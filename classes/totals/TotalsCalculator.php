@@ -38,6 +38,14 @@ class TotalsCalculator
      * @var int
      */
     protected $totalTaxes;
+    /**
+     * @var int
+     */
+    protected $productTotal;
+    /**
+     * @var int
+     */
+    protected $productTaxes;
 
     public function __construct(Cart $cart)
     {
@@ -55,30 +63,46 @@ class TotalsCalculator
 
     protected function calculate()
     {
-        $this->weightTotal = $this->cart->products->reduce(function ($total, Product $product) {
-            return $total += $product->pivot->weight;
-        }, 0);
+        $this->weightTotal  = $this->calculateWeightTotal();
+        $this->productTotal = $this->calculateProductTotal();
+        $this->productTaxes = $this->calculateProductTaxes();
 
         $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
 
-        $this->totalPreTaxes  = $this->productTotal() + $this->shippingTotal->total();
-        $this->totalTaxes     = $this->productTaxes() + $this->shippingTotal->taxes();
+        $this->totalPreTaxes  = $this->productTotal + $this->shippingTotal->total();
+        $this->totalTaxes     = $this->productTaxes + $this->shippingTotal->taxes();
         $this->totalPostTaxes = $this->totalPreTaxes + $this->totalTaxes;
 
         $this->taxes = $this->getTaxTotals();
     }
 
-    protected function productTotal(): int
+    protected function calculateProductTotal(): int
     {
         return $this->cart->products->reduce(function ($total, Product $product) {
             return $total += $product->pivot->totalPreTaxes;
         }, 0);
     }
 
-    protected function productTaxes(): int
+    protected function calculateProductTaxes(): int
     {
         return $this->cart->products->reduce(function ($total, Product $product) {
             return $total += $product->pivot->totalTaxes;
+        }, 0);
+    }
+
+    protected function getTaxTotals(): Collection
+    {
+        return $this->cart->products->flatMap(function (Product $product) {
+            return $product->taxes;
+        })->unique()->map(function (Tax $tax) {
+            return new TaxTotal($tax, $this->shippingTotal, $this);
+        });
+    }
+
+    protected function calculateWeightTotal(): int
+    {
+        return $this->cart->products->reduce(function ($total, Product $product) {
+            return $total += $product->pivot->weight;
         }, 0);
     }
 
@@ -102,6 +126,16 @@ class TotalsCalculator
         return $this->totalTaxes;
     }
 
+    public function productTotal(): int
+    {
+        return $this->productTotal;
+    }
+
+    public function productTaxes(): int
+    {
+        return $this->productTaxes;
+    }
+
     public function totalPostTaxes(): int
     {
         return $this->totalPostTaxes;
@@ -115,14 +149,5 @@ class TotalsCalculator
     public function getCart(): Cart
     {
         return $this->cart;
-    }
-
-    protected function getTaxTotals(): Collection
-    {
-        return $this->cart->products->flatMap(function (Product $product) {
-            return $product->taxes;
-        })->unique()->map(function (Tax $tax) {
-            return new TaxTotal($tax, $this->shippingTotal, $this);
-        });
     }
 }
