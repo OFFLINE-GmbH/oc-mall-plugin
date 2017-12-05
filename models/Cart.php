@@ -10,6 +10,7 @@ class Cart extends Model
     use SoftDelete;
 
     protected $dates = ['deleted_at'];
+    protected $with = ['products'];
 
     public $rules = [
         'session_id' => 'required_if,session_id,NULL',
@@ -25,14 +26,22 @@ class Cart extends Model
             'key'        => 'cart_id',
             'otherKey'   => 'product_id',
             'timestamps' => true,
-            'pivot'      => ['quantity', 'price'],
+            'pivot'      => ['id', 'quantity', 'price'],
             'pivotModel' => CartProduct::class,
         ],
     ];
 
     public $belongsTo = [
-        'shipping_method' => ShippingMethod::class
+        'shipping_method' => ShippingMethod::class,
     ];
+
+    /**
+     * When using pivot tables October's memory cache does
+     * more good than harm so we disable it for this model.
+     *
+     * @var bool
+     */
+    public $duplicateCache = false;
 
     public static function boot()
     {
@@ -46,12 +55,53 @@ class Cart extends Model
 
     public function addProduct(Product $product, int $quantity = 1)
     {
+        if ( ! $this->exists) {
+            $this->save();
+        }
+
+        if ($product->stackable && $this->products->contains($product->id)) {
+            $product = $this->products->find($product);
+
+            $quantity = ++$product->pivot->quantity;
+            $this->products()->newPivotStatement()
+                 ->where('id', $product->pivot->id)
+                 ->update(['quantity' => $quantity]);
+
+            return $this->refresh();
+        }
+
         $this->products()
-             ->attach($product, ['quantity' => $quantity, 'price' => $product->getOriginal('price')]);
+             ->attach($product, [
+                 'quantity' => $quantity,
+                 'price'    => $product->getOriginal('price'),
+             ]);
+
+        $this->refresh();
     }
 
     public function setShippingMethod(ShippingMethod $method)
     {
         $this->shipping_method_id = $method->id;
+    }
+
+    /**
+     * Reload all data and relationships.
+     *
+     * To make sure that we use the latest pivot data we can use this
+     * method to reload all relationships. Laravel's caching can
+     * sometimes be a bit to aggressive when it comes to pivot data
+     * that has been updated by the user.
+     *
+     * @return void
+     */
+    public function refresh()
+    {
+        $relations = collect($this->relations)
+            ->except('pivot')
+            ->keys()
+            ->toArray();
+
+        $this->reload();
+        $this->load($relations);
     }
 }

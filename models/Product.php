@@ -48,6 +48,8 @@ class Product extends Model
         'length'             => 'int',
         'height'             => 'int',
         'width'              => 'int',
+        'stackable'          => 'boolean',
+        'shippable'          => 'boolean',
     ];
 
     public $table = 'offline_mall_products';
