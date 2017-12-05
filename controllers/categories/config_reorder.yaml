@@ -1,0 +1,4 @@
+title: 'offline.mall::lang.common.categories'
+modelClass: OFFLINE\Mall\Models\Category
+toolbar:
+    buttons: reorder_toolbar

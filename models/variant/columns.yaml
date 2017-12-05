@@ -1,0 +1,16 @@
+columns:
+    custom_field_options:
+        label: 'offline.mall::lang.common.custom_fields'
+        path: $/offline/mall/models/variant/_custom_field_options.htm
+        type: partial
+        sortable: false
+    stock:
+        label: 'offline.mall::lang.product.stock'
+        type: number
+        sortable: true
+    allow_out_of_stock_purchases:
+        label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
+        path: $/offline/mall/models/variant/_allow_out_of_stock_purchases.htm
+        type: partial
+        searchable: true
+        sortable: true

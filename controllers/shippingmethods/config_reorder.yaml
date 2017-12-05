@@ -1,0 +1,5 @@
+title: 'offline.mall::lang.common.shipping_methods'
+modelClass: OFFLINE\Mall\Models\ShippingMethod
+nameFrom: sort_order
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<ruleset name="OFFLINE">
+    <description>OFFLINE Coding Standard</description>
+
+    <file>classes</file>
+    <file>controllers</file>
+    <file>lang</file>
+    <file>models</file>
+    <file>tests</file>
+    <file>updates</file>
+
+    <arg name="basepath" value="."/>
+    <arg name="parallel" value="75"/>
+    <arg name="report" value="code"/>
+    <arg value="np"/>
+
+    <rule ref="Generic.Files.LineEndings"/>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+    <rule ref="Generic.Metrics.NestingLevel">
+        <properties>
+            <property name="nestingLevel" value="3"/>
+        </properties>
+    </rule>
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+    <rule ref="Generic.PHP.DeprecatedFunctions"/>
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
+    <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+    <rule ref="Squiz.PHP.CommentedOutCode"/>
+    <rule ref="Squiz.PHP.Eval"/>
+    <rule ref="Squiz.PHP.GlobalKeyword"/>
+    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
+    <rule ref="PSR2">
+        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
+        <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+    </rule>
+</ruleset>

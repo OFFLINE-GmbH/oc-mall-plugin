@@ -1,0 +1,6 @@
+{
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "phpmd/phpmd": "^2.6"
+    }
+}

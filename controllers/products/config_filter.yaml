@@ -1,0 +1,20 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    category:
+        label: offline.mall::lang.common.category
+        modelClass: OFFLINE\Mall\Models\Category
+        conditions: category_id in (:filtered)
+        nameFrom: name
+
+    created_at:
+        label: offline.mall::lang.common.created_at
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'
+
+    published:
+        label: offline.mall::lang.common.hide_published
+        type: checkbox
+        conditions: published <> true

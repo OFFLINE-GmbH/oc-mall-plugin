@@ -1,0 +1,17 @@
+fields:
+    allow_out_of_stock_purchases:
+        label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
+        span: auto
+        type: switch
+        comment: 'offline.mall::lang.product.allow_out_of_stock_purchases_comment'
+    stock:
+        label: 'offline.mall::lang.product.stock'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+    custom_field_options:
+        label: ''
+        oc.commentPosition: ''
+        span: full
+        type: OFFLINE\Mall\FormWidgets\VariantSelector
+

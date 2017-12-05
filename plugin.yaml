@@ -1,0 +1,64 @@
+plugin:
+    name: 'offline.mall::lang.plugin.name'
+    description: 'offline.mall::lang.plugin.description'
+    author: 'OFFLINE GmbH'
+    icon: oc-icon-shopping-cart
+    homepage: ''
+navigation:
+    mall:
+        label: 'offline.mall::lang.common.shop'
+        url: offline/mall/products
+        icon: icon-shopping-cart
+        permissions:
+            - 'offline.mall.*'
+        sideMenu:
+            mall-products:
+                label: 'offline.mall::lang.common.products'
+                url: offline/mall/products
+                icon: icon-cart-plus
+                permissions:
+                    - offline.mall.manage_products
+            mall-categories:
+                label: 'offline.mall::lang.common.categories'
+                url: offline/mall/categories
+                icon: icon-sitemap
+                permissions:
+                    - offline.mall.manage_categories
+            mall-orders:
+                label: 'offline.mall::lang.common.orders'
+                url: offline/mall/orders
+                icon: icon-check-circle
+                permissions:
+                    - offline.mall.manage_orders
+            mall-discounts:
+                label: 'offline.mall::lang.common.discounts'
+                url: offline/mall/discounts
+                icon: icon-gift
+                permissions:
+                    - offline.mall.manage_discounts
+            mall-shipping-methods:
+                label: 'offline.mall::lang.common.shipping_methods'
+                url: offline/mall/shippingmethods
+                icon: icon-truck
+permissions:
+    offline.mall.manage_products:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.manage_products'
+    offline.mall.manage_categories:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.manage_categories'
+    offline.mall.manage_orders:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.manage_orders'
+    offline.mall.manage_discounts:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.manage_discounts'
+    offline.mall.settings.manage_general:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.settings.manage_general'
+    offline.mall.settings.manage_api:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.settings.manage_api'
+    offline.mall.settings.manage_currency:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.settings.manage_currency'

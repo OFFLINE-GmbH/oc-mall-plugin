@@ -1,0 +1,44 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+custom_fields:
+    label: 'offline.mall::lang.common.custom_fields'
+    view:
+        list: $/offline/mall/models/customfield/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        form: $/offline/mall/models/customfield/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true
+
+variants:
+    label: 'offline.mall::lang.common.variants'
+    view:
+        list: $/offline/mall/models/variant/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        form: $/offline/mall/models/variant/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true
+
+accessories:
+    label: 'offline.mall::lang.common.accessories'
+    view:
+        list: $/offline/mall/models/product/columns.yaml
+        recordUrl: offline/mall/products/update/:id
+        toolbarButtons: add|remove
+    manage:
+        form: $/offline/mall/models/product/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true
+
+taxes:
+    label: 'offline.mall::lang.common.taxes'
+    view:
+        list: $/offline/mall/models/tax/columns.yaml
+        toolbarButtons: add|create|remove
+    manage:
+        form: $/offline/mall/models/tax/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true

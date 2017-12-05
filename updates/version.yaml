@@ -1,0 +1,20 @@
+1.0.1:
+    - 'Initialize plugin.'
+    - builder_table_create_offline_mall_products.php
+    - builder_table_create_offline_mall_product_variants.php
+    - builder_table_create_offline_mall_product_accessory.php
+    - builder_table_create_offline_mall_product_custom_fields.php
+    - builder_table_create_offline_mall_product_custom_field_options.php
+    - builder_table_create_offline_mall_product_variant_custom_field_option.php
+    - builder_table_create_offline_mall_categories.php
+    - builder_table_create_offline_mall_category_product.php
+    - builder_table_create_offline_mall_taxes.php
+    - builder_table_create_offline_mall_product_tax.php
+    - builder_table_create_offline_mall_carts.php
+    - builder_table_create_offline_mall_cart_product.php
+    - builder_table_create_offline_mall_shipping_methods.php
+    - builder_table_create_offline_mall_shipping_method_tax.php
+    - builder_table_create_offline_mall_countries.php
+    - builder_table_create_offline_mall_country_tax.php
+    - builder_table_create_offline_mall_shipping_method_rates.php
+    - database_seeder.php

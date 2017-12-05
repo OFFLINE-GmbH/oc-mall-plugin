@@ -1,0 +1,9 @@
+columns:
+    code:
+        label: 'offline.mall::lang.category.code'
+        type: text
+        searchable: true
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true

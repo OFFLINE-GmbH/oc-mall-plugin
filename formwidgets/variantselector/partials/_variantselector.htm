@@ -1,0 +1,33 @@
+<?php if ($this->previewMode): ?>
+
+<div class="form-control">
+    <?= $value ?>
+</div>
+
+<?php else: ?>
+
+<?php
+if($fields):
+foreach($fields as $label => $field):
+$customFieldOption = $value->where('custom_field_id', $field->id)->first();
+$currentValue = $customFieldOption ? $customFieldOption->id : '';
+?>
+
+<div class="form-group">
+    <label for="<?= $this->getId('input') . $field->id ?>"><?= e($field->name) ?></label>
+    <select name="<?= $name ?>[<?= e($field->id) ?>]" class="form-control custom-select select-no-search"
+            id="<?= $this->getId('input') . $field->id ?>">
+        <option value=""><?= e(trans('offline.mall::lang.common.select_placeholder')) ?></option>
+        <?php
+        foreach($field->options()->get() as $option):
+        $selected = $currentValue === $option->id ? 'selected="selected"' : '';
+        ?>
+        <option value="<?= e($option->id) ?>"
+        <?= $selected ?>><?= e($option->name) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
+<?php endforeach; ?>
+<?php endif ?>
+<?php endif ?>

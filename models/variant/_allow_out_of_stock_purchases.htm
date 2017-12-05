@@ -1,0 +1,9 @@
+<?php if($value): ?>
+<span class="oc-icon-circle text-success">
+    <?= e(trans('offline.mall::lang.common.allowed')) ?>
+</span>
+<?php else: ?>
+<span class="oc-icon-circle text-muted">
+    <?= e(trans('offline.mall::lang.common.not_allowed')) ?>
+</span>
+<?php endif; ?>

@@ -1,0 +1,14 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: number
+        sortable: true
+    guaranteed_delivery_days:
+        label: guaranteed_delivery_days
+        type: number
+        sortable: true

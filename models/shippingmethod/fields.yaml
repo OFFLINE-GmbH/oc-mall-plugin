@@ -1,0 +1,38 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    guaranteed_delivery_days:
+        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_for_delivery'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+    price:
+        label: 'offline.mall::lang.product.price'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    available_above_total:
+        label: 'offline.mall::lang.shipping_method.available_above_total'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+    available_below_total:
+        label: 'offline.mall::lang.shipping_method.available_below_total'
+        oc.commentPosition: ''
+        span: right
+        type: number
+    rates:
+        label: 'offline.mall::lang.common.rates'
+        oc.commentPosition: ''
+        span: right
+        type: partial
+        path: $/offline/mall/controllers/shippingmethods/_rates.htm
+    taxes:
+        label: 'offline.mall::lang.common.taxes'
+        oc.commentPosition: ''
+        span: left
+        type: partial
+        path: $/offline/mall/controllers/shippingmethods/_taxes.htm

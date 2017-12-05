@@ -1,0 +1,49 @@
+fields:
+    required:
+        label: 'offline.mall::lang.custom_fields.required'
+        span: full
+        type: switch
+        comment: 'offline.mall::lang.custom_fields.required_comment'
+    name:
+        label: 'offline.mall::lang.custom_fields.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    type:
+        label: 'offline.mall::lang.custom_fields.type'
+        oc.commentPosition: ''
+        options:
+            text: 'offline.mall::lang.custom_field_options.text'
+            textarea: 'offline.mall::lang.custom_field_options.textarea'
+            dropdown: 'offline.mall::lang.custom_field_options.dropdown'
+            checkbox: 'offline.mall::lang.custom_field_options.checkbox'
+        span: auto
+        type: dropdown
+    fieldOptions:
+        label: 'offline.mall::lang.custom_fields.options'
+        oc.commentPosition: ''
+        prompt: 'offline.mall::lang.custom_field_options.add'
+        span: full
+        type: repeater
+        trigger:
+            action: show
+            field: type
+            condition: value[dropdown]
+        form:
+            fields:
+                id:
+                    label: ''
+                    oc.commentPosition: ''
+                    span: auto
+                    type: text
+                    cssClass: 'hidden'
+                option_name:
+                    label: 'offline.mall::lang.custom_field_options.option'
+                    oc.commentPosition: ''
+                    span: left
+                    type: text
+                option_price:
+                    label: 'offline.mall::lang.product.price'
+                    oc.commentPosition: ''
+                    span: right
+                    type: number

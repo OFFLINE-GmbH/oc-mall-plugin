@@ -1,0 +1,270 @@
+fields:
+    name:
+        label: 'offline.mall::lang.product.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        placeholder: 'offline.mall::lang.product.name'
+    slug:
+        label: 'offline.mall::lang.common.slug'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        placeholder: 'offline.mall::lang.common.slug'
+        preset:
+            field: name
+            type: slug
+    toolbar:
+        type: partial
+        path: product_toolbar
+        cssClass: collapse-visible
+tabs:
+    fields:
+        published:
+            label: 'offline.mall::lang.product.published'
+            span: right
+            type: switch
+            comment: 'offline.mall::lang.product.published_comment'
+            tab: 'offline.mall::lang.product.general'
+        user_defined_id:
+            label: 'offline.mall::lang.product.user_defined_id'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.product.general'
+        description_short:
+            label: 'offline.mall::lang.product.description_short'
+            oc.commentPosition: ''
+            span: left
+            type: text
+            tab: 'offline.mall::lang.product.general'
+        price:
+            label: 'offline.mall::lang.product.price'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.product.add_currency'
+            span: right
+            type: number
+            tab: 'offline.mall::lang.product.general'
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: giant
+            oc.commentPosition: ''
+            span: left
+            type: richeditor
+            tab: 'offline.mall::lang.product.general'
+        categories:
+            label: 'offline.mall::lang.common.categories'
+            oc.commentPosition: ''
+            nameFrom: name
+            descriptionFrom: description
+            span: right
+            type: relation
+            tab: 'offline.mall::lang.product.general'
+        taxes:
+            label: 'offline.mall::lang.common.taxes'
+            oc.commentPosition: ''
+            span: left
+            type: partial
+            path: $/offline/mall/controllers/products/_taxes.htm
+            tab: 'offline.mall::lang.common.taxes'
+        price_includes_tax:
+            label: 'offline.mall::lang.product.price_includes_tax'
+            span: right
+            type: switch
+            comment: 'offline.mall::lang.product.price_includes_tax_comment'
+            tab: 'offline.mall::lang.common.taxes'
+        properties:
+            label: 'offline.mall::lang.product.properties'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: left
+            type: repeater
+            tab: 'offline.mall::lang.common.properties_links'
+            form:
+                fields:
+                    title:
+                        label: 'offline.mall::lang.product.property_title'
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                        required: true
+                    value:
+                        label: 'offline.mall::lang.product.property_value'
+                        size: medium
+                        oc.commentPosition: ''
+                        span: full
+                        type: textarea
+                        required: true
+        links:
+            label: 'offline.mall::lang.product.links'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: right
+            type: repeater
+            tab: 'offline.mall::lang.common.properties_links'
+            form:
+                fields:
+                    title:
+                        label: 'offline.mall::lang.product.link_title'
+                        oc.commentPosition: ''
+                        span: left
+                        type: text
+                        required: true
+                    url:
+                        label: 'offline.mall::lang.product.link_target'
+                        oc.commentPosition: ''
+                        span: right
+                        type: text
+                        required: true
+        main_image:
+            label: 'offline.mall::lang.common.main_image'
+            oc.commentPosition: ''
+            mode: image
+            prompt: 'offline.mall::lang.common.select_image'
+            imageWidth: '120'
+            imageHeight: '120'
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: left
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        downloads:
+            label: 'offline.mall::lang.common.downloads'
+            oc.commentPosition: ''
+            mode: file
+            prompt: 'offline.mall::lang.common.select_file'
+            useCaption: true
+            span: right
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        images:
+            label: 'offline.mall::lang.common.images'
+            oc.commentPosition: ''
+            mode: image
+            prompt: 'offline.mall::lang.common.select_image'
+            imageWidth: '120'
+            imageHeight: '120'
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: left
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        custom_fields@update:
+            label: 'offline.mall::lang.common.custom_fields'
+            oc.commentPosition: ''
+            span: auto
+            type: partial
+            path: $/offline/mall/controllers/products/_custom_fields.htm
+            tab: 'offline.mall::lang.common.variants'
+        variants@update:
+            label: 'offline.mall::lang.common.variants'
+            oc.commentPosition: ''
+            span: auto
+            type: partial
+            path: $/offline/mall/controllers/products/_variants.htm
+            tab: 'offline.mall::lang.common.variants'
+        shippable:
+            label: 'offline.mall::lang.product.shippable'
+            span: left
+            type: switch
+            default: true
+            comment: 'offline.mall::lang.product.shippable_comment'
+            tab: 'offline.mall::lang.common.shipping'
+        weight:
+            label: 'offline.mall::lang.product.weight'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        width:
+            label: 'offline.mall::lang.product.width'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        length:
+            label: 'offline.mall::lang.product.length'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        height:
+            label: 'offline.mall::lang.product.height'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        stackable:
+            label: 'offline.mall::lang.product.stackable'
+            span: auto
+            type: switch
+            comment: 'offline.mall::lang.product.stackable_comment'
+            tab: 'offline.mall::lang.common.cart'
+        quantity_default:
+            label: 'offline.mall::lang.product.quantity_default'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.cart'
+        quantity_min:
+            label: 'offline.mall::lang.product.quantity_min'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.cart'
+        quantity_max:
+            label: 'offline.mall::lang.product.quantity_max'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.cart'
+        accessories:
+            label: 'offline.mall::lang.common.accessories'
+            span: full
+            type: partial
+            path: $/offline/mall/controllers/products/_accessories.htm
+            tab: 'offline.mall::lang.common.accessories'
+        allow_out_of_stock_purchases:
+            label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
+            span: left
+            type: switch
+            comment: 'offline.mall::lang.product.allow_out_of_stock_purchases_comment'
+            tab: 'offline.mall::lang.common.inventory'
+        inventory_management_method:
+            label: 'offline.mall::lang.product.inventory_management_method'
+            oc.commentPosition: ''
+            options:
+                singe: 'offline.mall::lang.variant.method.single'
+                variant: 'offline.mall::lang.variant.method.variant'
+            span: left
+            type: dropdown
+            tab: 'offline.mall::lang.common.inventory'
+        stock:
+            label: 'offline.mall::lang.product.stock'
+            oc.commentPosition: ''
+            span: right
+            type: number
+            tab: 'offline.mall::lang.common.inventory'
+        meta_title:
+            label: 'offline.mall::lang.common.meta_title'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.seo'
+        meta_keywords:
+            label: 'offline.mall::lang.common.meta_keywords'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.seo'
+        meta_description:
+            label: 'offline.mall::lang.common.meta_description'
+            size: large
+            oc.commentPosition: ''
+            span: left
+            type: textarea
+            tab: 'offline.mall::lang.common.seo'

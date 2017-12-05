@@ -1,0 +1,18 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        oc.commentPosition: ''
+        span: left
+        type: text
+    percentage:
+        label: 'offline.mall::lang.tax.percentage'
+        oc.commentPosition: ''
+        span: right
+        type: number
+    countries:
+        label: 'offline.mall::lang.tax.countries'
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+        comment: 'offline.mall::lang.tax.countries_comment'
