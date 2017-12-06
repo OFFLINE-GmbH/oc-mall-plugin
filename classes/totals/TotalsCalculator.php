@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Tax;
 
@@ -51,7 +52,7 @@ class TotalsCalculator
     {
         $this->cart  = $cart->load(
             'products',
-            'products.taxes',
+            'products.data.taxes',
             'shipping_method',
             'shipping_method.taxes',
             'shipping_method.rates'
@@ -68,7 +69,6 @@ class TotalsCalculator
         $this->productTaxes = $this->calculateProductTaxes();
 
         $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
-
         $this->totalPreTaxes  = $this->productTotal + $this->shippingTotal->total();
         $this->totalTaxes     = $this->productTaxes + $this->shippingTotal->taxes();
         $this->totalPostTaxes = $this->totalPreTaxes + $this->totalTaxes;
@@ -78,22 +78,22 @@ class TotalsCalculator
 
     protected function calculateProductTotal(): int
     {
-        return $this->cart->products->reduce(function ($total, Product $product) {
-            return $total += $product->pivot->totalPreTaxes;
+        return $this->cart->products->reduce(function ($total, CartProduct $product) {
+            return $total += $product->totalPreTaxes;
         }, 0);
     }
 
     protected function calculateProductTaxes(): int
     {
-        return $this->cart->products->reduce(function ($total, Product $product) {
-            return $total += $product->pivot->totalTaxes;
+        return $this->cart->products->reduce(function ($total, CartProduct $product) {
+            return $total += $product->totalTaxes;
         }, 0);
     }
 
     protected function getTaxTotals(): Collection
     {
-        return $this->cart->products->flatMap(function (Product $product) {
-            return $product->taxes;
+        return $this->cart->products->flatMap(function (CartProduct $product) {
+            return $product->data->taxes;
         })->unique()->map(function (Tax $tax) {
             return new TaxTotal($tax, $this->shippingTotal, $this);
         });
@@ -101,8 +101,8 @@ class TotalsCalculator
 
     protected function calculateWeightTotal(): int
     {
-        return $this->cart->products->reduce(function ($total, Product $product) {
-            return $total += $product->pivot->weight;
+        return $this->cart->products->reduce(function ($total, CartProduct $product) {
+            return $total += $product->data->weight * $product->quantity;
         }, 0);
     }
 

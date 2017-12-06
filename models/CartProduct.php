@@ -16,6 +16,7 @@ class CartProduct extends Model
     public $belongsTo = [
         'cart'    => Cart::class,
         'product' => Product::class,
+        'data'    => [Product::class, 'key' => 'product_id'],
     ];
 
     public $hasMany = [
@@ -24,16 +25,17 @@ class CartProduct extends Model
 
     public function getTotalPreTaxesAttribute(): int
     {
-        if ($this->product->price_includes_tax) {
+        if ($this->data->price_includes_tax) {
             return $this->price * $this->quantity - $this->totalTaxes;
         }
+
 
         return $this->price * $this->quantity;
     }
 
     public function getTotalTaxesAttribute(): int
     {
-        if ($this->product->price_includes_tax) {
+        if ($this->data->price_includes_tax) {
             $withoutTax = $this->priceWithoutTaxes();
 
             return $this->price * $this->quantity - $withoutTax;
@@ -44,7 +46,7 @@ class CartProduct extends Model
 
     public function getTotalPostTaxesAttribute(): int
     {
-        if ($this->product->price_includes_tax) {
+        if ($this->data->price_includes_tax) {
             return $this->price * $this->quantity;
         }
 
@@ -53,12 +55,12 @@ class CartProduct extends Model
 
     public function getWeightAttribute(): int
     {
-        return $this->product->weight * $this->quantity;
+        return $this->data->weight * $this->quantity;
     }
 
     protected function priceWithoutTaxes()
     {
-        if ($this->product->price_includes_tax) {
+        if ($this->data->price_includes_tax) {
             return 1 / (1 + $this->taxFactor()) * $this->price * $this->quantity;
         }
 
@@ -76,7 +78,7 @@ class CartProduct extends Model
      */
     protected function taxFactor()
     {
-        return $this->product->taxes->reduce(function ($total, Tax $tax) {
+        return $this->data->taxes->reduce(function ($total, Tax $tax) {
             return $total += $tax->percentageDecimal;
         });
     }

@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 
+use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Tax;
 
@@ -48,10 +49,10 @@ class TaxTotal
 
     protected function totalProductTaxes(): int
     {
-        return $this->totals->getCart()->products->filter(function (Product $product) {
-            return $product->taxes->contains($this->tax->id);
-        })->reduce(function ($total, Product $product) {
-            return $total += $product->pivot->totalForTax($this->tax);
+        return $this->totals->getCart()->products->filter(function (CartProduct $product) {
+            return $product->data->taxes->contains($this->tax->id);
+        })->reduce(function ($total, CartProduct $product) {
+            return $total += $product->totalForTax($this->tax);
         }, 0);
     }
 

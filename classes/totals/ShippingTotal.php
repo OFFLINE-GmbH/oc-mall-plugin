@@ -30,7 +30,7 @@ class ShippingTotal
      */
     private $taxes;
 
-    public function __construct(ShippingMethod $method, TotalsCalculator $totals)
+    public function __construct(?ShippingMethod $method, TotalsCalculator $totals)
     {
         $this->method = $method;
         $this->totals = $totals;
@@ -69,8 +69,12 @@ class ShippingTotal
         }, 0);
     }
 
-    protected function calculatePrice()
+    protected function calculatePrice(): int
     {
+        if ( ! $this->method) {
+            return 0;
+        }
+
         $method = $this->method;
         $price  = $method->getOriginal('price');
 

@@ -22,7 +22,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($this->getProduct($price), $quantity);
 
         $calc = new TotalsCalculator($cart);
-        $this->assertEquals($calc->totalPostTaxes(), $quantity * $price);
+        $this->assertEquals($quantity * $price * 100, $calc->totalPostTaxes());
     }
 
     public function test_it_works_for_multiple_products()
@@ -37,7 +37,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(
-            ($quantity * $price) + ($quantity * 2 * $price / 2),
+            (($quantity * $price) + ($quantity * 2 * $price / 2)) * 100,
             $calc->totalPostTaxes()
         );
     }
