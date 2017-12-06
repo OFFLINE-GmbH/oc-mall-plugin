@@ -1,9 +1,11 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
@@ -285,8 +287,8 @@ class CartTest extends PluginTestCase
 
     public function test_it_increases_the_quantity_for_stacked_products()
     {
-        $product               = Product::first();
-        $product->stackable    = true;
+        $product            = Product::first();
+        $product->stackable = true;
         $product->save();
 
         $cart = new Cart();
@@ -294,5 +296,58 @@ class CartTest extends PluginTestCase
         $this->assertEquals(2, $cart->products->first()->quantity);
         $cart->addProduct($product, 3);
         $this->assertEquals(5, $cart->products->first()->quantity);
+    }
+
+    public function test_the_same_discount_cannot_be_applied_twice()
+    {
+        $this->expectException(ValidationException::class);
+
+        $product = Product::first();
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product);
+
+        $discount       = new Discount();
+        $discount->code = 'Test';
+        $discount->name = 'Test discount';
+        $discount->type = 'rate';
+        $discount->rate = 25;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+        $cart->applyDiscount($discount);
+
+        $this->assertEquals(1, $cart->discounts->count());
+    }
+
+    public function test_only_one_alternate_price_discount_is_applied()
+    {
+        $this->expectException(ValidationException::class);
+
+        $product = Product::first();
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product);
+
+        $discountA                  = new Discount();
+        $discountA->code            = 'Test';
+        $discountA->name            = 'Test discount';
+        $discountA->type            = 'alternate_price';
+        $discountA->alternate_price = 25;
+        $discountA->save();
+
+        $discountB                  = new Discount();
+        $discountB->code            = 'Test';
+        $discountB->name            = 'Test discount';
+        $discountB->type            = 'alternate_price';
+        $discountB->alternate_price = 25;
+        $discountB->save();
+
+        $cart->applyDiscount($discountA);
+        $cart->applyDiscount($discountB);
+
+        $this->assertEquals(1, $cart->discounts->count());
     }
 }

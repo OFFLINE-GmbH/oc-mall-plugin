@@ -8,6 +8,7 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
@@ -157,16 +158,16 @@ class TotalsCalculatorTest extends PluginTestCase
     {
         $product            = Product::first();
         $product->stackable = true;
-        $product->price = 200;
+        $product->price     = 200;
         $product->save();
 
-        $sizeA        = new CustomFieldOption();
-        $sizeA->name  = 'Size A';
-        $sizeA->price = 100;
+        $sizeA             = new CustomFieldOption();
+        $sizeA->name       = 'Size A';
+        $sizeA->price      = 100;
         $sizeA->sort_order = 1;
-        $sizeB        = new CustomFieldOption();
-        $sizeB->name  = 'Size B';
-        $sizeB->price = 200;
+        $sizeB             = new CustomFieldOption();
+        $sizeB->name       = 'Size B';
+        $sizeB->price      = 200;
         $sizeB->sort_order = 1;
 
         $field             = new CustomField();
@@ -200,6 +201,95 @@ class TotalsCalculatorTest extends PluginTestCase
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(1000 * 100, $calc->totalPostTaxes());
     }
+
+    public function test_it_applies_fixed_discounts()
+    {
+        $quantity = 5;
+        $price    = 20000;
+
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+
+        $discount         = new Discount();
+        $discount->code   = 'Test';
+        $discount->name   = 'Test discount';
+        $discount->type   = 'fixed_amount';
+        $discount->amount = 10000;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(($quantity * $price * 100) - 10000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_rate_discounts()
+    {
+        $quantity = 5;
+        $price    = 20000;
+
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+
+        $discount       = new Discount();
+        $discount->code = 'Test';
+        $discount->name = 'Test discount';
+        $discount->type = 'rate';
+        $discount->rate = 50;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(($quantity * $price * 100) / 2, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_rate_discounts_always_to_base_price()
+    {
+        $quantity = 5;
+        $price    = 20000;
+
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+
+        $discountA       = new Discount();
+        $discountA->code = 'Test';
+        $discountA->name = 'Test discount';
+        $discountA->type = 'rate';
+        $discountA->rate = 25;
+        $discountA->save();
+
+        $discountB = $discountA->replicate();
+        $discountB->save();
+
+        $cart->applyDiscount($discountA);
+        $cart->applyDiscount($discountB);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(($quantity * $price * 100) / 2, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_alternate_price_discounts()
+    {
+        $quantity = 5;
+        $price    = 20000;
+
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+
+        $discount       = new Discount();
+        $discount->code = 'Test';
+        $discount->name = 'Test discount';
+        $discount->type = 'alternate_price';
+        $discount->alternate_price = 250;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(250 * 100, $calc->totalPostTaxes());
+    }
+
 
     protected function getProduct($price)
     {

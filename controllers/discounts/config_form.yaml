@@ -1,0 +1,14 @@
+name: 'offline.mall::lang.common.discount'
+modelClass: OFFLINE\Mall\Models\Discount
+form: $/offline/mall/models/discount/fields.yaml
+defaultRedirect: offline/mall/discounts
+create:
+    title: 'offline.mall::lang.titles.discounts.create'
+    redirect: 'offline/mall/discounts/update/:id'
+    redirectClose: offline/mall/discounts
+update:
+    title: 'offline.mall::lang.titles.discounts.update'
+    redirect: offline/mall/discounts
+    redirectClose: offline/mall/discounts
+preview:
+    title: 'offline.mall::lang.titles.discounts.preview'

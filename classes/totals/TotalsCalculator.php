@@ -6,7 +6,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
-use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
 class TotalsCalculator
@@ -55,7 +55,8 @@ class TotalsCalculator
             'products.data.taxes',
             'shipping_method',
             'shipping_method.taxes',
-            'shipping_method.rates'
+            'shipping_method.rates',
+            'discounts'
         );
         $this->taxes = new Collection();
 
@@ -68,7 +69,7 @@ class TotalsCalculator
         $this->productTotal = $this->calculateProductTotal();
         $this->productTaxes = $this->calculateProductTaxes();
 
-        $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
+        $this->shippingTotal  = new ShippingTotal($this->cart->shipping_method, $this);
         $this->totalPreTaxes  = $this->productTotal + $this->shippingTotal->total();
         $this->totalTaxes     = $this->productTaxes + $this->shippingTotal->taxes();
         $this->totalPostTaxes = $this->totalPreTaxes + $this->totalTaxes;
@@ -78,9 +79,13 @@ class TotalsCalculator
 
     protected function calculateProductTotal(): int
     {
-        return $this->cart->products->reduce(function ($total, CartProduct $product) {
+        $total = $this->cart->products->reduce(function ($total, CartProduct $product) {
             return $total += $product->totalPreTaxes;
         }, 0);
+
+        $total = $this->applyTotalDiscounts($total);
+
+        return $total > 0 ? $total : 0;
     }
 
     protected function calculateProductTaxes(): int
@@ -149,5 +154,30 @@ class TotalsCalculator
     public function getCart(): Cart
     {
         return $this->cart;
+    }
+
+    /**
+     * Apply the discounts that are applied to the cart's total.
+     *
+     * @param $total
+     *
+     * @return int
+     */
+    private function applyTotalDiscounts($total): int
+    {
+        $alternatePrice = $this->cart->discounts->where('type', 'alternate_price')->first();
+        if ($alternatePrice) {
+            return $alternatePrice->getOriginal('alternate_price');
+        }
+
+        $total = $this->cart->discounts->where('type', 'fixed_amount')->reduce(function ($total, Discount $discount) {
+            return $total - $discount->amount;
+        }, $total);
+
+        $base = $total;
+
+        return $this->cart->discounts->where('type', 'rate')->reduce(function ($total, Discount $discount) use ($base) {
+            return $total - $base * ($discount->rate / 100);
+        }, $total);
     }
 }

@@ -196,7 +196,7 @@
         'number_of_usages' => 'Numer of usages',
         'shipping_description' => 'Name of alternative shipping method',
         'shipping_cost' => 'Price of alternative shipping method',
-        'shipping_guaranteed_days_for_delivery' => 'Guaranteed days for delivery',
+        'shipping_guaranteed_days_to_delivery' => 'Guaranteed days to delivery',
         'section_type' => 'What does this discount do?',
         'section_trigger' => 'When is this discount applicable?',
         'types' => [

@@ -18,4 +18,6 @@
     - builder_table_create_offline_mall_country_tax.php
     - builder_table_create_offline_mall_shipping_method_rates.php
     - builder_table_create_offline_mall_cart_custom_field_value.php
+    - builder_table_create_offline_mall_discounts.php
+    - builder_table_create_offline_mall_cart_discount.php
     - database_seeder.php

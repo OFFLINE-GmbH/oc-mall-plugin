@@ -3,6 +3,7 @@
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Exception\ValidationException;
 
 class Cart extends Model
 {
@@ -25,6 +26,13 @@ class Cart extends Model
 
     public $belongsTo = [
         'shipping_method' => ShippingMethod::class,
+    ];
+
+    public $belongsToMany = [
+        'discounts' => [
+            Discount::class,
+            'table' => 'offline_mall_cart_discount',
+        ],
     ];
 
     public static function boot()
@@ -84,6 +92,28 @@ class Cart extends Model
             $value->save();
         }
 
+        $this->refresh();
+    }
+
+    /**
+     * Apply a discount to this cart.
+     *
+     * @param Discount $discount
+     *
+     * @throws \October\Rain\Exception\ValidationException
+     * @throws ValidationException
+     */
+    public function applyDiscount(Discount $discount)
+    {
+        if ($discount->type === 'alternate_price' && $this->discounts->where('type', 'alternate_price')->count() > 0) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.alternate_price')]);
+        }
+
+        if ($this->discounts->contains($discount)) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
+        }
+
+        $this->discounts()->attach($discount);
         $this->refresh();
     }
 

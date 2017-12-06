@@ -22,6 +22,6 @@ class BuilderTableCreateOfflineMallCartProducts extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('offline_mall_cart_product');
+        Schema::dropIfExists('offline_mall_cart_products');
     }
 }
