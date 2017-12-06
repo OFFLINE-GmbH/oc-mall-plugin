@@ -20,7 +20,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $jsonable = ['links'];
+    public $jsonable = ['links', 'properties'];
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
@@ -75,6 +75,7 @@ class Product extends Model
     public $hasMany = [
         'custom_fields' => CustomField::class,
         'variants'      => Variant::class,
+        'cart_products' => CartProduct::class,
     ];
 
     public $belongsToMany = [
@@ -106,11 +107,11 @@ class Product extends Model
         ],
         'carts'           => [
             Cart::class,
-            'table'      => 'offline_mall_cart_product',
-            'key'        => 'product_id',
-            'otherKey'   => 'cart_id',
-            'timestamps' => true,
-            'pivot'      => ['quantity', 'price'],
+            'table'    => 'offline_mall_cart_product',
+            'key'      => 'product_id',
+            'otherKey' => 'cart_id',
+            'deleted'    => true,
+            'pivot'      => ['id', 'quantity', 'price'],
             'pivotModel' => CartProduct::class,
         ],
     ];

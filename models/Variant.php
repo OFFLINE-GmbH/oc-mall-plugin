@@ -22,6 +22,7 @@ class Variant extends Model
 
     public $belongsTo = [
         'product' => Product::class,
+        'cart_product' => CartProduct::class,
     ];
 
     public $belongsToMany = [

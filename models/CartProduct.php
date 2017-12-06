@@ -3,17 +3,23 @@
 namespace OFFLINE\Mall\Models;
 
 
-use October\Rain\Database\Pivot;
+use Model;
 
-class CartProduct extends Pivot
+class CartProduct extends Model
 {
+    public $table = 'offline_mall_cart_products';
     public $casts = [
         'quantity' => 'integer',
         'price'    => 'integer',
     ];
 
     public $belongsTo = [
+        'cart'    => Cart::class,
         'product' => Product::class,
+    ];
+
+    public $hasMany = [
+        'custom_field_values' => [CustomFieldValue::class, 'key' => 'cart_product_id', 'otherKey' => 'id'],
     ];
 
     public function getTotalPreTaxesAttribute(): int

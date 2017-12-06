@@ -3,11 +3,11 @@
 use Schema;
 use October\Rain\Database\Updates\Migration;
 
-class BuilderTableCreateOfflineMallCartProduct extends Migration
+class BuilderTableCreateOfflineMallCartProducts extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_cart_product', function($table)
+        Schema::create('offline_mall_cart_products', function($table)
         {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();

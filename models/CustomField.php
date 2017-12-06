@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use DB;
 use Model;
 
 /**

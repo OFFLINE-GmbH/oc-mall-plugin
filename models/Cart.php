@@ -19,29 +19,13 @@ class Cart extends Model
 
     public $table = 'offline_mall_carts';
 
-    public $belongsToMany = [
-        'products' => [
-            Product::class,
-            'table'      => 'offline_mall_cart_product',
-            'key'        => 'cart_id',
-            'otherKey'   => 'product_id',
-            'timestamps' => true,
-            'pivot'      => ['id', 'quantity', 'price'],
-            'pivotModel' => CartProduct::class,
-        ],
+    public $hasMany = [
+        'products' => [CartProduct::class, 'deleted' => true],
     ];
 
     public $belongsTo = [
         'shipping_method' => ShippingMethod::class,
     ];
-
-    /**
-     * When using pivot tables October's memory cache does
-     * more good than harm so we disable it for this model.
-     *
-     * @var bool
-     */
-    public $duplicateCache = false;
 
     public static function boot()
     {
@@ -53,30 +37,63 @@ class Cart extends Model
         });
     }
 
-    public function addProduct(Product $product, int $quantity = 1)
+    public function addProduct(Product $product, int $quantity = 1, CustomFieldValue $value = null)
     {
         if ( ! $this->exists) {
             $this->save();
         }
 
-        if ($product->stackable && $this->products->contains($product->id)) {
-            $product = $this->products->find($product);
+        if ($product->stackable && $this->isInCart($product, $value)) {
+            $product = $this->products->first(function (CartProduct $cartProduct) use ($product) {
+                return $cartProduct->id === $product->id;
+            });
 
-            $quantity = ++$product->pivot->quantity;
-            $this->products()->newPivotStatement()
-                 ->where('id', $product->pivot->id)
-                 ->update(['quantity' => $quantity]);
+            CartProduct::where('id', $product->id)->update(['quantity' => ++$product->quantity]);
 
             return $this->refresh();
         }
 
-        $this->products()
-             ->attach($product, [
-                 'quantity' => $quantity,
-                 'price'    => $product->getOriginal('price'),
-             ]);
+        $cartProduct             = new CartProduct();
+        $cartProduct->cart_id    = $this->id;
+        $cartProduct->product_id = $product->id;
+        $cartProduct->quantity   = $quantity;
+        $cartProduct->price      = $product->getOriginal('price');
+        $cartProduct->save();
+
+        if ($value) {
+            $value->cart_product_id = $cartProduct->id;
+            $value->save();
+            $this->products->each(function (CartProduct $product) {
+                $product->load('custom_field_values');
+            });
+        }
 
         $this->refresh();
+    }
+
+    public function isInCart(Product $product, CustomFieldValue $value = null): bool
+    {
+        $productIsInCart = $this->products->contains($product->id);
+        // If there is no CustomFieldValue to compare we only have
+        // to check if the product is in the cart.
+        if ($value === null || $productIsInCart === false) {
+            return $productIsInCart;
+        }
+
+        $hasCustomFieldOption = $value->custom_field_option_id !== null;
+
+        $query = CustomFieldValue::where('custom_field_id', $value->custom_field_id);
+        $query->whereHas('cart_product.cart', function ($query) {
+            $query->where('id', 1);
+        })->get();
+
+        $query->when($hasCustomFieldOption, function ($query) use ($value) {
+            $query->where('custom_field_option_id', $value->custom_field_option_id);
+        })->when(! $hasCustomFieldOption, function ($query) use ($value) {
+            $query->where('value', $value->value);
+        });
+
+        return $query->count() > 0;
     }
 
     public function setShippingMethod(ShippingMethod $method)

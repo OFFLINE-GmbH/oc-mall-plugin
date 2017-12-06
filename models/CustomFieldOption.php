@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Sortable;
 use OFFLINE\Mall\Classes\Traits\Price;
 
 /**
@@ -10,6 +11,7 @@ class CustomFieldOption extends Model
 {
     use \October\Rain\Database\Traits\Validation;
     use Price;
+    use Sortable;
 
     public $implement = ['RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
