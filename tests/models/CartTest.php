@@ -232,4 +232,67 @@ class CartTest extends PluginTestCase
         $this->assertEquals($customFieldValueA->id, $cart->products[0]->custom_field_values[0]->id);
         $this->assertEquals($customFieldValueB->id, $cart->products[1]->custom_field_values[0]->id);
     }
+
+    public function test_it_uses_default_quantity()
+    {
+        $product                   = Product::first();
+        $product->quantity_default = 4;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product);
+
+        $this->assertEquals(4, $cart->products->first()->quantity);
+    }
+
+    public function test_it_enforces_min_quantity()
+    {
+        $product               = Product::first();
+        $product->quantity_min = 4;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 2);
+
+        $this->assertEquals(4, $cart->products->first()->quantity);
+    }
+
+    public function test_it_enforces_max_quantity()
+    {
+        $product               = Product::first();
+        $product->quantity_max = 4;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 12);
+
+        $this->assertEquals(4, $cart->products->first()->quantity);
+    }
+
+    public function test_it_enforces_max_quantity_on_stacked_products()
+    {
+        $product               = Product::first();
+        $product->stackable    = true;
+        $product->quantity_max = 4;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 2);
+        $this->assertEquals(2, $cart->products->first()->quantity);
+        $cart->addProduct($product, 3);
+        $this->assertEquals(4, $cart->products->first()->quantity);
+    }
+
+    public function test_it_increases_the_quantity_for_stacked_products()
+    {
+        $product               = Product::first();
+        $product->stackable    = true;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 2);
+        $this->assertEquals(2, $cart->products->first()->quantity);
+        $cart->addProduct($product, 3);
+        $this->assertEquals(5, $cart->products->first()->quantity);
+    }
 }

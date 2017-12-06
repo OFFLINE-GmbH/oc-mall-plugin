@@ -107,9 +107,9 @@ class Product extends Model
         ],
         'carts'           => [
             Cart::class,
-            'table'    => 'offline_mall_cart_product',
-            'key'      => 'product_id',
-            'otherKey' => 'cart_id',
+            'table'      => 'offline_mall_cart_product',
+            'key'        => 'product_id',
+            'otherKey'   => 'cart_id',
             'deleted'    => true,
             'pivot'      => ['id', 'quantity', 'price'],
             'pivotModel' => CartProduct::class,
@@ -163,5 +163,25 @@ class Product extends Model
     public function getVariantOptionsAttribute()
     {
         return $this->custom_fields()->where('type', 'dropdown')->get();
+    }
+
+    /**
+     * Returns the product's base price with all CustomFieldValue
+     * prices added.
+     *
+     * @param CustomFieldValue[] $value
+     *
+     * @return int
+     */
+    public function priceIncludingCustomFieldValues(array $value = []): int
+    {
+        $price = $this->getOriginal('price');
+        if (count($value) < 1) {
+            return $price;
+        }
+
+        return collect($value)->reduce(function ($total, CustomFieldValue $value) {
+            return $total += $value->custom_field_option->getOriginal('price');
+        }, $price);
     }
 }
