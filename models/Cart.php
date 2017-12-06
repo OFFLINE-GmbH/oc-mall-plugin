@@ -59,28 +59,28 @@ class Cart extends Model
         $values   = $this->normalizeArray($values);
 
         if ($product->stackable && $this->isInCart($product, $values)) {
-            $cartProduct = $this->products->first(function (CartProduct $cartProduct) use ($product) {
+            $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
                 return $cartProduct->id === $product->id;
             });
 
-            $newQuantity = $this->normalizeQuantity($cartProduct->quantity + $quantity, $product);
+            $newQuantity = $this->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
-            CartProduct::where('id', $cartProduct->id)->update(['quantity' => $newQuantity]);
+            CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
 
             return $this->refresh();
         }
 
         $quantity = $this->normalizeQuantity($quantity, $product);
 
-        $cartProduct             = new CartProduct();
-        $cartProduct->cart_id    = $this->id;
-        $cartProduct->product_id = $product->id;
-        $cartProduct->quantity   = $quantity;
-        $cartProduct->price      = $product->priceIncludingCustomFieldValues($values);
-        $cartProduct->save();
+        $cartEntry             = new CartProduct();
+        $cartEntry->cart_id    = $this->id;
+        $cartEntry->product_id = $product->id;
+        $cartEntry->quantity   = $quantity;
+        $cartEntry->price      = $product->priceIncludingCustomFieldValues($values);
+        $cartEntry->save();
 
         foreach ($values as $value) {
-            $value->cart_product_id = $cartProduct->id;
+            $value->cart_product_id = $cartEntry->id;
             $value->save();
         }
 

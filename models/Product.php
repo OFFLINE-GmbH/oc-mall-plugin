@@ -181,6 +181,10 @@ class Product extends Model
         }
 
         return collect($value)->reduce(function ($total, CustomFieldValue $value) {
+            if ( ! $value->custom_field_option) {
+                return $total;
+            }
+
             return $total += $value->custom_field_option->getOriginal('price');
         }, $price);
     }

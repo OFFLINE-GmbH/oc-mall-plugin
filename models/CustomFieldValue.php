@@ -15,6 +15,7 @@ class CustomFieldValue extends Model
     ];
 
     public $table = 'offline_mall_cart_custom_field_value';
+    public $with = ['custom_field_option'];
 
     public $belongsTo = [
         'cart_product'        => CartProduct::class,
