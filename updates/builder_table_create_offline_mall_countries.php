@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallCountries extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_countries', function($table)
-        {
+        Schema::create('offline_mall_countries', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('code');

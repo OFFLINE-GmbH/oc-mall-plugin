@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Models;
 
-
 use Model;
 
 class CartProduct extends Model
@@ -82,5 +81,4 @@ class CartProduct extends Model
             return $total += $tax->percentageDecimal;
         });
     }
-
 }

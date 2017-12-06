@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
-
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;

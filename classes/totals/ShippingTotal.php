@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
-
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;

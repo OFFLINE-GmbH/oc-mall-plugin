@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallCountryTax extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_country_tax', function($table)
-        {
+        Schema::create('offline_mall_country_tax', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('country_id');

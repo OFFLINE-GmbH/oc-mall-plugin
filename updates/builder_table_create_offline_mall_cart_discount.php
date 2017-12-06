@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallCartDiscount extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_cart_discount', function($table)
-        {
+        Schema::create('offline_mall_cart_discount', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('cart_id')->unsigned();

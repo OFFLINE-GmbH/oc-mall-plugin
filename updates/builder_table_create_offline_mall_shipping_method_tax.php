@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallShippingMethodTax extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_shipping_method_tax', function($table)
-        {
+        Schema::create('offline_mall_shipping_method_tax', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('shipping_method_id')->unsigned();

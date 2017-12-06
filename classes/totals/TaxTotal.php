@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
-
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Tax;
