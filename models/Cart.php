@@ -11,7 +11,7 @@ class Cart extends Model
     use SoftDelete;
 
     protected $dates = ['deleted_at'];
-    protected $with = ['products'];
+    protected $with = ['products', 'discounts', 'shipping_method'];
 
     public $rules = [
         'session_id' => 'required_if,session_id,NULL',
@@ -34,6 +34,8 @@ class Cart extends Model
             'table' => 'offline_mall_cart_discount',
         ],
     ];
+
+    public $duplicateCache = false;
 
     public static function boot()
     {
@@ -75,7 +77,7 @@ class Cart extends Model
 
             CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
 
-            return $this->refresh();
+            return $this->load('products');
         }
 
         $quantity = $this->normalizeQuantity($quantity, $product);
@@ -85,14 +87,11 @@ class Cart extends Model
         $cartEntry->product_id = $product->id;
         $cartEntry->quantity   = $quantity;
         $cartEntry->price      = $product->priceIncludingCustomFieldValues($values);
-        $cartEntry->save();
 
-        foreach ($values as $value) {
-            $value->cart_product_id = $cartEntry->id;
-            $value->save();
-        }
+        $this->products()->save($cartEntry);
+        $this->load('products');
 
-        $this->refresh();
+        $cartEntry->custom_field_values()->saveMany($values);
     }
 
     /**
@@ -105,16 +104,18 @@ class Cart extends Model
      */
     public function applyDiscount(Discount $discount)
     {
-        if ($discount->type === 'alternate_price' && $this->discounts->where('type', 'alternate_price')->count() > 0) {
-            throw new ValidationException([trans('offline.mall::lang.discounts.validation.alternate_price')]);
+        $uniqueDiscountTypes = ['alternate_price', 'shipping'];
+
+        if (in_array($discount->type, $uniqueDiscountTypes)
+            && $this->discounts->where('type', $discount->type)->count() > 0) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.' . $discount->type)]);
         }
 
         if ($this->discounts->contains($discount)) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
         }
 
-        $this->discounts()->attach($discount);
-        $this->refresh();
+        $this->discounts()->save($discount);
     }
 
     /**
@@ -151,27 +152,6 @@ class Cart extends Model
         }
 
         return $query->count() > 0;
-    }
-
-    /**
-     * Reload all data and relationships.
-     *
-     * To make sure that we use the latest  data we can use this
-     * method to reload all relationships. Laravel's caching can
-     * sometimes be a bit to aggressive when it comes to related data
-     * that has been updated manualy by the user.
-     *
-     * @return void
-     */
-    public function refresh()
-    {
-        $relations = collect($this->relations)
-            ->except('pivot')
-            ->keys()
-            ->toArray();
-
-        $this->reload();
-        $this->load($relations);
     }
 
     /**

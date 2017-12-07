@@ -3,9 +3,9 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
-use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
 class TotalsCalculator
@@ -66,6 +66,7 @@ class TotalsCalculator
     {
         $this->weightTotal  = $this->calculateWeightTotal();
         $this->productTotal = $this->calculateProductTotal();
+
         $this->productTaxes = $this->calculateProductTaxes();
 
         $this->shippingTotal  = new ShippingTotal($this->cart->shipping_method, $this);
@@ -156,7 +157,7 @@ class TotalsCalculator
     }
 
     /**
-     * Apply the discounts that are applied to the cart's total.
+     * Process the discounts that are applied to the cart's total.
      *
      * @param $total
      *
@@ -164,19 +165,13 @@ class TotalsCalculator
      */
     private function applyTotalDiscounts($total): int
     {
-        $alternatePrice = $this->cart->discounts->where('type', 'alternate_price')->first();
-        if ($alternatePrice) {
-            return $alternatePrice->getOriginal('alternate_price');
-        }
+        $discounts = $this->cart->discounts->reject(function ($item) {
+            return $item->type === 'shipping';
+        });
 
-        $total = $this->cart->discounts->where('type', 'fixed_amount')->reduce(function ($total, Discount $discount) {
-            return $total - $discount->amount;
-        }, $total);
+        $applier = new DiscountApplier($this->cart, $total);
+        $applier->applyMany($discounts);
 
-        $base = $total;
-
-        return $this->cart->discounts->where('type', 'rate')->reduce(function ($total, Discount $discount) use ($base) {
-            return $total - $base * ($discount->rate / 100);
-        }, $total);
+        return $applier->reducedTotal();
     }
 }

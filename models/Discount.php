@@ -20,7 +20,7 @@ class Discount extends Model
         'rate'                                 => 'required_if:type,rate|numeric',
         'alternate_price'                      => 'required_if:type,alternate_price|numeric',
         'shipping_description'                 => 'required_if:type,shipping',
-        'shipping_cost'                        => 'required_if:type,shipping|numeric',
+        'shipping_price'                       => 'required_if:type,shipping|numeric',
         'shipping_guaranteed_days_to_delivery' => 'numeric',
     ];
 
@@ -64,12 +64,22 @@ class Discount extends Model
         return $this->formatPrice((int)$value / 100);
     }
 
-    public function setShippingCostAttribute($value)
+    public function setShippingPriceAttribute($value)
     {
-        $this->attributes['shipping_cost'] = (float)$value * 100;
+        $this->attributes['shipping_price'] = (float)$value * 100;
     }
 
-    public function getShippingCostAttribute($value)
+    public function getShippingPriceAttribute($value)
+    {
+        return $this->formatPrice((int)$value / 100);
+    }
+
+    public function setTotalToReachAttribute($value)
+    {
+        $this->attributes['total_to_reach'] = (float)$value * 100;
+    }
+
+    public function getTotalToReachAttribute($value)
     {
         return $this->formatPrice((int)$value / 100);
     }

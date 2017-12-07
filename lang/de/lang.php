@@ -198,7 +198,7 @@
         'expires'                              => 'Gültig bis',
         'number_of_usages'                     => 'Anzahl Anwendungen',
         'shipping_description'                 => 'Name für alternative Versand-Methode',
-        'shipping_cost'                        => 'Preis für alternative Versand-Methode',
+        'shipping_price'                       => 'Preis für alternative Versand-Methode',
         'shipping_guaranteed_days_to_delivery' => 'Garantierte Lieferung in Tagen',
         'section_type'                         => 'Was bewirkt der Gutschein?',
         'section_trigger'                      => 'Wann ist der Gutschein gültig?',
@@ -215,6 +215,7 @@
         ],
         'validation'                           => [
             'alternate_price' => 'Es kann nur ein Gutschein für einen neuen Fixpreis angewendet werden.',
+            'shipping'        => 'Es kann nur ein Gutschein für einen Versandrabatt angewendet werden.',
             'duplicate'       => 'Ein Gutschein kann nur einmal verwendet werden.',
         ],
     ],

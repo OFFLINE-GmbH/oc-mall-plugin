@@ -350,4 +350,31 @@ class CartTest extends PluginTestCase
 
         $this->assertEquals(1, $cart->discounts->count());
     }
+
+    public function test_only_one_shipping_discount_is_applied()
+    {
+        $this->expectException(ValidationException::class);
+
+        $product = Product::first();
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product);
+
+        $discountA                       = new Discount();
+        $discountA->code                 = 'Test';
+        $discountA->name                 = 'Test discount';
+        $discountA->type                 = 'shipping';
+        $discountA->shipping_price       = 25;
+        $discountA->shipping_description = 'Test shipping';
+        $discountA->save();
+
+        $discountB = $discountA->replicate();
+        $discountB->save();
+
+        $cart->applyDiscount($discountA);
+        $cart->applyDiscount($discountB);
+
+        $this->assertEquals(1, $cart->discounts->count());
+    }
 }

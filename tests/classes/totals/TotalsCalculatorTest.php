@@ -210,11 +210,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($this->getProduct($price), $quantity);
 
-        $discount         = new Discount();
-        $discount->code   = 'Test';
-        $discount->name   = 'Test discount';
-        $discount->type   = 'fixed_amount';
-        $discount->amount = 10000;
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->trigger = 'code';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'fixed_amount';
+        $discount->amount  = 10000;
         $discount->save();
 
         $cart->applyDiscount($discount);
@@ -231,11 +232,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($this->getProduct($price), $quantity);
 
-        $discount       = new Discount();
-        $discount->code = 'Test';
-        $discount->name = 'Test discount';
-        $discount->type = 'rate';
-        $discount->rate = 50;
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->name    = 'Test discount';
+        $discount->trigger = 'code';
+        $discount->type    = 'rate';
+        $discount->rate    = 50;
         $discount->save();
 
         $cart->applyDiscount($discount);
@@ -252,11 +254,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($this->getProduct($price), $quantity);
 
-        $discountA       = new Discount();
-        $discountA->code = 'Test';
-        $discountA->name = 'Test discount';
-        $discountA->type = 'rate';
-        $discountA->rate = 25;
+        $discountA          = new Discount();
+        $discountA->code    = 'Test';
+        $discountA->name    = 'Test discount';
+        $discountA->trigger = 'code';
+        $discountA->type    = 'rate';
+        $discountA->rate    = 25;
         $discountA->save();
 
         $discountB = $discountA->replicate();
@@ -277,10 +280,11 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($this->getProduct($price), $quantity);
 
-        $discount       = new Discount();
-        $discount->code = 'Test';
-        $discount->name = 'Test discount';
-        $discount->type = 'alternate_price';
+        $discount                  = new Discount();
+        $discount->code            = 'Test';
+        $discount->name            = 'Test discount';
+        $discount->trigger         = 'code';
+        $discount->type            = 'alternate_price';
         $discount->alternate_price = 250;
         $discount->save();
 
@@ -290,6 +294,279 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(250 * 100, $calc->totalPostTaxes());
     }
 
+    public function test_it_applies_alternate_shipping_price_discounts()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 200;
+        $shippingMethod->save();
+
+        $shippingMethod->taxes()->attach($tax1);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $discount                       = new Discount();
+        $discount->code                 = 'Test';
+        $discount->name                 = 'Test discount';
+        $discount->trigger              = 'code';
+        $discount->type                 = 'shipping';
+        $discount->shipping_description = 'Test shipping';
+        $discount->shipping_price       = 100;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(30000, $calc->totalPostTaxes());
+        $this->assertEquals(5615, $calc->totalTaxes());
+    }
+
+    public function test_it_applies_alternate_price_discount_only_when_given_total_is_reached()
+    {
+        $product = $this->getProduct(100);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $discount                  = new Discount();
+        $discount->code            = 'Test';
+        $discount->name            = 'Test discount';
+        $discount->type            = 'alternate_price';
+        $discount->alternate_price = 100;
+        $discount->trigger         = 'total';
+        $discount->total_to_reach  = 300;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(20000, $calc->totalPostTaxes());
+
+        $cart->addProduct($product);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(10000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_fixed_amount_discount_only_when_given_total_is_reached()
+    {
+        $product = $this->getProduct(100);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $discount                 = new Discount();
+        $discount->code           = 'Test';
+        $discount->name           = 'Test discount';
+        $discount->type           = 'fixed_amount';
+        $discount->amount         = 15000;
+        $discount->trigger        = 'total';
+        $discount->total_to_reach = 300;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(20000, $calc->totalPostTaxes());
+
+        $cart->addProduct($product);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(15000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_rate_discounts_only_when_given_total_is_reached()
+    {
+        $product = $this->getProduct(100);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $discount                 = new Discount();
+        $discount->code           = 'Test';
+        $discount->name           = 'Test discount';
+        $discount->type           = 'rate';
+        $discount->rate           = 50;
+        $discount->trigger        = 'total';
+        $discount->total_to_reach = 300;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(20000, $calc->totalPostTaxes());
+
+        $cart->addProduct($product);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(15000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_alternate_shipping_price_discounts_only_when_given_total_is_reached()
+    {
+        $product = $this->getProduct(100);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 200;
+        $shippingMethod->save();
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $discount                       = new Discount();
+        $discount->code                 = 'Test';
+        $discount->name                 = 'Test discount';
+        $discount->type                 = 'shipping';
+        $discount->shipping_description = 'Test shipping';
+        $discount->shipping_price       = 0;
+        $discount->trigger              = 'total';
+        $discount->total_to_reach       = 300;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(40000, $calc->totalPostTaxes());
+
+        $cart->addProduct($product);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(30000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_alternate_price_discount_only_when_needed_product_is_in_cart()
+    {
+        $productA = $this->getProduct(100);
+        $productA->save();
+        $productB = $this->getProduct(100);
+        $productB->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+
+        $discount                  = new Discount();
+        $discount->code            = 'Test';
+        $discount->name            = 'Test discount';
+        $discount->type            = 'alternate_price';
+        $discount->alternate_price = 100;
+        $discount->trigger         = 'product';
+        $discount->product_id      = $productB->id;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(20000, $calc->totalPostTaxes());
+
+        $cart->addProduct($productB);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(10000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_fixed_amount_discount_only_when_needed_product_is_in_cart()
+    {
+        $productA = $this->getProduct(100);
+        $productA->save();
+        $productB = $this->getProduct(100);
+        $productB->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+
+        $discount             = new Discount();
+        $discount->code       = 'Test';
+        $discount->name       = 'Test discount';
+        $discount->type       = 'fixed_amount';
+        $discount->amount     = 15000;
+        $discount->trigger    = 'product';
+        $discount->product_id = $productB->id;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(20000, $calc->totalPostTaxes());
+
+        $cart->addProduct($productB);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(15000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_rate_discounts_only_when_needed_product_is_in_cart()
+    {
+        $productA = $this->getProduct(100);
+        $productA->save();
+        $productB = $this->getProduct(100);
+        $productB->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+
+        $discount             = new Discount();
+        $discount->code       = 'Test';
+        $discount->name       = 'Test discount';
+        $discount->type       = 'rate';
+        $discount->rate       = 50;
+        $discount->trigger    = 'product';
+        $discount->product_id = $productB->id;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(20000, $calc->totalPostTaxes());
+
+        $cart->addProduct($productB);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(15000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_applies_alternate_shipping_price_discounts_only_when_needed_product_is_in_cart()
+    {
+        $productA = $this->getProduct(100);
+        $productA->save();
+        $productB = $this->getProduct(100);
+        $productB->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 200;
+        $shippingMethod->save();
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $discount                       = new Discount();
+        $discount->code                 = 'Test';
+        $discount->name                 = 'Test discount';
+        $discount->type                 = 'shipping';
+        $discount->shipping_description = 'Test shipping';
+        $discount->shipping_price       = 0;
+        $discount->trigger              = 'product';
+        $discount->product_id           = $productB->id;
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(40000, $calc->totalPostTaxes());
+
+        $cart->addProduct($productB);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(30000, $calc->totalPostTaxes());
+    }
 
     protected function getProduct($price)
     {

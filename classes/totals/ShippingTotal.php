@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
@@ -94,7 +95,9 @@ class ShippingTotal
             }
         }
 
-        return $price;
+        $price = $this->applyDiscounts($price);
+
+        return $price > 0 ? $price : 0;
     }
 
     public function price(): int
@@ -110,5 +113,18 @@ class ShippingTotal
     public function total(): int
     {
         return $this->total;
+    }
+
+    private function applyDiscounts(int $price): int
+    {
+        $discount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
+        if ( ! $discount) {
+            return $price;
+        }
+
+        $applier = new DiscountApplier($this->totals->getCart(), $this->totals->productTotal(), $price);
+        $applier->apply($discount);
+
+        return $applier->reducedTotal();
     }
 }

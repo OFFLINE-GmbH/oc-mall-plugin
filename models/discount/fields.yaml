@@ -107,8 +107,8 @@ fields:
             field: type
             condition: value[shipping]
         type: number
-    shipping_cost:
-        label: 'offline.mall::lang.discounts.shipping_cost'
+    shipping_price:
+        label: 'offline.mall::lang.discounts.shipping_price'
         oc.commentPosition: ''
         span: left
         trigger:
