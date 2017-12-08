@@ -10,11 +10,11 @@ class BuilderTableCreateOfflineMallOrders extends Migration
         Schema::create('offline_mall_orders', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->string('order_number')->nullable();
+            $table->string('order_number')->nullable()->unique();
             $table->string('invoice_number')->nullable();
             $table->string('currency')->nullable();
-            $table->string('payment_status')->nullable();
-            $table->string('order_status')->nullable();
+            $table->string('payment_status');
+            $table->string('order_status');
             $table->boolean('shipping_address_same_as_billing')->nullable();
             $table->text('billing_address')->nullable();
             $table->text('shipping_address')->nullable();
@@ -22,7 +22,10 @@ class BuilderTableCreateOfflineMallOrders extends Migration
             $table->text('shipping')->nullable();
             $table->text('taxes')->nullable();
             $table->text('discounts')->nullable();
+            $table->integer('shipping_pre_taxes')->nullable();
+            $table->integer('shipping_taxes')->nullable();
             $table->integer('total_shipping')->nullable();
+            $table->integer('product_taxes')->nullable();
             $table->integer('total_product')->nullable();
             $table->integer('total_taxes')->nullable();
             $table->integer('total_pre_taxes')->nullable();

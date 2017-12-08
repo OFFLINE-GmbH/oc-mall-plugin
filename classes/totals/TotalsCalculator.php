@@ -111,7 +111,7 @@ class TotalsCalculator
         }, 0);
     }
 
-    protected function shippingTotal(): ShippingTotal
+    public function shippingTotal(): ShippingTotal
     {
         return $this->shippingTotal;
     }

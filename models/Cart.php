@@ -1,9 +1,11 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Auth\Models\User;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 
 class Cart extends Model
 {
@@ -35,7 +37,10 @@ class Cart extends Model
         ],
     ];
 
-    public $duplicateCache = false;
+    /**
+     * @var TotalsCalculator
+     */
+    public $totalsCached;
 
     public static function boot()
     {
@@ -50,6 +55,25 @@ class Cart extends Model
     public function setShippingMethod(ShippingMethod $method)
     {
         $this->shipping_method_id = $method->id;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user_id = $user->id;
+    }
+
+    public function getTotalsAttribute()
+    {
+        if ($this->totalsCached) {
+            return $this->totalsCached;
+        }
+
+        return $this->totalsCached = new TotalsCalculator($this);
+    }
+
+    public function totals(): TotalsCalculator
+    {
+        return $this->totalsCached = new TotalsCalculator($this);
     }
 
     /**

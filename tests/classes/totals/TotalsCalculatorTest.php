@@ -118,6 +118,27 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(3076, $calc->taxes()[1]->total());
     }
 
+    public function test_it_calculates_weight_total()
+    {
+        $product                     = $this->getProduct(100);
+        $product->weight             = 1000;
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+        $cart->addProduct($product, 1);
+
+        $product                     = $this->getProduct(100);
+        $product->weight             = 500;
+        $product->save();
+
+        $cart->addProduct($product, 3);
+        $cart->addProduct($product, 1);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(5000, $calc->weightTotal());
+    }
+
     public function test_it_calculates_shipping_cost_with_special_rates()
     {
         $tax1 = $this->getTax('Test 1', 10);
