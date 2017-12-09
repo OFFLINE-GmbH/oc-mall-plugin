@@ -1,7 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
-use October\Rain\Auth\Models\User;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
@@ -27,7 +26,9 @@ class Cart extends Model
     ];
 
     public $belongsTo = [
-        'shipping_method' => ShippingMethod::class,
+        'shipping_method'  => ShippingMethod::class,
+        'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
+        'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
     ];
 
     public $belongsToMany = [
@@ -35,6 +36,10 @@ class Cart extends Model
             Discount::class,
             'table' => 'offline_mall_cart_discount',
         ],
+    ];
+
+    public $casts = [
+        'shipping_address_same_as_billing' => 'boolean',
     ];
 
     /**
@@ -46,7 +51,7 @@ class Cart extends Model
     {
         parent::boot();
         static::creating(function (Cart $cart) {
-            if ( ! $cart->user_id) {
+            if ( ! $cart->customer_id) {
                 $cart->session_id = str_random(100);
             }
         });
@@ -57,9 +62,20 @@ class Cart extends Model
         $this->shipping_method_id = $method->id;
     }
 
-    public function setUser(User $user)
+    public function setCustomer(Customer $customer)
     {
-        $this->user_id = $user->id;
+        $this->customer_id = $customer->id;
+    }
+
+    public function setBillingAddress(Address $address)
+    {
+        $this->billing_address_id = $address->id;
+    }
+
+    public function setShippingAddress(Address $address)
+    {
+        $this->shipping_address_id              = $address->id;
+        $this->shipping_address_same_as_billing = false;
     }
 
     public function getTotalsAttribute()
@@ -82,6 +98,8 @@ class Cart extends Model
      * @param Product            $product
      * @param int|null           $quantity
      * @param CustomFieldValue[] $values
+     *
+     * @return void
      */
     public function addProduct(Product $product, int $quantity = null, $values = null)
     {

@@ -1,8 +1,13 @@
 <?php namespace OFFLINE\Mall;
 
-use OFFLINE\Mall\Models\Category;
-use System\Classes\PluginBase;
+
 use Event;
+use October\Rain\Database\Model;
+use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\Customer;
+use RainLab\User\Models\User;
+use Rainlab\User\Models\User as UserModel;
+use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
@@ -11,6 +16,7 @@ class Plugin extends PluginBase
     public function boot()
     {
         $this->registerStaticPagesEvents();
+        $this->extendUserModel();
     }
 
     public function registerComponents()
@@ -41,4 +47,21 @@ class Plugin extends PluginBase
             }
         });
     }
+
+    /**
+     * Extend RainLab's User Model with the needed
+     * relationships.
+     */
+    protected function extendUserModel()
+    {
+        if ( ! class_exists('RainLab\User\Models\User')) {
+            return;
+        }
+        UserModel::extend(function (Model $model) {
+            $model->hasOne['customer'] = [
+                Customer::class,
+            ];
+        });
+    }
+
 }

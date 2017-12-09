@@ -22,4 +22,6 @@
     - builder_table_create_offline_mall_cart_discount.php
     - builder_table_create_offline_mall_orders.php
     - builder_table_create_offline_mall_order_products.php
+    - builder_table_create_offline_mall_addresses.php
+    - builder_table_create_offline_mall_customers.php
     - database_seeder.php

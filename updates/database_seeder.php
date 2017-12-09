@@ -2,6 +2,7 @@
 
 use October\Rain\Database\Model;
 use October\Rain\Database\Updates\Seeder;
+use OFFLINE\Mall\Classes\Seeders\CustomerTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomFieldTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ProductTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;
@@ -18,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomFieldTableSeeder::class);
         $this->call(ShippingMethodTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
+        $this->call(CustomerTableSeeder::class);
     }
 }

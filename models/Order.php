@@ -33,6 +33,10 @@ class Order extends Model
         'products' => OrderProduct::class,
     ];
 
+    public $casts = [
+        'shipping_address_same_as_billing' => 'boolean',
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -48,9 +52,9 @@ class Order extends Model
         $order                                   = new static;
         $order->currency                         = 'CHF';
         $order->lang                             = 'de';
-        $order->shipping_address_same_as_billing = true;
-        $order->billing_address                  = 'address';
-        $order->shipping_address                 = 'address';
+        $order->shipping_address_same_as_billing = $cart->shipping_address_same_as_billing;
+        $order->billing_address                  = $cart->billing_address;
+        $order->shipping_address                 = $cart->shipping_address;
         $order->shipping                         = $cart->shipping_method;
         $order->taxes                            = $cart->totals->taxes();
         $order->discounts                        = $cart->discounts;

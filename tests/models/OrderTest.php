@@ -2,7 +2,9 @@
 
 use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
 use OFFLINE\Mall\Classes\PaymentStatus\PendingState;
+use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
@@ -12,7 +14,6 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
-use RainLab\User\Models\User;
 
 class OrderTest extends PluginTestCase
 {
@@ -34,6 +35,10 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(130000, $order->total_post_taxes);
         $this->assertEquals(2800, $order->total_weight);
         $this->assertNotEmpty($order->ip_address);
+
+        $this->assertFalse($order->shipping_address_same_as_billing);
+        $this->assertEquals(json_encode(Address::find(1)), $order->getOriginal('billing_address'));
+        $this->assertEquals(json_encode(Address::find(2)), $order->getOriginal('shipping_address'));
     }
 
     protected function getCart(): Cart
@@ -60,7 +65,6 @@ class OrderTest extends PluginTestCase
         $productB->weight = 800;
         $productB->save();
         $productB->taxes()->attach([$tax1->id, $tax2->id]);
-
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
@@ -108,13 +112,10 @@ class OrderTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $user                        = new User();
-        $user->email                 = 'test@test.com';
-        $user->password              = 'abcd';
-        $user->password_confirmation = 'abcd';
-        $user->save();
+        $cart->setCustomer(Customer::first());
 
-        $cart->setUser($user);
+        $cart->setBillingAddress(Address::find(1));
+        $cart->setShippingAddress(Address::find(2));
 
         return $cart;
     }

@@ -11,7 +11,10 @@ class BuilderTableCreateOfflineMallCarts extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('session_id')->nullable();
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('customer_id')->nullable()->unsigned();
+            $table->integer('shipping_address_id')->nullable()->unsigned();
+            $table->integer('billing_address_id')->nullable()->unsigned();
+            $table->boolean('shipping_address_same_as_billing')->default(true);
             $table->integer('shipping_method_id')->nullable()->unsigned();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
