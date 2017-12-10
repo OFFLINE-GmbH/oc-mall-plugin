@@ -20,11 +20,11 @@ class ShippingTotal
     /**
      * @var int
      */
-    private $total;
+    private $preTaxes;
     /**
      * @var int
      */
-    private $price;
+    private $total;
     /**
      * @var int
      */
@@ -40,18 +40,18 @@ class ShippingTotal
 
     protected function calculate()
     {
-        $this->price = $this->calculatePrice();
-        $this->taxes = $this->calculateTaxes();
-        $this->total = $this->calculateTotal();
+        $this->total    = $this->calculateTotal();
+        $this->taxes    = $this->calculateTaxes();
+        $this->preTaxes = $this->calculatePreTax();
     }
 
-    protected function calculateTotal()
+    protected function calculatePreTax()
     {
         if ( ! $this->method) {
             return 0;
         }
 
-        $price = $this->price;
+        $price = $this->total;
 
         return $price - $this->taxes;
     }
@@ -62,14 +62,14 @@ class ShippingTotal
             return 0;
         }
 
-        $price = $this->price;
+        $price = $this->total;
 
         return $this->method->taxes->reduce(function ($total, Tax $tax) use ($price) {
-            return $total += $tax->percentageDecimal * $price;
+            return $total += $price / (1 + $tax->percentageDecimal) * $tax->percentageDecimal;
         }, 0);
     }
 
-    protected function calculatePrice(): int
+    protected function calculateTotal(): int
     {
         if ( ! $this->method) {
             return 0;
@@ -100,9 +100,9 @@ class ShippingTotal
         return $price > 0 ? $price : 0;
     }
 
-    public function price(): int
+    public function preTaxes(): int
     {
-        return $this->price;
+        return $this->preTaxes;
     }
 
     public function taxes(): int
@@ -122,7 +122,7 @@ class ShippingTotal
             return $price;
         }
 
-        $applier = new DiscountApplier($this->totals->getCart(), $this->totals->productTotal(), $price);
+        $applier = new DiscountApplier($this->totals->getCart(), $this->totals->productPostTaxes(), $price);
         $applier->apply($discount);
 
         return $applier->reducedTotal();

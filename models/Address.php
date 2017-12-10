@@ -16,7 +16,6 @@ class Address extends Model
         'name'            => 'required',
         'lines'           => 'required',
         'zip'             => 'required',
-        'county_province' => 'required',
         'country_id'      => 'required|exists:offline_mall_countries,id',
         'city'            => 'required',
     ];

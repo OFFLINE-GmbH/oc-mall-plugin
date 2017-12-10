@@ -65,7 +65,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(4615, round($calc->totalTaxes(), 2));
         $this->assertCount(2, $calc->taxes());
         $this->assertEquals(1538, $calc->taxes()[0]->total());
-        $this->assertEquals(3076, $calc->taxes()[1]->total());
+        $this->assertEquals(3077, $calc->taxes()[1]->total());
     }
 
     public function test_it_calculates_taxes_excluded()
@@ -112,24 +112,137 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(30000, $calc->totalPostTaxes());
-        $this->assertEquals(5615, $calc->totalTaxes());
+        $this->assertEquals(5524, $calc->totalTaxes());
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(2538, $calc->taxes()[0]->total());
-        $this->assertEquals(3076, $calc->taxes()[1]->total());
+        $this->assertEquals(2447, $calc->taxes()[0]->total());
+        $this->assertEquals(3077, $calc->taxes()[1]->total());
+    }
+
+    public function test_it_calculates_taxes()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 10);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = false;
+        $product->taxes()->attach([$tax1->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 100;
+        $shippingMethod->save();
+
+        $shippingMethod->taxes()->attach($tax2);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(21000, $calc->totalPostTaxes());
+        $this->assertEquals(1909, $calc->totalTaxes());
+        $this->assertCount(2, $calc->taxes());
+        $this->assertEquals(1000, $calc->taxes()[0]->total());
+        $this->assertEquals(909, $calc->taxes()[1]->total());
+    }
+
+    public function test_it_calculates_taxes_with_quantity()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = false;
+        $product->taxes()->attach([$tax1->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 3);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 100;
+        $shippingMethod->save();
+
+        $shippingMethod->taxes()->attach($tax2);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(43000, $calc->totalPostTaxes());
+        $this->assertEquals(4666, $calc->totalTaxes());
+        $this->assertCount(2, $calc->taxes());
+        $this->assertEquals(3000, $calc->taxes()[0]->total());
+        $this->assertEquals(1666, $calc->taxes()[1]->total());
+    }
+
+    public function test_it_consolidates_taxes()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = false;
+        $product->taxes()->attach([$tax1->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 100;
+        $shippingMethod->save();
+
+        $shippingMethod->taxes()->attach($tax1);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(21000, $calc->totalPostTaxes());
+        $this->assertEquals(1909, $calc->totalTaxes());
+        $this->assertCount(1, $calc->taxes());
+        $this->assertEquals(1909, $calc->taxes()[0]->total());
+    }
+
+    public function test_it_calculates_detailed_taxes()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = false;
+        $product->taxes()->attach([$tax1->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1);
+
+        $shippingMethod        = ShippingMethod::first();
+        $shippingMethod->price = 100;
+        $shippingMethod->save();
+
+        $shippingMethod->taxes()->attach($tax1);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(21000, $calc->totalPostTaxes());
+        $this->assertEquals(1909, $calc->totalTaxes());
+        $this->assertCount(2, $calc->detailedTaxes());
+        $this->assertEquals(1000, $calc->detailedTaxes()[0]->total());
+        $this->assertEquals(909, $calc->detailedTaxes()[1]->total());
     }
 
     public function test_it_calculates_weight_total()
     {
-        $product                     = $this->getProduct(100);
-        $product->weight             = 1000;
+        $product         = $this->getProduct(100);
+        $product->weight = 1000;
         $product->save();
 
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
         $cart->addProduct($product, 1);
 
-        $product                     = $this->getProduct(100);
-        $product->weight             = 500;
+        $product         = $this->getProduct(100);
+        $product->weight = 500;
         $product->save();
 
         $cart->addProduct($product, 3);
@@ -169,10 +282,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(40000, $calc->totalPostTaxes());
-        $this->assertEquals(6615, $calc->totalTaxes());
+        $this->assertEquals(6433, $calc->totalTaxes());
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(3538, $calc->taxes()[0]->total());
-        $this->assertEquals(3076, $calc->taxes()[1]->total());
+        $this->assertEquals(3356, $calc->taxes()[0]->total());
+        $this->assertEquals(3077, $calc->taxes()[1]->total());
     }
 
     public function test_it_calculates_variant_cost()

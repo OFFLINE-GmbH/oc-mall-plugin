@@ -1,0 +1,22 @@
+<div class="relative">
+    <select class="mall-selectbox-sm"
+            name="quantity"
+            data-track-input
+            data-request="onUpdateQuantity"
+            data-request-data="id: '{{ product.id }}'"
+            data-request-update="'{{ __SELF__ }}::cart': '.mall-cart'"
+    >
+        {% set min = product.data.quantity_min | default(__SELF__.defaultMinQuantity) %}
+        {% set max = product.data.quantity_max | default(__SELF__.defaultMaxQuantity) %}
+        {% for i in range(min, max) %}
+            <option value="{{ i }}" {{ i == product.quantity ? 'selected="selected"' : '' }}>{{ i }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 20 20">
+            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+        </svg>
+    </div>
+</div>

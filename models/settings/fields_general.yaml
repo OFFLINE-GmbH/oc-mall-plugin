@@ -1,0 +1,57 @@
+fields:
+    links:
+        label: offline.snipcartshop::lang.plugin.general_settings.links
+        comment: offline.snipcartshop::lang.plugin.general_settings.links_comment
+        type: section
+
+    product_page:
+        label: offline.snipcartshop::lang.plugin.general_settings.product_page
+        span: left
+        type: dropdown
+        comment: offline.snipcartshop::lang.plugin.general_settings.product_page_comment
+
+    product_page_slug:
+        label: offline.snipcartshop::lang.plugin.general_settings.product_page_slug
+        span: right
+        type: text
+        default: "slug"
+        comment: offline.snipcartshop::lang.plugin.general_settings.product_page_slug_comment
+
+    category_page:
+        label: offline.snipcartshop::lang.plugin.general_settings.category_page
+        span: left
+        type: dropdown
+        comment: offline.snipcartshop::lang.plugin.general_settings.category_page_comment
+
+    category_page_slug:
+        label: offline.snipcartshop::lang.plugin.general_settings.category_page_slug
+        span: right
+        type: text
+        default: "slug"
+        comment: offline.snipcartshop::lang.plugin.general_settings.category_page_slug_comment
+
+    customizations:
+        label: offline.snipcartshop::lang.plugin.general_settings.customizations
+        comment: offline.snipcartshop::lang.plugin.general_settings.customizations_comment
+        type: section
+
+    auto_pop:
+        label: offline.snipcartshop::lang.plugin.general_settings.auto_pop
+        span: left
+        type: switch
+        default: true
+        comment: offline.snipcartshop::lang.plugin.general_settings.auto_pop_comment
+
+    show_continue_shopping:
+        label: offline.snipcartshop::lang.plugin.general_settings.show_continue_shopping
+        span: left
+        type: switch
+        default: true
+        comment: offline.snipcartshop::lang.plugin.general_settings.show_continue_shopping_comment
+
+    split_firstname_and_lastname:
+        label: offline.snipcartshop::lang.plugin.general_settings.split_firstname_and_lastname
+        span: left
+        type: switch
+        default: true
+        comment: offline.snipcartshop::lang.plugin.general_settings.split_firstname_and_lastname_comment

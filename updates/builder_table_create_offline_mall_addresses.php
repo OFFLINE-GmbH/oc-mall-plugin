@@ -15,11 +15,11 @@ class BuilderTableCreateOfflineMallAddresses extends Migration
             $table->string('name');
             $table->text('lines');
             $table->string('city');
-            $table->string('county_province');
+            $table->string('county_province')->nullable();
             $table->string('zip', 20);
             $table->integer('country_id')->unsigned();
             $table->text('details')->nullable();
-            $table->integer('customer_id')->unsigned();
+            $table->integer('customer_id')->unsigned()->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

@@ -19,6 +19,10 @@ class TotalsCalculator
      */
     protected $taxes;
     /**
+     * @var Collection<TaxTotal>
+     */
+    protected $detailedTaxes;
+    /**
      * @var ShippingTotal
      */
     protected $shippingTotal;
@@ -41,11 +45,15 @@ class TotalsCalculator
     /**
      * @var int
      */
-    protected $productTotal;
+    protected $productPreTaxes;
     /**
      * @var int
      */
     protected $productTaxes;
+    /**
+     * @var int
+     */
+    protected $productPostTaxes;
 
     public function __construct(Cart $cart)
     {
@@ -64,20 +72,20 @@ class TotalsCalculator
 
     protected function calculate()
     {
-        $this->weightTotal  = $this->calculateWeightTotal();
-        $this->productTotal = $this->calculateProductTotal();
+        $this->weightTotal      = $this->calculateWeightTotal();
+        $this->productPreTaxes  = $this->calculateProductPreTaxes();
+        $this->productTaxes     = $this->calculateProductTaxes();
+        $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
-        $this->productTaxes = $this->calculateProductTaxes();
-
-        $this->shippingTotal  = new ShippingTotal($this->cart->shipping_method, $this);
-        $this->totalPreTaxes  = $this->productTotal + $this->shippingTotal->total();
-        $this->totalTaxes     = $this->productTaxes + $this->shippingTotal->taxes();
-        $this->totalPostTaxes = $this->totalPreTaxes + $this->totalTaxes;
+        $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
+        $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->preTaxes();
 
         $this->taxes = $this->getTaxTotals();
+
+        $this->totalPostTaxes = $this->productPostTaxes + $this->shippingTotal->total();
     }
 
-    protected function calculateProductTotal(): int
+    protected function calculateProductPreTaxes(): int
     {
         $total = $this->cart->products->reduce(function ($total, CartProduct $product) {
             return $total += $product->totalPreTaxes;
@@ -97,11 +105,47 @@ class TotalsCalculator
 
     protected function getTaxTotals(): Collection
     {
-        return $this->cart->products->flatMap(function (CartProduct $product) {
+        $shippingTaxes = new Collection();
+        $shippingTotal = $this->shippingTotal->preTaxes();
+        if ($this->cart->shipping_method) {
+            $shippingTaxes = optional($this->cart->shipping_method)->taxes->map(function (Tax $tax) use ($shippingTotal) {
+                return new TaxTotal($shippingTotal, $tax);
+            });
+        }
+
+        $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {
             return $product->data->taxes;
         })->unique()->map(function (Tax $tax) {
-            return new TaxTotal($tax, $this->shippingTotal, $this);
+            return new TaxTotal($this->productPreTaxes, $tax);
         });
+
+        $combined = $productTaxes->concat($shippingTaxes);
+
+        $this->totalTaxes = $combined->reduce(function ($total, TaxTotal $tax) {
+            return $total += $tax->total();
+        }, 0);
+
+        $this->detailedTaxes = $combined;
+
+        return $this->consolidateTaxes($combined);
+    }
+
+    /**
+     * This method consolidates the same taxes on shipping
+     * and products down to one combined TaxTotal.
+     */
+    protected function consolidateTaxes(Collection $taxTotals)
+    {
+        return $taxTotals->groupBy(function (TaxTotal $taxTotal) {
+            return $taxTotal->tax->id;
+        })->map(function (Collection $grouped) {
+            $tax    = $grouped->first()->tax;
+            $preTax = $grouped->reduce(function ($total, TaxTotal $tax) {
+                return $total += $tax->preTax();
+            }, 0);
+
+            return new TaxTotal($preTax, $tax);
+        })->values();
     }
 
     protected function calculateWeightTotal(): int
@@ -131,9 +175,9 @@ class TotalsCalculator
         return $this->totalTaxes;
     }
 
-    public function productTotal(): int
+    public function productPreTaxes(): int
     {
-        return $this->productTotal;
+        return $this->productPreTaxes;
     }
 
     public function productTaxes(): int
@@ -141,14 +185,24 @@ class TotalsCalculator
         return $this->productTaxes;
     }
 
+    public function productPostTaxes(): int
+    {
+        return $this->productPostTaxes;
+    }
+
     public function totalPostTaxes(): int
     {
         return $this->totalPostTaxes;
     }
 
-    public function taxes(): Collection
+    public function taxes(bool $detailed = false): Collection
     {
-        return $this->taxes;
+        return $detailed ? $this->detailedTaxes : $this->taxes;
+    }
+
+    public function detailedTaxes(): Collection
+    {
+        return $this->taxes(true);
     }
 
     public function getCart(): Cart

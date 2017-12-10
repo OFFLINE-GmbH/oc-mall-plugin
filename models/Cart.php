@@ -1,10 +1,13 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cookie;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
+use RainLab\User\Models\User;
+use Session;
 
 class Cart extends Model
 {
@@ -12,12 +15,9 @@ class Cart extends Model
     use SoftDelete;
 
     protected $dates = ['deleted_at'];
-    protected $with = ['products', 'discounts', 'shipping_method'];
+    protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
 
-    public $rules = [
-        'session_id' => 'required_if,session_id,NULL',
-        'user_id'    => 'required_if,user_id,NULL',
-    ];
+    public $rules = [];
 
     public $table = 'offline_mall_carts';
 
@@ -29,6 +29,7 @@ class Cart extends Model
         'shipping_method'  => ShippingMethod::class,
         'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
         'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
+        'customer'         => [Customer::class, 'deleted' => true],
     ];
 
     public $belongsToMany = [
@@ -42,19 +43,37 @@ class Cart extends Model
         'shipping_address_same_as_billing' => 'boolean',
     ];
 
+    public $fillable = ['session_id'];
+
     /**
      * @var TotalsCalculator
      */
     public $totalsCached;
 
-    public static function boot()
+    public static function byUser(?User $user)
     {
-        parent::boot();
-        static::creating(function (Cart $cart) {
-            if ( ! $cart->customer_id) {
-                $cart->session_id = str_random(100);
-            }
-        });
+        if ($user === null) {
+            return self::bySession();
+        }
+
+        return self::firstOrCreate(['customer_id' => $user->customer->id]);
+    }
+
+    /**
+     * Create a cart for an unregistered user. The cart id
+     * is stored to the session and to a cookie. When the user
+     * visits the website again we will try to fetch the id of an old
+     * cart from the session or from the cookie.
+     *
+     * @return Cart
+     */
+    private static function bySession(): Cart
+    {
+        $sessionId = Session::get('cart_session_id') ?? Cookie::get('cart_session_id') ?? str_random(100);
+        Cookie::queue('cart_session_id', $sessionId, 9e6);
+        Session::put('cart_session_id', $sessionId);
+
+        return self::firstOrCreate(['session_id' => $sessionId]);
     }
 
     public function setShippingMethod(ShippingMethod $method)
@@ -112,17 +131,17 @@ class Cart extends Model
 
         if ($product->stackable && $this->isInCart($product, $values)) {
             $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
-                return $cartProduct->id === $product->id;
+                return $cartProduct->product_id === $product->id;
             });
 
-            $newQuantity = $this->normalizeQuantity($cartEntry->quantity + $quantity, $product);
+            $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
             CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
 
             return $this->load('products');
         }
 
-        $quantity = $this->normalizeQuantity($quantity, $product);
+        $quantity = $product->normalizeQuantity($quantity);
 
         $cartEntry             = new CartProduct();
         $cartEntry->cart_id    = $this->id;
@@ -171,7 +190,9 @@ class Cart extends Model
      */
     public function isInCart(Product $product, array $values = []): bool
     {
-        $productIsInCart = $this->products->contains($product->id);
+        $productIsInCart = $this->products->contains(function (CartProduct $existing) use ($product) {
+            return $existing->product_id === $product->id;
+        });
         // If there is no CustomFieldValue to compare we only have
         // to check if the product is in the cart.
         if (count($values) === 0 || $productIsInCart === false) {
@@ -194,23 +215,6 @@ class Cart extends Model
         }
 
         return $query->count() > 0;
-    }
-
-    /**
-     * Enforce min and max quantity values for a product.
-     *
-     * @return int
-     */
-    private function normalizeQuantity($quantity, Product $product): int
-    {
-        if ($product->quantity_min && $quantity < $product->quantity_min) {
-            return $product->quantity_min;
-        }
-        if ($product->quantity_max && $quantity > $product->quantity_max) {
-            return $product->quantity_max;
-        }
-
-        return $quantity;
     }
 
     /**

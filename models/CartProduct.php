@@ -22,6 +22,16 @@ class CartProduct extends Model
         'custom_field_values' => [CustomFieldValue::class, 'key' => 'cart_product_id', 'otherKey' => 'id'],
     ];
 
+    public $with = ['product', 'product.taxes'];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function (self $cartProduct) {
+            $cartProduct->quantity = $cartProduct->data->normalizeQuantity($cartProduct->quantity);
+        });
+    }
+
     public function getTotalPreTaxesAttribute(): int
     {
         if ($this->data->price_includes_tax) {

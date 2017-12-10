@@ -188,4 +188,21 @@ class Product extends Model
             return $total += $value->custom_field_option->getOriginal('price');
         }, $price);
     }
+
+    /**
+     * Enforce min and max quantity values for a product.
+     *
+     * @return int
+     */
+    public function normalizeQuantity($quantity): int
+    {
+        if ($this->quantity_min && $quantity < $this->quantity_min) {
+            return $this->quantity_min;
+        }
+        if ($this->quantity_max && $quantity > $this->quantity_max) {
+            return $this->quantity_max;
+        }
+
+        return $quantity;
+    }
 }

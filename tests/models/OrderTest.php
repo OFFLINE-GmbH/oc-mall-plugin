@@ -19,7 +19,8 @@ class OrderTest extends PluginTestCase
 {
     public function test_it_creates_a_new_order_from_a_cart()
     {
-        $order = Order::fromCart($this->getCart());
+        $cart  = $this->getCart();
+        $order = Order::fromCart($cart);
         $order->save();
 
         $this->assertEquals(1, $order->order_number);
@@ -39,6 +40,8 @@ class OrderTest extends PluginTestCase
         $this->assertFalse($order->shipping_address_same_as_billing);
         $this->assertEquals(json_encode(Address::find(1)), $order->getOriginal('billing_address'));
         $this->assertEquals(json_encode(Address::find(2)), $order->getOriginal('shipping_address'));
+
+        $this->assertNotNull($cart->deleted_at);
     }
 
     protected function getCart(): Cart

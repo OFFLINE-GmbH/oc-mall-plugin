@@ -1,6 +1,8 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
 use OFFLINE\Mall\Classes\PaymentStatus\PendingState;
 use OFFLINE\Mall\Classes\Traits\Price;
@@ -10,8 +12,8 @@ use OFFLINE\Mall\Classes\Traits\Price;
  */
 class Order extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
-    use \October\Rain\Database\Traits\SoftDelete;
+    use Validation;
+    use SoftDelete;
     use Price;
 
     protected $dates = ['deleted_at'];
@@ -22,7 +24,7 @@ class Order extends Model
         'billing_address'                  => 'required',
         'lang'                             => 'required',
         'ip_address'                       => 'required',
-        'user_id'                          => 'required|exists:users,id',
+        'customer_id'                      => 'required|exists:offline_mall_customers,id',
     ];
 
     public $jsonable = ['billing_address', 'shipping_address', 'custom_fields', 'taxes', 'discounts', 'shipping'];
@@ -59,7 +61,7 @@ class Order extends Model
         $order->taxes                            = $cart->totals->taxes();
         $order->discounts                        = $cart->discounts;
         $order->ip_address                       = request()->ip();
-        $order->user_id                          = 1;
+        $order->customer_id                      = 1;
         $order->payment_status                   = PendingState::class;
         $order->order_status                     = InProgressState::class;
         $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->total();
@@ -71,6 +73,8 @@ class Order extends Model
         $order->total_taxes                      = $cart->totals->totalTaxes();
         $order->total_post_taxes                 = $cart->totals->totalPostTaxes();
         $order->total_weight                     = $cart->totals->weightTotal();
+
+        $cart->delete(); // We can empty the cart once the order is created.
 
         return $order;
     }

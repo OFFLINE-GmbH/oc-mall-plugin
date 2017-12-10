@@ -1,0 +1,100 @@
+{% set headerStyle = 'text-sm font-semibold text-grey-darker p-2 bg-grey-lightest' %}
+{% set rowStyle = 'p-2 border-t text-xs whitespace-no-wrap' %}
+{% set rowMutedStyle = 'p-2 border-t text-xxs whitespace-no-wrap text-grey-dark' %}
+{% set totalStyle = 'p-2 bg-grey-lightest text-grey-darker font-semibold border-t border-smoke' %}
+
+<div class="border-t border-b border-grey-light overflow-hidden relative">
+    <div class="overflow-y-scroll">
+        <table class="w-full text-left table-collapse">
+            <thead>
+            <tr>
+                <th class="{{ headerStyle }} text-right">#</th>
+                <th class="{{ headerStyle }}">{{ "Product" | _ }}</th>
+                <th class="{{ headerStyle }} text-right">{{ "Quantity" | _ }}</th>
+                <th class="{{ headerStyle }} text-right">{{ "Price" | _ }}</th>
+                <th class="{{ headerStyle }} text-right">{{ "Total" | _ }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in cart.products %}
+                {% set borderColor = loop.index0 > 0 ? 'border-smoke-light' : 'border-smoke' %}
+                <tr>
+                    <td class="{{ rowStyle }} {{ borderColor }} text-right">
+                        {{ loop.index }}
+                    </td>
+                    <td class="{{ rowStyle }} {{ borderColor }}">
+                        {{ product.data.name }}
+                    </td>
+                    <td class="{{ rowStyle }} {{ borderColor }} text-right">
+                        {% partial __SELF__ ~ '::quantity-dropdown' product=product %}
+                    </td>
+                    <td class="{{ rowStyle }} {{ borderColor }} text-right">
+                        {{ product.data.price }}
+                    </td>
+                    <td class="{{ rowStyle }} {{ borderColor }} text-right">
+                        {{ product.totalPostTaxes | money }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td class="{{ totalStyle }} text-xs"></td>
+                <td class="{{ totalStyle }} text-xs" colspan="3">
+                    {{ "Total" | _ }}
+                </td>
+                <td class="{{ totalStyle }} text-xs text-right">
+                    {{ cart.totals.productPostTaxes | money }}
+                </td>
+            </tr>
+            <tr>
+                <td class="{{ rowStyle }}"></td>
+                <td class="{{ rowStyle }}" colspan="3">
+                    {{ cart.shipping_method.name }}
+                </td>
+                <td class="{{ rowStyle }} text-right">
+                    {{ cart.totals.shippingTotal.total | money }}
+                </td>
+            </tr>
+            <tr>
+                <td class="{{ totalStyle }} text-sm"></td>
+                <td class="{{ totalStyle }} text-sm" colspan="3">
+                    {{ "Grand total" | _ }}
+                </td>
+                <td class="{{ totalStyle }} text-sm text-right">
+                    {{ cart.totals.totalPostTaxes | money }}
+                </td>
+            </tr>
+
+            {% for tax in cart.totals.taxes %}
+                {% set borderColor = loop.index0 > 0 ? 'border-smoke-light' : 'border-smoke' %}
+                <tr>
+                    <td class="{{ rowMutedStyle }} {{ borderColor }}"></td>
+                    <td class="{{ rowMutedStyle }} {{ borderColor }}">
+                        {{ tax.tax.name }}
+                    </td>
+                    <td class="{{ rowMutedStyle }} {{ borderColor }} text-right">
+                        {{ tax.tax.percentage }} %
+                    </td>
+                    <td class="{{ rowMutedStyle }} {{ borderColor }}"></td>
+                    <td class="{{ rowMutedStyle }} {{ borderColor }} text-right">
+                        {{ tax.total | money }}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if cart.total.taxes.length > 0 %}
+            <tr>
+                <td class="{{ rowMutedStyle }} border-smoke"></td>
+                <td class="{{ rowMutedStyle }} border-smoke" colspan="2">
+                    {{ "Total taxes" | _ }}
+                </td>
+                <td class="{{ rowMutedStyle }} border-smoke"></td>
+                <td class="{{ rowMutedStyle }} border-smoke text-right">
+                    {{ cart.totals.totalTaxes | money }}
+                </td>
+            </tr>
+            {% endif %}
+            </tfoot>
+        </table>
+    </div>
+</div>

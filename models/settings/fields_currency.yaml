@@ -1,0 +1,22 @@
+fields:
+    currencies:
+        type: repeater
+        span: full
+        label: offline.mall::lang.currency_settings.currencies
+        form:
+            fields:
+                code:
+                    type: text
+                    label: offline.mall::lang.currency_settings.currency_code
+                    span: left
+                format:
+                    type: codeeditor
+                    label: offline.mall::lang.currency_settings.currency_format
+                    span: right
+                    size: small
+                    language: twig
+
+    help:
+        type: partial
+        span: right
+        path: $/offline/mall/models/settings/_currency_help.htm

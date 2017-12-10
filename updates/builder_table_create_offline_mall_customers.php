@@ -12,7 +12,7 @@ class BuilderTableCreateOfflineMallCustomers extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->nullable()->unsigned();
             $table->integer('default_shipping_address_id')->nullable();
             $table->integer('default_billing_address_id')->nullable();
             $table->timestamp('created_at')->nullable();

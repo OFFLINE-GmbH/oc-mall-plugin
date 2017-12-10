@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use OFFLINE\Mall\Models\Product;
+
 trait Price
 {
     public function getPriceColumns(): array
@@ -11,6 +13,10 @@ trait Price
 
     public function setAttribute($key, $value)
     {
+        if ($value === null) {
+            return $this->attributes[$key] = null;
+        }
+
         if ( ! in_array($key, $this->getPriceColumns())) {
             return parent::setAttribute($key, $value);
         }
@@ -24,11 +30,15 @@ trait Price
             return $value;
         }
 
-        return $this->formatPrice((int)$value / 100);
+        if ($value === null) {
+            return $value;
+        }
+
+        return $this->formatPrice((int)$value);
     }
 
     public function formatPrice($price)
     {
-        return number_format($price, 2, '.', '');
+        return format_money($price, $this instanceof Product ? $this : null);
     }
 }

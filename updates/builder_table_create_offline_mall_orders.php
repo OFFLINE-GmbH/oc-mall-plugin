@@ -41,7 +41,7 @@ class BuilderTableCreateOfflineMallOrders extends Migration
             $table->text('admin_notes')->nullable();
             $table->string('payment_transaction_id')->nullable();
             $table->string('ip_address')->nullable();
-            $table->integer('user_id')->nullable();
+            $table->integer('customer_id')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

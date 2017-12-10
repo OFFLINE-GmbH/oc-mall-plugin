@@ -2,8 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
-use OFFLINE\Mall\Models\CartProduct;
-use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Tax;
 
 class TaxTotal
@@ -11,32 +9,27 @@ class TaxTotal
     /**
      * @var Tax
      */
-    private $tax;
+    public $tax;
+    /**
+     * @var int
+     */
+    private $preTax;
     /**
      * @var int
      */
     private $total;
-    /**
-     * @var TotalsCalculator
-     */
-    private $totals;
-    /**
-     * @var ShippingTotal
-     */
-    private $shippingTotal;
 
-    public function __construct(Tax $tax, ShippingTotal $shippingTotal, TotalsCalculator $totals)
+    public function __construct(int $preTax, Tax $tax)
     {
+        $this->preTax = $preTax;
         $this->tax    = $tax;
-        $this->totals = $totals;
-        $this->shippingTotal = $shippingTotal;
 
         $this->calculate();
     }
 
     protected function calculate()
     {
-        $this->total = $this->totalProductTaxes() + $this->totalShippingTaxes();
+        $this->total = $this->preTax * $this->tax->percentageDecimal;
 
         return $this->total;
     }
@@ -46,30 +39,8 @@ class TaxTotal
         return $this->total;
     }
 
-    protected function totalProductTaxes(): int
+    public function preTax(): int
     {
-        return $this->totals->getCart()->products->filter(function (CartProduct $product) {
-            return $product->data->taxes->contains($this->tax->id);
-        })->reduce(function ($total, CartProduct $product) {
-            return $total += $product->totalForTax($this->tax);
-        }, 0);
-    }
-
-    protected function totalShippingTaxes(): int
-    {
-        $cart = $this->totals->getCart();
-        if ( ! $cart->shipping_method) {
-            return 0;
-        }
-
-        if ( ! $cart->shipping_method->taxes->contains($this->tax->id)) {
-            return 0;
-        }
-
-        $price = $this->shippingTotal->price();
-
-        return $cart->shipping_method->taxes->reduce(function ($total, Tax $tax) use ($cart, $price) {
-            return $total += $tax->percentageDecimal * $price;
-        }, 0);
+        return $this->preTax;
     }
 }
