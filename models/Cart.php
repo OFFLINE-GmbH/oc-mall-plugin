@@ -76,9 +76,10 @@ class Cart extends Model
         return self::firstOrCreate(['session_id' => $sessionId]);
     }
 
-    public function setShippingMethod(ShippingMethod $method)
+    public function setShippingMethod(?ShippingMethod $method)
     {
-        $this->shipping_method_id = $method->id;
+        $this->shipping_method_id = $method ? $method->id : null;
+        $this->save();
     }
 
     public function setCustomer(Customer $customer)
@@ -138,6 +139,8 @@ class Cart extends Model
 
             CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
 
+            $this->validateShippingMethod();
+
             return $this->load('products');
         }
 
@@ -153,6 +156,21 @@ class Cart extends Model
         $this->load('products');
 
         $cartEntry->custom_field_values()->saveMany($values);
+
+        $this->validateShippingMethod();
+    }
+
+    /**
+     * Updates the quantity for one cart entry.
+     */
+    public function setQuantity($cartProductId, int $quantity)
+    {
+        $product = $this->products->find($cartProductId);
+        if ($product) {
+            $product->quantity = $quantity;
+            $product->save();
+        }
+        $this->validateShippingMethod();
     }
 
     /**
@@ -227,5 +245,27 @@ class Cart extends Model
         }
 
         return array_filter($values);
+    }
+
+    /**
+     * Makes sure that the selected shipping method
+     * can still be applied to this cart.
+     */
+    private function validateShippingMethod()
+    {
+        if ( ! $this->shipping_method_id) {
+            return true;
+        }
+
+        $available = ShippingMethod::getAvailableByCart($this);
+        if ($available->pluck('id')->contains($this->shipping_method_id)) {
+            return true;
+        }
+
+        if (count($available) > 0) {
+            return $this->setShippingMethod($available->first());
+        }
+
+        return $this->setShippingMethod(null);
     }
 }

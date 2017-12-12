@@ -1,10 +1,12 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Auth;
 use Cms\Classes\ComponentBase;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\ShippingMethod;
-use Auth;
+use Validator;
 
 class ShippingSelector extends ComponentBase
 {
@@ -27,6 +29,34 @@ class ShippingSelector extends ComponentBase
     }
 
     public function onRun()
+    {
+        $this->setData();
+    }
+
+    public function onSelect()
+    {
+        $this->setData();
+
+        $v = Validator::make(post(), [
+            'id' => 'required|exists:offline_mall_shipping_methods,id',
+        ]);
+
+        if ($v->fails()) {
+            throw new ValidationException($v);
+        }
+
+        if ( ! $this->methods || ! $this->methods->pluck('id')->contains(post('id'))) {
+            throw new ValidationException(['id' => trans('offline.mall::lang.components.shippingSelector.errors.unavailable')]);
+        }
+
+        $this->cart->shipping_method_id = post('id');
+        $this->cart->save();
+
+        // Reload the cart to make sure everything is up to date.
+        $this->setData();
+    }
+
+    protected function setData()
     {
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
         $this->setVar('methods', ShippingMethod::getAvailableByCart($this->cart));

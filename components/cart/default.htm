@@ -1,7 +1,5 @@
-{% if cart.products.length %}
-    {% partial __SELF__ ~ '::empty' %}
-{% else %}
-    <div class="mall-cart">
-        {% partial __SELF__ ~ '::cart' %}
-    </div>
-{% endif %}
+<div class="mall-cart">
+    {% partial __SELF__ ~ '::cart' %}
+</div>
+
+{% partial __SELF__ ~ '::scripts' %}

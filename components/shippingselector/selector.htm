@@ -1,0 +1,6 @@
+<h2>{{ 'Shipping method' | _ }}</h2>
+{% if __SELF__.methods.count > 0 %}
+    {% partial __SELF__ ~ '::methods' %}
+{% else %}
+    {% partial __SELF__ ~ '::empty' %}
+{% endif %}

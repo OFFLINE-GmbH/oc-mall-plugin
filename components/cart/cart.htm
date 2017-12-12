@@ -1,2 +1,5 @@
-{% partial __SELF__ ~ '::entries' %}
-{% partial __SELF__ ~ '::actions' %}
+{% if cart.products.length %}
+    {% partial __SELF__ ~ '::empty' %}
+{% else %}
+    {% partial __SELF__ ~ '::table' %}
+{% endif %}

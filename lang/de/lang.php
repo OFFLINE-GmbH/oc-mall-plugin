@@ -329,6 +329,9 @@
                 'name' => 'Auswahl für Versandmethode',
                 'description' => 'Zeige eine Auflistung aller Versandmethoden an',
             ],
+            'errors' => [
+                'unavailable' => 'Die ausgewählte Versandmethode ist für Ihre Bestellung nicht verfügbar.'
+            ]
         ],
         'categories' => [
             'details' => [

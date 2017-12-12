@@ -5,7 +5,6 @@ use Cms\Classes\ComponentBase;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
-use OFFLINE\Mall\Models\Product;
 
 class Cart extends ComponentBase
 {
@@ -30,11 +29,14 @@ class Cart extends ComponentBase
 
     public function onRun()
     {
+        $this->addJs('assets/pubsub.js');
         $this->setData();
     }
 
     public function onUpdateQuantity()
     {
+        // Make sure the product is actually in the logged
+        // in user's shopping cart.
         $cart    = CartModel::byUser(Auth::getUser());
         $product = CartProduct
             ::whereHas('cart', function ($query) use ($cart) {
@@ -43,8 +45,7 @@ class Cart extends ComponentBase
             ->where('id', (int)input('id'))
             ->firstOrFail();
 
-        $product->quantity = (int)input('quantity');
-        $product->save();
+        $cart->setQuantity($product->id, (int)input('quantity'));
 
         $this->setData();
     }

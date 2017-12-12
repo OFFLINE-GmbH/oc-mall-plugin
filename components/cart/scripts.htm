@@ -1,0 +1,26 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $.subscribe('mall.shipping.update', function () {
+                $.request('onRun', {
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    success: function (data) {
+                        $('.mall-cart').html(data['{{ __SELF__ }}::cart'])
+                    }
+                })
+            });
+
+            $('body').on('change', '.js-mall-quantity', function () {
+                $.request('onUpdateQuantity', {
+                    data: {id: this.dataset.id, quantity: this.value},
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    loading: $.oc.stripeLoadIndicator,
+                    success: function (data) {
+                        $('.mall-cart').html(data['{{ __SELF__ }}::cart'])
+                        $.publish('mall.cart.update', data)
+                    }
+                })
+            });
+        })
+    </script>
+{% endput %}

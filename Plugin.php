@@ -4,6 +4,7 @@
 use Event;
 use October\Rain\Database\Model;
 use OFFLINE\Mall\Components\Cart;
+use OFFLINE\Mall\Components\Dependencies;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
@@ -25,7 +26,7 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            Cart::class => 'cart',
+            Cart::class             => 'cart',
             ShippingSelector::class => 'shippingSelector',
         ];
     }

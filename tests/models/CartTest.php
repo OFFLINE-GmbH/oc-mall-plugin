@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use DB;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
@@ -7,6 +8,7 @@ use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
 
@@ -376,5 +378,80 @@ class CartTest extends PluginTestCase
         $cart->applyDiscount($discountB);
 
         $this->assertEquals(1, $cart->discounts->count());
+    }
+
+    public function test_shipping_method_gets_reset_if_it_becomes_unavailable()
+    {
+        DB::table('offline_mall_shipping_methods')->truncate();
+
+        $product        = Product::first();
+        $product->price = 100;
+        $product->save();
+
+        $availableMethod                        = $this->getShippingMethod();
+        $availableMethod->available_above_total = 100;
+        $availableMethod->save();
+
+        $unavailableMethod                        = $this->getShippingMethod();
+        $unavailableMethod->available_above_total = 200;
+        $unavailableMethod->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 2);
+        $cart->setShippingMethod($unavailableMethod);
+
+        $available = ShippingMethod::getAvailableByCart($cart);
+
+        $this->assertCount(2, $available);
+        $this->assertEquals($unavailableMethod->id, $cart->shipping_method_id);
+
+        // Remove one item so that the selected shipping method becomes unavailable
+        $cart->setQuantity($cart->products->first()->id, 1);
+
+        $available = ShippingMethod::getAvailableByCart($cart);
+
+        $this->assertCount(1, $available);
+        $this->assertEquals($availableMethod->id, $cart->shipping_method_id);
+    }
+
+    public function test_shipping_method_gets_nulled_of_none_is_available()
+    {
+        DB::table('offline_mall_shipping_methods')->truncate();
+
+        $product        = Product::first();
+        $product->price = 100;
+        $product->save();
+
+        $availableMethod                        = $this->getShippingMethod();
+        $availableMethod->available_below_total = 200;
+        $availableMethod->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 1);
+        $cart->setShippingMethod($availableMethod);
+
+        $this->assertEquals($availableMethod->id, $cart->shipping_method_id);
+
+        // The selected shipping method becomes unavailable
+        $cart->addProduct($product, 1);
+
+        $available = ShippingMethod::getAvailableByCart($cart);
+
+        $this->assertCount(0, $available);
+        $this->assertNull($cart->shipping_method_id);
+    }
+
+    /**
+     * @return ShippingMethod
+     */
+    protected function getShippingMethod(): ShippingMethod
+    {
+        $availableMethod             = new ShippingMethod();
+        $availableMethod->name       = 'Available';
+        $availableMethod->price      = 100;
+        $availableMethod->sort_order = 1;
+        $availableMethod->save();
+
+        return $availableMethod;
     }
 }
