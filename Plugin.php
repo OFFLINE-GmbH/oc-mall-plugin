@@ -3,9 +3,15 @@
 
 use Event;
 use October\Rain\Database\Model;
+use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
+use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
+use OFFLINE\Mall\Classes\Customer\SignInHandler;
+use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Components\AddressInput;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Dependencies;
 use OFFLINE\Mall\Components\ShippingSelector;
+use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Customer;
@@ -21,6 +27,13 @@ class Plugin extends PluginBase
     {
         $this->registerStaticPagesEvents();
         $this->extendUserModel();
+
+        $this->app->bind(SignInHandler::class, function () {
+            return new DefaultSignInHandler();
+        });
+        $this->app->bind(SignUpHandler::class, function () {
+            return new DefaultSignUpHandler();
+        });
     }
 
     public function registerComponents()
@@ -28,6 +41,7 @@ class Plugin extends PluginBase
         return [
             Cart::class             => 'cart',
             ShippingSelector::class => 'shippingSelector',
+            SignUp::class           => 'signUp',
         ];
     }
 

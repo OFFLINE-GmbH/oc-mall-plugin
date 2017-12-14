@@ -1,0 +1,29 @@
+<h2>Checkout type</h2>
+<div class="mall-signup-list border-t border-b border-smoke">
+    <div class="border-b cursor-pointer border-smoke-light no-underline text-grey-darkest"
+    >
+        <a class="block bg-smoke hover:bg-grey-lighter px-6 py-4"
+           data-request="onMethodSignIn"
+           data-request-update="'{{ __SELF__ }}::signIn': '.mall-signup'">
+            <div>{{ 'Sign in' | _ }}</div>
+            <div class="text-sm text-grey mt-2">
+                {{ 'Sign in to an existing account' | _ }}
+            </div>
+        </a>
+        <a class="block bg-smoke hover:bg-grey-lighter px-6 py-4"
+           data-request="onMethodSignUp"
+           data-request-update="'{{ __SELF__ }}::signUp': '.mall-signup'"
+        >
+            <div>{{ 'Create an account' | _ }}</div>
+            <div class="text-sm text-grey mt-2">
+                {{ 'Create a personal account to track your order\'s status.' | _ }}
+            </div>
+        </a>
+        <a class="block bg-smoke hover:bg-grey-lighter px-6 py-4">
+            <div>{{ 'Checkout as guest' | _ }}</div>
+            <div class="text-sm text-grey mt-2">
+                {{ 'Place your order without creating an account.' | _ }}
+            </div>
+        </a>
+    </div>
+</div>

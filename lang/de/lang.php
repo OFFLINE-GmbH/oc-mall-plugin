@@ -333,6 +333,25 @@
                 'unavailable' => 'Die ausgewählte Versandmethode ist für Ihre Bestellung nicht verfügbar.'
             ]
         ],
+        'signup' => [
+            'details' => [
+                'name' => 'Anmeldung',
+                'description' => 'Zeigt ein Formular für die Registrierung oder das Login an',
+            ],
+            'errors' => [
+                'unknown_user' => 'Die eingegebenen Login-Daten sind ungültig.',
+                'login' => [
+                    'required' => 'Geben Sie eine Email-Adresse ein.',
+                    'email' => 'Geben Sie eine gültige Email-Adresse ein.',
+                    'between' => 'Geben Sie eine gültige Email-Adresse ein.',
+                ],
+                'password' => [
+                    'required' => 'Geben Sie ein Passwort ein.',
+                    'max' => 'Das eingegebene Passwort ist zu lang.',
+                    'min' => 'Das eingegebene Passwort ist zu kurz. Geben Sie mindestens 8 Zeichen ein.',
+                ]
+            ]
+        ],
         'categories' => [
             'details' => [
                 'name' => 'Kategorien',
