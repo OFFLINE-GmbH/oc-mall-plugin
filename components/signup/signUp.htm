@@ -1,27 +1,100 @@
 {% set labelStyle = 'block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2' %}
-{% set inputStyle = 'appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-light rounded py-3 px-4 mb-3' %}
-<div class="w-full max-w-xs">
-    <form class="bg-white px-8 pt-6 pb-8 mb-4" data-request="onSignin" data-request-flash
-          data-request-validate>
-        <div class="mb-4">
-            <label class="{{ labelStyle }}" for="email">Email</label>
-            <input class="{{ inputStyle }}" id="email" name="login" type="text" placeholder="email@example.com">
+{% set inputStyle = 'appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3' %}
+<form class="w-full max-w-md" data-request="onSignup" data-request-validate>
+    <div class="-mx-3 md:flex mb-6">
+        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+            <label class="{{ labelStyle }}" for="name">Your name</label>
+            <input class="{{ inputStyle }}" id="name" type="text" placeholder="First and last name" name="name">
+            <p class="text-red text-xs italic" data-validate-for="name"></p>
+        </div>
+        <div class="md:w-1/2 px-3">
+            <label class="{{ labelStyle }}" for="email">Your email</label>
+            <input class="{{ inputStyle }}" id="email" type="email" placeholder="email@example.com" name="email">
             <p class="text-red text-xs italic" data-validate-for="email"></p>
         </div>
-        <div class="mb-4">
-            <label class="{{ labelStyle }}" for="password">Password</label>
-            <input class="{{ inputStyle }}" id="password" type="password" name="password">
-            <p class="text-red text-xs italic" data-validate-for="password"></p>
+    </div>
+    {% if not asGuest %}
+        <div class="-mx-3 md:flex mb-6">
+            <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                <label class="{{ labelStyle }}" for="password">Password</label>
+                <input class="{{ inputStyle }}" id="password" type="password" name="password">
+                <p class="text-red text-xs italic" data-validate-for="password"></p>
+            </div>
+            <div class="md:w-1/2 px-3">
+                <label class="{{ labelStyle }}" for="password_repeat">Repeat password</label>
+                <input class="{{ inputStyle }}" id="password_repeat" type="password" name="password_repeat">
+                <p class="text-red text-xs italic" data-validate-for="password_repeat"></p>
+            </div>
         </div>
-        <div class="mb-4">
-            <label class="{{ labelStyle }}" for="password_repeat">Repeat password</label>
-            <input class="{{ inputStyle }}" id="password_repeat" type="password" name="password_repeat">
-            <p class="text-red text-xs italic" data-validate-for="password_repeat"></p>
+    {% endif %}
+    <div class="-mx-3 md:flex mb-6">
+        <div class="md:w-full px-3">
+            <h3>Your address</h3>
         </div>
-        <div class="flex items-center justify-between">
-            <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" type="submit">
-                Create an account
+    </div>
+    <div class="-mx-3 md:flex mb-6">
+        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+            <label class="{{ labelStyle }}" for="name">Company</label>
+            <input class="{{ inputStyle }}" id="company" type="text"
+                   placeholder="Leave plank if you are a private person" name="company">
+            <p class="text-red text-xs italic" data-validate-for="company"></p>
+        </div>
+        <div class="md:w-1/2 px-3">
+            <label class="{{ labelStyle }}" for="name">Recipient's name</label>
+            <input class="{{ inputStyle }}" id="address_name" type="text" placeholder="Leave blank if this is you"
+                   name="address_name">
+            <p class="text-red text-xs italic" data-validate-for="address_name"></p>
+        </div>
+    </div>
+    <div class="-mx-3 md:flex mb-6">
+        <div class="md:w-full px-3">
+            <label class="{{ labelStyle }}" for="name">Address lines</label>
+            <textarea class="{{ inputStyle }}" id="lines" type="text" name="lines"></textarea>
+            <p class="text-red text-xs italic" data-validate-for="lines"></p>
+        </div>
+    </div>
+    <div class="-mx-3 md:flex mb-2">
+        <div class="md:w-1/2 px-3">
+            <label class="{{ labelStyle }}" for="zip">Zip</label>
+            <input class="{{ inputStyle }}" id="zip" name="zip" type="text">
+            <p class="text-red text-xs italic" data-validate-for="zip"></p>
+        </div>
+        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+            <label class="{{ labelStyle }}" for="city">City</label>
+            <input class="{{ inputStyle }}" id="city" name="city" type="text">
+            <p class="text-red text-xs italic" data-validate-for="city"></p>
+        </div>
+        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+            <label class="{{ labelStyle }}" for="county_province">State/County/Province</label>
+            <input class="{{ inputStyle }}" id="county_province" name="county_province" type="text">
+            <p class="text-red text-xs italic" data-validate-for="county_province"></p>
+        </div>
+    </div>
+    <div class="-mx-3 md:flex mb-2">
+        <div class="md:w-full px-3">
+            <label class="{{ labelStyle }}" for="country_id">Country</label>
+            <div class="relative">
+                <select class="{{ inputStyle }} pr-8" id="country_id" name="country_id">
+                    {% for country in countries %}
+                        <option value="{{ country.id }}">{{ country.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-red text-xs italic" data-validate-for="country_id"></p>
+        </div>
+    </div>
+
+    <div class="-mx-3 md:flex mb-2 mt-6 border-t border-grey-light">
+        <div class="md:w-full px-3 pt-6">
+            <input type="hidden" name="as_guest" value="{{ asGuest ? 1 : 0 }}">
+            <button class="bg-blue hover:bg-blue-dark text-white font-bold py-3 px-4 rounded" type="submit">
+                Create account
             </button>
         </div>
-    </form>
-</div>
+    </div>
+</form>

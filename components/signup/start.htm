@@ -19,7 +19,10 @@
                 {{ 'Create a personal account to track your order\'s status.' | _ }}
             </div>
         </a>
-        <a class="block bg-smoke hover:bg-grey-lighter px-6 py-4">
+        <a class="block bg-smoke hover:bg-grey-lighter px-6 py-4"
+           data-request="onMethodSignUp"
+           data-request-data="asGuest: true"
+           data-request-update="'{{ __SELF__ }}::signUp': '.mall-signup'">
             <div>{{ 'Checkout as guest' | _ }}</div>
             <div class="text-sm text-grey mt-2">
                 {{ 'Place your order without creating an account.' | _ }}

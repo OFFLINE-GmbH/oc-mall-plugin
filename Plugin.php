@@ -3,6 +3,7 @@
 
 use Event;
 use October\Rain\Database\Model;
+use OFFLINE\Mall\Classes\Auth\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;

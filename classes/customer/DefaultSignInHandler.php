@@ -41,8 +41,20 @@ class DefaultSignInHandler implements SignInHandler
         ];
 
         Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
+        Event::fire('mall.user.beforeAuthenticate', [$this, $credentials]);
 
-        return Auth::authenticate($credentials, true);
+        $user = Auth::authenticate($credentials, true);
+        if ($user->isBanned()) {
+            Auth::logout();
+            throw new AuthException('rainlab.user::lang.account.banned');
+        }
+
+        if ($user->customer->is_guest) {
+            Auth::logout();
+            throw new AuthException('offline.mall::lang.components.signup.errors.user_is_guest');
+        }
+
+        return $user;
     }
 
     /**

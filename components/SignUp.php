@@ -1,12 +1,18 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Cms\Classes\ComponentBase;
+use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
+use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Traits\SetVars;
+use OFFLINE\Mall\Models\Country;
 
 class SignUp extends ComponentBase
 {
     use SetVars;
+
+    public $countries;
+    public $asGuest;
 
     public function componentDetails()
     {
@@ -33,11 +39,19 @@ class SignUp extends ComponentBase
 
     public function onMethodSignUp()
     {
-
+        $this->setVar('countries', Country::orderBy('name')->get());
+        $this->setVar('asGuest', request()->input('asGuest', false));
     }
 
     public function onSignIn()
     {
-        return app(SignInHandler::class)->handle(post());
+        return app(SignInHandler::class)->handle(post(), (bool)post('as_guest'));
+    }
+
+    public function onSignUp()
+    {
+        if (app(SignUpHandler::class)->handle(post(), (bool)post('as_guest'))) {
+            return Redirect::back();
+        }
     }
 }

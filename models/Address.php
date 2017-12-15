@@ -13,11 +13,21 @@ class Address extends Model
     protected $dates = ['deleted_at'];
 
     public $rules = [
-        'name'            => 'required',
-        'lines'           => 'required',
-        'zip'             => 'required',
-        'country_id'      => 'required|exists:offline_mall_countries,id',
-        'city'            => 'required',
+        'lines'      => 'required',
+        'zip'        => 'required',
+        'country_id' => 'required|exists:offline_mall_countries,id',
+        'city'       => 'required',
+    ];
+
+    public $fillable = [
+        'company',
+        'name',
+        'lines',
+        'zip',
+        'country_id',
+        'city',
+        'county_province',
+        'details',
     ];
 
     public $table = 'offline_mall_addresses';
@@ -25,4 +35,9 @@ class Address extends Model
     public $belongsTo = [
         'customer' => Customer::class,
     ];
+
+    public function getNameAttribute()
+    {
+        return $this->name ?? $this->customer->name;
+    }
 }

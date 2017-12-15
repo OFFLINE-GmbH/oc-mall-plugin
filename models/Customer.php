@@ -13,9 +13,14 @@ class Customer extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $casts = [
+        'is_guest' => 'boolean',
+    ];
+
     public $rules = [
-        'name'    => 'required',
-        'user_id' => 'required|exists:users,id',
+        'name'     => 'required',
+        'is_guest' => 'boolean',
+        'user_id'  => 'required|exists:users,id',
     ];
 
     public $table = 'offline_mall_customers';

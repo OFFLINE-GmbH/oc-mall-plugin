@@ -1,17 +1,17 @@
 <?php namespace OFFLINE\Mall\Updates;
 
-use Schema;
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class BuilderTableCreateOfflineMallCustomers extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_customers', function($table)
-        {
+        Schema::create('offline_mall_customers', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
+            $table->boolean('is_guest')->default(0);
             $table->integer('user_id')->nullable()->unsigned();
             $table->integer('default_shipping_address_id')->nullable();
             $table->integer('default_billing_address_id')->nullable();
@@ -20,7 +20,7 @@ class BuilderTableCreateOfflineMallCustomers extends Migration
             $table->timestamp('deleted_at')->nullable();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('offline_mall_customers');
