@@ -48,13 +48,26 @@ class DefaultSignUpHandler implements SignUpHandler
             $customer->is_guest = $this->asGuest;
             $customer->save();
 
-            $address = new Address();
-            $address->fill($data);
-            $address->customer_id = $customer->id;
-            $address->save();
+            $addressData = $this->transformAddressKeys($data, 'billing');
 
-            $customer->default_shipping_address_id = $address->id;
-            $customer->default_billing_address_id  = $address->id;
+            $billing = new Address();
+            $billing->fill($addressData);
+            $billing->customer_id = $customer->id;
+            $billing->save();
+            $customer->default_billing_address_id = $billing->id;
+
+            if ( ! empty($data['use_different_shipping'])) {
+                $addressData = $this->transformAddressKeys($data, 'shipping');
+
+                $shipping = new Address();
+                $shipping->fill($addressData);
+                $shipping->customer_id = $customer->id;
+                $shipping->save();
+                $customer->default_shipping_address_id = $shipping->id;
+            } else {
+                $customer->default_shipping_address_id = $billing->id;
+            }
+
             $customer->save();
 
             return $user;
@@ -76,14 +89,18 @@ class DefaultSignUpHandler implements SignUpHandler
     protected function validate(array $data)
     {
         $rules = [
-            'email'           => 'required|email|unique:users,email',
-            'name'            => 'required',
-            'lines'           => 'required',
-            'zip'             => 'required',
-            'city'            => 'required',
-            'country_id'      => 'required|exists:offline_mall_countries,id',
-            'password'        => 'required|min:8|max:255',
-            'password_repeat' => 'required|same:password',
+            'email'               => 'required|email|unique:users,email',
+            'name'                => 'required',
+            'billing_lines'       => 'required',
+            'billing_zip'         => 'required',
+            'billing_city'        => 'required',
+            'billing_country_id'  => 'required|exists:offline_mall_countries,id',
+            'shipping_lines'      => 'required_if:use_different_shipping,1',
+            'shipping_zip'        => 'required_if:use_different_shipping,1',
+            'shipping_city'       => 'required_if:use_different_shipping,1',
+            'shipping_country_id' => 'required_if:use_different_shipping,1|exists:offline_mall_countries,id',
+            'password'            => 'required|min:8|max:255',
+            'password_repeat'     => 'required|same:password',
         ];
 
         if ($this->asGuest) {
@@ -132,6 +149,19 @@ class DefaultSignUpHandler implements SignUpHandler
         }
 
         return $user;
+    }
+
+    protected function transformAddressKeys(array $data, string $type): array
+    {
+        $transformed = [];
+        foreach ($data as $key => $value) {
+            if (starts_with($key, $type)) {
+                $newKey               = str_replace($type . '_', '', $key);
+                $transformed[$newKey] = $value;
+            }
+        }
+
+        return $transformed;
     }
 
 }

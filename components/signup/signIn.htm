@@ -1,18 +1,17 @@
 {% set labelStyle = 'block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2' %}
-{% set inputStyle = 'appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-light rounded py-3 px-4 mb-3' %}
+{% set inputStyle = 'appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3' %}
 <div class="w-full max-w-xs">
-    <form class="bg-white px-8 pt-6 pb-8 mb-4" data-request="onSignin" data-request-flash>
+    <form class="bg-white" data-request="onSignin" data-request-flash>
         <div class="mb-4">
             <label class="{{ labelStyle }}" for="email">Email</label>
             <input class="{{ inputStyle }}" id="email" name="login" type="text" placeholder="email@example.com">
+            <p class="text-red text-xs italic" data-validate-for="login"></p>
         </div>
         <div class="mb-6">
             <label class="{{ labelStyle }}" for="password">Password</label>
             <input class="{{ inputStyle }}" id="password" type="password" placeholder="******************"
                    name="password">
-            <p class="text-red text-xs italic">
-                Please choose a password.
-            </p>
+            <p class="text-red text-xs italic" data-validate-for="password"></p>
         </div>
         <div class="flex items-center justify-between">
             <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" type="submit">

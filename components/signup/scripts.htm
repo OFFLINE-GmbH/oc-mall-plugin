@@ -1,0 +1,16 @@
+{% put scripts %}
+<script>
+    $(function() {
+        var $methods = $('.mall-signup-list .js-method-option');
+        $methods.on('click', function() {
+            var activeClass  = 'bg-purple-lightest text-purple-darker';
+            $methods.removeClass(activeClass);
+            $(this).addClass(activeClass);
+        });
+
+        $('body').on('click', '.js-mall-toggle-shipping-address', function() {
+            $('.mall-shipping-address').toggleClass('hidden', !this.checked);
+        });
+    })
+</script>
+{% endput %}
