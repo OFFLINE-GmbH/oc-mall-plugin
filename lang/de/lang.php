@@ -333,6 +333,14 @@
                 'unavailable' => 'Die ausgewählte Versandmethode ist für Ihre Bestellung nicht verfügbar.',
             ],
         ],
+        'addressSelector'  => [
+            'details' => [
+                'name'        => 'Auswahl für Adressen',
+                'description' => 'Zeige eine Auflistung aller Adressen eines Kunden an',
+            ],
+            'errors'  => [
+            ],
+        ],
         'signup'            => [
             'details' => [
                 'name'        => 'Anmeldung',

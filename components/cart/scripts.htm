@@ -2,7 +2,7 @@
     <script>
         $(function () {
             $.subscribe('mall.shipping.update', function () {
-                $.request('onRun', {
+                $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                     success: function (data) {
                         $('.mall-cart').html(data['{{ __SELF__ }}::cart'])
@@ -11,7 +11,7 @@
             });
 
             $('body').on('change', '.js-mall-quantity', function () {
-                $.request('onUpdateQuantity', {
+                $.request('{{ __SELF__ }}::onUpdateQuantity', {
                     data: {id: this.dataset.id, quantity: this.value},
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                     loading: $.oc.stripeLoadIndicator,

@@ -1,5 +1,11 @@
 <div class="mt-8 bg-smoke-light text-right">
-    <div class="mall-btn">
-        Checkout
-    </div>
+    {% if cart.shipping_method %}
+        <div class="mall-btn">
+            Checkout
+        </div>
+    {% else %}
+        <div class="bg-smoke-light text-sm text-red-dark p-4">
+            {{ 'Please select a shipping method to proceed' | _ }}
+        </div>
+    {% endif %}
 </div>

@@ -1,0 +1,35 @@
+{% set labelStyle = 'block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2' %}
+{% set inputStyle = 'appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3' %}
+
+<form class="w-full max-w-md" data-request="onUpdateAddress"
+      data-request-validate
+      data-request-success="$.publish('mall.address.update', {type: '{{ type }}'})">
+    <div class="mb-6">
+        <input type="hidden" name="type" value="{{ type }}">
+        <label class="{{ labelStyle }}"
+               for="id">{{ 'Select the address you want to use' | _ }}</label>
+        <div class="relative">
+            <select class="{{ inputStyle }} pr-8" id="id" name="id">
+                {% for address in addresses %}
+                    <option value="{{ address.id }}" {{ address.id == activeAddress ? 'selected' : '' }}>
+                        {{ address.oneLiner }}
+                    </option>
+                {% endfor %}
+            </select>
+            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-red text-xs italic" data-validate-for="id"></p>
+    </div>
+
+    <div class="mt-3">
+        <button class="bg-blue hover:bg-blue-dark text-white font-bold py-3 px-4 rounded" type="submit">
+            {{ 'Update' | _ }}
+        </button>
+    </div>
+
+
+</form>

@@ -29,7 +29,7 @@
                         {% partial __SELF__ ~ '::quantity-dropdown' product=product %}
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
-                        {{ product.data.price }}
+                        {{ product.data.price | raw }}
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
                         {{ product.totalPostTaxes | money }}
@@ -47,15 +47,24 @@
                     {{ cart.totals.productPostTaxes | money }}
                 </td>
             </tr>
-            <tr>
-                <td class="{{ rowStyle }}"></td>
-                <td class="{{ rowStyle }}" colspan="3">
-                    {{ cart.shipping_method.name }}
-                </td>
-                <td class="{{ rowStyle }} text-right">
-                    {{ cart.totals.shippingTotal.total | money }}
-                </td>
-            </tr>
+            {% if cart.shipping_method %}
+                <tr>
+                    <td class="{{ rowStyle }}"></td>
+                    <td class="{{ rowStyle }}" colspan="3">
+                        {{ cart.shipping_method.name }}
+                    </td>
+                    <td class="{{ rowStyle }} text-right">
+                        {{ cart.totals.shippingTotal.total | money }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="{{ rowStyle }}"></td>
+                    <td class="{{ rowStyle }}" colspan="4">
+                        {{ 'No shipping method selected' | _ }}
+                    </td>
+                </tr>
+            {% endif %}
             <tr>
                 <td class="{{ totalStyle }} text-sm"></td>
                 <td class="{{ totalStyle }} text-sm" colspan="3">
@@ -83,16 +92,16 @@
                 </tr>
             {% endfor %}
             {% if cart.total.taxes.length > 0 %}
-            <tr>
-                <td class="{{ rowMutedStyle }} border-smoke"></td>
-                <td class="{{ rowMutedStyle }} border-smoke" colspan="2">
-                    {{ "Total taxes" | _ }}
-                </td>
-                <td class="{{ rowMutedStyle }} border-smoke"></td>
-                <td class="{{ rowMutedStyle }} border-smoke text-right">
-                    {{ cart.totals.totalTaxes | money }}
-                </td>
-            </tr>
+                <tr>
+                    <td class="{{ rowMutedStyle }} border-smoke"></td>
+                    <td class="{{ rowMutedStyle }} border-smoke" colspan="2">
+                        {{ "Total taxes" | _ }}
+                    </td>
+                    <td class="{{ rowMutedStyle }} border-smoke"></td>
+                    <td class="{{ rowMutedStyle }} border-smoke text-right">
+                        {{ cart.totals.totalTaxes | money }}
+                    </td>
+                </tr>
             {% endif %}
             </tfoot>
         </table>

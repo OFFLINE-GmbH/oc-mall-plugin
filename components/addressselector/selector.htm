@@ -1,0 +1,8 @@
+<h2>{{ 'Billing address' | _ }}</h2>
+{% partial __SELF__ ~ '::address' address=billingAddress type='billing' %}
+
+<h2>{{ 'Shipping address' | _ }}</h2>
+{% partial __SELF__ ~ '::address'
+    address=shippingAddress type='shipping'
+    areSame=billingAddress.id == shippingAddress.id
+%}

@@ -14,7 +14,6 @@ class BuilderTableCreateOfflineMallCarts extends Migration
             $table->integer('customer_id')->nullable()->unsigned();
             $table->integer('shipping_address_id')->nullable()->unsigned();
             $table->integer('billing_address_id')->nullable()->unsigned();
-            $table->boolean('shipping_address_same_as_billing')->default(true);
             $table->integer('shipping_method_id')->nullable()->unsigned();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

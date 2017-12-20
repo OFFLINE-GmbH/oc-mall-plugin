@@ -1,0 +1,20 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $.subscribe('mall.address.update', function () {
+                $.request('{{ __SELF__ }}::onRun', {
+                    update: {'{{ __SELF__ }}::selector': '.mall-address-selector'},
+                })
+            });
+
+            $('body').on('click', '.js-change-address', function () {
+                var type = this.dataset.type;
+                $.request('{{ __SELF__ }}::onChangeAddress', {
+                    data: {type: type},
+                    update: {'{{ __SELF__ }}::changeAddress': $(this).closest('.mall-address')},
+                    loading: $.oc.stripeLoadIndicator,
+                })
+            });
+        })
+    </script>
+{% endput %}

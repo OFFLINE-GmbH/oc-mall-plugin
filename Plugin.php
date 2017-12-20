@@ -9,6 +9,7 @@ use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Components\AddressInput;
+use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Dependencies;
 use OFFLINE\Mall\Components\ShippingSelector;
@@ -41,8 +42,9 @@ class Plugin extends PluginBase
     {
         return [
             Cart::class             => 'cart',
-            ShippingSelector::class => 'shippingSelector',
             SignUp::class           => 'signUp',
+            ShippingSelector::class => 'shippingSelector',
+            AddressSelector::class  => 'addressSelector',
         ];
     }
 

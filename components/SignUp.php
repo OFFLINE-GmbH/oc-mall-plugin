@@ -45,7 +45,9 @@ class SignUp extends ComponentBase
 
     public function onSignIn()
     {
-        return app(SignInHandler::class)->handle(post(), (bool)post('as_guest'));
+        if (app(SignInHandler::class)->handle(post())) {
+            return Redirect::back();
+        }
     }
 
     public function onSignUp()

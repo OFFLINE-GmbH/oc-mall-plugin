@@ -4,7 +4,7 @@
             {# Track the quantity selector and reload available shipping
                methods if the quantity and therefore the totals have changed. #}
             $.subscribe('mall.cart.update', function () {
-                $.request('onRun', {
+                $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::selector': '.mall-shipping-selector'},
                     success: function (data) {
                         $('.mall-shipping-selector').html(data['{{ __SELF__ }}::selector'])
@@ -13,7 +13,7 @@
             })
 
             $('body').on('click', '.js-mall-select-shipping', function () {
-                $.request('onSelect', {
+                $.request('{{ __SELF__ }}::onSelect', {
                     data: {id: this.dataset.id},
                     update: {'{{ __SELF__ }}::selector': '.mall-shipping-selector'},
                     loading: $.oc.stripeLoadIndicator,

@@ -7,6 +7,7 @@ use Event;
 use Flash;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Address;
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User;
@@ -69,6 +70,8 @@ class DefaultSignUpHandler implements SignUpHandler
             }
 
             $customer->save();
+
+            Cart::transferToCustomer($user->customer);
 
             return $user;
         });

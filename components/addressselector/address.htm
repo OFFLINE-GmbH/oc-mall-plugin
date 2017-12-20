@@ -1,0 +1,23 @@
+<div class="mall-address">
+    {% if not areSame %}
+    <p>
+        {% if address.company %}
+            {{ address.company }}<br/>
+        {% endif %}
+        {{ address.name }}<br/>
+        {{ address.lines }} <br/>
+        {{ address.zip }} {{ address.city }}<br/>
+        {% if address.county_province %}
+            {{ address.county_province }} <br/>
+        {% endif %}
+        {{ address.country.name }}
+    </p>
+    {% else %}
+        <p>{{ 'Shipping and billing addresses are the same.' }}</p>
+    {% endif %}
+    <p>
+        <a href="#" class="js-change-address" data-type="{{ type }}">
+            Select different address
+        </a>
+    </p>
+</div>

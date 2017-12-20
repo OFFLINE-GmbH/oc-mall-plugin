@@ -7,6 +7,7 @@ use Exception;
 use Flash;
 use October\Rain\Auth\AuthException;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Models\Cart;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User;
 use Redirect;
@@ -53,6 +54,8 @@ class DefaultSignInHandler implements SignInHandler
             Auth::logout();
             throw new AuthException('offline.mall::lang.components.signup.errors.user_is_guest');
         }
+
+        Cart::transferToCustomer($user->customer);
 
         return $user;
     }

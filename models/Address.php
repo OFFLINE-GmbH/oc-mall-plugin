@@ -13,10 +13,10 @@ class Address extends Model
     protected $dates = ['deleted_at'];
 
     public $rules = [
-        'lines'      => 'required',
-        'zip'        => 'required',
+        'lines' => 'required',
+        'zip' => 'required',
         'country_id' => 'required|exists:offline_mall_countries,id',
-        'city'       => 'required',
+        'city' => 'required',
     ];
 
     public $fillable = [
@@ -34,10 +34,30 @@ class Address extends Model
 
     public $belongsTo = [
         'customer' => Customer::class,
+        'country'  => Country::class,
     ];
 
     public function getNameAttribute()
     {
         return $this->name ?? $this->customer->name;
     }
+
+    public function getOneLinerAttribute(): string
+    {
+        $parts = array_filter([
+            $this->name,
+            $this->lines,
+            $this->zip . ' ' . $this->city,
+            $this->county_or_province,
+            $this->country->name,
+        ]);
+
+        return implode(', ', $parts);
+    }
+
+    public static function byCustomer(Customer $customer)
+    {
+        return self::where('customer_id', $customer->id);
+    }
+
 }

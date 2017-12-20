@@ -43,7 +43,7 @@ class Cart extends Model
         'shipping_address_same_as_billing' => 'boolean',
     ];
 
-    public $fillable = ['session_id'];
+    public $fillable = ['session_id', 'customer_id'];
 
     /**
      * @var TotalsCalculator
@@ -76,6 +76,28 @@ class Cart extends Model
         return self::firstOrCreate(['session_id' => $sessionId]);
     }
 
+    /**
+     * Transfer a session attached cart to a customer.
+     *
+     * @param $customer
+     *
+     * @return Cart
+     */
+    public static function transferToCustomer(Customer $customer): Cart
+    {
+        $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
+
+        $cart                      = self::bySession();
+        $cart->session_id          = null;
+        $cart->customer_id         = $customer->id;
+        $cart->billing_address_id  = $customer->default_billing_address_id;
+        $cart->shipping_address_id = $shippingId;
+
+        $cart->save();
+
+        return $cart;
+    }
+
     public function setShippingMethod(?ShippingMethod $method)
     {
         $this->shipping_method_id = $method ? $method->id : null;
@@ -95,7 +117,6 @@ class Cart extends Model
     public function setShippingAddress(Address $address)
     {
         $this->shipping_address_id              = $address->id;
-        $this->shipping_address_same_as_billing = false;
     }
 
     public function getTotalsAttribute()
@@ -105,6 +126,11 @@ class Cart extends Model
         }
 
         return $this->totalsCached = new TotalsCalculator($this);
+    }
+
+    public function getShippingAddressSameAsBillingAttribute(): bool
+    {
+        return $this->shipping_address_id === $this->billing_address_id;
     }
 
     public function totals(): TotalsCalculator
