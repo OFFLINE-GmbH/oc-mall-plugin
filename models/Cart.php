@@ -5,6 +5,7 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Payments\PaymentMethod;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use RainLab\User\Models\User;
 use Session;
@@ -104,6 +105,16 @@ class Cart extends Model
         $this->save();
     }
 
+    public function setPaymentMethod($method)
+    {
+        if ($method instanceof PaymentMethod) {
+            $method = $method::identifier();
+        }
+
+        $this->payment_method_id = $method;
+        $this->save();
+    }
+
     public function setCustomer(Customer $customer)
     {
         $this->customer_id = $customer->id;
@@ -116,7 +127,7 @@ class Cart extends Model
 
     public function setShippingAddress(Address $address)
     {
-        $this->shipping_address_id              = $address->id;
+        $this->shipping_address_id = $address->id;
     }
 
     public function getTotalsAttribute()

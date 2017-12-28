@@ -22,6 +22,8 @@ class BuilderTableCreateOfflineMallOrders extends Migration
             $table->text('shipping')->nullable();
             $table->text('taxes')->nullable();
             $table->text('discounts')->nullable();
+            $table->string('payment_method')->nullable();
+            $table->text('payment_data')->nullable();
             $table->integer('shipping_pre_taxes')->nullable();
             $table->integer('shipping_taxes')->nullable();
             $table->integer('total_shipping')->nullable();
@@ -30,9 +32,9 @@ class BuilderTableCreateOfflineMallOrders extends Migration
             $table->integer('total_taxes')->nullable();
             $table->integer('total_pre_taxes')->nullable();
             $table->integer('total_post_taxes')->nullable();
-            $table->string('credit_card_last4_digits', 4)->nullable();
             $table->string('tracking_number')->nullable();
             $table->string('tracking_url')->nullable();
+            $table->string('credit_card_last4_digits', 4)->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('card_type')->nullable();
             $table->string('lang');

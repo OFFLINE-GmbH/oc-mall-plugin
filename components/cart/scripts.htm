@@ -1,6 +1,13 @@
 {% put scripts %}
     <script>
         $(function () {
+            var $body = $('body');
+
+            $body.on('click', '.js-mall-checkout', function () {
+                $('.mall-overlay').prependTo($body).show()
+                $.request('{{ __SELF__ }}::onCheckout')
+            });
+
             $.subscribe('mall.shipping.update', function () {
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
@@ -10,7 +17,7 @@
                 })
             });
 
-            $('body').on('change', '.js-mall-quantity', function () {
+            $body.on('change', '.js-mall-quantity', function () {
                 $.request('{{ __SELF__ }}::onUpdateQuantity', {
                     data: {id: this.dataset.id, quantity: this.value},
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},

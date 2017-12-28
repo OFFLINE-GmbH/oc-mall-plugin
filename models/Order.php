@@ -5,7 +5,6 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
 use OFFLINE\Mall\Classes\PaymentStatus\PendingState;
-use OFFLINE\Mall\Classes\Traits\Price;
 
 /**
  * Model
@@ -14,7 +13,6 @@ class Order extends Model
 {
     use Validation;
     use SoftDelete;
-    use Price;
 
     protected $dates = ['deleted_at'];
 
@@ -27,7 +25,15 @@ class Order extends Model
         'customer_id'                      => 'required|exists:offline_mall_customers,id',
     ];
 
-    public $jsonable = ['billing_address', 'shipping_address', 'custom_fields', 'taxes', 'discounts', 'shipping'];
+    public $jsonable = [
+        'billing_address',
+        'shipping_address',
+        'custom_fields',
+        'taxes',
+        'discounts',
+        'shipping',
+        'payment_data',
+    ];
 
     public $table = 'offline_mall_orders';
 
@@ -62,13 +68,14 @@ class Order extends Model
         $order->discounts                        = $cart->discounts;
         $order->ip_address                       = request()->ip();
         $order->customer_id                      = 1;
+        $order->payment_method                   = $cart->payment_method_id;
         $order->payment_status                   = PendingState::class;
         $order->order_status                     = InProgressState::class;
-        $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->total();
+        $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->preTaxes();
         $order->shipping_taxes                   = $cart->totals->shippingTotal()->taxes();
-        $order->total_shipping                   = $cart->totals->shippingTotal()->price();
+        $order->total_shipping                   = $cart->totals->shippingTotal()->total();
         $order->product_taxes                    = $cart->totals->productTaxes();
-        $order->total_product                    = $cart->totals->productTotal();
+        $order->total_product                    = $cart->totals->productPostTaxes();
         $order->total_pre_taxes                  = $cart->totals->totalPreTaxes();
         $order->total_taxes                      = $cart->totals->totalTaxes();
         $order->total_post_taxes                 = $cart->totals->totalPostTaxes();

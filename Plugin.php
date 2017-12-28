@@ -8,6 +8,9 @@ use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
+use OFFLINE\Mall\Classes\Payments\PaymentGateway;
+use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Components\AddressInput;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
@@ -35,6 +38,12 @@ class Plugin extends PluginBase
         });
         $this->app->bind(SignUpHandler::class, function () {
             return new DefaultSignUpHandler();
+        });
+        $this->app->singleton(PaymentGateway::class, function () {
+            $gateway = new DefaultPaymentGateway();
+            $gateway->register(new Stripe());
+
+            return $gateway;
         });
     }
 

@@ -8,5 +8,8 @@
         "files": [
             "helpers.php"
         ]
+    },
+    "require": {
+        "omnipay/omnipay": "^2.3"
     }
 }
