@@ -105,10 +105,10 @@ class Cart extends Model
         $this->save();
     }
 
-    public function setPaymentMethod($method)
+    public function setPaymentMethod(PaymentMethod $method)
     {
         if ($method instanceof PaymentMethod) {
-            $method = $method::identifier();
+            $method = $method->identifier();
         }
 
         $this->payment_method_id = $method;

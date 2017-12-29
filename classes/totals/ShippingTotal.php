@@ -100,17 +100,17 @@ class ShippingTotal
         return $price > 0 ? $price : 0;
     }
 
-    public function preTaxes(): int
+    public function totalPreTaxes(): int
     {
         return $this->preTaxes;
     }
 
-    public function taxes(): int
+    public function totalTaxes(): int
     {
         return $this->taxes;
     }
 
-    public function total(): int
+    public function totalPostTaxes(): int
     {
         return $this->total;
     }

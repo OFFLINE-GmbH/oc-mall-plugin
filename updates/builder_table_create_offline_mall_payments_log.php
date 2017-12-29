@@ -3,13 +3,17 @@
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class BuilderTableCreateOfflineMallFailedPayments extends Migration
+class BuilderTableCreateOfflineMallPaymentsLog extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_failed_payments', function ($table) {
+        Schema::create('offline_mall_payments_log', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
+            $table->boolean('failed')->default(true);
+            $table->string('payment_method')->nullable();
+            $table->string('ip')->nullable();
+            $table->string('session_id')->nullable();
             $table->text('data')->nullable();
             $table->integer('order_id')->nullable();
             $table->text('order_data')->nullable();
@@ -22,6 +26,6 @@ class BuilderTableCreateOfflineMallFailedPayments extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('offline_mall_failed_payments');
+        Schema::dropIfExists('offline_mall_payments_log');
     }
 }

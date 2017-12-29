@@ -4,12 +4,15 @@ use Auth;
 use Cms\Classes\ComponentBase;
 use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
+use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
+use Request;
+use Session;
 
 class Cart extends ComponentBase
 {
@@ -34,6 +37,11 @@ class Cart extends ComponentBase
 
     public function onRun()
     {
+        // An off-site payment has been completed
+        if ($type = Request::input('return')) {
+            return $this->handleOffSiteReturn($type);
+        }
+
         $this->addJs('assets/pubsub.js');
         $this->setData();
     }
@@ -58,11 +66,7 @@ class Cart extends ComponentBase
             return $gateway->process($order, $data);
         });
 
-        if ($result->successful) {
-            return Redirect::to('/done');
-        } else {
-            return Redirect::to('/failed');
-        }
+        return $this->handlePaymentResult($result);
     }
 
     public function onUpdateQuantity()
@@ -89,5 +93,72 @@ class Cart extends ComponentBase
         $cart->setPaymentMethod(new Stripe());
 
         $this->setVar('cart', $cart);
+    }
+
+    /**
+     * @param $result
+     *
+     * @return mixed
+     */
+    protected function handlePaymentResult($result)
+    {
+        if ($result->redirect) {
+            return $result->redirectUrl ? Redirect::to($result->redirectUrl) : $result->redirectResponse;
+        }
+
+        if ($result->successful) {
+            return Redirect::to($this->getSuccessfulUrl());
+        }
+
+        return Redirect::to($this->getFailedUrl());
+    }
+
+    protected function handleOffSiteReturn($type)
+    {
+        // Someone tampered with the url or the session has expired.
+        $paymentId = Session::pull('oc-mall.payment.id');
+        if ($paymentId !== Request::input('oc-mall_payment_id')) {
+            Session::forget('oc-mall.payment.callback');
+
+            return Redirect::to($this->getFailedUrl());
+        }
+
+        // The user has cancelled the payment
+        if ($type === 'cancel') {
+            Session::forget('oc-mall.payment.callback');
+
+            return Redirect::to($this->getCancelledUrl());
+        }
+
+        // If a callback is set we need to do an additional step to
+        // complete this payment.
+        $callback = Session::pull('oc-mall.payment.callback');
+        if ($callback) {
+            $paymentMethod = new $callback;
+
+            if ( ! method_exists($paymentMethod, 'complete')) {
+                throw new \LogicException('Payment gateways that redirect off-site need to have a "complete" method!');
+            }
+
+            return $this->handlePaymentResult($paymentMethod->complete());
+        }
+
+        // The payment was successful
+        return Redirect::to($this->getSuccessfulUrl());
+    }
+
+    private function getFailedUrl()
+    {
+        return '/failed';
+    }
+
+    private function getCancelledUrl()
+    {
+        return '/cancelled';
+    }
+
+    private function getSuccessfulUrl()
+    {
+        return '/done';
     }
 }

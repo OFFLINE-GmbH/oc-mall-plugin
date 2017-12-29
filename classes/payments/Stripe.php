@@ -1,17 +1,71 @@
 <?php
 
-namespace OFFLINE\Mall\Classes\PaymentMethods;
+namespace OFFLINE\Mall\Classes\Payments;
 
+
+use October\Rain\Exception\ValidationException;
+use Omnipay\Omnipay;
+use Validator;
 
 class Stripe extends PaymentMethod
 {
-    public static function name(): string
+    public function name(): string
     {
         return 'Stripe';
     }
 
-    public static function identifier(): string
+    public function identifier(): string
     {
         return 'stripe';
+    }
+
+    public function validate(): bool
+    {
+        $rules = [
+            'number'      => 'required|size:16',
+            'expiryMonth' => 'required|integer|min:1|max:12',
+            'expiryYear'  => 'required|integer|min:' . date('Y'),
+            'cvv'         => 'required|size:3',
+        ];
+
+        $validation = Validator::make($this->data, $rules);
+        if ($validation->fails()) {
+            throw new ValidationException($validation);
+        }
+
+        return true;
+    }
+
+    public function process(): PaymentResult
+    {
+        $gateway = Omnipay::create('Stripe');
+        $gateway->setApiKey('sk_test_hydn9EeswWDwNT3FOl2DjLvD');
+
+        $response = $gateway->purchase([
+            'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),
+            'currency'  => $this->order->currency,
+            'card'      => $this->data,
+            'returnUrl' => $this->returnUrl(),
+            'cancelUrl' => $this->cancelUrl(),
+        ])->send();
+
+        $data = (array)$response->getData();
+
+        $result             = new PaymentResult();
+        $result->successful = $response->isSuccessful();
+
+        if ($result->successful) {
+            $payment                               = $this->logSuccessfulPayment($data, $response);
+            $this->order->payment_id               = $payment->id;
+            $this->order->payment_data             = $data;
+            $this->order->payment_method           = $this->identifier();
+            $this->order->card_type                = $data['source']['brand'];
+            $this->order->card_holder_name         = $data['source']['name'];
+            $this->order->credit_card_last4_digits = $data['source']['last4'];
+        } else {
+            $result->failedPayment = $this->logFailedPayment($data, $response);
+        }
+
+        return $result;
     }
 }

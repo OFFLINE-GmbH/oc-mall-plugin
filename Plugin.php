@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
+use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Components\AddressInput;
 use OFFLINE\Mall\Components\AddressSelector;
@@ -42,6 +43,7 @@ class Plugin extends PluginBase
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();
             $gateway->register(new Stripe());
+            $gateway->register(new PayPalRest());
 
             return $gateway;
         });

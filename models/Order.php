@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use DB;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -71,9 +72,9 @@ class Order extends Model
         $order->payment_method                   = $cart->payment_method_id;
         $order->payment_status                   = PendingState::class;
         $order->order_status                     = InProgressState::class;
-        $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->preTaxes();
-        $order->shipping_taxes                   = $cart->totals->shippingTotal()->taxes();
-        $order->total_shipping                   = $cart->totals->shippingTotal()->total();
+        $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->totalPreTaxes();
+        $order->shipping_taxes                   = $cart->totals->shippingTotal()->totalTaxes();
+        $order->total_shipping                   = $cart->totals->shippingTotal()->totalPostTaxes();
         $order->product_taxes                    = $cart->totals->productTaxes();
         $order->total_product                    = $cart->totals->productPostTaxes();
         $order->total_pre_taxes                  = $cart->totals->totalPreTaxes();
@@ -91,12 +92,14 @@ class Order extends Model
      */
     protected function setOrderNumber()
     {
-        $start = self::max('order_number');
+        $numbers = DB::table($this->getTable())->selectRaw('max(cast(order_number as unsigned)) as max')->first();
+        $start   = $numbers->max;
+
         if ($start === 0) {
             $start = 0; // @TODO: Add custom starting point for numbers
         }
 
-        $this->order_number = (int)$start + 1;
+        $this->order_number = $start + 1;
     }
 
     public function getPriceColumns(): array

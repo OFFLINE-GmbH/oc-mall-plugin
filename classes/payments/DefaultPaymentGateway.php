@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 
 use OFFLINE\Mall\Models\Order;
+use Session;
 
 class DefaultPaymentGateway implements PaymentGateway
 {
@@ -11,7 +12,7 @@ class DefaultPaymentGateway implements PaymentGateway
 
     public function register(PaymentMethod $method)
     {
-        $this->methods[$method::identifier()] = get_class($method);
+        $this->methods[$method->identifier()] = get_class($method);
     }
 
     public function process(Order $order, array $data): PaymentResult
@@ -21,6 +22,8 @@ class DefaultPaymentGateway implements PaymentGateway
         $method->setData($data);
 
         $method->validate();
+
+        Session::put('oc-mall.payment.id', str_random(8));
 
         return $method->process();
     }

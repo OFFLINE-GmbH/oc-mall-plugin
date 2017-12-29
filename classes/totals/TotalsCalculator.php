@@ -78,11 +78,11 @@ class TotalsCalculator
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
         $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
-        $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->preTaxes();
+        $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
 
         $this->taxes = $this->getTaxTotals();
 
-        $this->totalPostTaxes = $this->productPostTaxes + $this->shippingTotal->total();
+        $this->totalPostTaxes = $this->productPostTaxes + $this->shippingTotal->totalPostTaxes();
     }
 
     protected function calculateProductPreTaxes(): int
@@ -106,7 +106,7 @@ class TotalsCalculator
     protected function getTaxTotals(): Collection
     {
         $shippingTaxes = new Collection();
-        $shippingTotal = $this->shippingTotal->preTaxes();
+        $shippingTotal = $this->shippingTotal->totalPreTaxes();
         if ($this->cart->shipping_method) {
             $shippingTaxes = optional($this->cart->shipping_method)->taxes->map(function (Tax $tax) use ($shippingTotal) {
                 return new TaxTotal($shippingTotal, $tax);

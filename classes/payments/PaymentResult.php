@@ -3,7 +3,8 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 
-use OFFLINE\Mall\Models\FailedPayment;
+use OFFLINE\Mall\Models\PaymentLog;
+use Omnipay\Common\Message\RedirectResponseInterface;
 
 class PaymentResult
 {
@@ -12,7 +13,19 @@ class PaymentResult
      */
     public $successful = false;
     /**
-     * @var FailedPayment
+     * @var bool
+     */
+    public $redirect = false;
+    /**
+     * @var RedirectResponseInterface
+     */
+    public $redirectResponse = null;
+    /**
+     * @var string
+     */
+    public $redirectUrl = '';
+    /**
+     * @var PaymentLog
      */
     public $failedPayment;
 }
