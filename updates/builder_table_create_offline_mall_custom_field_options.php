@@ -7,7 +7,7 @@ class BuilderTableCreateOfflineMallProductCustomFieldOptions extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_product_custom_field_options', function ($table) {
+        Schema::create('offline_mall_custom_field_options', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('custom_field_id')->unsigned();
@@ -20,6 +20,6 @@ class BuilderTableCreateOfflineMallProductCustomFieldOptions extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('offline_mall_product_custom_field_options');
+        Schema::dropIfExists('offline_mall_custom_field_options');
     }
 }

@@ -11,7 +11,7 @@ class CustomFieldValue extends Model
 
     public $rules = [
         'cart_product_id' => 'exists:offline_mall_cart_products,id',
-        'custom_field_id' => 'exists:offline_mall_product_custom_fields,id',
+        'custom_field_id' => 'exists:offline_mall_custom_fields,id',
     ];
 
     public $table = 'offline_mall_cart_custom_field_value';

@@ -73,7 +73,6 @@ class Product extends Model
     ];
 
     public $hasMany = [
-        'custom_fields' => CustomField::class,
         'variants'      => Variant::class,
         'cart_products' => CartProduct::class,
     ];
@@ -84,6 +83,12 @@ class Product extends Model
             'table'    => 'offline_mall_category_product',
             'key'      => 'product_id',
             'otherKey' => 'category_id',
+        ],
+        'custom_fields'   => [
+            CustomField::class,
+            'table'    => 'offline_mall_product_custom_field',
+            'key'      => 'product_id',
+            'otherKey' => 'custom_field_id',
         ],
         'accessories'     => [
             Product::class,

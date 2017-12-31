@@ -2,6 +2,7 @@
 
 use DB;
 use Model;
+use System\Models\File;
 
 /**
  * Model
@@ -20,9 +21,6 @@ class CustomField extends Model
         'type'       => 'in:text,textarea,dropdown,checkbox',
         'required'   => 'boolean',
     ];
-    public $belongsTo = [
-        'product' => Product::class,
-    ];
     public $hasMany = [
         'options' => [CustomFieldOption::class, 'order' => 'sort_order'],
     ];
@@ -33,9 +31,19 @@ class CustomField extends Model
             'key'      => 'custom_field_option_id',
             'otherKey' => 'variant_id',
         ],
+        'products' => [
+            Product::class,
+            'table'    => 'offline_mall_product_custom_field',
+            'key'      => 'custom_field_id',
+            'otherKey' => 'product_id',
+        ],
     ];
 
-    public $table = 'offline_mall_product_custom_fields';
+    public $attachOne = [
+        'image' => File::class,
+    ];
+
+    public $table = 'offline_mall_custom_fields';
 
     public function afterSave()
     {

@@ -6,7 +6,7 @@ custom_fields:
     label: 'offline.mall::lang.common.custom_fields'
     view:
         list: $/offline/mall/models/customfield/columns.yaml
-        toolbarButtons: create|delete
+        toolbarButtons: add|create|delete
     manage:
         form: $/offline/mall/models/customfield/fields.yaml
         recordsPerPage: 10

@@ -47,3 +47,9 @@ fields:
                     oc.commentPosition: ''
                     span: right
                     type: number
+                image:
+                    label: 'offline.mall::lang.custom_field_options.image'
+                    oc.commentPosition: ''
+                    span: right
+                    type: fileupload
+                    mode: image

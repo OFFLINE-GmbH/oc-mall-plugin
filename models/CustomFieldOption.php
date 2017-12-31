@@ -42,5 +42,5 @@ class CustomFieldOption extends Model
         ],
     ];
 
-    public $table = 'offline_mall_product_custom_field_options';
+    public $table = 'offline_mall_custom_field_options';
 }
