@@ -1,0 +1,20 @@
+{% set activeStyle = 'flex bg-purple-lightest border-t border-b border-purple-light no-underline text-purple-darker' %}
+{% set defaultStyle = 'flex border-b cursor-pointer border-smoke-light no-underline text-grey-darkest' %}
+<p class="mt-6 mb-6">{{ 'Please choose a payment method.' | _ }}</p>
+<div class="payment-method-list border-t border-b border-smoke">
+    {% for method in __SELF__.methods %}
+        <div class="js-mall-select-payment-method {{ cart.payment_method_id == method.id ? activeStyle : defaultStyle }}"
+             data-id="{{ method.id }}"
+        >
+            <div class="w-1/6 bg-smoke px-3 py-2 m-2">
+                <img class="max-w-full display-block" src="{{ method.logo.path }}" alt=""/>
+            </div>
+            <div class="w-5/6 bg-smoke px-4 py-2 m-2">
+                <div>{{ method.name }}</div>
+                <div class="text-sm text-grey mt-2">
+                    {{ method.price }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

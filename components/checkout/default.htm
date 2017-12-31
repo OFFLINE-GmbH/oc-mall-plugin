@@ -1,0 +1,16 @@
+<div class="flex mb-4">
+    <div class="w-1/3 h-12">
+        {% component 'addressSelector' %}
+        {% component 'shippingSelector' %}
+        {% component 'paymentMethodSelector' %}
+    </div>
+    <div class="w-2/3 h-12">
+        {% component 'cart' %}
+        <div class="mall-actions">
+            {% partial __SELF__ ~ '::actions' %}
+        </div>
+    </div>
+</div>
+
+{% partial __SELF__ ~ '::overlay' %}
+{% partial __SELF__ ~ '::scripts' %}

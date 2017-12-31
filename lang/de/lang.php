@@ -28,6 +28,11 @@
             'update'  => 'Versandart bearbeiten',
             'preview' => 'Versandart-Vorschau',
         ],
+        'payment_methods'  => [
+            'create'  => 'Zahlungsmethode erstellen',
+            'edit'    => 'Zahlungsmethode bearbeiten',
+            'reorder' => 'Sortieren',
+        ],
     ],
     'menu_items'            => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -108,6 +113,9 @@
         'conditions'           => 'Konditionen',
         'general'              => 'Allgemein',
         'logo'                 => 'Logo',
+        'payment_gateway'      => 'Zahlungsgateway',
+        'payment_provider'     => 'Zahlungsanbieter',
+        'payment_methods'      => 'Zahlungsmethoden',
     ],
     'variant'               => [
         'method' => [
@@ -312,19 +320,26 @@
         'manage_orders'     => 'Kann Bestellungen verwalten',
         'manage_discounts'  => 'Kann Rabatte verwalten',
         'settings'          => [
-            'manage_general'  => 'Kann die Grundeinstellungen des Shops verändern',
-            'manage_api'      => 'Kann die API-Konfiguration des Shops verändern',
-            'manage_currency' => 'Kann die Währungs-Einstellungen des Shops verändern',
+            'manage_general'         => 'Kann die Grundeinstellungen des Shops verändern',
+            'manage_api'             => 'Kann die API-Konfiguration des Shops verändern',
+            'manage_currency'        => 'Kann die Währungs-Einstellungen des Shops verändern',
+            'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
     ],
     'components'            => [
-        'cart'              => [
+        'cart'                  => [
             'details' => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt den Warenkorb an',
             ],
         ],
-        'shippingSelector'  => [
+        'checkout'              => [
+            'details' => [
+                'name'        => 'Checkout',
+                'description' => 'Komponente für den Bestellvorgang',
+            ],
+        ],
+        'shippingSelector'      => [
             'details' => [
                 'name'        => 'Auswahl für Versandmethode',
                 'description' => 'Zeige eine Auflistung aller Versandmethoden an',
@@ -333,7 +348,16 @@
                 'unavailable' => 'Die ausgewählte Versandmethode ist für Ihre Bestellung nicht verfügbar.',
             ],
         ],
-        'addressSelector'  => [
+        'paymentMethodSelector' => [
+            'details' => [
+                'name'        => 'Auswahl für Zahlungsmethode',
+                'description' => 'Zeige eine Auflistung aller Zahlungsmethoden an',
+            ],
+            'errors'  => [
+                'unavailable' => 'Die ausgewählte Zahlungsmethode ist für Ihre Bestellung nicht verfügbar.',
+            ],
+        ],
+        'addressSelector'       => [
             'details' => [
                 'name'        => 'Auswahl für Adressen',
                 'description' => 'Zeige eine Auflistung aller Adressen eines Kunden an',
@@ -341,7 +365,7 @@
             'errors'  => [
             ],
         ],
-        'signup'            => [
+        'signup'                => [
             'details' => [
                 'name'        => 'Anmeldung',
                 'description' => 'Zeigt ein Formular für die Registrierung oder das Login an',
@@ -386,7 +410,7 @@
                 ],
             ],
         ],
-        'categories'        => [
+        'categories'            => [
             'details'    => [
                 'name'        => 'Kategorien',
                 'description' => 'Listet vorhandene Kategorien auf',
@@ -408,7 +432,7 @@
             'no_parent'  => 'Zeige alle Kategorien',
             'by_slug'    => 'Verwende Kategorie aus URL als Startkategorie',
         ],
-        'cartSummary'       => [
+        'cartSummary'           => [
             'details'    => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt die Anzahl Produkte und den Gesamtwert des Warenkorbes an',
@@ -424,7 +448,7 @@
                 ],
             ],
         ],
-        'customerDashboard' => [
+        'customerDashboard'     => [
             'details'    => [
                 'name'        => 'Kundenkonto',
                 'description' => 'Zeigt den Link zum Öffnen des Kundenkontos an',
@@ -440,13 +464,13 @@
                 ],
             ],
         ],
-        'currencyPicker'    => [
+        'currencyPicker'        => [
             'details' => [
                 'name'        => 'Währungsauswahl',
                 'description' => 'Zeigt eine Auswahl für die aktuelle Shopwährung an',
             ],
         ],
-        'products'          => [
+        'products'              => [
             'details'    => [
                 'name'        => 'Produkt-Liste',
                 'description' => 'Zeigt eine Liste von Produkten an',
@@ -483,7 +507,7 @@
                 ],
             ],
         ],
-        'product'           => [
+        'product'               => [
             'details'    => [
                 'name'        => 'Produkt-Details',
                 'description' => 'Zeigt die Details zu einem Produkt an',

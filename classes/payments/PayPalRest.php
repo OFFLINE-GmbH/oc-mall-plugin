@@ -8,7 +8,7 @@ use Request;
 use Session;
 use Validator;
 
-class PayPalRest extends PaymentMethod
+class PayPalRest extends PaymentProvider
 {
     public function name(): string
     {
@@ -79,10 +79,10 @@ class PayPalRest extends PaymentMethod
         $result->successful = $response->isSuccessful();
 
         if ($result->successful) {
-            $payment                     = $this->logSuccessfulPayment($data, $response);
-            $this->order->payment_id     = $payment->id;
-            $this->order->payment_data   = $data;
-            $this->order->payment_method = $this->identifier();
+            $payment                   = $this->logSuccessfulPayment($data, $response);
+            $this->order->payment_id   = $payment->id;
+            $this->order->payment_data = $data;
+            $this->order->save();
         } else {
             $result->failedPayment = $this->logFailedPayment($data, $response);
         }

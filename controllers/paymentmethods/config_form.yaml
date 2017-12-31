@@ -1,0 +1,12 @@
+name: PaymentMethods
+modelClass: OFFLINE\Mall\Models\PaymentMethod
+form: $/offline/mall/models/paymentmethod/fields.yaml
+defaultRedirect: offline/mall/paymentmethods
+create:
+    title: 'offline.mall::lang.titles.payment_methods.create'
+    redirect: 'offline/mall/paymentmethods/update/:id'
+    redirectClose: offline/mall/paymentmethods
+update:
+    title: 'offline.mall::lang.titles.payment_methods.edit'
+    redirect: offline/mall/paymentmethods
+    redirectClose: offline/mall/paymentmethods

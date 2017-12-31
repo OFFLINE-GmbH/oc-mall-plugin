@@ -4,39 +4,53 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 
 use OFFLINE\Mall\Models\Order;
+use OFFLINE\Mall\Models\PaymentMethod;
 use Session;
 
 class DefaultPaymentGateway implements PaymentGateway
 {
-    public $methods = [];
+    public $providers = [];
 
-    public function register(PaymentMethod $method)
+    public function registerProvider(PaymentProvider $provider)
     {
-        $this->methods[$method->identifier()] = get_class($method);
+        $this->providers[$provider->identifier()] = get_class($provider);
+    }
+
+    public function getProviderById(string $identifier): PaymentProvider
+    {
+        if ( ! isset($this->providers[$identifier])) {
+            throw new \InvalidArgumentException(sprintf('Payment provider %s is not registered.', $identifier));
+        }
+
+        return $this->providers[$identifier];
     }
 
     public function process(Order $order, array $data): PaymentResult
     {
-        $method = $this->getMethod($order);
-        $method->setOrder($order);
-        $method->setData($data);
+        $provider = $this->getProviderForMethod($order->payment_method);
+        $provider->setOrder($order);
+        $provider->setData($data);
 
-        $method->validate();
+        $provider->validate();
 
         Session::put('oc-mall.payment.id', str_random(8));
 
-        return $method->process();
+        return $provider->process();
     }
 
-    protected function getMethod(Order $order): PaymentMethod
+    protected function getProviderForMethod(PaymentMethod $method): PaymentProvider
     {
-        if (isset($this->methods[$order->payment_method])) {
-            return new $this->methods[$order->payment_method];
+        if (isset($this->providers[$method->payment_provider])) {
+            return new $this->providers[$method->payment_provider];
         }
 
         throw new \LogicException(
-            sprintf('The selected payment method "%s" is unavailable.', $order->payment_method)
+            sprintf('The selected payment provider "%s" is unavailable.', $method->payment_provider)
         );
     }
 
+    public function getProviders(): array
+    {
+        return $this->providers;
+    }
 }

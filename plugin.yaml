@@ -40,6 +40,12 @@ navigation:
                 label: 'offline.mall::lang.common.shipping_methods'
                 url: offline/mall/shippingmethods
                 icon: icon-truck
+            mall-payment-methods:
+                label: 'offline.mall::lang.common.payment_methods'
+                url: offline/mall/paymentmethods
+                icon: icon-money
+                permissions:
+                    - offline.mall.settings.manage_payment_methods
 permissions:
     offline.mall.manage_products:
         tab: 'offline.mall::lang.name'
@@ -62,3 +68,6 @@ permissions:
     offline.mall.settings.manage_currency:
         tab: 'offline.mall::lang.name'
         label: 'offline.mall::lang.permissions.settings.manage_currency'
+    offline.mall.settings.manage_payment_methods:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.settings.manage_payment_methods'

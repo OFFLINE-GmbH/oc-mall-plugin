@@ -42,6 +42,10 @@ class Order extends Model
         'products' => OrderProduct::class,
     ];
 
+    public $belongsTo = [
+        'payment_method' => [PaymentMethod::class, 'deleted' => true],
+    ];
+
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
     ];
@@ -69,7 +73,7 @@ class Order extends Model
         $order->discounts                        = $cart->discounts;
         $order->ip_address                       = request()->ip();
         $order->customer_id                      = 1;
-        $order->payment_method                   = $cart->payment_method_id;
+        $order->payment_method_id                = $cart->payment_method_id;
         $order->payment_status                   = PendingState::class;
         $order->order_status                     = InProgressState::class;
         $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->totalPreTaxes();

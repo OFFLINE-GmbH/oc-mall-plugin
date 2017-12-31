@@ -15,7 +15,9 @@ use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Components\AddressInput;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
+use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\Dependencies;
+use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\Models\Category;
@@ -42,8 +44,8 @@ class Plugin extends PluginBase
         });
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();
-            $gateway->register(new Stripe());
-            $gateway->register(new PayPalRest());
+            $gateway->registerProvider(new Stripe());
+            $gateway->registerProvider(new PayPalRest());
 
             return $gateway;
         });
@@ -52,10 +54,12 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            Cart::class             => 'cart',
-            SignUp::class           => 'signUp',
-            ShippingSelector::class => 'shippingSelector',
-            AddressSelector::class  => 'addressSelector',
+            Cart::class                  => 'cart',
+            SignUp::class                => 'signUp',
+            ShippingSelector::class      => 'shippingSelector',
+            AddressSelector::class       => 'addressSelector',
+            PaymentMethodSelector::class => 'paymentMethodSelector',
+            Checkout::class              => 'checkout',
         ];
     }
 

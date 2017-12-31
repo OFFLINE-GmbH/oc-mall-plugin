@@ -1,0 +1,18 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $body = $('body');
+
+            $body.on('click', '.js-mall-checkout', function () {
+                $('.mall-overlay').prependTo($body).show()
+                $.request('{{ __SELF__ }}::onCheckout')
+            });
+
+            $.subscribe('mall.shipping.update', function () {
+                $.request('{{ __SELF__ }}::onRun', {
+                    update: {'{{ __SELF__ }}::actions': '.mall-actions'},
+                })
+            });
+        })
+    </script>
+{% endput %}

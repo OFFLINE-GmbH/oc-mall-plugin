@@ -1,0 +1,34 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    payment_provider:
+        label: 'offline.mall::lang.common.payment_provider'
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+    description:
+        label: 'offline.mall::lang.product.description'
+        size: ''
+        oc.commentPosition: ''
+        span: auto
+        type: textarea
+    logo:
+        label: 'offline.mall::lang.common.logo'
+        oc.commentPosition: ''
+        mode: image
+        imageWidth: '200'
+        imageHeight: '200'
+        useCaption: 0
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: right
+        type: fileupload
+    price:
+        label: 'offline.mall::lang.product.price_includes_tax'
+        oc.commentPosition: ''
+        span: left
+        type: text

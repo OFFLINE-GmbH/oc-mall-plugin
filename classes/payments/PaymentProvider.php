@@ -9,7 +9,7 @@ use Request;
 use Session;
 use Url;
 
-abstract class PaymentMethod
+abstract class PaymentProvider
 {
     /**
      * @var Order

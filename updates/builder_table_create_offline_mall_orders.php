@@ -22,7 +22,7 @@ class BuilderTableCreateOfflineMallOrders extends Migration
             $table->text('shipping')->nullable();
             $table->text('taxes')->nullable();
             $table->text('discounts')->nullable();
-            $table->string('payment_method')->nullable();
+            $table->integer('payment_method_id')->nullable();
             $table->text('payment_data')->nullable();
             $table->text('payment_id')->nullable();
             $table->integer('shipping_pre_taxes')->nullable();

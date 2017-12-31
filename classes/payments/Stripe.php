@@ -7,7 +7,7 @@ use October\Rain\Exception\ValidationException;
 use Omnipay\Omnipay;
 use Validator;
 
-class Stripe extends PaymentMethod
+class Stripe extends PaymentProvider
 {
     public function name(): string
     {
@@ -58,10 +58,10 @@ class Stripe extends PaymentMethod
             $payment                               = $this->logSuccessfulPayment($data, $response);
             $this->order->payment_id               = $payment->id;
             $this->order->payment_data             = $data;
-            $this->order->payment_method           = $this->identifier();
             $this->order->card_type                = $data['source']['brand'];
             $this->order->card_holder_name         = $data['source']['name'];
             $this->order->credit_card_last4_digits = $data['source']['last4'];
+            $this->order->save();
         } else {
             $result->failedPayment = $this->logFailedPayment($data, $response);
         }
