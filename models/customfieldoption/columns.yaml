@@ -1,0 +1,10 @@
+columns:
+    custom_field_id:
+        label: custom_field_id
+        type: number
+    name:
+        label: name
+        type: text
+    price:
+        label: price
+        type: number

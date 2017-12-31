@@ -1,0 +1,38 @@
+<?php if ($items): ?>
+
+<div class="list-preview list-flush">
+    <div class="control-list">
+        <table class="table data" data-control="rowlink">
+            <thead>
+            <tr>
+                <th><span>Name</span></th>
+                <th><span>Price</span></th>
+                <th style="width: 10%"><span></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($items as $item): ?>
+            <tr>
+                <td>
+                    <?= e($item->name) ?>
+                </td>
+                <td>
+                    <?= e($item->price) ?>
+                </td>
+                <td class="nolink text-right">
+                    <a
+                            href="javascript:;"
+                            data-request="onDeleteOption"
+                            data-request-data="record_id: '<?= $item->id ?>'"
+                            data-request-confirm="Delete this item?"
+                            class="oc-icon-remove"
+                            data-toggle="tooltip"
+                            title="Remove"></a>
+                </td>
+            </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php endif ?>

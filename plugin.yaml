@@ -46,6 +46,10 @@ navigation:
                 icon: icon-money
                 permissions:
                     - offline.mall.settings.manage_payment_methods
+            mall-custom-fields:
+                label: 'offline.mall::lang.common.custom_fields'
+                url: offline/mall/customfields
+                icon: icon-sliders
 permissions:
     offline.mall.manage_products:
         tab: 'offline.mall::lang.name'

@@ -1,0 +1,13 @@
+<div id="optionList">
+    <?= $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm', ['items' => $model->options]) ?>
+</div>
+<p>
+    <a
+            href="javascript:;"
+            class="btn btn-secondary oc-icon-plus"
+            data-control="popup"
+            data-handler="onLoadCreateOptionForm"
+            data-size="large">
+        Add item
+    </a>
+</p>

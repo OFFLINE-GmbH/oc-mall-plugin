@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: 'offline.mall::lang.custom_field_options.option'
+        oc.commentPosition: ''
+        span: left
+        type: text
+    price:
+        label: 'offline.mall::lang.product.price'
+        oc.commentPosition: ''
+        span: right
+        type: number
