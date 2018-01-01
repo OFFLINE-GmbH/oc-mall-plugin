@@ -33,6 +33,9 @@
             'edit'    => 'Zahlungsmethode bearbeiten',
             'reorder' => 'Sortieren',
         ],
+        'custom_field_options'  => [
+            'edit'    => 'Feldoptionen bearbeiten',
+        ],
     ],
     'menu_items'            => [
         'all_categories' => 'Alle Shop-Kategorien',

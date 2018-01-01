@@ -4,7 +4,7 @@
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="popup">&times;</button>
-    <h4 class="modal-title">Create new order item</h4>
+    <h4 class="modal-title"><?= e(trans('offline.mall::lang.titles.custom_field_options.edit')) ?></h4>
 </div>
 
 <div class="modal-body">
@@ -19,14 +19,14 @@
             data-hotkey="ctrl+s, cmd+s"
             data-popup-load-indicator
             class="btn btn-primary">
-        Create
+        <?= e(trans('backend::lang.form.create')) ?>
     </button>
 
     <button
             type="button"
             class="btn btn-default"
             data-dismiss="popup">
-        Cancel
+        <?= e(trans('backend::lang.form.cancel')) ?>
     </button>
 </div>
 

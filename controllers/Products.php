@@ -50,7 +50,7 @@ class Products extends Controller
         $model->fill($data);
         $model->save();
         $field = $this->getCustomFieldModel();
-        $field->options()->add($model, $this->optionFormWidget->getSessionKey());
+        $field->custom_field_options()->add($model, $this->optionFormWidget->getSessionKey());
 
         return $this->refreshOptionsList();
     }
@@ -60,7 +60,7 @@ class Products extends Controller
         $recordId = post('record_id');
         $model    = CustomFieldOption::find($recordId);
         $order    = $this->getCustomFieldModel();
-        $order->options()->remove($model, $this->optionFormWidget->getSessionKey());
+        $order->custom_field_options()->remove($model, $this->optionFormWidget->getSessionKey());
 
         return $this->refreshOptionsList();
     }
@@ -68,7 +68,7 @@ class Products extends Controller
     protected function refreshOptionsList()
     {
         $items = $this->getCustomFieldModel()
-                      ->options()
+                      ->custom_field_options()
                       ->withDeferred($this->optionFormWidget->getSessionKey())
                       ->get();
 

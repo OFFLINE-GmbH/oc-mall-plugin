@@ -1,5 +1,5 @@
 <div id="optionList">
-    <?= $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm', ['items' => $model->options]) ?>
+    <?= $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm', ['items' => $model->custom_field_options]) ?>
 </div>
 <p>
     <a
@@ -8,6 +8,6 @@
             data-control="popup"
             data-handler="onLoadCreateOptionForm"
             data-size="large">
-        Add item
+        <?= e(trans('offline.mall::lang.common.add_value')) ?>
     </a>
 </p>

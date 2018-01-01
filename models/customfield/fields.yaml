@@ -20,36 +20,10 @@ fields:
         span: auto
         type: dropdown
     options:
-        label: 'offline.mall::lang.common.custom_field_options'
+        label: 'offline.mall::lang.custom_fields.options'
         type: partial
         path: $/offline/mall/controllers/customfields/_field_options.htm
-
-
-    fieldOptions:
-        label: 'offline.mall::lang.custom_fields.options'
-        oc.commentPosition: ''
-        prompt: 'offline.mall::lang.custom_field_options.add'
-        span: full
-        type: repeater
         trigger:
             action: show
             field: type
             condition: value[dropdown]
-        form:
-            fields:
-                id:
-                    label: ''
-                    oc.commentPosition: ''
-                    span: auto
-                    type: text
-                    cssClass: 'hidden'
-                option_name:
-                    label: 'offline.mall::lang.custom_field_options.option'
-                    oc.commentPosition: ''
-                    span: left
-                    type: text
-                option_price:
-                    label: 'offline.mall::lang.product.price'
-                    oc.commentPosition: ''
-                    span: right
-                    type: number

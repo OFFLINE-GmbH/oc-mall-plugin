@@ -3,8 +3,8 @@ columns:
         label: custom_field_id
         type: number
     name:
-        label: name
+        label: 'offline.mall::lang.custom_field_options.option'
         type: text
     price:
-        label: price
+        label: 'offline.mall::lang.product.price'
         type: number
