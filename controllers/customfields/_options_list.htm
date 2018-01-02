@@ -1,5 +1,4 @@
 <?php if ($items): ?>
-
 <div class="list-preview list-flush">
     <div class="control-list">
         <table class="table data" data-control="rowlink">
@@ -12,12 +11,24 @@
             </thead>
             <tbody>
             <?php foreach ($items as $item): ?>
-            <tr>
+            <tr class="rowlink">
                 <td>
-                    <?= e($item->name) ?>
+                    <a href="javascript:;"
+                       data-handler="onLoadEditOptionForm"
+                       data-size="large"
+                       data-request-data="option_id: '<?= $item->id ?>', type: '<?php echo $type; ?>'"
+                       data-control="popup">
+                        <?= e($item->name) ?>
+                    </a>
                 </td>
                 <td>
-                    <?= e($item->price) ?>
+                    <a href="javascript:;"
+                       data-handler="onLoadEditOptionForm"
+                       data-size="large"
+                       data-request-data="option_id: '<?= $item->id ?>', type: '<?php echo $type; ?>'"
+                       data-control="popup">
+                        <?= e($item->price) ?>
+                    </a>
                 </td>
                 <td class="nolink text-right">
                     <a
@@ -35,4 +46,9 @@
         </table>
     </div>
 </div>
+<script>
+    $(function() {
+        $('body').trigger('oc-mall.custom-field-options.reloaded')
+    })
+</script>
 <?php endif ?>

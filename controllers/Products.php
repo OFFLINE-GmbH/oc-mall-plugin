@@ -28,7 +28,9 @@ class Products extends Controller
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall', 'mall-products');
 
-        $this->optionFormWidget = $this->createOptionFormWidget();
+        $model = post('option_id') ? CustomFieldOption::find(post('option_id')) : null;
+
+        $this->optionFormWidget = $this->createOptionFormWidget($model);
     }
 
     public function create()
@@ -46,9 +48,10 @@ class Products extends Controller
     public function onCreateOption()
     {
         $data  = $this->optionFormWidget->getSaveData();
-        $model = new CustomFieldOption();
+        $model = CustomFieldOption::findOrNew(post('edit_id'));
         $model->fill($data);
-        $model->save();
+        $model->save(null, $this->optionFormWidget->getSessionKey());
+
         $field = $this->getCustomFieldModel();
         $field->custom_field_options()->add($model, $this->optionFormWidget->getSessionKey());
 
@@ -73,6 +76,7 @@ class Products extends Controller
                       ->get();
 
         $this->vars['items'] = $items;
+        $this->vars['type']  = post('type');
 
         return ['#optionList' => $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm')];
     }
@@ -91,18 +95,32 @@ class Products extends Controller
     {
         $this->vars['optionFormWidget'] = $this->optionFormWidget;
         $this->vars['customFieldId']    = post('manage_id');
+        $this->vars['type']             = post('type');
 
-        return $this->makePartial('$/offline/mall/controllers/customfields/_option_create_form.htm');
+        return $this->makePartial('$/offline/mall/controllers/customfields/_option_form.htm');
     }
 
-    protected function createOptionFormWidget()
+    public function onLoadEditOptionForm()
     {
-        $config            = $this->makeConfig('$/offline/mall/models/customfieldoption/fields.yaml');
-        $config->alias     = 'optionForm';
-        $config->arrayName = 'Option';
-        $config->model     = new CustomFieldOption();
-        $widget            = $this->makeWidget('Backend\Widgets\Form', $config);
+        $this->vars['optionFormWidget']    = $this->optionFormWidget;
+        $this->vars['customFieldId']       = post('manage_id');
+        $this->vars['customFieldOptionId'] = post('option_id');
+        $this->vars['type']                = post('type');
+
+        return $this->makePartial('$/offline/mall/controllers/customfields/_option_form.htm');
+    }
+
+    protected function createOptionFormWidget(CustomFieldOption $model = null)
+    {
+        $config                    = $this->makeConfig('$/offline/mall/models/customfieldoption/fields.yaml');
+        $config->alias             = 'optionForm';
+        $config->arrayName         = 'Option';
+        $config->model             = $model ?? new CustomFieldOption();
+        $config->model->field_type = post('type');
+        $widget                    = $this->makeWidget('Backend\Widgets\Form', $config);
         $widget->bindToController();
+
+        $this->optionFormWidget = $widget;
 
         return $widget;
     }

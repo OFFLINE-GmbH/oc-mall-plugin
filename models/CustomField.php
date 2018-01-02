@@ -17,7 +17,7 @@ class CustomField extends Model
     public $rules = [
         'product_id' => 'exists:offline_mall_products,id',
         'name'       => 'required',
-        'type'       => 'in:text,textarea,dropdown,checkbox',
+        'type'       => 'in:text,textarea,dropdown,checkbox,color,image',
         'required'   => 'boolean',
     ];
     public $hasMany = [
@@ -43,6 +43,15 @@ class CustomField extends Model
     ];
 
     public $table = 'offline_mall_custom_fields';
+
+    public function getTypeLabelAttribute()
+    {
+        return trans('offline.mall::lang.custom_field_options.' . $this->type);
+    }
+    public function getTypeDropdownAttribute()
+    {
+        return $this->type;
+    }
 
 //    public function afterSave()
 //    {
