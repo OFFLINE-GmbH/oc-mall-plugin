@@ -36,6 +36,10 @@
         'custom_field_options' => [
             'edit' => 'Feldoptionen bearbeiten',
         ],
+        'properties' => [
+            'create' => 'Eigenschaft erstellen',
+            'edit' => 'Eigenschaft bearbeiten',
+        ],
     ],
     'menu_items' => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -96,6 +100,8 @@
         'select_file' => 'Datei auswählen',
         'allowed' => 'Erlaubt',
         'not_allowed' => 'Nicht erlaubt',
+        'yes' => 'Ja',
+        'no' => 'Nein',
         'seo' => 'SEO',
         'properties_links' => 'Eigenschaften/Links',
         'categories' => 'Kategorien',
@@ -121,6 +127,10 @@
         'payment_methods' => 'Zahlungsmethoden',
         'image' => 'Bild',
         'color' => 'Farbe',
+        'unit' => 'Einheit',
+        'properties' => 'Eigenschaften',
+        'old_price' => 'Alter Preis',
+        'property' => 'Eigenschaft',
     ],
     'variant' => [
         'method' => [
@@ -160,7 +170,7 @@
         'quantity_max' => 'Maximale Bestellmenge',
         'inventory_management_method' => 'Inventarverwaltungs-Methode',
         'allow_out_of_stock_purchases' => 'Nicht-an-Lager-Kauf erlauben',
-        'allow_out_of_stock_purchases_comment' => 'Dieser Artikel darf auch dann bestellt werden, wenn er nicht an Lager ist',
+        'allow_out_of_stock_purchases_comment' => 'Produkt darf bestellt werden, wenn es nicht an Lager ist',
         'stackable' => 'In Warenkorb zusammenfassen',
         'stackable_comment' => 'Beim mehrmaligen Hinzufügen zum Warenkorb diesen Artikel nur einmal auflisten (Anzahl erhöhen)',
         'shippable' => 'Versand möglich',
@@ -332,6 +342,7 @@
             'manage_currency' => 'Kann die Währungs-Einstellungen des Shops verändern',
             'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
+        'manage_properties' => 'Produkt-Eigenschaften bearbeiten',
     ],
     'components' => [
         'cart' => [

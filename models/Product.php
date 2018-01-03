@@ -167,7 +167,7 @@ class Product extends Model
 
     public function getVariantOptionsAttribute()
     {
-        return $this->custom_fields()->where('type', 'dropdown')->get();
+        return $this->custom_fields()->whereIn('type', ['dropdown', 'color', 'image'])->get();
     }
 
     /**

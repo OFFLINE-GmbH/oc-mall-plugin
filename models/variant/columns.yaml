@@ -1,16 +1,31 @@
 columns:
-    custom_field_options:
-        label: 'offline.mall::lang.common.custom_fields'
-        path: $/offline/mall/models/variant/_custom_field_options.htm
+    published:
+        label: 'offline.mall::lang.product.published'
         type: partial
-        sortable: false
+        path: $/offline/mall/models/variant/_published.htm
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
     stock:
         label: 'offline.mall::lang.product.stock'
         type: number
-        sortable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: text
+    old_price:
+        label: 'offline.mall::lang.common.old_price'
+        type: text
     allow_out_of_stock_purchases:
         label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
-        path: $/offline/mall/models/variant/_allow_out_of_stock_purchases.htm
         type: partial
-        searchable: true
-        sortable: true
+        path: $/offline/mall/models/variant/_allow_out_of_stock_purchases.htm
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: date
+        format: 'd.m.Y H:i'
+    updated_at:
+        label: 'offline.mall::lang.order.updated'
+        type: date
+        format: 'd.m.Y H:i'

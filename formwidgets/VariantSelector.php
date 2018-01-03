@@ -38,7 +38,7 @@ class VariantSelector extends FormWidgetBase
      */
     public function getLoadValue()
     {
-        return $this->model->custom_field_options()->get();
+        return $this->model->custom_field_options;
     }
 
 }

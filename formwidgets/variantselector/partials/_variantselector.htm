@@ -19,7 +19,7 @@ $currentValue = $customFieldOption ? $customFieldOption->id : '';
             id="<?= $this->getId('input') . $field->id ?>">
         <option value=""><?= e(trans('offline.mall::lang.common.select_placeholder')) ?></option>
         <?php
-        foreach($field->options()->get() as $option):
+        foreach($field->custom_field_options as $option):
         $selected = $currentValue === $option->id ? 'selected="selected"' : '';
         ?>
         <option value="<?= e($option->id) ?>"

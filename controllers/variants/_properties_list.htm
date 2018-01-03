@@ -3,8 +3,8 @@
         <table class="table data" data-control="rowlink">
             <thead>
             <tr>
-                <th><span><?= e(trans('offline.mall::lang.custom_field_options.option')) ?></span></th>
-                <th><span><?= e(trans('offline.mall::lang.product.price')) ?></span></th>
+                <th><span><?= e(trans('offline.mall::lang.common.name')) ?></span></th>
+                <th><span><?= e(trans('offline.mall::lang.product.property_value')) ?></span></th>
                 <th style="width: 10%"><span></span></th>
             </tr>
             </thead>
@@ -13,20 +13,20 @@
             <tr class="rowlink">
                 <td>
                     <a href="javascript:;"
-                       data-handler="onLoadEditOptionForm"
+                       data-handler="onLoadEditPropertyForm"
                        data-size="large"
-                       data-request-data="option_id: '<?= $item->id ?>', type: '<?php echo $type; ?>'"
+                       data-request-data="property_id: '<?= $item->id ?>'"
                        data-control="popup">
-                        <?= e($item->name) ?>
+                        <?= e($item->property->name) ?>
                     </a>
                 </td>
                 <td>
-                    <?= e($item->price) ?>
+                    <?= e($item->value) ?>
                 </td>
                 <td class="nolink text-right">
                     <a
                             href="javascript:;"
-                            data-request="onDeleteOption"
+                            data-request="onDeleteProperty"
                             data-request-data="record_id: '<?= $item->id ?>'"
                             data-request-confirm="Delete this item?"
                             class="oc-icon-remove"
@@ -42,8 +42,7 @@
                             href="javascript:;"
                             class="btn btn-sm btn-secondary oc-icon-plus js-create-option-form"
                             data-control="popup"
-                            data-handler="onLoadCreateOptionForm"
-                            data-request-data="type: '<?php echo $type ?>'"
+                            data-handler="onLoadCreatePropertyForm"
                             data-size="large">
                         <?= e(trans('offline.mall::lang.common.add_value')) ?>
                     </a>

@@ -1,0 +1,12 @@
+title: 'offline.mall::lang.product.properties'
+modelClass: OFFLINE\Mall\Models\Property
+list: $/offline/mall/models/property/columns.yaml
+recordUrl: 'offline/mall/properties/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

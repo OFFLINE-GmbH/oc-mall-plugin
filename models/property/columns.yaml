@@ -1,0 +1,19 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    type:
+        label: 'offline.mall::lang.custom_fields.type'
+        type: text
+        searchable: true
+        sortable: true
+    unit:
+        label: 'offline.mall::lang.common.unit'
+        type: text
+        searchable: true
+        sortable: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime

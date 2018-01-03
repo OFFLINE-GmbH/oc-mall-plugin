@@ -1,0 +1,12 @@
+name: 'offline.mall::lang.product.properties'
+modelClass: OFFLINE\Mall\Models\Property
+form: $/offline/mall/models/property/fields.yaml
+defaultRedirect: offline/mall/properties
+create:
+    title: 'offline.mall::lang.titles.properties.create'
+    redirect: 'offline/mall/properties/update/:id'
+    redirectClose: offline/mall/properties
+update:
+    title: 'offline.mall::lang.titles.properties.edit'
+    redirect: offline/mall/properties
+    redirectClose: offline/mall/properties

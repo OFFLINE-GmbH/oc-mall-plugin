@@ -50,6 +50,12 @@ navigation:
                 label: 'offline.mall::lang.common.custom_fields'
                 url: offline/mall/customfields
                 icon: icon-sliders
+            mall-properties:
+                label: 'offline.mall::lang.common.properties'
+                url: offline/mall/properties
+                icon: icon-tags
+                permissions:
+                    - offline.mall.manage_properties
 permissions:
     offline.mall.manage_products:
         tab: 'offline.mall::lang.name'
@@ -75,3 +81,6 @@ permissions:
     offline.mall.settings.manage_payment_methods:
         tab: 'offline.mall::lang.name'
         label: 'offline.mall::lang.permissions.settings.manage_payment_methods'
+    offline.mall.manage_properties:
+        tab: 'offline.mall::lang.name'
+        label: 'offline.mall::lang.permissions.manage_properties'

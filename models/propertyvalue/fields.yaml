@@ -1,0 +1,14 @@
+fields:
+    property:
+        label: 'offline.mall::lang.common.property'
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        list: $/offline/mall/models/property/columns.yaml
+        span: auto
+        type: recordfinder
+    value:
+        label: 'offline.mall::lang.product.property_value'
+        oc.commentPosition: ''
+        span: auto
+        type: text
