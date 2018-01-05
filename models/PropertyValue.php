@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use System\Models\File;
 
 /**
  * Model
@@ -8,7 +9,7 @@ use Model;
 class PropertyValue extends Model
 {
     use \October\Rain\Database\Traits\Validation;
-    
+
     /**
      * @var array Validation rules
      */
@@ -16,7 +17,10 @@ class PropertyValue extends Model
     ];
 
     public $fillable = [
-        'name', 'value'
+        'value',
+        'describable_id',
+        'describable_type',
+        'property_id',
     ];
 
     /**
@@ -26,6 +30,30 @@ class PropertyValue extends Model
 
     public $belongsTo = [
         'property' => Property::class,
-        'variant' => Variant::class,
     ];
+
+    public $attachOne = [
+        'image' => File::class
+    ];
+
+    public $morphTo = [
+        'describable' => [],
+    ];
+
+    public $belongsToMany = [
+        'categories' => [
+            Category::class,
+            'table'    => 'offline_mall_category_property',
+            'key'      => 'property_id',
+            'otherKey' => 'category_id',
+        ],
+    ];
+
+    /**
+     * The parent's attribute type is store to make trigger conditions
+     * work in the custom backend relationship form.
+     *
+     * @var string
+     */
+    public $attribute_type = '';
 }

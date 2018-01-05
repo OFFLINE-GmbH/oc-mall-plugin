@@ -20,7 +20,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $jsonable = ['links', 'properties'];
+    public $jsonable = ['links'];
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
@@ -28,7 +28,6 @@ class Product extends Model
         ['slug', 'index' => true],
         'description_short',
         'description',
-        'properties.value',
         'meta_title',
         'meta_description',
     ];
@@ -63,6 +62,10 @@ class Product extends Model
         'downloads' => File::class,
     ];
 
+    public $belongsTo = [
+        'category' => Category::class,
+    ];
+
     public $hasManyThrough = [
         'custom_field_options' => [
             CustomFieldOption::class,
@@ -72,18 +75,16 @@ class Product extends Model
         ],
     ];
 
+    public $morphMany = [
+        'property_values' => [PropertyValue::class, 'name' => 'describable']
+    ];
+
     public $hasMany = [
         'variants'      => Variant::class,
         'cart_products' => CartProduct::class,
     ];
 
     public $belongsToMany = [
-        'categories'      => [
-            Category::class,
-            'table'    => 'offline_mall_category_product',
-            'key'      => 'product_id',
-            'otherKey' => 'category_id',
-        ],
         'custom_fields'   => [
             CustomField::class,
             'table'    => 'offline_mall_product_custom_field',

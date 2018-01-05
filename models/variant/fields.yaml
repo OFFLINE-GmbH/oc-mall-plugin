@@ -29,8 +29,12 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
-
-    properties:
-        type: partial
-        path: $/offline/mall/controllers/variants/_field_properties.htm
+tabs:
+    fields:
+        _properties:
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: full
+            type: OFFLINE\Mall\FormWidgets\PropertyFields
+            tab: 'offline.mall::lang.common.properties'
 

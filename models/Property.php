@@ -12,6 +12,8 @@ class Property extends Model
 
     protected $dates = ['deleted_at'];
 
+    public $jsonable = ['options'];
+
     public $rules = [
         'name' => 'required',
         'type' => 'required|in:text,textarea,dropdown,checkbox,color,image',
@@ -27,7 +29,7 @@ class Property extends Model
             'dropdown' => trans('offline.mall::lang.custom_field_options.dropdown'),
             'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),
             'color'    => trans('offline.mall::lang.custom_field_options.color'),
-            'image'    => trans('offline.mall::lang.custom_field_options.image'),
+//            'image'    => trans('offline.mall::lang.custom_field_options.image'),
         ];
     }
 }

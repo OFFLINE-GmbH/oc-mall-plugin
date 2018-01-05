@@ -131,6 +131,8 @@
         'properties' => 'Eigenschaften',
         'old_price' => 'Alter Preis',
         'property' => 'Eigenschaft',
+        'options' => 'Optionen',
+        'option' => 'Option',
     ],
     'variant' => [
         'method' => [

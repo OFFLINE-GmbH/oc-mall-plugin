@@ -1,0 +1,13 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+properties:
+    label: 'offline.mall::lang.common.properties'
+    view:
+        list: $/offline/mall/models/property/columns.yaml
+        toolbarButtons: add|create|delete
+    manage:
+        form: $/offline/mall/models/property/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true

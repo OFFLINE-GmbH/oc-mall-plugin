@@ -3,22 +3,11 @@ fields:
         label: 'offline.mall::lang.category.parent'
         type: dropdown
         span: left
-    meta_title:
-        label: 'offline.mall::lang.common.meta_title'
-        oc.commentPosition: ''
-        span: right
-        type: text
     name:
         label: 'offline.mall::lang.category.name'
         oc.commentPosition: ''
         span: auto
         type: text
-    meta_description:
-        label: 'offline.mall::lang.common.meta_description'
-        size: large
-        oc.commentPosition: ''
-        span: right
-        type: textarea
     slug:
         label: 'offline.mall::lang.common.slug'
         oc.commentPosition: ''
@@ -26,12 +15,6 @@ fields:
         preset:
             field: name
             type: slug
-        type: text
-    code:
-        label: 'offline.mall::lang.category.code'
-        comment: 'offline.mall::lang.category.code_comment'
-        oc.commentPosition: 'below'
-        span: left
         type: text
     image:
         label: 'offline.mall::lang.common.main_image'
@@ -44,5 +27,32 @@ fields:
         thumbOptions:
             mode: crop
             extension: auto
-        span: right
+        span: auto
         type: fileupload
+    code:
+        label: 'offline.mall::lang.category.code'
+        comment: 'offline.mall::lang.category.code_comment'
+        span: left
+        type: text
+tabs:
+    fields:
+        properties:
+            label: 'offline.mall::lang.product.properties'
+            oc.commentPosition: ''
+            span: full
+            type: partial
+            path: $/offline/mall/controllers/categories/_properties.htm
+            tab: 'offline.mall::lang.product.properties'
+        meta_title:
+            label: 'offline.mall::lang.common.meta_title'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.seo'
+        meta_description:
+            label: 'offline.mall::lang.common.meta_description'
+            size: large
+            oc.commentPosition: ''
+            span: left
+            type: textarea
+            tab: 'offline.mall::lang.common.seo'

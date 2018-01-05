@@ -2,6 +2,7 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use OFFLINE\Mall\Models\Variant;
 
 class Properties extends Controller
 {

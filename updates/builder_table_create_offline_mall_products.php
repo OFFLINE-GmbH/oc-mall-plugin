@@ -10,6 +10,7 @@ class BuilderTableCreateOfflineMallProducts extends Migration
         Schema::create('offline_mall_products', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
+            $table->integer('category_id')->nullable();
             $table->string('user_defined_id')->nullable();
             $table->string('name', 255);
             $table->string('slug', 255);
@@ -27,7 +28,6 @@ class BuilderTableCreateOfflineMallProducts extends Migration
             $table->integer('quantity_min')->nullable()->unsigned();
             $table->integer('quantity_max')->nullable()->unsigned();
             $table->integer('stock')->nullable();
-            $table->text('properties')->nullable();
             $table->text('links')->nullable();
             $table->string('inventory_management_method')->default('single');
             $table->boolean('allow_out_of_stock_purchases')->default(false);

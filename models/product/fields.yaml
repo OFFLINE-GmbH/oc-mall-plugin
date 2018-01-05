@@ -52,14 +52,20 @@ tabs:
             span: left
             type: richeditor
             tab: 'offline.mall::lang.product.general'
-        categories:
-            label: 'offline.mall::lang.common.categories'
+        category:
+            label: 'offline.mall::lang.common.category'
             oc.commentPosition: ''
             nameFrom: name
             descriptionFrom: description
             span: right
             type: relation
             tab: 'offline.mall::lang.product.general'
+        _properties@update:
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: full
+            type: OFFLINE\Mall\FormWidgets\PropertyFields
+            tab: 'offline.mall::lang.common.properties'
         taxes:
             label: 'offline.mall::lang.common.taxes'
             oc.commentPosition: ''
@@ -73,35 +79,13 @@ tabs:
             type: switch
             comment: 'offline.mall::lang.product.price_includes_tax_comment'
             tab: 'offline.mall::lang.common.taxes'
-        properties:
-            label: 'offline.mall::lang.product.properties'
-            oc.commentPosition: ''
-            prompt: 'offline.mall::lang.common.add_value'
-            span: left
-            type: repeater
-            tab: 'offline.mall::lang.common.properties_links'
-            form:
-                fields:
-                    title:
-                        label: 'offline.mall::lang.product.property_title'
-                        oc.commentPosition: ''
-                        span: full
-                        type: text
-                        required: true
-                    value:
-                        label: 'offline.mall::lang.product.property_value'
-                        size: medium
-                        oc.commentPosition: ''
-                        span: full
-                        type: textarea
-                        required: true
         links:
             label: 'offline.mall::lang.product.links'
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.common.add_value'
-            span: right
+            span: full
             type: repeater
-            tab: 'offline.mall::lang.common.properties_links'
+            tab: 'offline.mall::lang.product.links'
             form:
                 fields:
                     title:

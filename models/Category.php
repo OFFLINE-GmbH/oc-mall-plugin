@@ -52,6 +52,12 @@ class Category extends Model
             'key'      => 'category_id',
             'otherKey' => 'product_id',
         ],
+        'properties' => [
+            Property::class,
+            'table'    => 'offline_mall_category_property',
+            'key'      => 'category_id',
+            'otherKey' => 'property_id',
+        ],
     ];
 
     public $attachOne = [

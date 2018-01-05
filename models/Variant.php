@@ -35,12 +35,34 @@ class Variant extends Model
         'cart_product' => CartProduct::class,
     ];
 
-    public $hasMany = [
-        'property_values' => PropertyValue::class,
+    public $morphMany = [
+        'property_values' => [PropertyValue::class, 'name' => 'describable'],
     ];
+
 
     public function getPriceColumns()
     {
         return ['price', 'old_price'];
+    }
+
+    public static function boot()
+    {
+        static::saved(function (Variant $variant) {
+            $values = post('PropertyValues');
+            if ( ! $values) {
+                return;
+            }
+
+            foreach ($values as $id => $value) {
+                $pv = PropertyValue::firstOrNew([
+                    'describable_id'   => $variant->id,
+                    'describable_type' => Variant::class,
+                    'property_id'      => $id,
+                ]);
+
+                $pv->value = $value;
+                $pv->save();
+            }
+        });
     }
 }

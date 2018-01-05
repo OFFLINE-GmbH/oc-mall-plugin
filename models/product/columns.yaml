@@ -25,9 +25,9 @@ columns:
         type: partial
         path: $/offline/mall/models/product/_taxable.htm
         sortable: true
-    categories:
-        label: 'offline.mall::lang.common.categories'
-        relation: categories
+    category:
+        label: 'offline.mall::lang.common.category'
+        relation: category
         select: name
         sortable: true
         searchable: true
