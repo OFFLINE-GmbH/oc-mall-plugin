@@ -11,7 +11,7 @@ class CurrencySettings extends Model
     public $implement = ['System.Behaviors.SettingsModel'];
     public $settingsCode = 'offline_mall_settings';
     public $settingsFields = '$/offline/mall/models/settings/fields_currency.yaml';
-    const CURRENCY_SESSION_KEY = 'mall.activeCurrency';
+    public const CURRENCY_SESSION_KEY = 'mall.activeCurrency';
 
     /**
      * Returns all supported currency codes.

@@ -352,6 +352,19 @@
         'manage_properties' => 'Produkt-Eigenschaften bearbeiten',
     ],
     'components' => [
+        'category' => [
+            'details' => [
+                'name' => 'Kategorie',
+                'description' => 'Zeigt alle Produkte in einer Kategorie an',
+            ],
+            'properties' => [
+                'use_url' => 'Verwende Slug aus URL',
+                'show_variants' => [
+                    'title' => 'Zeige einzelne Varianten an',
+                    'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
+                ]
+            ]
+        ],
         'cart' => [
             'details' => [
                 'name' => 'Warenkorb',

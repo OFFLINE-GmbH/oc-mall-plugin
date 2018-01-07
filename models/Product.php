@@ -212,4 +212,10 @@ class Product extends Model
 
         return $quantity;
     }
+
+    public function getPriceColumns()
+    {
+        return ['price', 'old_price'];
+    }
+
 }

@@ -13,9 +13,9 @@ class BuilderTableCreateOfflineMallCategories extends Migration
             $table->string('name', 255);
             $table->string('slug', 255);
             $table->string('code')->nullable();
-            $table->string('meta_title');
-            $table->text('meta_description');
-            $table->integer('sort_order');
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

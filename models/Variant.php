@@ -1,19 +1,20 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Model;
 use OFFLINE\Mall\Classes\Traits\Price;
-use System\Models\File;
 
 /**
  * Model
  */
-class Variant extends Model
+class Variant extends Product
 {
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
     use Price;
 
-    protected $dates = ['deleted_at'];
+    public $slugs = [];
+
+    public $with = ['product'];
+
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
@@ -25,8 +26,8 @@ class Variant extends Model
         'stock'                        => 'integer',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
-        'price'                        => 'required|nullable|regex:/\d+([\.,]\d+)?/i',
-        'old_price'                    => 'required|nullable|regex:/\d+([\.,]\d+)?/i',
+        'price'                        => 'sometimes|nullable|regex:/\d+([\.,]\d+)?/i',
+        'old_price'                    => 'sometimes|nullable|regex:/\d+([\.,]\d+)?/i',
     ];
 
     public $table = 'offline_mall_product_variants';
@@ -39,20 +40,6 @@ class Variant extends Model
     public $morphMany = [
         'property_values' => [PropertyValue::class, 'name' => 'describable'],
     ];
-
-    public $attachOne = [
-        'main_image' => File::class,
-    ];
-
-    public $attachMany = [
-        'images'    => File::class,
-        'downloads' => File::class,
-    ];
-
-    public function getPriceColumns()
-    {
-        return ['price', 'old_price'];
-    }
 
     public static function boot()
     {
@@ -73,5 +60,13 @@ class Variant extends Model
                 $pv->save();
             }
         });
+    }
+
+    public function __get($name)
+    {
+        if ( ! array_key_exists($name, $this->attributes)) {
+            return parent::__get($name) ;
+        }
+        return $this->attributes[$name];
     }
 }

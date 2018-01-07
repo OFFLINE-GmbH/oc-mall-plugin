@@ -93,7 +93,6 @@ tabs:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
             span: right
-            emptyOption: 'offline.mall::lang.common.dont_group'
             trigger:
                 action: show
                 field: inventory_management_method

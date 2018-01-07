@@ -12,11 +12,10 @@ use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
-use OFFLINE\Mall\Components\AddressInput;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
+use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\Checkout;
-use OFFLINE\Mall\Components\Dependencies;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
@@ -60,6 +59,7 @@ class Plugin extends PluginBase
             AddressSelector::class       => 'addressSelector',
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
+            CategoryComponent::class     => 'category',
         ];
     }
 

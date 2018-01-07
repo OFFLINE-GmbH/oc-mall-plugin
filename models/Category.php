@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cache;
 use Cms\Classes\Controller;
 use InvalidArgumentException;
 use Model;
@@ -18,6 +19,8 @@ class Category extends Model
     use SoftDelete;
     use NestedTree;
     use Sluggable;
+
+    public const ID_MAP_CACHE_KEY = 'oc-mall.categories.id_map';
 
     protected $dates = [
         'deleted_at',
@@ -45,13 +48,17 @@ class Category extends Model
 
     public $table = 'offline_mall_categories';
 
-    public $belongsToMany = [
-        'products' => [
+    public $hasMany = [
+        'products'          => [
             Product::class,
-            'table'    => 'offline_mall_category_product',
-            'key'      => 'category_id',
-            'otherKey' => 'product_id',
         ],
+        'publishedProducts' => [
+            Product::class,
+            'scope' => 'published',
+        ],
+    ];
+    
+    public $belongsToMany = [
         'properties' => [
             Property::class,
             'table'    => 'offline_mall_category_property',
@@ -63,6 +70,17 @@ class Category extends Model
     public $attachOne = [
         'image' => File::class,
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saved(function () {
+            Cache::forget(self::ID_MAP_CACHE_KEY);
+        });
+        static::deleted(function () {
+            Cache::forget(self::ID_MAP_CACHE_KEY);
+        });
+    }
 
     /**
      * Returns an array with possible parent categories.
@@ -163,4 +181,41 @@ class Category extends Model
             'created_at desc' => "${created}, Z->A",
         ];
     }
+
+    public static function getByNestedSlug(string $slug)
+    {
+        $slug = trim($slug, ' /');
+
+        $slugMap = (new Category)->getSlugMap();
+        if ( ! isset($slugMap[$slug])) {
+            return null;
+        }
+
+        return Category::findOrFail($slugMap[$slug]);
+    }
+
+    /**
+     * Returns a cached map of category_ids and slug pairs.
+     */
+    public function getSlugMap()
+    {
+        return \Cache::remember(self::ID_MAP_CACHE_KEY, 60 * 24, function () {
+            $map = [];
+
+            $buildSlugMap = function (?Category $parent = null, array &$map, string $base = '') use (&$buildSlugMap) {
+                $slug       = trim($base . '/' . $parent->slug, '/');
+                $map[$slug] = $parent->id;
+                foreach ($parent->children as $child) {
+                    $buildSlugMap($child, $map, $slug);
+                }
+            };
+
+            foreach (Category::getAllRoot() as $parent) {
+                $buildSlugMap($parent, $map);
+            }
+
+            return $map;
+        });
+    }
+
 }
