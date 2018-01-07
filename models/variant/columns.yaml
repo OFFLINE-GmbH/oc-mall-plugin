@@ -1,6 +1,6 @@
 columns:
     published:
-        label: 'offline.mall::lang.product.published'
+        label: 'offline.mall::lang.product.published_short'
         type: partial
         path: $/offline/mall/models/variant/_published.htm
     name:
@@ -26,6 +26,6 @@ columns:
         type: date
         format: 'd.m.Y H:i'
     updated_at:
-        label: 'offline.mall::lang.order.updated'
+        label: 'offline.mall::lang.common.updated_at'
         type: date
         format: 'd.m.Y H:i'

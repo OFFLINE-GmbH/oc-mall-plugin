@@ -108,9 +108,11 @@
         'category' => 'Kategorie',
         'meta_title' => 'Meta-Titel',
         'meta_description' => 'Meta-Beschreibung',
+        'meta_keywords' => 'Meta-Keywords',
         'reorder' => 'Reihenfolge ändern',
         'id' => 'ID',
-        'created_at' => 'Erstellungsdatum',
+        'created_at' => 'Erstellt',
+        'updated_at' => 'Aktualisiert',
         'hide_published' => 'Verstecke veröffentlichte',
         'slug' => 'URL',
         'name' => 'Name',
@@ -128,6 +130,7 @@
         'image' => 'Bild',
         'color' => 'Farbe',
         'unit' => 'Einheit',
+        'dont_group' => '-- Nicht gruppieren',
         'properties' => 'Eigenschaften',
         'old_price' => 'Alter Preis',
         'property' => 'Eigenschaft',
@@ -157,6 +160,7 @@
         'user_defined_id' => 'Artikelnummer',
         'name' => 'Produktname',
         'published' => 'Veröffentlicht',
+        'published_short' => 'Veröffentl.',
         'not_published' => 'Nicht veröffentlicht',
         'published_comment' => 'Dieser Artikel ist im Shop sichtbar',
         'stock' => 'Lagerbestand',
@@ -193,6 +197,7 @@
         'links' => 'Links',
         'price_includes_tax' => 'Preis ist inkl. Steuern',
         'price_includes_tax_comment' => 'Der angegebene Preis enthält bereits alle Steuern',
+        'group_by_property' => 'Attribut für Varianten-Gruppierung',
     ],
     'category' => [
         'name' => 'Name',
@@ -543,5 +548,8 @@
     'shipping_method_rates' => [
         'from_weight' => 'Von (Gewicht in Gramm)',
         'to_weight' => 'Bis (Gewicht in Gramm)',
+    ],
+    'products' => [
+        'variants_comment' => 'Erstelle verschiedene Varianten des gleichen Produkts',
     ],
 ];

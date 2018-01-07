@@ -21,9 +21,6 @@ class BuilderTableCreateOfflineMallProducts extends Migration
             $table->text('meta_description')->nullable();
             $table->text('meta_keywords')->nullable();
             $table->integer('weight')->nullable()->unsigned();
-            $table->integer('width')->nullable()->unsigned();
-            $table->integer('length')->nullable()->unsigned();
-            $table->integer('height')->nullable()->unsigned();
             $table->integer('quantity_default')->nullable()->unsigned();
             $table->integer('quantity_min')->nullable()->unsigned();
             $table->integer('quantity_max')->nullable()->unsigned();
@@ -34,6 +31,7 @@ class BuilderTableCreateOfflineMallProducts extends Migration
             $table->boolean('stackable')->default(true);
             $table->boolean('shippable')->default(true);
             $table->boolean('price_includes_tax')->default(true);
+            $table->integer('group_by_property_id')->nullable();
             $table->boolean('published')->default(false);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

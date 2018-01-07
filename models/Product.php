@@ -44,9 +44,6 @@ class Product extends Model
     public $casts = [
         'price_includes_tax' => 'boolean',
         'weight'             => 'int',
-        'length'             => 'int',
-        'height'             => 'int',
-        'width'              => 'int',
         'stackable'          => 'boolean',
         'shippable'          => 'boolean',
     ];
@@ -64,6 +61,10 @@ class Product extends Model
 
     public $belongsTo = [
         'category' => Category::class,
+        'group_by_property' => [
+            Property::class,
+            'key' => 'group_by_property_id'
+        ]
     ];
 
     public $hasManyThrough = [

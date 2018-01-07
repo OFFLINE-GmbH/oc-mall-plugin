@@ -2,6 +2,7 @@
 
 use Model;
 use OFFLINE\Mall\Classes\Traits\Price;
+use System\Models\File;
 
 /**
  * Model
@@ -39,6 +40,14 @@ class Variant extends Model
         'property_values' => [PropertyValue::class, 'name' => 'describable'],
     ];
 
+    public $attachOne = [
+        'main_image' => File::class,
+    ];
+
+    public $attachMany = [
+        'images'    => File::class,
+        'downloads' => File::class,
+    ];
 
     public function getPriceColumns()
     {

@@ -5,7 +5,6 @@
     - builder_table_create_offline_mall_product_accessory.php
     - builder_table_create_offline_mall_custom_fields.php
     - builder_table_create_offline_mall_custom_field_options.php
-    - builder_table_create_offline_mall_product_variant_custom_field_option.php
     - builder_table_create_offline_mall_categories.php
     - builder_table_create_offline_mall_taxes.php
     - builder_table_create_offline_mall_product_tax.php

@@ -37,4 +37,40 @@ tabs:
             span: full
             type: OFFLINE\Mall\FormWidgets\PropertyFields
             tab: 'offline.mall::lang.common.properties'
-
+        main_image:
+            label: 'offline.mall::lang.common.main_image'
+            oc.commentPosition: ''
+            mode: image
+            prompt: 'offline.mall::lang.common.select_image'
+            imageWidth: '120'
+            imageHeight: '120'
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: left
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        downloads:
+            label: 'offline.mall::lang.common.downloads'
+            oc.commentPosition: ''
+            mode: file
+            prompt: 'offline.mall::lang.common.select_file'
+            useCaption: true
+            span: right
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        images:
+            label: 'offline.mall::lang.common.images'
+            oc.commentPosition: ''
+            mode: image
+            prompt: 'offline.mall::lang.common.select_image'
+            imageWidth: '120'
+            imageHeight: '120'
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: left
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'

@@ -9,7 +9,7 @@
             $value = $values->where('property_id', $field->id)->first();
             $currentValue = $value ? $value->value : '';
         ?>
-            <div class="form-group span-<?= $i % 2 ? 'left' : 'right' ?>">
+            <div class="form-group span-<?= ($i + 1) % 2 ? 'left' : 'right' ?>">
                 <?= $this->createFormWidget($field, $currentValue); ?>
             </div>
         <?php endforeach; ?>

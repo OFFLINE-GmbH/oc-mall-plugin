@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\Seeders\PaymentMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ProductTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\TaxTableSeeder;
+use OFFLINE\Mall\Classes\Seeders\PropertyTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ShippingMethodTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
         $this->call(CustomerTableSeeder::class);
+        $this->call(PropertyTableSeeder::class);
     }
 }

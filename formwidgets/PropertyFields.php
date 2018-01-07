@@ -66,6 +66,7 @@ class PropertyFields extends FormWidgetBase
         $formField->value = $value;
 
         $widget = new ColorPicker($this->controller, $formField, $config);
+        $widget->allowEmpty = true;
         $widget->bindToController();
 
         return $this->makePartial('colorpicker', ['field' => $property, 'widget' => $widget, 'value' => $value]);
