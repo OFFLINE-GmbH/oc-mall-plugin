@@ -70,7 +70,7 @@ tabs:
                 condition: 'value[variant]'
             type: number
             tab: 'offline.mall::lang.product.general'
-        variants_section:
+        variants_section@update:
             label: 'offline.mall::lang.common.variants'
             span: full
             trigger:

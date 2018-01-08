@@ -5,6 +5,7 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
@@ -17,6 +18,7 @@ class Product extends Model
     use SoftDelete;
     use Sluggable;
     use Price;
+    use Images;
 
     protected $dates = ['deleted_at'];
 
@@ -31,7 +33,6 @@ class Product extends Model
         'meta_title',
         'meta_description',
     ];
-
     public $slugs = [
         'slug' => 'name',
     ];
@@ -72,7 +73,7 @@ class Product extends Model
             'key'        => 'product_id',
             'through'    => Variant::class,
             'throughKey' => 'custom_field_id',
-        ],
+        ]
     ];
 
     public $morphMany = [
@@ -121,45 +122,6 @@ class Product extends Model
             'pivotModel' => CartProduct::class,
         ],
     ];
-
-    /**
-     * Return the main image, if one is uploaded. Otherwise
-     * use the first available image.
-     *
-     * @return File
-     */
-    public function getImageAttribute()
-    {
-        if ($this->main_image) {
-            return $this->main_image;
-        }
-
-        if ($this->images) {
-            return $this->images->first();
-        }
-    }
-
-    /**
-     * Return all images except the main image.
-     *
-     * @return Collection
-     */
-    public function getAdditionalImagesAttribute()
-    {
-        // If a main image exists for this product we
-        // can just return all additional images.
-        if ($this->main_image) {
-            return $this->images;
-        }
-
-        // If no main image is uploaded we have to exclude the
-        // alternatively selected main image form the collection.
-        $mainImage = $this->image;
-
-        return $this->images->reject(function ($item) use ($mainImage) {
-            return $item->id === $mainImage->id;
-        });
-    }
 
     public function scopePublished($query)
     {

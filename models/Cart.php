@@ -164,12 +164,13 @@ class Cart extends Model
      * Adds a product to the cart.
      *
      * @param Product            $product
+     * @param Variant            $variant
      * @param int|null           $quantity
      * @param CustomFieldValue[] $values
      *
-     * @return void
+     * @return Cart
      */
-    public function addProduct(Product $product, int $quantity = null, $values = null)
+    public function addProduct(Product $product, Variant $variant = null, int $quantity = null, $values = null)
     {
         if ( ! $this->exists) {
             $this->save();
@@ -178,7 +179,7 @@ class Cart extends Model
         $quantity = $quantity ?? $product->quantity_default ?? 1;
         $values   = $this->normalizeArray($values);
 
-        if ($product->stackable && $this->isInCart($product, $values)) {
+        if ($product->stackable && $this->isInCart($product, $variant, $values)) {
             $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
                 return $cartProduct->product_id === $product->id;
             });
@@ -197,6 +198,7 @@ class Cart extends Model
         $cartEntry             = new CartProduct();
         $cartEntry->cart_id    = $this->id;
         $cartEntry->product_id = $product->id;
+        $cartEntry->variant_id = $variant ? $variant->id : null;
         $cartEntry->quantity   = $quantity;
         $cartEntry->price      = $product->priceIncludingCustomFieldValues($values);
 
@@ -250,14 +252,15 @@ class Cart extends Model
      * in the cart.
      *
      * @param Product            $product
+     * @param Variant            $variant
      * @param CustomFieldValue[] $values
      *
      * @return bool
      */
-    public function isInCart(Product $product, array $values = []): bool
+    public function isInCart(Product $product, Variant $variant, array $values = []): bool
     {
-        $productIsInCart = $this->products->contains(function (CartProduct $existing) use ($product) {
-            return $existing->product_id === $product->id;
+        $productIsInCart = $this->products->contains(function (CartProduct $existing) use ($product, $variant) {
+            return $existing->product_id === $product->id && $existing->variant_id === $variant->id;
         });
         // If there is no CustomFieldValue to compare we only have
         // to check if the product is in the cart.

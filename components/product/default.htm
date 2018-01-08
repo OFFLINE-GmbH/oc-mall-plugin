@@ -1,0 +1,44 @@
+<div class="mall-product">
+
+    <form data-request="onAddToCart">
+
+        <h3>{{ item.name }}</h3>
+        {% if item.description_short %}
+            <h4>{{ item.description_short }}</h4>
+        {% endif %}
+
+        <div class="mall-product__description">
+            {{ item.description | raw }}
+        </div>
+
+        <div class="mall-product__images">
+            {% for image in item.all_images %}
+                <img src="{{ image.thumb(300, auto) }}" alt=""/>
+            {% endfor %}
+        </div>
+
+        <div class="mall-variants">
+            {% for value, variant in variants %}
+                {% set variant = variant.first() %}
+                <div class="mall-variant">
+                    <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}">
+                        <p><img src="{{ variant.main_image.thumb(150, auto) }}" alt="{{ variant.name }}"/></p>
+                        <p>{{ variant.name }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mall-variant-properties">
+            {% for item in props %}
+                {% partial __SELF__ ~ '::proptypes/' ~ item.property.type item=item %}
+            {% endfor %}
+        </div>
+
+        <button type="submit">
+            Add to Cart
+        </button>
+
+    </form>
+
+</div>

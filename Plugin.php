@@ -4,7 +4,6 @@
 use Event;
 use Hashids\Hashids;
 use October\Rain\Database\Model;
-use OFFLINE\Mall\Classes\Auth\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
@@ -16,6 +15,7 @@ use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
+use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\ShippingSelector;
@@ -66,6 +66,7 @@ class Plugin extends PluginBase
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
             CategoryComponent::class     => 'category',
+            ProductComponent::class      => 'product',
         ];
     }
 

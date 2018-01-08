@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Hashids\Hashids;
+use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
@@ -12,6 +13,8 @@ class Variant extends \Model
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
     use Price;
+    use Images;
+    use HashIds;
 
     public $slugs = [];
 
@@ -82,6 +85,11 @@ class Variant extends \Model
         });
     }
 
+    public function scopePublished($query)
+    {
+        return $query->where('published', true);
+    }
+
     public function getAttribute($name)
     {
         $value = parent::getAttribute($name);
@@ -95,17 +103,6 @@ class Variant extends \Model
         }
 
         return $this->parent->getAttribute($name);
-    }
-
-    /**
-     * To hide the original ID in the product URL we use hash
-     * ids to link to different variants.
-     *
-     * @return string
-     */
-    public function getHashIdAttribute()
-    {
-        return app(Hashids::class)->encode($this->attributes['id']);
     }
 
     /**

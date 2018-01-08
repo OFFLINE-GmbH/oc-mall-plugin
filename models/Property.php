@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 
 /**
  * Model
@@ -9,6 +10,7 @@ class Property extends Model
 {
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
+    use HashIds;
 
     protected $dates = ['deleted_at'];
 

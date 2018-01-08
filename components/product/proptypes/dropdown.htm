@@ -1,0 +1,8 @@
+<div class="mall-property">
+    <label for="">{{ item.property.name }}</label>
+    <select name="props[{{ item.property.hashId }}]" id="">
+        {% for value in item.values %}
+            <option value="{{ value.hashId }}">{{ value.value }}</option>
+        {% endfor %}
+    </select>
+</div>

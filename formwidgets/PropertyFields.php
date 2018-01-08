@@ -87,8 +87,8 @@ class PropertyFields extends FormWidgetBase
         $formField          = new FormField('PropertyValues[' . $property->id . ']', $property->name);
         $formField->value   = $value;
         $formField->label   = $property->name;
-        $formField->options = collect($property->options)->map(function ($i) {
-            return [$i['value'], $i['value']];
+        $formField->options = collect($property->options)->mapWithKeys(function ($i) {
+            return [$i['value'] => $i['value']];
         })->toArray();
 
         $widget = $this->makePartial('modules/backend/widgets/form/partials/field_dropdown',

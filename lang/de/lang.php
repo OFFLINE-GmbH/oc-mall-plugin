@@ -369,6 +369,15 @@
                 ],
             ],
         ],
+        'product'              => [
+            'details'    => [
+                'name'        => 'Produkt',
+                'description' => 'Zeigt alle Details eines Produkts an',
+            ],
+            'properties' => [
+
+            ],
+        ],
         'cart'                  => [
             'details' => [
                 'name'        => 'Warenkorb',

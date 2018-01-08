@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use System\Models\File;
 
 /**
@@ -9,6 +10,7 @@ use System\Models\File;
 class PropertyValue extends Model
 {
     use \October\Rain\Database\Traits\Validation;
+    use HashIds;
 
     /**
      * @var array Validation rules
