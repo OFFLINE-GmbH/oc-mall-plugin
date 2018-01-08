@@ -35,7 +35,6 @@ class Product extends Model
     public $slugs = [
         'slug' => 'name',
     ];
-
     public $rules = [
         'name'  => 'required',
         'slug'  => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
@@ -60,11 +59,11 @@ class Product extends Model
     ];
 
     public $belongsTo = [
-        'category' => Category::class,
+        'category'          => Category::class,
         'group_by_property' => [
             Property::class,
-            'key' => 'group_by_property_id'
-        ]
+            'key' => 'group_by_property_id',
+        ],
     ];
 
     public $hasManyThrough = [
@@ -77,7 +76,7 @@ class Product extends Model
     ];
 
     public $morphMany = [
-        'property_values' => [PropertyValue::class, 'name' => 'describable']
+        'property_values' => [PropertyValue::class, 'name' => 'describable'],
     ];
 
     public $hasMany = [

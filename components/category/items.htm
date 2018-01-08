@@ -1,0 +1,9 @@
+<div class="flex flex-wrap-reverse bg-grey-lighter">
+    {% for item in items %}
+        {% partial __SELF__ ~ '::item' item=item %}
+    {% endfor %}
+</div>
+
+<div class="mall-pagination">
+    {{ items | raw }}
+</div>

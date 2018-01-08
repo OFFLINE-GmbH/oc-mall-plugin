@@ -10,6 +10,7 @@
         ]
     },
     "require": {
-        "omnipay/omnipay": "^2.3"
+        "omnipay/omnipay": "^2.3",
+        "hashids/hashids": "^2.0"
     }
 }

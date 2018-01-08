@@ -1,3 +1,5 @@
-<p>This is the default markup for component Category</p>
-
-<small>You can delete this file if you want</small>
+{% if __SELF__.items.count %}
+    {% partial __SELF__ ~ '::items' items=__SELF__.items %}
+{% else %}
+    {% partial __SELF__ ~ '::empty' %}
+{% endif %}

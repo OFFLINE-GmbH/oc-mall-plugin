@@ -78,9 +78,22 @@ class VariantTest extends PluginTestCase
 
         $this->product->main_image()->save($file);
 
-        dd($this->variant->main_image);
         $this->assertEquals('product.jpg', $this->variant->main_image->disk_name);
         $this->assertEquals('product.jpg', $this->product->main_image->disk_name);
+    }
+
+    public function test_it_inherits_file_accessors()
+    {
+        $file               = new File();
+        $file->disk_name    = 'product.jpg';
+        $file->file_name    = 'product.jpg';
+        $file->file_size    = 8;
+        $file->content_type = 'image/jpeg';
+
+        $this->product->main_image()->save($file);
+
+        $this->assertEquals('product.jpg', $this->variant->image->disk_name);
+        $this->assertEquals('product.jpg', $this->product->image->disk_name);
     }
 
 }

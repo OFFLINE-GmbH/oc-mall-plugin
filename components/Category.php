@@ -1,10 +1,15 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Cms\Classes\ComponentBase;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
+use Url;
 
 class Category extends ComponentBase
 {
@@ -17,6 +22,18 @@ class Category extends ComponentBase
      * @var Product|Variant
      */
     public $items;
+    /**
+     * @var integer
+     */
+    public $perPage;
+    /**
+     * @var integer
+     */
+    public $pageNumber;
+    /**
+     * @var string
+     */
+    public $productPage;
 
     public function componentDetails()
     {
@@ -34,11 +51,22 @@ class Category extends ComponentBase
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
+            'product_page'  => [
+                'title'       => 'offline.mall::lang.components.category.properties.product_page.title',
+                'description' => 'offline.mall::lang.components.category.properties.product_page.description',
+                'type'        => 'dropdown',
+            ],
             'show_variants' => [
                 'title'       => 'offline.mall::lang.components.category.properties.show_variants.title',
                 'description' => 'offline.mall::lang.components.category.properties.show_variants.description',
                 'default'     => '0',
                 'type'        => 'checkbox',
+            ],
+            'per_page'      => [
+                'title'       => 'offline.mall::lang.components.category.properties.per_page.title',
+                'description' => 'offline.mall::lang.components.category.properties.per_page.description',
+                'default'     => '9',
+                'type'        => 'string',
             ],
         ];
     }
@@ -49,6 +77,11 @@ class Category extends ComponentBase
             + CategoryModel::get()->pluck('name', 'id')->toArray();
     }
 
+    public function getProduct_PageOptions()
+    {
+        return Page::listInTheme(Theme::getActiveThemeCode())->pluck('title', 'fileName')->toArray();
+    }
+
     public function onRun()
     {
         $this->setData();
@@ -57,10 +90,13 @@ class Category extends ComponentBase
     protected function setData()
     {
         $this->setVar('category', $this->getCategory());
-        $this->setVar('items', $this->getItems());
+        $this->setVar('productPage', $this->property('product_page'));
+        $this->setVar('pageNumber', (int)request('page', 1));
+        $this->setVar('perPage', (int)$this->property('per_page'));
+        $this->setVar('items', $this->paginate($this->getItems()));
     }
 
-    private function getItems()
+    protected function getItems(): Collection
     {
         $showVariants = (bool)$this->property('show_variants');
         if ( ! $showVariants) {
@@ -74,7 +110,7 @@ class Category extends ComponentBase
         });
     }
 
-    private function getCategory()
+    protected function getCategory()
     {
         $category = $this->property('category');
 
@@ -84,4 +120,24 @@ class Category extends ComponentBase
 
         return CategoryModel::findOrFail($category);
     }
+
+    protected function paginate(Collection $items)
+    {
+        $paginator = new LengthAwarePaginator(
+            $this->getPaginatorSlice($items),
+            $items->count(),
+            $this->perPage,
+            $this->pageNumber
+        );
+
+        $pageUrl = $this->controller->pageUrl($this->page->fileName, ['slug' => $this->param('slug')]);
+
+        return $paginator->setPath($pageUrl);
+    }
+
+    protected function getPaginatorSlice($items)
+    {
+        return $items->slice(($this->pageNumber - 1) * $this->perPage, $this->perPage);
+    }
+
 }

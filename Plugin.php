@@ -2,6 +2,7 @@
 
 
 use Event;
+use Hashids\Hashids;
 use October\Rain\Database\Model;
 use OFFLINE\Mall\Classes\Auth\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
@@ -47,6 +48,11 @@ class Plugin extends PluginBase
             $gateway->registerProvider(new PayPalRest());
 
             return $gateway;
+        });
+        $this->app->singleton(Hashids::class, function () {
+            $hashids = new Hashids('oc-mall', 8);
+
+            return $hashids;
         });
     }
 
