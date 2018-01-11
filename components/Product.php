@@ -2,9 +2,11 @@
 
 use Auth;
 use Cms\Classes\ComponentBase;
+use DB;
 use Hashids\Hashids;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Product as ProductModel;
@@ -12,6 +14,7 @@ use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
 use Request;
+use Session;
 
 class Product extends ComponentBase
 {
@@ -110,16 +113,25 @@ class Product extends ComponentBase
 
     public function onAddToCart()
     {
-        $ids = collect(post('props'))->map(function ($id) {
-            return $this->decode($id);
-        });
-
-        $variant = Variant::whereHas('property_values', function ($q) use ($ids) {
-            $q->whereIn('id', $ids);
-        })->first();
+        $variant = $this->getVariantByPropertyValues(post('props'));
+        if ( ! $variant) {
+            throw new ValidationException(['This product is out of stock']);
+        }
 
         $cart = Cart::byUser(Auth::getUser());
         $cart->addProduct($this->getProduct(), $variant);
+    }
+
+    public function onChangeProperty()
+    {
+        $valueIds = post('values');
+        if ( ! $valueIds) {
+            throw new ValidationException(['Missing input data']);
+        }
+
+        $variant = $this->getVariantByPropertyValues(post('values'));
+
+        return $this->page['stock'] = $variant ? $variant->stock : 0;
     }
 
     public function setData()
@@ -201,33 +213,46 @@ class Product extends ComponentBase
 
     protected function getProps()
     {
+        $valueMap = $this->getValueMap();
+        if ($valueMap->count() < 1) {
+            return $valueMap;
+        }
+
+        return $this->product->category->properties->reject(function (Property $property) {
+            return $property->id === $this->product->group_by_property_id;
+        })->map(function (Property $property) use ($valueMap) {
+            $values = $valueMap->get($property->id);
+
+            return (object)[
+                'property' => $property,
+                'values'   => optional($values)->unique('value'),
+            ];
+        })->filter(function ($collection) {
+            return $collection->values && $collection->values->count() > 0;
+        })->keyBy(function ($value) {
+            return $value->property->id;
+        });
+    }
+
+    protected function getValueMap()
+    {
         $groupedValue = $this->getGroupedProperty($this->variant)->value;
         if ( ! $groupedValue) {
             return collect([]);
         }
 
         $ids = PropertyValue::where('value', $groupedValue)
+                            ->where('describable_type', Variant::class)
                             ->get(['describable_id'])
                             ->pluck('describable_id')
                             ->unique();
 
-        $valueMap = PropertyValue::whereIn('describable_id', $ids)
-                                 ->where('describable_type', Variant::class)
-                                 ->where('value', '<>', '')
-                                 ->whereNotNull('value')
-                                 ->get()
-                                 ->groupBy('property_id');
-
-        return $this->product->category->properties->reject(function (Property $property) {
-            return $property->id === $this->product->group_by_property_id;
-        })->map(function (Property $property) use ($valueMap) {
-            return (object)[
-                'property' => $property,
-                'values'   => $valueMap->get($property->id),
-            ];
-        })->filter(function ($collection) {
-            return $collection->values && $collection->values->count() > 0;
-        })->values();
+        return PropertyValue::whereIn('describable_id', $ids)
+                            ->where('describable_type', Variant::class)
+                            ->where('value', '<>', '')
+                            ->whereNotNull('value')
+                            ->get()
+                            ->groupBy('property_id');
     }
 
     /**
@@ -238,5 +263,25 @@ class Product extends ComponentBase
     protected function decode($id)
     {
         return app(Hashids::class)->decode($id);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getVariantByPropertyValues($valueIds)
+    {
+        $ids = collect($valueIds)->map(function ($id) {
+            return $this->decode($id);
+        });
+
+        $values = PropertyValue::whereIn('id', $ids)->get(['value'])->pluck('value');
+
+        $variant = PropertyValue::whereIn('value', $values)
+                                ->select(DB::raw('*, count(*) as matching_attributes'))
+                                ->groupBy('describable_id')
+                                ->having('matching_attributes', $values->count())
+                                ->first();
+
+        return $variant ? $variant->describable : null;
     }
 }

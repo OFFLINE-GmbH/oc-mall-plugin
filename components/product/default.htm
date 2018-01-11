@@ -30,9 +30,8 @@
         </div>
 
         <div class="mall-variant-properties">
-            {% for item in props %}
-                {% partial __SELF__ ~ '::proptypes/' ~ item.property.type item=item %}
-            {% endfor %}
+            {% partial __SELF__ ~ '::properties' item=item %}
+            <div class="mall-property-stock"></div>
         </div>
 
         <button type="submit">
@@ -40,5 +39,5 @@
         </button>
 
     </form>
-
 </div>
+{% partial __SELF__ ~ '::scripts' %}

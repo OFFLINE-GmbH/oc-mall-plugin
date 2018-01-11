@@ -1,0 +1,18 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $('body').on('change', '.js-mall-property-selector', function () {
+                var values = $('.js-mall-property-selector').map(function () {
+                    return this.value;
+                }).toArray();
+
+                $.request('onChangeProperty', {
+                    data: {
+                        values: values
+                    },
+                    update: {'{{ __SELF__ }}::propertystock': '.mall-property-stock'}
+                })
+            })
+        })
+    </script>
+{% endput %}
