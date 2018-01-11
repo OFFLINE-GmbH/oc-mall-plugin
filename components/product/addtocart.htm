@@ -1,0 +1,8 @@
+<div class="mall-property-stock text-{{ stock ? 'green' : 'red' }}">
+    {{ stock ? stock : 'No' }} items in stock.
+</div>
+{% if stock %}
+    <button type="submit">
+        Add to Cart
+    </button>
+{% endif %}

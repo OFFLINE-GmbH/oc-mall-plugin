@@ -7,12 +7,12 @@
                 }).toArray();
 
                 $.request('onChangeProperty', {
-                    data: {
-                        values: values
-                    },
-                    update: {'{{ __SELF__ }}::propertystock': '.mall-property-stock'}
+                    data: {values: values},
+                    update: {'{{ __SELF__ }}::addtocart': '.mall-add-to-cart'}
                 })
             })
+
+            $('.js-mall-property-selector').trigger('change')
         })
     </script>
 {% endput %}
