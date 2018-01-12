@@ -14,7 +14,7 @@ class CustomFieldOption extends Model
     use Price;
     use Sortable;
 
-    public $implement = ['RainLab.Translate.Behaviors.TranslatableModel'];
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
     public $jsonable = ['values'];
     public $fillable = [

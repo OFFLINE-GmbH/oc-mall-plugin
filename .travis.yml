@@ -1,5 +1,8 @@
 language: php
 
+services:
+  - mysql
+
 php:
   - 7.1
   - 7.2
@@ -11,10 +14,12 @@ matrix:
 
 sudo: false
 
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS october;'
+
 install:
   - composer self-update
   - travis_retry composer install --no-interaction --prefer-source
-
 
 before_script:
   - git clone https://github.com/octobercms/october.git
@@ -23,6 +28,10 @@ before_script:
   - cd october
   - composer self-update
   - travis_retry composer install --no-interaction --prefer-source
+  - php artisan october:env
+  - echo "DB_HOST=127.0.0.1" >> .env
+  - echo "DB_DATABASE=october" >> .env
+  - php artisan october:up
   - php artisan plugin:install RainLab.Translate
   - cd plugins/offline/mall
   - composer install
