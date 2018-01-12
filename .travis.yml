@@ -27,4 +27,3 @@ before_script:
   - composer install
 
 script: ../../../vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-script: vendor/bin/phpunit
