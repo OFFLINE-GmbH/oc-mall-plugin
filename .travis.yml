@@ -29,7 +29,8 @@ before_script:
   - composer self-update
   - travis_retry composer install --no-interaction --prefer-source
   - php artisan october:env
-  - echo "DB_HOST=127.0.0.1" >> .env
+  - php artisan key:generate
+  - echo "DB_HOST=127.0.0.1" > .env
   - echo "DB_DATABASE=october" >> .env
   - php artisan october:up
   - php artisan plugin:install RainLab.Translate
