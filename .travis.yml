@@ -30,14 +30,14 @@ before_script:
   - travis_retry composer install --no-interaction --prefer-source
   - php artisan october:env
   - php artisan key:generate
-  - echo "DB_CONNECTION=sqlite" > .env
-  - echo "DB_DATABASE=:memory:" >> .env
-  #- echo "DB_DATABASE=october" >> .env
+  - echo "DB_HOST=127.0.0.1" > .env
+  - echo "DB_DATABASE=october" >> .env
   - php artisan october:up
   - php artisan plugin:install RainLab.Translate
   - php artisan plugin:install RainLab.User
   - php artisan plugin:install OFFLINE.Cashier
   - cd plugins/offline/mall
   - composer install
+  - sed -i -e 's/public \$require.*\;//' Plugin.php
 
 script: ../../../vendor/bin/phpunit --coverage-clover build/logs/clover.xml
