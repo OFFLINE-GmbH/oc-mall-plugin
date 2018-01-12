@@ -295,6 +295,28 @@ class TotalsCalculatorTest extends PluginTestCase
         $product->price     = 200;
         $product->save();
 
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->price      = 100;
+        $variant->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2, $variant);
+        $cart->addProduct($product, 1, $variant);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(300 * 100, $calc->totalPostTaxes());
+    }
+
+    public function test_it_calculates_custom_fields_cost()
+    {
+        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
+
+        $product            = Product::first();
+        $product->stackable = true;
+        $product->price     = 200;
+        $product->save();
+
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
         $sizeA->price      = 100;
@@ -461,7 +483,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(30000, $calc->totalPostTaxes());
-        $this->assertEquals(5615, $calc->totalTaxes());
+        $this->assertEquals(5524, $calc->totalTaxes());
     }
 
     public function test_it_applies_alternate_price_discount_only_when_given_total_is_reached()

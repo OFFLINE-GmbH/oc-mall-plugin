@@ -53,7 +53,6 @@ class Checkout extends ComponentBase
     protected function setData()
     {
         $cart = Cart::byUser(Auth::getUser());
-        $cart->addProduct(Product::first());
         $cart->setPaymentMethod(PaymentMethod::find(2));
 
         $this->setVar('cart', $cart);

@@ -13,7 +13,7 @@ class BuilderTableCreateOfflineMallPropertyValues extends Migration
             $table->integer('describable_id')->unsigned()->nullable();
             $table->string('describable_type')->nullable();
             $table->integer('property_id');
-            $table->text('value');
+            $table->text('value')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

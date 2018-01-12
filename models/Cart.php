@@ -170,7 +170,7 @@ class Cart extends Model
      *
      * @return Cart
      */
-    public function addProduct(Product $product, Variant $variant = null, int $quantity = null, $values = null)
+    public function addProduct(Product $product, int $quantity = null, Variant $variant = null, $values = null)
     {
         if ( ! $this->exists) {
             $this->save();
@@ -194,13 +194,16 @@ class Cart extends Model
         }
 
         $quantity = $product->normalizeQuantity($quantity);
+        $price    = $variant
+            ? $variant->priceIncludingCustomFieldValues($values)
+            : $product->priceIncludingCustomFieldValues($values);
 
         $cartEntry             = new CartProduct();
         $cartEntry->cart_id    = $this->id;
         $cartEntry->product_id = $product->id;
         $cartEntry->variant_id = $variant ? $variant->id : null;
         $cartEntry->quantity   = $quantity;
-        $cartEntry->price      = $product->priceIncludingCustomFieldValues($values);
+        $cartEntry->price      = $price;
 
         $this->products()->save($cartEntry);
         $this->load('products');
@@ -257,11 +260,15 @@ class Cart extends Model
      *
      * @return bool
      */
-    public function isInCart(Product $product, Variant $variant, array $values = []): bool
+    public function isInCart(Product $product, ?Variant $variant = null, array $values = []): bool
     {
         $productIsInCart = $this->products->contains(function (CartProduct $existing) use ($product, $variant) {
-            return $existing->product_id === $product->id && $existing->variant_id === $variant->id;
+            $productIsInCart = $existing->product_id === $product->id;
+            $variantIsInCart = $variant ? $existing->variant_id === $variant->id : true;
+
+            return $productIsInCart && $variantIsInCart;
         });
+
         // If there is no CustomFieldValue to compare we only have
         // to check if the product is in the cart.
         if (count($values) === 0 || $productIsInCart === false) {

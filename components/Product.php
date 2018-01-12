@@ -119,7 +119,7 @@ class Product extends ComponentBase
         }
 
         $cart = Cart::byUser(Auth::getUser());
-        $cart->addProduct($this->getProduct(), $variant);
+        $cart->addProduct($this->getProduct(), 1, $variant);
     }
 
     public function onChangeProperty()

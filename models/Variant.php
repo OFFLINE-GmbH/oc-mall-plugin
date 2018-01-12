@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
@@ -15,6 +16,7 @@ class Variant extends \Model
     use Price;
     use Images;
     use HashIds;
+    use CustomFields;
 
     public $slugs = [];
 
@@ -90,9 +92,10 @@ class Variant extends \Model
         return $query->where('published', true);
     }
 
-    public function getAttribute($name)
+    public function getAttribute($attribute)
     {
-        $value = parent::getAttribute($name);
+        $value = parent::getAttribute($attribute);
+
         if ($value !== null || ! isset($this->attributes['product_id'])) {
             return $value;
         }
@@ -102,7 +105,7 @@ class Variant extends \Model
             $this->parent = Product::find($this->attributes['product_id']);
         }
 
-        return $this->parent->getAttribute($name);
+        return $this->parent->getAttribute($attribute);
     }
 
     /**
@@ -125,5 +128,20 @@ class Variant extends \Model
     public function getPriceColumns()
     {
         return ['price', 'old_price'];
+    }
+
+    public function getDescriptionAttribute()
+    {
+        if ($this->attributes['name']) {
+            return $this->attributes['name'];
+        }
+
+        return $this->property_values
+            ->reject(function (PropertyValue $value) {
+                return $value->value === '' || $value->value === null;
+            })
+            ->map(function (PropertyValue $value) {
+                return sprintf('%s: %s', e($value->property->name), $value->display_value);
+            })->implode(', ');
     }
 }

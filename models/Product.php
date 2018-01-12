@@ -4,7 +4,7 @@ use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
@@ -19,6 +19,7 @@ class Product extends Model
     use Sluggable;
     use Price;
     use Images;
+    use CustomFields;
 
     protected $dates = ['deleted_at'];
 
@@ -43,7 +44,8 @@ class Product extends Model
     ];
     public $casts = [
         'price_includes_tax' => 'boolean',
-        'weight'             => 'int',
+        'weight'             => 'integer',
+        'id'                 => 'integer',
         'stackable'          => 'boolean',
         'shippable'          => 'boolean',
     ];
@@ -73,7 +75,7 @@ class Product extends Model
             'key'        => 'product_id',
             'through'    => Variant::class,
             'throughKey' => 'custom_field_id',
-        ]
+        ],
     ];
 
     public $morphMany = [
@@ -134,27 +136,17 @@ class Product extends Model
     }
 
     /**
-     * Returns the product's base price with all CustomFieldValue
-     * prices added.
-     *
-     * @param CustomFieldValue[] $value
-     *
-     * @return int
+     * Returns the
      */
-    public function priceIncludingCustomFieldValues(array $value = []): int
+    public function getPriceAttribute()
     {
         $price = $this->getOriginal('price');
-        if (count($value) < 1) {
-            return $price;
+        dd($this->variant_id);
+        if ( ! $this->variant) {
+            return round($price / 100, 2);
         }
 
-        return collect($value)->reduce(function ($total, CustomFieldValue $value) {
-            if ( ! $value->custom_field_option) {
-                return $total;
-            }
-
-            return $total += $value->custom_field_option->getOriginal('price');
-        }, $price);
+        return $this->variant->price;
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Property;
+use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
@@ -94,6 +96,84 @@ class VariantTest extends PluginTestCase
 
         $this->assertEquals('product.jpg', $this->variant->image->disk_name);
         $this->assertEquals('product.jpg', $this->product->image->disk_name);
+    }
+
+    public function test_name()
+    {
+        $product             = Product::first();
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->product_id = $product->id;
+        $variant->save();
+
+        $this->assertEquals('ABC', $product->variants->where('id', $variant->id)->first()->description);
+    }
+
+    public function test_name_fallback()
+    {
+        $product             = Product::first();
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->save();
+
+        $height             = Property::find(1);
+        $value              = new PropertyValue();
+        $value->property_id = $height->id;
+        $value->value       = 200;
+        $variant->property_values()->save($value);
+
+        $width              = Property::find(2);
+        $value              = new PropertyValue();
+        $value->property_id = $width->id;
+        $value->value       = 400;
+        $variant->property_values()->save($value);
+
+        $this->assertEquals('Height: 200, Width: 400',
+            $product->variants->where('id', $variant->id)->first()->description);
+    }
+
+    public function test_name_fallback_ignore_empty()
+    {
+        $product             = Product::first();
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->save();
+
+        $height             = Property::find(1);
+        $value              = new PropertyValue();
+        $value->property_id = $height->id;
+        $value->value       = null;
+        $variant->property_values()->save($value);
+
+        $width              = Property::find(2);
+        $value              = new PropertyValue();
+        $value->property_id = $width->id;
+        $value->value       = 400;
+        $variant->property_values()->save($value);
+
+        $this->assertEquals('Width: 400',
+            $product->variants->where('id', $variant->id)->first()->description);
+    }
+
+    public function test_name_fallback_color()
+    {
+        $product             = Product::first();
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->save();
+
+        $color       = new Property();
+        $color->name = 'Color';
+        $color->type = 'color';
+        $color->save();
+
+        $value              = new PropertyValue();
+        $value->property_id = $color->id;
+        $value->value       = '#ff0000';
+        $variant->property_values()->save($value);
+
+        $this->assertEquals('Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000"></span>',
+            $product->variants->where('id', $variant->id)->first()->description);
     }
 
 }

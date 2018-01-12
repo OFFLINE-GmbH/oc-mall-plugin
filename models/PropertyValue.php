@@ -35,7 +35,7 @@ class PropertyValue extends Model
     ];
 
     public $attachOne = [
-        'image' => File::class
+        'image' => File::class,
     ];
 
     public $morphTo = [
@@ -58,4 +58,19 @@ class PropertyValue extends Model
      * @var string
      */
     public $attribute_type = '';
+
+    /**
+     * Returns a raw html presentation of the attribute values.
+     * The return value contains raw html and therefore is already escaped.
+     * @return string
+     */
+    public function getDisplayValueAttribute()
+    {
+        $value = e($this->value);
+        if ($this->property->type === 'color') {
+            return sprintf('<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>', $value);
+        }
+
+        return $value;
+    }
 }

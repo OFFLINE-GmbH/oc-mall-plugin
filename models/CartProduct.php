@@ -8,13 +8,17 @@ class CartProduct extends Model
 {
     public $table = 'offline_mall_cart_products';
     public $casts = [
-        'quantity' => 'integer',
-        'price'    => 'integer',
+        'quantity'   => 'integer',
+        'price'      => 'integer',
+        'id'         => 'integer',
+        'product_id' => 'integer',
+        'variant_id' => 'integer',
     ];
 
     public $belongsTo = [
         'cart'    => Cart::class,
         'product' => Product::class,
+        'variant' => Variant::class,
         'data'    => [Product::class, 'key' => 'product_id'],
     ];
 

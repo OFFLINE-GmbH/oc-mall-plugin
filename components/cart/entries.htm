@@ -24,6 +24,12 @@
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }}">
                         {{ product.data.name }}
+                        {% if product.variant %}
+                            <br />
+                            <span class="text-grey-dark">
+                                {{ product.variant.description | raw }}
+                            </span>
+                        {% endif %}
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
                         {% partial __SELF__ ~ '::quantity-dropdown' product=product %}
