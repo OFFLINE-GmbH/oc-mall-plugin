@@ -34,6 +34,8 @@ before_script:
   - echo "DB_DATABASE=october" >> .env
   - php artisan october:up
   - php artisan plugin:install RainLab.Translate
+  - php artisan plugin:install RainLab.User
+  - php artisan plugin:install OFFLINE.Cashier
   - cd plugins/offline/mall
   - composer install
 
