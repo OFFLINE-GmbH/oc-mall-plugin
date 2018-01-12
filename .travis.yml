@@ -23,6 +23,7 @@ before_script:
   - cd october
   - composer self-update
   - travis_retry composer install --no-interaction --prefer-source
+  - php artisan plugin:install RainLab.Translate
   - cd plugins/offline/mall
   - composer install
 
