@@ -35,7 +35,7 @@ class PropertyFields extends FormWidgetBase
         $this->vars['name']   = $this->formField->getName();
         $this->vars['values'] = $this->model->property_values ?? collect([]);
         $this->vars['model']  = $this->model;
-        $this->vars['fields'] = $this->controller->vars['formModel']->category->properties;
+        $this->vars['fields'] = optional($this->controller->vars['formModel']->category)->properties;
     }
 
     public function createFormWidget(Property $property, $value)

@@ -33,6 +33,10 @@ trait Images
      */
     public function getAllImagesAttribute()
     {
+        if ( ! $this->main_image) {
+            return $this->images;
+        }
+
         return $this->images->prepend($this->main_image)->unique();
     }
 

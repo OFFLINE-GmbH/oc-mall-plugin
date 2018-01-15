@@ -236,6 +236,10 @@ class Product extends ComponentBase
 
     protected function getValueMap()
     {
+        if ( ! $this->variant) {
+            return collect([]);
+        }
+
         $groupedValue = $this->getGroupedProperty($this->variant)->value;
         if ( ! $groupedValue) {
             return collect([]);
