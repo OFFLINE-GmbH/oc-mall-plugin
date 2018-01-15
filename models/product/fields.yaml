@@ -97,9 +97,9 @@ tabs:
                 action: show
                 field: inventory_management_method
                 condition: 'value[variant]'
-            type: relation
-            relation: property
+            type: dropdown
             tab: 'offline.mall::lang.product.general'
+            dependsOn: category
         description_short:
             label: 'offline.mall::lang.product.description_short'
             oc.commentPosition: ''

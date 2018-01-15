@@ -135,6 +135,18 @@ class Product extends Model
         return $this->custom_fields()->whereIn('type', ['dropdown', 'color', 'image'])->get();
     }
 
+
+    /**
+     * We are using a simple dropdown for this attribute since the relation
+     * widget has some problems with the emptyOption option.
+     * @return array
+     */
+    public function getGroupByPropertyOptions()
+    {
+        return [null => trans('offline.mall::lang.common.none')]
+            + $this->category->properties->pluck('name', 'id')->toArray();
+    }
+
     /**
      * Returns the
      */

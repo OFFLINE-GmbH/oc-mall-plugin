@@ -1,6 +1,6 @@
 # Work in progress
 
-[![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=travis)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
+[![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
 
 ## Todo
 
