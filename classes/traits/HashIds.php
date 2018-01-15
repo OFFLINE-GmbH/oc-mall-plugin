@@ -16,5 +16,4 @@ trait HashIds
     {
         return app(Hasher::class)->encode($this->attributes['id']);
     }
-
 }

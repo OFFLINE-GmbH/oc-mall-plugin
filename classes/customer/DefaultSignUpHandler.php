@@ -166,5 +166,4 @@ class DefaultSignUpHandler implements SignUpHandler
 
         return $transformed;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\PaymentStatus;
 
-
 use OFFLINE\Mall\Models\Order;
 
 abstract class PaymentStatus

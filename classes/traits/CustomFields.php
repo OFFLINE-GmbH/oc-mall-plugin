@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-
 use OFFLINE\Mall\Models\CustomFieldValue;
 
 trait CustomFields
@@ -30,5 +29,4 @@ trait CustomFields
             return $total += $value->custom_field_option->getOriginal('price');
         }, $price);
     }
-
 }

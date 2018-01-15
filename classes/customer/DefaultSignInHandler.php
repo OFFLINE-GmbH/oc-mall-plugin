@@ -82,5 +82,4 @@ class DefaultSignInHandler implements SignInHandler
             throw new ValidationException($validation);
         }
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Session;

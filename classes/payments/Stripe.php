@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use October\Rain\Exception\ValidationException;
 use Omnipay\Omnipay;
 use Validator;

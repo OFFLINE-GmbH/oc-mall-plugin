@@ -3,7 +3,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use OFFLINE\Mall\Models\Order;
 
 interface PaymentGateway

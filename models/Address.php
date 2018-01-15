@@ -59,5 +59,4 @@ class Address extends Model
     {
         return self::where('customer_id', $customer->id);
     }
-
 }

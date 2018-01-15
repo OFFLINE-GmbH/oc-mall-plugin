@@ -6,7 +6,6 @@ class ProcessedState extends OrderStatus
 {
     public function toInProgress()
     {
-
     }
 
     public function getAvailableTransitions(): array

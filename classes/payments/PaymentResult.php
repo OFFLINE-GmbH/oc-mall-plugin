@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use OFFLINE\Mall\Models\PaymentLog;
 use Omnipay\Common\Message\RedirectResponseInterface;
 

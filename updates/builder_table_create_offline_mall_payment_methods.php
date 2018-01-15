@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallPaymentMethods extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_payment_methods', function($table)
-        {
+        Schema::create('offline_mall_payment_methods', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');

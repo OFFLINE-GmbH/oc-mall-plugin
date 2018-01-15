@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallAddresses extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_addresses', function($table)
-        {
+        Schema::create('offline_mall_addresses', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('company')->nullable();

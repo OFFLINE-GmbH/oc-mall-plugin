@@ -33,7 +33,6 @@ class CartTest extends PluginTestCase
 
     public function test_it_stacks_variants()
     {
-
     }
 
     public function test_it_stacks_custom_field_variants()

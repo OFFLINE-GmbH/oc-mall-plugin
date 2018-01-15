@@ -36,6 +36,5 @@ class PropertyTableSeeder extends Seeder
 
         $category = Category::first();
         $category->properties()->attach([1, 2, 3]);
-
     }
 }

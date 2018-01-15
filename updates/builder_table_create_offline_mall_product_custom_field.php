@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallProductCustomField extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_product_custom_field', function($table)
-        {
+        Schema::create('offline_mall_product_custom_field', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('product_id')->unsigned();

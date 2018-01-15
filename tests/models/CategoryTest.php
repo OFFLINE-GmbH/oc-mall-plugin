@@ -71,5 +71,4 @@ class CategoryTest extends PluginTestCase
         $hit = Category::getByNestedSlug('child/child');
         $this->assertNull($hit);
     }
-
 }

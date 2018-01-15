@@ -7,8 +7,7 @@ class BuilderTableCreateOfflineMallCategoryProperty extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_category_property', function($table)
-        {
+        Schema::create('offline_mall_category_property', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('category_id')->unsigned();

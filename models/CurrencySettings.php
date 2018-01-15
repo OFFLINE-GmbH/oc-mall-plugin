@@ -74,5 +74,4 @@ class CurrencySettings extends Model
     {
         return Session::put(static::CURRENCY_SESSION_KEY, $currency);
     }
-
 }

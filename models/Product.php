@@ -170,5 +170,4 @@ class Product extends Model
     {
         return ['price', 'old_price'];
     }
-
 }

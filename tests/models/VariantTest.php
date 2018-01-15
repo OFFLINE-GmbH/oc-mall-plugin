@@ -128,8 +128,10 @@ class VariantTest extends PluginTestCase
         $value->value       = 400;
         $variant->property_values()->save($value);
 
-        $this->assertEquals('Height: 200, Width: 400',
-            $product->variants->where('id', $variant->id)->first()->description);
+        $this->assertEquals(
+            'Height: 200, Width: 400',
+            $product->variants->where('id', $variant->id)->first()->description
+        );
     }
 
     public function test_name_fallback_ignore_empty()
@@ -151,8 +153,10 @@ class VariantTest extends PluginTestCase
         $value->value       = 400;
         $variant->property_values()->save($value);
 
-        $this->assertEquals('Width: 400',
-            $product->variants->where('id', $variant->id)->first()->description);
+        $this->assertEquals(
+            'Width: 400',
+            $product->variants->where('id', $variant->id)->first()->description
+        );
     }
 
     public function test_name_fallback_color()
@@ -172,8 +176,9 @@ class VariantTest extends PluginTestCase
         $value->value       = '#ff0000';
         $variant->property_values()->save($value);
 
-        $this->assertEquals('Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000"></span>',
-            $product->variants->where('id', $variant->id)->first()->description);
+        $this->assertEquals(
+            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000"></span>',
+            $product->variants->where('id', $variant->id)->first()->description
+        );
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use Omnipay\Omnipay;
 use Request;
 use Session;

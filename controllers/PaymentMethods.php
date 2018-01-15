@@ -13,7 +13,7 @@ class PaymentMethods extends Controller
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.settings.manage_payment_methods' 
+        'offline.mall.settings.manage_payment_methods'
     ];
 
     public function __construct()

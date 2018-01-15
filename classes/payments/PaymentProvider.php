@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
 use Request;
@@ -104,5 +103,4 @@ abstract class PaymentProvider
 
         return $log;
     }
-
 }

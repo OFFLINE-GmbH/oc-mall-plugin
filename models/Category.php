@@ -217,5 +217,4 @@ class Category extends Model
             return $map;
         });
     }
-
 }

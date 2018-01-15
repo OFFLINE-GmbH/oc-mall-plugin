@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\OrderStatus;
 
-
 use OFFLINE\Mall\Models\Order;
 
 abstract class OrderStatus

@@ -3,7 +3,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-
 use October\Rain\Support\Collection;
 use System\Models\File;
 
