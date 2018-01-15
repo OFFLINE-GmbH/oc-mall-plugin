@@ -141,7 +141,6 @@ class Product extends Model
     public function getPriceAttribute()
     {
         $price = $this->getOriginal('price');
-        dd($this->variant_id);
         if ( ! $this->variant) {
             return round($price / 100, 2);
         }
