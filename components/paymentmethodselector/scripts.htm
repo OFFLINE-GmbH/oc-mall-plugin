@@ -7,7 +7,7 @@
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::selector': '.mall-payment-method-selector'},
                     success: function (data) {
-                        $('.mall-shipping-selector').html(data['{{ __SELF__ }}::selector'])
+                        $('.mall-payment-method-selector').html(data['{{ __SELF__ }}::selector'])
                     }
                 })
             })

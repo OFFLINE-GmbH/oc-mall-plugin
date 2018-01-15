@@ -35,7 +35,7 @@
                         {% partial __SELF__ ~ '::quantity-dropdown' product=product %}
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
-                        {{ product.data.price | raw }}
+                        {{ product.price | money }}
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
                         {{ product.totalPostTaxes | money }}

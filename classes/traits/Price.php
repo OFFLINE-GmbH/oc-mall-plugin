@@ -48,12 +48,14 @@ trait Price
     public function getAttribute($attr)
     {
         if (ends_with($attr, '_formatted')) {
-            $attr = str_replace('_formatted', '', $attr);
+            $attr  = str_replace('_formatted', '', $attr);
+            $value = parent::getAttribute($attr);
+
             if ( ! $this->isPriceColumn($attr)) {
-                return parent::getAttribute($attr);
+                return $value;
             }
 
-            return $this->formatPrice(parent::getAttribute($attr));
+            return $value ? $this->formatPrice($value * 100) : null;
         }
 
         return parent::getAttribute($attr);

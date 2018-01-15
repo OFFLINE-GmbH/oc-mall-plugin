@@ -132,7 +132,7 @@ class Product extends ComponentBase
         $variant = $this->getVariantByPropertyValues(post('values'));
 
         $this->page['stock'] = $variant ? $variant->stock : 0;
-        $this->page['item'] = $variant ? $variant : $this->getProduct();
+        $this->page['item']  = $variant ? $variant : $this->getProduct();
     }
 
     public function setData()

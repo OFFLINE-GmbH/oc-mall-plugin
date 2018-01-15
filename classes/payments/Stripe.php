@@ -38,7 +38,7 @@ class Stripe extends PaymentProvider
     public function process(): PaymentResult
     {
         $gateway = Omnipay::create('Stripe');
-        $gateway->setApiKey('sk_test_hydn9EeswWDwNT3FOl2DjLvD');
+        $gateway->setApiKey(env('STRIPE_API_KEY'));
 
         $response = $gateway->purchase([
             'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),

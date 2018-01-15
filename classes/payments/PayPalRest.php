@@ -89,16 +89,15 @@ class PayPalRest extends PaymentProvider
         return $result;
     }
 
-    protected function logFailedPayment($data, $response): FailedPayment
+    protected function getGateway()
     {
-        $failed             = new FailedPayment();
-        $failed->data       = $data;
-        $failed->order_data = $this->order;
-        $failed->order_id   = $this->order->id;
-        $failed->message    = $response->getMessage();
-        $failed->code       = $response->getCode();
-        $failed->save();
+        $gateway = Omnipay::create('PayPal_Rest');
+        $gateway->initialize([
+            'clientId' => env('PAYPAL_CLIENT_ID'),
+            'secret'   => env('PAYPAL_SECRET'),
+            'testMode' => true,
+        ]);
 
-        return $failed;
+        return $gateway;
     }
 }

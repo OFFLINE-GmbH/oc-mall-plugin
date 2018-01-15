@@ -16,7 +16,7 @@ trait CustomFields
      */
     public function priceIncludingCustomFieldValues(array $value = []): int
     {
-        $price = $this->getOriginal('price');
+        $price = $this->price * 100;
         if (count($value) < 1) {
             return $price;
         }

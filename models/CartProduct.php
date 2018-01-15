@@ -42,7 +42,6 @@ class CartProduct extends Model
             return $this->price * $this->quantity - $this->totalTaxes;
         }
 
-
         return $this->price * $this->quantity;
     }
 
