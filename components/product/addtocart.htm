@@ -2,7 +2,7 @@
     {{ stock ? stock : 'No' }} items in stock.
 </div>
 {% if stock %}
-    <button type="submit">
+    <button type="submit" data-attach-loading>
         Add to Cart
     </button>
 {% endif %}

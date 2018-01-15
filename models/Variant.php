@@ -13,10 +13,12 @@ class Variant extends \Model
 {
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
-    use Price;
     use Images;
     use HashIds;
     use CustomFields;
+    use Price {
+        getAttribute as priceGetAttribute;
+    }
 
     public $slugs = [];
 
@@ -94,7 +96,11 @@ class Variant extends \Model
 
     public function getAttribute($attribute)
     {
-        $value = parent::getAttribute($attribute);
+        if (session()->get('mall.variants.disable-inheritance')) {
+            return parent::getAttribute($attribute);
+        }
+
+        $value = $this->priceGetAttribute($attribute);
 
         if ($value !== null || ! isset($this->attributes['product_id'])) {
             return $value;

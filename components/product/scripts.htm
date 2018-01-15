@@ -1,14 +1,21 @@
 {% put scripts %}
     <script>
         $(function () {
+            var $addToCart = $('.mall-add-to-cart');
             $('body').on('change', '.js-mall-property-selector', function () {
                 var values = $('.js-mall-property-selector').map(function () {
                     return this.value;
                 }).toArray();
 
+                $addToCart.text('Checking stock...');
+
                 $.request('onChangeProperty', {
                     data: {values: values},
-                    update: {'{{ __SELF__ }}::addtocart': '.mall-add-to-cart'}
+                    loading: $.oc.stripeLoadIndicator,
+                    update: {
+                        '{{ __SELF__ }}::addtocart': '.mall-add-to-cart',
+                        '{{ __SELF__ }}::price': '.mall-product__price'
+                    }
                 })
             })
 

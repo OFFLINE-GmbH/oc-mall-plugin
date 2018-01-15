@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -107,6 +108,25 @@ class VariantTest extends PluginTestCase
         $variant->save();
 
         $this->assertEquals('ABC', $product->variants->where('id', $variant->id)->first()->description);
+    }
+
+    public function test_price()
+    {
+        CurrencySettings::set('currencies', [
+            ['code' => 'CHF', 'format' => '{{ currency }} {{ price|number_format(2, ".", "\'") }}'],
+        ]);
+
+        $product        = Product::first();
+        $product->price = 180;
+        $product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->product_id = $product->id;
+        $variant->price      = 120;
+        $variant->save();
+
+        $this->assertEquals('CHF 120.00', $product->variants->where('id', $variant->id)->first()->price_formatted);
     }
 
     public function test_name_fallback()

@@ -131,7 +131,8 @@ class Product extends ComponentBase
 
         $variant = $this->getVariantByPropertyValues(post('values'));
 
-        return $this->page['stock'] = $variant ? $variant->stock : 0;
+        $this->page['stock'] = $variant ? $variant->stock : 0;
+        $this->page['item'] = $variant ? $variant : $this->getProduct();
     }
 
     public function setData()
@@ -185,7 +186,7 @@ class Product extends ComponentBase
 
     protected function getVariants(): Collection
     {
-        if ($this->product->inventory_management_method === 'single') {
+        if ($this->product->inventory_management_method === 'single' || ! $this->product->group_by_property_id) {
             return collect();
         }
 
@@ -206,6 +207,10 @@ class Product extends ComponentBase
 
     protected function getGroupedProperty(Variant $variant)
     {
+        if ( ! $variant->product->group_by_property_id) {
+            return (object)['value' => 0];
+        }
+
         return $variant->property_values->first(function (PropertyValue $value) use ($variant) {
             return $value->property_id === $variant->product->group_by_property_id;
         });
@@ -241,7 +246,7 @@ class Product extends ComponentBase
         }
 
         $groupedValue = $this->getGroupedProperty($this->variant)->value;
-        if ( ! $groupedValue) {
+        if ($groupedValue === null) {
             return collect([]);
         }
 

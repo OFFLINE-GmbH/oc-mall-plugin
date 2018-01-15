@@ -13,10 +13,10 @@ if ( ! function_exists('format_money')) {
      *
      * @return string
      */
-    function format_money(?int $value, Product $product = null, $currency = null)
+    function format_money(?int $value, $product = null, $currency = null)
     {
         $format   = CurrencySettings::activeCurrencyFormat();
-        $value    = round($value / 100, 2);
+        $value    = round($value, 2);
         $integers = floor($value);
         $decimals = ($value - $integers) * 100;
 

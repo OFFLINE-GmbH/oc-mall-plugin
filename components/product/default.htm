@@ -7,6 +7,10 @@
             <h4>{{ item.description_short }}</h4>
         {% endif %}
 
+        <div class="mall-product__price">
+            {% partial __SELF__ ~ '::price' item=item %}
+        </div>
+
         <div class="mall-product__description">
             {{ item.description | raw }}
         </div>
@@ -30,7 +34,7 @@
         </div>
 
         <div class="mall-variant-properties">
-            {% partial __SELF__ ~ '::properties' item=item %}
+            {% partial __SELF__ ~ '::properties' props=props %}
         </div>
 
         <div class="mall-add-to-cart">

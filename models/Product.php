@@ -141,9 +141,9 @@ class Product extends Model
      * widget has some problems with the emptyOption option.
      * @return array
      */
-    public function getGroupByPropertyOptions()
+    public function getGroupByPropertyIdOptions()
     {
-        return [null => trans('offline.mall::lang.common.none')]
+        return ['' => trans('offline.mall::lang.common.none')]
             + $this->category->properties->pluck('name', 'id')->toArray();
     }
 
@@ -152,12 +152,23 @@ class Product extends Model
      */
     public function getPriceAttribute()
     {
-        $price = $this->getOriginal('price');
         if ( ! $this->variant) {
-            return round($price / 100, 2);
+            return $this->roundPrice($this->getOriginal('price'));
         }
 
         return $this->variant->price;
+    }
+
+    /**
+     * Returns the
+     */
+    public function getOldPriceAttribute()
+    {
+        if ( ! $this->variant) {
+            return $this->roundPrice($this->getOriginal('old_price'));
+        }
+
+        return $this->variant->old_price;
     }
 
     /**

@@ -89,7 +89,7 @@ tabs:
                 condition: 'value[single]'
             type: partial
             tab: 'offline.mall::lang.product.general'
-        group_by_property@update:
+        group_by_property_id@update:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
             span: right
