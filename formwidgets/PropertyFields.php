@@ -40,7 +40,7 @@ class PropertyFields extends FormWidgetBase
 
         if ($this->useVariantSpecificPropertiesOnly()) {
             $fields = $fields->filter(function (Property $property) {
-                return (bool)$property->pivot->use_for_variants === false;
+                return (bool)$property->pivot->use_for_variants === true;
             });
         }
 

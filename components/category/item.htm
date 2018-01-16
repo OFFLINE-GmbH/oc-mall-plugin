@@ -10,7 +10,7 @@
                     {{ item.name }}
                 </div>
                 <div class="mall-item__price flex-no-grow pl-2 whitespace-no-wrap">
-                    {{ item.price }}
+                    {{ item.price_formatted }}
                 </div>
             </div>
             <div class="row flex">
@@ -18,7 +18,7 @@
                     {{ item.description_short }}
                 </div>
                 <div class="mall-item__old-price flex-no-grow pl-2 text-red-light italic line-through whitespace-no-wrap">
-                    {{ item.old_price ? item.old_price : '' }}
+                    {{ item.old_price ? item.old_price_formatted : '' }}
                 </div>
             </div>
         </div>

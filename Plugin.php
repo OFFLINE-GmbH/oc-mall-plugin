@@ -15,6 +15,7 @@ use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
+use OFFLINE\Mall\Components\CategoryFilter;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
@@ -67,6 +68,7 @@ class Plugin extends PluginBase
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
             CategoryComponent::class     => 'category',
+            CategoryFilter::class     => 'categoryFilter',
             ProductComponent::class      => 'product',
         ];
     }

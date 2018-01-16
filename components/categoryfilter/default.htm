@@ -1,0 +1,3 @@
+{% for property in category.properties %}
+    {% partial __SELF__ ~ '::property' property=property %}
+{% endfor %}

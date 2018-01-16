@@ -23,6 +23,17 @@ class Property extends Model
 
     public $table = 'offline_mall_properties';
 
+    public $hasMany = [
+        'property_values' => PropertyValue::class,
+    ];
+
+    public function getValuesAttribute()
+    {
+        return $this->property_values->reject(function (PropertyValue $value) {
+            return $value->value === '' || $value->value === null;
+        })->unique('value');
+    }
+
     public function getTypeOptions()
     {
         return [

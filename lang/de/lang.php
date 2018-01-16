@@ -373,6 +373,12 @@
                 ],
             ],
         ],
+        'categoryFilter'              => [
+            'details'    => [
+                'name'        => 'Kategorie-Filter',
+                'description' => 'Filtert die Produkte einer Kategorie',
+            ],
+        ],
         'product'              => [
             'details'    => [
                 'name'        => 'Produkt',
