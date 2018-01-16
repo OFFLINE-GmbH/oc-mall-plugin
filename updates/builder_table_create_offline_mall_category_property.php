@@ -12,6 +12,7 @@ class BuilderTableCreateOfflineMallCategoryProperty extends Migration
             $table->increments('id')->unsigned();
             $table->integer('category_id')->unsigned();
             $table->integer('property_id');
+            $table->boolean('use_for_variants')->default(false);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

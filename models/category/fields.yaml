@@ -36,7 +36,7 @@ fields:
         type: text
 tabs:
     fields:
-        properties:
+        properties@update:
             label: 'offline.mall::lang.product.properties'
             oc.commentPosition: ''
             span: full

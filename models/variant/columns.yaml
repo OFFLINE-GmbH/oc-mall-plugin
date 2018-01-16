@@ -3,7 +3,7 @@ columns:
         label: 'offline.mall::lang.product.published_short'
         type: partial
         path: $/offline/mall/models/variant/_published.htm
-    name:
+    description:
         label: 'offline.mall::lang.common.name'
         type: text
         searchable: true
@@ -13,19 +13,24 @@ columns:
         type: number
     price:
         label: 'offline.mall::lang.product.price'
-        type: text
+        type: partial
+        path: $/offline/mall/models/variant/_price.htm
     old_price:
         label: 'offline.mall::lang.common.old_price'
         type: text
+        invisible: true
     allow_out_of_stock_purchases:
         label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
         type: partial
         path: $/offline/mall/models/variant/_allow_out_of_stock_purchases.htm
+        invisible: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: date
+        invisible: true
         format: 'd.m.Y H:i'
     updated_at:
         label: 'offline.mall::lang.common.updated_at'
         type: date
+        invisible: true
         format: 'd.m.Y H:i'

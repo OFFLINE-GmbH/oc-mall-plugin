@@ -64,6 +64,7 @@ class Category extends Model
             'table'    => 'offline_mall_category_property',
             'key'      => 'category_id',
             'otherKey' => 'property_id',
+            'pivot' => ['use_for_variants']
         ],
     ];
 

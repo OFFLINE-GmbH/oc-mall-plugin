@@ -14,6 +14,7 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
+
     options:
         label: 'offline.mall::lang.common.options'
         oc.commentPosition: ''

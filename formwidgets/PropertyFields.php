@@ -35,7 +35,16 @@ class PropertyFields extends FormWidgetBase
         $this->vars['name']   = $this->formField->getName();
         $this->vars['values'] = $this->model->property_values ?? collect([]);
         $this->vars['model']  = $this->model;
-        $this->vars['fields'] = optional($this->controller->vars['formModel']->category)->properties;
+
+        $fields = optional($this->controller->vars['formModel']->category)->properties;
+
+        if ($this->useVariantSpecificPropertiesOnly()) {
+            $fields = $fields->filter(function (Property $property) {
+                return (bool)$property->pivot->use_for_variants === false;
+            });
+        }
+
+        $this->vars['fields'] = $fields;
     }
 
     public function createFormWidget(Property $property, $value)
@@ -65,7 +74,7 @@ class PropertyFields extends FormWidgetBase
         $formField        = new FormField('PropertyValues[' . $property->id . ']', $property->name);
         $formField->value = $value;
 
-        $widget = new ColorPicker($this->controller, $formField, $config);
+        $widget             = new ColorPicker($this->controller, $formField, $config);
         $widget->allowEmpty = true;
         $widget->bindToController();
 
@@ -129,6 +138,14 @@ class PropertyFields extends FormWidgetBase
 
         return $this->makePartial('fileupload',
             ['field' => $property, 'widget' => $widget, 'value' => $value, 'session_key' => $this->sessionKey]);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function useVariantSpecificPropertiesOnly(): bool
+    {
+        return isset($this->formField->config['variantPropertiesOnly']) && isset($this->formField->config['variantPropertiesOnly']) === true;
     }
 
 }

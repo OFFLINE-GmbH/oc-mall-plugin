@@ -31,7 +31,7 @@ class PropertyValue extends Model
     public $table = 'offline_mall_property_values';
 
     public $belongsTo = [
-        'property' => Property::class,
+        'property' => [Property::class, 'deleted' => true],
     ];
 
     public $attachOne = [
@@ -48,6 +48,7 @@ class PropertyValue extends Model
             'table'    => 'offline_mall_category_property',
             'key'      => 'property_id',
             'otherKey' => 'category_id',
+            'pivot' => ['use_for_variants']
         ],
     ];
 

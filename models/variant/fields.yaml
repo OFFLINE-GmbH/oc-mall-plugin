@@ -36,6 +36,7 @@ tabs:
             prompt: 'offline.mall::lang.common.add_value'
             span: full
             type: OFFLINE\Mall\FormWidgets\PropertyFields
+            variantPropertiesOnly: true
             tab: 'offline.mall::lang.common.properties'
         main_image:
             label: 'offline.mall::lang.common.main_image'

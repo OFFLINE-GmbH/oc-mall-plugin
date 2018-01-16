@@ -143,6 +143,10 @@
             'variant' => 'Artikelvarianten',
         ],
     ],
+    'properties'               => [
+        'use_for_variants' => 'Verwende für Varianten',
+        'use_for_variants_comment' => 'Diese Eigenschaft unterscheidet sich für die verschiedenen Produkt-Varianten'
+    ],
     'custom_field_options'  => [
         'text'       => 'Textfeld',
         'textarea'   => 'Mehrzeiliges Textfeld',

@@ -6,8 +6,15 @@ properties:
     label: 'offline.mall::lang.common.properties'
     view:
         list: $/offline/mall/models/property/columns.yaml
-        toolbarButtons: add|create|delete
+        toolbarButtons: add|create|remove
     manage:
         form: $/offline/mall/models/property/fields.yaml
         recordsPerPage: 10
+    pivot:
+        form:
+            fields:
+                pivot[use_for_variants]:
+                    label: 'offline.mall::lang.properties.use_for_variants'
+                    comment: 'offline.mall::lang.properties.use_for_variants_comment'
+                    type: switch
     deferredBinding: true

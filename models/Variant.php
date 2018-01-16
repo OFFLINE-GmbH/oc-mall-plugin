@@ -144,7 +144,7 @@ class Variant extends \Model
 
         return $this->property_values
             ->reject(function (PropertyValue $value) {
-                return $value->value === '' || $value->value === null;
+                return $value->value === '' || $value->value === null || $value->property === null;
             })
             ->map(function (PropertyValue $value) {
                 return sprintf('%s: %s', e($value->property->name), $value->display_value);
