@@ -14,7 +14,7 @@ trait Price
 
     public function setAttribute($key, $value)
     {
-        if (\in_array($value, [0, null, ''], true)) {
+        if (\in_array($value, [null, ''], true)) {
             return $this->attributes[$key] = null;
         }
 
