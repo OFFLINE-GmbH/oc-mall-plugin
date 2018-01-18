@@ -5,6 +5,7 @@ use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Product;
@@ -99,15 +100,25 @@ class Category extends ComponentBase
     protected function getItems(): Collection
     {
         $showVariants = (bool)$this->property('show_variants');
-        if ( ! $showVariants) {
-            return $this->category->publishedProducts;
-        }
 
         $this->category->publishedProducts->load('variants');
 
-        return $this->category->publishedProducts->flatMap(function (Product $product) {
+        $items = $this->category->publishedProducts->flatMap(function (Product $product) {
             return $product->inventory_management_method === 'variant' ? $product->variants : [$product];
         });
+
+        $filtered = $this->applyFilters($items);
+
+        if ($showVariants) {
+            return $filtered;
+        }
+
+        // If the variants should not be listed separately we select
+        // all parent products with properties matching the current filter
+        // criteria.
+        $productIds = $filtered->unique('product_id')->map->product_id;
+
+        return Product::with('variants')->whereIn('id', $productIds)->get();
     }
 
     protected function getCategory()
@@ -138,6 +149,16 @@ class Category extends ComponentBase
     protected function getPaginatorSlice($items)
     {
         return $items->slice(($this->pageNumber - 1) * $this->perPage, $this->perPage);
+    }
+
+    protected function applyFilters($items)
+    {
+        $filters = (new QueryString())->deserialize(request()->get('filter', []));
+        foreach ($filters as $propertyId => $filter) {
+            $items = $filter->apply($items);
+        }
+
+        return $items;
     }
 
 }

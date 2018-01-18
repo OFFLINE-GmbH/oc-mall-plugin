@@ -37,10 +37,13 @@ abstract class Filter
             return $item->getOriginal($this->property);
         }
 
+        $item->load('property_values');
         $value = $item->property_values->where('property_id', $this->property)->first();
 
         return $value ? $value->value : null;
     }
 
     abstract public function apply(Collection $items): Collection;
+
+    abstract public function getValues(): array;
 }

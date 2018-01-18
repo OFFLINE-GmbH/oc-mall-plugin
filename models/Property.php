@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Nullable;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 
 /**
@@ -11,6 +12,9 @@ class Property extends Model
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
     use HashIds;
+    use Nullable;
+
+    protected $nullable = ['filter_type'];
 
     protected $dates = ['deleted_at'];
 
@@ -32,6 +36,25 @@ class Property extends Model
         return $this->property_values->reject(function (PropertyValue $value) {
             return $value->value === '' || $value->value === null;
         })->unique('value');
+    }
+
+    public function getMinValueAttribute()
+    {
+        return $this->values->min('value');
+    }
+
+    public function getMaxValueAttribute()
+    {
+        return $this->values->max('value');
+    }
+
+    public function getFilterTypeOptions()
+    {
+        return [
+            null    => '-- ' . trans('offline.mall::lang.properties.filter_types.none'),
+            'set'   => trans('offline.mall::lang.properties.filter_types.set'),
+            'range' => trans('offline.mall::lang.properties.filter_types.range'),
+        ];
     }
 
     public function getTypeOptions()

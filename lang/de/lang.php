@@ -143,9 +143,15 @@
             'variant' => 'Artikelvarianten',
         ],
     ],
-    'properties'               => [
-        'use_for_variants' => 'Verwende für Varianten',
-        'use_for_variants_comment' => 'Diese Eigenschaft unterscheidet sich für die verschiedenen Produkt-Varianten'
+    'properties'            => [
+        'use_for_variants'         => 'Verwende für Varianten',
+        'use_for_variants_comment' => 'Diese Eigenschaft unterscheidet sich für die verschiedenen Produkt-Varianten',
+        'filter_type'              => 'Filter-Typ',
+        'filter_types'             => [
+            'none'  => 'Ohne Filtermöglichkeit',
+            'set'   => 'Mehrfachauswahl',
+            'range' => 'Bereichsauswahl',
+        ],
     ],
     'custom_field_options'  => [
         'text'       => 'Textfeld',
@@ -373,19 +379,22 @@
                 ],
             ],
         ],
-        'categoryFilter'              => [
-            'details'    => [
+        'categoryFilter'        => [
+            'details' => [
                 'name'        => 'Kategorie-Filter',
                 'description' => 'Filtert die Produkte einer Kategorie',
             ],
         ],
-        'product'              => [
+        'product'               => [
             'details'    => [
-                'name'        => 'Produkt',
-                'description' => 'Zeigt alle Details eines Produkts an',
+                'name'        => 'Produkt-Details',
+                'description' => 'Zeigt die Details zu einem Produkt an',
             ],
             'properties' => [
-
+                'productSlug' => [
+                    'title'       => 'Produkt URL-Parameter',
+                    'description' => 'Verwende diesen Parameter um das Produkt aus der URL zu übernehmen',
+                ],
             ],
         ],
         'cart'                  => [
@@ -565,18 +574,6 @@
                 'productPage'         => [
                     'title'       => 'Produkt-Seite',
                     'description' => 'Die Produkt-Links werden auf diese Seite verweisen.',
-                ],
-            ],
-        ],
-        'product'               => [
-            'details'    => [
-                'name'        => 'Produkt-Details',
-                'description' => 'Zeigt die Details zu einem Produkt an',
-            ],
-            'properties' => [
-                'productSlug' => [
-                    'title'       => 'Produkt URL-Parameter',
-                    'description' => 'Verwende diesen Parameter um das Produkt aus der URL zu übernehmen',
                 ],
             ],
         ],

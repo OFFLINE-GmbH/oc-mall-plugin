@@ -13,6 +13,7 @@ class BuilderTableCreateOfflineMallProperties extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('unit')->nullable();
+            $table->string('filter_type')->nullable();
             $table->text('options')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

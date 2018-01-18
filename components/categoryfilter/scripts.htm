@@ -1,0 +1,34 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $propertiesForm = $('.mall-category-properties');
+
+            $('body').on('click', '.js-mall-filter', function () {
+                var $input = $(this).find('input');
+                $input.prop('checked', !$input.prop('checked'));
+
+                $propertiesForm.trigger('submit');
+            });
+
+            $propertiesForm.on('submit', function (e) {
+                e.preventDefault();
+
+                $(this).request('{{ __SELF__ }}::onSetFilter', {
+                    loading: $.oc.stripeLoadIndicator,
+                    update: {'{{ __SELF__ }}::properties': '.mall-category-properties'},
+                    complete: function (response) {
+                        $.oc.stripeLoadIndicator.hide()
+                        $.publish('mall.category.filter.update')
+                        if (response.responseJSON.queryString) {
+                            history.replaceState(null, '', '?' + response.responseJSON.queryString)
+                        }
+                    },
+                    error: function () {
+                        $.oc.stripeLoadIndicator.hide()
+                        $.oc.flashMsg({text: 'Fehler beim Ausführen der Suche.', class: 'error'})
+                    }
+                });
+            });
+        })
+    </script>
+{% endput %}

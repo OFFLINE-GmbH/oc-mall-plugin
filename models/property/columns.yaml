@@ -14,6 +14,13 @@ columns:
         type: text
         searchable: true
         sortable: true
+    filter_type:
+        label: 'offline.mall::lang.properties.filter_type'
+        type: text
+        searchable: true
+        sortable: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
+        searchable: true
+        sortable: true

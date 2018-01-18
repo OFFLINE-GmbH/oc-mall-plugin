@@ -1,0 +1,11 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $.subscribe('mall.category.filter.update', function () {
+                $.request('{{ __SELF__ }}::onRun', {
+                    update: {'{{ __SELF__ }}::entries': '.mall-category-entries'},
+                })
+            });
+        })
+    </script>
+{% endput %}

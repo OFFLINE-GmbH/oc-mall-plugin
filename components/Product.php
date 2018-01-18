@@ -3,10 +3,10 @@
 use Auth;
 use Cms\Classes\ComponentBase;
 use DB;
-use Hashids\Hashids;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Product as ProductModel;
@@ -19,6 +19,7 @@ use Session;
 class Product extends ComponentBase
 {
     use SetVars;
+    use HashIds;
 
     /**
      * @var Product|Variant;
@@ -262,16 +263,6 @@ class Product extends ComponentBase
                             ->whereNotNull('value')
                             ->get()
                             ->groupBy('property_id');
-    }
-
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    protected function decode($id)
-    {
-        return app(Hashids::class)->decode($id);
     }
 
     /**

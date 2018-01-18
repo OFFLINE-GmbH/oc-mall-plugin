@@ -1,3 +1,5 @@
-{% for property in category.properties %}
-    {% partial __SELF__ ~ '::property' property=property %}
-{% endfor %}
+<form class="mall-category-properties">
+    {{ d(filter) }}
+    {% partial __SELF__ ~ '::properties' props=__SELF__.props %}
+</form>
+{% partial __SELF__ ~ '::scripts' %}

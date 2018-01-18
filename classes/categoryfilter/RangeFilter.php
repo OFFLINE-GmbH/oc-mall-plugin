@@ -20,8 +20,19 @@ class RangeFilter extends Filter
     public function apply(Collection $items): Collection
     {
         return $this->setFilterValues($items)->filter(function ($item) {
-            return $item->filter_value >= $this->minValue
-                && $item->filter_value <= $this->maxValue;
+            $minValue = $this->minValue ? $this->minValue : 0;
+            $maxValue = $this->maxValue ? $this->maxValue : PHP_INT_MAX;
+
+            return (float)$item->filter_value >= (float)$minValue
+                && (float)$item->filter_value <= (float)$maxValue;
         });
+    }
+
+    public function getValues(): array
+    {
+        return [
+            'min' => $this->minValue,
+            'max' => $this->maxValue,
+        ];
     }
 }

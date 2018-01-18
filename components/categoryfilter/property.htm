@@ -1,10 +1,6 @@
 {% if property.values.count > 0 %}
     <div class="mall-property">
         <label>{{ property.name }}</label>
-        <ul>
-            {% for value in property.values %}
-                <li>{{ value }}</li>
-            {% endfor %}
-        </ul>
+        {% partial __SELF__ ~ '::' ~ property.filter_type %}
     </div>
 {% endif %}

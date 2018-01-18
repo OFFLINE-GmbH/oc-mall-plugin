@@ -183,7 +183,7 @@ class Category extends Model
         ];
     }
 
-    public static function getByNestedSlug(string $slug)
+    public static function getByNestedSlug(string $slug, array $with = [])
     {
         $slug = trim($slug, ' /');
 
@@ -192,7 +192,7 @@ class Category extends Model
             return null;
         }
 
-        return Category::findOrFail($slugMap[$slug]);
+        return Category::with($with)->findOrFail($slugMap[$slug]);
     }
 
     /**

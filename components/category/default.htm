@@ -1,5 +1,4 @@
-{% if __SELF__.items.count %}
-    {% partial __SELF__ ~ '::items' items=__SELF__.items %}
-{% else %}
-    {% partial __SELF__ ~ '::empty' %}
-{% endif %}
+<div class="mall-category-entries">
+    {% partial __SELF__ ~ '::entries' %}
+</div>
+{% partial __SELF__ ~ '::scripts' %}

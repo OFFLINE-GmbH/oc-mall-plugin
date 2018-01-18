@@ -21,4 +21,9 @@ class SetFilter extends Filter
             return in_array($item->filter_value, $this->values);
         });
     }
+
+    public function getValues(): array
+    {
+        return $this->values;
+    }
 }

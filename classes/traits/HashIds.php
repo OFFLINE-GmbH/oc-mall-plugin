@@ -16,4 +16,21 @@ trait HashIds
     {
         return app(Hasher::class)->encode($this->attributes['id']);
     }
+
+    /**
+     * @return mixed
+     */
+    protected function decode($value)
+    {
+        return app(Hasher::class)->decode($value);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function encode($value)
+    {
+        return app(Hasher::class)->encode($value);
+    }
+
 }

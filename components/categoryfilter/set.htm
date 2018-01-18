@@ -1,0 +1,18 @@
+<ul class="mall-categoryfilter mall-categoryfilter--set">
+    {% set selected = filter[property.id].values %}
+    {% for value in property.values %}
+        {% set isSelected = value.value in selected %}
+        <li class="js-mall-filter">
+            <input type="checkbox"
+                   aria-hidden="true"
+                   style="display: none"
+                   name="filter[{{ property.hashId }}][]"
+                   value="{{ value.value }}"
+                    {% if isSelected %}
+                        checked
+                    {% endif %}
+            >
+            {{ value.display_value | raw }} ( {{ isSelected ? 'X' : '_' }} )
+        </li>
+    {% endfor %}
+</ul>

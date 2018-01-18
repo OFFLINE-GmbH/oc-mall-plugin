@@ -1,0 +1,14 @@
+<ul class="mall-categoryfilter mall-categoryfilter--range">
+
+    {% set start = property.property.minValue %}
+    {% set end = property.property.maxValue %}
+
+    <input class="p-10 bg-grey-light"
+           type="text" name="filter[{{ property.hashId }}][min]"
+           value="{{ filter[property.id].minValue }}">
+    <input class="p-10 bg-grey-light"
+           type="text" name="filter[{{ property.hashId }}][max]"
+           value="{{ filter[property.id].maxValue }}">
+
+    <button class="js-mall-filter">Apply</button>
+</ul>
