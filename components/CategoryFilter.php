@@ -89,7 +89,7 @@ class CategoryFilter extends ComponentBase
 
         $data = collect($data)->mapWithKeys(function ($values, $id) {
             if ( ! $this->isSpecialProperty($id)) {
-                $id = $this->decode($id)[0];
+                $id = $this->decode($id);
             }
 
             return [$id => $values];
@@ -102,7 +102,7 @@ class CategoryFilter extends ComponentBase
             if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
                 return $values['min'] === '' && $values['max'] === ''
                     ? []
-                    : [$id => new RangeFilter($property, $values['min'], $values['max'])];
+                    : [$id => new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null)];
             }
 
             return [$id => new SetFilter($property, $values)];

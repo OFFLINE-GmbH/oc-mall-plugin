@@ -19,7 +19,7 @@ class QueryString
 
         $query = collect($query)->mapWithKeys(function ($values, $id) {
             if ( ! $this->isSpecialProperty($id)) {
-                $id = $this->decode($id)[0];
+                $id = $this->decode($id);
             }
 
             return [$id => $values];
@@ -29,7 +29,7 @@ class QueryString
                                    ->map(function ($property) use ($query) {
                                        $values = $query->get($property);
 
-                                       return new RangeFilter($property, $values['min'], $values['max']);
+                                       return new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null);
                                    });
 
         $properties = Property::whereIn('id', $query->keys())->get();
@@ -40,7 +40,7 @@ class QueryString
             } elseif ($property->filter_type === 'range') {
                 $values = $query->get($property->id);
 
-                return new RangeFilter($property->id, $values['min'], $values['max']);
+                return new RangeFilter($property->id, $values['min'] ?? null, $values['max'] ?? null);
             }
         })->concat($specialProperties)->keyBy('property');
     }

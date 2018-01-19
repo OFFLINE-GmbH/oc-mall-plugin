@@ -22,7 +22,9 @@ trait HashIds
      */
     protected function decode($value)
     {
-        return app(Hasher::class)->decode($value);
+        $value = app(Hasher::class)->decode($value);
+
+        return $value[0] ?? null;
     }
 
     /**

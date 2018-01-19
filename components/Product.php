@@ -140,7 +140,7 @@ class Product extends ComponentBase
     {
         $variantId = $this->decode($this->param('variant'));
 
-        $this->setVar('variantId', $variantId ? $variantId[0] : null);
+        $this->setVar('variantId', $variantId);
         $this->setVar('item', $this->getItem());
         $this->setVar('variants', $this->getVariants());
         $this->setVar('props', $this->getProps());
