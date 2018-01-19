@@ -9,7 +9,7 @@ use OFFLINE\Mall\Models\Property;
 abstract class Filter
 {
     public $property;
-    public $specialProperties = ['price'];
+    public static $specialProperties = ['price'];
 
     public function __construct($property)
     {
@@ -33,8 +33,8 @@ abstract class Filter
 
     public function getFilterValue($item)
     {
-        if (\in_array($this->property, $this->specialProperties, true)) {
-            return $item->getOriginal($this->property);
+        if (\in_array($this->property, self::$specialProperties, true)) {
+            return $item->getAttribute($this->property);
         }
 
         $item->load('property_values');

@@ -380,9 +380,14 @@
             ],
         ],
         'categoryFilter'        => [
-            'details' => [
+            'details'    => [
                 'name'        => 'Kategorie-Filter',
                 'description' => 'Filtert die Produkte einer Kategorie',
+            ],
+            'properties' => [
+                'showPriceFilter' => [
+                    'title' => 'Zeige Preis-Filter an',
+                ],
             ],
         ],
         'product'               => [

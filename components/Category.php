@@ -153,7 +153,12 @@ class Category extends ComponentBase
 
     protected function applyFilters($items)
     {
-        $filters = (new QueryString())->deserialize(request()->get('filter', []));
+        $filter = request()->get('filter', []);
+        if ( ! is_array($filter)) {
+            $filter = [];
+        }
+
+        $filters = (new QueryString())->deserialize($filter);
         foreach ($filters as $propertyId => $filter) {
             $items = $filter->apply($items);
         }

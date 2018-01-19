@@ -13,31 +13,55 @@ class QueryString
 
     public function deserialize(array $query): Collection
     {
+        if (count($query) < 1) {
+            return collect([]);
+        }
+
         $query = collect($query)->mapWithKeys(function ($values, $id) {
-            return [$this->decode($id)[0] => $values];
+            if ( ! $this->isSpecialProperty($id)) {
+                $id = $this->decode($id)[0];
+            }
+
+            return [$id => $values];
         });
+
+        $specialProperties = $query->keys()->intersect(Filter::$specialProperties)
+                                   ->map(function ($property) use ($query) {
+                                       $values = $query->get($property);
+
+                                       return new RangeFilter($property, $values['min'], $values['max']);
+                                   });
 
         $properties = Property::whereIn('id', $query->keys())->get();
 
-        return $properties->mapWithKeys(function (Property $property) use ($query) {
+        return $properties->map(function (Property $property) use ($query) {
             if ($property->filter_type === 'set') {
-                return [$property->id => new SetFilter($property->id, $query->get($property->id))];
+                return new SetFilter($property->id, $query->get($property->id));
             } elseif ($property->filter_type === 'range') {
                 $values = $query->get($property->id);
 
-                return [$property->id => new RangeFilter($property->id, $values['min'], $values['max'])];
+                return new RangeFilter($property->id, $values['min'], $values['max']);
             }
-        });
+        })->concat($specialProperties)->keyBy('property');
     }
 
     public function serialize(Collection $filter)
     {
         $filter = $filter->mapWithKeys(function (Filter $filter) {
+            $property = $this->isSpecialProperty($filter->property)
+                ? $filter->property
+                : $this->encode($filter->property);
+
             return [
-                $this->encode($filter->property) => $filter->getValues(),
+                $property => $filter->getValues(),
             ];
         });
 
         return http_build_query(['filter' => $filter->toArray()]);
+    }
+
+    protected function isSpecialProperty(string $prop): bool
+    {
+        return \in_array($prop, Filter::$specialProperties, true);
     }
 }

@@ -1,0 +1,13 @@
+<div class="mall-property">
+    <label>{{ 'offline.mall::lang.product.price' | __ }}</label>
+    <ul class="mall-categoryfilter mall-categoryfilter--range">
+        <input class="p-10 bg-grey-light"
+               type="text" name="filter[price][min]"
+               value="{{ filter.price.values.min }}">
+        <input class="p-10 bg-grey-light"
+               type="text" name="filter[price][max]"
+               value="{{ filter.price.values.max }}">
+
+        <button class="js-mall-filter">Apply</button>
+    </ul>
+</div>

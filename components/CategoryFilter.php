@@ -2,6 +2,7 @@
 
 use Cms\Classes\ComponentBase;
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
@@ -34,12 +35,15 @@ class CategoryFilter extends ComponentBase
      * @var Collection
      */
     public $filter;
-
     /**
      * Query-String representation of the active filter
      * @var string
      */
     public $queryString;
+    /**
+     * @var boolean
+     */
+    public $showPriceFilter;
 
     public function componentDetails()
     {
@@ -52,10 +56,15 @@ class CategoryFilter extends ComponentBase
     public function defineProperties()
     {
         return [
-            'category' => [
+            'category'        => [
                 'title'   => 'offline.mall::lang.common.category',
                 'default' => ':slug',
                 'type'    => 'dropdown',
+            ],
+            'showPriceFilter' => [
+                'title'   => 'offline.mall::lang.components.categoryFilter.properties.showPriceFilter.title',
+                'default' => '1',
+                'type'    => 'checkbox',
             ],
         ];
     }
@@ -79,7 +88,9 @@ class CategoryFilter extends ComponentBase
         }
 
         $data = collect($data)->mapWithKeys(function ($values, $id) {
-            $id = $this->decode($id)[0];
+            if ( ! $this->isSpecialProperty($id)) {
+                $id = $this->decode($id)[0];
+            }
 
             return [$id => $values];
         });
@@ -87,15 +98,14 @@ class CategoryFilter extends ComponentBase
         $properties = Property::whereIn('id', $data->keys())->get();
 
         $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
+            $property = $this->isSpecialProperty($id) ? $id : $properties->find($id);
             if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
-                if ($values['min'] === '' && $values['max'] === '') {
-                    return [];
-                }
-
-                return [$id => new RangeFilter($properties->find($id), $values['min'], $values['max'])];
+                return $values['min'] === '' && $values['max'] === ''
+                    ? []
+                    : [$id => new RangeFilter($property, $values['min'], $values['max'])];
             }
 
-            return [$id => new SetFilter($properties->find($id), $values)];
+            return [$id => new SetFilter($property, $values)];
         });
 
         return $this->replaceFilter($filter);
@@ -106,6 +116,7 @@ class CategoryFilter extends ComponentBase
         $this->setVar('category', $this->getCategory());
         $this->setVar('props', $this->getProps());
         $this->setVar('filter', $this->getFilter());
+        $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
     }
 
     protected function getCategory()
@@ -134,7 +145,12 @@ class CategoryFilter extends ComponentBase
 
     protected function getFilter()
     {
-        return (new QueryString())->deserialize(request()->get('filter', []));
+        $filter = request()->get('filter', []);
+        if ( ! is_array($filter)) {
+            $filter = [];
+        }
+
+        return (new QueryString())->deserialize($filter);
     }
 
     protected function replaceFilter($filter)
@@ -148,8 +164,8 @@ class CategoryFilter extends ComponentBase
         ];
     }
 
-    protected function getSessionKey(): string
+    protected function isSpecialProperty(string $prop): bool
     {
-        return sprintf('%s.%s', self::FILTER_KEY, $this->category->id);
+        return \in_array($prop, Filter::$specialProperties, true);
     }
 }

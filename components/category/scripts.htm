@@ -1,10 +1,14 @@
 {% put scripts %}
     <script>
         $(function () {
-            $.subscribe('mall.category.filter.update', function () {
+            $.subscribe('mall.category.filter.start', function() {
+                $('.mall-category-entries').html('Loading...')
+            });
+
+            $.subscribe('mall.category.filter.complete', function () {
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::entries': '.mall-category-entries'},
-                })
+                });
             });
         })
     </script>
