@@ -57,14 +57,15 @@ class Category extends Model
             'scope' => 'published',
         ],
     ];
-    
+
     public $belongsToMany = [
         'properties' => [
             Property::class,
-            'table'    => 'offline_mall_category_property',
-            'key'      => 'category_id',
-            'otherKey' => 'property_id',
-            'pivot' => ['use_for_variants']
+            'table'      => 'offline_mall_category_property',
+            'key'        => 'category_id',
+            'otherKey'   => 'property_id',
+            'pivot'      => ['use_for_variants', 'filter_type'],
+            'pivotModel' => CategoryProperty::class,
         ],
     ];
 

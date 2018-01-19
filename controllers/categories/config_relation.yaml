@@ -17,4 +17,10 @@ properties:
                     label: 'offline.mall::lang.properties.use_for_variants'
                     comment: 'offline.mall::lang.properties.use_for_variants_comment'
                     type: switch
+                    span: left
+                pivot[filter_type]:
+                    label: 'offline.mall::lang.properties.filter_type'
+                    oc.commentPosition: ''
+                    span: right
+                    type: dropdown
     deferredBinding: true

@@ -139,7 +139,7 @@ class CategoryFilter extends ComponentBase
     protected function getProps()
     {
         return $this->category->properties->reject(function (Property $property) {
-            return $property->filter_type === null;
+            return $property->pivot->filter_type === null;
         });
     }
 

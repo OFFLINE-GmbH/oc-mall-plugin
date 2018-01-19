@@ -14,11 +14,6 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
-    filter_type:
-        label: 'offline.mall::lang.properties.filter_type'
-        oc.commentPosition: ''
-        span: auto
-        type: dropdown
     options:
         label: 'offline.mall::lang.common.options'
         oc.commentPosition: ''
