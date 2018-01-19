@@ -5,25 +5,13 @@ plugin:
     icon: oc-icon-shopping-cart
     homepage: ''
 navigation:
-    mall:
-        label: 'offline.mall::lang.common.shop'
-        url: offline/mall/products
+    mall-orders:
+        label: 'offline.mall::lang.common.orders'
+        url: offline/mall/discounts
         icon: icon-shopping-cart
         permissions:
             - 'offline.mall.*'
         sideMenu:
-            mall-products:
-                label: 'offline.mall::lang.common.products'
-                url: offline/mall/products
-                icon: icon-cart-plus
-                permissions:
-                    - offline.mall.manage_products
-            mall-categories:
-                label: 'offline.mall::lang.common.categories'
-                url: offline/mall/categories
-                icon: icon-sitemap
-                permissions:
-                    - offline.mall.manage_categories
             mall-orders:
                 label: 'offline.mall::lang.common.orders'
                 url: offline/mall/orders
@@ -46,6 +34,25 @@ navigation:
                 icon: icon-money
                 permissions:
                     - offline.mall.settings.manage_payment_methods
+    mall-catalogue:
+        label: 'offline.mall::lang.common.catalogue'
+        url: offline/mall/products
+        icon: icon-book
+        permissions:
+            - offline.mall.manage_products
+        sideMenu:
+            mall-products:
+                label: 'offline.mall::lang.common.products'
+                url: offline/mall/products
+                icon: icon-cart-plus
+                permissions:
+                    - offline.mall.manage_products
+            mall-categories:
+                label: 'offline.mall::lang.common.categories'
+                url: offline/mall/categories
+                icon: icon-sitemap
+                permissions:
+                    - offline.mall.manage_categories
             mall-custom-fields:
                 label: 'offline.mall::lang.common.custom_fields'
                 url: offline/mall/customfields
@@ -56,6 +63,7 @@ navigation:
                 icon: icon-tags
                 permissions:
                     - offline.mall.manage_properties
+
 permissions:
     offline.mall.manage_products:
         tab: 'offline.mall::lang.name'

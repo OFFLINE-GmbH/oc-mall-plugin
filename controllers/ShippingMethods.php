@@ -20,6 +20,6 @@ class ShippingMethods extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall', 'mall-shipping-methods');
+        BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-shipping-methods');
     }
 }

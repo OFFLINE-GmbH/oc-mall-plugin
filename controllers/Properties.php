@@ -20,6 +20,6 @@ class Properties extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall', 'mall-properties');
+        BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-properties');
     }
 }

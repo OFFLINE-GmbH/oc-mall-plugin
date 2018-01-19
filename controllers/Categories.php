@@ -28,6 +28,6 @@ class Categories extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall', 'mall-categories');
+        BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-categories');
     }
 }
