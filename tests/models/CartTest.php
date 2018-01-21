@@ -33,39 +33,65 @@ class CartTest extends PluginTestCase
 
     public function test_it_stacks_variants()
     {
+        $product            = Product::first();
+        $product->stackable = true;
+        $product->save();
+
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 1, $variant);
+
+        $this->assertEquals(1, $cart->products->count());
+        $this->assertEquals(1, $cart->products->first()->quantity);
+
+        $cart->addProduct($product, 1, $variant);
+        $this->assertEquals(1, $cart->products->count());
+        $this->assertEquals(2, $cart->products->first()->quantity);
+    }
+
+    public function test_it_doesnt_stack_unstackable_variants()
+    {
+        $product            = Product::first();
+        $product->stackable = false;
+        $product->save();
+
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 1, $variant);
+
+        $this->assertEquals(1, $cart->products->count());
+        $this->assertEquals(1, $cart->products->first()->quantity);
+
+        $cart->addProduct($product, 1, $variant);
+        $this->assertEquals(2, $cart->products->count());
+        $this->assertEquals(1, $cart->products->first()->quantity);
     }
 
     public function test_it_stacks_custom_field_variants()
     {
-        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
-
         $product            = Product::first();
         $product->stackable = true;
         $product->save();
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
+        $sizeA->price      = 100;
         $sizeA->sort_order = 1;
-        $sizeB             = new CustomFieldOption();
-        $sizeB->name       = 'Size B';
-        $sizeB->sort_order = 2;
 
-        $field             = new CustomField();
-        $field->name       = 'Size';
-        $field->type       = 'dropdown';
-        $field->product_id = $product->id;
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'dropdown';
         $field->save();
 
-        $field->options()->save($sizeA);
-        $field->options()->save($sizeB);
+        $field->custom_field_options()->save($sizeA);
 
-        $variant             = new Variant();
-        $variant->product_id = $product->id;
-        $variant->stock      = 1;
-        $variant->save();
-
-        $variant->custom_field_options()->attach($sizeA);
-        $variant->custom_field_options()->attach($sizeB);
+        $product->custom_fields()->attach($field);
 
         $customFieldValue                         = new CustomFieldValue();
         $customFieldValue->custom_field_id        = $field->id;
@@ -73,13 +99,13 @@ class CartTest extends PluginTestCase
         $customFieldValue->save();
 
         $cart = new Cart();
-        $cart->addProduct($product, 1, $customFieldValue);
+        $cart->addProduct($product, 1, null, collect([$customFieldValue]));
 
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValue->id, $cart->products->first()->custom_field_values[0]->id);
 
-        $cart->addProduct($product, 1, $customFieldValue);
+        $cart->addProduct($product, 1, null, collect([$customFieldValue]));
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(2, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValue->id, $cart->products->first()->custom_field_values[0]->id);
@@ -104,35 +130,23 @@ class CartTest extends PluginTestCase
 
     public function test_it_doesnt_stack_product_custom_field_variants()
     {
-        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
         $product            = Product::first();
         $product->stackable = false;
         $product->save();
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
+        $sizeA->price      = 100;
         $sizeA->sort_order = 1;
-        $sizeB             = new CustomFieldOption();
-        $sizeB->name       = 'Size B';
-        $sizeB->sort_order = 2;
 
-        $field             = new CustomField();
-        $field->name       = 'Size';
-        $field->type       = 'dropdown';
-        $field->product_id = $product->id;
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'dropdown';
         $field->save();
 
-        $field->options()->save($sizeA);
-        $field->options()->save($sizeB);
+        $field->custom_field_options()->save($sizeA);
 
-        $variant             = new Variant();
-        $variant->product_id = $product->id;
-        $variant->stock      = 1;
-        $variant->save();
-
-        $variant->custom_field_options()->attach($sizeA);
-        $variant->custom_field_options()->attach($sizeB);
-
+        $product->custom_fields()->attach($field);
 
         $customFieldValue                         = new CustomFieldValue();
         $customFieldValue->custom_field_id        = $field->id;
@@ -140,14 +154,14 @@ class CartTest extends PluginTestCase
         $customFieldValue->save();
 
         $cart = new Cart();
-        $cart->addProduct($product, 1, $customFieldValue);
+        $cart->addProduct($product, 1, null, collect([$customFieldValue]));
 
         $cart->products->first()->refresh('custom_field_values');
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValue->id, $cart->products->first()->custom_field_values[0]->id);
 
-        $cart->addProduct($product, 1, $customFieldValue);
+        $cart->addProduct($product, 1, null, collect([$customFieldValue]));
         $this->assertEquals(2, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValue->id, $cart->products[1]->custom_field_values[0]->id);
@@ -155,8 +169,6 @@ class CartTest extends PluginTestCase
 
     public function test_it_doesnt_stack_different_custom_fields_product_variants()
     {
-        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
-
         $product            = Product::first();
         $product->stackable = true;
         $product->save();
@@ -168,22 +180,15 @@ class CartTest extends PluginTestCase
         $sizeB->name       = 'Size B';
         $sizeB->sort_order = 2;
 
-        $field             = new CustomField();
-        $field->name       = 'Size';
-        $field->type       = 'dropdown';
-        $field->product_id = $product->id;
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'dropdown';
         $field->save();
 
-        $field->options()->save($sizeA);
-        $field->options()->save($sizeB);
+        $field->custom_field_options()->save($sizeA);
+        $field->custom_field_options()->save($sizeB);
 
-        $variant             = new Variant();
-        $variant->product_id = $product->id;
-        $variant->stock      = 1;
-        $variant->save();
-
-        $variant->custom_field_options()->attach($sizeA);
-        $variant->custom_field_options()->attach($sizeB);
+        $product->custom_fields()->attach($field);
 
         $customFieldValueA                         = new CustomFieldValue();
         $customFieldValueA->custom_field_id        = $field->id;
@@ -194,13 +199,13 @@ class CartTest extends PluginTestCase
         $customFieldValueB->custom_field_option_id = $sizeB->id;
 
         $cart = new Cart();
-        $cart->addProduct($product, 1, $customFieldValueA);
+        $cart->addProduct($product, 1, null, collect([$customFieldValueA]));
 
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValueA->id, $cart->products->first()->custom_field_values[0]->id);
 
-        $cart->addProduct($product, 1, $customFieldValueB);
+        $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
         $this->assertEquals(2, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValueA->id, $cart->products[0]->custom_field_values[0]->id);
@@ -209,22 +214,16 @@ class CartTest extends PluginTestCase
 
     public function test_it_doesnt_stack_different_custom_field_product_variants_with_text_values()
     {
-        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
-
         $product            = Product::first();
         $product->stackable = true;
         $product->save();
 
-        $field             = new CustomField();
-        $field->name       = 'Size';
-        $field->type       = 'text';
-        $field->product_id = $product->id;
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'text';
         $field->save();
 
-        $variant             = new Variant();
-        $variant->product_id = $product->id;
-        $variant->stock      = 1;
-        $variant->save();
+        $product->custom_fields()->attach($field);
 
         $customFieldValueA                  = new CustomFieldValue();
         $customFieldValueA->custom_field_id = $field->id;
@@ -235,13 +234,13 @@ class CartTest extends PluginTestCase
         $customFieldValueA->value           = 'Test';
 
         $cart = new Cart();
-        $cart->addProduct($product, 1, $customFieldValueA);
+        $cart->addProduct($product, 1, null, collect([$customFieldValueA]));
 
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValueA->id, $cart->products->first()->custom_field_values[0]->id);
 
-        $cart->addProduct($product, 1, $customFieldValueB);
+        $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
         $this->assertEquals(2, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
         $this->assertEquals($customFieldValueA->id, $cart->products[0]->custom_field_values[0]->id);
