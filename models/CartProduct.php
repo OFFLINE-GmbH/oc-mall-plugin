@@ -36,7 +36,7 @@ class CartProduct extends Model
         });
     }
 
-    public function getTotalPreTaxesAttribute(): int
+    public function getTotalPreTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
             return $this->price * $this->quantity - $this->totalTaxes;
@@ -45,7 +45,7 @@ class CartProduct extends Model
         return $this->price * $this->quantity;
     }
 
-    public function getTotalTaxesAttribute(): int
+    public function getTotalTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
             $withoutTax = $this->priceWithoutTaxes();
@@ -56,7 +56,7 @@ class CartProduct extends Model
         return $this->taxFactor() * $this->price * $this->quantity;
     }
 
-    public function getTotalPostTaxesAttribute(): int
+    public function getTotalPostTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
             return $this->price * $this->quantity;
@@ -65,7 +65,7 @@ class CartProduct extends Model
         return $this->totalPreTaxes + $this->totalTaxes;
     }
 
-    public function getWeightAttribute(): int
+    public function getWeightAttribute(): float
     {
         return $this->data->weight * $this->quantity;
     }
@@ -90,8 +90,6 @@ class CartProduct extends Model
      */
     protected function taxFactor()
     {
-        return $this->data->taxes->reduce(function ($total, Tax $tax) {
-            return $total += $tax->percentageDecimal;
-        });
+        return $this->data->taxes->sum('percentageDecimal');
     }
 }

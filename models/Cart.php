@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Cookie;
+use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -163,21 +164,24 @@ class Cart extends Model
     /**
      * Adds a product to the cart.
      *
-     * @param Product            $product
-     * @param Variant            $variant
-     * @param int|null           $quantity
-     * @param CustomFieldValue[] $values
+     * @param Product    $product
+     * @param Variant    $variant
+     * @param int|null   $quantity
+     * @param Collection $values
      *
      * @return Cart
      */
-    public function addProduct(Product $product, int $quantity = null, Variant $variant = null, $values = null)
-    {
+    public function addProduct(
+        Product $product,
+        ?int $quantity = null,
+        ?Variant $variant = null,
+        ?Collection $values = null
+    ) {
         if ( ! $this->exists) {
             $this->save();
         }
 
         $quantity = $quantity ?? $product->quantity_default ?? 1;
-        $values   = $this->normalizeArray($values);
 
         if ($product->stackable && $this->isInCart($product, $variant, $values)) {
             $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
@@ -208,7 +212,9 @@ class Cart extends Model
         $this->products()->save($cartEntry);
         $this->load('products');
 
-        $cartEntry->custom_field_values()->saveMany($values);
+        if($values) {
+            $cartEntry->custom_field_values()->saveMany($values);
+        }
 
         $this->validateShippingMethod();
     }
@@ -260,7 +266,7 @@ class Cart extends Model
      *
      * @return bool
      */
-    public function isInCart(Product $product, ?Variant $variant = null, array $values = []): bool
+    public function isInCart(Product $product, ?Variant $variant = null, ?Collection $values = null): bool
     {
         $productIsInCart = $this->products->contains(function (CartProduct $existing) use ($product, $variant) {
             $productIsInCart = $existing->product_id === $product->id;
@@ -271,7 +277,7 @@ class Cart extends Model
 
         // If there is no CustomFieldValue to compare we only have
         // to check if the product is in the cart.
-        if (count($values) === 0 || $productIsInCart === false) {
+        if ($values === null || $values->count() === 0 || $productIsInCart === false) {
             return $productIsInCart;
         }
 
@@ -291,18 +297,6 @@ class Cart extends Model
         }
 
         return $query->count() > 0;
-    }
-
-    /**
-     * Makes sure $value is an array and removes all null values.
-     */
-    protected function normalizeArray($values): array
-    {
-        if ( ! is_array($values)) {
-            $values = [$values];
-        }
-
-        return array_filter($values);
     }
 
     /**

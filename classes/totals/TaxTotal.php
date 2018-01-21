@@ -11,15 +11,15 @@ class TaxTotal
      */
     public $tax;
     /**
-     * @var int
+     * @var float
      */
     private $preTax;
     /**
-     * @var int
+     * @var float
      */
     private $total;
 
-    public function __construct(int $preTax, Tax $tax)
+    public function __construct(float $preTax, Tax $tax)
     {
         $this->preTax = $preTax;
         $this->tax    = $tax;
@@ -34,12 +34,12 @@ class TaxTotal
         return $this->total;
     }
 
-    public function total(): int
+    public function total(): float
     {
         return $this->total;
     }
 
-    public function preTax(): int
+    public function preTax(): float
     {
         return $this->preTax;
     }

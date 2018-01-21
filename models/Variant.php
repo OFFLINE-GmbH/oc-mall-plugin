@@ -89,6 +89,11 @@ class Variant extends \Model
         });
     }
 
+    public function custom_fields()
+    {
+        return optional($this->parent)->custom_fields();
+    }
+
     public function scopePublished($query)
     {
         return $query->where('published', true);

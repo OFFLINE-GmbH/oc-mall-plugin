@@ -1,0 +1,15 @@
+{% set fieldId = 'field-' ~ field.hashId %}
+<label for="{{ fieldId }}" class="mall-label">{{ field.name }}</label>
+<div class="mall-field-color-selector">
+    {% if field.custom_field_options.count > 0 %}
+        <input type="hidden" id="{{ fieldId }}" name="fields[{{ field.hashId }}]" data-id="{{ item.property.hashId }}">
+        {% for option in field.custom_field_options %}
+            <a class="mall-field-selector" data-target="#{{ fieldId }}" data-value="{{ option.value.color }}">
+                <span style="background: {{ option.value.color }}; width: 20px; height: 20px; display: inline-block;
+                    "></span>
+            </a>
+        {% endfor %}
+    {% else %}
+        <input type="color" id="{{ fieldId }}" name="fields[{{ field.hashId }}]" data-id="{{ item.property.hashId }}">
+    {% endif %}
+</div>

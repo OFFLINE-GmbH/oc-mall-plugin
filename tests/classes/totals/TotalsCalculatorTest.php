@@ -62,10 +62,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(20000, $calc->totalPostTaxes());
-        $this->assertEquals(4615, round($calc->totalTaxes(), 2));
+        $this->assertEquals(4615.38, round($calc->totalTaxes(), 2));
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(1538, $calc->taxes()[0]->total());
-        $this->assertEquals(3077, $calc->taxes()[1]->total());
+        $this->assertEquals(1538, round($calc->taxes()[0]->total()));
+        $this->assertEquals(3077, round($calc->taxes()[1]->total()));
     }
 
     public function test_it_calculates_taxes_excluded()
@@ -112,10 +112,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(30000, $calc->totalPostTaxes());
-        $this->assertEquals(5524, $calc->totalTaxes());
+        $this->assertEquals(5524, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(2447, $calc->taxes()[0]->total());
-        $this->assertEquals(3077, $calc->taxes()[1]->total());
+        $this->assertEquals(2448, round($calc->taxes()[0]->total()));
+        $this->assertEquals(3077, round($calc->taxes()[1]->total()));
     }
 
     public function test_it_calculates_taxes()
@@ -141,10 +141,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(21000, $calc->totalPostTaxes());
-        $this->assertEquals(1909, $calc->totalTaxes());
+        $this->assertEquals(1909, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(1000, $calc->taxes()[0]->total());
-        $this->assertEquals(909, $calc->taxes()[1]->total());
+        $this->assertEquals(1000, round($calc->taxes()[0]->total()));
+        $this->assertEquals(909, round($calc->taxes()[1]->total()));
     }
 
     public function test_it_calculates_taxes_with_quantity()
@@ -170,10 +170,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(43000, $calc->totalPostTaxes());
-        $this->assertEquals(4666, $calc->totalTaxes());
+        $this->assertEquals(4667, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(3000, $calc->taxes()[0]->total());
-        $this->assertEquals(1666, $calc->taxes()[1]->total());
+        $this->assertEquals(3000, round($calc->taxes()[0]->total()));
+        $this->assertEquals(1667, round($calc->taxes()[1]->total()));
     }
 
     public function test_it_consolidates_taxes()
@@ -198,9 +198,9 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(21000, $calc->totalPostTaxes());
-        $this->assertEquals(1909, $calc->totalTaxes());
+        $this->assertEquals(1909, round($calc->totalTaxes()));
         $this->assertCount(1, $calc->taxes());
-        $this->assertEquals(1909, $calc->taxes()[0]->total());
+        $this->assertEquals(1909, round($calc->taxes()[0]->total()));
     }
 
     public function test_it_calculates_detailed_taxes()
@@ -225,10 +225,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(21000, $calc->totalPostTaxes());
-        $this->assertEquals(1909, $calc->totalTaxes());
+        $this->assertEquals(1909, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->detailedTaxes());
-        $this->assertEquals(1000, $calc->detailedTaxes()[0]->total());
-        $this->assertEquals(909, $calc->detailedTaxes()[1]->total());
+        $this->assertEquals(1000, round($calc->detailedTaxes()[0]->total()));
+        $this->assertEquals(909, round($calc->detailedTaxes()[1]->total()));
     }
 
     public function test_it_calculates_weight_total()
@@ -282,10 +282,10 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(40000, $calc->totalPostTaxes());
-        $this->assertEquals(6433, $calc->totalTaxes());
+        $this->assertEquals(6434, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
-        $this->assertEquals(3356, $calc->taxes()[0]->total());
-        $this->assertEquals(3077, $calc->taxes()[1]->total());
+        $this->assertEquals(3357, round($calc->taxes()[0]->total()));
+        $this->assertEquals(3077, round($calc->taxes()[1]->total()));
     }
 
     public function test_it_calculates_variant_cost()
@@ -310,8 +310,6 @@ class TotalsCalculatorTest extends PluginTestCase
 
     public function test_it_calculates_custom_fields_cost()
     {
-        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
-
         $product            = Product::first();
         $product->stackable = true;
         $product->price     = 200;
@@ -326,36 +324,72 @@ class TotalsCalculatorTest extends PluginTestCase
         $sizeB->price      = 200;
         $sizeB->sort_order = 1;
 
-        $field             = new CustomField();
-        $field->name       = 'Size';
-        $field->type       = 'dropdown';
-        $field->product_id = $product->id;
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'dropdown';
         $field->save();
 
-        $field->options()->save($sizeA);
-        $field->options()->save($sizeB);
+        $field->custom_field_options()->save($sizeA);
+        $field->custom_field_options()->save($sizeB);
 
-        $variant             = new Variant();
-        $variant->product_id = $product->id;
-        $variant->stock      = 1;
-        $variant->save();
-
-        $variant->custom_field_options()->attach($sizeA);
-        $variant->custom_field_options()->attach($sizeB);
+        $product->custom_fields()->attach($field);
 
         $customFieldValueA                         = new CustomFieldValue();
         $customFieldValueA->custom_field_id        = $field->id;
         $customFieldValueA->custom_field_option_id = $sizeA->id;
+
         $customFieldValueB                         = new CustomFieldValue();
         $customFieldValueB->custom_field_id        = $field->id;
         $customFieldValueB->custom_field_option_id = $sizeB->id;
 
         $cart = $this->getCart();
-        $cart->addProduct($product, 2, $customFieldValueA);
-        $cart->addProduct($product, 1, $customFieldValueB);
+        $cart->addProduct($product, 2, null, collect([$customFieldValueA]));
+        $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(1000 * 100, $calc->totalPostTaxes());
+    }
+
+
+    public function test_it_calculates_custom_field_fallback_cost()
+    {
+        $product            = Product::first();
+        $product->stackable = true;
+        $product->price     = 200;
+        $product->save();
+
+        $sizeA             = new CustomFieldOption();
+        $sizeA->name       = 'Size A';
+        $sizeA->sort_order = 1;
+        $sizeB             = new CustomFieldOption();
+        $sizeB->name       = 'Size B';
+        $sizeB->sort_order = 1;
+
+        $field        = new CustomField();
+        $field->name  = 'Size';
+        $field->type  = 'dropdown';
+        $field->price = 300;
+        $field->save();
+
+        $field->custom_field_options()->save($sizeA);
+        $field->custom_field_options()->save($sizeB);
+
+        $product->custom_fields()->attach($field);
+
+        $customFieldValueA                         = new CustomFieldValue();
+        $customFieldValueA->custom_field_id        = $field->id;
+        $customFieldValueA->custom_field_option_id = $sizeA->id;
+
+        $customFieldValueB                         = new CustomFieldValue();
+        $customFieldValueB->custom_field_id        = $field->id;
+        $customFieldValueB->custom_field_option_id = $sizeB->id;
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2, null, collect([$customFieldValueA]));
+        $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(1500 * 100, $calc->totalPostTaxes());
     }
 
     public function test_it_applies_fixed_discounts()
@@ -483,7 +517,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(30000, $calc->totalPostTaxes());
-        $this->assertEquals(5524, $calc->totalTaxes());
+        $this->assertEquals(5524, round($calc->totalTaxes()));
     }
 
     public function test_it_applies_alternate_price_discount_only_when_given_total_is_reached()

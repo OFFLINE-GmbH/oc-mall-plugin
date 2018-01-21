@@ -1,16 +1,20 @@
 fields:
     required:
         label: 'offline.mall::lang.custom_fields.required'
-        span: full
+        span: left
         type: switch
         comment: 'offline.mall::lang.custom_fields.required_comment'
+    price:
+        label: 'offline.mall::lang.product.price'
+        span: right
+        type: text
     name:
         label: 'offline.mall::lang.custom_fields.name'
         oc.commentPosition: ''
         span: auto
         type: text
 
-    type_dropdown:
+    _type_dropdown:
         label: 'offline.mall::lang.custom_fields.type'
         oc.commentPosition: ''
         options:
@@ -28,7 +32,7 @@ fields:
         path: $/offline/mall/controllers/customfields/_field_options.htm
         trigger:
             action: show
-            field: type_dropdown
+            field: _type_dropdown
             condition: value[dropdown] or value[image] or value[color]
 
     type:

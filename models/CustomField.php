@@ -2,17 +2,22 @@
 
 use DB;
 use Model;
+use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
-/**
- * Model
- */
 class CustomField extends Model
 {
     use \October\Rain\Database\Traits\Validation;
+    use Price;
+    use HashIds;
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
     public $with = ['custom_field_options'];
+    public $casts = [
+        'required' => 'boolean'
+    ];
 
     public $rules = [
         'product_id' => 'exists:offline_mall_products,id',

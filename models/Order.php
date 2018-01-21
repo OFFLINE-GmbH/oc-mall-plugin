@@ -76,19 +76,25 @@ class Order extends Model
         $order->payment_method_id                = $cart->payment_method_id;
         $order->payment_status                   = PendingState::class;
         $order->order_status                     = InProgressState::class;
-        $order->shipping_pre_taxes               = $cart->totals->shippingTotal()->totalPreTaxes();
-        $order->shipping_taxes                   = $cart->totals->shippingTotal()->totalTaxes();
-        $order->total_shipping                   = $cart->totals->shippingTotal()->totalPostTaxes();
-        $order->product_taxes                    = $cart->totals->productTaxes();
-        $order->total_product                    = $cart->totals->productPostTaxes();
-        $order->total_pre_taxes                  = $cart->totals->totalPreTaxes();
-        $order->total_taxes                      = $cart->totals->totalTaxes();
-        $order->total_post_taxes                 = $cart->totals->totalPostTaxes();
-        $order->total_weight                     = $cart->totals->weightTotal();
+        $order->total_shipping_pre_taxes         = $order->round($cart->totals->shippingTotal()->totalPreTaxes());
+        $order->total_shipping_taxes             = $order->round($cart->totals->shippingTotal()->totalTaxes());
+        $order->total_shipping_post_taxes        = $order->round($cart->totals->shippingTotal()->totalPostTaxes());
+        $order->total_product_pre_taxes          = $order->round($cart->totals->productPreTaxes());
+        $order->total_product_taxes              = $order->round($cart->totals->productTaxes());
+        $order->total_product_post_taxes         = $order->round($cart->totals->productPostTaxes());
+        $order->total_pre_taxes                  = $order->round($cart->totals->totalPreTaxes());
+        $order->total_taxes                      = $order->round($cart->totals->totalTaxes());
+        $order->total_post_taxes                 = $order->round($cart->totals->totalPostTaxes());
+        $order->total_weight                     = $order->round($cart->totals->weightTotal());
 
         $cart->delete(); // We can empty the cart once the order is created.
 
         return $order;
+    }
+
+    protected function round($amount)
+    {
+        return round($amount);
     }
 
     /**

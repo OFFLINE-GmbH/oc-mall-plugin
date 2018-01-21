@@ -85,38 +85,35 @@ class TotalsCalculator
         $this->totalPostTaxes = $this->productPostTaxes + $this->shippingTotal->totalPostTaxes();
     }
 
-    protected function calculateProductPreTaxes(): int
+    protected function calculateProductPreTaxes(): float
     {
-        $total = $this->cart->products->reduce(function ($total, CartProduct $product) {
-            return $total += $product->totalPreTaxes;
-        }, 0);
+        $total = $this->cart->products->sum('totalPreTaxes');
 
         $total = $this->applyTotalDiscounts($total);
 
         return $total > 0 ? $total : 0;
     }
 
-    protected function calculateProductTaxes(): int
+    protected function calculateProductTaxes(): float
     {
-        return $this->cart->products->reduce(function ($total, CartProduct $product) {
-            return $total += $product->totalTaxes;
-        }, 0);
+        return $this->cart->products->sum('totalTaxes');
     }
 
     protected function getTaxTotals(): Collection
     {
         $shippingTaxes = new Collection();
-        $shippingTotal = $this->shippingTotal->totalPreTaxes();
+        $shippingTotal = $this->shippingTotal->totalPreTaxesOriginal();
         if ($this->cart->shipping_method) {
-            $shippingTaxes = optional($this->cart->shipping_method)->taxes->map(function (Tax $tax) use ($shippingTotal) {
+            $shippingTaxes = optional($this->cart->shipping_method)->taxes->map(function (Tax $tax) use ($shippingTotal
+            ) {
                 return new TaxTotal($shippingTotal, $tax);
             });
         }
 
         $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {
-            return $product->data->taxes;
-        })->unique()->map(function (Tax $tax) {
-            return new TaxTotal($this->productPreTaxes, $tax);
+            return $product->data->taxes->map(function (Tax $tax) use ($product) {
+                return new TaxTotal($product->totalPreTaxes, $tax);
+            });
         });
 
         $combined = $productTaxes->concat($shippingTaxes);
@@ -165,32 +162,32 @@ class TotalsCalculator
         return $this->weightTotal;
     }
 
-    public function totalPreTaxes(): int
+    public function totalPreTaxes(): float
     {
         return $this->totalPreTaxes;
     }
 
-    public function totalTaxes(): int
+    public function totalTaxes(): float
     {
         return $this->totalTaxes;
     }
 
-    public function productPreTaxes(): int
+    public function productPreTaxes(): float
     {
         return $this->productPreTaxes;
     }
 
-    public function productTaxes(): int
+    public function productTaxes(): float
     {
         return $this->productTaxes;
     }
 
-    public function productPostTaxes(): int
+    public function productPostTaxes(): float
     {
         return $this->productPostTaxes;
     }
 
-    public function totalPostTaxes(): int
+    public function totalPostTaxes(): float
     {
         return $this->totalPostTaxes;
     }
@@ -215,9 +212,9 @@ class TotalsCalculator
      *
      * @param $total
      *
-     * @return int
+     * @return float
      */
-    private function applyTotalDiscounts($total): int
+    protected function applyTotalDiscounts($total): float
     {
         $discounts = $this->cart->discounts->reject(function ($item) {
             return $item->type === 'shipping';

@@ -12,15 +12,12 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
 
 class OrderTest extends PluginTestCase
 {
     public function test_it_creates_a_new_order_from_a_cart()
     {
-        $this->markTestSkipped('Not implemented yet. Needs refactoring since variants are now used differently');
-
         $cart  = $this->getCart();
         $order = Order::fromCart($cart);
         $order->save();
@@ -28,13 +25,14 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(1, $order->order_number);
         $this->assertEquals(PendingState::class, $order->payment_status);
         $this->assertEquals(InProgressState::class, $order->order_status);
-        $this->assertEquals(9000, $order->shipping_pre_taxes);
-        $this->assertEquals(1000, $order->shipping_taxes);
-        $this->assertEquals(10000, $order->total_shipping);
-        $this->assertEquals(27691, $order->product_taxes);
-        $this->assertEquals(92309, $order->total_product);
-        $this->assertEquals(101309, $order->total_pre_taxes);
-        $this->assertEquals(28691, $order->total_taxes);
+        $this->assertEquals(7692, $order->total_shipping_pre_taxes);
+        $this->assertEquals(2308, $order->total_shipping_taxes);
+        $this->assertEquals(10000, $order->total_shipping_post_taxes);
+        $this->assertEquals(92308, $order->total_product_pre_taxes);
+        $this->assertEquals(120000, $order->total_product_post_taxes);
+
+        $this->assertEquals(100000, $order->total_pre_taxes);
+        $this->assertEquals(30000, $order->total_taxes);
         $this->assertEquals(130000, $order->total_post_taxes);
         $this->assertEquals(2800, $order->total_weight);
         $this->assertNotEmpty($order->ip_address);
@@ -57,17 +55,19 @@ class OrderTest extends PluginTestCase
         $tax2->percentage = 20;
         $tax2->save();
 
-        $productA            = Product::first();
-        $productA->stackable = true;
-        $productA->price     = 200;
-        $productA->weight    = 400;
+        $productA                     = Product::first();
+        $productA->stackable          = true;
+        $productA->price              = 200;
+        $productA->weight             = 400;
+        $productA->price_includes_tax = true;
         $productA->save();
         $productA->taxes()->attach([$tax1->id, $tax2->id]);
 
-        $productB         = new Product;
-        $productB->name   = 'Another Product';
-        $productB->price  = 100;
-        $productB->weight = 800;
+        $productB                     = new Product;
+        $productB->name               = 'Another Product';
+        $productB->price              = 100;
+        $productB->weight             = 800;
+        $productB->price_includes_tax = true;
         $productB->save();
         $productB->taxes()->attach([$tax1->id, $tax2->id]);
 
@@ -80,40 +80,34 @@ class OrderTest extends PluginTestCase
         $sizeB->price      = 200;
         $sizeB->sort_order = 1;
 
-        $field             = new CustomField();
-        $field->name       = 'Size';
-        $field->type       = 'dropdown';
-        $field->product_id = $productA->id;
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'dropdown';
         $field->save();
 
-        $field->options()->save($sizeA);
-        $field->options()->save($sizeB);
+        $field->custom_field_options()->save($sizeA);
+        $field->custom_field_options()->save($sizeB);
 
-        $variant             = new Variant();
-        $variant->product_id = $productA->id;
-        $variant->stock      = 1;
-        $variant->save();
-
-        $variant->custom_field_options()->attach($sizeA);
-        $variant->custom_field_options()->attach($sizeB);
+        $productA->custom_fields()->attach($field);
 
         $customFieldValueA                         = new CustomFieldValue();
         $customFieldValueA->custom_field_id        = $field->id;
         $customFieldValueA->custom_field_option_id = $sizeA->id;
+
         $customFieldValueB                         = new CustomFieldValue();
         $customFieldValueB->custom_field_id        = $field->id;
         $customFieldValueB->custom_field_option_id = $sizeB->id;
 
         $cart = new Cart();
-        $cart->addProduct($productA, 2, $customFieldValueA);
-        $cart->addProduct($productA, 1, $customFieldValueB);
+        $cart->addProduct($productA, 2, null, collect([$customFieldValueA]));
+        $cart->addProduct($productA, 1, null, collect([$customFieldValueB]));
         $cart->addProduct($productB, 2);
 
         $shippingMethod        = ShippingMethod::first();
         $shippingMethod->price = 100;
         $shippingMethod->save();
 
-        $shippingMethod->taxes()->attach($tax1);
+        $shippingMethod->taxes()->attach([$tax1->id, $tax2->id]);
 
         $cart->setShippingMethod($shippingMethod);
 

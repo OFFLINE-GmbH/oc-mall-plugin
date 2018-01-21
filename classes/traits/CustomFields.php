@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\CustomFieldValue;
 
 trait CustomFields
@@ -10,23 +11,19 @@ trait CustomFields
      * Returns the product's base price with all CustomFieldValue
      * prices added.
      *
-     * @param CustomFieldValue[] $value
+     * @param CustomFieldValue[] $values
      *
      * @return int
      */
-    public function priceIncludingCustomFieldValues(array $value = []): int
+    public function priceIncludingCustomFieldValues(?Collection $values = null): int
     {
         $price = $this->price * 100;
-        if (count($value) < 1) {
+        if ( ! $values || count($values) < 1) {
             return $price;
         }
 
-        return collect($value)->reduce(function ($total, CustomFieldValue $value) {
-            if ( ! $value->custom_field_option) {
-                return $total;
-            }
-
-            return $total += $value->custom_field_option->getOriginal('price');
+        return $values->reduce(function ($total, CustomFieldValue $value) {
+            return $total += $value->price * 100;
         }, $price);
     }
 }

@@ -15,6 +15,10 @@
             {{ item.description | raw }}
         </div>
 
+        <div class="mall-custom-fields">
+            {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
+        </div>
+
         <div class="mall-product__images">
             {% for image in item.all_images %}
                 <img src="{{ image.thumb(300, auto) }}" alt=""/>

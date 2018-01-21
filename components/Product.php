@@ -9,12 +9,15 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\CustomField;
+use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
 use Request;
 use Session;
+use Validator;
 
 class Product extends ComponentBase
 {
@@ -26,7 +29,7 @@ class Product extends ComponentBase
      */
     public $item;
     /**
-     * @var Product;
+     * @var ProductModel;
      */
     public $product;
     /**
@@ -119,8 +122,10 @@ class Product extends ComponentBase
             throw new ValidationException(['This product is out of stock']);
         }
 
+        $values = $this->validateCustomFields(post('fields', []));
+
         $cart = Cart::byUser(Auth::getUser());
-        $cart->addProduct($this->getProduct(), 1, $variant);
+        $cart->addProduct($this->getProduct(), 1, $variant, $values);
     }
 
     public function onChangeProperty()
@@ -168,6 +173,9 @@ class Product extends ComponentBase
 
     public function getProduct(): ProductModel
     {
+        if ($this->product) {
+            return $this->product;
+        }
         $product = $this->property('product');
         $model   = ProductModel::published()->with([
             'variants',
@@ -283,5 +291,72 @@ class Product extends ComponentBase
                                 ->first();
 
         return $variant ? $variant->describable : null;
+    }
+
+    protected function validateCustomFields(array $values)
+    {
+        $values = collect($values)->mapWithKeys(function ($value, $id) {
+            return [$this->decode($id) => $value];
+        });
+
+        $fields = CustomField::with('custom_field_options')
+                             ->whereIn('id', $values->keys())
+                             ->get()
+                             ->mapWithKeys(function (CustomField $field) use ($values) {
+                                 $value = $values->get($field->id);
+                                 if (\in_array($field->type, ['dropdown', 'image'], true)) {
+                                     $value = $this->decode($value);
+                                 }
+
+                                 return [$field->id => ['field' => $field, 'value' => $value]];
+                             });
+
+        $rules = $fields->mapWithKeys(function (array $data) {
+            $field = $data['field'];
+
+            $rules = collect();
+            if ($field->required) {
+                $rules->push('required');
+            }
+            if (\in_array($field->type, ['dropdown', 'image'], true)) {
+                $rules->push('in:' . $field->custom_field_options->pluck('id')->implode(','));
+            }
+            if ($field->type === 'color') {
+                if ($field->custom_field_options->count() < 1) {
+                    $rules->push('size:7');
+                    $rules->push('regex:/^\#[0-9A-Fa-f]{6}$/');
+                } else {
+                    $rules->push('in:' . $field->custom_field_options->map->value->pluck('color')->implode(','));
+                }
+            }
+
+            return [$field->name => $rules];
+        })->filter();
+
+        $data = $fields->mapWithKeys(function (array $data) {
+            return [$data['field']->name => $data['value']];
+        });
+
+        $v = Validator::make($data->toArray(), $rules->toArray());
+        if ($v->fails()) {
+            throw new ValidationException($v);
+        }
+
+        $values = $fields->map(function (array $data) {
+            if ( ! $data['value']) {
+                return;
+            }
+
+            $option = $data['field']->custom_field_options->find($data['value']);
+
+            $value                         = new CustomFieldValue();
+            $value->value                  = $data['value'];
+            $value->custom_field_id        = $data['field']->id;
+            $value->custom_field_option_id = $option ? $option->id : null;
+
+            return $value;
+        });
+
+        return $values;
     }
 }

@@ -1,0 +1,10 @@
+{% set fieldId = 'field-' ~ field.hashId %}
+<label for="{{ fieldId }}" class="mall-label">{{ field.name }}</label>
+<input type="hidden" id="{{ fieldId }}" name="fields[{{ field.hashId }}]" data-id="{{ item.property.hashId }}">
+<div class="mall-field-image-selector">
+    {% for option in field.custom_field_options %}
+        <a class="mall-field-selector" data-target="#{{ fieldId }}" data-value="{{ option.hashId }}">
+            <img src="{{ option.image.thumb(90, 90, 'auto') }}" alt=""/>
+        </a>
+    {% endfor %}
+</div>

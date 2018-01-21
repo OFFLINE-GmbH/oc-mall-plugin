@@ -56,7 +56,7 @@ class ShippingTotal
         return $price - $this->taxes;
     }
 
-    protected function calculateTaxes(): int
+    protected function calculateTaxes(): float
     {
         if ( ! $this->method) {
             return 0;
@@ -64,12 +64,14 @@ class ShippingTotal
 
         $price = $this->total;
 
-        return $this->method->taxes->reduce(function ($total, Tax $tax) use ($price) {
-            return $total += $price / (1 + $tax->percentageDecimal) * $tax->percentageDecimal;
+        $totalTaxPercentage = $this->method->taxes->sum('percentageDecimal');
+
+        return $this->method->taxes->reduce(function ($total, Tax $tax) use ($price, $totalTaxPercentage) {
+            return $total += $price / (1 + $totalTaxPercentage) * $tax->percentageDecimal;
         }, 0);
     }
 
-    protected function calculateTotal(): int
+    protected function calculateTotal(): float
     {
         if ( ! $this->method) {
             return 0;
@@ -100,22 +102,27 @@ class ShippingTotal
         return $price > 0 ? $price : 0;
     }
 
-    public function totalPreTaxes(): int
+    public function totalPreTaxes(): float
     {
         return $this->preTaxes;
     }
 
-    public function totalTaxes(): int
+    public function totalPreTaxesOriginal(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalTaxes(): float
     {
         return $this->taxes;
     }
 
-    public function totalPostTaxes(): int
+    public function totalPostTaxes(): float
     {
         return $this->total;
     }
 
-    private function applyDiscounts(int $price): int
+    private function applyDiscounts(int $price): float
     {
         $discount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
         if ( ! $discount) {

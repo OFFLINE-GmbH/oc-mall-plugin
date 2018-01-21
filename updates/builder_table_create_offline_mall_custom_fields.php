@@ -12,7 +12,7 @@ class BuilderTableCreateOfflineMallProductCustomFields extends Migration
             $table->increments('id')->unsigned();
             $table->string('name');
             $table->string('type')->default('text');
-            $table->text('options')->nullable();
+            $table->integer('price')->nullable();
             $table->boolean('required')->default(false);
             $table->timestamps();
         });

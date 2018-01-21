@@ -29,7 +29,7 @@ class DiscountApplier
      */
     private $reducedTotalIsFixed = false;
 
-    public function __construct(Cart $cart, int $total, int $baseTotal = null)
+    public function __construct(Cart $cart, float $total, float $baseTotal = null)
     {
         $this->cart         = $cart;
         $this->total        = $total;
@@ -81,7 +81,7 @@ class DiscountApplier
         return true;
     }
 
-    public function reducedTotal(): int
+    public function reducedTotal(): float
     {
         return $this->reducedTotal;
     }
