@@ -30,6 +30,12 @@
                                 {{ product.variant.description | raw }}
                             </span>
                         {% endif %}
+                        {% if product.custom_field_values %}
+                            <br />
+                            <span class="text-grey-dark">
+                                {{ product.custom_field_value_description | raw }}
+                            </span>
+                        {% endif %}
                     </td>
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
                         {% partial __SELF__ ~ '::quantity-dropdown' product=product %}

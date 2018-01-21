@@ -32,4 +32,28 @@ class CustomFieldValue extends Model
 
         return optional($option)->price ? $option->price : $this->custom_field->price;
     }
+
+    /**
+     * Returns a raw html presentation of the attribute values.
+     * The return value contains raw html and therefore is already escaped.
+     * @return string
+     */
+    public function getDisplayValueAttribute()
+    {
+        $value = e($this->value);
+        if ($this->custom_field->type === 'color') {
+            return sprintf('<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>', $value);
+        }
+        if ($this->custom_field->type === 'checkbox') {
+            return $this->value || $this->value === 'on' ? '&#10004;' : '&#10007;';
+        }
+        if ($this->custom_field->type === 'dropdown') {
+            return $this->custom_field_option->name;
+        }
+        if ($this->custom_field->type === 'image') {
+            return sprintf('<img src="%s" />', $this->custom_field_option->image->getThumb(15, 15, 'crop'));
+        }
+
+        return $value;
+    }
 }

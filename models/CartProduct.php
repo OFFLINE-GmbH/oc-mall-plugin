@@ -26,7 +26,7 @@ class CartProduct extends Model
         'custom_field_values' => [CustomFieldValue::class, 'key' => 'cart_product_id', 'otherKey' => 'id'],
     ];
 
-    public $with = ['product', 'product.taxes'];
+    public $with = ['product', 'product.taxes', 'custom_field_values', 'custom_field_values.custom_field'];
 
     public static function boot()
     {
@@ -82,6 +82,14 @@ class CartProduct extends Model
     public function totalForTax(Tax $tax)
     {
         return $tax->percentageDecimal * $this->priceWithoutTaxes();
+    }
+
+
+    public function getCustomFieldValueDescriptionAttribute()
+    {
+        return $this->custom_field_values->map(function (CustomFieldValue $value) {
+                return sprintf('%s: %s', e($value->custom_field->name), $value->display_value);
+            })->implode(', ');
     }
 
     /**
