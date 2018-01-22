@@ -103,12 +103,13 @@ class CartTest extends PluginTestCase
 
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValue->id, $cart->products->first()->custom_field_values[0]->id);
+
+        $this->assertEquals($customFieldValue->id, $cart->products->first()->fresh()->custom_field_values[0]->id);
 
         $cart->addProduct($product, 1, null, collect([$customFieldValue]));
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(2, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValue->id, $cart->products->first()->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValue->id, $cart->products->first()->fresh()->custom_field_values[0]->id);
     }
 
     public function test_it_doesnt_stack_products()
@@ -159,12 +160,12 @@ class CartTest extends PluginTestCase
         $cart->products->first()->refresh('custom_field_values');
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValue->id, $cart->products->first()->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValue->id, $cart->products->first()->fresh()->custom_field_values[0]->id);
 
         $cart->addProduct($product, 1, null, collect([$customFieldValue]));
         $this->assertEquals(2, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValue->id, $cart->products[1]->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValue->id, $cart->products[1]->fresh()->custom_field_values[0]->id);
     }
 
     public function test_it_doesnt_stack_different_custom_fields_product_variants()
@@ -203,13 +204,13 @@ class CartTest extends PluginTestCase
 
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValueA->id, $cart->products->first()->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValueA->id, $cart->products->first()->fresh()->custom_field_values[0]->id);
 
         $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
         $this->assertEquals(2, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValueA->id, $cart->products[0]->custom_field_values[0]->id);
-        $this->assertEquals($customFieldValueB->id, $cart->products[1]->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValueA->id, $cart->products[0]->fresh()->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValueB->id, $cart->products[1]->fresh()->custom_field_values[0]->id);
     }
 
     public function test_it_doesnt_stack_different_custom_field_product_variants_with_text_values()
@@ -238,13 +239,13 @@ class CartTest extends PluginTestCase
 
         $this->assertEquals(1, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValueA->id, $cart->products->first()->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValueA->id, $cart->products->first()->fresh()->custom_field_values[0]->id);
 
         $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
         $this->assertEquals(2, $cart->products->count());
         $this->assertEquals(1, $cart->products->first()->quantity);
-        $this->assertEquals($customFieldValueA->id, $cart->products[0]->custom_field_values[0]->id);
-        $this->assertEquals($customFieldValueB->id, $cart->products[1]->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValueA->id, $cart->products[0]->fresh()->custom_field_values[0]->id);
+        $this->assertEquals($customFieldValueB->id, $cart->products[1]->fresh()->custom_field_values[0]->id);
     }
 
     public function test_it_uses_default_quantity()
