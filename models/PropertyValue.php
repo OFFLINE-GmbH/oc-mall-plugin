@@ -25,6 +25,8 @@ class PropertyValue extends Model
         'property_id',
     ];
 
+    public $with = ['property'];
+
     /**
      * @var string The database table used by the model.
      */

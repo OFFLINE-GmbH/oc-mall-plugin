@@ -3,9 +3,12 @@
 namespace OFFLINE\Mall\Models;
 
 use Model;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 
 class CartProduct extends Model
 {
+    use HashIds;
+
     public $table = 'offline_mall_cart_products';
     public $casts = [
         'quantity'   => 'integer',
@@ -33,6 +36,9 @@ class CartProduct extends Model
         parent::boot();
         static::saving(function (self $cartProduct) {
             $cartProduct->quantity = $cartProduct->data->normalizeQuantity($cartProduct->quantity);
+        });
+        static::deleted(function (self $cartProduct) {
+            CustomFieldValue::where('cart_product_id', $cartProduct->id)->delete();
         });
     }
 
@@ -88,8 +94,8 @@ class CartProduct extends Model
     public function getCustomFieldValueDescriptionAttribute()
     {
         return $this->custom_field_values->map(function (CustomFieldValue $value) {
-                return sprintf('%s: %s', e($value->custom_field->name), $value->display_value);
-            })->implode(', ');
+            return sprintf('%s: %s', e($value->custom_field->name), $value->display_value);
+        })->implode('<br />');
     }
 
     /**

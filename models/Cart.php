@@ -212,11 +212,18 @@ class Cart extends Model
         $this->products()->save($cartEntry);
         $this->load('products');
 
-        if($values) {
+        if ($values) {
             $cartEntry->custom_field_values()->saveMany($values);
         }
 
         $this->validateShippingMethod();
+    }
+
+    public function removeProduct(CartProduct $product)
+    {
+        $product->delete();
+
+        return $this;
     }
 
     /**

@@ -13,6 +13,7 @@
                 <th class="{{ headerStyle }} text-right">{{ "Quantity" | _ }}</th>
                 <th class="{{ headerStyle }} text-right">{{ "Price" | _ }}</th>
                 <th class="{{ headerStyle }} text-right">{{ "Total" | _ }}</th>
+                <th class="{{ headerStyle }} text-right"></th>
             </tr>
             </thead>
             <tbody>
@@ -25,13 +26,13 @@
                     <td class="{{ rowStyle }} {{ borderColor }}">
                         {{ product.data.name }}
                         {% if product.variant %}
-                            <br />
+                            <br/>
                             <span class="text-grey-dark">
                                 {{ product.variant.description | raw }}
                             </span>
                         {% endif %}
                         {% if product.custom_field_values %}
-                            <br />
+                            <br/>
                             <span class="text-grey-dark">
                                 {{ product.custom_field_value_description | raw }}
                             </span>
@@ -46,6 +47,14 @@
                     <td class="{{ rowStyle }} {{ borderColor }} text-right">
                         {{ product.totalPostTaxes | money }}
                     </td>
+                    <td class="{{ rowStyle }} {{ borderColor }} text-right">
+                        <a href="javascript:;"
+                           class="js-mall-remove-product"
+                           data-id="{{ product.hashId }}"
+                        >
+                            Remove
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -58,6 +67,7 @@
                 <td class="{{ totalStyle }} text-xs text-right">
                     {{ cart.totals.productPostTaxes | money }}
                 </td>
+                <td class="{{ totalStyle }} text-xs"></td>
             </tr>
             {% if cart.shipping_method %}
                 <tr>
@@ -68,6 +78,7 @@
                     <td class="{{ rowStyle }} text-right">
                         {{ cart.totals.shippingTotal.total | money }}
                     </td>
+                    <td class="{{ rowStyle }}"></td>
                 </tr>
             {% else %}
                 <tr>
@@ -75,6 +86,7 @@
                     <td class="{{ rowStyle }}" colspan="4">
                         {{ 'No shipping method selected' | _ }}
                     </td>
+                    <td class="{{ rowStyle }}"></td>
                 </tr>
             {% endif %}
             <tr>
@@ -85,6 +97,7 @@
                 <td class="{{ totalStyle }} text-sm text-right">
                     {{ cart.totals.totalPostTaxes | money }}
                 </td>
+                <td class="{{ totalStyle }} text-sm"></td>
             </tr>
 
             {% for tax in cart.totals.taxes %}
@@ -101,6 +114,7 @@
                     <td class="{{ rowMutedStyle }} {{ borderColor }} text-right">
                         {{ tax.total | money }}
                     </td>
+                    <td class="{{ rowMutedStyle }} {{ borderColor }}"></td>
                 </tr>
             {% endfor %}
             {% if cart.total.taxes.length > 0 %}
@@ -113,6 +127,7 @@
                     <td class="{{ rowMutedStyle }} border-smoke text-right">
                         {{ cart.totals.totalTaxes | money }}
                     </td>
+                    <td class="{{ rowMutedStyle }} border-smoke"></td>
                 </tr>
             {% endif %}
             </tfoot>

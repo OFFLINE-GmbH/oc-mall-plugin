@@ -1,5 +1,5 @@
 <div class="relative">
-    <select class="mall-selectbox-sm js-mall-quantity" data-id="{{ product.id }}" name="quantity">
+    <select class="mall-selectbox-sm js-mall-quantity" data-id="{{ product.hashId }}" name="quantity">
         {% set min = product.data.quantity_min | default(__SELF__.defaultMinQuantity) %}
         {% set max = product.data.quantity_max | default(__SELF__.defaultMaxQuantity) %}
         {% for i in range(min, max) %}

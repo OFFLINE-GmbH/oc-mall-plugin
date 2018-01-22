@@ -153,6 +153,6 @@ class Variant extends \Model
             })
             ->map(function (PropertyValue $value) {
                 return sprintf('%s: %s', e($value->property->name), $value->display_value);
-            })->implode(', ');
+            })->implode('<br />');
     }
 }

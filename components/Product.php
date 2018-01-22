@@ -353,6 +353,7 @@ class Product extends ComponentBase
             $value->value                  = $data['value'];
             $value->custom_field_id        = $data['field']->id;
             $value->custom_field_option_id = $option ? $option->id : null;
+            $value->price                  = $value->price($data['field'], $option);
 
             return $value;
         });

@@ -5,6 +5,7 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
@@ -20,6 +21,7 @@ class Product extends Model
     use Price;
     use Images;
     use CustomFields;
+    use HashIds;
 
     protected $dates = ['deleted_at'];
 

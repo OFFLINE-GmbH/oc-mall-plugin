@@ -18,7 +18,6 @@ class CustomFieldValue extends Model
 
     public $table = 'offline_mall_cart_custom_field_value';
     public $with = ['custom_field_option'];
-    public $appends = ['price'];
 
     public $belongsTo = [
         'cart_product'        => CartProduct::class,
@@ -26,11 +25,25 @@ class CustomFieldValue extends Model
         'custom_field_option' => CustomFieldOption::class,
     ];
 
-    public function getPriceAttribute()
+    /**
+     * Calculate the price depending on given data.
+     *
+     * If an option with a price is available use it. If the field itself
+     * has a price, use it as fallback.
+     * We allow to pass the fields and option parameter to save a few queries when
+     * adding the Product to the cart since these relations are already available then.
+     *
+     * @param null|CustomField       $field
+     * @param null|CustomFieldOption $option
+     *
+     * @return mixed|string
+     */
+    public function price(?CustomField $field = null, ?CustomFieldOption $option = null)
     {
-        $option = optional($this->custom_field->custom_field_options)->find($this->custom_field_option_id);
+        $field  = $field ?? $this->custom_field;
+        $option = $option ?? optional($field->custom_field_options)->find($this->custom_field_option_id);
 
-        return optional($option)->price ? $option->price : $this->custom_field->price;
+        return optional($option)->price ? $option->price : $field->price;
     }
 
     /**
@@ -42,7 +55,8 @@ class CustomFieldValue extends Model
     {
         $value = e($this->value);
         if ($this->custom_field->type === 'color') {
-            return sprintf('<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>', $value);
+            return sprintf('<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>',
+                $value);
         }
         if ($this->custom_field->type === 'checkbox') {
             return $this->value || $this->value === 'on' ? '&#10004;' : '&#10007;';
