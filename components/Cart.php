@@ -2,6 +2,8 @@
 
 use Auth;
 use Cms\Classes\ComponentBase;
+use Flash;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart as CartModel;
@@ -51,7 +53,13 @@ class Cart extends ComponentBase
             ->where('id', $id)
             ->firstOrFail();
 
-        $cart->setQuantity($product->id, (int)input('quantity'));
+        try {
+            $cart->setQuantity($product->id, (int)input('quantity'));
+        } catch (OutOfStockException $e) {
+            Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $e->product->item->stock]));
+
+            return;
+        }
 
         $this->setData();
     }

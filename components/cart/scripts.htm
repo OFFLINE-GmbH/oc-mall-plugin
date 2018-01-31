@@ -6,9 +6,6 @@
             $.subscribe('mall.shipping.update', function () {
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
-                    success: function (data) {
-                        $('.mall-cart').html(data['{{ __SELF__ }}::cart'])
-                    }
                 })
             });
 
@@ -17,7 +14,14 @@
                     data: {id: this.dataset.id, quantity: this.value},
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                     loading: $.oc.stripeLoadIndicator,
-                    success: updateCart
+                    flash: true,
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                    },
+                    handleFlashMessage: function (message, type) {
+                        $.oc.flashMsg({text: message, class: type})
+                    }
                 })
             });
             $body.on('click', '.js-mall-remove-product', function () {
@@ -25,14 +29,12 @@
                     data: {id: this.dataset.id},
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                     loading: $.oc.stripeLoadIndicator,
-                    success: updateCart
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                    }
                 })
             });
-
-            function updateCart (data) {
-                $('.mall-cart').html(data['{{ __SELF__ }}::cart'])
-                $.publish('mall.cart.update', data)
-            }
         })
     </script>
 {% endput %}

@@ -246,6 +246,7 @@ class Cart extends Model
     {
         $product = $this->products->find($cartProductId);
         if ($product) {
+            $this->validateStock($product->item, $quantity);
             $product->quantity = $quantity;
             $product->save();
         }

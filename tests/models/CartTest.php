@@ -460,6 +460,7 @@ class CartTest extends PluginTestCase
 
         $product        = Product::first();
         $product->price = 100;
+        $product->stock = 100;
         $product->save();
 
         $availableMethod                        = $this->getShippingMethod();
