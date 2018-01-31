@@ -2,6 +2,7 @@
 
 use DB;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
@@ -282,6 +283,68 @@ class CartTest extends PluginTestCase
         $cart->addProduct($product, 12);
 
         $this->assertEquals(4, $cart->products->first()->quantity);
+    }
+
+    public function test_it_detects_product_out_of_stock_quantity()
+    {
+        $this->expectException(OutOfStockException::class);
+
+        $product        = Product::first();
+        $product->stock = 4;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 5);
+
+        $this->assertEquals(0, $cart->products->count());
+    }
+
+    public function test_it_detects_variant_out_of_stock_quantity()
+    {
+        $this->expectException(OutOfStockException::class);
+
+        $product = Product::first();
+        $product->save();
+
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->stock      = 10;
+        $variant->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 11, $variant);
+
+        $this->assertEquals(0, $cart->products->count());
+    }
+
+    public function test_it_allows_variant_out_of_stock_purchase()
+    {
+        $product = Product::first();
+        $product->save();
+
+        $variant                               = new Variant();
+        $variant->product_id                   = $product->id;
+        $variant->allow_out_of_stock_purchases = true;
+        $variant->stock                        = 10;
+        $variant->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 11, $variant);
+
+        $this->assertEquals(1, $cart->products->count());
+    }
+
+    public function test_it_allows_product_out_of_stock_purchase()
+    {
+        $product                               = Product::first();
+        $product->allow_out_of_stock_purchases = true;
+        $product->stock                        = 10;
+        $product->save();
+
+        $cart = new Cart();
+        $cart->addProduct($product, 11);
+
+        $this->assertEquals(1, $cart->products->count());
     }
 
     public function test_it_enforces_max_quantity_on_stacked_products()

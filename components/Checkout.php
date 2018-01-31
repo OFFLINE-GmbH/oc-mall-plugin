@@ -9,7 +9,6 @@ use OFFLINE\Mall\Components\Cart as CartComponent;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
-use OFFLINE\Mall\Models\Product;
 use Redirect;
 use Request;
 use Session;
@@ -61,21 +60,22 @@ class Checkout extends ComponentBase
     public function onCheckout()
     {
         $this->setData();
-        $result = DB::transaction(function () {
+        $order = DB::transaction(function () {
             $order = Order::fromCart($this->cart);
             $order->save();
 
-            $data = [
-                'number'      => '4242424242424242',
-                'expiryMonth' => 6,
-                'expiryYear'  => 2019,
-                'cvv'         => '123',
-            ];
-
-            $gateway = app(PaymentGateway::class);
-
-            return $gateway->process($order, $data);
+            return $order;
         });
+
+        $data = [
+            'number'      => '4242424242424242',
+            'expiryMonth' => 6,
+            'expiryYear'  => 2019,
+            'cvv'         => '123',
+        ];
+
+        $gateway = app(PaymentGateway::class);
+        $result  = $gateway->process($order, $data);
 
         return $this->handlePaymentResult($result);
     }

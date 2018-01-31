@@ -4,6 +4,7 @@ use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
@@ -45,11 +46,13 @@ class Product extends Model
         'price' => 'required|regex:/\d+([\.,]\d+)?/i',
     ];
     public $casts = [
-        'price_includes_tax' => 'boolean',
-        'weight'             => 'integer',
-        'id'                 => 'integer',
-        'stackable'          => 'boolean',
-        'shippable'          => 'boolean',
+        'price_includes_tax'           => 'boolean',
+        'allow_out_of_stock_purchases' => 'boolean',
+        'weight'                       => 'integer',
+        'id'                           => 'integer',
+        'stackable'                    => 'boolean',
+        'stock'                        => 'integer',
+        'shippable'                    => 'boolean',
     ];
 
     public $table = 'offline_mall_products';
@@ -137,6 +140,15 @@ class Product extends Model
         return $this->custom_fields()->whereIn('type', ['dropdown', 'color', 'image'])->get();
     }
 
+    public function reduceStock(int $quantity): self
+    {
+        $this->stock -= $quantity;
+        if ($this->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
+            throw new OutOfStockException($this);
+        }
+
+        return tap($this)->save();
+    }
 
     /**
      * We are using a simple dropdown for this attribute since the relation

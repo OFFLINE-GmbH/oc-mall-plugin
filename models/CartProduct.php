@@ -42,6 +42,15 @@ class CartProduct extends Model
         });
     }
 
+    public function reduceStock()
+    {
+        if ($this->variant) {
+            $this->variant->reduceStock($this->quantity);
+        } else {
+            $this->product->reduceStock($this->quantity);
+        }
+    }
+
     public function getTotalPreTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {

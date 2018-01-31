@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
 use OFFLINE\Mall\Classes\PaymentStatus\PendingState;
 use OFFLINE\Mall\Models\Address;
@@ -12,13 +13,14 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
+use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
 
 class OrderTest extends PluginTestCase
 {
     public function test_it_creates_a_new_order_from_a_cart()
     {
-        $cart  = $this->getCart();
+        $cart  = $this->getFullCart();
         $order = Order::fromCart($cart);
         $order->save();
 
@@ -44,7 +46,131 @@ class OrderTest extends PluginTestCase
         $this->assertNotNull($cart->deleted_at);
     }
 
-    protected function getCart(): Cart
+    public function test_it_updates_product_stock()
+    {
+        $product        = Product::first();
+        $product->price = 200;
+        $product->stock = 10;
+        $product->save();
+
+        $cart = $this->getSimpleCart();
+        $cart->addProduct($product, 2);
+
+        $order = Order::fromCart($cart);
+        $order->save();
+
+        $this->assertEquals(8, $product->fresh()->stock);
+    }
+
+    public function test_it_prevents_out_of_stock_purchase()
+    {
+        $this->expectException(OutOfStockException::class);
+
+        $product                               = Product::first();
+        $product->price                        = 200;
+        $product->stock                        = 10;
+        $product->allow_out_of_stock_purchases = false;
+        $product->save();
+
+        $cart = $this->getSimpleCart();
+        $cart->addProduct($product, 12);
+
+        $order = Order::fromCart($cart);
+        $order->save();
+
+        $this->assertEquals(10, $product->fresh()->stock);
+    }
+
+    public function test_it_allows_explicit_out_of_stock_purchase()
+    {
+        $product                               = Product::first();
+        $product->price                        = 200;
+        $product->stock                        = 10;
+        $product->allow_out_of_stock_purchases = true;
+        $product->save();
+
+        $cart = $this->getSimpleCart();
+        $cart->addProduct($product, 12);
+
+        $order = Order::fromCart($cart);
+        $order->save();
+
+        $this->assertEquals(-2, $product->fresh()->stock);
+    }
+
+    public function test_it_updates_variant_stock()
+    {
+        $product        = Product::first();
+        $product->price = 200;
+        $product->stock = 10;
+        $product->save();
+
+        $variant             = new Variant();
+        $variant->product_id = $product->id;
+        $variant->stock      = 20;
+        $variant->save();
+
+        $cart = $this->getSimpleCart();
+        $cart->addProduct($product, 2, $variant);
+
+        $order = Order::fromCart($cart);
+        $order->save();
+
+        $this->assertEquals(10, $product->fresh()->stock);
+        $this->assertEquals(18, $variant->fresh()->stock);
+    }
+
+    public function test_it_prevents_out_of_stock_variant_purchase()
+    {
+        $this->expectException(OutOfStockException::class);
+
+        $product        = Product::first();
+        $product->price = 200;
+        $product->stock = 10;
+        $product->save();
+
+        $variant                               = new Variant();
+        $variant->product_id                   = $product->id;
+        $variant->stock                        = 20;
+        $product->allow_out_of_stock_purchases = false;
+        $variant->save();
+
+        $cart = $this->getSimpleCart();
+        $cart->addProduct($product, 21, $variant);
+
+        $order = Order::fromCart($cart);
+        $order->save();
+
+        $this->assertEquals(10, $product->fresh()->stock);
+        $this->assertEquals(20, $variant->fresh()->stock);
+    }
+
+    public function test_it_allows_explicit_out_of_stock_variant_purchase()
+    {
+        $this->expectException(OutOfStockException::class);
+
+        $product        = Product::first();
+        $product->price = 200;
+        $product->stock = 10;
+        $product->save();
+
+        $variant                               = new Variant();
+        $variant->product_id                   = $product->id;
+        $variant->stock                        = 20;
+        $product->allow_out_of_stock_purchases = true;
+        $variant->save();
+
+        $cart = $this->getSimpleCart();
+        $cart->addProduct($product, 21, $variant);
+
+        $order = Order::fromCart($cart);
+        $order->save();
+
+        $this->assertEquals(10, $product->fresh()->stock);
+        $this->assertEquals(-1, $variant->fresh()->stock);
+    }
+
+    protected function getFullCart(): Cart
     {
         $tax1             = new Tax();
         $tax1->name       = 'Tax 1';
@@ -59,6 +185,7 @@ class OrderTest extends PluginTestCase
         $productA->stackable          = true;
         $productA->price              = 200;
         $productA->weight             = 400;
+        $productA->stock              = 10;
         $productA->price_includes_tax = true;
         $productA->save();
         $productA->taxes()->attach([$tax1->id, $tax2->id]);
@@ -66,6 +193,7 @@ class OrderTest extends PluginTestCase
         $productB                     = new Product;
         $productB->name               = 'Another Product';
         $productB->price              = 100;
+        $productB->stock              = 10;
         $productB->weight             = 800;
         $productB->price_includes_tax = true;
         $productB->save();
@@ -113,6 +241,17 @@ class OrderTest extends PluginTestCase
 
         $cart->setCustomer(Customer::first());
 
+        $cart->setBillingAddress(Address::find(1));
+        $cart->setShippingAddress(Address::find(2));
+
+        return $cart;
+    }
+
+    protected function getSimpleCart(): Cart
+    {
+        $cart = new Cart();
+        $cart->setShippingMethod(ShippingMethod::first());
+        $cart->setCustomer(Customer::first());
         $cart->setBillingAddress(Address::find(1));
         $cart->setShippingAddress(Address::find(2));
 

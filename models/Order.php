@@ -62,32 +62,40 @@ class Order extends Model
 
     public static function fromCart(Cart $cart): self
     {
-        $order                                   = new static;
-        $order->currency                         = 'CHF';
-        $order->lang                             = 'de';
-        $order->shipping_address_same_as_billing = $cart->shipping_address_same_as_billing;
-        $order->billing_address                  = $cart->billing_address;
-        $order->shipping_address                 = $cart->shipping_address;
-        $order->shipping                         = $cart->shipping_method;
-        $order->taxes                            = $cart->totals->taxes();
-        $order->discounts                        = $cart->discounts;
-        $order->ip_address                       = request()->ip();
-        $order->customer_id                      = 1;
-        $order->payment_method_id                = $cart->payment_method_id;
-        $order->payment_status                   = PendingState::class;
-        $order->order_status                     = InProgressState::class;
-        $order->total_shipping_pre_taxes         = $order->round($cart->totals->shippingTotal()->totalPreTaxes());
-        $order->total_shipping_taxes             = $order->round($cart->totals->shippingTotal()->totalTaxes());
-        $order->total_shipping_post_taxes        = $order->round($cart->totals->shippingTotal()->totalPostTaxes());
-        $order->total_product_pre_taxes          = $order->round($cart->totals->productPreTaxes());
-        $order->total_product_taxes              = $order->round($cart->totals->productTaxes());
-        $order->total_product_post_taxes         = $order->round($cart->totals->productPostTaxes());
-        $order->total_pre_taxes                  = $order->round($cart->totals->totalPreTaxes());
-        $order->total_taxes                      = $order->round($cart->totals->totalTaxes());
-        $order->total_post_taxes                 = $order->round($cart->totals->totalPostTaxes());
-        $order->total_weight                     = $order->round($cart->totals->weightTotal());
+        $order = \DB::transaction(function () use ($cart) {
+            $order                                   = new static;
+            $order->currency                         = 'CHF';
+            $order->lang                             = 'de';
+            $order->shipping_address_same_as_billing = $cart->shipping_address_same_as_billing;
+            $order->billing_address                  = $cart->billing_address;
+            $order->shipping_address                 = $cart->shipping_address;
+            $order->shipping                         = $cart->shipping_method;
+            $order->taxes                            = $cart->totals->taxes();
+            $order->discounts                        = $cart->discounts;
+            $order->ip_address                       = request()->ip();
+            $order->customer_id                      = 1;
+            $order->payment_method_id                = $cart->payment_method_id;
+            $order->payment_status                   = PendingState::class;
+            $order->order_status                     = InProgressState::class;
+            $order->total_shipping_pre_taxes         = $order->round($cart->totals->shippingTotal()->totalPreTaxes());
+            $order->total_shipping_taxes             = $order->round($cart->totals->shippingTotal()->totalTaxes());
+            $order->total_shipping_post_taxes        = $order->round($cart->totals->shippingTotal()->totalPostTaxes());
+            $order->total_product_pre_taxes          = $order->round($cart->totals->productPreTaxes());
+            $order->total_product_taxes              = $order->round($cart->totals->productTaxes());
+            $order->total_product_post_taxes         = $order->round($cart->totals->productPostTaxes());
+            $order->total_pre_taxes                  = $order->round($cart->totals->totalPreTaxes());
+            $order->total_taxes                      = $order->round($cart->totals->totalTaxes());
+            $order->total_post_taxes                 = $order->round($cart->totals->totalPostTaxes());
+            $order->total_weight                     = $order->round($cart->totals->weightTotal());
 
-        $cart->delete(); // We can empty the cart once the order is created.
+            $cart->products->each(function (CartProduct $entry) {
+                $entry->reduceStock();
+            });
+
+            $cart->delete(); // We can empty the cart once the order is created.
+
+            return $order;
+        });
 
         return $order;
     }
@@ -115,11 +123,12 @@ class Order extends Model
     public function getPriceColumns(): array
     {
         return [
-            'total_pre_taxes',
-            'total_post_taxes',
-            'total_product',
-            'total_taxes',
-            'total_shipping',
+            'total_shipping_pre_taxes',
+            'total_shipping_taxes',
+            'total_shipping_post_taxes',
+            'total_product_pre_taxes',
+            'total_product_taxes',
+            'total_product_post_taxes',
         ];
     }
 }

@@ -1,11 +1,13 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Cookie;
+use DB;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use RainLab\User\Models\User;
 use Session;
@@ -177,46 +179,57 @@ class Cart extends Model
         ?Variant $variant = null,
         ?Collection $values = null
     ) {
-        if ( ! $this->exists) {
-            $this->save();
-        }
+        return DB::transaction(function () use ($product, $quantity, $variant, $values) {
+            if ( ! $this->exists) {
+                $this->save();
+            }
 
-        $quantity = $quantity ?? $product->quantity_default ?? 1;
+            $quantity = $quantity ?? $product->quantity_default ?? 1;
 
-        if ($product->stackable && $this->isInCart($product, $variant, $values)) {
-            $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
-                return $cartProduct->product_id === $product->id;
-            });
+            if ($product->stackable && $this->isInCart($product, $variant, $values)) {
+                $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
+                    return $cartProduct->product_id === $product->id;
+                });
 
-            $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
+                $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
-            CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
+                CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
+
+                $this->validateShippingMethod();
+
+                return $this->load('products');
+            }
+
+            $quantity = $product->normalizeQuantity($quantity);
+            $price    = $variant
+                ? $variant->priceIncludingCustomFieldValues($values)
+                : $product->priceIncludingCustomFieldValues($values);
+
+            $this->validateStock($variant ?? $product, $quantity);
+
+            $cartEntry             = new CartProduct();
+            $cartEntry->cart_id    = $this->id;
+            $cartEntry->product_id = $product->id;
+            $cartEntry->variant_id = $variant ? $variant->id : null;
+            $cartEntry->quantity   = $quantity;
+            $cartEntry->price      = $price;
+
+            $this->products()->save($cartEntry);
+            $this->load('products');
+
+            if ($values) {
+                $cartEntry->custom_field_values()->saveMany($values);
+            }
 
             $this->validateShippingMethod();
+        });
+    }
 
-            return $this->load('products');
+    protected function validateStock($item, $quantity)
+    {
+        if ($item->allow_out_of_stock_purchases !== true && $item->stock < $quantity) {
+            throw new OutOfStockException($item);
         }
-
-        $quantity = $product->normalizeQuantity($quantity);
-        $price    = $variant
-            ? $variant->priceIncludingCustomFieldValues($values)
-            : $product->priceIncludingCustomFieldValues($values);
-
-        $cartEntry             = new CartProduct();
-        $cartEntry->cart_id    = $this->id;
-        $cartEntry->product_id = $product->id;
-        $cartEntry->variant_id = $variant ? $variant->id : null;
-        $cartEntry->quantity   = $quantity;
-        $cartEntry->price      = $price;
-
-        $this->products()->save($cartEntry);
-        $this->load('products');
-
-        if ($values) {
-            $cartEntry->custom_field_values()->saveMany($values);
-        }
-
-        $this->validateShippingMethod();
     }
 
     public function removeProduct(CartProduct $product)

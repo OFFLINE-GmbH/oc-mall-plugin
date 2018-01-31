@@ -13,6 +13,7 @@ class ProductTableSeeder extends Seeder
             $product        = new Product();
             $product->name  = 'Test';
             $product->slug  = 'test';
+            $product->stock = 20;
             $product->price = 20;
             $product->save();
         }

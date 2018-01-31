@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
@@ -28,6 +29,8 @@ class Variant extends \Model
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
+        'id'                           => 'integer',
+        'stock'                        => 'integer',
     ];
 
     public $rules = [
@@ -87,6 +90,16 @@ class Variant extends \Model
                 $pv->save();
             }
         });
+    }
+
+    public function reduceStock(int $quantity): self
+    {
+        $this->stock -= $quantity;
+        if ($this->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
+            throw new OutOfStockException($this);
+        }
+
+        return tap($this)->save();
     }
 
     public function custom_fields()
