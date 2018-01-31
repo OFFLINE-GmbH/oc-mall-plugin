@@ -29,7 +29,13 @@ class CartProduct extends Model
         'custom_field_values' => [CustomFieldValue::class, 'key' => 'cart_product_id', 'otherKey' => 'id'],
     ];
 
-    public $with = ['product', 'product.taxes', 'custom_field_values', 'custom_field_values.custom_field'];
+    public $with = [
+        'product',
+        'product.taxes',
+        'custom_field_values',
+        'custom_field_values.custom_field',
+        'custom_field_values.custom_field_option',
+    ];
 
     public static function boot()
     {
@@ -42,13 +48,23 @@ class CartProduct extends Model
         });
     }
 
+    public function getPriceAttribute()
+    {
+        $customFieldPrice = $this->custom_field_values->sum(function (CustomFieldValue $value) {
+            return $value->price() * 100;
+        });
+
+        return $this->item->getOriginal('price') + $customFieldPrice;
+    }
+
     public function reduceStock()
     {
-        if ($this->variant) {
-            $this->variant->reduceStock($this->quantity);
-        } else {
-            $this->product->reduceStock($this->quantity);
-        }
+        return $this->item->reduceStock($this->quantity);
+    }
+
+    public function getItemAttribute()
+    {
+        return $this->variant ?? $this->product;
     }
 
     public function getTotalPreTaxesAttribute(): float

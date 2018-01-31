@@ -149,7 +149,7 @@ class VariantTest extends PluginTestCase
         $variant->property_values()->save($value);
 
         $this->assertEquals(
-            'Height: 200, Width: 400',
+            'Height: 200<br />Width: 400',
             $product->variants->where('id', $variant->id)->first()->description
         );
     }
