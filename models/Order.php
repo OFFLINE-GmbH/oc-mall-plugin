@@ -1,11 +1,13 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use DB;
+use Event;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
-use OFFLINE\Mall\Classes\PaymentStatus\PendingState;
+use OFFLINE\Mall\Classes\PaymentState\PendingState;
+use OFFLINE\Mall\Classes\Traits\Price;
+use RuntimeException;
 
 /**
  * Model
@@ -14,6 +16,7 @@ class Order extends Model
 {
     use Validation;
     use SoftDelete;
+    use Price;
 
     protected $dates = ['deleted_at'];
 
@@ -44,6 +47,8 @@ class Order extends Model
 
     public $belongsTo = [
         'payment_method' => [PaymentMethod::class, 'deleted' => true],
+        'order_state'    => [OrderState::class, 'deleted' => true],
+        'customer'       => [Customer::class, 'deleted' => true],
     ];
 
     public $casts = [
@@ -58,38 +63,48 @@ class Order extends Model
                 $order->setOrderNumber();
             }
         });
+        static::updated(function (self $order) {
+            Event::fire('mall.order.state_changed', [$order]);
+        });
     }
 
     public static function fromCart(Cart $cart): self
     {
-        $order = \DB::transaction(function () use ($cart) {
-            $order                                   = new static;
-            $order->currency                         = 'CHF';
-            $order->lang                             = 'de';
-            $order->shipping_address_same_as_billing = $cart->shipping_address_same_as_billing;
-            $order->billing_address                  = $cart->billing_address;
-            $order->shipping_address                 = $cart->shipping_address;
-            $order->shipping                         = $cart->shipping_method;
-            $order->taxes                            = $cart->totals->taxes();
-            $order->discounts                        = $cart->discounts;
-            $order->ip_address                       = request()->ip();
-            $order->customer_id                      = 1;
-            $order->payment_method_id                = $cart->payment_method_id;
-            $order->payment_status                   = PendingState::class;
-            $order->order_status                     = InProgressState::class;
-            $order->total_shipping_pre_taxes         = $order->round($cart->totals->shippingTotal()->totalPreTaxes());
-            $order->total_shipping_taxes             = $order->round($cart->totals->shippingTotal()->totalTaxes());
-            $order->total_shipping_post_taxes        = $order->round($cart->totals->shippingTotal()->totalPostTaxes());
-            $order->total_product_pre_taxes          = $order->round($cart->totals->productPreTaxes());
-            $order->total_product_taxes              = $order->round($cart->totals->productTaxes());
-            $order->total_product_post_taxes         = $order->round($cart->totals->productPostTaxes());
-            $order->total_pre_taxes                  = $order->round($cart->totals->totalPreTaxes());
-            $order->total_taxes                      = $order->round($cart->totals->totalTaxes());
-            $order->total_post_taxes                 = $order->round($cart->totals->totalPostTaxes());
-            $order->total_weight                     = $order->round($cart->totals->weightTotal());
+        $order = DB::transaction(function () use ($cart) {
 
-            $cart->products->each(function (CartProduct $entry) {
-                $entry->reduceStock();
+            $initialOrderStatus = OrderState::where('flag', OrderState::FLAG_NEW)->first();
+            if ( ! $initialOrderStatus) {
+                throw new RuntimeException('You have to create an order state with the "new" flag before accepting orders!');
+            }
+
+            $order                                          = new static;
+            $order->currency                                = 'CHF';
+            $order->lang                                    = 'de';
+            $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
+            $order->billing_address                         = $cart->billing_address;
+            $order->shipping_address                        = $cart->shipping_address;
+            $order->shipping                                = $cart->shipping_method;
+            $order->taxes                                   = $cart->totals->taxes();
+            $order->discounts                               = $cart->discounts;
+            $order->ip_address                              = request()->ip();
+            $order->customer_id                             = 1;
+            $order->payment_method_id                       = $cart->payment_method_id;
+            $order->payment_state                           = PendingState::class;
+            $order->order_state_id                          = $initialOrderStatus->id;
+            $order->attributes['total_shipping_pre_taxes']  = $order->round($cart->totals->shippingTotal()->totalPreTaxes());
+            $order->attributes['total_shipping_taxes']      = $order->round($cart->totals->shippingTotal()->totalTaxes());
+            $order->attributes['total_shipping_post_taxes'] = $order->round($cart->totals->shippingTotal()->totalPostTaxes());
+            $order->attributes['total_product_pre_taxes']   = $order->round($cart->totals->productPreTaxes());
+            $order->attributes['total_product_taxes']       = $order->round($cart->totals->productTaxes());
+            $order->attributes['total_product_post_taxes']  = $order->round($cart->totals->productPostTaxes());
+            $order->attributes['total_pre_taxes']           = $order->round($cart->totals->totalPreTaxes());
+            $order->attributes['total_taxes']               = $order->round($cart->totals->totalTaxes());
+            $order->attributes['total_post_taxes']          = $order->round($cart->totals->totalPostTaxes());
+            $order->total_weight                            = $order->round($cart->totals->weightTotal());
+            $order->save();
+
+            $cart->products->each(function (CartProduct $entry) use ($order) {
+                $entry->moveToOrder($order);
             });
 
             $cart->delete(); // We can empty the cart once the order is created.
@@ -129,6 +144,9 @@ class Order extends Model
             'total_product_pre_taxes',
             'total_product_taxes',
             'total_product_post_taxes',
+            'total_taxes',
+            'total_post_taxes',
+            'total_pre_taxes',
         ];
     }
 }

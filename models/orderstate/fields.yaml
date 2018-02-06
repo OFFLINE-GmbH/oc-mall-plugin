@@ -1,0 +1,23 @@
+fields:
+    name:
+        label: 'offline.mall::lang.order_states.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    flag:
+        label: 'offline.mall::lang.order_states.flag'
+        oc.commentPosition: ''
+        emptyOption: '--'
+        span: auto
+        type: dropdown
+    description:
+        label: 'offline.mall::lang.product.description'
+        size: large
+        oc.commentPosition: ''
+        span: auto
+        type: textarea
+    color:
+        label: 'offline.mall::lang.order_states.color'
+        oc.commentPosition: ''
+        span: auto
+        type: colorpicker

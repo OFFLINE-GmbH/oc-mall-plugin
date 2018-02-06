@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Models;
 
+use DB;
 use Model;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 
@@ -57,6 +58,75 @@ class CartProduct extends Model
         return $this->item->getOriginal('price') + $customFieldPrice;
     }
 
+    public function moveToOrder(Order $order)
+    {
+        DB::transaction(function () use ($order) {
+            $this->reduceStock();
+
+            $entry             = new OrderProduct();
+            $entry->order_id   = $order->id;
+            $entry->product_id = $this->product->id;
+            $entry->variant_id = optional($this->variant)->id ?? null;
+
+            $entry->item         = $this->item;
+            $entry->name         = $this->data->name;
+            $entry->variant_name = optional($this->variant)->properties_description;
+            $entry->description  = $this->item->description;
+            $entry->quantity     = $this->quantity;
+
+            $entry->taxes = $this->item->taxes;
+
+            // Set the attribute directly to prevent the price mutator from being triggered
+            $entry->attributes['price_post_taxes'] = $this->price;
+            $entry->attributes['price_taxes']      = $this->getTotalTaxesAttribute() / $this->quantity;
+            $entry->attributes['price_pre_taxes']  = $this->pricePreTaxes();
+
+            $entry->attributes['total_pre_taxes']  = $this->total_pre_taxes;
+            $entry->attributes['total_taxes']      = $this->total_taxes;
+            $entry->attributes['total_post_taxes'] = $this->total_post_taxes;
+
+            $entry->tax_factor = $this->taxFactor();
+
+            $entry->weight       = $this->data->weight;
+            $entry->total_weight = $this->weight;
+
+            $entry->width     = $this->item->width;
+            $entry->length    = $this->item->length;
+            $entry->height    = $this->item->height;
+            $entry->stackable = $this->item->stackable;
+            $entry->shippable = $this->item->shippable;
+
+            if ($this->variant) {
+                $entry->properties_description = $this->variant->propertyValuesAsString();
+                $entry->property_values        = $this->variant->property_values;
+            }
+
+            $entry->custom_field_values = $this->convertCustomFieldValues();
+            $entry->save();
+        });
+    }
+
+    /**
+     * Converts the custom field values into a simpler structure
+     * to save it to the order.
+     */
+    public function convertCustomFieldValues()
+    {
+        return $this->custom_field_values->load(['custom_field', 'custom_field_option'])->map(function (
+            CustomFieldValue $value
+        ) {
+            $data                  = $value->toArray();
+            $data['display_value'] = $value->displayValue;
+            $data['price']         = $value->price($value->custom_field);
+
+            if (isset($data['custom_field']['custom_field_options'])) {
+                unset($data['custom_field']['custom_field_options']);
+            }
+
+            return $data;
+        });
+    }
+
     public function reduceStock()
     {
         return $this->item->reduceStock($this->quantity);
@@ -79,7 +149,7 @@ class CartProduct extends Model
     public function getTotalTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
-            $withoutTax = $this->priceWithoutTaxes();
+            $withoutTax = $this->pricePreTaxes();
 
             return $this->price * $this->quantity - $withoutTax;
         }
@@ -101,7 +171,7 @@ class CartProduct extends Model
         return $this->data->weight * $this->quantity;
     }
 
-    protected function priceWithoutTaxes()
+    protected function pricePreTaxes()
     {
         if ($this->data->price_includes_tax) {
             return 1 / (1 + $this->taxFactor()) * $this->price * $this->quantity;
@@ -112,7 +182,7 @@ class CartProduct extends Model
 
     public function totalForTax(Tax $tax)
     {
-        return $tax->percentageDecimal * $this->priceWithoutTaxes();
+        return $tax->percentageDecimal * $this->pricePreTaxes();
     }
 
 

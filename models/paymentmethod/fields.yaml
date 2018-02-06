@@ -28,7 +28,7 @@ fields:
         span: right
         type: fileupload
     price:
-        label: 'offline.mall::lang.product.price_includes_tax'
+        label: 'offline.mall::lang.product.price'
         oc.commentPosition: ''
         span: left
         type: text

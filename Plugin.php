@@ -24,7 +24,6 @@ use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Customer;
-use OFFLINE\Mall\Models\Variant;
 use RainLab\User\Models\User;
 use Rainlab\User\Models\User as UserModel;
 use System\Classes\PluginBase;
@@ -68,7 +67,7 @@ class Plugin extends PluginBase
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
             CategoryComponent::class     => 'category',
-            CategoryFilter::class     => 'categoryFilter',
+            CategoryFilter::class        => 'categoryFilter',
             ProductComponent::class      => 'product',
         ];
     }

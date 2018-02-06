@@ -3,7 +3,7 @@ columns:
         label: 'offline.mall::lang.product.published_short'
         type: partial
         path: $/offline/mall/models/variant/_published.htm
-    description:
+    properties_description:
         type: partial
         path: $/offline/mall/models/variant/_description.htm
         label: 'offline.mall::lang.common.name'

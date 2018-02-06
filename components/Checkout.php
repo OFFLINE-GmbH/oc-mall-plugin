@@ -52,7 +52,8 @@ class Checkout extends ComponentBase
     protected function setData()
     {
         $cart = Cart::byUser(Auth::getUser());
-        $cart->setPaymentMethod(PaymentMethod::find(2));
+        // @Todo Remove
+        $cart->setPaymentMethod(PaymentMethod::find(1));
 
         $this->setVar('cart', $cart);
     }
@@ -61,10 +62,7 @@ class Checkout extends ComponentBase
     {
         $this->setData();
         $order = DB::transaction(function () {
-            $order = Order::fromCart($this->cart);
-            $order->save();
-
-            return $order;
+            return Order::fromCart($this->cart);
         });
 
         $data = [

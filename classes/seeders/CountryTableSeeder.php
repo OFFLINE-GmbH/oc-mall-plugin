@@ -5,7 +5,7 @@ namespace OFFLINE\Mall\Classes\Seeders;
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Country;
 
-class CountriesTableSeeder extends Seeder
+class CountryTableSeeder extends Seeder
 {
     public function run()
     {

@@ -1,0 +1,35 @@
+<div class="dropdown dropdown-fixed">
+    <button type="button"
+            class="btn btn-primary oc-icon-map-signs"
+            data-toggle="dropdown">
+        <?= e(trans('offline.mall::lang.order.change_order_status')) ?>
+    </button>
+    <ul class="dropdown-menu"
+        data-dropdown-title="<?= e(trans('offline.mall::lang.order.change_order_status')) ?>">
+        <?php foreach($orderStates as $state): ?>
+        <li><a href="#" tabindex="-1"
+               data-request-data="state: '<?= e($state->id) ?>', id: <?= e($order['id']) ?>"
+               data-request="onChangeOrderState"><?= e($state->name) ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<div class="dropdown dropdown-fixed">
+    <button type="button" class="btn btn-default oc-icon-money"
+            data-toggle="dropdown">
+        <?= e(trans('offline.mall::lang.order.change_payment_status')) ?>
+    </button>
+
+    <ul class="dropdown-menu"
+        data-dropdown-title="<?= e(trans('offline.mall::lang.order.change_payment_status')) ?>">
+        <?php foreach((new $order['payment_state']($order))->getAvailableTransitions() as $state): ?>
+        <li><a href="#" tabindex="-1"
+               data-request-data="state: '<?= addslashes($state) ?>', id: <?= e($order['id']) ?>"
+               data-request="onChangePaymentState"><?= e($state::label()) ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<a data-toggle="modal" href="#content-tracking" class="btn btn-default  oc-icon-map-marker">
+    <?= e(trans('offline.mall::lang.order.update_tracking_info')) ?>
+</a>

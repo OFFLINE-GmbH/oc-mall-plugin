@@ -28,7 +28,7 @@
                         {% if product.variant %}
                             <br/>
                             <span class="text-grey-dark">
-                                {{ product.variant.description | raw }}
+                                {{ product.variant.properties_description | raw }}
                             </span>
                         {% endif %}
                         {% if product.custom_field_values %}
@@ -76,7 +76,7 @@
                         {{ cart.shipping_method.name }}
                     </td>
                     <td class="{{ rowStyle }} text-right">
-                        {{ cart.totals.shippingTotal.total | money }}
+                        {{ cart.totals.shippingTotal.totalPostTaxes | money }}
                     </td>
                     <td class="{{ rowStyle }}"></td>
                 </tr>

@@ -2,10 +2,16 @@
     <script>
         $(function () {
             var $body = $('body');
+            var $overlay = $('.mall-overlay');
 
             $body.on('click', '.js-mall-checkout', function () {
-                $('.mall-overlay').prependTo($body).show()
-                $.request('{{ __SELF__ }}::onCheckout')
+                $overlay.prependTo($body).show()
+                $.request('{{ __SELF__ }}::onCheckout', {
+                    error: function(data) {
+                        this.error(data)
+                        $overlay.hide();
+                    }
+                })
             });
 
             $.subscribe('mall.shipping.update', function () {

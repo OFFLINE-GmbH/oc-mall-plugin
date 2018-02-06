@@ -1,0 +1,15 @@
+title: 'offline.mall::lang.common.orders'
+modelClass: OFFLINE\Mall\Models\Order
+list: $/offline/mall/models/order/columns.yaml
+recordUrl: 'offline/mall/orders/show/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: false
+defaultSort:
+    column: creation_date
+    direction: desc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

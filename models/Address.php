@@ -13,10 +13,10 @@ class Address extends Model
     protected $dates = ['deleted_at'];
 
     public $rules = [
-        'lines' => 'required',
-        'zip' => 'required',
+        'lines'      => 'required',
+        'zip'        => 'required',
         'country_id' => 'required|exists:offline_mall_countries,id',
-        'city' => 'required',
+        'city'       => 'required',
     ];
 
     public $fillable = [

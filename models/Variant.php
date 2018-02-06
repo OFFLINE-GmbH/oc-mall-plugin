@@ -154,17 +154,23 @@ class Variant extends \Model
         return ['price', 'old_price'];
     }
 
-    public function getDescriptionAttribute()
+    public function getPropertiesDescriptionAttribute()
     {
         if ($this->attributes['name']) {
-            return $this->attributes['name'];
+            return e($this->attributes['name']);
         }
 
+        return $this->propertyValuesAsString();
+    }
+
+    public function propertyValuesAsString()
+    {
         return $this->property_values
             ->reject(function (PropertyValue $value) {
                 return $value->value === '' || $value->value === null || $value->property === null;
             })
             ->map(function (PropertyValue $value) {
+                // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
                 return sprintf('%s: %s', e($value->property->name), $value->display_value);
             })->implode('<br />');
     }

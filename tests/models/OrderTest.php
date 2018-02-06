@@ -2,7 +2,7 @@
 
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
-use OFFLINE\Mall\Classes\PaymentStatus\PendingState;
+use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
@@ -27,15 +27,15 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(1, $order->order_number);
         $this->assertEquals(PendingState::class, $order->payment_status);
         $this->assertEquals(InProgressState::class, $order->order_status);
-        $this->assertEquals(7692, $order->total_shipping_pre_taxes);
-        $this->assertEquals(2308, $order->total_shipping_taxes);
-        $this->assertEquals(10000, $order->total_shipping_post_taxes);
-        $this->assertEquals(92308, $order->total_product_pre_taxes);
-        $this->assertEquals(120000, $order->total_product_post_taxes);
+        $this->assertEquals(76.92, $order->total_shipping_pre_taxes);
+        $this->assertEquals(23.08, $order->total_shipping_taxes);
+        $this->assertEquals(100.00, $order->total_shipping_post_taxes);
+        $this->assertEquals(923.08, $order->total_product_pre_taxes);
+        $this->assertEquals(1200.00, $order->total_product_post_taxes);
 
-        $this->assertEquals(100000, $order->total_pre_taxes);
-        $this->assertEquals(30000, $order->total_taxes);
-        $this->assertEquals(130000, $order->total_post_taxes);
+        $this->assertEquals(1000.00, $order->total_pre_taxes);
+        $this->assertEquals(300.00, $order->total_taxes);
+        $this->assertEquals(1300.00, $order->total_post_taxes);
         $this->assertEquals(2800, $order->total_weight);
         $this->assertNotEmpty($order->ip_address);
 

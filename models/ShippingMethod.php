@@ -28,6 +28,8 @@ class ShippingMethod extends Model
 
     public $table = 'offline_mall_shipping_methods';
 
+    public $appends = ['price_formatted'];
+
     public $hasMany = [
         'carts' => Cart::class,
         'rates' => ShippingMethodRate::class,
@@ -82,5 +84,10 @@ class ShippingMethod extends Model
     public function getPriceColumns()
     {
         return ['price', 'available_below_total', 'available_above_total'];
+    }
+
+    public function getPriceFormattedAttribute()
+    {
+        return $this->formatPrice($this->getOriginal('price'));
     }
 }

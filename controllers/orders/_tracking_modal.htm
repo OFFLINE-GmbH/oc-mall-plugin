@@ -1,0 +1,39 @@
+<div class="control-popup modal fade" id="content-tracking" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form class="form-elements" role="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        <?= e(trans('offline.snipcartshop::lang.plugin.order.update_tracking_info')) ?>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group span-left">
+                        <label><?= e(trans('offline.snipcartshop::lang.plugin.order.tracking_number')) ?></label>
+                        <input type="text" name="trackingNumber" value="<?= e($order->tracking_number) ?>" class="form-control"/>
+                    </div>
+
+                    <div class="form-group span-right">
+                        <label><?= e(trans('offline.snipcartshop::lang.plugin.order.tracking_url')) ?></label>
+                        <input type="text" name="trackingUrl" value="<?= e($order->tracking_url) ?>" class="form-control"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal">
+                        <?= e(trans('offline.snipcartshop::lang.plugin.order.modal.cancel')) ?>
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            data-attach-loading
+                            data-request="onUpdateTrackingInfo"
+                            data-request-data="id: <?= e($order['id']) ?>"
+                            data-request-success="$('#content-tracking').modal('hide');">
+                        <?= e(trans('offline.snipcartshop::lang.plugin.order.modal.update')) ?>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

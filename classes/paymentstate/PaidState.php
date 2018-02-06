@@ -1,13 +1,9 @@
 <?php
 
-namespace OFFLINE\Mall\Classes\PaymentStatus;
+namespace OFFLINE\Mall\Classes\PaymentState;
 
-class PaidState extends PaymentStatus
+class PaidState extends PaymentState
 {
-    public function toPending()
-    {
-    }
-
     public function getAvailableTransitions(): array
     {
         return [

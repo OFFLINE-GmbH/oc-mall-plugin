@@ -1,0 +1,12 @@
+name: 'offline.mall::lang.common.order_states'
+modelClass: OFFLINE\Mall\Models\OrderState
+form: $/offline/mall/models/orderstate/fields.yaml
+defaultRedirect: offline/mall/orderstate
+create:
+    title: 'offline.mall::lang.titles.order_states.create'
+    redirect: 'offline/mall/orderstate/update/:id'
+    redirectClose: offline/mall/orderstate
+update:
+    title: 'offline.mall::lang.titles.order_states.edit'
+    redirect: offline/mall/orderstate
+    redirectClose: offline/mall/orderstate

@@ -40,6 +40,11 @@
             'create' => 'Eigenschaft erstellen',
             'edit'   => 'Eigenschaft bearbeiten',
         ],
+        'order_states'         => [
+            'create'  => 'Status erstellen',
+            'edit'    => 'Status bearbeiten',
+            'reorder' => 'Status sortieren',
+        ],
     ],
     'menu_items'            => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -138,6 +143,9 @@
         'option'               => 'Option',
         'catalogue'            => 'Katalog',
         'out_of_stock'         => 'Es sind nur noch :quantity Stück von diesem Artikel an Lager',
+        'deleted_at'           => 'Gelöscht am',
+        'sort_order'           => 'Sortierreihenfolge',
+        'order_states'         => 'Bestellungs-Status',
     ],
     'variant'               => [
         'method' => [
@@ -267,6 +275,7 @@
         ],
     ],
     'order'                 => [
+        'order_number'                        => 'Bestellungsnummer',
         'invoice_number'                      => 'Rechnungsnummer',
         'customer'                            => 'Kunde',
         'creation_date'                       => 'Erstellt am',
@@ -320,14 +329,12 @@
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
         ],
-    ],
-    'order_status'          => [
-        'processed' => 'Verarbeitet',
-        'disputed'  => 'Reklamiert',
-        'shipped'   => 'Versendet',
-        'delivered' => 'Geliefert',
-        'pending'   => 'Pendent',
-        'cancelled' => 'Storniert',
+        'payment_states'                      => [
+            'pending_state'  => 'Zahlung ausstehend',
+            'failed_state'   => 'Zahlung fehlgeschlagen',
+            'refunded_state' => 'Zahlung zurückerstattet',
+            'paid_state'     => 'Zahlung erhalten',
+        ],
     ],
     'shipping_method'       => [
         'guaranteed_delivery_days' => 'Garantierte Lieferung in Tagen',
@@ -591,5 +598,15 @@
     ],
     'products'              => [
         'variants_comment' => 'Erstelle verschiedene Varianten des gleichen Produkts',
+    ],
+    'order_states'          => [
+        'name'              => 'Name',
+        'description'       => 'Beschreibung',
+        'color'             => 'Farbe',
+        'flag'              => 'Spezielle Funktion',
+        'flags'             => [
+            'new'      => 'Status für neue Bestellungen setzen',
+            'complete' => 'Bestellung gilt als abgeschlossen',
+        ],
     ],
 ];

@@ -4,7 +4,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 
 use OFFLINE\Mall\Models\Tax;
 
-class TaxTotal
+class TaxTotal implements \JsonSerializable
 {
     /**
      * @var Tax
@@ -42,5 +42,21 @@ class TaxTotal
     public function preTax(): float
     {
         return $this->preTax;
+    }
+
+    public function __toArray(): array
+    {
+
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'tax'              => $this->tax,
+            'amount'           => round($this->preTax),
+            'total'            => round($this->total),
+            'amount_formatted' => format_money(round($this->preTax)),
+            'total_formatted'  => format_money(round($this->total)),
+        ];
     }
 }

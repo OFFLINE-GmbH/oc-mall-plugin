@@ -7,7 +7,7 @@ plugin:
 navigation:
     mall-orders:
         label: 'offline.mall::lang.common.orders'
-        url: offline/mall/discounts
+        url: offline/mall/orders
         icon: icon-shopping-cart
         permissions:
             - 'offline.mall.*'
@@ -34,6 +34,12 @@ navigation:
                 icon: icon-money
                 permissions:
                     - offline.mall.settings.manage_payment_methods
+            side-menu-order-state:
+                label: 'offline.mall::lang.common.order_state'
+                url: offline/mall/orderstate
+                icon: icon-history
+                permissions:
+                    - offline.mall.manage_orders
     mall-catalogue:
         label: 'offline.mall::lang.common.catalogue'
         url: offline/mall/products
@@ -63,7 +69,6 @@ navigation:
                 icon: icon-tags
                 permissions:
                     - offline.mall.manage_properties
-
 permissions:
     offline.mall.manage_products:
         tab: 'offline.mall::lang.name'

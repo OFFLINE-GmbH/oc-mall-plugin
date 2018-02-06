@@ -15,18 +15,23 @@ class OrderProduct extends Model
     protected $dates = ['deleted_at'];
 
     public $rules = [
-        'name'         => 'required',
-        'price'        => 'required|integer',
-        'total_price'  => 'required|integer',
-        'quantity'     => 'required|integer',
-        'weight'       => 'integer',
-        'width'        => 'integer',
-        'length'       => 'integer',
-        'height'       => 'integer',
-        'total_weight' => 'integer',
-        'stackable'    => 'boolean',
-        'shippable'    => 'boolean',
-        'taxable'      => 'boolean',
+        'name'             => 'required',
+        'order_id'         => 'required',
+        'product_id'       => 'required',
+        'price_pre_taxes'  => 'required',
+        'price_taxes'      => 'required',
+        'price_post_taxes' => 'required',
+        'total_pre_taxes'  => 'required',
+        'total_taxes'      => 'required',
+        'total_post_taxes' => 'required',
+        'quantity'         => 'required',
+        'weight'           => 'nullable|integer',
+        'width'            => 'nullable|integer',
+        'length'           => 'nullable|integer',
+        'height'           => 'nullable|integer',
+        'total_weight'     => 'nullable|integer',
+        'stackable'        => 'boolean',
+        'shippable'        => 'boolean',
     ];
 
     public $casts = [
@@ -42,7 +47,9 @@ class OrderProduct extends Model
 
     public $jsonable = [
         'taxes',
-        'custom_fields',
+        'item',
+        'custom_field_values',
+        'property_values'
     ];
 
     public $table = 'offline_mall_order_products';
@@ -50,8 +57,12 @@ class OrderProduct extends Model
     public function getPriceColumns()
     {
         return [
-            'price',
-            'total_price',
+            'price_pre_taxes',
+            'price_taxes',
+            'price_post_taxes',
+            'total_pre_taxes',
+            'total_taxes',
+            'total_post_taxes',
         ];
     }
 }

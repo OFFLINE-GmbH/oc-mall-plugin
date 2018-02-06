@@ -1,0 +1,28 @@
+columns:
+    name:
+        label: 'offline.mall::lang.order_states.name'
+        type: partial
+        path: $/offline/mall/models/orderstate/_name.htm
+    description:
+        label: 'offline.mall::lang.order_states.description'
+        type: text
+    flag:
+        label: 'offline.mall::lang.order_states.flag'
+        type: partial
+        path: $/offline/mall/models/orderstate/_flag.htm
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        invisible: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        invisible: true
+    deleted_at:
+        label: 'offline.mall::lang.common.deleted_at'
+        type: datetime
+        invisible: true
+    sort_order:
+        label: 'offline.mall::lang.common.sort_order'
+        type: number
+        invisible: true

@@ -56,7 +56,7 @@ class Cart extends ComponentBase
         try {
             $cart->setQuantity($product->id, (int)input('quantity'));
         } catch (OutOfStockException $e) {
-            Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $e->product->item->stock]));
+            Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $e->product->stock]));
 
             return;
         }
