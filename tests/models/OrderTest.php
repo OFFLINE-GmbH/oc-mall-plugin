@@ -10,6 +10,7 @@ use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Order;
+use OFFLINE\Mall\Models\OrderState;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
@@ -25,8 +26,8 @@ class OrderTest extends PluginTestCase
         $order->save();
 
         $this->assertEquals(1, $order->order_number);
-        $this->assertEquals(PendingState::class, $order->payment_status);
-        $this->assertEquals(InProgressState::class, $order->order_status);
+        $this->assertEquals(PendingState::class, $order->payment_state);
+        $this->assertEquals(OrderState::where('flag', OrderState::FLAG_NEW)->first()->id, $order->order_state_id);
         $this->assertEquals(76.92, $order->total_shipping_pre_taxes);
         $this->assertEquals(23.08, $order->total_shipping_taxes);
         $this->assertEquals(100.00, $order->total_shipping_post_taxes);

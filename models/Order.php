@@ -64,7 +64,12 @@ class Order extends Model
             }
         });
         static::updated(function (self $order) {
-            Event::fire('mall.order.state_changed', [$order]);
+            if ($order->isDirty('order_state_id')) {
+                Event::fire('mall.order.state_changed', [$order]);
+            }
+            if ($order->isDirty('tracking_url') || $order->isDirty('tracking_number')) {
+                Event::fire('mall.order.tracking_changed', [$order]);
+            }
         });
     }
 

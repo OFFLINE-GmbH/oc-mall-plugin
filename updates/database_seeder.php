@@ -6,6 +6,7 @@ use OFFLINE\Mall\Classes\Seeders\CategoryTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CountryTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomerTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomFieldTableSeeder;
+use OFFLINE\Mall\Classes\Seeders\OrderStateTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\PaymentMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ProductTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;

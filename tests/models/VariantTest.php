@@ -107,7 +107,7 @@ class VariantTest extends PluginTestCase
         $variant->product_id = $product->id;
         $variant->save();
 
-        $this->assertEquals('ABC', $product->variants->where('id', $variant->id)->first()->description);
+        $this->assertEquals('ABC', $product->variants->where('id', $variant->id)->first()->properties_description);
     }
 
     public function test_price()
@@ -150,7 +150,7 @@ class VariantTest extends PluginTestCase
 
         $this->assertEquals(
             'Height: 200<br />Width: 400',
-            $product->variants->where('id', $variant->id)->first()->description
+            $product->variants->where('id', $variant->id)->first()->properties_description
         );
     }
 
@@ -175,7 +175,7 @@ class VariantTest extends PluginTestCase
 
         $this->assertEquals(
             'Width: 400',
-            $product->variants->where('id', $variant->id)->first()->description
+            $product->variants->where('id', $variant->id)->first()->properties_description
         );
     }
 
@@ -198,7 +198,7 @@ class VariantTest extends PluginTestCase
 
         $this->assertEquals(
             'Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000"></span>',
-            $product->variants->where('id', $variant->id)->first()->description
+            $product->variants->where('id', $variant->id)->first()->properties_description
         );
     }
 }
