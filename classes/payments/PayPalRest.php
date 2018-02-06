@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use OFFLINE\Mall\Classes\PaymentState\FailedState;
+use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use Omnipay\Omnipay;
 use Request;
 use Session;
@@ -78,12 +80,15 @@ class PayPalRest extends PaymentProvider
         $result->successful = $response->isSuccessful();
 
         if ($result->successful) {
-            $payment                   = $this->logSuccessfulPayment($data, $response);
-            $this->order->payment_id   = $payment->id;
-            $this->order->payment_data = $data;
+            $payment                    = $this->logSuccessfulPayment($data, $response);
+            $this->order->payment_id    = $payment->id;
+            $this->order->payment_data  = $data;
+            $this->order->payment_state = PaidState::class;
             $this->order->save();
         } else {
-            $result->failedPayment = $this->logFailedPayment($data, $response);
+            $result->failedPayment      = $this->logFailedPayment($data, $response);
+            $this->order->payment_state = FailedState::class;
+            $this->order->save();
         }
 
         return $result;

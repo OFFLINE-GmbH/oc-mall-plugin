@@ -56,16 +56,16 @@ class Orders extends Controller
 
     public function onChangePaymentState()
     {
-        $order        = Order::findOrFail(input('id'));
-        $newState     = input('state');
-        $currentState = new $order->payment_state($order);
+        $order    = Order::findOrFail(input('id'));
+        $newState = input('state');
 
-        $availableStatus = $currentState->getAvailableTransitions();
+        $availableStatus = $order->payment_state::getAvailableTransitions();
         if ( ! in_array($newState, $availableStatus)) {
             throw new ValidationException([trans('offline.mall::lang.order.invalid_status')]);
         }
 
-        $currentState->transitionTo($newState);
+        $order->payment_state = $newState;
+        $order->save();
 
         return [
             '#payment_state' => trans($newState::label()),

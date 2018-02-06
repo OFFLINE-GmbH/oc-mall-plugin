@@ -3,6 +3,8 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\PaymentState\FailedState;
+use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use Omnipay\Omnipay;
 use Validator;
 
@@ -60,9 +62,12 @@ class Stripe extends PaymentProvider
             $this->order->card_type                = $data['source']['brand'];
             $this->order->card_holder_name         = $data['source']['name'];
             $this->order->credit_card_last4_digits = $data['source']['last4'];
+            $this->order->payment_state            = PaidState::class;
             $this->order->save();
         } else {
-            $result->failedPayment = $this->logFailedPayment($data, $response);
+            $result->failedPayment      = $this->logFailedPayment($data, $response);
+            $this->order->payment_state = FailedState::class;
+            $this->order->save();
         }
 
         return $result;

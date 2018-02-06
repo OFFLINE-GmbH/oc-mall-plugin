@@ -2,26 +2,9 @@
 
 namespace OFFLINE\Mall\Classes\PaymentState;
 
-use Event;
-use OFFLINE\Mall\Models\Order;
-
 abstract class PaymentState
 {
-    private $order;
-
-    abstract public function getAvailableTransitions(): array;
-
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
-
-    public function transitionTo(string $newState)
-    {
-        Event::fire('mall.order.payment.state_changed', ['old' => get_called_class(), 'new' => $newState]);
-        $this->order->forceFill(['payment_state' => $newState]);
-        $this->order->save();
-    }
+    abstract public static function getAvailableTransitions(): array;
 
     public static function label(): string
     {

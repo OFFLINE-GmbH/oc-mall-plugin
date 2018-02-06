@@ -5,6 +5,7 @@ use Event;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\PaymentState\PaymentState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\Price;
 use RuntimeException;
@@ -65,10 +66,13 @@ class Order extends Model
         });
         static::updated(function (self $order) {
             if ($order->isDirty('order_state_id')) {
-                Event::fire('mall.order.state_changed', [$order]);
+                Event::fire('mall.order.state.changed', [$order]);
             }
             if ($order->isDirty('tracking_url') || $order->isDirty('tracking_number')) {
-                Event::fire('mall.order.tracking_changed', [$order]);
+                Event::fire('mall.order.tracking.changed', [$order]);
+            }
+            if ($order->isDirty('payment_state')) {
+                Event::fire('mall.order.payment_state.changed', [$order]);
             }
         });
     }

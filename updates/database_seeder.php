@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        CurrencySettings::set('currencies', ['code' => 'CHF']);
+        CurrencySettings::set('currencies', [
+            ['code' => 'CHF', 'format' => '{{ currency }} {{ price|number_format(2, ".", "\'") }}'],
+        ]);
 
         $this->call(CategoryTableSeeder::class);
         $this->call(TaxTableSeeder::class);
