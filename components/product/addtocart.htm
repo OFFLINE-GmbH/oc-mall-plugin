@@ -1,7 +1,9 @@
-<div class="mall-property-stock text-{{ stock ? 'green' : 'red' }}">
-    {{ stock ? stock : 'No' }} items in stock.
-</div>
-{% if stock %}
+{% if not item.allow_out_of_stock_purchases %}
+    <div class="mall-property-stock text-{{ stock ? 'green' : 'red' }}">
+        {{ stock ? stock : 'No' }} items in stock.
+    </div>
+{% endif %}
+{% if stock or item.allow_out_of_stock_purchases %}
     <button type="submit" data-attach-loading>
         Add to Cart
     </button>

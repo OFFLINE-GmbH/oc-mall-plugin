@@ -3,14 +3,17 @@
         $(function () {
             {# Track the quantity selector and reload available shipping
                methods if the quantity and therefore the totals have changed. #}
-            $.subscribe('mall.cart.update', function () {
+            $.subscribe('mall.cart.update', reloadShippingMethods)
+            $.subscribe('mall.discounts.applied', reloadShippingMethods)
+
+            function reloadShippingMethods () {
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::selector': '.mall-shipping-selector'},
                     success: function (data) {
                         $('.mall-shipping-selector').html(data['{{ __SELF__ }}::selector'])
                     }
                 })
-            })
+            }
 
             $('body').on('click', '.js-mall-select-shipping', function () {
                 $.request('{{ __SELF__ }}::onSelect', {

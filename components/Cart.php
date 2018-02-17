@@ -33,6 +33,11 @@ class Cart extends ComponentBase
         return [];
     }
 
+    public function init()
+    {
+        $this->addComponent(DiscountApplier::class, 'discountApplier', []);
+    }
+
     public function onRun()
     {
         $this->addJs('assets/pubsub.js');
@@ -86,7 +91,7 @@ class Cart extends ComponentBase
     protected function setData()
     {
         $cart = CartModel::byUser(Auth::getUser());
-        $cart->load(['products', 'products.custom_field_values']);
+        $cart->load(['products', 'products.custom_field_values', 'discounts']);
         $this->setVar('cart', $cart);
     }
 }

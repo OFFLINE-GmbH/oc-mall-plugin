@@ -2,10 +2,12 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
 class TotalsCalculator
@@ -45,6 +47,10 @@ class TotalsCalculator
     /**
      * @var int
      */
+    protected $totalDiscounts;
+    /**
+     * @var int
+     */
     protected $productPreTaxes;
     /**
      * @var int
@@ -54,6 +60,10 @@ class TotalsCalculator
      * @var int
      */
     protected $productPostTaxes;
+    /**
+     * @var Collection
+     */
+    protected $appliedDiscounts;
 
     public function __construct(Cart $cart)
     {
@@ -82,14 +92,13 @@ class TotalsCalculator
 
         $this->taxes = $this->getTaxTotals();
 
-        $this->totalPostTaxes = $this->productPostTaxes + $this->shippingTotal->totalPostTaxes();
+        $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
+        $this->totalPostTaxes = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
     }
 
     protected function calculateProductPreTaxes(): float
     {
         $total = $this->cart->products->sum('totalPreTaxes');
-
-        $total = $this->applyTotalDiscounts($total);
 
         return $total > 0 ? $total : 0;
     }
@@ -207,6 +216,11 @@ class TotalsCalculator
         return $this->cart;
     }
 
+    public function appliedDiscounts(): Collection
+    {
+        return $this->appliedDiscounts;
+    }
+
     /**
      * Process the discounts that are applied to the cart's total.
      *
@@ -216,12 +230,17 @@ class TotalsCalculator
      */
     protected function applyTotalDiscounts($total): float
     {
-        $discounts = $this->cart->discounts->reject(function ($item) {
+        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])->where(function ($q) {
+            $q->whereNull('expires')
+              ->orWhere('expires', '>', Carbon::now());
+        })->get();
+
+        $discounts = $this->cart->discounts->merge($nonCodeTriggers)->reject(function ($item) {
             return $item->type === 'shipping';
         });
 
-        $applier = new DiscountApplier($this->cart, $total);
-        $applier->applyMany($discounts);
+        $applier                = new DiscountApplier($this->cart, $total);
+        $this->appliedDiscounts = $applier->applyMany($discounts);
 
         return $applier->reducedTotal();
     }

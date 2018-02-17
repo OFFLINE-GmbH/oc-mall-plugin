@@ -273,6 +273,7 @@
             'shipping'            => 'Es kann nur ein Gutschein für einen Versandrabatt angewendet werden.',
             'duplicate'           => 'Ein Gutschein kann nur einmal verwendet werden.',
             'expired'             => 'Der verwendete Gutschein ist nicht mehr gültig.',
+            'not_found'           => 'Der verwendete Gutschein ist nicht gültig.',
             'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
         ],
     ],
@@ -423,6 +424,12 @@
             'details' => [
                 'name'        => 'Checkout',
                 'description' => 'Komponente für den Bestellvorgang',
+            ],
+        ],
+        'discountApplier'       => [
+            'details' => [
+                'name'        => 'Gutschein-Code Eingabe',
+                'description' => 'Zeigt eine Eingabemöglichkeit für Gutscheincodes an',
             ],
         ],
         'shippingSelector'      => [

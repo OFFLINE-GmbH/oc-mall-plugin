@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Cookie;
 use DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
@@ -279,11 +280,25 @@ class Cart extends Model
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.expired')]);
         }
 
-        if ($discount->max_number_of_usages > 0 && $discount->number_of_usages >= $discount->max_number_of_usages) {
+        if ($discount->max_number_of_usages !== null && $discount->number_of_usages >= $discount->max_number_of_usages) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.usage_limit_reached')]);
         }
 
         $this->discounts()->save($discount);
+    }
+
+    public function applyDiscountByCode(string $code)
+    {
+        $code = strtoupper($code);
+        try {
+            $discount = Discount::whereCode($code)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ValidationException([
+                'code' => trans('offline.mall::lang.discounts.validation.not_found'),
+            ]);
+        }
+
+        return $this->applyDiscount($discount);
     }
 
     /**

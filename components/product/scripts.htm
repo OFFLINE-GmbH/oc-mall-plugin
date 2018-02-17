@@ -4,6 +4,8 @@
             var $body = $('body');
             var $addToCart = $('.mall-add-to-cart');
 
+
+            {% if not item.allow_out_of_stock_purchases %}
             $body.on('change', '.js-mall-property-selector', function (e, isInitial) {
                 var values = $('.js-mall-property-selector').map(function () {
                     return this.value;
@@ -36,6 +38,7 @@
                     }
                 })
             }
+            {% endif %}
 
             {# Handle clicks on the image selector for custom field type "image" and "color" #}
             $body.on('click', '.mall-field-selector', function () {

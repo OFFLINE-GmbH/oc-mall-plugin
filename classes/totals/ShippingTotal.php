@@ -2,7 +2,9 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use Carbon\Carbon;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
@@ -124,13 +126,23 @@ class ShippingTotal
 
     private function applyDiscounts(int $price): float
     {
-        $discount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
-        if ( ! $discount) {
+        $discounts = Discount::whereIn('trigger', ['total', 'product'])->where('type', 'shipping')->where(function ($q
+        ) {
+            $q->whereNull('expires')
+              ->orWhere('expires', '>', Carbon::now());
+        })->get();
+
+        $codeDiscount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
+        if ($codeDiscount) {
+            $discounts->push($codeDiscount);
+        }
+
+        if ($discounts->count() < 1) {
             return $price;
         }
 
         $applier = new DiscountApplier($this->totals->getCart(), $this->totals->productPostTaxes(), $price);
-        $applier->apply($discount);
+        $applier->applyMany($discounts);
 
         return $applier->reducedTotal();
     }

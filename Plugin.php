@@ -17,6 +17,7 @@ use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
 use OFFLINE\Mall\Components\Checkout;
+use OFFLINE\Mall\Components\DiscountApplier;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ShippingSelector;
@@ -30,7 +31,7 @@ use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.Translate', 'RainLab.User', 'OFFLINE.Cashier'];
+    public $require = ['RainLab.Translate', 'RainLab.User'];
 
     public function boot()
     {
@@ -69,6 +70,7 @@ class Plugin extends PluginBase
             CategoryComponent::class     => 'category',
             CategoryFilter::class        => 'categoryFilter',
             ProductComponent::class      => 'product',
+            DiscountApplier::class       => 'discountApplier',
         ];
     }
 

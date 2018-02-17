@@ -69,6 +69,21 @@
                 </td>
                 <td class="{{ totalStyle }} text-xs"></td>
             </tr>
+            {% for entry in cart.totals.appliedDiscounts %}
+                <tr>
+                    <td class="{{ rowStyle }}"></td>
+                    <td class="{{ rowStyle }}" colspan="3">
+                        {{ entry.discount.name }}
+                        {% if entry.discount.code %}
+                            ({{ entry.discount.code }})
+                        {% endif %}
+                    </td>
+                    <td class="{{ rowStyle }} text-right">
+                        {{ entry.savings | money }}
+                    </td>
+                    <td class="{{ rowStyle }}"></td>
+                </tr>
+            {% endfor %}
             {% if cart.shipping_method %}
                 <tr>
                     <td class="{{ rowStyle }}"></td>

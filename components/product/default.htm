@@ -42,7 +42,11 @@
         </div>
 
         <div class="mall-add-to-cart">
-            Checking stock...
+            {% if item.allow_out_of_stock_purchases %}
+                {% partial __SELF__ ~ '::addtocart.htm' item=item %}
+            {% else %}
+                Checking stock...
+            {% endif %}
         </div>
 
     </form>

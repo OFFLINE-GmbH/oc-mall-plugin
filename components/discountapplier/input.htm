@@ -1,0 +1,8 @@
+<form data-request="onApplyDiscount" data-request-validate data-request-success="$.publish('mall.discount.applied')">
+    <div class="mall-discount-applier">
+        <label for="code">Do you have a discount code?</label>
+        <input name="code" type="text" id="code" placeholder="Discount code...">
+        <div data-validate-for="code"></div>
+        <button type="submit">Apply</button>
+    </div>
+</form>

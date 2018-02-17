@@ -11,7 +11,7 @@ class BuilderTableCreateOfflineMallDiscounts extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->integer('product_id')->nullable();
             $table->integer('total_to_reach')->nullable();
             $table->string('type')->default('Rate');

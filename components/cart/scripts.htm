@@ -3,11 +3,14 @@
         $(function () {
             var $body = $('body');
 
-            $.subscribe('mall.shipping.update', function () {
+            $.subscribe('mall.discount.applied', refreshCart);
+            $.subscribe('mall.shipping.update', refreshCart);
+
+            function refreshCart () {
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                 })
-            });
+            }
 
             $body.on('change', '.js-mall-quantity', function () {
                 $.request('{{ __SELF__ }}::onUpdateQuantity', {

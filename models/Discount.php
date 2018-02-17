@@ -12,19 +12,19 @@ class Discount extends Model
         'name'                                 => 'required',
         'expires'                              => 'date',
         'number_of_usages'                     => 'numeric',
-        'max_number_of_usages'                 => 'numeric',
+        'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,alternate_price,shipping',
         'code'                                 => 'required_if:trigger,code',
-        'total_to_reach'                       => 'required_if:trigger,total|numeric',
+        'total_to_reach'                       => 'required_if:trigger,total|nullable|numeric',
         'product'                              => 'required_if:trigger,product',
         'type'                                 => 'in:fixed_amount,rate,alternate_price,shipping',
-        'amount'                               => 'required_if:type,fixed_amount|numeric',
-        'rate'                                 => 'required_if:type,rate|numeric',
-        'alternate_price'                      => 'required_if:type,alternate_price|numeric',
+        'amount'                               => 'required_if:type,fixed_amount|nullable|numeric',
+        'rate'                                 => 'required_if:type,rate|nullable|numeric',
+        'alternate_price'                      => 'required_if:type,alternate_price|nullable|numeric',
         'shipping_description'                 => 'required_if:type,shipping',
-        'shipping_price'                       => 'required_if:type,shipping|numeric',
-        'shipping_guaranteed_days_to_delivery' => 'numeric',
+        'shipping_price'                       => 'required_if:type,shipping|nullable|numeric',
+        'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
 
     public $table = 'offline_mall_discounts';
@@ -42,6 +42,13 @@ class Discount extends Model
     public $belongsToMany = [
         'carts' => [Cart::class],
     ];
+
+    public static function boot()
+    {
+        static::saving(function (self $discount) {
+            $discount->code = strtoupper($discount->code);
+        });
+    }
 
     public function getTypeOptions()
     {

@@ -2,4 +2,5 @@
     {% partial __SELF__ ~ '::empty' %}
 {% else %}
     {% partial __SELF__ ~ '::table' %}
+    {% partial __SELF__ ~ '::discount-applier' %}
 {% endif %}
