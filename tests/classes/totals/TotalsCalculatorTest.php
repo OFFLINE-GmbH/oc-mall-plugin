@@ -405,7 +405,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger = 'code';
         $discount->name    = 'Test discount';
         $discount->type    = 'fixed_amount';
-        $discount->amount  = 10000;
+        $discount->amount  = 100;
         $discount->save();
 
         $cart->applyDiscount($discount);
@@ -559,7 +559,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->code           = 'Test';
         $discount->name           = 'Test discount';
         $discount->type           = 'fixed_amount';
-        $discount->amount         = 15000;
+        $discount->amount         = 150;
         $discount->trigger        = 'total';
         $discount->total_to_reach = 300;
 
@@ -678,7 +678,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->code       = 'Test';
         $discount->name       = 'Test discount';
         $discount->type       = 'fixed_amount';
-        $discount->amount     = 15000;
+        $discount->amount     = 150;
         $discount->trigger    = 'product';
         $discount->product_id = $productB->id;
 
