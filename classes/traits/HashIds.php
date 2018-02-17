@@ -34,5 +34,4 @@ trait HashIds
     {
         return app(Hasher::class)->encode($value);
     }
-
 }

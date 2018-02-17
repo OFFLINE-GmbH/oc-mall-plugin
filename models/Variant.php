@@ -149,6 +149,18 @@ class Variant extends \Model
         }
     }
 
+    /**
+     * To easily generate the correct URL to a Product/Variant
+     * we blindly call item.variantId. In this case we return
+     * the Variant's hashed ID. If the property is called on a
+     * Product model null is returned.
+     * @return string
+     */
+    public function getVariantIdAttribute()
+    {
+        return $this->hashId;
+    }
+
     public function getPriceColumns()
     {
         return ['price', 'old_price'];

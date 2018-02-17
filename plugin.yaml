@@ -9,6 +9,7 @@ navigation:
         label: 'offline.mall::lang.common.orders'
         url: offline/mall/orders
         icon: icon-shopping-cart
+        order: 801
         permissions:
             - 'offline.mall.*'
         sideMenu:
@@ -34,7 +35,7 @@ navigation:
                 icon: icon-money
                 permissions:
                     - offline.mall.settings.manage_payment_methods
-            side-menu-order-state:
+            mall-order-states:
                 label: 'offline.mall::lang.common.order_state'
                 url: offline/mall/orderstate
                 icon: icon-history
@@ -44,6 +45,7 @@ navigation:
         label: 'offline.mall::lang.common.catalogue'
         url: offline/mall/products
         icon: icon-book
+        order: 800
         permissions:
             - offline.mall.manage_products
         sideMenu:
@@ -71,29 +73,29 @@ navigation:
                     - offline.mall.manage_properties
 permissions:
     offline.mall.manage_products:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_products'
     offline.mall.manage_categories:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_categories'
     offline.mall.manage_orders:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_orders'
     offline.mall.manage_discounts:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_discounts'
     offline.mall.settings.manage_general:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.settings.manage_general'
     offline.mall.settings.manage_api:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.settings.manage_api'
     offline.mall.settings.manage_currency:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.settings.manage_currency'
     offline.mall.settings.manage_payment_methods:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.settings.manage_payment_methods'
     offline.mall.manage_properties:
-        tab: 'offline.mall::lang.name'
+        tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_properties'

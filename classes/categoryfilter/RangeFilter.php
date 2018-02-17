@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
-
 use Illuminate\Support\Collection;
 
 class RangeFilter extends Filter

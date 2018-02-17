@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Models;
 
-
 use Backend\Models\ExportModel;
 
 class OrderExport extends ExportModel

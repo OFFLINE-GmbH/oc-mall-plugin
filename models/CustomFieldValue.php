@@ -55,8 +55,10 @@ class CustomFieldValue extends Model
     {
         $value = e($this->value);
         if ($this->custom_field->type === 'color') {
-            return sprintf('<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>',
-                $value);
+            return sprintf(
+                '<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>',
+                $value
+            );
         }
         if ($this->custom_field->type === 'checkbox') {
             return $this->value || $this->value === 'on' ? '&#10004;' : '&#10007;';

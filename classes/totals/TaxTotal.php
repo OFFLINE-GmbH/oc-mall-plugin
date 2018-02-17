@@ -46,7 +46,6 @@ class TaxTotal implements \JsonSerializable
 
     public function __toArray(): array
     {
-
     }
 
     public function jsonSerialize()

@@ -141,7 +141,7 @@ class Category extends Model
 
         if ( ! $pageUrl = GeneralSettings::get('category_page')) {
             throw new InvalidArgumentException(
-                'SnipcartShop: Please select a category page via the backend settings.'
+                'Mall: Please select a category page via the backend settings.'
             );
         }
 

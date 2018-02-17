@@ -20,7 +20,22 @@
                     }
                 })
             })
-            $('.js-mall-property-selector:first').trigger('change', true)
+            var firstProperty = $('.js-mall-property-selector:first')
+            if (firstProperty.length) {
+                firstProperty.trigger('change', true)
+            } else {
+                {#
+                   In case the product has no special properties we simply check the stock once
+                   since nothing can be configured afterwards.
+                #}
+                $.request('onCheckProductStock', {
+                    data: {slug: '{{ item.slug }}'},
+                    loading: null,
+                    update: {
+                        '{{ __SELF__ }}::addtocart': '.mall-add-to-cart'
+                    }
+                })
+            }
 
             {# Handle clicks on the image selector for custom field type "image" and "color" #}
             $body.on('click', '.mall-field-selector', function () {

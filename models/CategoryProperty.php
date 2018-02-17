@@ -2,7 +2,6 @@
 
 namespace OFFLINe\Mall\Models;
 
-
 use October\Rain\Database\Pivot;
 use October\Rain\Database\Traits\Nullable;
 

@@ -13,12 +13,13 @@ class OrderState extends Controller
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.manage_orders' 
+        'offline.mall.manage_orders'
     ];
 
     public function __construct()
     {
         parent::__construct();
+        BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-order-states');
     }
 
     public function index()

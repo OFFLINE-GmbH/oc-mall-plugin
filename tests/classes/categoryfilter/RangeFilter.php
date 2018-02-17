@@ -70,5 +70,4 @@ class RangeFilterTest extends PluginTestCase
         $this->assertEquals($hit1->id, $result->first()->id);
         $this->assertEquals($hit2->id, $result->last()->id);
     }
-
 }

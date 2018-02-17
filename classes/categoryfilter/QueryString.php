@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
-
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Property;

@@ -3,22 +3,22 @@
     <tr>
         <th>
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.product.name')) ?>
+                <?= e(trans('offline.mall::lang.product.name')) ?>
             </span>
         </th>
         <th class="text-right">
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.order.quantity')) ?>
+                <?= e(trans('offline.mall::lang.order.quantity')) ?>
             </span>
         </th>
         <th class="text-right">
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.product.price')) ?>
+                <?= e(trans('offline.mall::lang.product.price')) ?>
             </span>
         </th>
         <th class="text-right">
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.order.total')) ?>
+                <?= e(trans('offline.mall::lang.order.total')) ?>
             </span>
         </th>
     </tr>
@@ -47,7 +47,7 @@
     <tr class="orderfooter separator separator-bottom">
         <td colspan="3">
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.order.subtotal')) ?>
+                <?= e(trans('offline.mall::lang.order.subtotal')) ?>
             </span>
         </td>
         <td class="text-right">
@@ -61,7 +61,7 @@
     <tr class="orderdiscount">
         <td colspan="3">
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.common.discount')) ?>:
+                <?= e(trans('offline.mall::lang.common.discount')) ?>:
                 <?= e($discount['name']) ?>
             </span>
         </td>
@@ -81,7 +81,7 @@
     <tr class="orderfooter separator">
         <td colspan="3">
                 <span>
-                    <?= e(trans('offline.snipcartshop::lang.plugin.common.shipping')) ?>:
+                    <?= e(trans('offline.mall::lang.common.shipping')) ?>:
                     <?= e($order['shipping']['name']) ?>
                 </span>
         </td>
@@ -95,7 +95,7 @@
     <tr class="orderfooter-bottomline">
         <td colspan="3">
             <span>
-                <?= e(trans('offline.snipcartshop::lang.plugin.order.grand_total')) ?>
+                <?= e(trans('offline.mall::lang.order.grand_total')) ?>
             </span>
         </td>
         <td class="text-right"><span><?= e($order['total_post_taxes_formatted']) ?></span></td>

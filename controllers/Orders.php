@@ -22,7 +22,7 @@ class Orders extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall-shop', 'mall-orders');
+        BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-orders');
     }
 
     public function index()

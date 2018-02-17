@@ -1,5 +1,5 @@
 <div class="mall-item w-1/3 pb-6 pr-4 pl-4 text-sm">
-    <a href="{{ productPage|page({slug: item.slug, variant: item.hashId}) }}"
+    <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}"
        style="color: inherit" class="no-underline">
         <div class="mall-item__image">
             <img src="{{ item.image.thumb(200, 200, {mode: 'crop'}) }}" alt="{{ item.name }}"/>

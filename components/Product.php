@@ -117,15 +117,25 @@ class Product extends ComponentBase
 
     public function onAddToCart()
     {
-        $variant = $this->getVariantByPropertyValues(post('props'));
-        if ( ! $variant) {
+        $product = $this->getProduct();
+        $values  = $this->validateCustomFields(post('fields', []));
+        $variant = null;
+
+        // We are adding a product
+        if ($product instanceof ProductModel) {
+            $hasStock = $product->stock > 0 || $product->allow_out_of_stock_purchases;
+        } else {
+            // We are adding a product variant
+            $variant  = $this->getVariantByPropertyValues(post('props'));
+            $hasStock = $variant !== null;
+        }
+
+        if ( ! $hasStock) {
             throw new ValidationException(['This product is out of stock']);
         }
 
-        $values = $this->validateCustomFields(post('fields', []));
-
         $cart = Cart::byUser(Auth::getUser());
-        $cart->addProduct($this->getProduct(), 1, $variant, $values);
+        $cart->addProduct($product, 1, $variant, $values);
     }
 
     public function onChangeProperty()
@@ -139,6 +149,19 @@ class Product extends ComponentBase
 
         $this->page['stock'] = $variant ? $variant->stock : 0;
         $this->page['item']  = $variant ? $variant : $this->getProduct();
+    }
+
+    public function onCheckProductStock()
+    {
+        $slug = post('slug');
+        if ( ! $slug) {
+            throw new ValidationException(['Missing input data']);
+        }
+
+        $product = ProductModel::published()->whereSlug($slug)->firstOrFail();
+
+        $this->page['stock'] = $product ? $product->stock : 0;
+        $this->page['item']  = $product;
     }
 
     public function setData()
