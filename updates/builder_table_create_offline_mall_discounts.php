@@ -21,7 +21,7 @@ class BuilderTableCreateOfflineMallDiscounts extends Migration
             $table->integer('alternate_price')->nullable();
             $table->integer('max_number_of_usages')->nullable()->unsigned();
             $table->dateTime('expires')->nullable();
-            $table->integer('number_of_usages')->nullable()->unsigned();
+            $table->integer('number_of_usages')->default(0)->unsigned();
             $table->string('shipping_description')->nullable();
             $table->integer('shipping_price')->nullable();
             $table->integer('shipping_guaranteed_days_to_delivery')->nullable()->unsigned();

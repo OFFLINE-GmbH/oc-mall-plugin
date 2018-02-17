@@ -199,6 +199,7 @@ class Product extends ComponentBase
         if ($this->product) {
             return $this->product;
         }
+
         $product = $this->property('product');
         $model   = ProductModel::published()->with([
             'variants',

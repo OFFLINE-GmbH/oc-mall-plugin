@@ -269,9 +269,11 @@
             'product' => 'Bestimmtes Produkt im Warenkorb liegt',
         ],
         'validation'                           => [
-            'alternate_price' => 'Es kann nur ein Gutschein für einen neuen Fixpreis angewendet werden.',
-            'shipping'        => 'Es kann nur ein Gutschein für einen Versandrabatt angewendet werden.',
-            'duplicate'       => 'Ein Gutschein kann nur einmal verwendet werden.',
+            'alternate_price'     => 'Es kann nur ein Gutschein für einen neuen Fixpreis angewendet werden.',
+            'shipping'            => 'Es kann nur ein Gutschein für einen Versandrabatt angewendet werden.',
+            'duplicate'           => 'Ein Gutschein kann nur einmal verwendet werden.',
+            'expired'             => 'Der verwendete Gutschein ist nicht mehr gültig.',
+            'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
         ],
     ],
     'order'                 => [
@@ -600,11 +602,11 @@
         'variants_comment' => 'Erstelle verschiedene Varianten des gleichen Produkts',
     ],
     'order_states'          => [
-        'name'              => 'Name',
-        'description'       => 'Beschreibung',
-        'color'             => 'Farbe',
-        'flag'              => 'Spezielle Funktion',
-        'flags'             => [
+        'name'        => 'Name',
+        'description' => 'Beschreibung',
+        'color'       => 'Farbe',
+        'flag'        => 'Spezielle Funktion',
+        'flags'       => [
             'new'      => 'Status für neue Bestellungen setzen',
             'complete' => 'Bestellung gilt als abgeschlossen',
         ],

@@ -11,6 +11,7 @@ class Discount extends Model
     public $rules = [
         'name'                                 => 'required',
         'expires'                              => 'date',
+        'number_of_usages'                     => 'numeric',
         'max_number_of_usages'                 => 'numeric',
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,alternate_price,shipping',
@@ -27,6 +28,12 @@ class Discount extends Model
     ];
 
     public $table = 'offline_mall_discounts';
+
+    public $dates = ['expires'];
+    public $casts = [
+        'number_of_usages'     => 'integer',
+        'max_number_of_usages' => 'integer',
+    ];
 
     public $belongsTo = [
         'product' => [Product::class],

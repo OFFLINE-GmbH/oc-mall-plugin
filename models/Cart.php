@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use Cookie;
 use DB;
 use Illuminate\Support\Collection;
@@ -272,6 +273,14 @@ class Cart extends Model
 
         if ($this->discounts->contains($discount)) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
+        }
+
+        if ($discount->expires && $discount->expires->lt(Carbon::now())) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.expired')]);
+        }
+
+        if ($discount->max_number_of_usages > 0 && $discount->number_of_usages >= $discount->max_number_of_usages) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.usage_limit_reached')]);
         }
 
         $this->discounts()->save($discount);
