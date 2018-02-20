@@ -2,12 +2,15 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Session;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 class DefaultPaymentGateway implements PaymentGateway
 {
+    public $provider;
     public $providers = [];
 
     public function registerProvider(PaymentProvider $provider)
@@ -24,17 +27,24 @@ class DefaultPaymentGateway implements PaymentGateway
         return $this->providers[$identifier];
     }
 
-    public function process(Order $order, array $data): PaymentResult
+    public function init(Cart $cart, array $data)
     {
-        $provider = $this->getProviderForMethod($order->payment_method);
-        $provider->setOrder($order);
-        $provider->setData($data);
+        $this->provider = $this->getProviderForMethod(PaymentMethod::findOrFail($cart->payment_method_id));
+        $this->provider->setData($data);
+        $this->provider->validate();
+    }
 
-        $provider->validate();
+    public function process(Order $order): PaymentResult
+    {
+        if ( ! $this->provider) {
+            throw new \LogicException('Missing data for payment. Make sure to call init() before process()');
+        }
 
         Session::put('oc-mall.payment.id', str_random(8));
 
-        return $provider->process();
+        $this->provider->setOrder($order);
+
+        return $this->provider->process();
     }
 
     protected function getProviderForMethod(PaymentMethod $method): PaymentProvider

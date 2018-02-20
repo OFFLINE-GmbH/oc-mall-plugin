@@ -23,10 +23,10 @@ class Stripe extends PaymentProvider
     public function validate(): bool
     {
         $rules = [
-            'number'      => 'required|size:16',
+            'number'      => 'required|digits:16',
             'expiryMonth' => 'required|integer|min:1|max:12',
             'expiryYear'  => 'required|integer|min:' . date('Y'),
-            'cvv'         => 'required|size:3',
+            'cvv'         => 'required|digits:3',
         ];
 
         $validation = Validator::make($this->data, $rules);

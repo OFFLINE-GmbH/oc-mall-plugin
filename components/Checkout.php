@@ -3,6 +3,7 @@
 use Auth;
 use Cms\Classes\ComponentBase;
 use DB;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Components\Cart as CartComponent;
@@ -18,6 +19,7 @@ class Checkout extends ComponentBase
     use SetVars;
 
     public $cart;
+    public $payment_method;
 
     public function componentDetails()
     {
@@ -49,33 +51,41 @@ class Checkout extends ComponentBase
         }
     }
 
-    protected function setData()
-    {
-        $cart = Cart::byUser(Auth::getUser());
-        // @Todo Remove
-        $cart->setPaymentMethod(PaymentMethod::find(1));
-
-        $this->setVar('cart', $cart);
-    }
-
     public function onCheckout()
     {
         $this->setData();
+        $data = post('payment_data', []);
+
+        $gateway = app(PaymentGateway::class);
+        $gateway->init($this->cart, $data);
+
         $order = DB::transaction(function () {
             return Order::fromCart($this->cart);
         });
 
-        $data = [
-            'number'      => '4242424242424242',
-            'expiryMonth' => 6,
-            'expiryYear'  => 2019,
-            'cvv'         => '123',
-        ];
-
-        $gateway = app(PaymentGateway::class);
-        $result  = $gateway->process($order, $data);
+        $result = $gateway->process($order);
 
         return $this->handlePaymentResult($result);
+    }
+
+    public function onPaymentMethodChanged()
+    {
+        $name    = strtolower($this->payment_method->payment_provider);
+        $partial = sprintf('%s::paymentmethods/%s', $this->alias, $name);
+
+        return [
+            '.mall-payment-method-data' => $this->renderPartial($partial),
+        ];
+    }
+
+    protected function setData()
+    {
+        $cart = Cart::byUser(Auth::getUser());
+        if ( ! $cart->payment_method_id) {
+            $cart->setPaymentMethod(PaymentMethod::getDefault());
+        }
+        $this->setVar('cart', $cart);
+        $this->setVar('payment_method', PaymentMethod::findOrFail($cart->payment_method_id));
     }
 
     /**

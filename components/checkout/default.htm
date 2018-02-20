@@ -6,11 +6,19 @@
     </div>
     <div class="w-2/3 h-12">
         {% component 'cart' %}
+
+        <form class="mall-payment-method-data-form">
+            <div class="mall-payment-method-data">
+                {% if __SELF__.payment_method.payment_provider %}
+                    {% partial __SELF__ ~ '::paymentmethods/' ~ (__SELF__.payment_method.payment_provider) %}
+                {% endif %}
+            </div>
+        </form>
+
         <div class="mall-actions">
             {% partial __SELF__ ~ '::actions' %}
         </div>
     </div>
 </div>
-
 {% partial __SELF__ ~ '::overlay' %}
 {% partial __SELF__ ~ '::scripts' %}

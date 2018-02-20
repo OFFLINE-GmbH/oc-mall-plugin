@@ -3,13 +3,40 @@
         $(function () {
             var $body = $('body');
             var $overlay = $('.mall-overlay');
+            var $dataContainer = $('.mall-payment-method-data');
+            var $dataForm = $('.mall-payment-method-data-form');
 
-            $body.on('click', '.js-mall-checkout', function () {
+            $body.on('click', '.js-mall-checkout', function (e) {
+                e.preventDefault()
                 $overlay.prependTo($body).show()
                 $.request('{{ __SELF__ }}::onCheckout', {
-                    error: function(data) {
-                        this.error(data)
+                    form: $dataForm,
+                    error: function (jqXHR) {
                         $overlay.hide();
+                        if (jqXHR.status === 406) {
+                            return this.options.handleValidationMessage(
+                                jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE'],
+                                jqXHR.responseJSON['X_OCTOBER_ERROR_FIELDS']
+                            )
+                        }
+                        this.error(jqXHR)
+                    },
+                    handleValidationMessage: function (message, fields) {
+                        var fieldFound = false
+                        $dataContainer.find('[data-validate-for]').hide().html('')
+                        $.each(fields, function (field, messages) {
+                            var errLabel = $dataContainer.find('[data-validate-for="payment_data[' + field + ']"]')
+                            if (errLabel.length > 0) {
+                                errLabel.html(messages[0]).show()
+                                fieldFound = true;
+                            }
+                        })
+
+                        {# If there is not at least one matching error label present
+                           fall back to a default JS alert message to display the error. #}
+                        if (! fieldFound) {
+                            alert(message)
+                        }
                     }
                 })
             });
@@ -18,6 +45,9 @@
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::actions': '.mall-actions'},
                 })
+            });
+            $.subscribe('mall.payment-method.update', function () {
+                $.request('{{ __SELF__ }}::onPaymentMethodChanged')
             });
         })
     </script>

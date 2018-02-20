@@ -18,7 +18,7 @@ class PaymentMethod extends Model
     use Price;
 
     public $rules = [
-        'name'            => 'required',
+        'name'             => 'required',
         'payment_provider' => 'required',
     ];
 
@@ -43,5 +43,10 @@ class PaymentMethod extends Model
         }
 
         return $options;
+    }
+
+    public static function getDefault()
+    {
+        return static::first();
     }
 }
