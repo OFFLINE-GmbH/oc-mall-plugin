@@ -345,6 +345,23 @@ class Cart extends Model
     }
 
     /**
+     * Updates the `number_of_usages` property on each
+     * applied discount of this cart.
+     */
+    public function updateDiscountUsageCount()
+    {
+        $this->totals()->appliedDiscounts()->each(function (array $discount) {
+            $discount['discount']->number_of_usages++;
+            $discount['discount']->save();
+        });
+
+        if ($shippingDiscount = $this->totals()->shippingTotal()->appliedDiscount()) {
+            $shippingDiscount['discount']->number_of_usages++;
+            $shippingDiscount['discount']->save();
+        }
+    }
+
+    /**
      * Makes sure that the selected shipping method
      * can still be applied to this cart.
      */

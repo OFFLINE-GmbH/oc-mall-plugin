@@ -128,6 +128,11 @@ class ShippingTotal implements \JsonSerializable
         return $this->total;
     }
 
+    public function appliedDiscount()
+    {
+        return $this->appliedDiscount;
+    }
+
     /**
      * Get the effective ShippingMethod including changes
      * made by any applied discounts.
@@ -142,7 +147,7 @@ class ShippingTotal implements \JsonSerializable
 
         $method = $this->method->replicate(['id', 'name', 'price']);
 
-        $discount      = $this->appliedDiscount->first()['discount'];
+        $discount      = $this->appliedDiscount['discount'];
         $method->name  = $discount->shipping_description;
         $method->price = $discount->shipping_price;
 
@@ -168,7 +173,7 @@ class ShippingTotal implements \JsonSerializable
 
         $applier               = new DiscountApplier($this->totals->getCart(), $this->totals->productPostTaxes(),
             $price);
-        $this->appliedDiscount = $applier->applyMany($discounts);
+        $this->appliedDiscount = optional($applier->applyMany($discounts))->first();
 
         return $applier->reducedTotal();
     }
@@ -180,7 +185,7 @@ class ShippingTotal implements \JsonSerializable
             'preTaxes'        => $this->preTaxes,
             'taxes'           => $this->taxes,
             'total'           => $this->total,
-            'appliedDiscount' => optional($this->appliedDiscount)->first(),
+            'appliedDiscount' => $this->appliedDiscount,
         ];
     }
 }

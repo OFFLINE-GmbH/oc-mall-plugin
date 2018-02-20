@@ -116,6 +116,8 @@ class Order extends Model
                 $entry->moveToOrder($order);
             });
 
+            $cart->updateDiscountUsageCount();
+
             $cart->delete(); // We can empty the cart once the order is created.
 
             return $order;

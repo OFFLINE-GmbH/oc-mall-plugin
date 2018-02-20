@@ -172,7 +172,6 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(-1, $variant->fresh()->stock);
     }
 
-
     public function test_it_uses_the_correct_discounted_shipping_method()
     {
         $cart   = $this->getSimpleCart();
@@ -197,6 +196,45 @@ class OrderTest extends PluginTestCase
         $this->assertEquals($discount->shipping_description, $order->shipping['method']['name']);
         $this->assertEquals($discount->getOriginal('shipping_price'), $order->shipping['total']);
         $this->assertEquals($discount->getOriginal('shipping_price'), $order->shipping['method']['price']);
+    }
+
+    public function test_discount_number_of_usages_gets_updated()
+    {
+        $cart                            = $this->getSimpleCart();
+        $discount1                       = new Discount();
+        $discount1->name                 = 'Shipping Test';
+        $discount1->type                 = 'shipping';
+        $discount1->trigger              = 'total';
+        $discount1->total_to_reach       = 0;
+        $discount1->shipping_price       = 10;
+        $discount1->shipping_description = 'Reduced shipping';
+        $discount1->number_of_usages     = 10;
+        $discount1->save();
+
+        $discount2                   = new Discount();
+        $discount2->name             = 'Amount Test';
+        $discount2->type             = 'fixed_amount';
+        $discount2->trigger          = 'code';
+        $discount2->code             = 'TEST';
+        $discount2->number_of_usages = 12;
+        $discount2->save();
+
+        $discount3                   = new Discount();
+        $discount3->name             = 'Amount Test';
+        $discount3->type             = 'rate';
+        $discount3->trigger          = 'code';
+        $discount3->code             = 'TEST';
+        $discount3->number_of_usages = 18;
+        $discount3->save();
+
+        $cart->applyDiscount($discount2);
+        $cart->applyDiscount($discount3);
+
+        Order::fromCart($cart);
+
+        $this->assertEquals(11, $discount1->fresh()->number_of_usages);
+        $this->assertEquals(13, $discount2->fresh()->number_of_usages);
+        $this->assertEquals(19, $discount3->fresh()->number_of_usages);
     }
 
     protected function getFullCart(): Cart
