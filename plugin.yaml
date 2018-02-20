@@ -36,7 +36,7 @@ navigation:
                 permissions:
                     - offline.mall.settings.manage_payment_methods
             mall-order-states:
-                label: 'offline.mall::lang.common.order_state'
+                label: 'offline.mall::lang.common.order_states'
                 url: offline/mall/orderstate
                 icon: icon-history
                 permissions:

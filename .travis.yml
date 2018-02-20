@@ -32,7 +32,7 @@ before_script:
   - php artisan key:generate
   - echo "DB_HOST=127.0.0.1" > .env
   - echo "DB_DATABASE=october" >> .env
-  - php artisan october:up
+  - php artisan october:up -v
   - php artisan plugin:install RainLab.Translate
   - php artisan plugin:install RainLab.User
   - php artisan plugin:install OFFLINE.Cashier
