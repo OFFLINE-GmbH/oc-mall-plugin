@@ -88,7 +88,7 @@
                 <tr>
                     <td class="{{ rowStyle }}"></td>
                     <td class="{{ rowStyle }}" colspan="3">
-                        {{ cart.shipping_method.name }}
+                        {{ cart.totals.shippingTotal.method.name }}
                     </td>
                     <td class="{{ rowStyle }} text-right">
                         {{ cart.totals.shippingTotal.totalPostTaxes | money }}

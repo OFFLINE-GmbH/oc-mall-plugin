@@ -9,7 +9,7 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 
-class ShippingTotal
+class ShippingTotal implements \JsonSerializable
 {
     /**
      * @var TotalsCalculator
@@ -31,6 +31,10 @@ class ShippingTotal
      * @var int
      */
     private $taxes;
+    /**
+     * @var int
+     */
+    private $appliedDiscount;
 
     public function __construct(?ShippingMethod $method, TotalsCalculator $totals)
     {
@@ -124,6 +128,27 @@ class ShippingTotal
         return $this->total;
     }
 
+    /**
+     * Get the effective ShippingMethod including changes
+     * made by any applied discounts.
+     *
+     * @return ShippingMethod
+     */
+    public function method(): ShippingMethod
+    {
+        if ( ! $this->appliedDiscount) {
+            return $this->method;
+        }
+
+        $method = $this->method->replicate(['id', 'name', 'price']);
+
+        $discount      = $this->appliedDiscount->first()['discount'];
+        $method->name  = $discount->shipping_description;
+        $method->price = $discount->shipping_price;
+
+        return $method;
+    }
+
     private function applyDiscounts(int $price): float
     {
         $discounts = Discount::whereIn('trigger', ['total', 'product'])->where('type', 'shipping')->where(function ($q
@@ -141,9 +166,21 @@ class ShippingTotal
             return $price;
         }
 
-        $applier = new DiscountApplier($this->totals->getCart(), $this->totals->productPostTaxes(), $price);
-        $applier->applyMany($discounts);
+        $applier               = new DiscountApplier($this->totals->getCart(), $this->totals->productPostTaxes(),
+            $price);
+        $this->appliedDiscount = $applier->applyMany($discounts);
 
         return $applier->reducedTotal();
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'method'          => $this->method(),
+            'preTaxes'        => $this->preTaxes,
+            'taxes'           => $this->taxes,
+            'total'           => $this->total,
+            'appliedDiscount' => optional($this->appliedDiscount)->first(),
+        ];
     }
 }

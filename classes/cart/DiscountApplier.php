@@ -56,7 +56,7 @@ class DiscountApplier
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->getOriginal('shipping_price');
-            $savings                   = $this->cart->shipping_method->getOriginal('price') - $discount->getOriginal('alternate_price');
+            $savings                   = $this->cart->shipping_method->getOriginal('price') - $discount->getOriginal('shipping_price');
             $this->reducedTotalIsFixed = true;
         }
 
@@ -89,7 +89,7 @@ class DiscountApplier
         return $this->discounts;
     }
 
-    public function reducedTotal(): float
+    public function reducedTotal(): ?float
     {
         return $this->reducedTotal;
     }

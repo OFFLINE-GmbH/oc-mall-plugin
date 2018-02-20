@@ -57,21 +57,17 @@
         </td>
     </tr>
     <?php if($order['discounts']): ?>
-    <?php foreach ($order['discounts'] as $discount): ?>
+    <?php foreach ($order['discounts'] as $entry): ?>
     <tr class="orderdiscount">
         <td colspan="3">
             <span>
                 <?= e(trans('offline.mall::lang.common.discount')) ?>:
-                <?= e($discount['name']) ?>
+                <?= e($entry['discount']['name']) ?>
             </span>
         </td>
         <td class="text-right">
             <span>
-                <?php if($discount['amountSaved']): ?>
-                <?= e(format_money(-1 * (float)($discount['amountSaved']))) ?>
-                <?php else: ?>
-                <?= e(format_money(0)) ?>
-                <?php endif; ?>
+                <?= e(format_money($entry['savings'])) ?>
             </span>
         </td>
     </tr>
@@ -80,15 +76,19 @@
     <?php if ($order['shipping']): ?>
     <tr class="orderfooter separator">
         <td colspan="3">
-                <span>
-                    <?= e(trans('offline.mall::lang.common.shipping')) ?>:
-                    <?= e($order['shipping']['name']) ?>
-                </span>
+            <span>
+                <?= e(trans('offline.mall::lang.common.shipping')) ?>:
+                <?= e($order['shipping']['method']['name']) ?>
+                <?php if($order['shipping']['appliedDiscount']): ?>
+                    (<?= e($order['shipping']['appliedDiscount']['discount']['name']) ?>,
+                     <?= e(format_money($order['shipping']['appliedDiscount']['savings'])) ?>)
+                <?php endif; ?>
+            </span>
         </td>
         <td class="text-right">
-                <span>
-                    <?= e($order['shipping']['price_formatted']) ?>
-                </span>
+            <span>
+                <?= e(format_money($order['shipping']['method']['price'])) ?>
+            </span>
         </td>
     </tr>
     <?php endif; ?>

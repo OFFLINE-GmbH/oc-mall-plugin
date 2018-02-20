@@ -276,7 +276,7 @@ class Cart extends Model
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
         }
 
-        if ($discount->expires && $discount->expires->lt(Carbon::now())) {
+        if ($discount->expires && $discount->expires->lt(Carbon::today())) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.expired')]);
         }
 
@@ -305,9 +305,9 @@ class Cart extends Model
      * Checks if a product with the same $value is already
      * in the cart.
      *
-     * @param Product            $product
-     * @param Variant            $variant
-     * @param CustomFieldValue[] $values
+     * @param Product         $product
+     * @param Variant         $variant
+     * @param Collection|null $values
      *
      * @return bool
      */

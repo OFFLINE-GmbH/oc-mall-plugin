@@ -92,9 +92,9 @@ class Order extends Model
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
             $order->billing_address                         = $cart->billing_address;
             $order->shipping_address                        = $cart->shipping_address;
-            $order->shipping                                = $cart->shipping_method;
+            $order->shipping                                = $cart->totals->shippingTotal();
             $order->taxes                                   = $cart->totals->taxes();
-            $order->discounts                               = $cart->discounts;
+            $order->discounts                               = $cart->totals->appliedDiscounts();
             $order->ip_address                              = request()->ip();
             $order->customer_id                             = 1;
             $order->payment_method_id                       = $cart->payment_method_id;

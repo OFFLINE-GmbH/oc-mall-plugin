@@ -9,6 +9,7 @@ use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderState;
 use OFFLINE\Mall\Models\Product;
@@ -169,6 +170,33 @@ class OrderTest extends PluginTestCase
 
         $this->assertEquals(10, $product->fresh()->stock);
         $this->assertEquals(-1, $variant->fresh()->stock);
+    }
+
+
+    public function test_it_uses_the_correct_discounted_shipping_method()
+    {
+        $cart   = $this->getSimpleCart();
+        $method = $cart->shipping_method;
+
+        $this->assertEquals(1, $method->id);
+        $this->assertEquals('Default', $method->name);
+        $this->assertEquals(20, $method->price);
+
+        $discount                       = new Discount();
+        $discount->name                 = 'Shipping Test';
+        $discount->type                 = 'shipping';
+        $discount->trigger              = 'code';
+        $discount->code                 = 'SHIPPING';
+        $discount->shipping_price       = 10;
+        $discount->shipping_description = 'Reduced shipping';
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        $order = Order::fromCart($cart);
+        $this->assertEquals($discount->shipping_description, $order->shipping['method']['name']);
+        $this->assertEquals($discount->getOriginal('shipping_price'), $order->shipping['total']);
+        $this->assertEquals($discount->getOriginal('shipping_price'), $order->shipping['method']['price']);
     }
 
     protected function getFullCart(): Cart
