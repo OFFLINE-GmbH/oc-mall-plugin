@@ -37,6 +37,7 @@ tabs:
             span: full
             type: OFFLINE\Mall\FormWidgets\PropertyFields
             variantPropertiesOnly: true
+            fieldPrefix: VariantPropertyValues
             tab: 'offline.mall::lang.common.properties'
         main_image:
             label: 'offline.mall::lang.common.main_image'

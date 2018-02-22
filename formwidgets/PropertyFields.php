@@ -71,7 +71,7 @@ class PropertyFields extends FormWidgetBase
             'model' => new PropertyValue(),
         ]);
 
-        $formField        = new FormField('PropertyValues[' . $property->id . ']', $property->name);
+        $formField        = $this->newFormField($property);
         $formField->value = $value;
 
         $widget             = new ColorPicker($this->controller, $formField, $config);
@@ -93,7 +93,7 @@ class PropertyFields extends FormWidgetBase
 
     private function dropdown($property, $value)
     {
-        $formField          = new FormField('PropertyValues[' . $property->id . ']', $property->name);
+        $formField          = $this->newFormField($property);
         $formField->value   = $value;
         $formField->label   = $property->name;
         $formField->options = collect($property->options)->mapWithKeys(function ($i) {
@@ -109,7 +109,7 @@ class PropertyFields extends FormWidgetBase
 
     private function checkbox($property, $value)
     {
-        $formField          = new FormField('PropertyValues[' . $property->id . ']', $property->name);
+        $formField          = $this->newFormField($property);
         $formField->value   = $value;
         $formField->label   = $property->name;
         $formField->options = collect($property->options)->map(function ($i) {
@@ -129,7 +129,7 @@ class PropertyFields extends FormWidgetBase
             'sessionKey' => $this->sessionKey,
         ]);
 
-        $formField            = new FormField('PropertyValues[' . $property->id . ']', $property->name);
+        $formField            = $this->newFormField($property);
         $formField->valueFrom = 'image';
 
         $widget        = new FileUpload($this->controller, $formField, $config);
@@ -140,12 +140,19 @@ class PropertyFields extends FormWidgetBase
             ['field' => $property, 'widget' => $widget, 'value' => $value, 'session_key' => $this->sessionKey]);
     }
 
-    /**
-     * @return bool
-     */
+    protected function newFormField($property): FormField
+    {
+        return new FormField($this->fieldPrefix() . '[' . $property->id . ']', $property->name);
+    }
+
     protected function useVariantSpecificPropertiesOnly(): bool
     {
-        return isset($this->formField->config['variantPropertiesOnly']) && isset($this->formField->config['variantPropertiesOnly']) === true;
+        return isset($this->formField->config['variantPropertiesOnly']) && $this->formField->config['variantPropertiesOnly'] === true;
+    }
+
+    protected function fieldPrefix(): string
+    {
+        return $this->formField->config['fieldPrefix'] ?? 'PropertyValues';
     }
 
 }

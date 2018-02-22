@@ -73,8 +73,9 @@ class Variant extends \Model
 
     public static function boot()
     {
+        parent::boot();
         static::saved(function (Variant $variant) {
-            $values = post('PropertyValues');
+            $values = post('VariantPropertyValues');
             if ( ! $values) {
                 return;
             }
