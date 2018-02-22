@@ -1,9 +1,9 @@
 <?php return [
-    'plugin'                => [
+    'plugin'                   => [
         'name'        => 'Mall',
         'description' => 'Ecommerce-Plattform für October CMS',
     ],
-    'titles'                => [
+    'titles'                   => [
         'products'             => [
             'create'  => 'Produkt erstellen',
             'update'  => 'Produkt bearbeiten',
@@ -46,17 +46,31 @@
             'reorder' => 'Status sortieren',
         ],
     ],
-    'menu_items'            => [
+    'menu_items'               => [
         'all_categories' => 'Alle Shop-Kategorien',
     ],
-    'currency_settings'     => [
+    'currency_settings'        => [
         'label'           => 'Währungen',
         'description'     => 'Einstellungen zu den verwendeten Währungen',
         'currencies'      => 'Geben Sie jeweils nur den offiziellen dreistelligen Währungscode ein.',
         'currency_code'   => 'Währungscode',
         'currency_format' => 'Formatierung',
     ],
-    'general_settings'      => [
+    'payment_gateway_settings' => [
+        'label'       => 'Zahlungsanbieter',
+        'description' => 'Einstellungen zu den Zahlungsanbietern',
+        'stripe'      => [
+            'api_key'         => 'Stripe API-Key',
+            'api_key_comment' => 'Du findest diesen in deinem Stripe Dashboard',
+        ],
+        'paypal'      => [
+            'client_id'         => 'PayPal Client-ID',
+            'secret'            => 'PayPal Secret',
+            'test_mode'         => 'Test-Modus',
+            'test_mode_comment' => 'Führe alle Zahlungen in der PayPal Sandbox aus.',
+        ],
+    ],
+    'general_settings'         => [
         'category'                             => 'Mall',
         'label'                                => 'Grundkonfiguration',
         'description'                          => 'Allgemeine Einstellungen',
@@ -79,7 +93,7 @@
         'customizations'                       => 'Optionen',
         'customizations_comment'               => 'Globale Konfigurationseinstellungen für deinen Shop',
     ],
-    'common'                => [
+    'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Produkte',
         'product'              => 'Produkt',
@@ -147,13 +161,13 @@
         'sort_order'           => 'Sortierreihenfolge',
         'order_states'         => 'Bestellungs-Status',
     ],
-    'variant'               => [
+    'variant'                  => [
         'method' => [
             'single'  => 'Artikel',
             'variant' => 'Artikelvarianten',
         ],
     ],
-    'properties'            => [
+    'properties'               => [
         'use_for_variants'         => 'Verwende für Varianten',
         'use_for_variants_comment' => 'Diese Eigenschaft unterscheidet sich für die verschiedenen Produkt-Varianten',
         'filter_type'              => 'Filter-Typ',
@@ -163,7 +177,7 @@
             'range' => 'Bereichsauswahl',
         ],
     ],
-    'custom_field_options'  => [
+    'custom_field_options'     => [
         'text'       => 'Textfeld',
         'textarea'   => 'Mehrzeiliges Textfeld',
         'dropdown'   => 'Auswahlliste',
@@ -176,7 +190,7 @@
         'attributes' => 'Attribute',
         'option'     => 'Option',
     ],
-    'product'               => [
+    'product'                  => [
         'user_defined_id'                      => 'Artikelnummer',
         'name'                                 => 'Produktname',
         'published'                            => 'Veröffentlicht',
@@ -219,14 +233,14 @@
         'price_includes_tax_comment'           => 'Der angegebene Preis enthält bereits alle Steuern',
         'group_by_property'                    => 'Attribut für Varianten-Gruppierung',
     ],
-    'category'              => [
+    'category'                 => [
         'name'         => 'Name',
         'code'         => 'Code',
         'code_comment' => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
         'parent'       => 'Elternelement',
         'no_parent'    => 'Kein Elternelement',
     ],
-    'custom_fields'         => [
+    'custom_fields'            => [
         'name'             => 'Feldname',
         'type'             => 'Typ',
         'options'          => 'Optionen',
@@ -235,12 +249,12 @@
         'is_required'      => 'Pflichtfeld',
         'is_not_required'  => 'Kein Pflichtfeld',
     ],
-    'tax'                   => [
+    'tax'                      => [
         'percentage'        => 'Prozent',
         'countries'         => 'Steuer gilt nur für Versand in diese Länder',
         'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
     ],
-    'discounts'             => [
+    'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Gutschein-Code',
         'total_to_reach'                       => 'Gültig ab Bestellwert',
@@ -277,7 +291,7 @@
             'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
         ],
     ],
-    'order'                 => [
+    'order'                    => [
         'order_number'                        => 'Bestellungsnummer',
         'invoice_number'                      => 'Rechnungsnummer',
         'customer'                            => 'Kunde',
@@ -339,14 +353,14 @@
             'paid_state'     => 'Zahlung erhalten',
         ],
     ],
-    'shipping_method'       => [
+    'shipping_method'          => [
         'guaranteed_delivery_days' => 'Garantierte Lieferung in Tagen',
         'available_above_total'    => 'Verfügbar wenn Totalbetrag grösser oder gleich',
         'available_below_total'    => 'Verfügbar wenn Totalbetrag kleiner',
         'countries'                => 'Verfügbar für den Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandart weltweit verwendet werden.',
     ],
-    'payment_status'        => [
+    'payment_status'           => [
         'paid'          => 'Bezahlt',
         'deferred'      => 'Auf Rechnung',
         'paid_deferred' => 'Auf Rechnung bezahlt',
@@ -360,7 +374,7 @@
         'cancelled'     => 'Zahlung abgebrochen',
         'open'          => 'Zahlung ausstehend',
     ],
-    'permissions'           => [
+    'permissions'              => [
         'manage_products'   => 'Kann Produkte verwalten',
         'manage_categories' => 'Kann Kategorien verwalten',
         'manage_orders'     => 'Kann Bestellungen verwalten',
@@ -373,7 +387,7 @@
         ],
         'manage_properties' => 'Produkt-Eigenschaften bearbeiten',
     ],
-    'components'            => [
+    'components'               => [
         'category'              => [
             'details'    => [
                 'name'        => 'Kategorie',
@@ -601,14 +615,14 @@
             ],
         ],
     ],
-    'shipping_method_rates' => [
+    'shipping_method_rates'    => [
         'from_weight' => 'Von (Gewicht in Gramm)',
         'to_weight'   => 'Bis (Gewicht in Gramm)',
     ],
-    'products'              => [
+    'products'                 => [
         'variants_comment' => 'Erstelle verschiedene Varianten des gleichen Produkts',
     ],
-    'order_states'          => [
+    'order_states'             => [
         'name'        => 'Name',
         'description' => 'Beschreibung',
         'color'       => 'Farbe',

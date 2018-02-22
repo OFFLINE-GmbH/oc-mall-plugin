@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
+use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Omnipay;
 use Validator;
 
@@ -40,7 +41,7 @@ class Stripe extends PaymentProvider
     public function process(): PaymentResult
     {
         $gateway = Omnipay::create('Stripe');
-        $gateway->setApiKey(env('STRIPE_API_KEY'));
+        $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
 
         $response = $gateway->purchase([
             'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),

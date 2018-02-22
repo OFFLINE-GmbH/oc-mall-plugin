@@ -1,0 +1,24 @@
+tabs:
+    fields:
+        stripe_api_key:
+            label: offline.mall::lang.payment_gateway_settings.stripe.api_key
+            comment: offline.mall::lang.payment_gateway_settings.stripe.api_key_comment
+            span: left
+            type: text
+            tab: Stripe
+        paypal_test_mode:
+            label: offline.mall::lang.payment_gateway_settings.paypal.test_mode
+            comment: offline.mall::lang.payment_gateway_settings.paypal.test_mode_comment
+            span: left
+            type: switch
+            tab: PayPal
+        paypal_client_id:
+            label: offline.mall::lang.payment_gateway_settings.paypal.client_id
+            span: left
+            type: text
+            tab: PayPal
+        paypal_secret:
+            label: offline.mall::lang.payment_gateway_settings.paypal.secret
+            span: left
+            type: text
+            tab: PayPal

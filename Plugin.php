@@ -25,6 +25,7 @@ use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Customer;
+use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use RainLab\User\Models\User;
 use Rainlab\User\Models\User as UserModel;
 use System\Classes\PluginBase;
@@ -86,6 +87,16 @@ class Plugin extends PluginBase
                 'order'       => 20,
                 'permissions' => ['offline.mall.settings.manage_currency'],
                 'keywords'    => 'shop store mall currency',
+            ],
+            'payment_gateways_settings' => [
+                'label'       => 'offline.mall::lang.payment_gateway_settings.label',
+                'description' => 'offline.mall::lang.payment_gateway_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-credit-card',
+                'class'       => PaymentGatewaySettings::class,
+                'order'       => 30,
+                'permissions' => ['offline.mall.settings.manage_payment_gateways'],
+                'keywords'    => 'shop store mall payment gateways',
             ],
         ];
     }

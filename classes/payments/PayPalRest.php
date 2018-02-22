@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
+use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Omnipay;
 use Request;
 use Session;
@@ -98,9 +99,9 @@ class PayPalRest extends PaymentProvider
     {
         $gateway = Omnipay::create('PayPal_Rest');
         $gateway->initialize([
-            'clientId' => env('PAYPAL_CLIENT_ID'),
-            'secret'   => env('PAYPAL_SECRET'),
-            'testMode' => true,
+            'clientId' => decrypt(PaymentGatewaySettings::get('paypal_client_id')),
+            'secret'   => decrypt(PaymentGatewaySettings::get('paypal_secret')),
+            'testMode' => (bool)PaymentGatewaySettings::get('test_mode'),
         ]);
 
         return $gateway;
