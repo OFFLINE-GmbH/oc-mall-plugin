@@ -1,8 +1,8 @@
-<ul class="mall-categoryfilter mall-categoryfilter--set">
+<div class="mall-filter mall-filter--set">
     {% set selected = filter[property.id].values %}
     {% for value in property.values %}
         {% set isSelected = value.value in selected %}
-        <li class="js-mall-filter">
+        <div class="js-mall-filter mall-filter__option {{ isSelected ? 'mall-filter__option--selected' : '' }}">
             <input type="checkbox"
                    aria-hidden="true"
                    style="display: none"
@@ -12,7 +12,7 @@
                         checked
                     {% endif %}
             >
-            {{ value.display_value | raw }} ( {{ isSelected ? 'X' : '_' }} )
-        </li>
+            {{ value.display_value | raw }}
+        </div>
     {% endfor %}
-</ul>
+</div>

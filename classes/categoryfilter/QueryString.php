@@ -4,13 +4,14 @@ namespace OFFLINE\Mall\Classes\CategoryFilter;
 
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Property;
 
 class QueryString
 {
     use HashIds;
 
-    public function deserialize(array $query): Collection
+    public function deserialize(array $query, Category $category): Collection
     {
         if (count($query) < 1) {
             return collect([]);
@@ -28,15 +29,16 @@ class QueryString
                                    ->map(function ($property) use ($query) {
                                        $values = $query->get($property);
 
-                                       return new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null);
+                                       return new RangeFilter($property, $values['min'] ?? null,
+                                           $values['max'] ?? null);
                                    });
 
-        $properties = Property::whereIn('id', $query->keys())->get();
+        $properties = $category->with('properties')->first()->properties->whereIn('id',$query->keys());
 
         return $properties->map(function (Property $property) use ($query) {
-            if ($property->filter_type === 'set') {
+            if ($property->pivot->filter_type === 'set') {
                 return new SetFilter($property->id, $query->get($property->id));
-            } elseif ($property->filter_type === 'range') {
+            } elseif ($property->pivot->filter_type === 'range') {
                 $values = $query->get($property->id);
 
                 return new RangeFilter($property->id, $values['min'] ?? null, $values['max'] ?? null);

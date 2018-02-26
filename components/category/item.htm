@@ -1,23 +1,22 @@
-<div class="mall-item w-1/3 pb-6 pr-4 pl-4 text-sm">
-    <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}"
-       style="color: inherit" class="no-underline">
-        <div class="mall-item__image">
-            <img src="{{ item.image.thumb(200, 200, {mode: 'crop'}) }}" alt="{{ item.name }}"/>
+<div class="mall-product">
+    <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}">
+        <div class="mall-product__image">
+            <img src="{{ item.image.thumb('auto', 240) }}" alt="{{ item.name }}"/>
         </div>
-        <div class="mall-item__info mt-2">
+        <div class="mall-product__info">
             <div class="row flex">
-                <div class="mall-item__name flex-grow font-bold truncate">
+                <div class="mall-product__name">
                     {{ item.name }}
                 </div>
-                <div class="mall-item__price flex-no-grow pl-2 whitespace-no-wrap">
+                <div class="mall-product__price">
                     {{ item.price_formatted }}
                 </div>
             </div>
             <div class="row flex">
-                <div class="mall-item__short-description flex-grow truncate text-grey-dark">
+                <div class="mall-product__short-description">
                     {{ item.description_short }}
                 </div>
-                <div class="mall-item__old-price flex-no-grow pl-2 text-red-light italic line-through whitespace-no-wrap">
+                <div class="mall-product__old-price">
                     {{ item.old_price ? item.old_price_formatted : '' }}
                 </div>
             </div>

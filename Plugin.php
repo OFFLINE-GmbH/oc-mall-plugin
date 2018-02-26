@@ -78,6 +78,16 @@ class Plugin extends PluginBase
     public function registerSettings()
     {
         return [
+            'general_settings'  => [
+                'label'       => 'offline.mall::lang.general_settings.label',
+                'description' => 'offline.mall::lang.general_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-shopping-cart',
+                'class'       => 'OFFLINE\Mall\Models\GeneralSettings',
+                'order'       => 0,
+                'permissions' => ['offline.mall.settings.manage_general'],
+                'keywords'    => 'shop store mall general',
+            ],
             'currency_settings' => [
                 'label'       => 'offline.mall::lang.currency_settings.label',
                 'description' => 'offline.mall::lang.currency_settings.description',

@@ -1,14 +1,17 @@
-<ul class="mall-categoryfilter mall-categoryfilter--range">
+<div class="mall-filter mall-filter--range">
 
-    {% set start = property.property.minValue %}
-    {% set end = property.property.maxValue %}
+    <div class="mall-slider-handles"
+         data-start="{{ filter[id].minValue | default(min) }}"
+         data-end="{{ filter[id].maxValue | default(max) }}"
+         data-min="{{ min }}"
+         data-max="{{ max }}"
+         data-target="{{ hashId }}"
+         style="width: 100%"></div>
 
-    <input class="p-10 bg-grey-light"
-           type="text" name="filter[{{ property.hashId }}][min]"
-           value="{{ filter[property.id].minValue }}">
-    <input class="p-10 bg-grey-light"
-           type="text" name="filter[{{ property.hashId }}][max]"
-           value="{{ filter[property.id].maxValue }}">
-
-    <button class="js-mall-filter">Apply</button>
-</ul>
+    <input data-min="{{ hashId }}"
+           type="hidden" name="filter[{{ hashId }}][min]"
+           value="{{ filter[id].minValue }}">
+    <input data-max="{{ hashId }}"
+           type="hidden" name="filter[{{ hashId }}][max]"
+           value="{{ filter[id].maxValue }}">
+</div>

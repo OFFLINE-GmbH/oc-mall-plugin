@@ -1,6 +1,13 @@
 {% if property.values.count > 0 %}
     <div class="mall-property">
-        <label>{{ property.name }}</label>
-        {% partial __SELF__ ~ '::' ~ property.pivot.filter_type %}
+        <div class="mall-property__label">
+            {{ property.name }}
+        </div>
+        {% partial __SELF__ ~ '::' ~ property.pivot.filter_type
+            id  = property.id
+            hashId  = property.hashId
+            min = property.minValue
+            max = property.maxValue
+        %}
     </div>
 {% endif %}

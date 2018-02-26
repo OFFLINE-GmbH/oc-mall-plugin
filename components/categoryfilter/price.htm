@@ -1,13 +1,12 @@
 <div class="mall-property">
-    <label>{{ 'offline.mall::lang.product.price' | __ }}</label>
-    <ul class="mall-categoryfilter mall-categoryfilter--range">
-        <input class="p-10 bg-grey-light"
-               type="text" name="filter[price][min]"
-               value="{{ filter.price.values.min }}">
-        <input class="p-10 bg-grey-light"
-               type="text" name="filter[price][max]"
-               value="{{ filter.price.values.max }}">
+    <div class="mall-property__label">
+        {{ 'offline.mall::lang.product.price' | __ }}
+    </div>
 
-        <button class="js-mall-filter">Apply</button>
-    </ul>
+    {% partial __SELF__ ~ '::range'
+        id  = 'price'
+        hashId  = 'price'
+        min = __SELF__.priceRange[0]
+        max = __SELF__.priceRange[1]
+    %}
 </div>

@@ -10,25 +10,11 @@ fields:
         type: dropdown
         comment: offline.mall::lang.general_settings.product_page_comment
 
-    product_page_slug:
-        label: offline.mall::lang.general_settings.product_page_slug
-        span: right
-        type: text
-        default: "slug"
-        comment: offline.mall::lang.general_settings.product_page_slug_comment
-
     category_page:
         label: offline.mall::lang.general_settings.category_page
-        span: left
+        span: right
         type: dropdown
         comment: offline.mall::lang.general_settings.category_page_comment
-
-    category_page_slug:
-        label: offline.mall::lang.general_settings.category_page_slug
-        span: right
-        type: text
-        default: "slug"
-        comment: offline.mall::lang.general_settings.category_page_slug_comment
 
     customizations:
         label: offline.mall::lang.general_settings.customizations
@@ -41,17 +27,3 @@ fields:
         type: switch
         default: true
         comment: offline.mall::lang.general_settings.auto_pop_comment
-
-    show_continue_shopping:
-        label: offline.mall::lang.general_settings.show_continue_shopping
-        span: left
-        type: switch
-        default: true
-        comment: offline.mall::lang.general_settings.show_continue_shopping_comment
-
-    split_firstname_and_lastname:
-        label: offline.mall::lang.general_settings.split_firstname_and_lastname
-        span: left
-        type: switch
-        default: true
-        comment: offline.mall::lang.general_settings.split_firstname_and_lastname_comment

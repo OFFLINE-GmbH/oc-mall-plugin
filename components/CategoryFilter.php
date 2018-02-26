@@ -24,13 +24,11 @@ class CategoryFilter extends ComponentBase
      * @var Category
      */
     public $category;
-
     /**
      * All available property filters.
      * @var Collection
      */
     public $props;
-
     /**
      * @var Collection
      */
@@ -44,6 +42,10 @@ class CategoryFilter extends ComponentBase
      * @var boolean
      */
     public $showPriceFilter;
+    /**
+     * @var array
+     */
+    public $priceRange;
 
     public function componentDetails()
     {
@@ -73,6 +75,12 @@ class CategoryFilter extends ComponentBase
     {
         return [':slug' => trans('offline.mall::lang.components.category.properties.use_url')]
             + CategoryModel::get()->pluck('name', 'id')->toArray();
+    }
+
+    public function init()
+    {
+        $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.js');
+        $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.css');
     }
 
     public function onRun()
@@ -117,6 +125,7 @@ class CategoryFilter extends ComponentBase
         $this->setVar('props', $this->getProps());
         $this->setVar('filter', $this->getFilter());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
+        $this->setPriceRange();
     }
 
     protected function getCategory()
@@ -136,6 +145,12 @@ class CategoryFilter extends ComponentBase
         return CategoryModel::with($with)->findOrFail($category);
     }
 
+    protected function setPriceRange()
+    {
+        $products = $this->category->getProducts();
+        $this->setVar('priceRange', [$products->min('price'), $products->max('price')]);
+    }
+
     protected function getProps()
     {
         return $this->category->properties->reject(function (Property $property) {
@@ -150,7 +165,7 @@ class CategoryFilter extends ComponentBase
             $filter = [];
         }
 
-        return (new QueryString())->deserialize($filter);
+        return (new QueryString())->deserialize($filter, $this->category);
     }
 
     protected function replaceFilter($filter)

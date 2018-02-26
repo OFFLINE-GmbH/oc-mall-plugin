@@ -101,24 +101,7 @@ class Category extends ComponentBase
     {
         $showVariants = (bool)$this->property('show_variants');
 
-        $this->category->publishedProducts->load('variants');
-
-        $items = $this->category->publishedProducts->flatMap(function (Product $product) {
-            return $product->inventory_management_method === 'variant' ? $product->variants : [$product];
-        });
-
-        $filtered = $this->applyFilters($items);
-
-        if ($showVariants) {
-            return $filtered;
-        }
-
-        // If the variants should not be listed separately we select
-        // all parent products with properties matching the current filter
-        // criteria.
-        $productIds = $filtered->unique('product_id')->map->product_id;
-
-        return Product::with('variants')->whereIn('id', $productIds)->get();
+        return $this->applyFilters($this->category->getProducts($showVariants));
     }
 
     protected function getCategory()
@@ -158,7 +141,7 @@ class Category extends ComponentBase
             $filter = [];
         }
 
-        $filters = (new QueryString())->deserialize($filter);
+        $filters = (new QueryString())->deserialize($filter, $this->category);
         foreach ($filters as $propertyId => $filter) {
             $items = $filter->apply($items);
         }

@@ -134,23 +134,18 @@ class Category extends Model
         $structure = [];
         $category  = new Category();
 
-        $pageSlug = GeneralSettings::get('category_page_slug', 'slug');
-        if ($pageSlug === '') {
-            $pageSlug = 'slug';
-        }
-
         if ( ! $pageUrl = GeneralSettings::get('category_page')) {
             throw new InvalidArgumentException(
                 'Mall: Please select a category page via the backend settings.'
             );
         }
 
-        $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $pageUrl, $pageSlug, $url) {
+        $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $pageUrl, $url) {
             $branch = [];
 
             $controller = new Controller();
             foreach ($items as $item) {
-                $entryUrl               = $controller->pageUrl($pageUrl, [$pageSlug => $item->slug]);
+                $entryUrl               = $controller->pageUrl($pageUrl, ['slug' => $item->slug]);
                 $branchItem             = [];
                 $branchItem['url']      = $entryUrl;
                 $branchItem['isActive'] = $entryUrl === $url;
@@ -218,5 +213,32 @@ class Category extends Model
 
             return $map;
         });
+    }
+
+    /**
+     * Liefert alle Produkte in dieser Kategorie zurück.
+     *
+     * @param bool $useVariants
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getProducts($useVariants = true)
+    {
+        $this->publishedProducts->load('variants');
+
+        $items = $this->publishedProducts->flatMap(function (Product $product) {
+            return $product->inventory_management_method === 'variant' ? $product->variants : [$product];
+        });
+
+        if ($useVariants) {
+            return $items;
+        }
+
+        // If the variants should not be listed separately we select
+        // all parent products with properties matching the current filter
+        // criteria.
+        $productIds = $items->unique('product_id')->map->product_id;
+
+        return Product::with('variants')->whereIn('id', $productIds)->get();
     }
 }

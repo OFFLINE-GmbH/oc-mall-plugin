@@ -3,18 +3,18 @@ fields:
         label: 'offline.mall::lang.category.parent'
         type: dropdown
         span: left
+    slug:
+        label: 'offline.mall::lang.common.slug'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
     name:
         label: 'offline.mall::lang.category.name'
         oc.commentPosition: ''
         span: auto
-        type: text
-    slug:
-        label: 'offline.mall::lang.common.slug'
-        oc.commentPosition: ''
-        span: left
-        preset:
-            field: name
-            type: slug
         type: text
     image:
         label: 'offline.mall::lang.common.main_image'

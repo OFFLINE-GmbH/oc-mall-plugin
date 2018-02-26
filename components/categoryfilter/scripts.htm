@@ -1,11 +1,12 @@
 {% put scripts %}
     <script>
         $(function () {
-            var $propertiesForm = $('.mall-category-properties');
+            var $propertiesForm = $('.mall-category-filter');
 
             $('body').on('click', '.js-mall-filter', function () {
                 var $input = $(this).find('input');
-                $input.prop('checked', !$input.prop('checked'));
+                $(this).toggleClass('mall-filter__option--selected')
+                $input.prop('checked', ! $input.prop('checked'));
                 $propertiesForm.trigger('submit');
             });
 
@@ -15,7 +16,6 @@
                 $.publish('mall.category.filter.start')
                 $(this).request('{{ __SELF__ }}::onSetFilter', {
                     loading: $.oc.stripeLoadIndicator,
-                    update: {'{{ __SELF__ }}::properties': '.mall-category-properties'},
                     complete: function (response) {
                         $.oc.stripeLoadIndicator.hide()
                         if (response.responseJSON.hasOwnProperty('queryString')) {
@@ -30,6 +30,25 @@
                     }
                 });
             });
+
+            $('.mall-slider-handles').each(function () {
+                var el = this;
+                noUiSlider.create(el, {
+                    start: [el.dataset.start, el.dataset.end],
+                    range: {
+                        min: [parseFloat(el.dataset.min)],
+                        max: [parseFloat(el.dataset.max)]
+                    },
+                    pips: {
+                        mode: 'range',
+                        density: 4
+                    }
+                }).on('change', function (values) {
+                    $('[data-min="' + el.dataset.target + '"]').val(values[0])
+                    $('[data-max="' + el.dataset.target + '"]').val(values[1])
+                    $propertiesForm.trigger('submit');
+                });
+            })
         })
     </script>
 {% endput %}

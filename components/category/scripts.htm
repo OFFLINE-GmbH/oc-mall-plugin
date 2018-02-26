@@ -2,12 +2,12 @@
     <script>
         $(function () {
             $.subscribe('mall.category.filter.start', function() {
-                $('.mall-category-entries').html('Loading...')
+                $('.mall-category').html('...')
             });
 
             $.subscribe('mall.category.filter.complete', function () {
                 $.request('{{ __SELF__ }}::onRun', {
-                    update: {'{{ __SELF__ }}::entries': '.mall-category-entries'},
+                    update: {'{{ __SELF__ }}::entries': '.mall-category'},
                 });
             });
         })
