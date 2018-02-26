@@ -45,6 +45,10 @@
             'edit'    => 'Status bearbeiten',
             'reorder' => 'Status sortieren',
         ],
+        'brands'               => [
+            'create' => 'Marke erstellen',
+            'edit'   => 'Marke bearbeiten',
+        ],
     ],
     'menu_items'               => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -160,6 +164,9 @@
         'deleted_at'           => 'Gelöscht am',
         'sort_order'           => 'Sortierreihenfolge',
         'order_states'         => 'Bestellungs-Status',
+        'website'              => 'Website',
+        'brands'               => 'Marken',
+        'brand'                => 'Marke',
     ],
     'variant'                  => [
         'method' => [

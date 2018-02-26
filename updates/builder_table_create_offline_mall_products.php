@@ -11,6 +11,7 @@ class BuilderTableCreateOfflineMallProducts extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('category_id')->nullable();
+            $table->integer('brand_id')->nullable();
             $table->string('user_defined_id')->nullable();
             $table->string('name', 255);
             $table->string('slug', 255);

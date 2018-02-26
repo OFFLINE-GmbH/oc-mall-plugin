@@ -42,3 +42,12 @@ taxes:
         form: $/offline/mall/models/tax/fields.yaml
         recordsPerPage: 10
     deferredBinding: true
+
+brand:
+    label: 'offline.mall::lang.common.brand'
+    view:
+        form: $/offline/mall/models/brand/fields_relation_manager.yaml
+        toolbarButtons: add|create|remove
+    manage:
+        form: $/offline/mall/models/brand/fields.yaml
+        list: $/offline/mall/models/brand/columns.yaml

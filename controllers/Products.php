@@ -34,6 +34,7 @@ class Products extends Controller
 
         $model                  = post('option_id') ? CustomFieldOption::find(post('option_id')) : null;
         $this->optionFormWidget = $this->createOptionFormWidget($model);
+        $this->addCss('/plugins/offline/mall/assets/backend.css');
     }
 
     public function create()

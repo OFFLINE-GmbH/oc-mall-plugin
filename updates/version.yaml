@@ -30,4 +30,5 @@
     - builder_table_create_offline_mall_property_values.php
     - builder_table_create_offline_mall_category_property.php
     - builder_table_create_offline_mall_order_states.php
+    - builder_table_create_offline_mall_brands.php
     - database_seeder.php

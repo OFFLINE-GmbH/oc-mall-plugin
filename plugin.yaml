@@ -61,10 +61,12 @@ navigation:
                 icon: icon-sitemap
                 permissions:
                     - offline.mall.manage_categories
-            mall-custom-fields:
-                label: 'offline.mall::lang.common.custom_fields'
-                url: offline/mall/customfields
-                icon: icon-sliders
+            mall-brands:
+                label: 'offline.mall::lang.common.brands'
+                url: offline/mall/brands
+                icon: icon-cube
+                permissions:
+                    - offline.mall.manage_products
             mall-properties:
                 label: 'offline.mall::lang.common.properties'
                 url: offline/mall/properties

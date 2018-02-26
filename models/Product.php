@@ -68,6 +68,7 @@ class Product extends Model
 
     public $belongsTo = [
         'category'          => Category::class,
+        'brand'             => Brand::class,
         'group_by_property' => [
             Property::class,
             'key' => 'group_by_property_id',

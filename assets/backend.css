@@ -74,3 +74,12 @@ table.table.data tbody tr.orderfooter-taxes td {
     letter-spacing: 1px;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .1)
 }
+
+.fancy-layout .relation-behavior .form-tabless-fields {
+    background: transparent;
+    padding: 0;
+}
+.fancy-layout .relation-behavior .form-tabless-fields label {
+    color: inherit;
+    text-transform: none;
+}

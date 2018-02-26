@@ -109,15 +109,19 @@ tabs:
         user_defined_id:
             label: 'offline.mall::lang.product.user_defined_id'
             oc.commentPosition: ''
-            span: right
+            span: auto
             type: text
             tab: 'offline.mall::lang.product.description'
         description:
             label: 'offline.mall::lang.product.description'
             size: giant
-            oc.commentPosition: ''
-            span: full
+            span: left
             type: richeditor
+            tab: 'offline.mall::lang.product.description'
+        brand:
+            span: auto
+            path: $/offline/mall/controllers/products/_brand.htm
+            type: partial
             tab: 'offline.mall::lang.product.description'
         _properties@update:
             oc.commentPosition: ''
