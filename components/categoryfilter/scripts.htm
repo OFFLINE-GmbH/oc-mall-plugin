@@ -35,13 +35,14 @@
                 var el = this;
                 noUiSlider.create(el, {
                     start: [el.dataset.start, el.dataset.end],
+                    connect: true,
                     range: {
                         min: [parseFloat(el.dataset.min)],
                         max: [parseFloat(el.dataset.max)]
                     },
                     pips: {
                         mode: 'range',
-                        density: 4
+                        density: 20
                     }
                 }).on('change', function (values) {
                     $('[data-min="' + el.dataset.target + '"]').val(values[0])

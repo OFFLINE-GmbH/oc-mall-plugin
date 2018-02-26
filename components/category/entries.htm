@@ -1,3 +1,7 @@
+<h2 class="mall-category-heading">{{ __SELF__.category.name }}</h2>
+
+{% partial __SELF__ ~ '::loader' %}
+
 {% if __SELF__.items.count %}
     {% partial __SELF__ ~ '::items' items=__SELF__.items %}
 {% else %}

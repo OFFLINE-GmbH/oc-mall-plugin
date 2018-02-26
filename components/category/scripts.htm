@@ -2,7 +2,7 @@
     <script>
         $(function () {
             $.subscribe('mall.category.filter.start', function() {
-                $('.mall-category').html('...')
+                $('.mall-category').find('.mall-loader').css({opacity: 1, visibility: 'visible'})
             });
 
             $.subscribe('mall.category.filter.complete', function () {
