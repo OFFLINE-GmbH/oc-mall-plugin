@@ -1,6 +1,7 @@
 <div class="mall-property">
     <div class="mall-property__label">
         {{ 'offline.mall::lang.product.price' | __ }}
+        {% partial __SELF__ ~ '::clearfilter' id='price' %}
     </div>
 
     {% partial __SELF__ ~ '::range'

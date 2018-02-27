@@ -113,8 +113,13 @@ class CategoryFilter extends ComponentBase
                     : [$id => new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null)];
             }
 
-            return [$id => new SetFilter($property, $values)];
+            // Remove empty set values
+            $values = array_filter($values);
+
+            return count($values) ? [$id => new SetFilter($property, $values)] : [];
         });
+
+        $filter = $this->hashKeys($filter);
 
         return $this->replaceFilter($filter);
     }
@@ -165,7 +170,7 @@ class CategoryFilter extends ComponentBase
             $filter = [];
         }
 
-        return (new QueryString())->deserialize($filter, $this->category);
+        return $this->hashKeys((new QueryString())->deserialize($filter, $this->category));
     }
 
     protected function replaceFilter($filter)
@@ -177,6 +182,15 @@ class CategoryFilter extends ComponentBase
             'filter'      => $filter,
             'queryString' => (new QueryString())->serialize($filter),
         ];
+    }
+
+    protected function hashKeys(Collection $data): Collection
+    {
+        return $data->mapWithKeys(function ($item, $key) {
+            $key = $this->isSpecialProperty($key) ? $key : $this->encode($key);
+
+            return [$key => $item];
+        });
     }
 
     protected function isSpecialProperty(string $prop): bool

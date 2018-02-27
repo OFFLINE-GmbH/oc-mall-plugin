@@ -237,7 +237,9 @@ class Category extends Model
         // If the variants should not be listed separately we select
         // all parent products with properties matching the current filter
         // criteria.
-        $productIds = $items->unique('product_id')->map->product_id;
+        $productIds = $items->map(function($item) {
+            return $item->product_id ?? $item->id;
+        })->unique();
 
         return Product::with('variants')->whereIn('id', $productIds)->get();
     }
