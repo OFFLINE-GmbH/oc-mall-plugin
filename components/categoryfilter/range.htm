@@ -1,8 +1,8 @@
 <div class="mall-filter mall-filter--range">
 
     <div class="mall-slider-handles"
-         data-start="{{ filter[id].minValue | default(min) }}"
-         data-end="{{ filter[id].maxValue | default(max) }}"
+         data-start="{{ filter[hashId].minValue | default(min) }}"
+         data-end="{{ filter[hashId].maxValue | default(max) }}"
          data-min="{{ min }}"
          data-max="{{ max }}"
          data-target="{{ hashId }}"
@@ -10,8 +10,8 @@
 
     <input data-min="{{ hashId }}"
            type="hidden" name="filter[{{ hashId }}][min]"
-           value="{{ filter[id].minValue }}">
+           value="{{ filter[hashId].minValue }}">
     <input data-max="{{ hashId }}"
            type="hidden" name="filter[{{ hashId }}][max]"
-           value="{{ filter[id].maxValue }}">
+           value="{{ filter[hashId].maxValue }}">
 </div>

@@ -4,9 +4,14 @@
 
 properties:
     label: 'offline.mall::lang.common.properties'
+    deferredBinding: false
+    showSorting: false
     view:
         list: $/offline/mall/models/property/columns.yaml
         toolbarButtons: add|create|remove
+        defaultSort:
+            column: sort_order
+            direction: asc
     manage:
         form: $/offline/mall/models/property/fields.yaml
         recordsPerPage: 10
@@ -23,4 +28,3 @@ properties:
                     oc.commentPosition: ''
                     span: right
                     type: dropdown
-    deferredBinding: true

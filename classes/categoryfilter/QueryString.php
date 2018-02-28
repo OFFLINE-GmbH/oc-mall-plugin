@@ -33,7 +33,7 @@ class QueryString
                                            $values['max'] ?? null);
                                    });
 
-        $properties = $category->with('properties')->first()->properties->whereIn('id', $query->keys());
+        $properties = $category->load('properties')->properties->whereIn('id', $query->keys());
 
         return $properties->map(function (Property $property) use ($query) {
             if ($property->pivot->filter_type === 'set') {

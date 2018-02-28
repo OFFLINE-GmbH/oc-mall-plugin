@@ -3,6 +3,7 @@
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\SortableRelation;
 
 /**
  * Model
@@ -14,7 +15,6 @@ class Property extends Model
     use HashIds;
 
     protected $dates = ['deleted_at'];
-
     public $jsonable = ['options'];
 
     public $rules = [
@@ -27,6 +27,21 @@ class Property extends Model
     public $hasMany = [
         'property_values' => PropertyValue::class,
     ];
+    public $belongsToMany = [
+        'categories' => [
+            Category::class,
+            'table'      => 'offline_mall_category_property',
+            'key'        => 'property_id',
+            'otherKey'   => 'category_id',
+            'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
+            'pivotModel' => CategoryProperty::class
+        ],
+    ];
+
+    public function getSortOrderAttribute()
+    {
+        return $this->pivot->sort_order;
+    }
 
     public function getValuesAttribute()
     {

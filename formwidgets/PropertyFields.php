@@ -38,12 +38,13 @@ class PropertyFields extends FormWidgetBase
 
         $fields = optional($this->controller->vars['formModel']->category)->properties;
 
-        if ($this->useVariantSpecificPropertiesOnly()) {
-            $fields = $fields->filter(function (Property $property) {
-                return (bool)$property->pivot->use_for_variants === true;
+        if ($this->controller->vars['formModel']->inventory_management_method !== 'single') {
+            $useForVariants = $this->useVariantSpecificPropertiesOnly();
+            $fields         = $fields->filter(function (Property $property) use ($useForVariants) {
+                return (bool)$property->pivot->use_for_variants === $useForVariants;
             });
         }
-
+        
         $this->vars['fields'] = $fields;
     }
 

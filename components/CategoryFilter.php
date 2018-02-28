@@ -160,7 +160,7 @@ class CategoryFilter extends ComponentBase
     {
         return $this->category->properties->reject(function (Property $property) {
             return $property->pivot->filter_type === null;
-        });
+        })->sortBy('pivot.sort_order');
     }
 
     protected function getFilter()

@@ -9,7 +9,7 @@
                     {{ item.name }}
                 </div>
                 <div class="mall-product__price">
-                    {{ item.price_formatted }}
+                    {{ item.price_formatted | raw }}
                 </div>
             </div>
             <div class="row flex">
@@ -17,7 +17,7 @@
                     {{ item.description_short }}
                 </div>
                 <div class="mall-product__old-price">
-                    {{ item.old_price ? item.old_price_formatted : '' }}
+                    {{ item.old_price ? (item.old_price_formatted | raw) : '' }}
                 </div>
             </div>
         </div>

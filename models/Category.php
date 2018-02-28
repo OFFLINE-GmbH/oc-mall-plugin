@@ -8,6 +8,7 @@ use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Models\File;
 
 /**
@@ -19,6 +20,7 @@ class Category extends Model
     use SoftDelete;
     use NestedTree;
     use Sluggable;
+    use SortableRelation;
 
     public const ID_MAP_CACHE_KEY = 'oc-mall.categories.id_map';
 
@@ -64,7 +66,7 @@ class Category extends Model
             'table'      => 'offline_mall_category_property',
             'key'        => 'category_id',
             'otherKey'   => 'property_id',
-            'pivot'      => ['use_for_variants', 'filter_type'],
+            'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
             'pivotModel' => CategoryProperty::class,
         ],
     ];
@@ -237,7 +239,7 @@ class Category extends Model
         // If the variants should not be listed separately we select
         // all parent products with properties matching the current filter
         // criteria.
-        $productIds = $items->map(function($item) {
+        $productIds = $items->map(function ($item) {
             return $item->product_id ?? $item->id;
         })->unique();
 

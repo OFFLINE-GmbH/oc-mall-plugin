@@ -6,6 +6,10 @@ use Backend\Behaviors\RelationController;
 use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use BackendMenu;
+use Flash;
+use OFFLINE\Mall\Models\Category;
+use OFFLINe\Mall\Models\CategoryProperty;
+use OFFLINE\Mall\Models\Property;
 
 class Categories extends Controller
 {
@@ -29,5 +33,16 @@ class Categories extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-categories');
+        $this->addJs('/plugins/offline/mall/assets/Sortable.js');
+        $this->addJs('/plugins/offline/mall/assets/backend.js');
+    }
+
+    public function onReorder()
+    {
+        $records = request()->input('rcd');
+        $model   = Category::findOrFail($this->params[0]);
+        $model->setRelationOrder('properties', $records, range(1, count($records)));
+
+        Flash::success(trans('offline.mall::lang.common.sorting_updated'));
     }
 }
