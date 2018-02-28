@@ -124,7 +124,10 @@ class Category extends ComponentBase
             $this->pageNumber
         );
 
-        $pageUrl = $this->controller->pageUrl($this->page->fileName, ['slug' => $this->param('slug')]);
+        $filter = request()->get('filter', []);
+        $paginator->appends('filter', $filter);
+
+        $pageUrl = $this->controller->pageUrl($this->page->fileName, ['slug' => $this->param('slug'),]);
 
         return $paginator->setPath($pageUrl);
     }
