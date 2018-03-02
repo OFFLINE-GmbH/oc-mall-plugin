@@ -32,9 +32,11 @@
                     data: {id: this.dataset.id},
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                     loading: $.oc.stripeLoadIndicator,
+                    confirm: 'Are you sure?',
                     success: function (data) {
                         this.success(data)
                         $.publish('mall.cart.update', data)
+                        $.publish('mall.cart.productRemoved')
                     }
                 })
             });

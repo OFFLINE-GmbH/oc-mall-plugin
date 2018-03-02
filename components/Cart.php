@@ -8,6 +8,8 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
+use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\ShippingMethod;
 use Request;
 use Session;
 
@@ -19,6 +21,10 @@ class Cart extends ComponentBase
     public $cart;
     public $defaultMinQuantity = 1;
     public $defaultMaxQuantity = 100;
+    /**
+     * @var string
+     */
+    public $productPage;
 
     public function componentDetails()
     {
@@ -92,6 +98,11 @@ class Cart extends ComponentBase
     {
         $cart = CartModel::byUser(Auth::getUser());
         $cart->load(['products', 'products.custom_field_values', 'discounts']);
+        if ($cart->shipping_method_id === null) {
+            $cart->setShippingMethod(ShippingMethod::getDefault());
+        }
+
         $this->setVar('cart', $cart);
+        $this->setVar('productPage', GeneralSettings::get('product_page'));
     }
 }

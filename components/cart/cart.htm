@@ -1,6 +1,6 @@
 {% if cart.products.length %}
     {% partial __SELF__ ~ '::empty' %}
 {% else %}
-    {% partial __SELF__ ~ '::table' %}
-    {% partial __SELF__ ~ '::discount-applier' %}
+    {% partial __SELF__ ~ '::table/base' %}
+    {% partial __SELF__ ~ '::discountapplier' %}
 {% endif %}

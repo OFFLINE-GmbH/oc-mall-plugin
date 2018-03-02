@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use Url;
@@ -78,11 +79,6 @@ class Category extends ComponentBase
             + CategoryModel::get()->pluck('name', 'id')->toArray();
     }
 
-    public function getProduct_PageOptions()
-    {
-        return Page::listInTheme(Theme::getActiveThemeCode())->pluck('title', 'fileName')->toArray();
-    }
-
     public function onRun()
     {
         $this->setData();
@@ -91,7 +87,7 @@ class Category extends ComponentBase
     protected function setData()
     {
         $this->setVar('category', $this->getCategory());
-        $this->setVar('productPage', $this->property('product_page'));
+        $this->setVar('productPage', GeneralSettings::get('product_page'));
         $this->setVar('pageNumber', (int)request('page', 1));
         $this->setVar('perPage', (int)$this->property('per_page'));
         $this->setVar('items', $this->paginate($this->getItems()));

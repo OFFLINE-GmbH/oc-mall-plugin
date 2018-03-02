@@ -1,0 +1,14 @@
+{% for entry in discounts %}
+    <tr class="mall-cart__discount">
+        <td></td>
+        <td colspan="3">
+            {{ entry.discount.name }}
+            {% if entry.discount.code %}
+                ({{ entry.discount.code }})
+            {% endif %}
+        </td>
+        <td class="text-right">
+            {{ entry.savings | money }}
+        </td>
+    </tr>
+{% endfor %}

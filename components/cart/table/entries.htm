@@ -1,0 +1,21 @@
+<div class="mall-cart__wrapper">
+    <div style="overflow-y: auto">
+        <table class="mall-cart__table">
+            <thead>
+                {% partial __SELF__ ~ '::table/header' %}
+            </thead>
+            <tbody>
+                {% for product in cart.products %}
+                    {% partial __SELF__ ~ '::table/entry' product=product %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                {% partial __SELF__ ~ '::table/total'      totals=cart.totals %}
+                {% partial __SELF__ ~ '::table/discounts'  discounts=cart.totals.appliedDiscounts %}
+                {% partial __SELF__ ~ '::table/shipping'   shipping=cart.totals.shippingTotal %}
+                {% partial __SELF__ ~ '::table/grandtotal' totals=cart.totals %}
+                {% partial __SELF__ ~ '::table/taxes'      taxes=cart.totals.taxes %}
+            </tfoot>
+        </table>
+    </div>
+</div>

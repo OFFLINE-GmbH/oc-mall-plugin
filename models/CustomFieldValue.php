@@ -67,7 +67,7 @@ class CustomFieldValue extends Model
             return $this->custom_field_option->name;
         }
         if ($this->custom_field->type === 'image') {
-            return sprintf('<img src="%s" />', $this->custom_field_option->image->getThumb(15, 15, 'crop'));
+            return $this->custom_field_option->name;
         }
 
         return $value;
