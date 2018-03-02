@@ -32,7 +32,7 @@
                     data: {id: this.dataset.id},
                     update: {'{{ __SELF__ }}::cart': '.mall-cart'},
                     loading: $.oc.stripeLoadIndicator,
-                    confirm: 'Are you sure?',
+                    confirm: '{{ 'mall.confirm' | _ }}',
                     success: function (data) {
                         this.success(data)
                         $.publish('mall.cart.update', data)
