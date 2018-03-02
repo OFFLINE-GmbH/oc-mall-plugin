@@ -8,7 +8,6 @@ use System\Models\File;
 
 trait Images
 {
-
     /**
      * Return the main image, if one is uploaded. Otherwise
      * use the first available image.
@@ -37,7 +36,9 @@ trait Images
             return $this->images;
         }
 
-        return $this->images->prepend($this->main_image)->unique();
+        // To prevent the mutation of the original images relationship
+        // property we create a new collection and return it instead.
+        return collect([$this->main_image])->concat($this->images->unique());
     }
 
     /**

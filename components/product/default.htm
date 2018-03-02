@@ -1,54 +1,11 @@
-<div class="mall-product">
-
-    <form data-request="onAddToCart">
-
-        <h3>{{ item.name }}</h3>
-        {% if item.description_short %}
-            <h4>{{ item.description_short }}</h4>
-        {% endif %}
-
-        <div class="mall-product__price">
-            {% partial __SELF__ ~ '::price' item=item %}
+<form data-request="onAddToCart" data-request-success="$.publish('mall.product.addedToCart')">
+    <div class="mall-product">
+        <div class="mall-product__info">
+            {% partial __SELF__ ~ '::info' %}
         </div>
-
-        <div class="mall-product__description">
-            {{ item.description | raw }}
+        <div class="mall-product__cart">
+            {% partial __SELF__ ~ '::cart' %}
         </div>
-
-        <div class="mall-custom-fields">
-            {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
-        </div>
-
-        <div class="mall-product__images">
-            {% for image in item.all_images %}
-                <img src="{{ image.thumb(300, auto) }}" alt=""/>
-            {% endfor %}
-        </div>
-
-        <div class="mall-variants">
-            {% for value, variant in variants %}
-                {% set variant = variant.first() %}
-                <div class="mall-variant">
-                    <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}">
-                        <p><img src="{{ variant.main_image.thumb(150, auto) }}" alt="{{ variant.name }}"/></p>
-                        <p>{{ variant.name }}</p>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="mall-variant-properties">
-            {% partial __SELF__ ~ '::properties' props=props %}
-        </div>
-
-        <div class="mall-add-to-cart">
-            {% if item.allow_out_of_stock_purchases %}
-                {% partial __SELF__ ~ '::addtocart.htm' item=item %}
-            {% else %}
-                Checking stock...
-            {% endif %}
-        </div>
-
-    </form>
-</div>
+    </div>
+</form>
 {% partial __SELF__ ~ '::scripts' %}

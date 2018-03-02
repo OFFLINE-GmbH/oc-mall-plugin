@@ -2,7 +2,7 @@
     <script>
         $(function () {
             var $body = $('body');
-            var $addToCart = $('.mall-add-to-cart');
+            var $addToCart = $('.mall-product__add-to-cart');
 
 
             {% if not item.allow_out_of_stock_purchases %}
@@ -11,13 +11,13 @@
                     return this.value;
                 }).toArray();
 
-                $addToCart.text('Checking stock...');
+                $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'mall.stock.checking' | _ }}</div>');
 
                 $.request('onChangeProperty', {
                     data: {values: values},
                     loading: isInitial ? null : $.oc.stripeLoadIndicator,
                     update: {
-                        '{{ __SELF__ }}::addtocart': '.mall-add-to-cart',
+                        '{{ __SELF__ }}::addtocart': '.mall-product__add-to-cart',
                         '{{ __SELF__ }}::price': '.mall-product__price'
                     }
                 })
@@ -34,7 +34,7 @@
                     data: {slug: '{{ item.slug }}'},
                     loading: null,
                     update: {
-                        '{{ __SELF__ }}::addtocart': '.mall-add-to-cart'
+                        '{{ __SELF__ }}::addtocart': '.mall-product__add-to-cart'
                     }
                 })
             }

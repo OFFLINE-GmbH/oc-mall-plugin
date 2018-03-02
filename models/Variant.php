@@ -1,5 +1,8 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -12,8 +15,8 @@ use System\Models\File;
  */
 class Variant extends \Model
 {
-    use \October\Rain\Database\Traits\Validation;
-    use \October\Rain\Database\Traits\SoftDelete;
+    use Validation;
+    use SoftDelete;
     use Images;
     use HashIds;
     use CustomFields;
@@ -121,7 +124,7 @@ class Variant extends \Model
 
         $value = $this->priceGetAttribute($attribute);
 
-        if ($value !== null || ! isset($this->attributes['product_id'])) {
+        if ($this->notNullthy($value) || ! isset($this->attributes['product_id'])) {
             return $value;
         }
 
@@ -131,23 +134,6 @@ class Variant extends \Model
         }
 
         return $this->parent->getAttribute($attribute);
-    }
-
-    /**
-     * Return the main image, if one is uploaded. Otherwise
-     * use the first available image.
-     *
-     * @return File
-     */
-    public function getImageAttribute()
-    {
-        if ($this->main_image) {
-            return $this->main_image;
-        }
-
-        if ($this->images) {
-            return $this->images->first();
-        }
     }
 
     /**
@@ -186,5 +172,14 @@ class Variant extends \Model
                 // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
                 return sprintf('%s: %s', e($value->property->name), $value->display_value);
             })->implode('<br />');
+    }
+
+    protected function notNullthy($value): bool
+    {
+        if ($value instanceof \Illuminate\Support\Collection) {
+            return $value->count() > 0;
+        }
+
+        return $value !== null;
     }
 }

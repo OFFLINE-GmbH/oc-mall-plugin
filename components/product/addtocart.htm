@@ -1,10 +1,16 @@
 {% if not item.allow_out_of_stock_purchases %}
-    <div class="mall-property-stock text-{{ stock ? 'green' : 'red' }}">
-        {{ stock ? stock : 'No' }} items in stock.
+    <div class="mall-product__property-stock text-{{ stock ? 'green' : 'red' }}">
+        {% if stock %}
+            {{ 'mall.stock.available' | __(stock, {stock: stock}) }}
+        {% else %}
+            {{ 'mall.stock.unavailable' | _ }}
+        {% endif %}
     </div>
 {% endif %}
 {% if stock or item.allow_out_of_stock_purchases %}
-    <button type="submit" data-attach-loading>
-        Add to Cart
-    </button>
+    <div class="mall-product__add-to-cart-button">
+        <button type="submit" data-attach-loading>
+            {{ 'mall.cart.add' | _ }}
+        </button>
+    </div>
 {% endif %}

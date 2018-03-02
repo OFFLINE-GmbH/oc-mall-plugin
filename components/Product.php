@@ -113,16 +113,21 @@ class Product extends ComponentBase
 
             return Redirect::to($url);
         }
+
+        $this->page->title            = $this->item->meta_title ?? $this->item->name;
+        $this->page->meta_description = $this->item->meta_description;
     }
 
     public function onAddToCart()
     {
+        $this->setData();
+
         $product = $this->getProduct();
         $values  = $this->validateCustomFields(post('fields', []));
         $variant = null;
 
         // We are adding a product
-        if ($product instanceof ProductModel) {
+        if ($this->variantId === null) {
             $hasStock = $product->stock > 0 || $product->allow_out_of_stock_purchases;
         } else {
             // We are adding a product variant
@@ -131,7 +136,7 @@ class Product extends ComponentBase
         }
 
         if ( ! $hasStock) {
-            throw new ValidationException(['This product is out of stock']);
+            throw new ValidationException(['stock' => 'This product is out of stock']);
         }
 
         $cart = Cart::byUser(Auth::getUser());
@@ -208,6 +213,7 @@ class Product extends ComponentBase
             'variants.main_image',
             'images',
             'downloads',
+            'taxes',
         ]);
 
         if ($product === ':slug') {

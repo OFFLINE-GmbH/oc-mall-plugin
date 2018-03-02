@@ -1,0 +1,11 @@
+<h2 class="mall-product__name">{{ item.name }}</h2>
+
+{% if item.description_short %}
+    <h3 class="mall-product__description-short">{{ item.description_short }}</h3>
+{% endif %}
+
+<div class="mall-product__description">
+    {{ item.description | raw }}
+</div>
+
+{% partial __SELF__ ~ '::images' images=item.all_images %}

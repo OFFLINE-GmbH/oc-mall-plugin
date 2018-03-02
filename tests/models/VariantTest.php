@@ -99,6 +99,27 @@ class VariantTest extends PluginTestCase
         $this->assertEquals('product.jpg', $this->product->image->disk_name);
     }
 
+    public function test_it_inherits_file_accessors_for_images()
+    {
+        $getFile = function () {
+            $file               = new File();
+            $file->disk_name    = 'product.jpg';
+            $file->file_name    = 'product.jpg';
+            $file->file_size    = 8;
+            $file->content_type = 'image/jpeg';
+
+            return $file;
+        };
+
+        $this->product->main_image()->save($getFile());
+        $this->product->images()->save($getFile());
+
+        $this->assertEquals(1, $this->variant->images->count());
+        $this->assertNotNull($this->variant->main_image);
+        $this->assertEquals(2, $this->variant->all_images->count());
+        $this->assertEquals(1, $this->variant->additional_images->count());
+    }
+
     public function test_name()
     {
         $product             = Product::first();

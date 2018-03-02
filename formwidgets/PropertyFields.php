@@ -44,8 +44,8 @@ class PropertyFields extends FormWidgetBase
                 return (bool)$property->pivot->use_for_variants === $useForVariants;
             });
         }
-        
-        $this->vars['fields'] = $fields;
+
+        $this->vars['fields'] = $fields->sortBy('pivot.sort_order');
     }
 
     public function createFormWidget(Property $property, $value)
@@ -94,11 +94,14 @@ class PropertyFields extends FormWidgetBase
 
     private function dropdown($property, $value)
     {
+        $value = e($value);
+
         $formField          = $this->newFormField($property);
         $formField->value   = $value;
         $formField->label   = $property->name;
         $formField->options = collect($property->options)->mapWithKeys(function ($i) {
-            return [$i['value'] => $i['value']];
+            $value = e($i['value']);
+            return [$value => $value];
         })->toArray();
 
         $widget = $this->makePartial('modules/backend/widgets/form/partials/field_dropdown',
