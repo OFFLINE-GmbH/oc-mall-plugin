@@ -29,16 +29,6 @@ class SignUp extends ComponentBase
 
     public function onRun()
     {
-
-    }
-
-    public function onMethodSignIn()
-    {
-
-    }
-
-    public function onMethodSignUp()
-    {
         $this->setVar('countries', Country::orderBy('name')->get());
         $this->setVar('asGuest', request()->input('asGuest', false));
     }

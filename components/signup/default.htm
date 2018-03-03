@@ -1,11 +1,9 @@
 <div class="mall-signup">
-    <div class="flex mb-4">
-        <div class="w-1/4">
-            {% partial __SELF__ ~ '::method' %}
-        </div>
-        <div class="mall-signup-form w-3/4 p-6">
-            {% partial __SELF__ ~ '::signIn' %}
-        </div>
+    <div class="mall-signup__signin">
+        {% partial __SELF__ ~ '::signin' %}
+    </div>
+    <div class="mall-signup__signup mall-signup-form">
+        {% partial __SELF__ ~ '::signup' %}
     </div>
 </div>
 {% partial __SELF__ ~ '::scripts' %}

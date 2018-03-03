@@ -1,0 +1,44 @@
+<div class="mall-form-control">
+    <label for="{{ type }}_company">{{ 'mall.form.company' | _ }}</label>
+    <input id="{{ type }}_company" type="text"
+           placeholder="{{ 'mall.form.company_placeholder' | _ }}" name="{{ type }}_company">
+    <div data-validate-for="{{ type }}_company"></div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}_address_name">{{ 'mall.form.recipient' | _ }}</label>
+    <input id="{{ type }}_address_name" type="text"
+           placeholder="{{ 'mall.form.recipient_placeholder' | _ }}"
+           name="{{ type }}_address_name">
+    <div data-validate-for="{{ type }}_address_name"></div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}_lines">{{ 'mall.form.address_lines' | _ }}</label>
+    <textarea id="{{ type }}_lines" type="text" name="{{ type }}_lines"></textarea>
+    <div data-validate-for="{{ type }}_lines"></div>
+</div>
+<div class="mall-two-fields">
+    <div class="mall-form-control">
+        <label for="{{ type }}_zip">{{ 'mall.form.zip' | _ }}</label>
+        <input id="{{ type }}_zip" name="{{ type }}_zip" type="text">
+        <div data-validate-for="{{ type }}_zip"></div>
+    </div>
+    <div class="mall-form-control">
+        <label for="{{ type }}_city">{{ 'mall.form.city' | _ }}</label>
+        <input id="{{ type }}_city" name="{{ type }}_city" type="text">
+        <div data-validate-for="{{ type }}_city"></div>
+    </div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}_county_province">{{ 'mall.form.county_province' | _ }}</label>
+    <input id="{{ type }}_county_province" name="{{ type }}_county_province" type="text">
+    <div data-validate-for="{{ type }}_county_province"></div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}_country_id">{{ 'mall.form.country' | _ }}</label>
+    <select id="{{ type }}_country_id" name="{{ type }}_country_id">
+        {% for country in countries %}
+            <option value="{{ country.id }}">{{ country.name }}</option>
+        {% endfor %}
+    </select>
+    <div data-validate-for="{{ type }}_country_id"></div>
+</div>

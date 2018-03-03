@@ -19,6 +19,8 @@ class DefaultSignInHandler implements SignInHandler
     {
         try {
             return $this->login($data);
+        } catch (ValidationException $ex) {
+            throw $ex;
         } catch (AuthException $ex) {
             Flash::error(trans('offline.mall::lang.components.signup.errors.unknown_user'));
         } catch (Exception $ex) {

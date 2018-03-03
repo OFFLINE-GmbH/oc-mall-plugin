@@ -1,16 +1,12 @@
 {% put scripts %}
-<script>
-    $(function() {
-        var $methods = $('.mall-signup-list .js-method-option');
-        $methods.on('click', function() {
-            var activeClass  = 'bg-purple-lightest text-purple-darker';
-            $methods.removeClass(activeClass);
-            $(this).addClass(activeClass);
-        });
-
-        $('body').on('click', '.js-mall-toggle-shipping-address', function() {
-            $('.mall-shipping-address').toggleClass('hidden', !this.checked);
-        });
-    })
-</script>
+    <script>
+        $(function () {
+            $('.js-mall-toggle-shipping-address').on('click', function () {
+                $('.mall-shipping-address').toggle(this.checked);
+            });
+            $('.js-mall-toggle-guest-signup').on('click', function () {
+                $('.mall-signup__password-inputs').toggle(! this.checked);
+            });
+        })
+    </script>
 {% endput %}
