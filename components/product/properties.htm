@@ -1,14 +1,26 @@
 {% for item in props %}
-    <div class="mall-product__property mall-form-control">
-        <label for="">{{ item.property.name }}</label>
-        <select name="props[{{ item.property.hashId }}]"
-                data-id="{{ item.property.hashId }}"
-                class="js-mall-property-selector">
-            {% for value in item.values %}
-                <option value="{{ value.hashId }}">
-                    {{ value.value }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
+    {% set propertyValue = __SELF__.variantPropertyValues[item.property.id] %}
+    {% if item.property.id == __SELF__.product.group_by_property_id %}
+        {# Preset the property used to group the variants. #}
+        <input type="hidden"
+               name="props[{{ item.property.hashId }}]"
+               value="{{ propertyValue.hashId }}">
+    {% else %}
+        <div class="mall-product__property mall-form-control">
+            <label for="">{{ item.property.name }}</label>
+            <select name="props[{{ item.property.hashId }}]"
+                    data-id="{{ item.property.hashId }}"
+                    class="js-mall-property-selector">
+                {% for value in item.values %}
+                    <option value="{{ value.hashId }}"
+                            {% if propertyValue.value == value.value %}
+                                selected
+                            {% endif %}
+                    >
+                        {{ value.value }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
 {% endfor %}

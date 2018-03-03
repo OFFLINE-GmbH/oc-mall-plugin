@@ -3,10 +3,16 @@ columns:
         label: 'offline.mall::lang.product.published_short'
         type: partial
         path: $/offline/mall/models/variant/_published.htm
+    name:
+        type: text
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
     properties_description:
         type: partial
         path: $/offline/mall/models/variant/_description.htm
-        label: 'offline.mall::lang.common.name'
+        label: 'offline.mall::lang.common.properties'
         type: text
         searchable: true
         sortable: true
@@ -16,6 +22,7 @@ columns:
     price:
         label: 'offline.mall::lang.product.price'
         type: partial
+        invisible: true
         path: $/offline/mall/models/variant/_price.htm
     old_price:
         label: 'offline.mall::lang.common.old_price'

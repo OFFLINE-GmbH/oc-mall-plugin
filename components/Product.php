@@ -37,6 +37,10 @@ class Product extends ComponentBase
      */
     public $variants;
     /**
+     * @var Collection
+     */
+    public $variantPropertyValues;
+    /**
      * Available product properties. Named "props" to prevent
      * naming conflict with base class.
      *
@@ -176,6 +180,7 @@ class Product extends ComponentBase
         $this->setVar('variantId', $variantId);
         $this->setVar('item', $this->getItem());
         $this->setVar('variants', $this->getVariants());
+        $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
     }
 
@@ -262,9 +267,7 @@ class Product extends ComponentBase
             return $valueMap;
         }
 
-        return $this->product->category->properties->reject(function (Property $property) {
-            return $property->id === $this->product->group_by_property_id;
-        })->map(function (Property $property) use ($valueMap) {
+        return $this->product->category->properties->map(function (Property $property) use ($valueMap) {
             $values = $valueMap->get($property->id);
 
             return (object)[
@@ -321,6 +324,15 @@ class Product extends ComponentBase
                                 ->first();
 
         return $variant ? $variant->describable : null;
+    }
+
+    protected function getPropertyValues()
+    {
+        if ( ! $this->variant) {
+            return collect([]);
+        }
+
+        return $this->variant->property_values->keyBy('property_id');
     }
 
     protected function validateCustomFields(array $values)

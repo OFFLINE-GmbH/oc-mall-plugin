@@ -155,10 +155,6 @@ class Variant extends \Model
 
     public function getPropertiesDescriptionAttribute()
     {
-        if ($this->attributes['name']) {
-            return e($this->attributes['name']);
-        }
-
         return $this->propertyValuesAsString();
     }
 
