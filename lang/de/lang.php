@@ -282,7 +282,7 @@
             'product' => 'Bestimmtes Produkt im Warenkorb liegt',
         ],
         'validation'                           => [
-            'alternate_price'     => 'Es kann nur ein Gutschein für einen neuen Fixpreis angewendet werden.',
+            'empty'               => 'Geben Sie einen Gutschein-Code ein.',
             'shipping'            => 'Es kann nur ein Gutschein für einen Versandrabatt angewendet werden.',
             'duplicate'           => 'Ein Gutschein kann nur einmal verwendet werden.',
             'expired'             => 'Der verwendete Gutschein ist nicht mehr gültig.',

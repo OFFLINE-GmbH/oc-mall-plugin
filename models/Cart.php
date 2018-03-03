@@ -289,7 +289,13 @@ class Cart extends Model
 
     public function applyDiscountByCode(string $code)
     {
-        $code = strtoupper($code);
+        $code = trim(strtoupper($code));
+        if ($code === '') {
+            throw new ValidationException([
+                'code' => trans('offline.mall::lang.discounts.validation.empty'),
+            ]);
+        }
+
         try {
             $discount = Discount::whereCode($code)->firstOrFail();
         } catch (ModelNotFoundException $e) {
