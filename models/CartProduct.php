@@ -55,7 +55,7 @@ class CartProduct extends Model
             return $value->price() * 100;
         });
 
-        return $this->item->getOriginal('price') + $customFieldPrice;
+        return ($this->item->price * 100) + $customFieldPrice;
     }
 
     public function moveToOrder(Order $order)

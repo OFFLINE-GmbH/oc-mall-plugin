@@ -162,9 +162,6 @@ class Product extends Model
             + $this->category->properties->pluck('name', 'id')->toArray();
     }
 
-    /**
-     * Returns the
-     */
     public function getPriceAttribute()
     {
         if ( ! $this->variant) {

@@ -14,6 +14,7 @@ class CartProductTest extends PluginTestCase
     public $product;
     public $variant;
     public $cart;
+    public $customFieldValueA;
 
     public function setUp()
     {
@@ -21,6 +22,7 @@ class CartProductTest extends PluginTestCase
 
         $product                   = Product::first();
         $product->meta_description = 'Test';
+        $product->price            = 200;
         $product->save();
 
         $this->product = $product;
@@ -28,6 +30,7 @@ class CartProductTest extends PluginTestCase
         $variant             = new Variant();
         $variant->product_id = $product->id;
         $variant->name       = 'Variant';
+        $variant->price      = null;
         $variant->save();
 
         $this->variant = $variant;
@@ -56,6 +59,9 @@ class CartProductTest extends PluginTestCase
         $customFieldValueA                         = new CustomFieldValue();
         $customFieldValueA->custom_field_id        = $field->id;
         $customFieldValueA->custom_field_option_id = $sizeA->id;
+
+        $this->customFieldValueA = $customFieldValueA;
+
         $customFieldValueB                         = new CustomFieldValue();
         $customFieldValueB->custom_field_id        = $field2->id;
         $customFieldValueB->value                  = 'Test';
@@ -83,5 +89,19 @@ class CartProductTest extends PluginTestCase
         $this->assertEquals('Test', $transformed[1]['display_value']);
         $this->assertEquals('300.0', $transformed[1]['price']);
         $this->assertNull($transformed[1]['custom_field_option']);
+    }
+
+    public function test_custom_field_price_with_variant()
+    {
+        $cart = new Cart();
+        $cart->save();
+
+        $cart->addProduct($this->product, 1, $this->variant, collect([$this->customFieldValueA]));
+        $cartProduct = CartProduct::find($cart->products->first()->id);
+
+        $variant = $cartProduct->variant;
+
+        $this->assertEquals(200, $variant->price);
+        $this->assertEquals(30000, $cartProduct->price);
     }
 }

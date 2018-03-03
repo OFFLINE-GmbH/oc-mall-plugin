@@ -1,6 +1,8 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
 use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\CustomField;
+use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;

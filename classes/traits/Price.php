@@ -79,11 +79,6 @@ trait Price
         return in_array($key, $this->getPriceColumns());
     }
 
-    /**
-     * @param $value
-     *
-     * @return float
-     */
     protected function roundPrice($value): float
     {
         return round((int)$value / 100, 2);
