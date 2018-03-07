@@ -12,7 +12,6 @@ class SignUp extends ComponentBase
     use SetVars;
 
     public $countries;
-    public $asGuest;
 
     public function componentDetails()
     {
@@ -30,7 +29,6 @@ class SignUp extends ComponentBase
     public function onRun()
     {
         $this->setVar('countries', Country::orderBy('name')->get());
-        $this->setVar('asGuest', request()->input('asGuest', false));
     }
 
     public function onSignIn()

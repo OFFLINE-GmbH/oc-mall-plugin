@@ -11,7 +11,7 @@ class BuilderTableCreateOfflineMallAddresses extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('company')->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->text('lines');
             $table->string('city');
             $table->string('county_province')->nullable();

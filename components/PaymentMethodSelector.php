@@ -3,6 +3,7 @@
 use Auth;
 use Cms\Classes\ComponentBase;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\PaymentMethod;
@@ -34,6 +35,23 @@ class PaymentMethodSelector extends ComponentBase
         $this->setData();
     }
 
+    public function onSubmit()
+    {
+        $this->setData();
+        $data = post('payment_data', []);
+
+        // Create the payment gateway to trigger the validation.
+        // If not all specified data is valid an exception is thrown here.
+        $gateway = app(PaymentGateway::class);
+        $gateway->init($this->cart, $data);
+
+        session()->put('mall.payment_method.data', $data);
+
+        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'shipping']);
+
+        return redirect()->to($url);
+    }
+
     public function onChangeMethod()
     {
         $this->setData();
@@ -49,7 +67,12 @@ class PaymentMethodSelector extends ComponentBase
 
         $id = post('id');
         $this->cart->setPaymentMethod($id);
-        $this->setVar('activeMethod', $id);
+
+        $this->setData();
+
+        return [
+            '.mall-payment-method-selector' => $this->renderPartial($this->alias . '::selector'),
+        ];
     }
 
     protected function setData()

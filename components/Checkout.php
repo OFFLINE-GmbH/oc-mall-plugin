@@ -20,6 +20,7 @@ class Checkout extends ComponentBase
 
     public $cart;
     public $payment_method;
+    public $step;
 
     public function componentDetails()
     {
@@ -31,7 +32,21 @@ class Checkout extends ComponentBase
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'step' => [
+                'type' => 'dropdown',
+                'name' => 'offline.mall::lang.components.checkout.properties.step.name',
+            ],
+        ];
+    }
+
+    public function getStepOptions()
+    {
+        return [
+            'payment'      => trans('offline.mall::lang.components.checkout.steps.payment'),
+            'shipping'     => trans('offline.mall::lang.components.checkout.steps.shipping'),
+            'confirmation' => trans('offline.mall::lang.components.checkout.steps.confirmation'),
+        ];
     }
 
     public function init()
@@ -48,6 +63,18 @@ class Checkout extends ComponentBase
         // An off-site payment has been completed
         if ($type = Request::input('return')) {
             return $this->handleOffSiteReturn($type);
+        }
+
+        // If no step is provided or the step is invalid redirect the user to
+        // the payment method selection screen.
+        $step = $this->property('step');
+        if ( ! $step || ! array_key_exists($step, $this->getStepOptions())) {
+            $url = $this->controller->pageUrl(
+                $this->page->page->fileName,
+                ['step' => 'payment']
+            );
+
+            return redirect()->to($url);
         }
     }
 
@@ -68,16 +95,6 @@ class Checkout extends ComponentBase
         return $this->handlePaymentResult($result);
     }
 
-    public function onPaymentMethodChanged()
-    {
-        $name    = strtolower($this->payment_method->payment_provider);
-        $partial = sprintf('%s::paymentmethods/%s', $this->alias, $name);
-
-        return [
-            '.mall-payment-method-data' => $this->renderPartial($partial),
-        ];
-    }
-
     protected function setData()
     {
         $cart = Cart::byUser(Auth::getUser());
@@ -86,13 +103,9 @@ class Checkout extends ComponentBase
         }
         $this->setVar('cart', $cart);
         $this->setVar('payment_method', PaymentMethod::findOrFail($cart->payment_method_id));
+        $this->setVar('step', $this->property('step'));
     }
 
-    /**
-     * @param $result
-     *
-     * @return mixed
-     */
     protected function handlePaymentResult($result)
     {
         if ($result->redirect) {

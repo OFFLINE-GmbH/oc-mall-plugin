@@ -1,22 +1,58 @@
-{% set activeStyle = 'flex bg-purple-lightest border-t border-b border-purple-light no-underline text-purple-darker' %}
-{% set defaultStyle = 'flex border-b cursor-pointer border-smoke-light no-underline text-grey-darkest' %}
-<p class="mt-6 mb-6">{{ 'Please choose a payment method.' | _ }}</p>
-<div class="payment-method-list border-t border-b border-smoke">
-    {% for method in __SELF__.methods %}
-        <div class="js-mall-select-payment-method {{ cart.payment_method_id == method.id ? activeStyle : defaultStyle }}"
+<p>{{ 'mall.payment_method.choose' | _ }}</p>
+
+<form data-request-validate data-request="onSubmit">
+    <div class="mall-payment-method">
+        {% for method in __SELF__.methods %}
+        {% set isActiveMethod = cart.payment_method_id == method.id %}
+        <div class="mall-payment-method__entry js-mall-select-payment-method
+            {{ isActiveMethod ? 'mall-payment-method__entry--active' : '' }}"
              data-id="{{ method.id }}"
         >
-            <div class="w-1/6 bg-smoke px-3 py-2 m-2">
-                <img class="max-w-full display-block" src="{{ method.logo.path }}" alt=""/>
+            <div class="mall-payment-method__logo">
+                <img class="mall-payment-method__logo" src="{{ method.logo.thumb(120, 'auto') }}" alt=""/>
             </div>
-            <div class="w-5/6 bg-smoke px-4 py-2 m-2">
-                <div>{{ method.name }}</div>
-                {% if method.price %}
-                    <div class="text-sm text-grey mt-2">
-                        {{ method.price_formatted }}
+            <div class="mall-payment-method__text">
+                <div>
+                    <div class="mall-payment-method__heading">
+                        <div class="mall-payment-method__name">{{ method.name }}</div>
+                        <div class="mall-payment-method__price">
+                            {{ method.price > 0 ? method.price_formatted : ('mall.no_additional_charges' | _) }}
+                        </div>
                     </div>
+                    <div class="mall-payment-method__toggle"
+                         style="{% if not isActiveMethod %}display: none{% endif %}">
+                        {% if method.description %}
+                            <div class="mall-payment-method__description">
+                                {{ method.description | raw }}
+                            </div>
+                        {% endif %}
+                        <div class="mall-payment-method__data">
+                            {% if method.payment_provider %}
+                                {% set path = __SELF__ ~ '::gateways/' ~ (method.payment_provider) %}
+                                {% if partial(path) %}
+                                    {% partial path %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="mall-payment-method__submit">
+                            <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
+                                {{ 'mall.payment_method.proceed' | _ }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mall-payment-method__selector">
+                {% if not isActiveMethod %}
+                    <button class="mall-payment-method__select-button"
+                            data-attach-loading
+                            data-request="onChangeMethod"
+                            data-request-data="id: '{{ method.id }}'">
+                        {{ 'mall.payment_method.button_label' | _ }}
+                    </button>
                 {% endif %}
             </div>
         </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
+</form>

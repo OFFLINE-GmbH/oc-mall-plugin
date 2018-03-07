@@ -29,7 +29,7 @@ class DefaultSignUpHandler implements SignUpHandler
     /**
      * @throws ValidationException
      */
-    protected function signUp(array $data)
+    protected function signUp(array $data): ?User
     {
         if ($this->asGuest) {
             $data['password'] = $data['password_repeat'] = str_random(30);
@@ -39,7 +39,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
         Event::fire('mall.user.beforeSignup', [$this, $data]);
 
-        $user = DB::transaction(function () use ($data) {
+        DB::transaction(function () use ($data) {
 
             $user = $this->createUser($data);
 
@@ -53,6 +53,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
             $billing = new Address();
             $billing->fill($addressData);
+            $billing->name = $addressData['address_name'] ?? $data['name'];
             $billing->customer_id = $customer->id;
             $billing->save();
             $customer->default_billing_address_id = $billing->id;
@@ -62,6 +63,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
                 $shipping = new Address();
                 $shipping->fill($addressData);
+                $shipping->name = $addressData['address_name'] ?? $data['name'];
                 $shipping->customer_id = $customer->id;
                 $shipping->save();
                 $customer->default_shipping_address_id = $shipping->id;
@@ -92,8 +94,8 @@ class DefaultSignUpHandler implements SignUpHandler
     protected function validate(array $data)
     {
         $rules = [
-            'email'               => 'required|email|unique:users,email',
             'name'                => 'required',
+            'email'               => 'required|email|unique:users,email',
             'billing_lines'       => 'required',
             'billing_zip'         => 'required',
             'billing_city'        => 'required',
