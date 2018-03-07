@@ -15,6 +15,7 @@ class PaymentMethodSelector extends ComponentBase
 
     public $cart;
     public $activeMethod;
+    public $paymentData;
     public $methods;
 
     public function componentDetails()
@@ -80,5 +81,6 @@ class PaymentMethodSelector extends ComponentBase
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('activeMethod', $this->cart->payment_method_id);
+        $this->setVar('paymentData', session()->get('mall.payment_method.data', []));
     }
 }

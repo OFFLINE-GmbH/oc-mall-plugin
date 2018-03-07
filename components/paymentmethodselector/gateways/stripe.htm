@@ -1,24 +1,24 @@
 <div class="mall-two-fields mall-two-fields--number-cvv">
     <div class="mall-form-control">
         <label>{{ 'mall.payment_method.card_number' | _ }}</label>
-        <input type="text" name="payment_data[number]">
+        <input type="text" name="payment_data[number]" value="{{ __SELF__.paymentData['number'] }}">
         <div data-validate-for="number"></div>
     </div>
     <div class="mall-form-control">
         <label>{{ 'mall.payment_method.card_cvv' | _ }}</label>
-        <input type="text" name="payment_data[cvv]">
+        <input type="text" name="payment_data[cvv]" value="{{ __SELF__.paymentData['cvv'] }}">
         <div data-validate-for="cvv"></div>
     </div>
 </div>
 <div class="mall-two-fields mall-two-fields--expiration">
     <div class="mall-form-control">
         <label>{{ 'mall.payment_method.card_expiry_month' | _ }}</label>
-        <input type="text" name="payment_data[expiryMonth]">
+        <input type="text" name="payment_data[expiryMonth]" value="{{ __SELF__.paymentData['expiryMonth'] }}">
         <div data-validate-for="expiryMonth"></div>
     </div>
     <div class="mall-form-control">
         <label>{{ 'mall.payment_method.card_expiry_year' | _ }}</label>
-        <input type="text" name="payment_data[expiryYear]">
+        <input type="text" name="payment_data[expiryYear]" value="{{ __SELF__.paymentData['expiryYear'] }}">
         <div data-validate-for="expiryYear"></div>
     </div>
 </div>
