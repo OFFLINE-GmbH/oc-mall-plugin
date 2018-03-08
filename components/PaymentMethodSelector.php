@@ -2,6 +2,7 @@
 
 use Auth;
 use Cms\Classes\ComponentBase;
+use Illuminate\Contracts\Encryption\DecryptException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\SetVars;
@@ -46,7 +47,8 @@ class PaymentMethodSelector extends ComponentBase
         $gateway = app(PaymentGateway::class);
         $gateway->init($this->cart, $data);
 
-        session()->put('mall.payment_method.data', $data);
+        // Just to prevent any data leakage we store credit card information encrypted to the session.
+        session()->put('mall.payment_method.data', encrypt(json_encode($data)));
 
         $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'shipping']);
 
@@ -81,6 +83,13 @@ class PaymentMethodSelector extends ComponentBase
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('activeMethod', $this->cart->payment_method_id);
-        $this->setVar('paymentData', session()->get('mall.payment_method.data', []));
+
+        try {
+            $paymentData = json_decode(decrypt(session()->get('mall.payment_method.data')), true);
+        } catch (DecryptException $e) {
+            $paymentData = [];
+        }
+
+        $this->setVar('paymentData', $paymentData);
     }
 }
