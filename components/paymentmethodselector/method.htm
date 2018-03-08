@@ -1,0 +1,52 @@
+{% set isActiveMethod = cart.payment_method_id == method.id %}
+<div class="mall-payment-method__entry js-mall-select-payment-method
+     {{ isActiveMethod ? 'mall-payment-method__entry--active' : '' }}"
+     data-id="{{ method.id }}"
+>
+    <div class="mall-payment-method__logo">
+        {% if method.logo %}
+            <img class="mall-payment-method__logo" src="{{ method.logo.thumb(120, 'auto') }}" alt=""/>
+        {% endif %}
+    </div>
+    <div class="mall-payment-method__text">
+        <div>
+            <div class="mall-payment-method__heading">
+                <div class="mall-payment-method__name">{{ method.name }}</div>
+                <div class="mall-payment-method__price">
+                    {{ method.price > 0 ? method.price_formatted : ('mall.no_additional_charges' | _) }}
+                </div>
+            </div>
+            <div class="mall-payment-method__toggle"
+                 style="{% if not isActiveMethod %}display: none{% endif %}">
+                {% if method.description %}
+                    <div class="mall-payment-method__description">
+                        {{ method.description | raw }}
+                    </div>
+                {% endif %}
+                <div class="mall-payment-method__data">
+                    {% if method.payment_provider %}
+                        {% set path = __SELF__ ~ '::gateways/' ~ (method.payment_provider) %}
+                        {% if partial(path) %}
+                            {% partial path %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="mall-payment-method__submit">
+                    <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
+                        {{ 'mall.payment_method.proceed' | _ }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mall-payment-method__selector">
+        {% if not isActiveMethod %}
+            <button class="mall-payment-method__select-button"
+                    data-attach-loading
+                    data-request="onChangeMethod"
+                    data-request-data="id: '{{ method.id }}'">
+                {{ 'mall.payment_method.button_label' | _ }}
+            </button>
+        {% endif %}
+    </div>
+</div>
