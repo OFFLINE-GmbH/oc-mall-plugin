@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
 use Omnipay\Common\Message\RedirectResponseInterface;
 
@@ -27,4 +28,12 @@ class PaymentResult
      * @var PaymentLog
      */
     public $failedPayment;
+    /**
+     * @var Order
+     */
+    public $order;
+    /**
+     * @var string
+     */
+    public $message;
 }

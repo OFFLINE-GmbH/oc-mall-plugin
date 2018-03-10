@@ -7,6 +7,7 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\PaymentState\PaymentState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Price;
 use RuntimeException;
 
@@ -18,6 +19,7 @@ class Order extends Model
     use Validation;
     use SoftDelete;
     use Price;
+    use HashIds;
 
     protected $dates = ['deleted_at'];
 
@@ -44,6 +46,7 @@ class Order extends Model
 
     public $hasMany = [
         'products' => OrderProduct::class,
+        'payment_logs' => [PaymentLog::class, 'order' => 'created_at ASC'],
     ];
 
     public $belongsTo = [
@@ -75,6 +78,11 @@ class Order extends Model
                 Event::fire('mall.order.payment_state.changed', [$order]);
             }
         });
+    }
+
+    public static function byCustomer(Customer $customer)
+    {
+        return static::where('customer_id', $customer->id);
     }
 
     public static function fromCart(Cart $cart): self

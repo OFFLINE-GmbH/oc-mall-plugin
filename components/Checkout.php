@@ -7,6 +7,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentResult;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Components\Cart as CartComponent;
 use OFFLINE\Mall\Models\Cart;
@@ -19,10 +20,12 @@ use Session;
 class Checkout extends ComponentBase
 {
     use SetVars;
+    use HashIds;
 
     public $cart;
     public $payment_method;
     public $step;
+    public $order;
 
     public function componentDetails()
     {
@@ -45,9 +48,12 @@ class Checkout extends ComponentBase
     public function getStepOptions()
     {
         return [
-            'payment'  => trans('offline.mall::lang.components.checkout.steps.payment'),
-            'shipping' => trans('offline.mall::lang.components.checkout.steps.shipping'),
-            'confirm'  => trans('offline.mall::lang.components.checkout.steps.confirm'),
+            'payment'   => trans('offline.mall::lang.components.checkout.steps.payment'),
+            'shipping'  => trans('offline.mall::lang.components.checkout.steps.shipping'),
+            'confirm'   => trans('offline.mall::lang.components.checkout.steps.confirm'),
+            'failed'    => trans('offline.mall::lang.components.checkout.steps.failed'),
+            'cancelled' => trans('offline.mall::lang.components.checkout.steps.cancelled'),
+            'done'      => trans('offline.mall::lang.components.checkout.steps.done'),
         ];
     }
 
@@ -64,7 +70,7 @@ class Checkout extends ComponentBase
     public function onRun()
     {
         // An off-site payment has been completed
-        if ($type = Request::input('return')) {
+        if ($type = request()->input('return')) {
             return $this->handleOffSiteReturn($type);
         }
 
@@ -99,11 +105,14 @@ class Checkout extends ComponentBase
             return Order::fromCart($this->cart);
         });
 
+        session()->put('mall.processing_order.id', $order->hashId);
+
         try {
             $result = $gateway->process($order);
         } catch (\Throwable $e) {
             $result             = new PaymentResult();
             $result->successful = false;
+            $result->message    = $e->getMessage();
         }
 
         session()->forget('mall.payment_method.data');
@@ -113,21 +122,19 @@ class Checkout extends ComponentBase
 
     protected function setData()
     {
-        $cart = Cart::byUser(Auth::getUser());
+        $user = Auth::getUser();
+        $cart = Cart::byUser($user);
         if ( ! $cart->payment_method_id) {
             $cart->setPaymentMethod(PaymentMethod::getDefault());
         }
         $this->setVar('cart', $cart);
         $this->setVar('payment_method', PaymentMethod::findOrFail($cart->payment_method_id));
         $this->setVar('step', $this->property('step'));
-    }
 
-    public function stepUrl($step)
-    {
-        return $this->controller->pageUrl(
-            $this->page->page->fileName,
-            ['step' => $step]
-        );
+        if ($orderId = request()->get('order')) {
+            $orderId = $this->decode($orderId);
+            $this->setVar('order', Order::byCustomer($user->customer)->find($orderId));
+        }
     }
 
     protected function handlePaymentResult($result)
@@ -137,32 +144,32 @@ class Checkout extends ComponentBase
         }
 
         if ($result->successful) {
-            return Redirect::to($this->getSuccessfulUrl());
+            return $this->finalRedirect('successful');
         }
 
-        return Redirect::to($this->getFailedUrl());
+        return $this->finalRedirect('failed');
     }
 
     protected function handleOffSiteReturn($type)
     {
         // Someone tampered with the url or the session has expired.
-        $paymentId = Session::pull('oc-mall.payment.id');
-        if ($paymentId !== Request::input('oc-mall_payment_id')) {
-            Session::forget('oc-mall.payment.callback');
+        $paymentId = session()->pull('oc-mall.payment.id');
+        if ($paymentId !== request()->input('oc-mall_payment_id')) {
+            session()->forget('oc-mall.payment.callback');
 
-            return Redirect::to($this->getFailedUrl());
+            return $this->finalRedirect('failed');
         }
 
         // The user has cancelled the payment
         if ($type === 'cancel') {
-            Session::forget('oc-mall.payment.callback');
+            session()->forget('oc-mall.payment.callback');
 
-            return Redirect::to($this->getCancelledUrl());
+            return $this->finalRedirect('cancelled');
         }
 
         // If a callback is set we need to do an additional step to
         // complete this payment.
-        $callback = Session::pull('oc-mall.payment.callback');
+        $callback = session()->pull('oc-mall.payment.callback');
         if ($callback) {
             $paymentMethod = new $callback;
 
@@ -174,21 +181,47 @@ class Checkout extends ComponentBase
         }
 
         // The payment was successful
-        return Redirect::to($this->getSuccessfulUrl());
+        return $this->finalRedirect('successful');
     }
 
-    private function getFailedUrl()
+    public function stepUrl($step, $params = [])
     {
-        return '/failed';
+        return $this->controller->pageUrl(
+            $this->page->page->fileName,
+            array_merge($params, ['step' => $step])
+        );
     }
 
-    private function getCancelledUrl()
+    protected function finalRedirect($state)
     {
-        return '/cancelled';
+        $states = [
+            'failed'     => $this->getFailedUrl(),
+            'cancelled'  => $this->getCancelledUrl(),
+            'successful' => $this->getSuccessfulUrl(),
+        ];
+
+        $orderId = session()->pull('mall.processing_order.id');
+
+        $url = $states[$state];
+        if ($orderId) {
+            $url .= '?order=' . $orderId;
+        }
+
+        return redirect()->to($url);
     }
 
-    private function getSuccessfulUrl()
+    protected function getFailedUrl()
     {
-        return '/done';
+        return $this->stepUrl('failed');
+    }
+
+    protected function getCancelledUrl()
+    {
+        return $this->stepUrl('cancelled');
+    }
+
+    protected function getSuccessfulUrl()
+    {
+        return $this->stepUrl('done');
     }
 }

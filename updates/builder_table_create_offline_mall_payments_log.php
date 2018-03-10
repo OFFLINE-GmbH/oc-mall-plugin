@@ -10,6 +10,7 @@ class BuilderTableCreateOfflineMallPaymentsLog extends Migration
         Schema::create('offline_mall_payments_log', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
+            $table->string('reference');
             $table->boolean('failed')->default(true);
             $table->string('payment_method')->nullable();
             $table->string('ip')->nullable();

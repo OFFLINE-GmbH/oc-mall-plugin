@@ -21,4 +21,12 @@ class PaymentLog extends Model
         'failed'         => 'required|boolean',
         'payment_method' => 'required',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function (self $log) {
+            $log->reference = str_random(16);
+        });
+    }
 }

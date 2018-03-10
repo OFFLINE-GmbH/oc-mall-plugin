@@ -43,17 +43,25 @@ class Stripe extends PaymentProvider
         $gateway = Omnipay::create('Stripe');
         $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
 
-        $response = $gateway->purchase([
-            'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),
-            'currency'  => $this->order->currency,
-            'card'      => $this->data,
-            'returnUrl' => $this->returnUrl(),
-            'cancelUrl' => $this->cancelUrl(),
-        ])->send();
+        $result = new PaymentResult();
 
-        $data = (array)$response->getData();
+        $response = null;
+        try {
+            $response = $gateway->purchase([
+                'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),
+                'currency'  => $this->order->currency,
+                'card'      => $this->data,
+                'returnUrl' => $this->returnUrl(),
+                'cancelUrl' => $this->cancelUrl(),
+            ])->send();
+        } catch (\Throwable $e) {
+            $result->successful    = false;
+            $result->failedPayment = $this->logFailedPayment([], $e);
 
-        $result             = new PaymentResult();
+            return $result;
+        }
+
+        $data               = (array)$response->getData();
         $result->successful = $response->isSuccessful();
 
         if ($result->successful) {

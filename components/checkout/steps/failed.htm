@@ -1,0 +1,22 @@
+<div class="mall-checkout-result mall-checkout-result--failed">
+    {% if __SELF__.order %}
+        <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.payment.failed.heading' | _ }}</h3>
+        <p>{{ 'mall.checkout.payment.failed.line_1' | _ }}</p>
+        <p>{{ 'mall.checkout.payment.failed.line_2' | _ }}</p>
+        {% set message = __SELF__.order.payment_logs.first().message %}
+        {% if message %}
+            <p>
+                {{ 'mall.checkout.payment.failed.line_3' | _ }}<br/>
+                <strong>{{ message }}</strong>
+            </p>
+        {% endif %}
+    {% else %}
+        <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.order.failed.heading' | _ }}</h3>
+        <p>{{ 'mall.checkout.order.failed.line_1' | _ }}</p>
+    {% endif %}
+    <div class="mall-checkout-result__actions">
+        <a href="{{ '' | page }}" class="mall-btn mall-btn--primary">
+            {{ 'mall.order_overview.visit' | _ }}
+        </a>
+    </div>
+</div>
