@@ -318,7 +318,12 @@ class Product extends ComponentBase
         $values = PropertyValue::whereIn('id', $ids)->get(['value'])->pluck('value');
 
         $variant = PropertyValue::whereIn('value', $values)
+                                ->leftJoin(
+                                    'offline_mall_product_variants',
+                                    'describable_id', '=', 'offline_mall_product_variants.id'
+                                )
                                 ->where('describable_type', Variant::class)
+                                ->whereNull('offline_mall_product_variants.deleted_at')
                                 ->select(DB::raw('*, count(*) as matching_attributes'))
                                 ->groupBy('describable_id')
                                 ->having('matching_attributes', $values->count())

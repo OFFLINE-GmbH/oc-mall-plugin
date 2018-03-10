@@ -3,6 +3,7 @@
     {% if item.property.id == __SELF__.product.group_by_property_id %}
         {# Preset the property used to group the variants. #}
         <input type="hidden"
+               data-mall-property
                name="props[{{ item.property.hashId }}]"
                value="{{ propertyValue.hashId }}">
     {% else %}
@@ -10,6 +11,7 @@
             <label for="">{{ item.property.name }}</label>
             <select name="props[{{ item.property.hashId }}]"
                     data-id="{{ item.property.hashId }}"
+                    data-mall-property
                     class="js-mall-property-selector">
                 {% for value in item.values %}
                     <option value="{{ value.hashId }}"

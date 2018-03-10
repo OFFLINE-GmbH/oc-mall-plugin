@@ -4,10 +4,9 @@
             var $body = $('body');
             var $addToCart = $('.mall-product__add-to-cart');
 
-
             {% if not item.allow_out_of_stock_purchases %}
             $body.on('change', '.js-mall-property-selector', function (e, isInitial) {
-                var values = $('.js-mall-property-selector').map(function () {
+                var values = $('[data-mall-property]').map(function () {
                     return this.value;
                 }).toArray();
 
