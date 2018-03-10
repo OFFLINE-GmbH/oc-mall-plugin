@@ -12,7 +12,7 @@
         <div>
             <div class="mall-payment-method__heading">
                 <div class="mall-payment-method__name">{{ method.name }}</div>
-                <div class="mall-payment-method__price">
+                <div class="mall-payment-method__meta">
                     {{ method.price > 0 ? method.price_formatted : ('mall.no_additional_charges' | _) }}
                 </div>
             </div>
@@ -43,7 +43,7 @@
         {% if not isActiveMethod %}
             <button class="mall-payment-method__select-button"
                     data-attach-loading
-                    data-request="onChangeMethod"
+                    data-request="{{ __SELF__ }}::onChangeMethod"
                     data-request-data="id: '{{ method.id }}'">
                 {{ 'mall.payment_method.button_label' | _ }}
             </button>

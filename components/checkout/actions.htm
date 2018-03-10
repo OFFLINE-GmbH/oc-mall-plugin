@@ -1,11 +1,7 @@
-<div class="mt-8 bg-smoke-light text-right">
-    {% if cart.shipping_method %}
-        <button class="js-mall-checkout mall-btn">
-            Checkout
+{% if cart.products.count > 0 %}
+    <div class="mall-cart-actions">
+        <button class="js-mall-checkout mall-btn-checkout mall-btn mall-btn--secondary">
+            {{ 'mall.checkout.checkout' | _ }}
         </button>
-    {% else %}
-        <div class="bg-smoke-light text-sm text-red-dark p-4">
-            {{ 'Please select a shipping method to proceed' | _ }}
-        </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}

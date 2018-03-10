@@ -21,6 +21,8 @@ class Cart extends ComponentBase
     public $cart;
     public $defaultMinQuantity = 1;
     public $defaultMaxQuantity = 100;
+    public $showDiscountApplier = true;
+
     /**
      * @var string
      */
@@ -36,7 +38,13 @@ class Cart extends ComponentBase
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'showDiscountApplier' => [
+                'type'    => 'checkbox',
+                'name'    => 'offline.mall::lang.components.cart.properties.showDiscountApplier.name',
+                'default' => 1,
+            ],
+        ];
     }
 
     public function init()
@@ -104,5 +112,6 @@ class Cart extends ComponentBase
 
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
+        $this->setVar('showDiscountApplier', $this->property('showDiscountApplier'));
     }
 }

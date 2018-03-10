@@ -5,13 +5,10 @@ use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Traits\SetVars;
-use OFFLINE\Mall\Models\Country;
 
 class SignUp extends ComponentBase
 {
     use SetVars;
-
-    public $countries;
 
     public function componentDetails()
     {
@@ -24,11 +21,6 @@ class SignUp extends ComponentBase
     public function defineProperties()
     {
         return [];
-    }
-
-    public function onRun()
-    {
-        $this->setVar('countries', Country::orderBy('name')->get());
     }
 
     public function onSignIn()

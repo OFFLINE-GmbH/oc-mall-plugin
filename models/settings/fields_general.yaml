@@ -16,6 +16,18 @@ fields:
         type: dropdown
         comment: offline.mall::lang.general_settings.category_page_comment
 
+    address_page:
+        label: offline.mall::lang.general_settings.address_page
+        span: left
+        type: dropdown
+        comment: offline.mall::lang.general_settings.address_page_comment
+
+    checkout_page:
+        label: offline.mall::lang.general_settings.checkout_page
+        span: right
+        type: dropdown
+        comment: offline.mall::lang.general_settings.checkout_page_comment
+
     customizations:
         label: offline.mall::lang.general_settings.customizations
         comment: offline.mall::lang.general_settings.customizations_comment

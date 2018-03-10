@@ -3,8 +3,10 @@
 use Auth;
 use Cms\Classes\ComponentBase;
 use DB;
+use Illuminate\Contracts\Encryption\DecryptException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
+use OFFLINE\Mall\Classes\Payments\PaymentResult;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Components\Cart as CartComponent;
 use OFFLINE\Mall\Models\Cart;
@@ -43,16 +45,17 @@ class Checkout extends ComponentBase
     public function getStepOptions()
     {
         return [
-            'payment'      => trans('offline.mall::lang.components.checkout.steps.payment'),
-            'shipping'     => trans('offline.mall::lang.components.checkout.steps.shipping'),
-            'confirmation' => trans('offline.mall::lang.components.checkout.steps.confirmation'),
+            'payment'  => trans('offline.mall::lang.components.checkout.steps.payment'),
+            'shipping' => trans('offline.mall::lang.components.checkout.steps.shipping'),
+            'confirm'  => trans('offline.mall::lang.components.checkout.steps.confirm'),
         ];
     }
 
     public function init()
     {
-        $this->addComponent(CartComponent::class, 'cart', []);
-        $this->addComponent(AddressSelector::class, 'addressSelector', []);
+        $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
+        $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
+        $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
         $this->addComponent(ShippingSelector::class, 'shippingSelector', []);
         $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         $this->setData();
@@ -69,10 +72,7 @@ class Checkout extends ComponentBase
         // the payment method selection screen.
         $step = $this->property('step');
         if ( ! $step || ! array_key_exists($step, $this->getStepOptions())) {
-            $url = $this->controller->pageUrl(
-                $this->page->page->fileName,
-                ['step' => 'payment']
-            );
+            $url = $this->stepUrl('payment');
 
             return redirect()->to($url);
         }
@@ -81,16 +81,32 @@ class Checkout extends ComponentBase
     public function onCheckout()
     {
         $this->setData();
-        $data = post('payment_data', []);
+
+        if ($this->cart->shipping_method_id === null || $this->cart->payment_method_id === null) {
+            throw new ValidationException([trans('offline.mall::lang.components.checkout.errors.missing_settings')]);
+        }
+
+        try {
+            $paymentData = json_decode(decrypt(session()->get('mall.payment_method.data')), true);
+        } catch (DecryptException $e) {
+            $paymentData = [];
+        }
 
         $gateway = app(PaymentGateway::class);
-        $gateway->init($this->cart, $data);
+        $gateway->init($this->cart, $paymentData);
 
         $order = DB::transaction(function () {
             return Order::fromCart($this->cart);
         });
 
-        $result = $gateway->process($order);
+        try {
+            $result = $gateway->process($order);
+        } catch (\Throwable $e) {
+            $result             = new PaymentResult();
+            $result->successful = false;
+        }
+
+        session()->forget('mall.payment_method.data');
 
         return $this->handlePaymentResult($result);
     }
@@ -104,6 +120,14 @@ class Checkout extends ComponentBase
         $this->setVar('cart', $cart);
         $this->setVar('payment_method', PaymentMethod::findOrFail($cart->payment_method_id));
         $this->setVar('step', $this->property('step'));
+    }
+
+    public function stepUrl($step)
+    {
+        return $this->controller->pageUrl(
+            $this->page->page->fileName,
+            ['step' => $step]
+        );
     }
 
     protected function handlePaymentResult($result)

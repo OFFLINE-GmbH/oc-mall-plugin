@@ -1,0 +1,24 @@
+<div class="mall-cart-summary">
+    <div class="mall-cart-summary__info">
+        <div class="mall-cart-summary__billing-address">
+            <h4 class="mall-cart-summary__heading">{{ 'mall.billing_address' | _ }}</h4>
+            {% component 'billingAddressSelector' %}
+        </div>
+        <div class="mall-cart-summary__shipping-address">
+            <h4 class="mall-cart-summary__heading">{{ 'mall.shipping_address' | _ }}</h4>
+            {% component 'shippingAddressSelector' %}
+        </div>
+        <div class="mall-cart-summary__payment-method">
+            <h4 class="mall-cart-summary__heading">{{ 'mall.payment_method' | _ }}</h4>
+            <div>
+                {% partial __SELF__ ~ '::paymentmethod' %}
+            </div>
+        </div>
+        <div class="mall-cart-summary__shipping-method">
+            <h4 class="mall-cart-summary__heading">{{ 'mall.shipping_method' | _ }}</h4>
+            <div>
+                {% partial __SELF__ ~ '::shippingmethod' %}
+            </div>
+        </div>
+    </div>
+</div>

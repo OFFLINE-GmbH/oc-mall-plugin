@@ -80,6 +80,10 @@
         'description'            => 'Allgemeine Einstellungen',
         'product_page'           => 'Produkt-Seite',
         'product_page_comment'   => 'Auf dieser Seite werden die Produkt-Details angezeigt',
+        'address_page'           => 'Adressen-Seite',
+        'address_page_comment'   => 'Auf dieser Seite muss die addressForm Komponente platziert werden',
+        'checkout_page'          => 'Checkout-Seite',
+        'checkout_page_comment'  => 'Auf dieser Seite muss die checkout Komponente platziert werden',
         'category_page'          => 'Kategorie-Seite für Produkte-Übersicht',
         'auto_pop'               => 'Warenkorb nach Hinzufügen anzeigen',
         'auto_pop_comment'       => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
@@ -159,6 +163,7 @@
         'brands'               => 'Marken',
         'brand'                => 'Marke',
         'sorting_updated'      => 'Reihenfolge aktualisiert',
+        'not_in_use'           => 'Option nicht verwendet',
     ],
     'variant'                  => [
         'method' => [
@@ -438,6 +443,9 @@
                 'name'        => 'Checkout',
                 'description' => 'Komponente für den Bestellvorgang',
             ],
+            'errors'  => [
+                'missing_settings' => 'Bitte wählen Sie eine Zahlungs- und Versandmethode aus.',
+            ],
         ],
         'discountApplier'       => [
             'details' => [
@@ -469,6 +477,30 @@
                 'description' => 'Zeige eine Auflistung aller Adressen eines Kunden an',
             ],
             'errors'  => [
+            ],
+        ],
+        'addressForm'           => [
+            'details'    => [
+                'name'        => 'Bearbeitungsformular für Adressen',
+                'description' => 'Zeigt ein Formular an um Adressen zu bearbeiten',
+            ],
+            'properties' => [
+                'address'  => [
+                    'title' => 'Adresse',
+                ],
+                'redirect' => [
+                    'title' => 'Weiterleitung (nach Speichern)',
+                ],
+                'set'      => [
+                    'title' => 'Übernehme die Adresse für die Bestellung als...',
+                ],
+            ],
+            'redirects'  => [
+                'checkout' => 'Checkout-Seite',
+            ],
+            'set'        => [
+                'billing'  => 'Rechnungsadresse',
+                'shipping' => 'Versandadresse',
             ],
         ],
         'signup'                => [

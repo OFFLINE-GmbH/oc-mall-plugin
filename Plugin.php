@@ -12,6 +12,7 @@ use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
+use OFFLINE\Mall\Components\AddressForm;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
@@ -66,6 +67,7 @@ class Plugin extends PluginBase
             SignUp::class                => 'signUp',
             ShippingSelector::class      => 'shippingSelector',
             AddressSelector::class       => 'addressSelector',
+            AddressForm::class           => 'addressForm',
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
             CategoryComponent::class     => 'category',
@@ -78,7 +80,7 @@ class Plugin extends PluginBase
     public function registerSettings()
     {
         return [
-            'general_settings'  => [
+            'general_settings'          => [
                 'label'       => 'offline.mall::lang.general_settings.label',
                 'description' => 'offline.mall::lang.general_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',
@@ -88,7 +90,7 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_general'],
                 'keywords'    => 'shop store mall general',
             ],
-            'currency_settings' => [
+            'currency_settings'         => [
                 'label'       => 'offline.mall::lang.currency_settings.label',
                 'description' => 'offline.mall::lang.currency_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',

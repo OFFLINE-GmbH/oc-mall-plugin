@@ -6,6 +6,7 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\User\Facades\Auth;
 use Validator;
 
@@ -15,10 +16,10 @@ class AddressSelector extends ComponentBase
 
     public $cart;
     public $addresses;
-    public $shippingAddress;
-    public $billingAddress;
+    public $address;
     public $type;
     public $activeAddress;
+    public $addressPage;
 
     public function componentDetails()
     {
@@ -30,7 +31,20 @@ class AddressSelector extends ComponentBase
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'type' => [
+                'label' => 'Type',
+                'type'  => 'dropdown',
+            ],
+        ];
+    }
+
+    public function getTypeOptions()
+    {
+        return [
+            'shipping' => trans('offline.mall::lang.order.shipping_address'),
+            'billing'  => trans('offline.mall::lang.order.billing_address'),
+        ];
     }
 
     public function init()
@@ -47,21 +61,20 @@ class AddressSelector extends ComponentBase
     public function onChangeAddress()
     {
         $user = Auth::getUser();
-        $type = post('type') ?? 'billing';
+        $this->setData();
 
         $this->setVar('addresses', Address::byCustomer($user->customer)->get());
-        $this->setVar('type', $type);
-        $this->setVar('activeAddress', $this->cart->{$type . '_address_id'});
+        $this->setVar('activeAddress', $this->cart->{$this->type . '_address_id'});
     }
 
     public function onUpdateAddress()
     {
         $user = Auth::getUser();
-        $data = post();
+        $this->setData();
 
+        $data  = post();
         $rules = [
-            'type' => 'required|in:billing,shipping',
-            'id'   => [
+            'id' => [
                 'required',
                 Rule::exists('offline_mall_addresses')->where(function ($q) use ($user) {
                     $q->where('customer_id', $user->customer->id);
@@ -74,30 +87,41 @@ class AddressSelector extends ComponentBase
             throw new ValidationException($validation);
         }
 
-        $cart = Cart::byUser($user);
-        $cart->{$data['type'] . '_address_id'} = $data['id'];
+        $col = $this->type . '_address_id';
 
+        $cart         = Cart::byUser($user);
+        $cart->{$col} = $data['id'];
         $cart->save();
+
+        $selector = '.mall-address-selector--' . $this->type;
+        $partial       = $this->alias . '::selector';
+
+        $this->cart = $cart;
+        $this->setData();
+
+        return [$selector => $this->renderPartial($partial)];
     }
 
     protected function setData()
     {
         $user = Auth::getUser();
-
         if ( ! $user) {
             return;
         }
 
-        $billing  = $this->cart->billing_address_id ?? $user->customer->default_billing_address_id;
-        $shipping = $this->cart->shipping_address_id ?? $user->customer->default_shipping_address_id ?? $billing;
+        $this->setVar('type', $this->property('type'));
 
-        $addresses = Address::whereIn('id', [$billing, $shipping])->get();
+        if ($this->type === 'billing') {
+            $address = $this->cart->billing_address_id ?? $user->customer->default_billing_address_id;
+        } else {
+            $address = $this->cart->shipping_address_id ?? $user->customer->default_shipping_address_id;
+        }
 
-        $billingAddress  = $addresses->find($billing);
-        $shippingAddress = $addresses->find($shipping);
+        $addresses = Address::byCustomer($user->customer)->get();
+        $address   = $addresses->find($address);
 
-        $this->setVar('addresses', Address::byCustomer($user->customer)->get());
-        $this->setVar('billingAddress', $billingAddress);
-        $this->setVar('shippingAddress', $shippingAddress);
+        $this->setVar('addresses', $addresses);
+        $this->setVar('address', $address);
+        $this->setVar('addressPage', GeneralSettings::get('address_page'));
     }
 }

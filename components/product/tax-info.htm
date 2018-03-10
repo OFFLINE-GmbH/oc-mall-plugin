@@ -1,9 +1,11 @@
-{% if item.price_includes_tax %}
-    {{ 'mall.tax.inclusive' | _ }}
-{% else %}
-    {{ 'mall.tax.exclusive' | _ }}
+{% if item.taxes %}
+    {% if item.price_includes_tax %}
+        {{ 'mall.tax.inclusive' | _ }}
+    {% else %}
+        {{ 'mall.tax.exclusive' | _ }}
+    {% endif %}
+    {% for tax in item.taxes %}
+        {{ tax.name }}
+        ({{ tax.percentage }} %){% if not loop.last %}, {% endif %}
+    {% endfor %}
 {% endif %}
-{% for tax in item.taxes %}
-    {{ tax.name }}
-    ({{ tax.percentage }} %){% if not loop.last %}, {% endif %}
-{% endfor %}

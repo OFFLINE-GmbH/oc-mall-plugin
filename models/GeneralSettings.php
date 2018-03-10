@@ -16,10 +16,25 @@ class GeneralSettings extends Model
 
     public function getProductPageOptions()
     {
-        return Page::sortBy('baseFileName')->lists('title', 'baseFileName');
+        return $this->getPages();
     }
 
     public function getCategoryPageOptions()
+    {
+        return $this->getPages();
+    }
+
+    public function getAddressPageOptions()
+    {
+        return $this->getPages();
+    }
+
+    public function getCheckoutPageOptions()
+    {
+        return $this->getPages();
+    }
+
+    protected function getPages()
     {
         return Page::sortBy('baseFileName')->lists('title', 'baseFileName');
     }

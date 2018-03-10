@@ -1,6 +1,1 @@
-
 {% component 'paymentMethodSelector' %}
-
-{% if __SELF__.payment_method.payment_provider %}
-    {% partial __SELF__ ~ '::paymentmethods/' ~ (__SELF__.payment_method.payment_provider) %}
-{% endif %}

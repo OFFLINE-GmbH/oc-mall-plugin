@@ -32,6 +32,7 @@ class Cart extends Model
 
     public $belongsTo = [
         'shipping_method'  => ShippingMethod::class,
+        'payment_method'   => PaymentMethod::class,
         'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
         'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
         'customer'         => [Customer::class, 'deleted' => true],
@@ -54,6 +55,20 @@ class Cart extends Model
      * @var TotalsCalculator
      */
     public $totalsCached;
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function (self $cart) {
+            // Make sure the selected shipping method is available for the new address(es).
+            if ($cart->shipping_method_id !== null && $cart->isDirty('shipping_address_id')) {
+                $availableMethods = ShippingMethod::getAvailableByCart($cart);
+                if ( ! $availableMethods->pluck('id')->contains($cart->shipping_method_id)) {
+                    $cart->shipping_method_id = ShippingMethod::getDefault()->id;
+                }
+            }
+        });
+    }
 
     public static function byUser(?User $user)
     {

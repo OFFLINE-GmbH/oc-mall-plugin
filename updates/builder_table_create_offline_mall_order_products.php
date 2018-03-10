@@ -16,7 +16,7 @@ class BuilderTableCreateOfflineMallOrderProducts extends Migration
 
             $table->string('name');
             $table->string('variant_name')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->integer('quantity');
 
             $table->integer('price_pre_taxes');

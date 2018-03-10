@@ -11,8 +11,9 @@ class BuilderTableCreateOfflineMallShippingMethods extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name', 255);
+            $table->text('description')->nullable();
             $table->integer('price');
-            $table->integer('sort_order');
+            $table->integer('sort_order')->nullable();
             $table->integer('guaranteed_delivery_days')->nullable();
             $table->integer('available_below_total')->nullable();
             $table->integer('available_above_total')->nullable();

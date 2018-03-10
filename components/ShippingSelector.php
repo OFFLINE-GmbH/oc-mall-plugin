@@ -33,7 +33,14 @@ class ShippingSelector extends ComponentBase
         $this->setData();
     }
 
-    public function onSelect()
+    public function onSubmit()
+    {
+        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'confirm']);
+
+        return redirect()->to($url);
+    }
+
+    public function onChangeMethod()
     {
         $this->setData();
 
@@ -52,8 +59,11 @@ class ShippingSelector extends ComponentBase
         $this->cart->shipping_method_id = post('id');
         $this->cart->save();
 
-        // Reload the cart to make sure everything is up to date.
         $this->setData();
+
+        return [
+            '.mall-shipping-selector' => $this->renderPartial($this->alias . '::selector'),
+        ];
     }
 
     protected function setData()

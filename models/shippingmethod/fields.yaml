@@ -11,11 +11,23 @@ fields:
         type: number
 tabs:
     fields:
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: huge
+            oc.commentPosition: ''
+            span: left
+            type: richeditor
+            tab: 'offline.mall::lang.common.general'
         price:
             label: 'offline.mall::lang.product.price'
             oc.commentPosition: ''
-            span: auto
+            span: right
             type: text
+            tab: 'offline.mall::lang.common.general'
+        taxes:
+            span: right
+            path: $/offline/mall/controllers/shippingmethods/_taxes.htm
+            type: partial
             tab: 'offline.mall::lang.common.general'
         logo:
             label: 'offline.mall::lang.common.logo'
@@ -28,11 +40,6 @@ tabs:
                 extension: auto
             span: right
             type: fileupload
-            tab: 'offline.mall::lang.common.general'
-        taxes:
-            span: left
-            path: $/offline/mall/controllers/shippingmethods/_taxes.htm
-            type: partial
             tab: 'offline.mall::lang.common.general'
         available_below_total:
             label: 'offline.mall::lang.shipping_method.available_below_total'
