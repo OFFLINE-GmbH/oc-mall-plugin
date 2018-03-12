@@ -14,9 +14,5 @@
         <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.order.failed.heading' | _ }}</h3>
         <p>{{ 'mall.checkout.order.failed.line_1' | _ }}</p>
     {% endif %}
-    <div class="mall-checkout-result__actions">
-        <a href="{{ '' | page }}" class="mall-btn mall-btn--primary">
-            {{ 'mall.order_overview.visit' | _ }}
-        </a>
-    </div>
+    {% partial __SELF__ ~ '::resultactions' %}
 </div>

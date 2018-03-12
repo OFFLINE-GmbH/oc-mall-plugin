@@ -28,6 +28,12 @@ fields:
         type: dropdown
         comment: offline.mall::lang.general_settings.checkout_page_comment
 
+    customer_profile_page:
+        label: offline.mall::lang.general_settings.customer_profile_page
+        span: left
+        type: dropdown
+        comment: offline.mall::lang.general_settings.customer_profile_page_comment
+
     customizations:
         label: offline.mall::lang.general_settings.customizations
         comment: offline.mall::lang.general_settings.customizations_comment

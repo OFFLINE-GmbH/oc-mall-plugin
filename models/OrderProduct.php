@@ -54,6 +54,10 @@ class OrderProduct extends Model
 
     public $table = 'offline_mall_order_products';
 
+    public $belongsTo = [
+        'variant' => Variant::class,
+    ];
+
     public function getPriceColumns()
     {
         return [

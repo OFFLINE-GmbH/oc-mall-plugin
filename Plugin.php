@@ -18,7 +18,9 @@ use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
 use OFFLINE\Mall\Components\Checkout;
+use OFFLINE\Mall\Components\CustomerProfile;
 use OFFLINE\Mall\Components\DiscountApplier;
+use OFFLINE\Mall\Components\OrdersList;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ShippingSelector;
@@ -74,6 +76,8 @@ class Plugin extends PluginBase
             CategoryFilter::class        => 'categoryFilter',
             ProductComponent::class      => 'product',
             DiscountApplier::class       => 'discountApplier',
+            CustomerProfile::class       => 'customerProfile',
+            OrdersList::class            => 'ordersList',
         ];
     }
 

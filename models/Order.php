@@ -168,4 +168,19 @@ class Order extends Model
             'total_pre_taxes',
         ];
     }
+
+    public function getPaymentStateLabelAttribute()
+    {
+        return $this->payment_state::label();
+    }
+
+    public function getOrderStateLabelAttribute()
+    {
+        return $this->order_state->name;
+    }
+
+    public function getShippingAddressStringAttribute()
+    {
+        return implode("\n", $this->shipping_address);
+    }
 }

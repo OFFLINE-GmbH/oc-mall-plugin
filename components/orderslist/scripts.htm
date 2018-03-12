@@ -1,0 +1,10 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $('.mall-orders-list .clickable').on('click', function () {
+                $(this).next('tr').toggle();
+                $(this).toggleClass('is-open')
+            });
+        });
+    </script>
+{% endput %}

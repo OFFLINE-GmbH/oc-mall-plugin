@@ -34,6 +34,11 @@ class GeneralSettings extends Model
         return $this->getPages();
     }
 
+    public function getCustomerProfilePageOptions()
+    {
+        return $this->getPages();
+    }
+
     protected function getPages()
     {
         return Page::sortBy('baseFileName')->lists('title', 'baseFileName');

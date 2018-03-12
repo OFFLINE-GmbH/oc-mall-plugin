@@ -13,12 +13,12 @@ if ( ! function_exists('format_money')) {
      *
      * @return string
      */
-    function format_money(?int $value, $product = null, $currency = null)
+    function format_money(?int $value, $product = null, $currency = null, $factor = 100)
     {
         $format   = CurrencySettings::activeCurrencyFormat();
-        $value    = round($value / 100, 2);
+        $value    = round($value / $factor, 2);
         $integers = floor($value);
-        $decimals = ($value - $integers) * 100;
+        $decimals = ($value - $integers) * $factor;
 
         return Twig::parse($format, [
             'price'    => $value,

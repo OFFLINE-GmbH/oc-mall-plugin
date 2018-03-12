@@ -1,0 +1,69 @@
+<table class="mall-table">
+    {% for product in products %}
+        <tr>
+            <td>
+                {{ product.name }}
+                {% if product.variant %}
+                    <br/>
+                    <span class="text-muted">
+                        {{ product.variant.properties_description | raw }}
+                    </span>
+                {% endif %}
+                {% if product.custom_field_values %}
+                    <br/>
+                    <span class="text-muted">
+                        {{ product.custom_field_value_description | raw }}
+                    </span>
+                {% endif %}
+            </td>
+            <td>{{ product.quantity }}</td>
+            <td class="text-right">
+                {{ product.price_post_taxes_formatted | raw }}
+            </td>
+            <td class="text-right">
+                {{ product.total_post_taxes_formatted | raw }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr class="mall-cart__total">
+        <td></td>
+        <td colspan="2">
+            {{ 'mall.total' | _ }}
+        </td>
+        <td class="text-right">
+            {{ order.total_product_post_taxes_formatted | raw }}
+        </td>
+    </tr>
+    <tr class="mall-cart__shipping">
+        <td></td>
+        <td colspan="2">
+            {{ order.shipping.method.name }}
+        </td>
+        <td class="text-right">
+            {{ order.shipping.total | money }}
+        </td>
+    </tr>
+    {% for entry in order.discounts %}
+        <tr class="mall-cart__discount">
+            <td></td>
+            <td colspan="2">
+                {{ entry.discount.name }}
+                {% if entry.discount.code %}
+                    ({{ entry.discount.code }})
+                {% endif %}
+            </td>
+            <td class="text-right">
+                {{ entry.savings | money }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr class="mall-cart__grand-total">
+        <td></td>
+        <td colspan="2">
+            {{ "mall.grand_total" | _ }}
+        </td>
+        <td class="text-right">
+            {{ order.total_post_taxes_formatted | raw }}
+        </td>
+    </tr>
+</table>

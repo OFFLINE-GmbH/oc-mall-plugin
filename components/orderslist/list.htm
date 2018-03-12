@@ -1,0 +1,19 @@
+<table class="mall-table">
+    <tr>
+        <th>#</th>
+        <th>{{ 'mall.created_at' | _ }}</th>
+        <th>{{ 'mall.order.order_state' | _ }}</th>
+        <th>{{ 'mall.order.payment_state' | _ }}</th>
+        <th class="text-right">{{ 'mall.total' | _ }}</th>
+    </tr>
+    {% for order in orders %}
+        <tr class="clickable">
+            <td>{{ order.order_number }}</td>
+            <td>{{ order.created_at }}</td>
+            <td>{{ order.order_state_label }}</td>
+            <td>{{ order.payment_state_label }}</td>
+            <td class="text-right">{{ order.total_post_taxes_formatted | raw }}</td>
+        </tr>
+        {% partial __SELF__ ~ '::details' order=order %}
+    {% endfor %}
+</table>

@@ -1,9 +1,5 @@
 <div class="mall-checkout-result mall-checkout-result--successful">
     <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.order.successful.heading' | _ }}</h3>
     <p>{{ 'mall.checkout.order.successful.line_1' | _ }}</p>
-    <div class="mall-checkout-result__actions">
-        <a href="{{ '' | page }}" class="mall-btn mall-btn--primary">
-            {{ 'mall.order_overview.visit' | _ }}
-        </a>
-    </div>
+    {% partial __SELF__ ~ '::resultactions' %}
 </div>

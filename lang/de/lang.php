@@ -75,22 +75,24 @@
         ],
     ],
     'general_settings'         => [
-        'category'               => 'Mall',
-        'label'                  => 'Grundkonfiguration',
-        'description'            => 'Allgemeine Einstellungen',
-        'product_page'           => 'Produkt-Seite',
-        'product_page_comment'   => 'Auf dieser Seite werden die Produkt-Details angezeigt',
-        'address_page'           => 'Adressen-Seite',
-        'address_page_comment'   => 'Auf dieser Seite muss die addressForm Komponente platziert werden',
-        'checkout_page'          => 'Checkout-Seite',
-        'checkout_page_comment'  => 'Auf dieser Seite muss die checkout Komponente platziert werden',
-        'category_page'          => 'Kategorie-Seite für Produkte-Übersicht',
-        'auto_pop'               => 'Warenkorb nach Hinzufügen anzeigen',
-        'auto_pop_comment'       => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
-        'links'                  => 'Verlinkungen',
-        'links_comment'          => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
-        'customizations'         => 'Optionen',
-        'customizations_comment' => 'Globale Konfigurationseinstellungen für deinen Shop',
+        'category'                      => 'Mall',
+        'label'                         => 'Grundkonfiguration',
+        'description'                   => 'Allgemeine Einstellungen',
+        'product_page'                  => 'Produkt-Seite',
+        'product_page_comment'          => 'Auf dieser Seite werden die Produkt-Details angezeigt',
+        'address_page'                  => 'Adressen-Seite',
+        'address_page_comment'          => 'Auf dieser Seite muss die addressForm Komponente platziert werden',
+        'checkout_page'                 => 'Checkout-Seite',
+        'checkout_page_comment'         => 'Auf dieser Seite muss die checkout Komponente platziert werden',
+        'customer_profile_page'         => 'Kundenprofil-Seite',
+        'customer_profile_page_comment' => 'Auf dieser Seite muss die customerProfile Komponente platziert werden',
+        'category_page'                 => 'Kategorie-Seite für Produkte-Übersicht',
+        'auto_pop'                      => 'Warenkorb nach Hinzufügen anzeigen',
+        'auto_pop_comment'              => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
+        'links'                         => 'Verlinkungen',
+        'links_comment'                 => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
+        'customizations'                => 'Optionen',
+        'customizations_comment'        => 'Globale Konfigurationseinstellungen für deinen Shop',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -418,6 +420,29 @@
                 'showPriceFilter' => [
                     'title' => 'Zeige Preis-Filter an',
                 ],
+            ],
+        ],
+        'customerProfile'       => [
+            'details'    => [
+                'name'        => 'Kundenprofil-Seite',
+                'description' => 'Zeigt dem Kunden alle Informationen zu seinem Profil an',
+            ],
+            'properties' => [
+                'page' => [
+                    'title' => 'Aktive Unterseite',
+                ],
+            ],
+            'pages'      => [
+                'orders'  => 'Bestellungen',
+                'profile' => 'Benutzerprofil',
+            ],
+        ],
+        'ordersList'       => [
+            'details'    => [
+                'name'        => 'Bestellungsliste',
+                'description' => 'Zeigt alle Bestellungen eines Kunden an',
+            ],
+            'properties' => [
             ],
         ],
         'product'               => [

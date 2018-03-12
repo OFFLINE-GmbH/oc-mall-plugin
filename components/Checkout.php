@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Components\Cart as CartComponent;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Redirect;
@@ -26,6 +27,7 @@ class Checkout extends ComponentBase
     public $payment_method;
     public $step;
     public $order;
+    public $customerProfilePage;
 
     public function componentDetails()
     {
@@ -130,6 +132,7 @@ class Checkout extends ComponentBase
         $this->setVar('cart', $cart);
         $this->setVar('payment_method', PaymentMethod::findOrFail($cart->payment_method_id));
         $this->setVar('step', $this->property('step'));
+        $this->setVar('customerProfilePage', GeneralSettings::get('customer_profile_page'));
 
         if ($orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
