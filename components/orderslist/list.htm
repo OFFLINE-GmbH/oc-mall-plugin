@@ -1,4 +1,4 @@
-<table class="mall-table">
+<table class="mall-orders-list__table mall-table">
     <tr>
         <th>#</th>
         <th>{{ 'mall.created_at' | _ }}</th>
@@ -7,7 +7,7 @@
         <th class="text-right">{{ 'mall.total' | _ }}</th>
     </tr>
     {% for order in orders %}
-        <tr class="clickable">
+        <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }}">
             <td>{{ order.order_number }}</td>
             <td>{{ order.created_at }}</td>
             <td>{{ order.order_state_label }}</td>

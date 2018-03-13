@@ -27,9 +27,9 @@ class DefaultPaymentGateway implements PaymentGateway
         return $this->providers[$identifier];
     }
 
-    public function init(Cart $cart, array $data)
+    public function init(PaymentMethod $paymentMethod, array $data)
     {
-        $this->provider = $this->getProviderForMethod(PaymentMethod::findOrFail($cart->payment_method_id));
+        $this->provider = $this->getProviderForMethod($paymentMethod);
         $this->provider->setData($data);
         $this->provider->validate();
     }
@@ -40,7 +40,7 @@ class DefaultPaymentGateway implements PaymentGateway
             throw new \LogicException('Missing data for payment. Make sure to call init() before process()');
         }
 
-        Session::put('oc-mall.payment.id', str_random(8));
+        Session::put('mall.payment.id', str_random(8));
 
         $this->provider->setOrder($order);
 

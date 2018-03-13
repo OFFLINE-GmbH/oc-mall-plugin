@@ -2,12 +2,14 @@
 
 use Cms\Classes\ComponentBase;
 use OFFLINE\Mall\Models\Country;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 
 class OrdersList extends ComponentBase
 {
     public $orders = [];
     public $countries = [];
+    public $paymentLink;
 
     public function componentDetails()
     {
@@ -29,10 +31,18 @@ class OrdersList extends ComponentBase
             return;
         }
 
-        $this->orders    = Order::byCustomer($user->customer)
-                                ->with(['products', 'products.variant'])
-                                ->orderBy('created_at', 'DESC')
-                                ->get();
-        $this->countries = Country::get()->pluck('name', 'id');
+        $this->orders      = Order::byCustomer($user->customer)
+                                  ->with(['products', 'products.variant'])
+                                  ->orderBy('created_at', 'DESC')
+                                  ->get();
+        $this->countries   = Country::get()->pluck('name', 'id');
+        $this->paymentLink = $this->getPaymentLink();
+    }
+
+    protected function getPaymentLink()
+    {
+        $page = GeneralSettings::get('checkout_page');
+
+        return $this->controller->pageUrl($page, ['step' => 'payment']);
     }
 }

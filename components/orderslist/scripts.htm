@@ -1,7 +1,7 @@
 {% put scripts %}
     <script>
         $(function () {
-            $('.mall-orders-list .clickable').on('click', function () {
+            $('.mall-orders-list__order').on('click', function () {
                 $(this).next('tr').toggle();
                 $(this).toggleClass('is-open')
             });

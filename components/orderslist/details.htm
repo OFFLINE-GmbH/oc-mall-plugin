@@ -9,6 +9,10 @@
                 <div class="mall-order-details__detail">
                     <h5>{{ 'mall.order.payment_state' | _ }}</h5>
                     {{ order.payment_state_label }}
+                    {% if not order.isPaid %}
+                    <br />
+                    <a href="{{ __SELF__.paymentLink }}?order={{ order.hashId }}">{{ 'mall.payment_method.pay_now' | _ }}</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="mall-order-details__row">

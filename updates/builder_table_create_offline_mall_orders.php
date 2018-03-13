@@ -10,6 +10,7 @@ class BuilderTableCreateOfflineMallOrders extends Migration
         Schema::create('offline_mall_orders', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
+            $table->string('session_id')->nullable();
             $table->string('order_number')->nullable()->unique();
             $table->string('invoice_number')->nullable();
             $table->string('currency')->nullable();

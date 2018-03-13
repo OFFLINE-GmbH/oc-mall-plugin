@@ -5,6 +5,7 @@ use Event;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PaymentState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -45,14 +46,15 @@ class Order extends Model
     public $table = 'offline_mall_orders';
 
     public $hasMany = [
-        'products' => OrderProduct::class,
-        'payment_logs' => [PaymentLog::class, 'order' => 'created_at ASC'],
+        'products'     => OrderProduct::class,
+        'payment_logs' => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
 
     public $belongsTo = [
         'payment_method' => [PaymentMethod::class, 'deleted' => true],
         'order_state'    => [OrderState::class, 'deleted' => true],
         'customer'       => [Customer::class, 'deleted' => true],
+        'cart'           => [Cart::class, 'deleted' => true],
     ];
 
     public $casts = [
@@ -95,6 +97,7 @@ class Order extends Model
             }
 
             $order                                          = new static;
+            $order->session_id                              = $cart->session_id;
             $order->currency                                = 'CHF';
             $order->lang                                    = 'de';
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
@@ -182,5 +185,10 @@ class Order extends Model
     public function getShippingAddressStringAttribute()
     {
         return implode("\n", $this->shipping_address);
+    }
+
+    public function getIsPaidAttribute()
+    {
+        return $this->payment_state === PaidState::class;
     }
 }

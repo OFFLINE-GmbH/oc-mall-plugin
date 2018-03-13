@@ -40,18 +40,18 @@ abstract class PaymentProvider
     public function setOrder(?Order $order)
     {
         $this->order = $order;
-        Session::put('oc-mall.payment.order', optional($this->order)->id);
+        Session::put('mall.payment.order', optional($this->order)->id);
     }
 
     public function setData(array $data)
     {
         $this->data = $data;
-        Session::put('oc-mall.payment.data', $data);
+        Session::put('mall.payment.data', $data);
     }
 
     protected function getOrderFromSession(): Order
     {
-        $id = Session::pull('oc-mall.payment.order');
+        $id = Session::pull('mall.payment.order');
 
         return Order::findOrFail($id);
     }
@@ -74,7 +74,7 @@ abstract class PaymentProvider
 
     private function getPaymentId()
     {
-        return Session::get('oc-mall.payment.id');
+        return Session::get('mall.payment.id');
     }
 
     protected function logFailedPayment(array $data = [], $response): PaymentLog

@@ -3,11 +3,10 @@
         <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.payment.failed.heading' | _ }}</h3>
         <p>{{ 'mall.checkout.payment.failed.line_1' | _ }}</p>
         <p>{{ 'mall.checkout.payment.failed.line_2' | _ }}</p>
-        {% set message = __SELF__.order.payment_logs.first().message %}
-        {% if message %}
+        {% if __SELF__.paymentError %}
             <p>
                 {{ 'mall.checkout.payment.failed.line_3' | _ }}<br/>
-                <strong>{{ message }}</strong>
+                <strong>{{ __SELF__.paymentError }}</strong>
             </p>
         {% endif %}
     {% else %}

@@ -49,8 +49,8 @@ class PayPalRest extends PaymentProvider
 
         // PayPal has to return a RedirectResponse if everything went well
         if ($response->isRedirect()) {
-            Session::put('oc-mall.payment.callback', self::class);
-            Session::put('oc-mall.paypal.transactionReference', $response->getTransactionReference());
+            Session::put('mall.payment.callback', self::class);
+            Session::put('mall.paypal.transactionReference', $response->getTransactionReference());
             $result->redirect    = true;
             $result->redirectUrl = $response->getRedirectResponse()->getTargetUrl();
 
@@ -66,7 +66,7 @@ class PayPalRest extends PaymentProvider
     public function complete(): PaymentResult
     {
         $result  = new PaymentResult();
-        $key     = Session::pull('oc-mall.paypal.transactionReference');
+        $key     = Session::pull('mall.paypal.transactionReference');
         $payerId = Request::input('PayerID');
 
         if ( ! $key || ! $payerId) {

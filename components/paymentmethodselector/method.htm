@@ -1,4 +1,4 @@
-{% set isActiveMethod = cart.payment_method_id == method.id %}
+{% set isActiveMethod = __SELF__.activeMethod == method.id %}
 <div class="mall-payment-method__entry js-mall-select-payment-method
      {{ isActiveMethod ? 'mall-payment-method__entry--active' : '' }}"
      data-id="{{ method.id }}"
@@ -32,8 +32,9 @@
                     {% endif %}
                 </div>
                 <div class="mall-payment-method__submit">
+                    {% set label = __SELF__.order ? 'mall.payment_method.pay_now' : 'mall.payment_method.proceed' %}
                     <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
-                        {{ 'mall.payment_method.proceed' | _ }}
+                        {{ label | _ }}
                     </button>
                 </div>
             </div>
