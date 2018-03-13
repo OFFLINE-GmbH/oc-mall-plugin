@@ -2,6 +2,7 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use Event;
 use Flash;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Order;
