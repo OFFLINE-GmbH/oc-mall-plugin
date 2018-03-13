@@ -85,7 +85,7 @@
         'checkout_page'                 => 'Checkout-Seite',
         'checkout_page_comment'         => 'Auf dieser Seite muss die checkout Komponente platziert werden',
         'customer_profile_page'         => 'Kundenprofil-Seite',
-        'customer_profile_page_comment' => 'Auf dieser Seite muss die customerProfile Komponente platziert werden',
+        'customer_profile_page_comment' => 'Auf dieser Seite muss die myAccount Komponente platziert werden',
         'category_page'                 => 'Kategorie-Seite für Produkte-Übersicht',
         'auto_pop'                      => 'Warenkorb nach Hinzufügen anzeigen',
         'auto_pop_comment'              => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
@@ -422,7 +422,7 @@
                 ],
             ],
         ],
-        'customerProfile'       => [
+        'myAccount'       => [
             'details'    => [
                 'name'        => 'Kundenprofil-Seite',
                 'description' => 'Zeigt dem Kunden alle Informationen zu seinem Profil an',

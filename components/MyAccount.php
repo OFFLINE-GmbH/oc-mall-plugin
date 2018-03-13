@@ -2,15 +2,15 @@
 
 use Cms\Classes\ComponentBase;
 
-class CustomerProfile extends ComponentBase
+class MyAccount extends ComponentBase
 {
     public $currentPage;
 
     public function componentDetails()
     {
         return [
-            'name'        => 'offline.mall::lang.components.customerProfile.details.name',
-            'description' => 'offline.mall::lang.components.customerProfile.details.description',
+            'name'        => 'offline.mall::lang.components.myAccount.details.name',
+            'description' => 'offline.mall::lang.components.myAccount.details.description',
         ];
     }
 
@@ -19,7 +19,7 @@ class CustomerProfile extends ComponentBase
         return [
             'page' => [
                 'type'  => 'dropdown',
-                'title' => 'offline.mall::lang.components.customerProfile.properties.page.title',
+                'title' => 'offline.mall::lang.components.myAccount.properties.page.title',
             ],
         ];
     }
@@ -27,15 +27,19 @@ class CustomerProfile extends ComponentBase
     public function getPageOptions()
     {
         return [
-            'orders'  => trans('offline.mall::lang.components.customerProfile.pages.orders'),
-            'profile' => trans('offline.mall::lang.components.customerProfile.pages.profile'),
+            'orders'  => trans('offline.mall::lang.components.myAccount.pages.orders'),
+            'profile' => trans('offline.mall::lang.components.myAccount.pages.profile'),
         ];
     }
 
     public function onRun()
     {
         $this->currentPage = $this->property('page');
-        if($this->currentPage === 'orders') {
+        if ($this->currentPage === false || ! array_key_exists($this->currentPage, $this->getPageOptions())) {
+            return redirect()->to($this->pageUrl('orders'));
+        }
+
+        if ($this->currentPage === 'orders') {
             $this->addComponent(OrdersList::class, 'ordersList', []);
         }
     }
