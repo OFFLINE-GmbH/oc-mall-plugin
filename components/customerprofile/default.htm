@@ -1,0 +1,32 @@
+<form data-request="{{ __SELF__ }}::onSubmit" data-request-validate data-request-flash>
+    <div class="mall-two-fields">
+        <div class="mall-form-control">
+            <label for="name">{{ 'mall.form.full_name' | _ }}</label>
+            <input id="name" type="text" placeholder="{{ 'mall.form.full_name_placeholder' | _ }}" name="name"
+                   value="{{ __SELF__.user.customer.name }}">
+            <div data-validate-for="name"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="email">{{ 'mall.form.email' | _ }}</label>
+            <input id="email" type="email" placeholder="email@email.com" name="email" value="{{ __SELF__.user.email }}">
+            <div data-validate-for="email"></div>
+        </div>
+    </div>
+    <div class="mall-two-fields">
+        <div class="mall-form-control">
+            <label for="password">{{ 'mall.form.new_password' | _ }}</label>
+            <input id="password" type="password" name="password">
+            <div data-validate-for="password"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="password_repeat">{{ 'mall.form.password_repeat' | _ }}</label>
+            <input id="password_repeat" type="password" name="password_repeat">
+            <div data-validate-for="password_repeat"></div>
+        </div>
+    </div>
+    <div class="mall-form-actions">
+        <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
+            {{ 'mall.save' | _ }}
+        </button>
+    </div>
+</form>

@@ -34,7 +34,7 @@ class GeneralSettings extends Model
         return $this->getPages();
     }
 
-    public function getCustomerProfilePageOptions()
+    public function getAccountPageOptions()
     {
         return $this->getPages();
     }

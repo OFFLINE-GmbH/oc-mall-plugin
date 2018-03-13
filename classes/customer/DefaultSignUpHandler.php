@@ -53,7 +53,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
             $billing = new Address();
             $billing->fill($addressData);
-            $billing->name = $addressData['address_name'] ?? $data['name'];
+            $billing->name        = $addressData['address_name'] ?? $data['name'];
             $billing->customer_id = $customer->id;
             $billing->save();
             $customer->default_billing_address_id = $billing->id;
@@ -63,7 +63,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
                 $shipping = new Address();
                 $shipping->fill($addressData);
-                $shipping->name = $addressData['address_name'] ?? $data['name'];
+                $shipping->name        = $addressData['address_name'] ?? $data['name'];
                 $shipping->customer_id = $customer->id;
                 $shipping->save();
                 $customer->default_shipping_address_id = $shipping->id;
@@ -93,45 +93,14 @@ class DefaultSignUpHandler implements SignUpHandler
      */
     protected function validate(array $data)
     {
-        $rules = [
-            'name'                => 'required',
-            'email'               => 'required|email|unique:users,email',
-            'billing_lines'       => 'required',
-            'billing_zip'         => 'required',
-            'billing_city'        => 'required',
-            'billing_country_id'  => 'required|exists:offline_mall_countries,id',
-            'shipping_lines'      => 'required_if:use_different_shipping,1',
-            'shipping_zip'        => 'required_if:use_different_shipping,1',
-            'shipping_city'       => 'required_if:use_different_shipping,1',
-            'shipping_country_id' => 'required_if:use_different_shipping,1|exists:offline_mall_countries,id',
-            'password'            => 'required|min:8|max:255',
-            'password_repeat'     => 'required|same:password',
-        ];
+        $rules = self::rules();
 
         if ($this->asGuest) {
             unset($rules['password']);
             unset($rules['password_repeat']);
         }
 
-        $messages = [
-            'email.required' => trans('offline.mall::lang.components.signup.errors.email.required'),
-            'email.email'    => trans('offline.mall::lang.components.signup.errors.email.email'),
-            'email.unique'   => trans('offline.mall::lang.components.signup.errors.email.unique'),
-
-            'name.required'       => trans('offline.mall::lang.components.signup.errors.name.required'),
-            'lines.required'      => trans('offline.mall::lang.components.signup.errors.lines.required'),
-            'zip.required'        => trans('offline.mall::lang.components.signup.errors.zip.required'),
-            'city.required'       => trans('offline.mall::lang.components.signup.errors.city.required'),
-            'country_id.required' => trans('offline.mall::lang.components.signup.errors.country_id.required'),
-            'country_id.exists'   => trans('offline.mall::lang.components.signup.errors.country_id.exists'),
-
-            'password.required' => trans('offline.mall::lang.components.signup.errors.password.required'),
-            'password.min'      => trans('offline.mall::lang.components.signup.errors.password.min'),
-            'password.max'      => trans('offline.mall::lang.components.signup.errors.password.max'),
-
-            'password_repeat.required' => trans('offline.mall::lang.components.signup.errors.password_repeat.required'),
-            'password_repeat.same'     => trans('offline.mall::lang.components.signup.errors.password_repeat.same'),
-        ];
+        $messages = self::messages();
 
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -167,5 +136,46 @@ class DefaultSignUpHandler implements SignUpHandler
         }
 
         return $transformed;
+    }
+
+    public static function rules($forSignup = true): array
+    {
+        return [
+            'name'                => 'required',
+            'email'               => 'required|email' . ($forSignup ? '|unique:users,email' : ''),
+            'billing_lines'       => 'required',
+            'billing_zip'         => 'required',
+            'billing_city'        => 'required',
+            'billing_country_id'  => 'required|exists:offline_mall_countries,id',
+            'shipping_lines'      => 'required_if:use_different_shipping,1',
+            'shipping_zip'        => 'required_if:use_different_shipping,1',
+            'shipping_city'       => 'required_if:use_different_shipping,1',
+            'shipping_country_id' => 'required_if:use_different_shipping,1|exists:offline_mall_countries,id',
+            'password'            => 'required|min:8|max:255',
+            'password_repeat'     => 'required|same:password',
+        ];
+    }
+
+    public static function messages(): array
+    {
+        return [
+            'email.required' => trans('offline.mall::lang.components.signup.errors.email.required'),
+            'email.email'    => trans('offline.mall::lang.components.signup.errors.email.email'),
+            'email.unique'   => trans('offline.mall::lang.components.signup.errors.email.unique'),
+
+            'name.required'       => trans('offline.mall::lang.components.signup.errors.name.required'),
+            'lines.required'      => trans('offline.mall::lang.components.signup.errors.lines.required'),
+            'zip.required'        => trans('offline.mall::lang.components.signup.errors.zip.required'),
+            'city.required'       => trans('offline.mall::lang.components.signup.errors.city.required'),
+            'country_id.required' => trans('offline.mall::lang.components.signup.errors.country_id.required'),
+            'country_id.exists'   => trans('offline.mall::lang.components.signup.errors.country_id.exists'),
+
+            'password.required' => trans('offline.mall::lang.components.signup.errors.password.required'),
+            'password.min'      => trans('offline.mall::lang.components.signup.errors.password.min'),
+            'password.max'      => trans('offline.mall::lang.components.signup.errors.password.max'),
+
+            'password_repeat.required' => trans('offline.mall::lang.components.signup.errors.password_repeat.required'),
+            'password_repeat.same'     => trans('offline.mall::lang.components.signup.errors.password_repeat.same'),
+        ];
     }
 }

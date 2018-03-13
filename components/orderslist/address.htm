@@ -6,7 +6,7 @@
     {{ address.lines | nl2br }}<br />
     {{ address.zip }} {{ address.city }}<br />
     {% if address.county_province %}
-        {{ address.county_province }}
+        {{ address.county_province }}<br />
     {% endif %}
     {{ __SELF__.countries[address.country_id] }}
 </p>

@@ -55,6 +55,7 @@ class AddressForm extends ComponentBase
     {
         return [
             'checkout' => trans('offline.mall::lang.components.addressForm.redirects.checkout'),
+            'account'  => trans('offline.mall::lang.components.addressForm.redirects.account'),
         ];
     }
 
@@ -99,6 +100,8 @@ class AddressForm extends ComponentBase
             $this->cart->save();
         }
 
+        Flash::success(trans('offline.mall::lang.common.changes_saved'));
+
         if ($url = $this->getRedirectUrl()) {
             return redirect()->to(url($url));
         }
@@ -132,9 +135,10 @@ class AddressForm extends ComponentBase
         $url      = '';
         if ($redirect === 'checkout') {
             $url = $this->controller->pageUrl(GeneralSettings::get('checkout_page'), ['step' => 'confirm']);
+        } elseif ($redirect === 'account') {
+            $url = $this->controller->pageUrl(GeneralSettings::get('account_page'), ['page' => 'addresses']);
         }
 
         return $url;
-
     }
 }

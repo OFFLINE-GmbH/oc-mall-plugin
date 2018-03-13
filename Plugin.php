@@ -13,11 +13,13 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Components\AddressForm;
+use OFFLINE\Mall\Components\AddressList;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
 use OFFLINE\Mall\Components\Checkout;
+use OFFLINE\Mall\Components\CustomerProfile;
 use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\DiscountApplier;
 use OFFLINE\Mall\Components\OrdersList;
@@ -32,6 +34,7 @@ use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use RainLab\User\Models\User;
 use Rainlab\User\Models\User as UserModel;
 use System\Classes\PluginBase;
+use OFFLINE\Mall\Models\GeneralSettings;
 
 class Plugin extends PluginBase
 {
@@ -78,6 +81,8 @@ class Plugin extends PluginBase
             DiscountApplier::class       => 'discountApplier',
             MyAccount::class             => 'myAccount',
             OrdersList::class            => 'ordersList',
+            CustomerProfile::class       => 'customerProfile',
+            AddressList::class           => 'addressList',
         ];
     }
 
@@ -89,7 +94,7 @@ class Plugin extends PluginBase
                 'description' => 'offline.mall::lang.general_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',
                 'icon'        => 'icon-shopping-cart',
-                'class'       => 'OFFLINE\Mall\Models\GeneralSettings',
+                'class'       => GeneralSettings::class,
                 'order'       => 0,
                 'permissions' => ['offline.mall.settings.manage_general'],
                 'keywords'    => 'shop store mall general',
@@ -153,7 +158,7 @@ class Plugin extends PluginBase
      */
     protected function extendUserModel()
     {
-        if ( ! class_exists('RainLab\User\Models\User')) {
+        if ( ! class_exists(User::class)) {
             return;
         }
         UserModel::extend(function (Model $model) {

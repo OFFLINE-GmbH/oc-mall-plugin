@@ -29,7 +29,7 @@ class Checkout extends ComponentBase
     public $paymentError;
     public $step;
     public $order;
-    public $customerProfilePage;
+    public $accountPage;
 
     public function componentDetails()
     {
@@ -134,7 +134,7 @@ class Checkout extends ComponentBase
         $this->setVar('cart', $cart);
         $this->setVar('paymentMethod', PaymentMethod::findOrFail($cart->payment_method_id));
         $this->setVar('step', $this->property('step'));
-        $this->setVar('customerProfilePage', GeneralSettings::get('customer_profile_page'));
+        $this->setVar('accountPage', GeneralSettings::get('account_page'));
 
         if ($orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);

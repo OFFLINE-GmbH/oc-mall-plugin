@@ -75,24 +75,24 @@
         ],
     ],
     'general_settings'         => [
-        'category'                      => 'Mall',
-        'label'                         => 'Grundkonfiguration',
-        'description'                   => 'Allgemeine Einstellungen',
-        'product_page'                  => 'Produkt-Seite',
-        'product_page_comment'          => 'Auf dieser Seite werden die Produkt-Details angezeigt',
-        'address_page'                  => 'Adressen-Seite',
-        'address_page_comment'          => 'Auf dieser Seite muss die addressForm Komponente platziert werden',
-        'checkout_page'                 => 'Checkout-Seite',
-        'checkout_page_comment'         => 'Auf dieser Seite muss die checkout Komponente platziert werden',
-        'customer_profile_page'         => 'Kundenprofil-Seite',
-        'customer_profile_page_comment' => 'Auf dieser Seite muss die myAccount Komponente platziert werden',
-        'category_page'                 => 'Kategorie-Seite für Produkte-Übersicht',
-        'auto_pop'                      => 'Warenkorb nach Hinzufügen anzeigen',
-        'auto_pop_comment'              => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
-        'links'                         => 'Verlinkungen',
-        'links_comment'                 => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
-        'customizations'                => 'Optionen',
-        'customizations_comment'        => 'Globale Konfigurationseinstellungen für deinen Shop',
+        'category'               => 'Mall',
+        'label'                  => 'Grundkonfiguration',
+        'description'            => 'Allgemeine Einstellungen',
+        'product_page'           => 'Produkt-Seite',
+        'product_page_comment'   => 'Auf dieser Seite werden die Produkt-Details angezeigt',
+        'address_page'           => 'Adressen-Seite',
+        'address_page_comment'   => 'Auf dieser Seite muss die addressForm Komponente platziert werden',
+        'checkout_page'          => 'Checkout-Seite',
+        'checkout_page_comment'  => 'Auf dieser Seite muss die checkout Komponente platziert werden',
+        'account_page'           => 'Account-Seite',
+        'account_page_comment'   => 'Auf dieser Seite muss die myAccount Komponente platziert werden',
+        'category_page'          => 'Kategorie-Seite für Produkte-Übersicht',
+        'auto_pop'               => 'Warenkorb nach Hinzufügen anzeigen',
+        'auto_pop_comment'       => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
+        'links'                  => 'Verlinkungen',
+        'links_comment'          => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
+        'customizations'         => 'Optionen',
+        'customizations_comment' => 'Globale Konfigurationseinstellungen für deinen Shop',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -166,6 +166,7 @@
         'brand'                => 'Marke',
         'sorting_updated'      => 'Reihenfolge aktualisiert',
         'not_in_use'           => 'Option nicht verwendet',
+        'saved_changes'        => 'Änderungen gespeichert',
     ],
     'variant'                  => [
         'method' => [
@@ -422,10 +423,10 @@
                 ],
             ],
         ],
-        'myAccount'       => [
+        'myAccount'             => [
             'details'    => [
-                'name'        => 'Kundenprofil-Seite',
-                'description' => 'Zeigt dem Kunden alle Informationen zu seinem Profil an',
+                'name'        => 'Benutzeraccount',
+                'description' => 'Zeigt dem Kunden alle Informationen zu seinem Bentzerkonto an',
             ],
             'properties' => [
                 'page' => [
@@ -433,11 +434,35 @@
                 ],
             ],
             'pages'      => [
-                'orders'  => 'Bestellungen',
-                'profile' => 'Benutzerprofil',
+                'orders'    => 'Bestellungen',
+                'profile'   => 'Benutzerprofil',
+                'addresses' => 'Adressliste',
             ],
         ],
-        'ordersList'       => [
+        'customerProfile'       => [
+            'details'    => [
+                'name'        => 'Kundenprofil',
+                'description' => 'Zeigt ein Formular zur Bearbeitung der Kundendaten an.',
+            ],
+            'properties' => [
+            ],
+        ],
+        'addressList'           => [
+            'details'    => [
+                'name'        => 'Adressliste',
+                'description' => 'Zeigt alle erfassten Adressen eines Kunden an',
+            ],
+            'properties' => [
+            ],
+            'errors'     => [
+                'address_not_found' => 'Die gesuchte Addresse wurde nicht gefunden',
+                'cannot_delete_last_address' => 'Sie können Ihre letzte Adresse nicht löschen',
+            ],
+            'messages'   => [
+                'address_deleted' => 'Adresse gelöscht',
+            ],
+        ],
+        'ordersList'            => [
             'details'    => [
                 'name'        => 'Bestellungsliste',
                 'description' => 'Zeigt alle Bestellungen eines Kunden an',

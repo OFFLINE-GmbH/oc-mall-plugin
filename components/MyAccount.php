@@ -27,20 +27,29 @@ class MyAccount extends ComponentBase
     public function getPageOptions()
     {
         return [
-            'orders'  => trans('offline.mall::lang.components.myAccount.pages.orders'),
-            'profile' => trans('offline.mall::lang.components.myAccount.pages.profile'),
+            'orders'    => trans('offline.mall::lang.components.myAccount.pages.orders'),
+            'profile'   => trans('offline.mall::lang.components.myAccount.pages.profile'),
+            'addresses' => trans('offline.mall::lang.components.myAccount.pages.addresses'),
         ];
+    }
+
+    public function init()
+    {
+        $this->currentPage = $this->property('page');
+
+        if ($this->currentPage === 'orders') {
+            $this->addComponent(OrdersList::class, 'ordersList', []);
+        } elseif ($this->currentPage === 'profile') {
+            $this->addComponent(CustomerProfile::class, 'customerProfile', []);
+        } elseif ($this->currentPage === 'addresses') {
+            $this->addComponent(AddressList::class, 'addressList', []);
+        }
     }
 
     public function onRun()
     {
-        $this->currentPage = $this->property('page');
         if ($this->currentPage === false || ! array_key_exists($this->currentPage, $this->getPageOptions())) {
             return redirect()->to($this->pageUrl('orders'));
-        }
-
-        if ($this->currentPage === 'orders') {
-            $this->addComponent(OrdersList::class, 'ordersList', []);
         }
     }
 
