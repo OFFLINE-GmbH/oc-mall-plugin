@@ -53,7 +53,7 @@ class CustomFieldOption extends Model
     public $table = 'offline_mall_custom_field_options';
 
     /**
-     * Make it easiert to access the first "values" option since
+     * Make it easier to access the first "values" option since
      * this often is the only value we need.
      */
     public function getValueAttribute()

@@ -1,5 +1,5 @@
 <h3 class="mall-signup__heading">{{ 'mall.signup.signin' | _ }}</h3>
-<form data-request="onSignin" data-request-validate>
+<form data-request="onSignin" data-request-validate data-request-flash>
     <div class="mall-form-control">
         <label for="email">{{ 'mall.form.email' | _ }}</label>
         <input id="email" name="login" type="text" placeholder="email@example.com">
@@ -15,8 +15,6 @@
         <button class="mall-btn mall-btn--primary" type="submit">
             {{ 'mall.form.signin' | _ }}
         </button>
-        <a class="mall-btn mall-btn--link" href="#">
-            {{ 'mall.form.forgot_password' | _ }}
-        </a>
+        {% partial __SELF__ ~ '::reset_password' %}
     </div>
 </form>

@@ -1,12 +1,12 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Auth;
 use DB;
 use Event;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
-use OFFLINE\Mall\Classes\PaymentState\PaymentState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Price;
@@ -97,7 +97,7 @@ class Order extends Model
             }
 
             $order                                          = new static;
-            $order->session_id                              = $cart->session_id;
+            $order->session_id                              = session()->getId();
             $order->currency                                = 'CHF';
             $order->lang                                    = 'de';
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
@@ -107,7 +107,7 @@ class Order extends Model
             $order->taxes                                   = $cart->totals->taxes();
             $order->discounts                               = $cart->totals->appliedDiscounts();
             $order->ip_address                              = request()->ip();
-            $order->customer_id                             = 1;
+            $order->customer_id                             = Auth::getUser()->customer->id;
             $order->payment_method_id                       = $cart->payment_method_id;
             $order->payment_state                           = PendingState::class;
             $order->order_state_id                          = $initialOrderStatus->id;

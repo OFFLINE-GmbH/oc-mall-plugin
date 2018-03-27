@@ -146,4 +146,12 @@ class Checkout extends ComponentBase
     {
         return (new PaymentRedirector($this->page->page->fileName))->handleOffSiteReturn($type);
     }
+
+    public function stepUrl($step, $params = [])
+    {
+        return $this->controller->pageUrl(
+            $this->page->page->fileName,
+            array_merge($params, ['step' => $step])
+        );
+    }
 }

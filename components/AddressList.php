@@ -32,9 +32,11 @@ class AddressList extends ComponentBase
 
     public function init()
     {
-        $this->addresses   = Auth::getUser()->customer->addresses;
-        $this->countries   = Country::get()->pluck('name', 'id');
-        $this->addressPage = GeneralSettings::get('address_page');
+        if($user = Auth::getUser()) {
+            $this->addresses   = $user->customer->addresses;
+            $this->countries   = Country::get()->pluck('name', 'id');
+            $this->addressPage = GeneralSettings::get('address_page');
+        }
     }
 
     public function onDelete()

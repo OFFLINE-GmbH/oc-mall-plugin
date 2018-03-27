@@ -1,10 +1,12 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Cms\Classes\ComponentBase;
+use OFFLINE\Mall\Models\GeneralSettings;
 
 class MyAccount extends ComponentBase
 {
     public $currentPage;
+    public $accountPage;
 
     public function componentDetails()
     {
@@ -36,6 +38,7 @@ class MyAccount extends ComponentBase
     public function init()
     {
         $this->currentPage = $this->property('page');
+        $this->accountPage = GeneralSettings::get('account_page');
 
         if ($this->currentPage === 'orders') {
             $this->addComponent(OrdersList::class, 'ordersList', []);

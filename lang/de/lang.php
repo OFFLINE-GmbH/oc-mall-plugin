@@ -455,7 +455,7 @@
             'properties' => [
             ],
             'errors'     => [
-                'address_not_found' => 'Die gesuchte Addresse wurde nicht gefunden',
+                'address_not_found'          => 'Die gesuchte Addresse wurde nicht gefunden',
                 'cannot_delete_last_address' => 'Sie können Ihre letzte Adresse nicht löschen',
             ],
             'messages'   => [
@@ -554,45 +554,51 @@
             ],
         ],
         'signup'                => [
-            'details' => [
+            'details'    => [
                 'name'        => 'Anmeldung',
                 'description' => 'Zeigt ein Formular für die Registrierung oder das Login an',
             ],
-            'errors'  => [
-                'user_is_guest'   => 'Sie versuchen sich mit einem Gast-Konto einzuloggen.',
-                'unknown_user'    => 'Die eingegebenen Login-Daten sind ungültig.',
-                'login'           => [
+            'properties' => [
+                'redirect' => [
+                    'name' => 'Weiterleitung nach Login',
+                ],
+            ],
+            'errors'     => [
+                'user_is_guest'     => 'Sie versuchen sich mit einem Gast-Konto einzuloggen.',
+                'unknown_user'      => 'Die eingegebenen Login-Daten sind ungültig.',
+                'login'             => [
                     'required' => 'Geben Sie eine Email-Adresse ein.',
                     'email'    => 'Geben Sie eine gültige Email-Adresse ein.',
                     'between'  => 'Geben Sie eine gültige Email-Adresse ein.',
                 ],
-                'password'        => [
+                'password'          => [
                     'required' => 'Geben Sie ein Passwort ein.',
                     'max'      => 'Das eingegebene Passwort ist zu lang.',
                     'min'      => 'Das eingegebene Passwort ist zu kurz. Geben Sie mindestens 8 Zeichen ein.',
                 ],
-                'password_repeat' => [
+                'password_repeat'   => [
                     'required' => 'Bestätigen Sie Ihr Passwort.',
                     'same'     => 'Die Passwörter stimmen nicht überein.',
                 ],
-                'email'           => [
+                'email'             => [
                     'required' => 'Geben Sie eine Email ein.',
                     'email'    => 'Die Email-Adresse ist ungültig.',
                     'unique'   => 'Es existiert bereits ein Benutzerkonto mit dieser Email',
+                    'non_existing_user' => 'Es existiert bereits ein Benutzer mit dieser Email. Nutzen Sie die Passwort vergessen Funktion',
                 ],
-                'name'            => [
+                'name'              => [
                     'required' => 'Geben Sie Ihren Namen ein.',
                 ],
-                'lines'           => [
+                'lines'             => [
                     'required' => 'Geben Sie Ihre Adresse ein.',
                 ],
-                'zip'             => [
+                'zip'               => [
                     'required' => 'Geben Sie Ihre PLZ ein.',
                 ],
-                'city'            => [
+                'city'              => [
                     'required' => 'Geben Sie eine Stadt ein.',
                 ],
-                'country_id'      => [
+                'country_id'        => [
                     'required' => 'Wählen Sie Ihr Land aus.',
                     'exists'   => 'Das ausgewählte Land ist ungültig.',
                 ],

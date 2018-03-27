@@ -3,7 +3,7 @@
 
 namespace OFFLINE\Mall\Classes\Customer;
 
-use RainLab\User\Models\User;
+use OFFLINE\Mall\Models\User;
 
 interface SignUpHandler
 {

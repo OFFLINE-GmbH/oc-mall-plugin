@@ -12,6 +12,11 @@
             <div data-validate-for="email"></div>
         </div>
     </div>
+    {% if user.customer.is_guest %}
+        <div class="mall-callout">
+            {{ 'mall.guest_upgrade.callout' | _ }}
+        </div>
+    {% endif %}
     <div class="mall-two-fields">
         <div class="mall-form-control">
             <label for="password">{{ 'mall.form.new_password' | _ }}</label>

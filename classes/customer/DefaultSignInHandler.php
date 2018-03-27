@@ -8,8 +8,8 @@ use Flash;
 use October\Rain\Auth\AuthException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
-use RainLab\User\Facades\Auth;
-use RainLab\User\Models\User;
+use OFFLINE\Mall\Models\User;
+use Auth;
 use Redirect;
 use Validator;
 
@@ -47,6 +47,7 @@ class DefaultSignInHandler implements SignInHandler
         Event::fire('mall.user.beforeAuthenticate', [$this, $credentials]);
 
         $user = Auth::authenticate($credentials, true);
+
         if ($user->isBanned()) {
             Auth::logout();
             throw new AuthException('rainlab.user::lang.account.banned');

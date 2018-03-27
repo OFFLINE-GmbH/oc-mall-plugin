@@ -1,9 +1,11 @@
 <?php namespace OFFLINE\Mall;
 
 
+use App;
 use Event;
 use Hashids\Hashids;
 use October\Rain\Database\Model;
+use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
@@ -35,6 +37,7 @@ use RainLab\User\Models\User;
 use Rainlab\User\Models\User as UserModel;
 use System\Classes\PluginBase;
 use OFFLINE\Mall\Models\GeneralSettings;
+use Validator;
 
 class Plugin extends PluginBase
 {
@@ -62,6 +65,22 @@ class Plugin extends PluginBase
             $hashids = new Hashids('oc-mall', 8);
 
             return $hashids;
+        });
+        Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
+            $count = User::with('customer')
+                         ->where('email', $value)
+                         ->whereHas('customer', function ($q) {
+                             $q->where('is_guest', 0);
+                         })->count();
+
+            return $count === 0;
+        });
+    }
+
+    public function register()
+    {
+        App::singleton('user.auth', function () {
+            return AuthManager::instance();
         });
     }
 

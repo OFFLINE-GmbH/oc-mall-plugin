@@ -9,6 +9,11 @@
         <div class="mall-my-account__nav-item {{ __SELF__.currentPage == 'addresses' ? 'mall-my-account__nav-item--active' : '' }}">
             <a href="{{ __SELF__.pageUrl('addresses') }}">{{ 'mall.addresses' | _ }}</a>
         </div>
+        <div class="mall-my-account__nav-item">
+            <a href="javascript:;" data-request="onLogout" data-request-data="redirect: '/'">
+                {{ 'mall.session.logout' | _ }}
+            </a>
+        </div>
     </nav>
     <div class="mall-my-account__content">
         {% partial __SELF__ ~ ('::pages/' ~ __SELF__.currentPage) %}

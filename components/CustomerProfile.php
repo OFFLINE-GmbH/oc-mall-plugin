@@ -50,6 +50,7 @@ class CustomerProfile extends ComponentBase
         if ($data['password']) {
             $this->user->password              = $data['password'];
             $this->user->password_confirmation = $data['password_repeat'];
+            $this->user->customer->is_guest = false;
         }
         $this->user->save();
         $this->user->customer->save();

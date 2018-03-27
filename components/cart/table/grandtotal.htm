@@ -1,9 +1,9 @@
 <tr class="mall-cart__grand-total">
     <td></td>
     <td colspan="3">
-        {{ 'mall.grad_total' | _ }}
+        {{ 'mall.grand_total' | _ }}
     </td>
     <td class="text-right">
-        {{ order.total_post_taxes | money }}
+        {{ cart.totals.totalPostTaxes | money }}
     </td>
 </tr>

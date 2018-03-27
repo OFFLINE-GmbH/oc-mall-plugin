@@ -5,10 +5,13 @@ use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Traits\SetVars;
+use OFFLINE\Mall\Models\Country;
 
 class SignUp extends ComponentBase
 {
     use SetVars;
+
+    public $countries;
 
     public function componentDetails()
     {
@@ -20,20 +23,39 @@ class SignUp extends ComponentBase
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'redirect' => [
+                'type' => 'checkbox',
+                'name' => 'offline.mall::lang.components.signup.properties.redirect.name',
+            ],
+        ];
+    }
+
+    public function init()
+    {
+        $this->setVar('countries', Country::get());
     }
 
     public function onSignIn()
     {
         if (app(SignInHandler::class)->handle(post())) {
-            return Redirect::back();
+            return $this->redirect();
         }
     }
 
     public function onSignUp()
     {
         if (app(SignUpHandler::class)->handle(post(), (bool)post('as_guest'))) {
-            return Redirect::back();
+            return $this->redirect();
         }
+    }
+
+    protected function redirect()
+    {
+        if ($url = $this->property('redirect')) {
+            return redirect()->to($url);
+        }
+
+        return redirect()->back();
     }
 }

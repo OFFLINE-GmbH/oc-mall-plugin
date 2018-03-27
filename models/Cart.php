@@ -76,7 +76,7 @@ class Cart extends Model
             return self::bySession();
         }
 
-        $cart = self::firstOrCreate(['customer_id' => $user->customer->id]);
+        $cart = self::orderBy('created_at', 'DESC')->firstOrCreate(['customer_id' => $user->customer->id]);
 
         if ( ! $cart->shipping_address_id || ! $cart->billing_address_id) {
             if ( ! $cart->shipping_address_id) {
@@ -105,7 +105,7 @@ class Cart extends Model
         Cookie::queue('cart_session_id', $sessionId, 9e6);
         Session::put('cart_session_id', $sessionId);
 
-        return self::firstOrCreate(['session_id' => $sessionId]);
+        return self::orderBy('created_at', 'DESC')->firstOrCreate(['session_id' => $sessionId]);
     }
 
     /**
