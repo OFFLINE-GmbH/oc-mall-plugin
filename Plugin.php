@@ -62,9 +62,7 @@ class Plugin extends PluginBase
             return $gateway;
         });
         $this->app->singleton(Hashids::class, function () {
-            $hashids = new Hashids('oc-mall', 8);
-
-            return $hashids;
+            return new Hashids('oc-mall', 8);
         });
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
             $count = User::with('customer')

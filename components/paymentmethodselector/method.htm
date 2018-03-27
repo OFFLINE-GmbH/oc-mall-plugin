@@ -12,9 +12,6 @@
         <div>
             <div class="mall-payment-method__heading">
                 <div class="mall-payment-method__name">{{ method.name }}</div>
-                <div class="mall-payment-method__meta">
-                    {{ method.price > 0 ? method.price_formatted : ('mall.no_additional_charges' | _) }}
-                </div>
             </div>
             <div class="mall-payment-method__toggle"
                  style="{% if not isActiveMethod %}display: none{% endif %}">

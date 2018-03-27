@@ -35,7 +35,6 @@ before_script:
   - php artisan october:up -v
   - php artisan plugin:install RainLab.Translate
   - php artisan plugin:install RainLab.User
-  - php artisan plugin:install OFFLINE.Cashier
   - cd plugins/offline/mall
   - composer install
   # Remove the RainLab.User from $require since it messes up the tests

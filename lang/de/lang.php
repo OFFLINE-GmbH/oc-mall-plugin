@@ -367,6 +367,10 @@
         'countries'                => 'Verfügbar für den Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandart weltweit verwendet werden.',
     ],
+    'payment_method'           => [
+        'price_fixed'      => 'Aufpreis fix',
+        'price_percentage' => 'Aufpreis prozentual (des Gesamttotals)',
+    ],
     'payment_status'           => [
         'paid'          => 'Bezahlt',
         'deferred'      => 'Auf Rechnung',
@@ -564,41 +568,41 @@
                 ],
             ],
             'errors'     => [
-                'user_is_guest'     => 'Sie versuchen sich mit einem Gast-Konto einzuloggen.',
-                'unknown_user'      => 'Die eingegebenen Login-Daten sind ungültig.',
-                'login'             => [
+                'user_is_guest'   => 'Sie versuchen sich mit einem Gast-Konto einzuloggen.',
+                'unknown_user'    => 'Die eingegebenen Login-Daten sind ungültig.',
+                'login'           => [
                     'required' => 'Geben Sie eine Email-Adresse ein.',
                     'email'    => 'Geben Sie eine gültige Email-Adresse ein.',
                     'between'  => 'Geben Sie eine gültige Email-Adresse ein.',
                 ],
-                'password'          => [
+                'password'        => [
                     'required' => 'Geben Sie ein Passwort ein.',
                     'max'      => 'Das eingegebene Passwort ist zu lang.',
                     'min'      => 'Das eingegebene Passwort ist zu kurz. Geben Sie mindestens 8 Zeichen ein.',
                 ],
-                'password_repeat'   => [
+                'password_repeat' => [
                     'required' => 'Bestätigen Sie Ihr Passwort.',
                     'same'     => 'Die Passwörter stimmen nicht überein.',
                 ],
-                'email'             => [
-                    'required' => 'Geben Sie eine Email ein.',
-                    'email'    => 'Die Email-Adresse ist ungültig.',
-                    'unique'   => 'Es existiert bereits ein Benutzerkonto mit dieser Email',
+                'email'           => [
+                    'required'          => 'Geben Sie eine Email ein.',
+                    'email'             => 'Die Email-Adresse ist ungültig.',
+                    'unique'            => 'Es existiert bereits ein Benutzerkonto mit dieser Email',
                     'non_existing_user' => 'Es existiert bereits ein Benutzer mit dieser Email. Nutzen Sie die Passwort vergessen Funktion',
                 ],
-                'name'              => [
+                'name'            => [
                     'required' => 'Geben Sie Ihren Namen ein.',
                 ],
-                'lines'             => [
+                'lines'           => [
                     'required' => 'Geben Sie Ihre Adresse ein.',
                 ],
-                'zip'               => [
+                'zip'             => [
                     'required' => 'Geben Sie Ihre PLZ ein.',
                 ],
-                'city'              => [
+                'city'            => [
                     'required' => 'Geben Sie eine Stadt ein.',
                 ],
-                'country_id'        => [
+                'country_id'      => [
                     'required' => 'Wählen Sie Ihr Land aus.',
                     'exists'   => 'Das ausgewählte Land ist ungültig.',
                 ],

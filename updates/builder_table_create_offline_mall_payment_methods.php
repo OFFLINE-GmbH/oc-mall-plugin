@@ -12,7 +12,6 @@ class BuilderTableCreateOfflineMallPaymentMethods extends Migration
             $table->increments('id')->unsigned();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('price')->nullable();
             $table->text('payment_provider');
             $table->integer('sort_order');
             $table->timestamp('created_at')->nullable();
@@ -20,7 +19,7 @@ class BuilderTableCreateOfflineMallPaymentMethods extends Migration
             $table->timestamp('deleted_at')->nullable();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('offline_mall_payment_methods');

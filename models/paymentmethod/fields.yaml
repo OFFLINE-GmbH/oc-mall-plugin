@@ -9,11 +9,6 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: dropdown
-    price:
-        label: 'offline.mall::lang.product.price'
-        oc.commentPosition: ''
-        span: left
-        type: text
     logo:
         label: 'offline.mall::lang.common.logo'
         oc.commentPosition: ''
