@@ -9,23 +9,26 @@ if ( ! function_exists('format_money')) {
      *
      * @param int          $value
      * @param Product|null $product
-     * @param null         $currency
+     * @param null         $currencyCode
      *
      * @return string
      */
-    function format_money(?int $value, $product = null, $currency = null, $factor = 100)
+    function format_money(?int $value, $product = null, $currencyCode = null, $factor = 100)
     {
-        $format   = CurrencySettings::activeCurrencyFormat();
+        $currency = $currencyCode ? CurrencySettings::currencyByCode($currencyCode) : CurrencySettings::activeCurrency();
+        // Apply currency rate to price.
+        $value *= (float)$currency['rate'];
+
         $value    = round($value / $factor, 2);
         $integers = floor($value);
         $decimals = ($value - $integers) * $factor;
 
-        return Twig::parse($format, [
+        return Twig::parse(CurrencySettings::currencyFormatByCode($currency['code']), [
             'price'    => $value,
             'integers' => $integers,
             'decimals' => str_pad($decimals, 2, '0', STR_PAD_LEFT),
             'product'  => $product,
-            'currency' => $currency ?: CurrencySettings::activeCurrency(),
+            'currency' => $currency,
         ]);
     }
 }

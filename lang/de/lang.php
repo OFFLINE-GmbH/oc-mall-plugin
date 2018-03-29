@@ -59,6 +59,8 @@
         'currencies'      => 'Geben Sie jeweils nur den offiziellen dreistelligen Währungscode ein.',
         'currency_code'   => 'Währungscode',
         'currency_format' => 'Formatierung',
+        'currency_symbol' => 'Symbol',
+        'currency_rate'   => 'Kurs zu Basiswährung',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Zahlungsanbieter',
@@ -158,6 +160,8 @@
         'option'               => 'Option',
         'catalogue'            => 'Katalog',
         'out_of_stock'         => 'Es sind nur noch :quantity Stück von diesem Artikel an Lager',
+        'out_of_stock_short'   => 'Dieser Artikel ist ausverkauft',
+        'stock_limit_reached'  => 'Es stehen keine weiteren Stücke dieses Artikels zur Verfügung',
         'deleted_at'           => 'Gelöscht am',
         'sort_order'           => 'Sortierreihenfolge',
         'order_states'         => 'Bestellungs-Status',
@@ -451,6 +455,14 @@
             'properties' => [
             ],
         ],
+        'currencyPicker'        => [
+            'details'    => [
+                'name'        => 'Währungsauswahl',
+                'description' => 'Zeigt eine Auswahl für die aktive Währung an',
+            ],
+            'properties' => [
+            ],
+        ],
         'addressList'           => [
             'details'    => [
                 'name'        => 'Adressliste',
@@ -660,12 +672,6 @@
                     'title'       => 'Logout-Text',
                     'description' => 'Link-Text für den Logout-Link',
                 ],
-            ],
-        ],
-        'currencyPicker'        => [
-            'details' => [
-                'name'        => 'Währungsauswahl',
-                'description' => 'Zeigt eine Auswahl für die aktuelle Shopwährung an',
             ],
         ],
         'products'              => [

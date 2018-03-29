@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Price;
+use RainLab\Translate\Classes\Translator;
 use RuntimeException;
 
 /**
@@ -38,6 +39,7 @@ class Order extends Model
         'shipping_address',
         'custom_fields',
         'taxes',
+        'currency',
         'discounts',
         'shipping',
         'payment_data',
@@ -98,8 +100,8 @@ class Order extends Model
 
             $order                                          = new static;
             $order->session_id                              = session()->getId();
-            $order->currency                                = 'CHF';
-            $order->lang                                    = 'de';
+            $order->currency                                = CurrencySettings::activeCurrency();
+            $order->lang                                    = Translator::instance()->getLocale();
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
             $order->billing_address                         = $cart->billing_address;
             $order->shipping_address                        = $cart->shipping_address;

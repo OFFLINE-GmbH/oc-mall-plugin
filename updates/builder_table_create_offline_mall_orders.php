@@ -13,7 +13,7 @@ class BuilderTableCreateOfflineMallOrders extends Migration
             $table->string('session_id')->nullable();
             $table->string('order_number')->nullable()->unique();
             $table->string('invoice_number')->nullable();
-            $table->string('currency')->nullable();
+            $table->text('currency')->nullable();
             $table->string('payment_state');
             $table->integer('order_state_id');
             $table->boolean('shipping_address_same_as_billing')->nullable();

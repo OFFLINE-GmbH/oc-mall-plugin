@@ -78,9 +78,9 @@ class Cart extends ComponentBase
             Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $e->product->stock]));
 
             return;
+        } finally {
+            $this->setData();
         }
-
-        $this->setData();
     }
 
     public function onRemoveProduct()

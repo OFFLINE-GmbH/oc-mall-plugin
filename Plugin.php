@@ -21,6 +21,7 @@ use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
 use OFFLINE\Mall\Components\Checkout;
+use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
 use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\DiscountApplier;
@@ -100,6 +101,7 @@ class Plugin extends PluginBase
             OrdersList::class            => 'ordersList',
             CustomerProfile::class       => 'customerProfile',
             AddressList::class           => 'addressList',
+            CurrencyPicker::class        => 'currencyPicker',
         ];
     }
 

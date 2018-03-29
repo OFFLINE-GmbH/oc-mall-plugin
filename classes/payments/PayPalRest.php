@@ -36,7 +36,7 @@ class PayPalRest extends PaymentProvider
         try {
             $response = $gateway->purchase([
                 'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),
-                'currency'  => $this->order->currency,
+                'currency'  => $this->order->currency['code'],
                 'returnUrl' => $this->returnUrl(),
                 'cancelUrl' => $this->cancelUrl(),
             ])->send();

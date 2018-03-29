@@ -21,6 +21,11 @@ class CurrencySettings extends Model
         return collect(self::get('currencies'))->pluck('code', 'code');
     }
 
+    public static function currencyByCode($code)
+    {
+        return collect(self::get('currencies'))->where('code', $code)->first();
+    }
+
     /**
      * Returns the formats for all currencies.
      */
@@ -31,7 +36,7 @@ class CurrencySettings extends Model
 
     /**
      * Returns the currently active currency from the session.
-     * @return string
+     * @return array
      * @throws \RuntimeException
      */
     public static function activeCurrency()
@@ -47,23 +52,21 @@ class CurrencySettings extends Model
             static::setActiveCurrency($currencies->first());
         }
 
-        return Session::get(static::CURRENCY_SESSION_KEY);
+        return self::currencyByCode(Session::get(static::CURRENCY_SESSION_KEY));
     }
 
     /**
-     * Returns the format for the currently active currency.
+     * Returns the format for a currency. If no settings are provided a fallback
+     * format is returned.
      * @return string
      * @throws \RuntimeException
      */
-    public static function activeCurrencyFormat()
+    public static function currencyFormatByCode($code)
     {
-        $currency = CurrencySettings::activeCurrency();
-        $formats  = CurrencySettings::currencyFormats();
+        $currency = self::currencyByCode($code);
+        $default  = "{{ currency.code }} {{ price|number_format(2, '.', '\'') }}";
 
-        $format  = $formats->get($currency, false);
-        $default = "{{ currency }} {{ price|number_format(2, '.', '\'') }}";
-
-        return $format ? $format : $default;
+        return $currency ? $currency['format'] : $default;
     }
 
     /**
