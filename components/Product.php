@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
@@ -140,11 +141,15 @@ class Product extends ComponentBase
         }
 
         if ( ! $hasStock) {
-            throw new ValidationException(['stock' => 'This product is out of stock']);
+            throw new ValidationException(['stock' => trans('offline.mall::lang.common.out_of_stock_short')]);
         }
 
         $cart = Cart::byUser(Auth::getUser());
-        $cart->addProduct($product, 1, $variant, $values);
+        try {
+            $cart->addProduct($product, 1, $variant, $values);
+        } catch (OutOfStockException $e) {
+            throw new ValidationException(['stock' => trans('offline.mall::lang.common.stock_limit_reached')]);
+        }
     }
 
     public function onChangeProperty()

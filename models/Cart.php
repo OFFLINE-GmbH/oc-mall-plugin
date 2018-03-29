@@ -212,6 +212,7 @@ class Cart extends Model
 
                 CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
 
+                $this->validateStock($variant ?? $product, $quantity);
                 $this->validateShippingMethod();
 
                 return $this->load('products');
@@ -242,9 +243,11 @@ class Cart extends Model
         });
     }
 
-    protected function validateStock($item, $quantity)
+    protected function validateStock($item, $quantity, $ignoreRecord = null)
     {
-        if ($item->allow_out_of_stock_purchases !== true && $item->stock < $quantity) {
+        $alreadyInCart = $this->getTotalQuantityInCart($item, $ignoreRecord);
+
+        if ($item->allow_out_of_stock_purchases !== true && $item->stock < $quantity + $alreadyInCart) {
             throw new OutOfStockException($item);
         }
     }
@@ -263,7 +266,7 @@ class Cart extends Model
     {
         $product = $this->products->find($cartProductId);
         if ($product) {
-            $this->validateStock($product->item, $quantity);
+            $this->validateStock($product->item, $quantity, $product->id);
             $product->quantity = $quantity;
             $product->save();
         }
@@ -402,5 +405,23 @@ class Cart extends Model
         }
 
         return $this->setShippingMethod(null);
+    }
+
+    protected function getTotalQuantityInCart($item, $ignoreRecord): int
+    {
+        $query = CartProduct::where('cart_id', $this->id)
+                            ->when($ignoreRecord, function ($q) use ($ignoreRecord) {
+                                $q->where('id', '<>', $ignoreRecord);
+                            })
+                            ->when($item instanceof Product, function ($q) use ($item) {
+                                $q->where('product_id', $item->id);
+                            })
+                            ->when($item instanceof Variant, function ($q) use ($item) {
+                                $q->where('cart_id', $this->id)
+                                  ->where('product_id', $item->product_id)
+                                  ->where('variant_id', $item->id);
+                            });
+
+        return (int)$query->sum('quantity');
     }
 }
