@@ -19,6 +19,11 @@ class PaymentMethod extends Model
     ];
 
     public $table = 'offline_mall_payment_methods';
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name',
+        'description'
+    ];
 
     public $hasMany = [
         'orders' => Order::class,

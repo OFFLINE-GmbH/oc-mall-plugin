@@ -23,7 +23,11 @@ class Property extends Model
     ];
 
     public $table = 'offline_mall_properties';
-
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name',
+        'unit'
+    ];
     public $hasMany = [
         'property_values' => PropertyValue::class,
     ];

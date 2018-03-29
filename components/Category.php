@@ -82,6 +82,9 @@ class Category extends ComponentBase
     public function onRun()
     {
         $this->setData();
+
+        $this->page->title            = $this->category->meta_title ?: $this->category->name;
+        $this->page->meta_description = $this->category->meta_description;
     }
 
     protected function setData()

@@ -16,9 +16,9 @@ class ShippingMethod extends Model
     use Price;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-
     public $translatable = [
         'name',
+        'description'
     ];
 
     public $rules = [

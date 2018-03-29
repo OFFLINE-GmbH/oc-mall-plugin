@@ -5,9 +5,7 @@ columns:
     description:
         label: 'offline.mall::lang.product.description'
         type: text
-    price:
-        label: 'offline.mall::lang.product.price'
-        type: number
+        invisible: true
     payment_provider:
         label: 'offline.mall::lang.common.payment_provider'
         type: text
