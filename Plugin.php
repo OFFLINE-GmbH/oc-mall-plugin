@@ -53,39 +53,8 @@ class Plugin extends PluginBase
         $this->registerSiteSearchEvents();
         $this->registerStaticPagesEvents();
         $this->extendUserModel();
-
-        $this->app->bind(SignInHandler::class, function () {
-            return new DefaultSignInHandler();
-        });
-        $this->app->bind(SignUpHandler::class, function () {
-            return new DefaultSignUpHandler();
-        });
-        $this->app->singleton(PaymentGateway::class, function () {
-            $gateway = new DefaultPaymentGateway();
-            $gateway->registerProvider(new Stripe());
-            $gateway->registerProvider(new PayPalRest());
-
-            return $gateway;
-        });
-        $this->app->singleton(Hashids::class, function () {
-            return new Hashids('oc-mall', 8);
-        });
-        Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
-            $count = User::with('customer')
-                         ->where('email', $value)
-                         ->whereHas('customer', function ($q) {
-                             $q->where('is_guest', 0);
-                         })->count();
-
-            return $count === 0;
-        });
-    }
-
-    public function register()
-    {
-        App::singleton('user.auth', function () {
-            return AuthManager::instance();
-        });
+        $this->setContainerBindings();
+        $this->addCustomValidatorRules();
     }
 
     public function registerComponents()
@@ -196,6 +165,42 @@ class Plugin extends PluginBase
             $model->hasOne['customer'] = [
                 Customer::class,
             ];
+        });
+    }
+
+    protected function setContainerBindings()
+    {
+        $this->app->bind(SignInHandler::class, function () {
+            return new DefaultSignInHandler();
+        });
+        $this->app->bind(SignUpHandler::class, function () {
+            return new DefaultSignUpHandler();
+        });
+        $this->app->singleton(PaymentGateway::class, function () {
+            $gateway = new DefaultPaymentGateway();
+            $gateway->registerProvider(new Stripe());
+            $gateway->registerProvider(new PayPalRest());
+
+            return $gateway;
+        });
+        $this->app->singleton(Hashids::class, function () {
+            return new Hashids('oc-mall', 8);
+        });
+        $this->app->singleton('user.auth', function () {
+            return AuthManager::instance();
+        });
+    }
+
+    protected function addCustomValidatorRules()
+    {
+        Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
+            $count = User::with('customer')
+                         ->where('email', $value)
+                         ->whereHas('customer', function ($q) {
+                             $q->where('is_guest', 0);
+                         })->count();
+
+            return $count === 0;
         });
     }
 }
