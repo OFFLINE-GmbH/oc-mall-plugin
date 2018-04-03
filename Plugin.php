@@ -14,6 +14,7 @@ use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
+use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
 use OFFLINE\Mall\Components\AddressForm;
 use OFFLINE\Mall\Components\AddressList;
 use OFFLINE\Mall\Components\AddressSelector;
@@ -46,6 +47,7 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        $this->registerSiteSearchEvents();
         $this->registerStaticPagesEvents();
         $this->extendUserModel();
 
@@ -168,6 +170,13 @@ class Plugin extends PluginBase
             if ($type == 'all-mall-categories') {
                 return Category::resolveMenuItem($item, $url, $theme);
             }
+        });
+    }
+
+    protected function registerSiteSearchEvents()
+    {
+        Event::listen('offline.sitesearch.extend', function () {
+            return new ProductsSearchProvider();
         });
     }
 
