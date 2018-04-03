@@ -156,6 +156,7 @@ class VariantTest extends PluginTestCase
     {
         $product             = Product::first();
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->save();
 
@@ -181,6 +182,7 @@ class VariantTest extends PluginTestCase
     {
         $product             = Product::first();
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->save();
 
@@ -206,6 +208,7 @@ class VariantTest extends PluginTestCase
     {
         $product             = Product::first();
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->save();
 

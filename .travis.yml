@@ -43,4 +43,4 @@ before_script:
   # Remove the RainLab.User from $require since it messes up the tests
   - sed -i -e "s/'RainLab.User', 'OFFLINE.Cashier'/'OFFLINE.Cashier'/" Plugin.php
 
-script: ../../../vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+script: ../../../vendor/bin/phpunit

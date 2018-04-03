@@ -8,7 +8,6 @@ use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
-use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Variant;
@@ -40,6 +39,7 @@ class CartTest extends PluginTestCase
         $product->save();
 
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->save();
 
@@ -61,6 +61,7 @@ class CartTest extends PluginTestCase
         $product->save();
 
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->save();
 
@@ -308,6 +309,7 @@ class CartTest extends PluginTestCase
         $product->save();
 
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->stock      = 10;
         $variant->save();
@@ -324,6 +326,7 @@ class CartTest extends PluginTestCase
         $product->save();
 
         $variant                               = new Variant();
+        $variant->name                         = 'Variant';
         $variant->product_id                   = $product->id;
         $variant->allow_out_of_stock_purchases = true;
         $variant->stock                        = 10;

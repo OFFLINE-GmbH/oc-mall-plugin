@@ -21,8 +21,12 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         CurrencySettings::set('currencies', [
-            ['code' => 'CHF', 'format' => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}', 'decimals' =>
-                2],
+            [
+                'code'     => 'CHF',
+                'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
+                'decimals' => 2,
+                'rate'     => 1,
+            ],
         ]);
 
         $this->call(CategoryTableSeeder::class);

@@ -9,7 +9,6 @@ use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
-use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
@@ -297,6 +296,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $product->save();
 
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->price      = 100;
         $variant->save();

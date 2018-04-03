@@ -108,6 +108,7 @@ class OrderTest extends PluginTestCase
         $product->save();
 
         $variant             = new Variant();
+        $variant->name       = 'Variant';
         $variant->product_id = $product->id;
         $variant->stock      = 20;
         $variant->save();
@@ -132,6 +133,7 @@ class OrderTest extends PluginTestCase
         $product->save();
 
         $variant                               = new Variant();
+        $variant->name                         = 'Variant';
         $variant->product_id                   = $product->id;
         $variant->stock                        = 20;
         $product->allow_out_of_stock_purchases = false;
@@ -157,6 +159,7 @@ class OrderTest extends PluginTestCase
         $product->save();
 
         $variant                               = new Variant();
+        $variant->name                         = 'Variant';
         $variant->product_id                   = $product->id;
         $variant->stock                        = 20;
         $product->allow_out_of_stock_purchases = true;

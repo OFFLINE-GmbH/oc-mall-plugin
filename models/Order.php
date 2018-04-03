@@ -1,9 +1,9 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Auth;
 use DB;
 use Event;
 use Model;
+use Auth;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
