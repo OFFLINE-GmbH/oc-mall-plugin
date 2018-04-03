@@ -24,7 +24,6 @@ install:
 before_script:
   - git clone https://github.com/octobercms/october.git
   - mkdir -p ./october/plugins/offline/mall
-  - mv !(october) october/plugins/offline/mall
   - cd october
   - composer self-update
   - travis_retry composer install --no-interaction --prefer-source
@@ -35,9 +34,12 @@ before_script:
   - php artisan october:up -v
   - php artisan plugin:install RainLab.Translate
   - php artisan plugin:install RainLab.User
+  - cd ..
+  - mv !(october) october/plugins/offline/mall
+  - php artisan october:up -v
   - cd plugins/offline/mall
   - composer install
   # Remove the RainLab.User from $require since it messes up the tests
-#  - sed -i -e "s/'RainLab.User', 'OFFLINE.Cashier'/'OFFLINE.Cashier'/" Plugin.php
+  - sed -i -e "s/'RainLab.User', 'OFFLINE.Cashier'/'OFFLINE.Cashier'/" Plugin.php
 
 script: ../../../vendor/bin/phpunit --coverage-clover build/logs/clover.xml
