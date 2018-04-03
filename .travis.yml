@@ -38,7 +38,7 @@ before_script:
   - mv !(october) october/plugins/offline/mall
   - cd october
   - php artisan october:up -v
-  - cd ../plugins/offline/mall
+  - cd plugins/offline/mall
   - composer install
   # Remove the RainLab.User from $require since it messes up the tests
   - sed -i -e "s/'RainLab.User', 'OFFLINE.Cashier'/'OFFLINE.Cashier'/" Plugin.php
