@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-
 use Cms\Classes\Controller;
 
 class PaymentRedirector
@@ -13,7 +12,7 @@ class PaymentRedirector
     public function __construct(string $page)
     {
         $this->controller = new Controller();
-        $this->page = $page;
+        $this->page       = $page;
     }
 
     public function finalRedirect($state)

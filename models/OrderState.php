@@ -5,9 +5,6 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 
-/**
- * Model
- */
 class OrderState extends Model
 {
     use Validation;

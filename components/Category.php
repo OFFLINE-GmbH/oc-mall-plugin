@@ -1,21 +1,16 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
-use Cms\Classes\Page;
-use Cms\Classes\Theme;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use Url;
 
-class Category extends ComponentBase
+class Category extends MallComponent
 {
-    use SetVars;
     /**
      * @var Category
      */
@@ -150,5 +145,4 @@ class Category extends ComponentBase
 
         return $items;
     }
-
 }

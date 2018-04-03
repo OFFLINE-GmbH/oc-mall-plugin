@@ -8,15 +8,19 @@ fields:
                 code:
                     type: text
                     label: offline.mall::lang.currency_settings.currency_code
-                    span: custom col-md-4
+                    span: custom col-md-3
                 symbol:
                     type: text
                     label: offline.mall::lang.currency_settings.currency_symbol
-                    span: custom col-md-4
+                    span: custom col-md-3
                 rate:
                     type: text
                     label: offline.mall::lang.currency_settings.currency_rate
-                    span: custom col-md-4
+                    span: custom col-md-3
+                decimals:
+                    type: text
+                    label: offline.mall::lang.currency_settings.currency_decimals
+                    span: custom col-md-3
                 format:
                     type: codeeditor
                     label: offline.mall::lang.currency_settings.currency_format

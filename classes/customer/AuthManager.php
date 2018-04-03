@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Customer;
 
-
 use October\Rain\Auth\AuthException;
 use OFFLINE\Mall\Models\User;
 

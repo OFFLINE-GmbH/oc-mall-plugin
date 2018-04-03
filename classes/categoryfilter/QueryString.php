@@ -7,6 +7,9 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Property;
 
+/**
+ * This class is used to (de)serialize a `Filter` class into a query string.
+ */
 class QueryString
 {
     use HashIds;
@@ -25,13 +28,14 @@ class QueryString
             return [$id => $values];
         });
 
-        $specialProperties = $query->keys()->intersect(Filter::$specialProperties)
-                                   ->map(function ($property) use ($query) {
-                                       $values = $query->get($property);
+        $specialProperties = $query
+            ->keys()
+            ->intersect(Filter::$specialProperties)
+            ->map(function ($property) use ($query) {
+                $values = $query->get($property);
 
-                                       return new RangeFilter($property, $values['min'] ?? null,
-                                           $values['max'] ?? null);
-                                   });
+                return new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null);
+            });
 
         $properties = $category->load('properties')->properties->whereIn('id', $query->keys());
 

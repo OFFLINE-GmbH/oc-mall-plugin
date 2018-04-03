@@ -1,19 +1,15 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
 use Illuminate\Validation\Rule;
 use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\User\Facades\Auth;
 use Validator;
 
-class AddressSelector extends ComponentBase
+class AddressSelector extends MallComponent
 {
-    use SetVars;
-
     public $cart;
     public $addresses;
     public $address;
@@ -94,7 +90,7 @@ class AddressSelector extends ComponentBase
         $cart->save();
 
         $selector = '.mall-address-selector--' . $this->type;
-        $partial       = $this->alias . '::selector';
+        $partial  = $this->alias . '::selector';
 
         $this->cart = $cart;
         $this->setData();

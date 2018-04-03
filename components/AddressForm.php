@@ -1,24 +1,18 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
 use October\Rain\Support\Facades\Flash;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Address;
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Country;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\User\Facades\Auth;
-use OFFLINE\Mall\Models\Cart;
 
-class AddressForm extends ComponentBase
+class AddressForm extends MallComponent
 {
     public $address;
     public $countries;
     public $setAddressAs;
     public $cart;
-
-    use SetVars;
-    use HashIds;
 
     public function componentDetails()
     {
@@ -105,6 +99,8 @@ class AddressForm extends ComponentBase
         if ($url = $this->getRedirectUrl()) {
             return redirect()->to(url($url));
         }
+
+        return null;
     }
 
     protected function setData()

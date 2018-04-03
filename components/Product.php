@@ -1,14 +1,12 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
 use DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SetVars;
+use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldValue;
@@ -20,10 +18,9 @@ use Request;
 use Session;
 use Validator;
 
-class Product extends ComponentBase
+class Product extends MallComponent
 {
-    use SetVars;
-    use HashIds;
+    use CustomFields;
 
     /**
      * @var Product|Variant;
@@ -311,9 +308,6 @@ class Product extends ComponentBase
                             ->groupBy('property_id');
     }
 
-    /**
-     * @return mixed
-     */
     protected function getVariantByPropertyValues($valueIds)
     {
         $ids = collect($valueIds)->map(function ($id) {
@@ -344,73 +338,5 @@ class Product extends ComponentBase
         }
 
         return $this->variant->property_values->keyBy('property_id');
-    }
-
-    protected function validateCustomFields(array $values)
-    {
-        $values = collect($values)->mapWithKeys(function ($value, $id) {
-            return [$this->decode($id) => $value];
-        });
-
-        $fields = CustomField::with('custom_field_options')
-                             ->whereIn('id', $values->keys())
-                             ->get()
-                             ->mapWithKeys(function (CustomField $field) use ($values) {
-                                 $value = $values->get($field->id);
-                                 if (\in_array($field->type, ['dropdown', 'image'], true)) {
-                                     $value = $this->decode($value);
-                                 }
-
-                                 return [$field->id => ['field' => $field, 'value' => $value]];
-                             });
-
-        $rules = $fields->mapWithKeys(function (array $data) {
-            $field = $data['field'];
-
-            $rules = collect();
-            if ($field->required) {
-                $rules->push('required');
-            }
-            if (\in_array($field->type, ['dropdown', 'image'], true)) {
-                $rules->push('in:' . $field->custom_field_options->pluck('id')->implode(','));
-            }
-            if ($field->type === 'color') {
-                if ($field->custom_field_options->count() < 1) {
-                    $rules->push('size:7');
-                    $rules->push('regex:/^\#[0-9A-Fa-f]{6}$/');
-                } else {
-                    $rules->push('in:' . $field->custom_field_options->map->value->pluck('color')->implode(','));
-                }
-            }
-
-            return [$field->name => $rules];
-        })->filter();
-
-        $data = $fields->mapWithKeys(function (array $data) {
-            return [$data['field']->name => $data['value']];
-        });
-
-        $v = Validator::make($data->toArray(), $rules->toArray());
-        if ($v->fails()) {
-            throw new ValidationException($v);
-        }
-
-        $values = $fields->map(function (array $data) {
-            if ( ! $data['value']) {
-                return;
-            }
-
-            $option = $data['field']->custom_field_options->find($data['value']);
-
-            $value                         = new CustomFieldValue();
-            $value->value                  = $data['value'];
-            $value->custom_field_id        = $data['field']->id;
-            $value->custom_field_option_id = $option ? $option->id : null;
-            $value->price                  = $value->price($data['field'], $option);
-
-            return $value;
-        });
-
-        return $values;
     }
 }

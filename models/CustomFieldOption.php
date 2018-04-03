@@ -2,16 +2,14 @@
 
 use Model;
 use October\Rain\Database\Traits\Sortable;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
-/**
- * Model
- */
 class CustomFieldOption extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use Validation;
     use Price;
     use Sortable;
     use HashIds;

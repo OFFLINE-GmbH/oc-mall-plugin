@@ -17,15 +17,15 @@ class CustomFieldTableSeeder extends Seeder
             $field->type = 'dropdown';
             $field->save();
 
-            $option         = new CustomFieldOption();
-            $option->name   = 'Test';
-            $option->values = 'test';
+            $option             = new CustomFieldOption();
+            $option->name       = 'Test';
+            $option->values     = 'test';
             $option->sort_order = 1;
             $field->custom_field_options()->save($option);
 
-            $option         = new CustomFieldOption();
-            $option->name   = 'Test2';
-            $option->values = 'test2';
+            $option             = new CustomFieldOption();
+            $option->name       = 'Test2';
+            $option->values     = 'test2';
             $option->sort_order = 2;
             $field->custom_field_options()->save($option);
             $field->products()->attach(Product::first()->id);

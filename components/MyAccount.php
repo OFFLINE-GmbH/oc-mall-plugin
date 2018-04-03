@@ -1,9 +1,8 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
 use OFFLINE\Mall\Models\GeneralSettings;
 
-class MyAccount extends ComponentBase
+class MyAccount extends MallComponent
 {
     public $currentPage;
     public $accountPage;

@@ -1,12 +1,15 @@
 <div class="mall-my-account">
     <nav class="mall-my-account__nav">
-        <div class="mall-my-account__nav-item {{ __SELF__.currentPage == 'orders' ? 'mall-my-account__nav-item--active' : '' }}">
+        <div class="mall-my-account__nav-item
+                {{ __SELF__.currentPage == 'orders' ? 'mall-my-account__nav-item--active' : '' }}">
             <a href="{{ __SELF__.pageUrl('orders') }}">{{ 'mall.orders' | _ }}</a>
         </div>
-        <div class="mall-my-account__nav-item {{ __SELF__.currentPage == 'profile' ? 'mall-my-account__nav-item--active' : '' }}">
+        <div class="mall-my-account__nav-item
+                {{ __SELF__.currentPage == 'profile' ? 'mall-my-account__nav-item--active' : '' }}">
             <a href="{{ __SELF__.pageUrl('profile') }}">{{ 'mall.profile' | _ }}</a>
         </div>
-        <div class="mall-my-account__nav-item {{ __SELF__.currentPage == 'addresses' ? 'mall-my-account__nav-item--active' : '' }}">
+        <div class="mall-my-account__nav-item
+                {{ __SELF__.currentPage == 'addresses' ? 'mall-my-account__nav-item--active' : '' }}">
             <a href="{{ __SELF__.pageUrl('addresses') }}">{{ 'mall.addresses' | _ }}</a>
         </div>
         <div class="mall-my-account__nav-item">

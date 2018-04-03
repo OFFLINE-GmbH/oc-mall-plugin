@@ -8,7 +8,7 @@
     <div class="content">
         <p>
             The default currency format is<br/>
-            <code>{{ currency.code }} {{ price|number_format(2, '.', '\'') }}</code>
+            <code>{{ currency.code }} {{ price|number_format(currency.decimals, '.', '\'') }}</code>
         </p>
         <p>
             The following variables are available:
@@ -39,7 +39,7 @@
             <tr>
                 <td><code>currency</code></td>
                 <td>The currency data you specified</td>
-                <td>{code: "EUR", rate: 1, symbol: "€"}</td>
+                <td>{code: "EUR", rate: 1, symbol: "€", decimals: 2}</td>
             </tr>
             <tr>
                 <td><code>product</code></td>

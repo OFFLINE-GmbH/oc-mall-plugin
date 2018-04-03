@@ -1,18 +1,14 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
+use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
-use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Country;
-use Auth;
 use OFFLINE\Mall\Models\GeneralSettings;
 
-class AddressList extends ComponentBase
+class AddressList extends MallComponent
 {
-    use HashIds;
-
     public $countries;
     public $addresses;
     public $addressPage;
@@ -32,7 +28,7 @@ class AddressList extends ComponentBase
 
     public function init()
     {
-        if($user = Auth::getUser()) {
+        if ($user = Auth::getUser()) {
             $this->addresses   = $user->customer->addresses;
             $this->countries   = Country::get()->pluck('name', 'id');
             $this->addressPage = GeneralSettings::get('address_page');

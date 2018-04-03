@@ -81,13 +81,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
         // To prevent multiple guest accounts with the same email address we edit
         // the email of all existing guest accounts registered to the same email.
-        $newEmail = sprintf('%s_%s%s', $data['email'], 'old_', date('Y-m-d_His'));
-        User::where('id', '<>', $user->id)
-            ->where('email', $data['email'])
-            ->whereHas('customer', function ($q) {
-                $q->where('is_guest', 1);
-            })
-            ->update(['email' => $newEmail]);
+        $this->renameExistingGuestAccounts($data, $user);
 
         Event::fire('mall.user.afterSignup', [$this, $data]);
 
@@ -146,6 +140,17 @@ class DefaultSignUpHandler implements SignUpHandler
         }
 
         return $transformed;
+    }
+
+    protected function renameExistingGuestAccounts(array $data, $user)
+    {
+        $newEmail = sprintf('%s_%s%s', $data['email'], 'old_', date('Y-m-d_His'));
+        User::where('id', '<>', $user->id)
+            ->where('email', $data['email'])
+            ->whereHas('customer', function ($q) {
+                $q->where('is_guest', 1);
+            })
+            ->update(['email' => $newEmail]);
     }
 
     public static function rules($forSignup = true): array

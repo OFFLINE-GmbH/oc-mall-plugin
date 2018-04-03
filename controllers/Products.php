@@ -1,5 +1,8 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use BackendMenu;
 use October\Rain\Database\Models\DeferredBinding;
@@ -12,9 +15,9 @@ use OFFLINE\Mall\Models\PropertyValue;
 class Products extends Controller
 {
     public $implement = [
-        'Backend\Behaviors\ListController',
-        'Backend\Behaviors\FormController',
-        'Backend.Behaviors.RelationController',
+        ListController::class,
+        FormController::class,
+        RelationController::class,
     ];
 
     public $listConfig = 'config_list.yaml';

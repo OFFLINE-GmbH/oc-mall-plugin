@@ -1,18 +1,15 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\Price;
 
-/**
- * Model
- */
 class ShippingMethodRate extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use Validation;
     use Price;
 
     public $timestamps = false;
-
     public $rules = [
         'price'       => 'required|regex:/\d+([\.,]\d+)?/i',
         'from_weight' => 'integer|min:0',

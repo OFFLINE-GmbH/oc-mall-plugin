@@ -1,14 +1,15 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use BackendMenu;
-use OFFLINE\Mall\Models\Variant;
 
 class Variants extends Controller
 {
     public $implement = [
-        'Backend\Behaviors\ListController',
-        'Backend\Behaviors\FormController',
+        ListController::class,
+        FormController::class,
     ];
 
     public $listConfig = 'config_list.yaml';

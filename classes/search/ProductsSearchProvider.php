@@ -8,7 +8,6 @@ use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\SiteSearch\Classes\Providers\ResultsProvider;
 
-
 class ProductsSearchProvider extends ResultsProvider
 {
     public function search()
@@ -60,9 +59,6 @@ class ProductsSearchProvider extends ResultsProvider
                       ->get();
     }
 
-    /**
-     * @return mixed
-     */
     protected function searchVariants()
     {
         return Variant::where(function ($q) {

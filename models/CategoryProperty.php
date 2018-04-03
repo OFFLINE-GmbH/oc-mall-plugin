@@ -1,6 +1,6 @@
 <?php
 
-namespace OFFLINe\Mall\Models;
+namespace OFFLINE\Mall\Models;
 
 use October\Rain\Database\Pivot;
 use October\Rain\Database\Traits\Nullable;

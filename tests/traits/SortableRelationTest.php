@@ -1,6 +1,5 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
-
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Property;
 use PluginTestCase;

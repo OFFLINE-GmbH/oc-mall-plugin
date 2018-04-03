@@ -17,18 +17,15 @@ class PaymentMethod extends Model
         'name'             => 'required',
         'payment_provider' => 'required',
     ];
-
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
-        'description'
+        'description',
     ];
-
     public $hasMany = [
         'orders' => Order::class,
     ];
-
     public $attachOne = [
         'logo' => File::class,
     ];

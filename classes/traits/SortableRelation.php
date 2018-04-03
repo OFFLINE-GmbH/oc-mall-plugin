@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-
 use DB;
 use Exception;
 

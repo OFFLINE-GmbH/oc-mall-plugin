@@ -1,19 +1,17 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Validation;
 
-/**
- * Model
- */
 class Country extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
-    
+    use Validation;
+
     public $timestamps = false;
 
     public $rules = [
         'code' => 'required|size:2',
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     public $table = 'offline_mall_countries';

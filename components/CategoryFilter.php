@@ -1,25 +1,21 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Property;
 use Session;
 use Validator;
 
-class CategoryFilter extends ComponentBase
+class CategoryFilter extends MallComponent
 {
-    use SetVars;
-    use HashIds;
-
+    /**
+     * @var string
+     */
     public const FILTER_KEY = 'oc-mall.category.filter';
-
     /**
      * @var Category
      */
@@ -108,9 +104,17 @@ class CategoryFilter extends ComponentBase
         $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
             $property = $this->isSpecialProperty($id) ? $id : $properties->find($id);
             if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
-                return $values['min'] === '' && $values['max'] === ''
-                    ? []
-                    : [$id => new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null)];
+                if ($values['min'] === '' && $values['max'] === '') {
+                    return [];
+                }
+
+                return [
+                    $id => new RangeFilter(
+                        $property,
+                        $values['min'] ?? null,
+                        $values['max'] ?? null
+                    ),
+                ];
             }
 
             // Remove empty set values

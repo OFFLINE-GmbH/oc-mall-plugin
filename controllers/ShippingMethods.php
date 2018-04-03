@@ -1,15 +1,19 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\RelationController;
+use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use BackendMenu;
 
 class ShippingMethods extends Controller
 {
     public $implement = [
-        'Backend\Behaviors\ListController',
-        'Backend\Behaviors\FormController',
-        'Backend\Behaviors\ReorderController',
-        'Backend.Behaviors.RelationController',
+        ListController::class,
+        FormController::class,
+        ReorderController::class,
+        RelationController::class,
     ];
 
     public $listConfig = 'config_list.yaml';

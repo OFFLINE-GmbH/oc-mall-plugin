@@ -1,25 +1,17 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
 use Illuminate\Contracts\Encryption\DecryptException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
-use OFFLINE\Mall\Classes\PaymentState\PaidState;
-use OFFLINE\Mall\Classes\PaymentState\PendingState;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Validator;
 
-class PaymentMethodSelector extends ComponentBase
+class PaymentMethodSelector extends MallComponent
 {
-    use SetVars;
-    use HashIds;
-
     public $cart;
     public $activeMethod;
     public $paymentData;

@@ -3,6 +3,16 @@
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Product;
 
+if ( ! function_exists('round_money')) {
+    /**
+     * Rounds an amount to the specified decimals.
+     */
+    function round_money($value, $decimals = 2)
+    {
+        return round($value / 100, $decimals ?? 2);
+    }
+}
+
 if ( ! function_exists('format_money')) {
     /**
      * Formats a price. Adds the currency if provided.
@@ -13,15 +23,18 @@ if ( ! function_exists('format_money')) {
      *
      * @return string
      */
-    function format_money(?int $value, $product = null, $currencyCode = null, $factor = 100)
+    function format_money(?int $value, $product = null, $currencyCode = null)
     {
-        $currency = $currencyCode ? CurrencySettings::currencyByCode($currencyCode) : CurrencySettings::activeCurrency();
+        $currency = $currencyCode
+            ? CurrencySettings::currencyByCode($currencyCode)
+            : CurrencySettings::activeCurrency();
+
         // Apply currency rate to price.
         $value *= (float)$currency['rate'];
 
-        $value    = round($value / $factor, 2);
+        $value    = round_money($value, $currency['decimals']);
         $integers = floor($value);
-        $decimals = ($value - $integers) * $factor;
+        $decimals = ($value - $integers) * 100;
 
         return Twig::parse(CurrencySettings::currencyFormatByCode($currency['code']), [
             'price'    => $value,

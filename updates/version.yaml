@@ -1,4 +1,4 @@
-1.0.1:
+0.1.0:
     - 'Initialize plugin.'
     - builder_table_create_offline_mall_products.php
     - builder_table_create_offline_mall_product_variants.php

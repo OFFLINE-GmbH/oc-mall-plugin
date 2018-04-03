@@ -1,16 +1,17 @@
-<h5 class="mall-product__variants-heading">{{ 'mall.variants' | _ }}</h5>
-<div class="mall-product__variants">
-    {% for value, variant in variants %}
-        {% set variant = variant.first() %}
-        <div class="mall-product__variant">
-            <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}"
-               title="{{ variant.name }}"
-            >
-                <img src="{{ variant.main_image.thumb(80, auto) }}" alt="{{ variant.name }}"/>
-            </a>
-        </div>
-    {% endfor %}
-</div>
+{% if variants.count > 0 %}
+    <h5 class="mall-product__variants-heading">{{ 'mall.variants' | _ }}</h5>
+    <div class="mall-product__variants">
+        {% for value, variant in variants %}
+            {% set variant = variant.first() %}
+            <div class="mall-product__variant">
+                <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}"
+                   title="{{ variant.name }}">
+                    <img src="{{ variant.main_image.thumb(80, auto) }}" alt="{{ variant.name }}"/>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 
 <div class="mall-product__variant-properties">
     {% partial __SELF__ ~ '::properties' props=props %}

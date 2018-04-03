@@ -2,9 +2,10 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use JsonSerializable;
 use OFFLINE\Mall\Models\Tax;
 
-class TaxTotal implements \JsonSerializable
+class TaxTotal implements JsonSerializable
 {
     /**
      * @var Tax

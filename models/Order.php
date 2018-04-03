@@ -13,9 +13,6 @@ use OFFLINE\Mall\Classes\Traits\Price;
 use RainLab\Translate\Classes\Translator;
 use RuntimeException;
 
-/**
- * Model
- */
 class Order extends Model
 {
     use Validation;
@@ -24,7 +21,6 @@ class Order extends Model
     use HashIds;
 
     protected $dates = ['deleted_at'];
-
     public $rules = [
         'currency'                         => 'required',
         'shipping_address_same_as_billing' => 'required|boolean',
@@ -33,7 +29,6 @@ class Order extends Model
         'ip_address'                       => 'required',
         'customer_id'                      => 'required|exists:offline_mall_customers,id',
     ];
-
     public $jsonable = [
         'billing_address',
         'shipping_address',
@@ -44,21 +39,17 @@ class Order extends Model
         'shipping',
         'payment_data',
     ];
-
     public $table = 'offline_mall_orders';
-
     public $hasMany = [
         'products'     => OrderProduct::class,
         'payment_logs' => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
-
     public $belongsTo = [
         'payment_method' => [PaymentMethod::class, 'deleted' => true],
         'order_state'    => [OrderState::class, 'deleted' => true],
         'customer'       => [Customer::class, 'deleted' => true],
         'cart'           => [Cart::class, 'deleted' => true],
     ];
-
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
     ];
@@ -136,6 +127,10 @@ class Order extends Model
             return $order;
         });
 
+        // Drop any saved payment information since the order has been
+        // created successfully.
+        session()->forget('mall.payment_method.data');
+
         return $order;
     }
 
@@ -172,6 +167,20 @@ class Order extends Model
             'total_post_taxes',
             'total_pre_taxes',
         ];
+    }
+
+    /**
+     * Returns the amount of the order in the selected currency.
+     * This is used in the PaymentProvider classes.
+     *
+     * @return float
+     */
+    public function getTotalInCurrencyAttribute()
+    {
+        $total = (int)$this->getOriginal('total_post_taxes');
+        $total *= (float)$this->currency['rate'];
+
+        return round_money($total, $this->currency['decimals']);
     }
 
     public function getPaymentStateLabelAttribute()

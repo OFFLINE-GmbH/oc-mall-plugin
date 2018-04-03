@@ -2,11 +2,9 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Session;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 class DefaultPaymentGateway implements PaymentGateway
 {

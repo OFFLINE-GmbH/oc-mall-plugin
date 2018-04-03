@@ -200,13 +200,6 @@ tabs:
             span: left
             type: fileupload
             tab: 'offline.mall::lang.common.attachments'
-        shippable:
-            label: 'offline.mall::lang.product.shippable'
-            span: left
-            type: switch
-            default: true
-            comment: 'offline.mall::lang.product.shippable_comment'
-            tab: 'offline.mall::lang.common.shipping'
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''

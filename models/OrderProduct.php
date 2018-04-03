@@ -3,9 +3,6 @@
 use Model;
 use OFFLINE\Mall\Classes\Traits\Price;
 
-/**
- * Model
- */
 class OrderProduct extends Model
 {
     use \October\Rain\Database\Traits\Validation;
@@ -49,7 +46,7 @@ class OrderProduct extends Model
         'taxes',
         'item',
         'custom_field_values',
-        'property_values'
+        'property_values',
     ];
 
     public $table = 'offline_mall_order_products';

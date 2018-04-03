@@ -1,32 +1,27 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
-use October\Rain\Database\Traits\Nullable;
+use October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SortableRelation;
 
-/**
- * Model
- */
 class Property extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
-    use \October\Rain\Database\Traits\SoftDelete;
+    use Validation;
+    use SoftDelete;
     use HashIds;
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['options'];
-
     public $rules = [
         'name' => 'required',
         'type' => 'required|in:text,textarea,dropdown,checkbox,color,image',
     ];
-
     public $table = 'offline_mall_properties';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
-        'unit'
+        'unit',
     ];
     public $hasMany = [
         'property_values' => PropertyValue::class,
@@ -38,7 +33,7 @@ class Property extends Model
             'key'        => 'property_id',
             'otherKey'   => 'category_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
-            'pivotModel' => CategoryProperty::class
+            'pivotModel' => CategoryProperty::class,
         ],
     ];
 

@@ -113,10 +113,10 @@ class TotalsCalculator
         $shippingTaxes = new Collection();
         $shippingTotal = $this->shippingTotal->totalPreTaxesOriginal();
         if ($this->cart->shipping_method) {
-            $shippingTaxes = optional($this->cart->shipping_method)->taxes->map(function (Tax $tax) use ($shippingTotal
-            ) {
-                return new TaxTotal($shippingTotal, $tax);
-            });
+            $shippingTaxes = optional($this->cart->shipping_method)->taxes
+                ->map(function (Tax $tax) use ($shippingTotal) {
+                    return new TaxTotal($shippingTotal, $tax);
+                });
         }
 
         $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {
@@ -127,9 +127,9 @@ class TotalsCalculator
 
         $combined = $productTaxes->concat($shippingTaxes);
 
-        $this->totalTaxes = $combined->reduce(function ($total, TaxTotal $tax) {
-            return $total += $tax->total();
-        }, 0);
+        $this->totalTaxes = $combined->sum(function (TaxTotal $tax) {
+            return $tax->total();
+        });
 
         $this->detailedTaxes = $combined;
 
@@ -146,9 +146,9 @@ class TotalsCalculator
             return $taxTotal->tax->id;
         })->map(function (Collection $grouped) {
             $tax    = $grouped->first()->tax;
-            $preTax = $grouped->reduce(function ($total, TaxTotal $tax) {
-                return $total += $tax->preTax();
-            }, 0);
+            $preTax = $grouped->sum(function (TaxTotal $tax) {
+                return $tax->preTax();
+            });
 
             return new TaxTotal($preTax, $tax);
         })->values();
@@ -156,9 +156,9 @@ class TotalsCalculator
 
     protected function calculateWeightTotal(): int
     {
-        return $this->cart->products->reduce(function ($total, CartProduct $product) {
-            return $total += $product->data->weight * $product->quantity;
-        }, 0);
+        return $this->cart->products->sum(function (CartProduct $product) {
+            return $product->data->weight * $product->quantity;
+        });
     }
 
     public function shippingTotal(): ShippingTotal
@@ -223,17 +223,14 @@ class TotalsCalculator
 
     /**
      * Process the discounts that are applied to the cart's total.
-     *
-     * @param $total
-     *
-     * @return float
      */
     protected function applyTotalDiscounts($total): float
     {
-        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])->where(function ($q) {
-            $q->whereNull('expires')
-              ->orWhere('expires', '>', Carbon::now());
-        })->get();
+        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])
+                                   ->where(function ($q) {
+                                       $q->whereNull('expires')
+                                         ->orWhere('expires', '>', Carbon::now());
+                                   })->get();
 
         $discounts = $this->cart->discounts->merge($nonCodeTriggers)->reject(function ($item) {
             return $item->type === 'shipping';

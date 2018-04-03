@@ -7,6 +7,7 @@ use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Omnipay;
+use Throwable;
 use Validator;
 
 class Stripe extends PaymentProvider
@@ -48,13 +49,13 @@ class Stripe extends PaymentProvider
         $response = null;
         try {
             $response = $gateway->purchase([
-                'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),
+                'amount'    => $this->order->total_in_currency,
                 'currency'  => $this->order->currency['code'],
                 'card'      => $this->data,
                 'returnUrl' => $this->returnUrl(),
                 'cancelUrl' => $this->cancelUrl(),
             ])->send();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $result->successful    = false;
             $result->failedPayment = $this->logFailedPayment([], $e);
 

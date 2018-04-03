@@ -2,17 +2,24 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ReorderController;
 
 class Brands extends Controller
 {
-    public $implement = [        'Backend\Behaviors\ListController',        'Backend\Behaviors\FormController',        'Backend\Behaviors\ReorderController'    ];
-    
+    public $implement = [
+        ListController::class,
+        FormController::class,
+        ReorderController::class,
+    ];
+
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.manage_products' 
+        'offline.mall.manage_products',
     ];
 
     public function __construct()

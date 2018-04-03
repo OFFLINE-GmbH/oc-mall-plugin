@@ -1,11 +1,12 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\Price;
 
 class Discount extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use Validation;
     use Price;
 
     public $rules = [
@@ -28,17 +29,14 @@ class Discount extends Model
     ];
 
     public $table = 'offline_mall_discounts';
-
     public $dates = ['expires'];
     public $casts = [
         'number_of_usages'     => 'integer',
         'max_number_of_usages' => 'integer',
     ];
-
     public $belongsTo = [
         'product' => [Product::class],
     ];
-
     public $belongsToMany = [
         'carts' => [Cart::class],
     ];

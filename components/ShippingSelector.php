@@ -1,17 +1,12 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
-use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\ShippingMethod;
 use Validator;
 
-class ShippingSelector extends ComponentBase
+class ShippingSelector extends MallComponent
 {
-    use SetVars;
-
     public $cart;
     public $methods;
 

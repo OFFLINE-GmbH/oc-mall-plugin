@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Models\Order;

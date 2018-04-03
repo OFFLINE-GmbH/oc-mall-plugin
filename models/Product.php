@@ -11,9 +11,6 @@ use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
-/**
- * Model
- */
 class Product extends Model
 {
     use Validation;
@@ -25,9 +22,7 @@ class Product extends Model
     use HashIds;
 
     protected $dates = ['deleted_at'];
-
     public $jsonable = ['links'];
-
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
@@ -60,12 +55,10 @@ class Product extends Model
     public $attachOne = [
         'main_image' => File::class,
     ];
-
     public $attachMany = [
         'images'    => File::class,
         'downloads' => File::class,
     ];
-
     public $belongsTo = [
         'category'          => Category::class,
         'brand'             => Brand::class,
@@ -83,16 +76,13 @@ class Product extends Model
             'throughKey' => 'custom_field_id',
         ],
     ];
-
     public $morphMany = [
         'property_values' => [PropertyValue::class, 'name' => 'describable'],
     ];
-
     public $hasMany = [
         'variants'      => Variant::class,
         'cart_products' => CartProduct::class,
     ];
-
     public $belongsToMany = [
         'custom_fields'   => [
             CustomField::class,

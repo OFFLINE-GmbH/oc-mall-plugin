@@ -6,9 +6,6 @@ use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
-/**
- * Model
- */
 class ShippingMethod extends Model
 {
     use Validation;
@@ -18,27 +15,21 @@ class ShippingMethod extends Model
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
-        'description'
+        'description',
     ];
-
     public $rules = [
         'name'  => 'required',
         'price' => 'required|regex:/\d+([\.,]\d+)?/i',
     ];
-
     public $table = 'offline_mall_shipping_methods';
-
     public $appends = ['price_formatted'];
-
     public $hasMany = [
         'carts' => Cart::class,
         'rates' => ShippingMethodRate::class,
     ];
-
     public $attachOne = [
         'logo' => File::class,
     ];
-
     public $belongsToMany = [
         'taxes'     => [
             Tax::class,

@@ -1,16 +1,11 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
-use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Country;
 
-class SignUp extends ComponentBase
+class SignUp extends MallComponent
 {
-    use SetVars;
-
     public $countries;
 
     public function componentDetails()

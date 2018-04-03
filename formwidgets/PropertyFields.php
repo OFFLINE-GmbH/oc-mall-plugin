@@ -101,6 +101,7 @@ class PropertyFields extends FormWidgetBase
         $formField->label   = $property->name;
         $formField->options = collect($property->options)->mapWithKeys(function ($i) {
             $value = e($i['value']);
+
             return [$value => $value];
         })->toArray();
 

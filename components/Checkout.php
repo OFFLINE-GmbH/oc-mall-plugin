@@ -1,16 +1,12 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
 use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentRedirector;
-use OFFLINE\Mall\Classes\Payments\PaymentResult;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Components\Cart as CartComponent;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -20,11 +16,11 @@ use Redirect;
 use Request;
 use Session;
 
-class Checkout extends ComponentBase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Checkout extends MallComponent
 {
-    use SetVars;
-    use HashIds;
-
     public $cart;
     public $paymentError;
     public $step;
@@ -88,7 +84,7 @@ class Checkout extends ComponentBase
         }
 
         if ($step === 'failed' && $this->order) {
-            $this->paymentError = $this->order->payment_logs->first()->message;
+            $this->paymentError = optional($this->order->payment_logs->first())->message ?? 'Unknown error';
         }
     }
 

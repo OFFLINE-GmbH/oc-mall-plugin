@@ -1,11 +1,8 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
 use Flash;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\SetVars;
 use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -13,19 +10,12 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use Request;
 use Session;
 
-class Cart extends ComponentBase
+class Cart extends MallComponent
 {
-    use SetVars;
-    use HashIds;
-
     public $cart;
     public $defaultMinQuantity = 1;
     public $defaultMaxQuantity = 100;
     public $showDiscountApplier = true;
-
-    /**
-     * @var string
-     */
     public $productPage;
 
     public function componentDetails()

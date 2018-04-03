@@ -11,9 +11,6 @@ use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Models\File;
 
-/**
- * Model
- */
 class Category extends Model
 {
     use Validation;
@@ -114,7 +111,7 @@ class Category extends Model
     public static function getMenuTypeInfo($type)
     {
         $result = [];
-        if ($type == 'all-mall-categories') {
+        if ($type === 'all-mall-categories') {
             $result = [
                 'dynamicItems' => true,
             ];

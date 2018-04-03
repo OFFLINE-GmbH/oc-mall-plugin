@@ -1,11 +1,11 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
+use Auth;
 use OFFLINE\Mall\Models\Country;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 
-class OrdersList extends ComponentBase
+class OrdersList extends MallComponent
 {
     public $orders = [];
     public $countries = [];
@@ -26,7 +26,7 @@ class OrdersList extends ComponentBase
 
     public function init()
     {
-        $user = \Auth::getUser();
+        $user = Auth::getUser();
         if ( ! $user) {
             return;
         }

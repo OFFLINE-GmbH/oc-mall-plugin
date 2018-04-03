@@ -171,8 +171,12 @@ class ShippingTotal implements \JsonSerializable
             return $price;
         }
 
-        $applier               = new DiscountApplier($this->totals->getCart(), $this->totals->productPostTaxes(),
-            $price);
+        $applier = new DiscountApplier(
+            $this->totals->getCart(),
+            $this->totals->productPostTaxes(),
+            $price
+        );
+        
         $this->appliedDiscount = optional($applier->applyMany($discounts))->first();
 
         return $applier->reducedTotal();

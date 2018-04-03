@@ -41,6 +41,9 @@ use System\Classes\PluginBase;
 use OFFLINE\Mall\Models\GeneralSettings;
 use Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Plugin extends PluginBase
 {
     public $require = ['RainLab.Translate', 'RainLab.User'];
@@ -195,5 +198,4 @@ class Plugin extends PluginBase
             ];
         });
     }
-
 }

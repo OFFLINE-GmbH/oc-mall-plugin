@@ -2,12 +2,14 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\FormController;
 
 class Discounts extends Controller
 {
     public $implement = [
-        'Backend\Behaviors\ListController',
-        'Backend\Behaviors\FormController',
+        ListController::class,
+        FormController::class,
     ];
 
     public $listConfig = 'config_list.yaml';

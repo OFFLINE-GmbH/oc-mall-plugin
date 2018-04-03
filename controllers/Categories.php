@@ -8,8 +8,6 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
 use OFFLINE\Mall\Models\Category;
-use OFFLINe\Mall\Models\CategoryProperty;
-use OFFLINE\Mall\Models\Property;
 
 class Categories extends Controller
 {

@@ -1,4 +1,3 @@
-
 table.table.data tbody tr.orderfooter td {
     background: #eee;
     border-top: none;
@@ -23,6 +22,7 @@ table.table.data tbody tr.orderfooter-bottomline td {
     border-bottom: 2px solid #ccc;
     font-weight: bold;
 }
+
 table.table.data tbody tr.orderfooter-taxes td {
     background: transparent;
 }

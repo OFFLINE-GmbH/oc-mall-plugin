@@ -8,6 +8,7 @@ use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Omnipay;
 use Request;
 use Session;
+use Throwable;
 use Validator;
 
 class PayPalRest extends PaymentProvider
@@ -35,12 +36,12 @@ class PayPalRest extends PaymentProvider
         $response = null;
         try {
             $response = $gateway->purchase([
-                'amount'    => round((int)$this->order->getOriginal('total_post_taxes') / 100, 2),
+                'amount'    => $this->order->total_in_currency,
                 'currency'  => $this->order->currency['code'],
                 'returnUrl' => $this->returnUrl(),
                 'cancelUrl' => $this->cancelUrl(),
             ])->send();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $result->successful    = false;
             $result->failedPayment = $this->logFailedPayment([], $e);
 
@@ -83,7 +84,7 @@ class PayPalRest extends PaymentProvider
                 'transactionReference' => $key,
                 'payerId'              => $payerId,
             ])->send();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $result->successful    = false;
             $result->failedPayment = $this->logFailedPayment([], $e);
 

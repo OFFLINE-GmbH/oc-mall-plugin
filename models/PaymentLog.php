@@ -1,22 +1,17 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Validation;
 
-/**
- * Model
- */
 class PaymentLog extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use Validation;
 
     public $jsonable = ['data', 'order_data'];
-
     public $table = 'offline_mall_payments_log';
-
     public $casts = [
         'failed' => 'boolean',
     ];
-
     public $rules = [
         'failed'         => 'required|boolean',
         'payment_method' => 'required',

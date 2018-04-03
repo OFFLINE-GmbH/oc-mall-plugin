@@ -17,7 +17,7 @@ class SetFilter extends Filter
     public function apply(Collection $items): Collection
     {
         return $this->setFilterValues($items)->filter(function ($item) {
-            return in_array($item->filter_value, $this->values);
+            return \in_array($item->filter_value, $this->values);
         });
     }
 

@@ -1,13 +1,10 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
-use OFFLINE\Mall\Models\Discount;
 
-class DiscountApplier extends ComponentBase
+class DiscountApplier extends MallComponent
 {
     public function componentDetails()
     {

@@ -1,15 +1,11 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Cms\Classes\ComponentBase;
-use OFFLINE\Mall\Classes\Traits\SetVars;
-use OFFLINE\Mall\Models\CurrencySettings;
 use October\Rain\Router\Router as RainRouter;
+use OFFLINE\Mall\Models\CurrencySettings;
 use Redirect;
 
-class CurrencyPicker extends ComponentBase
+class CurrencyPicker extends MallComponent
 {
-    use SetVars;
-
     public $currencies;
     public $activeCurrency;
 
@@ -55,10 +51,10 @@ class CurrencyPicker extends ComponentBase
 
         if (isset($page->apiBag['staticPage'])) {
             $staticPage = $page->apiBag['staticPage'];
-            $localeUrl = array_get($staticPage->attributes, 'viewBag.url');
+            $localeUrl  = array_get($staticPage->attributes, 'viewBag.url');
         } else {
-            $router = new RainRouter;
-            $params = $this->getRouter()->getParameters();
+            $router    = new RainRouter;
+            $params    = $this->getRouter()->getParameters();
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
 

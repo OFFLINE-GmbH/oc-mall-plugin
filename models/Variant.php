@@ -2,7 +2,6 @@
 
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -10,9 +9,6 @@ use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
-/**
- * Model
- */
 class Variant extends \Model
 {
     use Validation;
@@ -25,17 +21,14 @@ class Variant extends \Model
     }
 
     public $slugs = [];
-
     public $dates = ['deleted_at'];
     public $with = ['product'];
-
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
         'id'                           => 'integer',
         'stock'                        => 'integer',
     ];
-
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required|exists:offline_mall_products,id',
@@ -45,23 +38,18 @@ class Variant extends \Model
         'price'                        => 'sometimes|nullable|regex:/\d+([\.,]\d+)?/i',
         'old_price'                    => 'sometimes|nullable|regex:/\d+([\.,]\d+)?/i',
     ];
-
     public $table = 'offline_mall_product_variants';
-
     public $attachOne = [
         'main_image' => File::class,
     ];
-
     public $attachMany = [
         'images'    => File::class,
         'downloads' => File::class,
     ];
-
     public $belongsTo = [
         'product'      => Product::class,
         'cart_product' => CartProduct::class,
     ];
-
     public $morphMany = [
         'property_values' => [PropertyValue::class, 'name' => 'describable'],
     ];

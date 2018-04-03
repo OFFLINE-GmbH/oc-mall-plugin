@@ -8,11 +8,12 @@
                value="{{ propertyValue.hashId }}">
     {% else %}
         <div class="mall-product__property mall-form-control">
-            <label for="">{{ item.property.name }}</label>
+            <label for="{{ item.property.hashId }}">{{ item.property.name }}</label>
             <select name="props[{{ item.property.hashId }}]"
+                    id="{{ item.property.hashId }}"
                     data-id="{{ item.property.hashId }}"
-                    data-mall-property
-                    class="js-mall-property-selector">
+                    class="js-mall-property-selector"
+                    data-mall-property>
                 {% for value in item.values %}
                     <option value="{{ value.hashId }}"
                             {% if propertyValue.value == value.value %}

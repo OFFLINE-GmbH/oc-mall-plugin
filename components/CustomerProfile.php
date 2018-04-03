@@ -1,13 +1,12 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Cms\Classes\ComponentBase;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use Validator;
 
-class CustomerProfile extends ComponentBase
+class CustomerProfile extends MallComponent
 {
     public $user;
 
@@ -50,7 +49,7 @@ class CustomerProfile extends ComponentBase
         if ($data['password']) {
             $this->user->password              = $data['password'];
             $this->user->password_confirmation = $data['password_repeat'];
-            $this->user->customer->is_guest = false;
+            $this->user->customer->is_guest    = false;
         }
         $this->user->save();
         $this->user->customer->save();

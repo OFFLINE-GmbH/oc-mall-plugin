@@ -1,19 +1,25 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use BackendMenu;
 
 class OrderState extends Controller
 {
     public $implement = [
-        'Backend\Behaviors\ListController','Backend\Behaviors\FormController','Backend\Behaviors\ReorderController'    ];
-    
+        ListController::class,
+        FormController::class,
+        ReorderController::class,
+    ];
+
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.manage_orders'
+        'offline.mall.manage_orders',
     ];
 
     public function __construct()

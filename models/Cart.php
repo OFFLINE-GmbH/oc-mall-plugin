@@ -1,23 +1,24 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Carbon\Carbon;
 use Cookie;
 use DB;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
-use RainLab\User\Models\User;
+use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
+use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
+use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
 use Session;
 
 class Cart extends Model
 {
     use Validation;
     use SoftDelete;
+    use CartSession;
+    use CartActions;
+    use Discounts;
 
     protected $dates = ['deleted_at'];
     protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
@@ -68,66 +69,6 @@ class Cart extends Model
                 }
             }
         });
-    }
-
-    public static function byUser(?User $user)
-    {
-        if ($user === null) {
-            return self::bySession();
-        }
-
-        $cart = self::orderBy('created_at', 'DESC')->firstOrCreate(['customer_id' => $user->customer->id]);
-
-        if ( ! $cart->shipping_address_id || ! $cart->billing_address_id) {
-            if ( ! $cart->shipping_address_id) {
-                $cart->shipping_address_id = $user->customer->default_shipping_address_id;
-            }
-            if ( ! $cart->billing_address_id) {
-                $cart->billing_address_id = $user->customer->default_billing_address_id;
-            }
-            $cart->save();
-        }
-
-        return $cart;
-    }
-
-    /**
-     * Create a cart for an unregistered user. The cart id
-     * is stored to the session and to a cookie. When the user
-     * visits the website again we will try to fetch the id of an old
-     * cart from the session or from the cookie.
-     *
-     * @return Cart
-     */
-    private static function bySession(): Cart
-    {
-        $sessionId = Session::get('cart_session_id') ?? Cookie::get('cart_session_id') ?? str_random(100);
-        Cookie::queue('cart_session_id', $sessionId, 9e6);
-        Session::put('cart_session_id', $sessionId);
-
-        return self::orderBy('created_at', 'DESC')->firstOrCreate(['session_id' => $sessionId]);
-    }
-
-    /**
-     * Transfer a session attached cart to a customer.
-     *
-     * @param $customer
-     *
-     * @return Cart
-     */
-    public static function transferToCustomer(Customer $customer): Cart
-    {
-        $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
-
-        $cart                      = self::bySession();
-        $cart->session_id          = null;
-        $cart->customer_id         = $customer->id;
-        $cart->billing_address_id  = $customer->default_billing_address_id;
-        $cart->shipping_address_id = $shippingId;
-
-        $cart->save();
-
-        return $cart;
     }
 
     public function setShippingMethod(?ShippingMethod $method)
@@ -181,85 +122,6 @@ class Cart extends Model
     }
 
     /**
-     * Adds a product to the cart.
-     *
-     * @param Product    $product
-     * @param Variant    $variant
-     * @param int|null   $quantity
-     * @param Collection $values
-     *
-     * @return Cart
-     */
-    public function addProduct(
-        Product $product,
-        ?int $quantity = null,
-        ?Variant $variant = null,
-        ?Collection $values = null
-    ) {
-        return DB::transaction(function () use ($product, $quantity, $variant, $values) {
-            if ( ! $this->exists) {
-                $this->save();
-            }
-
-            $quantity = $quantity ?? $product->quantity_default ?? 1;
-
-            if ($product->stackable && $this->isInCart($product, $variant, $values)) {
-                $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
-                    return $cartProduct->product_id === $product->id;
-                });
-
-                $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
-
-                CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
-
-                $this->validateStock($variant ?? $product, $quantity);
-                $this->validateShippingMethod();
-
-                return $this->load('products');
-            }
-
-            $quantity = $product->normalizeQuantity($quantity);
-            $price    = $variant
-                ? $variant->priceIncludingCustomFieldValues($values)
-                : $product->priceIncludingCustomFieldValues($values);
-
-            $this->validateStock($variant ?? $product, $quantity);
-
-            $cartEntry             = new CartProduct();
-            $cartEntry->cart_id    = $this->id;
-            $cartEntry->product_id = $product->id;
-            $cartEntry->variant_id = $variant ? $variant->id : null;
-            $cartEntry->quantity   = $quantity;
-            $cartEntry->price      = $price;
-
-            $this->products()->save($cartEntry);
-            $this->load('products');
-
-            if ($values) {
-                $cartEntry->custom_field_values()->saveMany($values);
-            }
-
-            $this->validateShippingMethod();
-        });
-    }
-
-    protected function validateStock($item, $quantity, $ignoreRecord = null)
-    {
-        $alreadyInCart = $this->getTotalQuantityInCart($item, $ignoreRecord);
-
-        if ($item->allow_out_of_stock_purchases !== true && $item->stock < $quantity + $alreadyInCart) {
-            throw new OutOfStockException($item);
-        }
-    }
-
-    public function removeProduct(CartProduct $product)
-    {
-        $product->delete();
-
-        return $this;
-    }
-
-    /**
      * Updates the quantity for one cart entry.
      */
     public function setQuantity($cartProductId, int $quantity)
@@ -273,57 +135,6 @@ class Cart extends Model
         $this->validateShippingMethod();
     }
 
-    /**
-     * Apply a discount to this cart.
-     *
-     * @param Discount $discount
-     *
-     * @throws \October\Rain\Exception\ValidationException
-     * @throws ValidationException
-     */
-    public function applyDiscount(Discount $discount)
-    {
-        $uniqueDiscountTypes = ['alternate_price', 'shipping'];
-
-        if (in_array($discount->type, $uniqueDiscountTypes)
-            && $this->discounts->where('type', $discount->type)->count() > 0) {
-            throw new ValidationException([trans('offline.mall::lang.discounts.validation.' . $discount->type)]);
-        }
-
-        if ($this->discounts->contains($discount)) {
-            throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
-        }
-
-        if ($discount->expires && $discount->expires->lt(Carbon::today())) {
-            throw new ValidationException([trans('offline.mall::lang.discounts.validation.expired')]);
-        }
-
-        if ($discount->max_number_of_usages !== null && $discount->number_of_usages >= $discount->max_number_of_usages) {
-            throw new ValidationException([trans('offline.mall::lang.discounts.validation.usage_limit_reached')]);
-        }
-
-        $this->discounts()->save($discount);
-    }
-
-    public function applyDiscountByCode(string $code)
-    {
-        $code = trim(strtoupper($code));
-        if ($code === '') {
-            throw new ValidationException([
-                'code' => trans('offline.mall::lang.discounts.validation.empty'),
-            ]);
-        }
-
-        try {
-            $discount = Discount::whereCode($code)->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            throw new ValidationException([
-                'code' => trans('offline.mall::lang.discounts.validation.not_found'),
-            ]);
-        }
-
-        return $this->applyDiscount($discount);
-    }
 
     /**
      * Checks if a product with the same $value is already
@@ -369,23 +180,6 @@ class Cart extends Model
     }
 
     /**
-     * Updates the `number_of_usages` property on each
-     * applied discount of this cart.
-     */
-    public function updateDiscountUsageCount()
-    {
-        $this->totals()->appliedDiscounts()->each(function (array $discount) {
-            $discount['discount']->number_of_usages++;
-            $discount['discount']->save();
-        });
-
-        if ($shippingDiscount = $this->totals()->shippingTotal()->appliedDiscount()) {
-            $shippingDiscount['discount']->number_of_usages++;
-            $shippingDiscount['discount']->save();
-        }
-    }
-
-    /**
      * Makes sure that the selected shipping method
      * can still be applied to this cart.
      */
@@ -405,23 +199,5 @@ class Cart extends Model
         }
 
         return $this->setShippingMethod(null);
-    }
-
-    protected function getTotalQuantityInCart($item, $ignoreRecord): int
-    {
-        $query = CartProduct::where('cart_id', $this->id)
-                            ->when($ignoreRecord, function ($q) use ($ignoreRecord) {
-                                $q->where('id', '<>', $ignoreRecord);
-                            })
-                            ->when($item instanceof Product, function ($q) use ($item) {
-                                $q->where('product_id', $item->id);
-                            })
-                            ->when($item instanceof Variant, function ($q) use ($item) {
-                                $q->where('cart_id', $this->id)
-                                  ->where('product_id', $item->product_id)
-                                  ->where('variant_id', $item->id);
-                            });
-
-        return (int)$query->sum('quantity');
     }
 }

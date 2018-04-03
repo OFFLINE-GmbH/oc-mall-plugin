@@ -81,6 +81,8 @@ class DiscountApplier
     public function applyMany(Collection $discounts): Collection
     {
         foreach ($discounts as $discount) {
+            // A return value of `false` indicates that a discount is applied that
+            // fixes the final amount so no other discounts would have an effect.
             if ($this->apply($discount) === false) {
                 break;
             }
@@ -99,11 +101,12 @@ class DiscountApplier
         if ($discount->max_number_of_usages !== null && $discount->max_number_of_usages < $discount->number_of_usages) {
             return false;
         }
+
         if ($discount->trigger === 'total' && (int)$discount->getOriginal('total_to_reach') <= $this->total) {
             return true;
         }
-        if ($discount->trigger === 'product' &&
-            $this->productIsInCart($discount->product_id)) {
+
+        if ($discount->trigger === 'product' && $this->productIsInCart($discount->product_id)) {
             return true;
         }
 

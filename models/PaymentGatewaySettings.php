@@ -3,11 +3,12 @@
 namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Encryptable;
 use Session;
 
 class PaymentGatewaySettings extends Model
 {
-    use \October\Rain\Database\Traits\Encryptable;
+    use Encryptable;
 
     protected $encryptable = ['stripe_api_key', 'paypal_client_id', 'paypal_secret'];
 

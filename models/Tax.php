@@ -11,9 +11,7 @@ class Tax extends Model
         'name'       => 'required',
         'percentage' => 'numeric|min:0|max:100',
     ];
-
     public $table = 'offline_mall_taxes';
-
     public $belongsToMany = [
         'products'         => [
             Product::class,

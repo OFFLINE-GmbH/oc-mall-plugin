@@ -1,8 +1,7 @@
 {% set isActiveMethod = __SELF__.activeMethod == method.id %}
 <div class="mall-payment-method__entry js-mall-select-payment-method
      {{ isActiveMethod ? 'mall-payment-method__entry--active' : '' }}"
-     data-id="{{ method.id }}"
->
+     data-id="{{ method.id }}">
     <div class="mall-payment-method__logo">
         {% if method.logo %}
             <img class="mall-payment-method__logo" src="{{ method.logo.thumb(120, 'auto') }}" alt=""/>

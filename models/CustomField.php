@@ -2,13 +2,14 @@
 
 use DB;
 use Model;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
 
 class CustomField extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use Validation;
     use Price;
     use HashIds;
 
@@ -16,9 +17,8 @@ class CustomField extends Model
     public $translatable = ['name'];
     public $with = ['custom_field_options'];
     public $casts = [
-        'required' => 'boolean'
+        'required' => 'boolean',
     ];
-
     public $rules = [
         'product_id' => 'exists:offline_mall_products,id',
         'name'       => 'required',
