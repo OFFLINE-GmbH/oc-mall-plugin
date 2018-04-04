@@ -11,8 +11,8 @@ class Discount extends Model
 
     public $rules = [
         'name'                                 => 'required',
-        'expires'                              => 'date',
-        'number_of_usages'                     => 'numeric',
+        'expires'                              => 'nullable|date',
+        'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,alternate_price,shipping',
@@ -43,8 +43,12 @@ class Discount extends Model
 
     public static function boot()
     {
+        parent::boot();
         static::saving(function (self $discount) {
             $discount->code = strtoupper($discount->code);
+            if ($discount->trigger !== 'product') {
+                $discount->product_id = null;
+            }
         });
     }
 
@@ -61,5 +65,10 @@ class Discount extends Model
     public function getPriceColumns()
     {
         return ['amount', 'alternate_price', 'shipping_price', 'total_to_reach'];
+    }
+
+    public function getProductIdOptions()
+    {
+        return collect([null => '--'])->merge(Product::get()->pluck('name', 'id'));
     }
 }

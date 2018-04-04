@@ -87,13 +87,13 @@ fields:
             field: type
             condition: value[shipping]
         type: text
-    product:
+    product_id:
         label: 'offline.mall::lang.common.product'
         oc.commentPosition: ''
         nameFrom: name
         descriptionFrom: description
         span: auto
-        type: relation
+        type: dropdown
         trigger:
             action: show
             field: trigger
