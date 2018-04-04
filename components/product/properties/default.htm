@@ -1,0 +1,15 @@
+<select name="props[{{ item.property.hashId }}]"
+        id="{{ item.property.hashId }}"
+        data-id="{{ item.property.hashId }}"
+        class="js-mall-property-selector"
+        data-mall-property>
+    {% for value in item.values %}
+        <option value="{{ value.hashId }}"
+                {% if propertyValue.value == value.value %}
+                    selected
+                {% endif %}
+        >
+            {{ value.value }}
+        </option>
+    {% endfor %}
+</select>

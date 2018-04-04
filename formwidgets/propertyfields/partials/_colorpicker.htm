@@ -2,5 +2,10 @@
 
 <label for="<?= $id ?>"><?= e($field->name) ?></label>
 <div style="overflow: auto;">
+    <input type="text" name="<?= $this->fieldPrefix() ?>[<?= e($field->id) ?>][name]"
+           class="form-control"
+           id="<?= $id ?>"
+           value="<?= e($value['name'] ?? '') ?>"
+    >
     <?= $widget->render() ?>
 </div>

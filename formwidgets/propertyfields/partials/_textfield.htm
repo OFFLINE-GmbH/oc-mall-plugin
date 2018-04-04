@@ -1,9 +1,6 @@
 <?php $id = uniqid(); ?>
 
 <label for="<?= $id ?>"><?= e($field->name) ?></label>
-
-
-
 <input type="text" name="PropertyValues[<?= e($field->id) ?>]" class="form-control" id="<?= $id ?>"
-       value="<?= $value ?>"
+       value="<?= e($value) ?>"
 >

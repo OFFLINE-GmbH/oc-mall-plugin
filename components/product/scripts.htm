@@ -40,8 +40,8 @@
             {% endif %}
 
             {# Handle clicks on the image selector for custom field type "image" and "color" #}
-            $body.on('click', '.mall-field-selector', function () {
-                $(this.dataset.target).val(this.dataset.value);
+            $body.on('click', '.mall-option-selector', function () {
+                $(this.dataset.target).val(this.dataset.value).trigger('change');
 
                 $(this).parent().find('.is-active').removeClass('is-active');
                 $(this).addClass('is-active');

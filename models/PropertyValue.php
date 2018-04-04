@@ -40,12 +40,19 @@ class PropertyValue extends Model
     ];
 
     /**
-     * The parent's attribute type is store to make trigger conditions
+     * The parent's attribute type is stored to make trigger conditions
      * work in the custom backend relationship form.
      *
      * @var string
      */
     public $attribute_type = '';
+
+    public function getValueAttribute()
+    {
+        return optional($this->property)->type === 'color'
+            ? json_decode($this->getOriginal('value'), true)
+            : $this->getOriginal('value');
+    }
 
     /**
      * Returns a raw html presentation of the attribute values.
@@ -54,14 +61,14 @@ class PropertyValue extends Model
      */
     public function getDisplayValueAttribute()
     {
-        $value = e($this->value);
         if ($this->property->type === 'color') {
             return sprintf(
-                '<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>',
-                $value
+                '<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s" title="%s"></span>',
+                $this->value['hex'],
+                $this->value['name'] ?? ''
             );
         }
 
-        return $value;
+        return e($this->value);
     }
 }

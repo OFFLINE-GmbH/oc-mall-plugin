@@ -72,14 +72,17 @@ class PropertyFields extends FormWidgetBase
             'model' => new PropertyValue(),
         ]);
 
-        $formField        = $this->newFormField($property);
-        $formField->value = $value;
+        $formField        = $this->newFormField($property, 'hex');
+        $formField->value = $value['hex'];
 
         $widget             = new ColorPicker($this->controller, $formField, $config);
         $widget->allowEmpty = true;
         $widget->bindToController();
 
-        return $this->makePartial('colorpicker', ['field' => $property, 'widget' => $widget, 'value' => $value]);
+        return $this->makePartial(
+            'colorpicker',
+            ['field' => $property, 'widget' => $widget, 'value' => $value]
+        );
     }
 
     private function textfield($property, $value)
@@ -145,9 +148,12 @@ class PropertyFields extends FormWidgetBase
             ['field' => $property, 'widget' => $widget, 'value' => $value, 'session_key' => $this->sessionKey]);
     }
 
-    protected function newFormField($property): FormField
+    protected function newFormField($property, $subkey = null): FormField
     {
-        return new FormField($this->fieldPrefix() . '[' . $property->id . ']', $property->name);
+        $subkey    = $subkey ? '[' . $subkey . ']' : '';
+        $fieldName = sprintf('%s[%s]%s', $this->fieldPrefix(), $property->id, $subkey);
+
+        return new FormField($fieldName, $property->name);
     }
 
     protected function useVariantSpecificPropertiesOnly(): bool

@@ -79,6 +79,13 @@ class Variant extends \Model
                 ]);
 
                 $pv->value = $value;
+
+                // Some attribute types (like color) have multiple values (a hex color and a display name)
+                // These types of attribute values are stored as json string.
+                if (\is_array($value)) {
+                    $pv->value = json_encode($value);
+                }
+
                 $pv->save();
             }
         });
