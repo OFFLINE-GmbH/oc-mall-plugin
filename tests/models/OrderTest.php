@@ -229,7 +229,7 @@ class OrderTest extends PluginTestCase
         $discount2                   = new Discount();
         $discount2->name             = 'Amount Test';
         $discount2->type             = 'fixed_amount';
-        $discount2->amount           = '20';
+        $discount2->amount           = 20;
         $discount2->trigger          = 'code';
         $discount2->code             = 'TEST';
         $discount2->number_of_usages = 12;
