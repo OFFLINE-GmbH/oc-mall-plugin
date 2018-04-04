@@ -5,7 +5,7 @@ fields:
         span: auto
         type: text
     guaranteed_delivery_days:
-        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_for_delivery'
+        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
         oc.commentPosition: ''
         span: auto
         type: number
