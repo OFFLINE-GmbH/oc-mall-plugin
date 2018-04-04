@@ -3,7 +3,7 @@
 # ===================================
 
 properties:
-    label: 'offline.mall::lang.common.properties'
+    label: 'offline.mall::lang.common.property'
     deferredBinding: false
     showSorting: false
     view:
