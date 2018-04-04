@@ -296,6 +296,10 @@ class Product extends MallComponent
 
         $ids = PropertyValue::where('value', $groupedValue)
                             ->where('describable_type', Variant::class)
+                            ->where('product_id', $this->product->id)
+                            ->leftJoin(
+                                'offline_mall_product_variants',
+                                'offline_mall_property_values.describable_id', '=', 'offline_mall_product_variants.id')
                             ->get(['describable_id'])
                             ->pluck('describable_id')
                             ->unique();
