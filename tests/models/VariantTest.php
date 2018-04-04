@@ -122,7 +122,7 @@ class VariantTest extends PluginTestCase
         $this->assertEquals(1, $this->variant->additional_images->count());
     }
 
-    public function test_name()
+    public function test_name_is_not_used_as_property_description()
     {
         $product             = Product::first();
         $variant             = new Variant();
@@ -130,13 +130,14 @@ class VariantTest extends PluginTestCase
         $variant->product_id = $product->id;
         $variant->save();
 
-        $this->assertEquals('ABC', $product->variants->where('id', $variant->id)->first()->properties_description);
+        $this->assertEquals('', $product->variants->where('id', $variant->id)->first()->properties_description);
     }
 
     public function test_price()
     {
         CurrencySettings::set('currencies', [
-            ['code' => 'CHF', 'format' => '{{ currency }} {{ price|number_format(2, ".", "\'") }}'],
+            ['code' => 'CHF', 'format' => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}', 'rate' => 1,
+             'decimals' => 2],
         ]);
 
         $product        = Product::first();
