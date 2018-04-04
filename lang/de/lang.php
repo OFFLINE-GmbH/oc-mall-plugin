@@ -172,6 +172,7 @@
         'sorting_updated'      => 'Reihenfolge aktualisiert',
         'not_in_use'           => 'Option nicht verwendet',
         'saved_changes'        => 'Änderungen gespeichert',
+        'none'                 => '-- Nicht definiert',
     ],
     'variant'                  => [
         'method' => [

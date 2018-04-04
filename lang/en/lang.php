@@ -173,6 +173,7 @@
         'sorting_updated' => 'Sort order has been updated',
         'not_in_use' => 'Option is not in use',
         'saved_changes' => 'Saved changes successfully',
+        'none'                 => '-- None',
     ],
     'variant' => [
         'method' => [
