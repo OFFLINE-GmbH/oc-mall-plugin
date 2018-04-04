@@ -220,11 +220,11 @@ class VariantTest extends PluginTestCase
 
         $value              = new PropertyValue();
         $value->property_id = $color->id;
-        $value->value       = '#ff0000';
+        $value->value       = ['hex' => '#ff0000', 'name' => 'Red'];
         $variant->property_values()->save($value);
 
         $this->assertEquals(
-            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000"></span>',
+            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000" title="Red"></span>',
             $product->variants->where('id', $variant->id)->first()->properties_description
         );
     }

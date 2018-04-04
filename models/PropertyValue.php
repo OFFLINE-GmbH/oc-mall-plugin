@@ -47,6 +47,15 @@ class PropertyValue extends Model
      */
     public $attribute_type = '';
 
+    public function setValueAttribute($value)
+    {
+        // Some attribute types (like color) have multiple values (a hex color and a display name)
+        // These types of attribute values are stored as json string.
+        $this->attributes['value'] = \is_array($value)
+            ? json_encode($value)
+            : $value;
+    }
+
     public function getValueAttribute()
     {
         return optional($this->property)->type === 'color'
