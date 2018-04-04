@@ -9,6 +9,10 @@ class Country extends Model
 
     public $timestamps = false;
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name',
+    ];
     public $rules = [
         'code' => 'required|size:2',
         'name' => 'required',

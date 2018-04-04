@@ -41,6 +41,12 @@ class Discount extends Model
         'carts' => [Cart::class],
     ];
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name',
+        'shipping_description',
+    ];
+
     public static function boot()
     {
         parent::boot();
