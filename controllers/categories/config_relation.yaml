@@ -14,6 +14,5 @@ properties:
             direction: asc
     manage:
         form: $/offline/mall/models/property/fields_pivot.yaml
-        recordsPerPage: 10
     pivot:
         form: $/offline/mall/models/property/fields_pivot.yaml
