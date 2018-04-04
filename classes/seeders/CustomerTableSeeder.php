@@ -17,6 +17,7 @@ class CustomerTableSeeder extends Seeder
             $user->email                 = 'test@test.com';
             $user->password              = 'abcd';
             $user->password_confirmation = 'abcd';
+            $user->is_activated          = true;
             $user->save();
 
             $customer          = new Customer();

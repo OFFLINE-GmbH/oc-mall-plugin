@@ -1,7 +1,7 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
-use OFFLINE\Mall\Classes\OrderStatus\InProgressState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
@@ -15,11 +15,23 @@ use OFFLINE\Mall\Models\OrderState;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
+use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
 use PluginTestCase;
+use RainLab\User\Facades\Auth;
 
 class OrderTest extends PluginTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        app()->singleton('user.auth', function () {
+            return AuthManager::instance();
+        });
+        Auth::login(User::first());
+    }
+
     public function test_it_creates_a_new_order_from_a_cart()
     {
         $cart  = $this->getFullCart();

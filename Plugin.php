@@ -52,7 +52,6 @@ class Plugin extends PluginBase
     {
         $this->registerSiteSearchEvents();
         $this->registerStaticPagesEvents();
-        $this->extendUserModel();
         $this->setContainerBindings();
         $this->addCustomValidatorRules();
     }
@@ -149,22 +148,6 @@ class Plugin extends PluginBase
     {
         Event::listen('offline.sitesearch.extend', function () {
             return new ProductsSearchProvider();
-        });
-    }
-
-    /**
-     * Extend RainLab's User Model with the needed
-     * relationships.
-     */
-    protected function extendUserModel()
-    {
-        if ( ! class_exists(User::class)) {
-            return;
-        }
-        UserModel::extend(function (Model $model) {
-            $model->hasOne['customer'] = [
-                Customer::class,
-            ];
         });
     }
 

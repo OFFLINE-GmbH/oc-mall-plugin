@@ -3,7 +3,6 @@
 use DB;
 use Event;
 use Model;
-use Auth;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
@@ -11,6 +10,7 @@ use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Price;
 use RainLab\Translate\Classes\Translator;
+use RainLab\User\Facades\Auth;
 use RuntimeException;
 
 class Order extends Model
