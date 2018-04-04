@@ -15,11 +15,9 @@ fields:
         span: auto
         type: dropdown
         options:
-            text: 'offline.mall::lang.custom_field_options.text'
-            textarea: 'offline.mall::lang.custom_field_options.textarea'
-            dropdown: 'offline.mall::lang.custom_field_options.dropdown'
-            checkbox: 'offline.mall::lang.custom_field_options.checkbox'
-            color: 'offline.mall::lang.custom_field_options.color'
+            '': 'offline.mall::lang.properties.filter_types.none'
+            set: 'offline.mall::lang.properties.filter_types.set'
+            range: 'offline.mall::lang.properties.filter_types.range'
     type:
         label: 'offline.mall::lang.custom_fields.type'
         oc.commentPosition: ''
