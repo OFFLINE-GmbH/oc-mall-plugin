@@ -2,7 +2,7 @@
     <div class="mall-product__property-stock text-{{ stock ? 'green' : 'red' }}">
         {% if stock > 10 %}
             {{ 'mall.stock.many_available' | _ }}
-        {% elseif stock > 1 %}
+        {% elseif stock > 0 %}
             {{ 'mall.stock.available' | __(stock, {stock: stock}) }}
         {% else %}
             {{ 'mall.stock.unavailable' | _ }}
