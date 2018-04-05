@@ -49,6 +49,34 @@ class Property extends Model
         })->unique('value');
     }
 
+    public function getValuesForCategory($category)
+    {
+        $products      = $category->publishedProducts;
+        $productValues = PropertyValue::where('describable_type', Product::class)
+                                      ->whereIn('describable_id', $products->pluck('id'))
+                                      ->where('property_id', $this->id)
+                                      ->groupBy('value')
+                                      ->get();
+
+        $variantValues = PropertyValue::where('describable_type', Variant::class)
+                                      ->whereIn('describable_id', $products->flatMap->variants->pluck('id'))
+                                      ->where('property_id', $this->id)
+                                      ->groupBy('value')
+                                      ->get();
+
+        $values = $productValues->merge($variantValues)->unique('value');
+
+        // If this property has options make sure to restore the original order
+        if ($this->options) {
+            $order  = collect($this->options)->pluck('value')->flip();
+            $values = $values->sortBy(function ($value) use ($order) {
+                return $order[$value->value] ?? 0;
+            });
+        }
+
+        return $values;
+    }
+
     public function getMinValueAttribute()
     {
         return $this->values->min('value');
