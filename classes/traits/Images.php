@@ -36,7 +36,7 @@ trait Images
         // If a Variant has separate main image we'll load the additional
         // images directly from the Variant model itself and don't inherit
         // them from the parent product model.
-        $images = $this instanceof Variant && $this->main_image
+        $images = $this instanceof Variant && parent::getAttribute('main_image')
             ? parent::getAttribute('images')
             : $this->images;
 
