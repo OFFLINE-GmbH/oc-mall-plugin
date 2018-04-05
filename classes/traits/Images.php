@@ -4,6 +4,7 @@
 namespace OFFLINE\Mall\Classes\Traits;
 
 use October\Rain\Support\Collection;
+use OFFLINE\Mall\Models\Variant;
 use System\Models\File;
 
 trait Images
@@ -32,13 +33,21 @@ trait Images
      */
     public function getAllImagesAttribute()
     {
+        // If a Variant has separate main image we'll load the additional
+        // images directly from the Variant model itself and don't inherit
+        // them from the parent product model.
+        $images = $this instanceof Variant && $this->main_image
+            ? parent::getAttribute('images')
+            : $this->images;
+
+        // If no main image is available simply return all "other" images.
         if ( ! $this->main_image) {
-            return $this->images;
+            return $images;
         }
 
         // To prevent the mutation of the original images relationship
         // property we create a new collection and return it instead.
-        return collect([$this->main_image])->concat($this->images->unique());
+        return collect([$this->main_image])->concat($images->unique());
     }
 
     /**
