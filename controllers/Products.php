@@ -60,7 +60,11 @@ class Products extends Controller
 
     public function formAfterUpdate(Product $model)
     {
-        $values     = post('PropertyValues');
+        $values = post('PropertyValues');
+        if ($values === null) {
+            return;
+        }
+
         $properties = Property::whereIn('id', array_keys($values))->get();
 
         foreach ($values as $id => $value) {
