@@ -43,7 +43,9 @@ abstract class Filter
             $value = $item->product->property_values->where('property_id', $this->property)->first();
         }
 
-        return $value ? $value->value : null;
+        $value = $value ? $value->value : null;
+
+        return \is_array($value) ? json_encode($value) : $value;
     }
 
     abstract public function apply(Collection $items): Collection;

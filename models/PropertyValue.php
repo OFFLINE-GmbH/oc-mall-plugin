@@ -64,6 +64,15 @@ class PropertyValue extends Model
     }
 
     /**
+     * This attribute can be used if a safe string value
+     * is needed even if the value is an array.
+     */
+    public function getSafeValueAttribute(): string
+    {
+        return \is_array($this->value) ? json_encode($this->value) : $this->value;
+    }
+
+    /**
      * Returns a raw html presentation of the attribute values.
      * The return value contains raw html and therefore is already escaped.
      * @return string

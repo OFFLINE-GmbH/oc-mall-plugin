@@ -7,7 +7,7 @@
                    aria-hidden="true"
                    style="display: none"
                    name="filter[{{ property.hashId }}][]"
-                   value="{{ value.value }}"
+                   value="{{ value.safeValue }}"
                     {% if isSelected %}
                         checked
                     {% endif %}
