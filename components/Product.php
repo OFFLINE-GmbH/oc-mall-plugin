@@ -240,12 +240,12 @@ class Product extends MallComponent
             // Remove the currently active variant
             return $variant->id === $this->variantId;
         })->groupBy(function (Variant $variant) {
-            return $this->getGroupedProperty($variant)->value;
+            return $this->getGroupedPropertyValue($variant);
         });
 
         if ($this->variant) {
             // Remove the property value of the currently viewed variant
-            $variants->pull($this->getGroupedProperty($this->variant)->value);
+            $variants->pull($this->getGroupedPropertyValue($this->variant));
         }
 
         return $variants;
@@ -260,6 +260,15 @@ class Product extends MallComponent
         return $variant->property_values->first(function (PropertyValue $value) use ($variant) {
             return $value->property_id === $variant->product->group_by_property_id;
         });
+    }
+
+    protected function getGroupedPropertyValue(Variant $variant)
+    {
+        $property = $this->getGroupedProperty($variant);
+
+        return \is_array($property->value)
+            ? json_encode($property->value)
+            : $property->value;
     }
 
     protected function getProps()
@@ -289,7 +298,7 @@ class Product extends MallComponent
             return collect([]);
         }
 
-        $groupedValue = $this->getGroupedProperty($this->variant)->value;
+        $groupedValue = $this->getGroupedPropertyValue($this->variant);
         if ($groupedValue === null) {
             return collect([]);
         }
