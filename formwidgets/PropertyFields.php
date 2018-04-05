@@ -73,7 +73,7 @@ class PropertyFields extends FormWidgetBase
         ]);
 
         $formField        = $this->newFormField($property, 'hex');
-        $formField->value = $value['hex'];
+        $formField->value = $value['hex'] ?? '';
 
         $widget             = new ColorPicker($this->controller, $formField, $config);
         $widget->allowEmpty = true;

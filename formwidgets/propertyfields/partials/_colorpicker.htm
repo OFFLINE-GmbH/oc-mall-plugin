@@ -5,6 +5,7 @@
     <input type="text" name="<?= $this->fieldPrefix() ?>[<?= e($field->id) ?>][name]"
            class="form-control"
            id="<?= $id ?>"
+           style="margin-bottom: 10px"
            value="<?= e($value['name'] ?? '') ?>"
     >
     <?= $widget->render() ?>
