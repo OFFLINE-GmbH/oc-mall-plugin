@@ -224,7 +224,7 @@ class Product extends MallComponent
         ]);
 
         if ($product === ':slug') {
-            return $model->where('slug', $this->param('slug'))->firstOrFail();
+            return $model->transWhere('slug', $this->param('slug'))->firstOrFail();
         }
 
         return $model->findOrFail($product);
