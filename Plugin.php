@@ -35,8 +35,7 @@ use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
-use RainLab\User\Models\User;
-use Rainlab\User\Models\User as UserModel;
+use OFFLINE\Mall\Models\User as UserModel;
 use System\Classes\PluginBase;
 use OFFLINE\Mall\Models\GeneralSettings;
 use Validator;
@@ -177,7 +176,7 @@ class Plugin extends PluginBase
     protected function addCustomValidatorRules()
     {
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
-            $count = User::with('customer')
+            $count = UserModel::with('customer')
                          ->where('email', $value)
                          ->whereHas('customer', function ($q) {
                              $q->where('is_guest', 0);
