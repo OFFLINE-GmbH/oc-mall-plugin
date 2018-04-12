@@ -14,10 +14,6 @@ fields:
         preset:
             field: name
             type: slug
-    toolbar:
-        type: partial
-        path: product_toolbar
-        cssClass: collapse-visible
 tabs:
     fields:
         published:
@@ -70,25 +66,6 @@ tabs:
                 condition: 'value[variant]'
             type: number
             tab: 'offline.mall::lang.product.general'
-        variants_section@update:
-            label: 'offline.mall::lang.common.variants'
-            span: full
-            trigger:
-                action: show
-                field: inventory_management_method
-                condition: 'value[variant]'
-            type: section
-            comment: 'offline.mall::lang.products.variants_comment'
-            tab: 'offline.mall::lang.product.general'
-        variants@update:
-            span: auto
-            path: $/offline/mall/controllers/products/_variants.htm
-            trigger:
-                action: hide
-                field: inventory_management_method
-                condition: 'value[single]'
-            type: partial
-            tab: 'offline.mall::lang.product.general'
         group_by_property_id@update:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
@@ -100,6 +77,25 @@ tabs:
             type: dropdown
             tab: 'offline.mall::lang.product.general'
             dependsOn: category
+        variants_section@update:
+            label: 'offline.mall::lang.common.variants'
+            span: full
+            trigger:
+                action: show
+                field: inventory_management_method
+                condition: 'value[variant]'
+            type: section
+            comment: 'offline.mall::lang.products.variants_comment'
+            tab: 'offline.mall::lang.product.general'
+        variants@update:
+            span: full
+            path: $/offline/mall/controllers/products/_variants.htm
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[single]'
+            type: partial
+            tab: 'offline.mall::lang.product.general'
         description_short:
             label: 'offline.mall::lang.product.description_short'
             oc.commentPosition: ''

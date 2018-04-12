@@ -40,16 +40,8 @@ class Products extends Controller
         $this->addCss('/plugins/offline/mall/assets/backend.css');
     }
 
-    public function create()
-    {
-        $this->bodyClass = 'compact-container';
-        parent::create();
-    }
-
     public function update($recordId = null)
     {
-        $this->bodyClass = 'compact-container';
-
         // This is pretty hacky but it works. To get the original
         // data from the Variant this session variable is flashed.
         // The Variant model checks for the existence and doesn't
