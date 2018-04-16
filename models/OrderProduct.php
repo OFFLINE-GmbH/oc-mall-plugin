@@ -7,7 +7,10 @@ class OrderProduct extends Model
 {
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
-    use Price;
+
+    use Price {
+        useCurrency as fallbackCurrency;
+    }
 
     protected $dates = ['deleted_at'];
 
@@ -53,6 +56,7 @@ class OrderProduct extends Model
 
     public $belongsTo = [
         'variant' => Variant::class,
+        'order' => Order::class,
     ];
 
     public function getPriceColumns()
@@ -65,5 +69,10 @@ class OrderProduct extends Model
             'total_taxes',
             'total_post_taxes',
         ];
+    }
+
+    protected function useCurrency()
+    {
+        return $this->order->currency['code'] ?? $this->fallbackCurrency();
     }
 }

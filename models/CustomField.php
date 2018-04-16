@@ -15,6 +15,7 @@ class CustomField extends Model
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
+    public $jsonable = ['price'];
     public $with = ['custom_field_options'];
     public $casts = [
         'required' => 'boolean',

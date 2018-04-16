@@ -20,7 +20,7 @@
                     </a>
                 {% endif %}
             </td>
-            <td class="text-right">{{ order.total_post_taxes_formatted | raw }}</td>
+            <td class="text-right">{{ order.totalPostTaxesInCurrencyFormatted() | raw }}</td>
         </tr>
         {% partial __SELF__ ~ '::details' order=order %}
     {% endfor %}

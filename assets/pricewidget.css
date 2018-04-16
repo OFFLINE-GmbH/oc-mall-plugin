@@ -1,0 +1,83 @@
+.field-mall-price {
+  position: relative;
+}
+.field-mall-price .mall-price-btn {
+  background: transparent;
+  position: absolute;
+  color: #7b7b7b;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1px;
+  width: 44px;
+  padding-right: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none;
+  z-index: 2;
+}
+.field-mall-price .mall-price-btn:hover {
+  color: #555555;
+}
+.field-mall-price.field-mall-price-text .form-control {
+  padding-right: 44px;
+}
+.field-mall-price.field-mall-price-text .mall-price-btn {
+  right: 13px;
+  top: 50%;
+  margin-top: -44px;
+  height: 88px;
+}
+.field-mall-price.field-mall-price-textarea .mall-price-btn {
+  right: 11px;
+  top: 5px;
+  text-align: right;
+}
+.field-mall-price.field-mall-price-textarea .mall-price-dropdown-menu {
+  top: 39px;
+  right: 1px;
+}
+.field-mall-price.field-mall-price-richeditor .mall-price-btn {
+  top: 43px;
+  right: 25px;
+  text-align: right;
+}
+.field-mall-price.field-mall-price-richeditor .mall-price-dropdown-menu {
+  top: 74px;
+  right: 12px;
+}
+.field-mall-price.field-mall-price-markdowneditor .mall-price-btn {
+  top: 43px;
+  right: 25px;
+  text-align: right;
+}
+.field-mall-price.field-mall-price-markdowneditor .mall-price-dropdown-menu {
+  top: 74px !important;
+  right: 12px;
+}
+.field-mall-price.field-mall-price-repeater .mall-price-btn {
+  top: -10px;
+  right: 50px;
+  text-align: right;
+}
+.field-mall-price.field-mall-price-repeater .mall-price-dropdown-menu {
+  top: 15px;
+  right: 38px;
+}
+.field-mall-price.field-mall-price-repeater.is-empty {
+  padding-top: 5px;
+}
+.field-mall-price.field-mall-price-repeater.is-empty .mall-price-btn {
+  top: -10px;
+  right: 5px;
+  text-align: right;
+}
+.field-mall-price.field-mall-price-repeater.is-empty .mall-price-dropdown-menu {
+  top: 15px;
+  right: -7px;
+}
+.fancy-layout .form-tabless-fields .field-mall-price .mall-price-btn {
+  color: rgba(255, 255, 255, 0.8);
+}
+.fancy-layout .form-tabless-fields .field-mall-price .mall-price-btn:hover {
+  color: #ffffff;
+}

@@ -63,7 +63,7 @@ class OrderTest extends PluginTestCase
     public function test_it_updates_product_stock()
     {
         $product        = Product::first();
-        $product->price = 200;
+        $product->price = ['CHF' => 200, 'EUR' => 300];
         $product->stock = 10;
         $product->save();
 
@@ -81,7 +81,7 @@ class OrderTest extends PluginTestCase
         $this->expectException(OutOfStockException::class);
 
         $product                               = Product::first();
-        $product->price                        = 200;
+        $product->price                        = ['CHF' => 200, 'EUR' => 300];
         $product->stock                        = 10;
         $product->allow_out_of_stock_purchases = false;
         $product->save();
@@ -98,7 +98,7 @@ class OrderTest extends PluginTestCase
     public function test_it_allows_explicit_out_of_stock_purchase()
     {
         $product                               = Product::first();
-        $product->price                        = 200;
+        $product->price                        = ['CHF' => 200, 'EUR' => 300];
         $product->stock                        = 10;
         $product->allow_out_of_stock_purchases = true;
         $product->save();
@@ -115,7 +115,7 @@ class OrderTest extends PluginTestCase
     public function test_it_updates_variant_stock()
     {
         $product        = Product::first();
-        $product->price = 200;
+        $product->price = ['CHF' => 200, 'EUR' => 300];
         $product->stock = 10;
         $product->save();
 
@@ -140,7 +140,7 @@ class OrderTest extends PluginTestCase
         $this->expectException(OutOfStockException::class);
 
         $product        = Product::first();
-        $product->price = 200;
+        $product->price = ['CHF' => 200, 'EUR' => 300];
         $product->stock = 10;
         $product->save();
 
@@ -166,7 +166,7 @@ class OrderTest extends PluginTestCase
         $this->expectException(OutOfStockException::class);
 
         $product        = Product::first();
-        $product->price = 200;
+        $product->price = ['CHF' => 200, 'EUR' => 300];
         $product->stock = 10;
         $product->save();
 
@@ -194,14 +194,14 @@ class OrderTest extends PluginTestCase
 
         $this->assertEquals(1, $method->id);
         $this->assertEquals('Default', $method->name);
-        $this->assertEquals(20, $method->price);
+        $this->assertEquals(20, $method->price['CHF']);
 
         $discount                       = new Discount();
         $discount->name                 = 'Shipping Test';
         $discount->type                 = 'shipping';
         $discount->trigger              = 'code';
         $discount->code                 = 'SHIPPING';
-        $discount->shipping_price       = 10;
+        $discount->shipping_price       = ['CHF' => 10, 'EUR' => 300];
         $discount->shipping_description = 'Reduced shipping';
         $discount->save();
 
@@ -209,8 +209,8 @@ class OrderTest extends PluginTestCase
 
         $order = Order::fromCart($cart);
         $this->assertEquals($discount->shipping_description, $order->shipping['method']['name']);
-        $this->assertEquals($discount->getOriginal('shipping_price'), $order->shipping['total']);
-        $this->assertEquals($discount->getOriginal('shipping_price'), $order->shipping['method']['price']);
+        $this->assertEquals($discount->shippingPriceInCurrencyInteger(), $order->shipping['total']);
+        $this->assertEquals($discount->shippingPriceInCurrencyInteger(), $order->shipping['method']['price']['CHF']);
     }
 
     public function test_discount_number_of_usages_gets_updated()
@@ -220,8 +220,8 @@ class OrderTest extends PluginTestCase
         $discount1->name                 = 'Shipping Test';
         $discount1->type                 = 'shipping';
         $discount1->trigger              = 'total';
-        $discount1->total_to_reach       = 0;
-        $discount1->shipping_price       = 10;
+        $discount1->total_to_reach       = ['CHF' => 0, 'EUR' => 0];
+        $discount1->shipping_price       = ['CHF' => 10, 'EUR' => 300];
         $discount1->shipping_description = 'Reduced shipping';
         $discount1->number_of_usages     = 10;
         $discount1->save();
@@ -229,7 +229,7 @@ class OrderTest extends PluginTestCase
         $discount2                   = new Discount();
         $discount2->name             = 'Amount Test';
         $discount2->type             = 'fixed_amount';
-        $discount2->amount           = 20;
+        $discount2->amount           = ['CHF' => 20, 'EUR' => 300];
         $discount2->trigger          = 'code';
         $discount2->code             = 'TEST';
         $discount2->number_of_usages = 12;
@@ -267,7 +267,7 @@ class OrderTest extends PluginTestCase
 
         $productA                     = Product::first();
         $productA->stackable          = true;
-        $productA->price              = 200;
+        $productA->price              = ['CHF' => 200, 'EUR' => 300];
         $productA->weight             = 400;
         $productA->stock              = 10;
         $productA->price_includes_tax = true;
@@ -276,7 +276,7 @@ class OrderTest extends PluginTestCase
 
         $productB                     = new Product;
         $productB->name               = 'Another Product';
-        $productB->price              = 100;
+        $productB->price              = ['CHF' => 100, 'EUR' => 300];
         $productB->stock              = 10;
         $productB->weight             = 800;
         $productB->price_includes_tax = true;
@@ -285,11 +285,11 @@ class OrderTest extends PluginTestCase
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = 100;
+        $sizeA->price      = ['CHF' => 100, 'EUR' => 300];
         $sizeA->sort_order = 1;
         $sizeB             = new CustomFieldOption();
         $sizeB->name       = 'Size B';
-        $sizeB->price      = 200;
+        $sizeB->price      = ['CHF' => 200, 'EUR' => 300];
         $sizeB->sort_order = 1;
 
         $field       = new CustomField();
@@ -316,7 +316,7 @@ class OrderTest extends PluginTestCase
         $cart->addProduct($productB, 2);
 
         $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = 100;
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 300];
         $shippingMethod->save();
 
         $shippingMethod->taxes()->attach([$tax1->id, $tax2->id]);

@@ -14,6 +14,7 @@ class CustomFieldValue extends Model
         'custom_field_id' => 'exists:offline_mall_custom_fields,id',
     ];
     public $table = 'offline_mall_cart_custom_field_value';
+    public $jsonable = ['price'];
     public $with = ['custom_field_option'];
     public $belongsTo = [
         'cart_product'        => CartProduct::class,
@@ -39,7 +40,9 @@ class CustomFieldValue extends Model
         $field  = $field ?? $this->custom_field;
         $option = $option ?? optional($field->custom_field_options)->find($this->custom_field_option_id);
 
-        return optional($option)->price ? $option->price : $field->price;
+        $optionPrice = optional($option)->price;
+
+        return $optionPrice ?: $field->price;
     }
 
     /**

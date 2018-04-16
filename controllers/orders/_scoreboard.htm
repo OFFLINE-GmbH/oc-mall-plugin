@@ -31,15 +31,5 @@
 
 <div class="scoreboard-item title-value">
     <h4><?= e(trans('offline.mall::lang.order.grand_total')) ?></h4>
-    <p><?= e(number_format($order['total_post_taxes'], 2)) ?></p>
-</div>
-
-<div class="scoreboard-item title-value">
-    <h4><?= e(trans('offline.mall::lang.order.currency')) ?></h4>
-    <p><?= e(number_format(round($order['total_post_taxes'] * $order['currency']['rate'],
-    $order['currency']['decimals']), $order['currency']['decimals']))
-?></p>
-    <p class="description">
-        <?= e($order['currency']['code']) ?>
-    </p>
+    <p><?= e($order->totalPostTaxesInCurrencyFormatted()) ?></p>
 </div>

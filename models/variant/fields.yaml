@@ -23,19 +23,19 @@ fields:
     price:
         label: 'offline.mall::lang.product.price'
         span: auto
-        type: text
+        type: mall.price
     old_price:
         label: 'offline.mall::lang.common.old_price'
         oc.commentPosition: ''
         span: auto
-        type: text
+        type: mall.price
 tabs:
     fields:
         _properties:
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.common.add_value'
             span: full
-            type: OFFLINE\Mall\FormWidgets\PropertyFields
+            type: mall.propertyfields
             variantPropertiesOnly: true
             fieldPrefix: VariantPropertyValues
             tab: 'offline.mall::lang.common.properties'

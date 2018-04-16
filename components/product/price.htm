@@ -1,8 +1,8 @@
 {% if item.old_price %}
     <div class="mall-product__old-price">
-        {{ item.old_price_formatted | raw }}
+        {{ item.oldPriceInCurrencyFormatted | raw }}
     </div>
 {% endif %}
 <div class="mall-product__current-price">
-    {{ item.price_formatted | raw }}
+    {{ item.priceInCurrencyFormatted | raw }}
 </div>

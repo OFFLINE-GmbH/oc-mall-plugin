@@ -17,7 +17,9 @@ class Order extends Model
 {
     use Validation;
     use SoftDelete;
-    use Price;
+    use Price {
+        useCurrency as fallbackCurrency;
+    }
     use HashIds;
 
     protected $dates = ['deleted_at'];
@@ -167,6 +169,11 @@ class Order extends Model
             'total_post_taxes',
             'total_pre_taxes',
         ];
+    }
+
+    protected function useCurrency()
+    {
+        return $this->currency['code'] ?? $this->fallbackCurrency();
     }
 
     /**

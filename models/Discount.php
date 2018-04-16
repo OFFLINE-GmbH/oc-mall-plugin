@@ -17,19 +17,20 @@ class Discount extends Model
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,alternate_price,shipping',
         'code'                                 => 'required_if:trigger,code',
-        'total_to_reach'                       => 'required_if:trigger,total|nullable|numeric',
+        'total_to_reach'                       => 'required_if:trigger,total|nullable',
         'product'                              => 'required_if:trigger,product',
         'type'                                 => 'in:fixed_amount,rate,alternate_price,shipping',
-        'amount'                               => 'required_if:type,fixed_amount|nullable|numeric',
+        'amount'                               => 'required_if:type,fixed_amount|nullable',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
-        'alternate_price'                      => 'required_if:type,alternate_price|nullable|numeric',
+        'alternate_price'                      => 'required_if:type,alternate_price|nullable',
         'shipping_description'                 => 'required_if:type,shipping',
-        'shipping_price'                       => 'required_if:type,shipping|nullable|numeric',
+        'shipping_price'                       => 'required_if:type,shipping|nullable',
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
 
     public $table = 'offline_mall_discounts';
     public $dates = ['expires'];
+    public $jsonable = ['amount', 'alternate_price', 'shipping_price', 'total_to_reach'];
     public $casts = [
         'number_of_usages'     => 'integer',
         'max_number_of_usages' => 'integer',

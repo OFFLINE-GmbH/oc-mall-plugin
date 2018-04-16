@@ -5,15 +5,17 @@ namespace OFFLINE\Mall\Models;
 use DB;
 use Model;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\Price;
 
 class CartProduct extends Model
 {
     use HashIds;
+    use Price;
 
     public $table = 'offline_mall_cart_products';
+    public $jsonable = ['price'];
     public $casts = [
         'quantity'   => 'integer',
-        'price'      => 'integer',
         'id'         => 'integer',
         'product_id' => 'integer',
         'variant_id' => 'integer',
@@ -49,15 +51,6 @@ class CartProduct extends Model
         });
     }
 
-    public function getPriceAttribute()
-    {
-        $customFieldPrice = $this->custom_field_values->sum(function (CustomFieldValue $value) {
-            return $value->price() * 100;
-        });
-
-        return ($this->item->price * 100) + $customFieldPrice;
-    }
-
     public function moveToOrder(Order $order)
     {
         DB::transaction(function () use ($order) {
@@ -77,7 +70,7 @@ class CartProduct extends Model
             $entry->taxes = $this->item->taxes;
 
             // Set the attribute directly to prevent the price mutator from being triggered
-            $entry->attributes['price_post_taxes'] = $this->price;
+            $entry->attributes['price_post_taxes'] = $this->priceInCurrencyInteger();
             $entry->attributes['price_taxes']      = $this->getTotalTaxesAttribute() / $this->quantity;
             $entry->attributes['price_pre_taxes']  = $this->pricePreTaxes();
 
@@ -112,19 +105,19 @@ class CartProduct extends Model
      */
     public function convertCustomFieldValues()
     {
-        return $this->custom_field_values->load(['custom_field', 'custom_field_option'])->map(function (
-            CustomFieldValue $value
-        ) {
-            $data                  = $value->toArray();
-            $data['display_value'] = $value->displayValue;
-            $data['price']         = $value->price($value->custom_field);
+        return $this->custom_field_values
+            ->load(['custom_field', 'custom_field_option'])
+            ->map(function (CustomFieldValue $value) {
+                $data                  = $value->toArray();
+                $data['display_value'] = $value->displayValue;
+                $data['price']         = $value->price($value->custom_field);
 
-            if (isset($data['custom_field']['custom_field_options'])) {
-                unset($data['custom_field']['custom_field_options']);
-            }
+                if (isset($data['custom_field']['custom_field_options'])) {
+                    unset($data['custom_field']['custom_field_options']);
+                }
 
-            return $data;
-        });
+                return $data;
+            });
     }
 
     public function reduceStock()
@@ -140,10 +133,10 @@ class CartProduct extends Model
     public function getTotalPreTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
-            return $this->price * $this->quantity - $this->totalTaxes;
+            return $this->priceInCurrencyInteger() * $this->quantity - $this->totalTaxes;
         }
 
-        return $this->price * $this->quantity;
+        return $this->priceInCurrencyInteger() * $this->quantity;
     }
 
     public function getTotalTaxesAttribute(): float
@@ -151,16 +144,16 @@ class CartProduct extends Model
         if ($this->data->price_includes_tax) {
             $withoutTax = $this->pricePreTaxes();
 
-            return $this->price * $this->quantity - $withoutTax;
+            return $this->priceInCurrencyInteger() * $this->quantity - $withoutTax;
         }
 
-        return $this->taxFactor() * $this->price * $this->quantity;
+        return $this->taxFactor() * $this->priceInCurrencyInteger() * $this->quantity;
     }
 
     public function getTotalPostTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
-            return $this->price * $this->quantity;
+            return $this->priceInCurrencyInteger() * $this->quantity;
         }
 
         return $this->totalPreTaxes + $this->totalTaxes;
@@ -174,10 +167,10 @@ class CartProduct extends Model
     protected function pricePreTaxes()
     {
         if ($this->data->price_includes_tax) {
-            return 1 / (1 + $this->taxFactor()) * $this->price * $this->quantity;
+            return 1 / (1 + $this->taxFactor()) * $this->priceInCurrencyInteger() * $this->quantity;
         }
 
-        return $this->price * $this->quantity;
+        return $this->priceInCurrencyInteger() * $this->quantity;
     }
 
     public function totalForTax(Tax $tax)

@@ -10,12 +10,17 @@ class ProductTableSeeder extends Seeder
     public function run()
     {
         if (app()->environment() === 'testing') {
-            $product        = new Product();
-            $product->name  = 'Test';
-            $product->slug  = 'test';
-            $product->stock = 20;
-            $product->price = 20;
-            $product->save();
+            try {
+                $product       = new Product();
+                $product->name = 'Test';
+
+                $product->slug  = 'test';
+                $product->stock = 20;
+                $product->price = ['CHF' => 20, 'EUR' => 30];
+                $product->save();
+            } catch (\Throwable $e) {
+                dd($e);
+            }
         }
     }
 }

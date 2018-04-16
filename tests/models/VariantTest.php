@@ -1,8 +1,5 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
-use OFFLINE\Mall\Models\CurrencySettings;
-use OFFLINE\Mall\Models\CustomField;
-use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -20,10 +17,14 @@ class VariantTest extends PluginTestCase
     {
         parent::setUp();
 
-        $product                   = Product::first();
-        $product->meta_description = 'Test';
+        $product                     = new Product();
+        $product->name               = 'Test';
+        $product->meta_description   = 'Test';
+        $product->slug               = 'test';
+        $product->stock              = 20;
+        $product->price_includes_tax = true;
+        $product->price              = ['CHF' => 20, 'EUR' => 30];
         $product->save();
-
         $this->product = $product;
 
         $variant             = new Variant();
@@ -133,24 +134,90 @@ class VariantTest extends PluginTestCase
         $this->assertEquals('', $product->variants->where('id', $variant->id)->first()->properties_description);
     }
 
-    public function test_price()
+    public function test_price_accessors()
     {
-        CurrencySettings::set('currencies', [
-            ['code' => 'CHF', 'format' => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}', 'rate' => 1,
-             'decimals' => 2],
-        ]);
-
-        $product        = Product::first();
-        $product->price = 180;
-        $product->save();
+        $price          = ['CHF' => 20.50, 'EUR' => 80.50];
+        $priceInt       = ['CHF' => 2050, 'EUR' => 8050];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
 
         $variant             = new Variant();
         $variant->name       = 'ABC';
-        $variant->product_id = $product->id;
-        $variant->price      = 120;
+        $variant->product_id = $this->product->id;
+        $variant->price      = $price;
         $variant->save();
 
-        $this->assertEquals('CHF 120.00', $product->variants->where('id', $variant->id)->first()->price_formatted);
+        $this->assertEquals($price, $variant->price);
+        $this->assertEquals(json_encode($priceInt), $variant->getOriginal('price'));
+        $this->assertEquals($priceFormatted, $variant->price_formatted);
+        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
+        $this->assertEquals(20.50, $variant->priceInCurrency());
+        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
+        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+    }
+
+    public function test_price_accessors_are_inherited()
+    {
+        $price          = ['CHF' => 20.50, 'EUR' => 80.50];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+
+        $this->product->price = $price;
+        $this->product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->product_id = $this->product->id;
+        $variant->save();
+
+        $this->assertEquals($price, $variant->price);
+        $this->assertEquals($priceFormatted, $variant->price_formatted);
+        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
+        $this->assertEquals(20.50, $variant->priceInCurrency());
+        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
+        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+    }
+
+    public function test_price_accessors_are_inherited_by_currency()
+    {
+        $price          = ['CHF' => 20.50, 'EUR' => 80.50];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '50.00€'];
+
+        $this->product->price = $price;
+        $this->product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->price      = ['EUR' => 50];
+        $variant->product_id = $this->product->id;
+        $variant->save();
+
+        $this->assertEquals(['CHF' => 20.50, 'EUR' => 50], $variant->price);
+        $this->assertEquals($priceFormatted, $variant->price_formatted);
+        $this->assertEquals(50, $variant->priceInCurrency('EUR'));
+        $this->assertEquals(20.50, $variant->priceInCurrency());
+        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
+        $this->assertEquals(5000, $variant->priceInCurrencyInteger('EUR'));
+    }
+
+    public function test_alternative_price_accessors()
+    {
+        $price          = ['CHF' => 20.50, 'EUR' => 80.50];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+
+        $this->product->price = $price;
+        $this->product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->old_price  = $price;
+        $variant->product_id = $this->product->id;
+        $variant->save();
+
+        $this->assertEquals($price, $variant->old_price);
+        $this->assertEquals($priceFormatted, $variant->old_price_formatted);
+        $this->assertEquals(80.50, $variant->oldPriceInCurrency('EUR'));
+        $this->assertEquals(20.50, $variant->oldPriceInCurrency());
+        $this->assertEquals(2050, $variant->oldPriceInCurrencyInteger('CHF'));
+        $this->assertEquals(8050, $variant->oldPriceInCurrencyInteger('EUR'));
     }
 
     public function test_name_fallback()

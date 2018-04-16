@@ -157,7 +157,13 @@ class CategoryFilter extends MallComponent
     protected function setPriceRange()
     {
         $products = $this->category->getProducts();
-        $this->setVar('priceRange', [$products->min('price'), $products->max('price')]);
+        $min      = $products->min(function ($p) {
+            return $p->priceInCurrency();
+        });
+        $max      = $products->max(function ($p) {
+            return $p->priceInCurrency();
+        });
+        $this->setVar('priceRange', [$min, $max]);
     }
 
     protected function getProps()

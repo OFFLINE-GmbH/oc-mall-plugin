@@ -37,7 +37,7 @@ tabs:
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.product.add_currency'
             span: auto
-            type: number
+            type: mall.price
             tab: 'offline.mall::lang.product.general'
         inventory_management_method:
             label: 'offline.mall::lang.product.inventory_management_method'
@@ -123,7 +123,7 @@ tabs:
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.common.add_value'
             span: full
-            type: OFFLINE\Mall\FormWidgets\PropertyFields
+            type: mall.propertyfields
             tab: 'offline.mall::lang.common.properties'
         price_includes_tax:
             label: 'offline.mall::lang.product.price_includes_tax'

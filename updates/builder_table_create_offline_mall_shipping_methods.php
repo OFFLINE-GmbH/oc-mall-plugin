@@ -12,11 +12,11 @@ class BuilderTableCreateOfflineMallShippingMethods extends Migration
             $table->increments('id')->unsigned();
             $table->string('name', 255);
             $table->text('description')->nullable();
-            $table->integer('price');
+            $table->text('price');
             $table->integer('sort_order')->nullable();
             $table->integer('guaranteed_delivery_days')->nullable();
-            $table->integer('available_below_total')->nullable();
-            $table->integer('available_above_total')->nullable();
+            $table->text('available_below_total')->nullable();
+            $table->text('available_above_total')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
