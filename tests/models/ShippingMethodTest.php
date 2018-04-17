@@ -17,11 +17,11 @@ class ShippingMethodTest extends PluginTestCase
         $cart->addProduct($product, 1);
 
         $availableMethod                        = $this->getMethod();
-        $availableMethod->available_below_total = 100;
+        $availableMethod->available_below_total = ['CHF' => 100, 'EUR' => 150];
         $availableMethod->save();
 
         $unavailableMethod                        = $this->getMethod();
-        $unavailableMethod->available_below_total = 50;
+        $unavailableMethod->available_below_total = ['CHF' => 50, 'EUR' => 150];
         $unavailableMethod->save();
 
         $available = ShippingMethod::getAvailableByCart($cart);
@@ -38,11 +38,11 @@ class ShippingMethodTest extends PluginTestCase
         $cart->addProduct($product, 1);
 
         $availableMethod                        = $this->getMethod();
-        $availableMethod->available_above_total = 100;
+        $availableMethod->available_above_total = ['CHF' => 100, 'EUR' => 150];
         $availableMethod->save();
 
         $unavailableMethod                        = $this->getMethod();
-        $unavailableMethod->available_above_total = 200;
+        $unavailableMethod->available_above_total = ['CHF' => 200, 'EUR' => 150];
         $unavailableMethod->save();
 
         $available = ShippingMethod::getAvailableByCart($cart);
@@ -59,13 +59,13 @@ class ShippingMethodTest extends PluginTestCase
         $cart->addProduct($product, 1);
 
         $availableMethod                        = $this->getMethod();
-        $availableMethod->available_below_total = 200;
-        $availableMethod->available_above_total = 50;
+        $availableMethod->available_below_total = ['CHF' => 200, 'EUR' => 150];
+        $availableMethod->available_above_total = ['CHF' => 50, 'EUR' => 150];
         $availableMethod->save();
 
         $unavailableMethod                        = $this->getMethod();
-        $unavailableMethod->available_below_total = 120;
-        $unavailableMethod->available_above_total = 110;
+        $unavailableMethod->available_below_total = ['CHF' => 120, 'EUR' => 150];
+        $unavailableMethod->available_above_total = ['CHF' => 110, 'EUR' => 150];
         $unavailableMethod->save();
 
         $available = ShippingMethod::getAvailableByCart($cart);
@@ -111,7 +111,7 @@ class ShippingMethodTest extends PluginTestCase
     {
         $availableMethod             = new ShippingMethod();
         $availableMethod->name       = 'Available';
-        $availableMethod->price      = 100;
+        $availableMethod->price      = ['CHF' => 100, 'EUR' => 150];
         $availableMethod->sort_order = 1;
         $availableMethod->save();
 
@@ -130,7 +130,7 @@ class ShippingMethodTest extends PluginTestCase
     protected function getProduct(int $price): Product
     {
         $product        = Product::first();
-        $product->price = $price;
+        $product->price = ['CHF' => $price, 'EUR' => 150];
         $product->save();
 
         return $product;

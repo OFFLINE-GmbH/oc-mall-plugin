@@ -11,6 +11,7 @@ columns:
         sortable: true
     price:
         label: 'offline.mall::lang.product.price'
-        type: number
+        type: partial
+        path: $/offline/mall/models/shippingmethodrate/_price.htm
         searchable: true
         sortable: true

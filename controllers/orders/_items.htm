@@ -40,8 +40,8 @@
             </div>
         </td>
         <td class="text-right"><?= e($item['quantity']) ?></td>
-        <td class="text-right"><?= e($item['price_post_taxes_formatted']) ?></td>
-        <td class="text-right"><?= e($item['total_post_taxes_formatted']) ?></td>
+        <td class="text-right"><?= e($item->pricePostTaxesInCurrencyFormatted()) ?></td>
+        <td class="text-right"><?= e($item->totalPostTaxesInCurrencyFormatted()) ?></td>
     </tr>
     <?php endforeach; ?>
     <tr class="orderfooter separator separator-bottom">
@@ -52,7 +52,7 @@
         </td>
         <td class="text-right">
             <span>
-                <?= e($order['total_product_post_taxes_formatted']) ?>
+                <?= e($order->totalProductPostTaxesInCurrencyFormatted()) ?>
             </span>
         </td>
     </tr>
@@ -67,7 +67,7 @@
         </td>
         <td class="text-right">
             <span>
-                <?= e(format_money($entry['savings'])) ?>
+                <?= e($entry['savings_formatted']) ?>
             </span>
         </td>
     </tr>
@@ -87,7 +87,7 @@
         </td>
         <td class="text-right">
             <span>
-                <?= e(format_money($order['shipping']['method']['price'])) ?>
+                <?= e($order['shipping']['method']['price_formatted']) ?>
             </span>
         </td>
     </tr>
@@ -98,7 +98,7 @@
                 <?= e(trans('offline.mall::lang.order.grand_total')) ?>
             </span>
         </td>
-        <td class="text-right"><span><?= e($order['total_post_taxes_formatted']) ?></span></td>
+        <td class="text-right"><span><?= e($order->totalPostTaxesInCurrencyFormatted()) ?></span></td>
     </tr>
     <?php if ($order['taxes']): ?>
     <?php foreach ($order['taxes'] as $tax): ?>

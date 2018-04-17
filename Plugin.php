@@ -4,7 +4,6 @@
 use App;
 use Event;
 use Hashids\Hashids;
-use October\Rain\Database\Model;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
@@ -24,20 +23,21 @@ use OFFLINE\Mall\Components\CategoryFilter;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
-use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\DiscountApplier;
+use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\OrdersList;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
+use OFFLINE\Mall\FormWidgets\Price;
+use OFFLINE\Mall\FormWidgets\PropertyFields;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
-use OFFLINE\Mall\Models\Customer;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use OFFLINE\Mall\Models\User as UserModel;
 use System\Classes\PluginBase;
-use OFFLINE\Mall\Models\GeneralSettings;
 use Validator;
 
 /**
@@ -50,6 +50,7 @@ class Plugin extends PluginBase
     public function boot()
     {
         $this->registerSiteSearchEvents();
+        $this->registerFormWidgets();
         $this->registerStaticPagesEvents();
         $this->setContainerBindings();
         $this->addCustomValidatorRules();
@@ -74,6 +75,14 @@ class Plugin extends PluginBase
             CustomerProfile::class       => 'customerProfile',
             AddressList::class           => 'addressList',
             CurrencyPicker::class        => 'currencyPicker',
+        ];
+    }
+
+    public function registerFormWidgets()
+    {
+        return [
+            PropertyFields::class => 'mall.propertyfields',
+            Price::class => 'mall.price'
         ];
     }
 

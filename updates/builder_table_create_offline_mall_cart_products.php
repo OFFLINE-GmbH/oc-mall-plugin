@@ -14,7 +14,7 @@ class BuilderTableCreateOfflineMallCartProducts extends Migration
             $table->integer('product_id')->unsigned();
             $table->integer('variant_id')->unsigned()->nullable();
             $table->integer('quantity')->default(1);
-            $table->integer('price')->unsigned();
+            $table->text('price');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

@@ -49,19 +49,20 @@ class DiscountApplier
 
         $savings = 0;
         if ($discount->type === 'alternate_price') {
-            $this->reducedTotal        = $discount->getOriginal('alternate_price');
+            $this->reducedTotal        = $discount->alternatePriceInCurrencyInteger();
             $this->reducedTotalIsFixed = true;
-            $savings                   = $this->total - $discount->getOriginal('alternate_price');
+            $savings                   = $this->total - $discount->alternatePriceInCurrencyInteger();
         }
 
         if ($discount->type === 'shipping') {
-            $this->reducedTotal        = $discount->getOriginal('shipping_price');
-            $savings                   = $this->cart->shipping_method->getOriginal('price') - $discount->getOriginal('shipping_price');
+            $this->reducedTotal        = $discount->shippingPriceInCurrencyInteger();
+            $savings                   = $this->cart->shipping_method->priceInCurrencyInteger() -
+                $discount->shippingPriceInCurrencyInteger();
             $this->reducedTotalIsFixed = true;
         }
 
         if ($discount->type === 'fixed_amount') {
-            $savings            = $discount->getOriginal('amount');
+            $savings            = $discount->amountInCurrencyInteger();
             $this->reducedTotal -= $savings;
         }
 
@@ -71,8 +72,9 @@ class DiscountApplier
         }
 
         $this->discounts->push([
-            'discount' => $discount,
-            'savings'  => $savings * -1,
+            'discount'          => $discount,
+            'savings'           => $savings * -1,
+            'savings_formatted' => format_money($savings * -1),
         ]);
 
         return true;
@@ -102,7 +104,7 @@ class DiscountApplier
             return false;
         }
 
-        if ($discount->trigger === 'total' && (int)$discount->getOriginal('total_to_reach') <= $this->total) {
+        if ($discount->trigger === 'total' && (int)$discount->totalToReachInCurrencyInteger() <= $this->total) {
             return true;
         }
 

@@ -22,7 +22,7 @@ class CartProductTest extends PluginTestCase
 
         $product                   = Product::first();
         $product->meta_description = 'Test';
-        $product->price            = 200;
+        $product->price            = ['CHF' => 200, 'EUR' => 150];
         $product->save();
 
         $this->product = $product;
@@ -37,7 +37,7 @@ class CartProductTest extends PluginTestCase
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = 100;
+        $sizeA->price      = ['CHF' => 100, 'EUR' => 150];
         $sizeA->sort_order = 1;
 
         $field       = new CustomField();
@@ -48,7 +48,7 @@ class CartProductTest extends PluginTestCase
         $field2        = new CustomField();
         $field2->name  = 'Label';
         $field2->type  = 'text';
-        $field2->price = 300;
+        $field2->price = ['CHF' => 300, 'EUR' => 150];
         $field2->save();
 
         $field->custom_field_options()->save($sizeA);
@@ -82,12 +82,11 @@ class CartProductTest extends PluginTestCase
         $transformed = $cartProduct->convertCustomFieldValues();
 
         $this->assertEquals(2, $transformed->count());
-        $this->assertEquals('100.0', $transformed[0]['price']);
+        $this->assertEquals('100.0', $transformed[0]['price']['CHF']);
         $this->assertEquals('Size A', $transformed[0]['display_value']);
-        $this->assertEquals('100.0', $transformed[0]['price']);
         $this->assertEquals('Test', $transformed[1]['value']);
         $this->assertEquals('Test', $transformed[1]['display_value']);
-        $this->assertEquals('300.0', $transformed[1]['price']);
+        $this->assertEquals('300.0', $transformed[1]['price']['CHF']);
         $this->assertNull($transformed[1]['custom_field_option']);
     }
 
@@ -101,7 +100,7 @@ class CartProductTest extends PluginTestCase
 
         $variant = $cartProduct->variant;
 
-        $this->assertEquals(200, $variant->price);
-        $this->assertEquals(30000, $cartProduct->price);
+        $this->assertEquals(20000, $variant->priceInteger()['CHF']);
+        $this->assertEquals(30000, $cartProduct->priceInteger()['CHF']);
     }
 }

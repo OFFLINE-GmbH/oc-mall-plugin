@@ -13,7 +13,7 @@ class BuilderTableCreateOfflineMallCartCustomFieldValue extends Migration
             $table->integer('cart_product_id')->unsigned()->nullable();
             $table->integer('custom_field_id')->unsigned();
             $table->integer('custom_field_option_id')->nullable()->unsigned();
-            $table->integer('price')->nullable();
+            $table->text('price')->nullable();
             $table->text('value')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

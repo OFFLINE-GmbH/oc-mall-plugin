@@ -252,7 +252,7 @@ class Product extends MallComponent
     }
 
     protected function getGroupedProperty(Variant $variant)
-    {
+   {
         if ( ! $variant->product->group_by_property_id) {
             return (object)['value' => 0];
         }

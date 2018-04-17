@@ -10,9 +10,9 @@ class ShippingMethodTableSeeder extends Seeder
 {
     public function run()
     {
-        $method        = new ShippingMethod();
-        $method->name  = 'Default';
-        $method->price = 20;
+        $method             = new ShippingMethod();
+        $method->name       = 'Default';
+        $method->price      = ['CHF' => 20, 'EUR' => 30];
         $method->sort_order = 1;
         $method->save();
     }

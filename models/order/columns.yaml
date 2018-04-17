@@ -36,4 +36,5 @@ columns:
         label: 'offline.mall::lang.order.grand_total'
         path: $/offline/mall/models/order/_total.htm
         type: partial
+        align: right
         sortable: true

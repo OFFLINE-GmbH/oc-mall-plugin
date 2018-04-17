@@ -84,7 +84,7 @@ class ShippingTotal implements \JsonSerializable
         }
 
         $method = $this->method;
-        $price  = $method->getOriginal('price');
+        $price  = $method->priceInCurrencyInteger();
 
         // If there are special rates let's see if they
         // need to be applied.
@@ -99,7 +99,7 @@ class ShippingTotal implements \JsonSerializable
             });
 
             if ($matchingRate) {
-                $price = $matchingRate->getOriginal('price');
+                $price = $matchingRate->priceInCurrencyInteger();
             }
         }
 
@@ -156,11 +156,12 @@ class ShippingTotal implements \JsonSerializable
 
     private function applyDiscounts(int $price): float
     {
-        $discounts = Discount::whereIn('trigger', ['total', 'product'])->where('type', 'shipping')->where(function ($q
-        ) {
-            $q->whereNull('expires')
-              ->orWhere('expires', '>', Carbon::now());
-        })->get();
+        $discounts = Discount::whereIn('trigger', ['total', 'product'])
+                             ->where('type', 'shipping')
+                             ->where(function ($q) {
+                                 $q->whereNull('expires')
+                                   ->orWhere('expires', '>', Carbon::now());
+                             })->get();
 
         $codeDiscount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
         if ($codeDiscount) {
@@ -176,7 +177,7 @@ class ShippingTotal implements \JsonSerializable
             $this->totals->productPostTaxes(),
             $price
         );
-        
+
         $this->appliedDiscount = optional($applier->applyMany($discounts))->first();
 
         return $applier->reducedTotal();

@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Illuminate\Support\Collection;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
@@ -23,6 +24,7 @@ class Variant extends \Model
     public $slugs = [];
     public $dates = ['deleted_at'];
     public $with = ['product'];
+    public $jsonable = ['price', 'old_price'];
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
@@ -35,8 +37,8 @@ class Variant extends \Model
         'stock'                        => 'integer',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
-        'price'                        => 'sometimes|nullable|regex:/\d+([\.,]\d+)?/i',
-        'old_price'                    => 'sometimes|nullable|regex:/\d+([\.,]\d+)?/i',
+        'price'                        => 'sometimes|nullable',
+        'old_price'                    => 'sometimes|nullable',
     ];
     public $table = 'offline_mall_product_variants';
     public $attachOne = [
@@ -106,22 +108,40 @@ class Variant extends \Model
 
     public function getAttribute($attribute)
     {
+        $originalValue = parent::getAttribute($attribute);
+        $isPriceColumn = $this->isPriceColumn($attribute);
+
         if (session()->get('mall.variants.disable-inheritance')) {
-            return parent::getAttribute($attribute);
+            return $this->isPriceColumn($attribute) && $originalValue
+                ? $this->roundPrice($originalValue)
+                : $originalValue;
         }
 
-        $value = $this->priceGetAttribute($attribute);
-
-        if ($this->notNullthy($value) || ! isset($this->attributes['product_id'])) {
-            return $value;
-        }
-
-        // Cache the "parent" products data.
+        // Cache the "parent" product's data.
         if ( ! $this->parent) {
             $this->parent = Product::find($this->attributes['product_id']);
         }
 
-        return $this->parent->getAttribute($attribute);
+        $parentValues = $this->parent->getAttribute($attribute);
+
+        if ($isPriceColumn) {
+            $value = $this->priceGetAttribute($attribute);
+
+            if (is_array($value)) {
+                return array_merge($parentValues ?: [], $value);
+            }
+        }
+
+        // In case of an empty Array or Collection we want to
+        // return the parent's values
+        $notEmpty = true;
+        if ($originalValue instanceof Collection) {
+            $notEmpty = $originalValue->count() > 0;
+        } elseif (is_array($originalValue)) {
+            $notEmpty = count($originalValue) > 0;
+        }
+
+        return $originalValue && $notEmpty ? $originalValue : $parentValues;
     }
 
     /**

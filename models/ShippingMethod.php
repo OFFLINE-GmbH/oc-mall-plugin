@@ -13,13 +13,14 @@ class ShippingMethod extends Model
     use Price;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $jsonable = ['price', 'available_below_total', 'available_above_total'];
     public $translatable = [
         'name',
         'description',
     ];
     public $rules = [
         'name'  => 'required',
-        'price' => 'required|regex:/\d+([\.,]\d+)?/i',
+        'price' => 'required',
     ];
     public $table = 'offline_mall_shipping_methods';
     public $appends = ['price_formatted'];
@@ -50,35 +51,34 @@ class ShippingMethod extends Model
         return ShippingMethod::first();
     }
 
+    public function getPriceFormattedAttribute()
+    {
+        return $this->priceInCurrencyFormatted();
+    }
+
     public static function getAvailableByCart(Cart $cart)
     {
         $total = $cart->totals()->productPostTaxes();
 
         return ShippingMethod::orderBy('sort_order')
-                             ->where(function ($q) use ($total) {
-                                 $q->where('available_below_total', '>', $total)
-                                   ->orWhereNull('available_below_total');
-                             })
-                             ->where(function ($q) use ($total) {
-                                 $q->where('available_above_total', '<=', $total)
-                                   ->orWhereNull('available_above_total');
-                             })
                              ->when($cart->shipping_address, function ($q) use ($cart) {
                                  $q->whereDoesntHave('countries')
                                    ->orWhereHas('countries', function ($q) use ($cart) {
                                        $q->where('country_id', $cart->shipping_address->country_id);
                                    });
                              })
-                             ->get();
+                             ->get()
+                             ->filter(function (ShippingMethod $method) use ($total) {
+                                 $below = $method->availableBelowTotalInCurrencyInteger();
+                                 $above = $method->availableAboveTotalInCurrencyInteger();
+
+                                 return ($below === null || $below > $total)
+                                     && ($above === null || $above <= $total);
+                             });
     }
 
     public function getPriceColumns()
     {
         return ['price', 'available_below_total', 'available_above_total'];
-    }
-
-    public function getPriceFormattedAttribute()
-    {
-        return $this->formatPrice($this->getOriginal('price'));
     }
 }

@@ -22,15 +22,15 @@ class PropertyTableSeeder extends Seeder
         $method->unit = 'mm';
         $method->save();
 
-        $method       = new Property();
-        $method->name = 'Size';
-        $method->type = 'dropdown';
+        $method          = new Property();
+        $method->name    = 'Size';
+        $method->type    = 'dropdown';
         $method->options = [
             ['value' => 'XS'],
             ['value' => 'S'],
             ['value' => 'M'],
             ['value' => 'L'],
-            ['value' => 'XL']
+            ['value' => 'XL'],
         ];
         $method->save();
 

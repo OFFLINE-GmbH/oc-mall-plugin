@@ -10,8 +10,9 @@ class ShippingMethodRate extends Model
     use Price;
 
     public $timestamps = false;
+    public $jsonable = ['price'];
     public $rules = [
-        'price'       => 'required|regex:/\d+([\.,]\d+)?/i',
+        'price'       => 'required',
         'from_weight' => 'integer|min:0',
         'to_weight'   => 'min:0',
     ];

@@ -84,7 +84,7 @@ class CartTest extends PluginTestCase
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = 100;
+        $sizeA->price      = ['CHF' => 100, 'EUR' => 150];
         $sizeA->sort_order = 1;
 
         $field       = new CustomField();
@@ -140,7 +140,7 @@ class CartTest extends PluginTestCase
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = 100;
+        $sizeA->price      = ['CHF' => 100, 'EUR' => 150];
         $sizeA->sort_order = 1;
 
         $field       = new CustomField();
@@ -415,14 +415,14 @@ class CartTest extends PluginTestCase
         $discountA->code            = 'Test';
         $discountA->name            = 'Test discount';
         $discountA->type            = 'alternate_price';
-        $discountA->alternate_price = 25;
+        $discountA->alternate_price = ['CHF' => 25, 'EUR' => 150];
         $discountA->save();
 
         $discountB                  = new Discount();
         $discountB->code            = 'Test';
         $discountB->name            = 'Test discount';
         $discountB->type            = 'alternate_price';
-        $discountB->alternate_price = 25;
+        $discountB->alternate_price = ['CHF' => 25, 'EUR' => 150];
         $discountB->save();
 
         $cart->applyDiscount($discountA);
@@ -445,7 +445,7 @@ class CartTest extends PluginTestCase
         $discountA->code                 = 'Test';
         $discountA->name                 = 'Test discount';
         $discountA->type                 = 'shipping';
-        $discountA->shipping_price       = 25;
+        $discountA->shipping_price       = ['CHF' => 25, 'EUR' => 150];
         $discountA->shipping_description = 'Test shipping';
         $discountA->save();
 
@@ -463,16 +463,16 @@ class CartTest extends PluginTestCase
         DB::table('offline_mall_shipping_methods')->truncate();
 
         $product        = Product::first();
-        $product->price = 100;
+        $product->price = ['CHF' => 100, 'EUR' => 150];
         $product->stock = 100;
         $product->save();
 
         $availableMethod                        = $this->getShippingMethod();
-        $availableMethod->available_above_total = 100;
+        $availableMethod->available_above_total = ['CHF' => 100, 'EUR' => 150];
         $availableMethod->save();
 
         $unavailableMethod                        = $this->getShippingMethod();
-        $unavailableMethod->available_above_total = 200;
+        $unavailableMethod->available_above_total = ['CHF' => 200, 'EUR' => 150];
         $unavailableMethod->save();
 
         $cart = new Cart();
@@ -498,11 +498,11 @@ class CartTest extends PluginTestCase
         DB::table('offline_mall_shipping_methods')->truncate();
 
         $product        = Product::first();
-        $product->price = 100;
+        $product->price = ['CHF' => 100, 'EUR' => 150];
         $product->save();
 
         $availableMethod                        = $this->getShippingMethod();
-        $availableMethod->available_below_total = 200;
+        $availableMethod->available_below_total = ['CHF' => 200, 'EUR' => 150];
         $availableMethod->save();
 
         $cart = new Cart();
@@ -527,7 +527,7 @@ class CartTest extends PluginTestCase
     {
         $availableMethod             = new ShippingMethod();
         $availableMethod->name       = 'Available';
-        $availableMethod->price      = 100;
+        $availableMethod->price      = ['CHF' => 100, 'EUR' => 150];
         $availableMethod->sort_order = 1;
         $availableMethod->save();
 

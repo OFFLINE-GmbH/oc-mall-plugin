@@ -20,7 +20,7 @@
                         </div>
                     {% endif %}
                     <div class="mall-shipping-method__price">
-                        {{ method.price > 0 ? (method.price_formatted | raw) : ('mall.no_additional_charges' | _) }}
+                        {{ method.price > 0 ? (method.priceInCurrencyFormatted() | raw) : ('mall.no_additional_charges' | _) }}
                     </div>
                 </div>
             </div>

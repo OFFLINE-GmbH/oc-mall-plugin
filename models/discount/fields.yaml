@@ -36,7 +36,7 @@ fields:
             action: show
             field: type
             condition: value[fixed_amount]
-        type: number
+        type: mall.price
     total_to_reach:
         label: 'offline.mall::lang.discounts.total_to_reach'
         oc.commentPosition: ''
@@ -45,7 +45,7 @@ fields:
             action: show
             field: trigger
             condition: value[total]
-        type: number
+        type: mall.price
     rate:
         label: 'offline.mall::lang.discounts.rate'
         oc.commentPosition: ''
@@ -77,7 +77,7 @@ fields:
             action: show
             field: type
             condition: value[alternate_price]
-        type: number
+        type: mall.price
     shipping_description:
         label: 'offline.mall::lang.discounts.shipping_description'
         oc.commentPosition: ''
@@ -115,4 +115,4 @@ fields:
             action: show
             field: type
             condition: value[shipping]
-        type: number
+        type: mall.price

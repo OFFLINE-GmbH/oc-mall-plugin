@@ -22,7 +22,7 @@ class Product extends Model
     use HashIds;
 
     protected $dates = ['deleted_at'];
-    public $jsonable = ['links'];
+    public $jsonable = ['links', 'price', 'old_price'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
@@ -38,7 +38,7 @@ class Product extends Model
     public $rules = [
         'name'  => 'required',
         'slug'  => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
-        'price' => 'required|regex:/\d+([\.,]\d+)?/i',
+        'price' => 'required',
     ];
     public $casts = [
         'price_includes_tax'           => 'boolean',
@@ -67,7 +67,6 @@ class Product extends Model
             'key' => 'group_by_property_id',
         ],
     ];
-
     public $hasManyThrough = [
         'custom_field_options' => [
             CustomFieldOption::class,
@@ -150,27 +149,6 @@ class Product extends Model
     {
         return ['' => trans('offline.mall::lang.common.none')]
             + $this->category->properties->pluck('name', 'id')->toArray();
-    }
-
-    public function getPriceAttribute()
-    {
-        if ( ! $this->variant) {
-            return $this->roundPrice($this->getOriginal('price'));
-        }
-
-        return $this->variant->price;
-    }
-
-    /**
-     * Returns the
-     */
-    public function getOldPriceAttribute()
-    {
-        if ( ! $this->variant) {
-            return $this->roundPrice($this->getOriginal('old_price'));
-        }
-
-        return $this->variant->old_price;
     }
 
     /**

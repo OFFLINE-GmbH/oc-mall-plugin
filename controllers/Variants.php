@@ -18,11 +18,4 @@ class Variants extends Controller
     public $requiredPermissions = [
         'offline.mall.manage_products',
     ];
-
-    public $formWidget;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 }

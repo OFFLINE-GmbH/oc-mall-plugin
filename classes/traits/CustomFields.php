@@ -16,18 +16,21 @@ trait CustomFields
      *
      * @param CustomFieldValue[] $values
      *
-     * @return int
+     * @return array
      */
-    public function priceIncludingCustomFieldValues(?Collection $values = null): int
+    public function priceIncludingCustomFieldValues(?Collection $values = null): array
     {
-        $price = $this->price * 100;
+        $price = $this->price;
         if ( ! $values || count($values) < 1) {
             return $price;
         }
 
-        return $values->reduce(function ($total, CustomFieldValue $value) {
-            return $total += $value->price * 100;
-        }, $price);
+        // Add the cost of each custom field value to all available currencies.
+        return collect($price)->map(function ($price, $currency) use ($values) {
+            return $values->reduce(function ($total, CustomFieldValue $value) use ($currency) {
+                return $total += $value->price()[$currency] ?? 0;
+            }, $price);
+        })->toArray();
     }
 
     /**
@@ -49,9 +52,9 @@ trait CustomFields
                              ->get()
                              ->mapWithKeys(function (CustomField $field) use ($values) {
                                  $value = $values->get($field->id);
-                                if (\in_array($field->type, ['dropdown', 'image'], true)) {
-                                    $value = $this->decode($value);
-                                }
+                                 if (\in_array($field->type, ['dropdown', 'image'], true)) {
+                                     $value = $this->decode($value);
+                                 }
 
                                  return [$field->id => ['field' => $field, 'value' => $value]];
                              });

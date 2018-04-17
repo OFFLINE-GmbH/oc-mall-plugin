@@ -7,4 +7,4 @@ columns:
         type: text
     price:
         label: 'offline.mall::lang.product.price'
-        type: number
+        type: mall.price

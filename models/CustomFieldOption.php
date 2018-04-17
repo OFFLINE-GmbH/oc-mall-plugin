@@ -16,7 +16,7 @@ class CustomFieldOption extends Model
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
-    public $jsonable = ['values'];
+    public $jsonable = ['values', 'price'];
     public $fillable = [
         'id',
         'name',
@@ -28,7 +28,7 @@ class CustomFieldOption extends Model
 
     public $rules = [
         'name'  => 'required',
-        'price' => 'nullable|regex:/\d+([\.,]\d+)?/i',
+        'price' => 'nullable',
     ];
 
     public $attachOne = [
