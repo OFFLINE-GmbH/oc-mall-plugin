@@ -29,14 +29,11 @@ if ( ! function_exists('format_money')) {
             ? CurrencySettings::currencyByCode($currencyCode)
             : CurrencySettings::activeCurrency();
 
-        // Apply currency rate to price.
-        $value *= (float)$currency['rate'];
-
         $value    = round_money($value, $currency['decimals']);
         $integers = floor($value);
         $decimals = ($value - $integers) * 100;
 
-        return Twig::parse(CurrencySettings::currencyFormatByCode($currency['code']), [
+        return Twig::parse($currency['format'], [
             'price'    => $value,
             'integers' => $integers,
             'decimals' => str_pad($decimals, 2, '0', STR_PAD_LEFT),
