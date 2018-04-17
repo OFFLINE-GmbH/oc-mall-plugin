@@ -62,18 +62,12 @@ trait Price
                 }, $values);
             },
             'InCurrency'          => function ($value, $currency) {
-                $value = \is_array($value) ? $value[$currency] : $value;
-
                 return $value;
             },
             'InCurrencyInteger'   => function ($value, $currency) {
-                $value = \is_array($value) ? $value[$currency] : $value;
-
                 return $value === null ? null : (int)($value * 100);
             },
             'InCurrencyFormatted' => function ($value, $currency) {
-                $value = \is_array($value) ? $value[$currency] : $value;
-
                 return format_money($value * 100, null, $currency);
             },
         ];
@@ -84,6 +78,12 @@ trait Price
                 $currency = $parameters[0] ?? $this->useCurrency();
 
                 $value = $this->getAttribute($attr);
+
+                if (\is_array($value)
+                    && ( ! ends_with($method, 'Integer')
+                        || ends_with($method, 'InCurrencyInteger'))) {
+                    $value = $value[$currency] ?? 0;
+                }
 
                 return $closure($value, $currency);
             }
