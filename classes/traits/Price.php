@@ -23,6 +23,10 @@ trait Price
             return parent::setAttribute($key, $value);
         }
 
+        if ( ! is_array($value)) {
+            return $this->attributes[$key] = null;
+        }
+
         $this->attributes[$key] = json_encode(array_map(function ($value) {
             return $this->isNullthy($value) ? null : (float)$value * 100;
         }, $value));
