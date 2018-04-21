@@ -8,6 +8,20 @@ use OFFLINE\Mall\Models\Variant;
 
 trait Price
 {
+    public $currencies;
+    public $activeCurrency;
+    public $baseCurrency;
+
+    public function __construct(...$args)
+    {
+        parent::__construct(...$args);
+
+        $currencies           = collect(CurrencySettings::get('currencies'));
+        $this->currencies     = $currencies->keyBy('code');
+        $this->baseCurrency   = $currencies->first();
+        $this->activeCurrency = CurrencySettings::activeCurrency();
+    }
+
     public function getPriceColumns(): array
     {
         return ['price'];
@@ -51,6 +65,10 @@ trait Price
             return $value;
         }
 
+        if (is_array($value)) {
+            $value = $this->fillMissingCurrencies($value);
+        }
+
         return $format ? $this->formatPrice($value) : $this->roundPrice($value);
     }
 
@@ -86,7 +104,7 @@ trait Price
                 if (\is_array($value)
                     && ( ! ends_with($method, 'Integer')
                         || ends_with($method, 'InCurrencyInteger'))) {
-                    $value = $value[$currency] ?? 0;
+                    $value = $value[$currency] ?? null;
                 }
 
                 return $closure($value, $currency);
@@ -147,6 +165,28 @@ trait Price
 
     protected function useCurrency()
     {
-        return CurrencySettings::activeCurrency()['code'];
+        return $this->activeCurrency['code'];
+    }
+
+    /**
+     * Fill in missing currency prices using the default
+     * currency rate defined in the backend settings.
+     *
+     * @param $value
+     *
+     * @return array
+     */
+    protected function fillMissingCurrencies($value): array
+    {
+        $basePrice = $value[$this->baseCurrency['code']] ?? null;
+
+        return collect($value)->map(function ($price, $currency) use ($basePrice) {
+            if ($price !== null || $basePrice === null) {
+                return $price;
+            }
+
+            return $basePrice * (float)$this->currencies[$currency]['rate'] ?? 1;
+        })->toArray();
+
     }
 }

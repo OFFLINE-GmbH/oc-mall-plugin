@@ -1,7 +1,7 @@
 columns:
     invoice_number:
         label: 'offline.mall::lang.order.invoice_number'
-        type: text
+        type: number
         searchable: true
         sortable: true
     order_number:
@@ -36,5 +36,5 @@ columns:
         label: 'offline.mall::lang.order.grand_total'
         path: $/offline/mall/models/order/_total.htm
         type: partial
-        align: right
+        align: center
         sortable: true
