@@ -17,7 +17,7 @@ class CategoryFilter extends MallComponent
      */
     public const FILTER_KEY = 'oc-mall.category.filter';
     /**
-     * @var Category
+     * @var CategoryModel
      */
     public $category;
     /**
@@ -86,23 +86,15 @@ class CategoryFilter extends MallComponent
 
     public function onSetFilter()
     {
-        $data = post('filter', []);
-        if (count($data) < 1) {
+        $data = collect(post('filter', []));
+        if ($data->count() < 1) {
             return $this->replaceFilter([]);
         }
 
-        $data = collect($data)->mapWithKeys(function ($values, $id) {
-            if ( ! $this->isSpecialProperty($id)) {
-                $id = $this->decode($id);
-            }
-
-            return [$id => $values];
-        });
-
-        $properties = Property::whereIn('id', $data->keys())->get();
+        $properties = Property::whereIn('slug', $data->keys())->get();
 
         $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
-            $property = $this->isSpecialProperty($id) ? $id : $properties->find($id);
+            $property = $this->isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
             if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
                 if ($values['min'] === '' && $values['max'] === '') {
                     return [];
@@ -122,8 +114,6 @@ class CategoryFilter extends MallComponent
 
             return count($values) ? [$id => new SetFilter($property, $values)] : [];
         });
-
-        $filter = $this->hashKeys($filter);
 
         return $this->replaceFilter($filter);
     }
@@ -180,7 +170,7 @@ class CategoryFilter extends MallComponent
             $filter = [];
         }
 
-        return $this->hashKeys((new QueryString())->deserialize($filter, $this->category));
+        return (new QueryString())->deserialize($filter, $this->category);
     }
 
     protected function replaceFilter($filter)

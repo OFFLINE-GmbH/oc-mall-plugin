@@ -2,11 +2,11 @@
     <div class="mall-property">
         <div class="mall-property__label">
             {{ property.name }}
-            {% partial __SELF__ ~ '::clearfilter' id=property.hashId %}
+            {% partial __SELF__ ~ '::clearfilter' id=property.slug %}
         </div>
         {% partial __SELF__ ~ '::' ~ property.pivot.filter_type
             id  = property.id
-            hashId  = property.hashId
+            slug  = property.slug
             min = property.minValue
             max = property.maxValue %}
     </div>

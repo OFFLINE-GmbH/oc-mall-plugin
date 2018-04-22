@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -10,12 +11,16 @@ class Property extends Model
     use Validation;
     use SoftDelete;
     use HashIds;
+    use Sluggable;
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['options'];
     public $rules = [
         'name' => 'required',
         'type' => 'required|in:text,textarea,dropdown,checkbox,color,image',
+    ];
+    public $slugs = [
+        'slug' => 'name',
     ];
     public $table = 'offline_mall_properties';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];

@@ -12,12 +12,12 @@ abstract class Filter
 
     public function __construct($property)
     {
-        if ($property instanceof Property) {
-            $property = $property->id;
-        }
-
         $this->property = $property;
     }
+
+    abstract public function apply(Collection $items): Collection;
+
+    abstract public function getValues(): array;
 
     public function setFilterValues(Collection $items): Collection
     {
@@ -32,15 +32,19 @@ abstract class Filter
 
     public function getFilterValue($item)
     {
-        if (\in_array($this->property, self::$specialProperties, true)) {
+        if ($this->isSpecialProperty()) {
+            if ($this->property === 'price') {
+                return $item->priceInCurrency();
+            }
+
             return $item->getAttribute($this->property);
         }
 
         $item->load('property_values');
-        $value = $item->property_values->where('property_id', $this->property)->first();
+        $value = $item->property_values->where('property_id', $this->property->id)->first();
         if ($value === null) {
             // The filtered property is specified on the product, not on the variant
-            $value = $item->product->property_values->where('property_id', $this->property)->first();
+            $value = $item->product->property_values->where('property_id', $this->property->id)->first();
         }
 
         $value = $value ? $value->value : null;
@@ -48,7 +52,9 @@ abstract class Filter
         return \is_array($value) ? json_encode($value) : $value;
     }
 
-    abstract public function apply(Collection $items): Collection;
-
-    abstract public function getValues(): array;
+    protected function isSpecialProperty(): bool
+    {
+        return ! $this->property instanceof Property
+            && \in_array($this->property, self::$specialProperties, true);
+    }
 }

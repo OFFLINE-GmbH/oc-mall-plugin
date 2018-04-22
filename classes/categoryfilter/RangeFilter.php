@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Models\Property;
 
 class RangeFilter extends Filter
 {

@@ -14,12 +14,13 @@ class BuilderTableCreateOfflineMallProperties extends Migration
             $table->string('type');
             $table->string('unit')->nullable();
             $table->text('options')->nullable();
+            $table->string('slug')->unique()->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('offline_mall_properties');

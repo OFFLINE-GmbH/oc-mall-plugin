@@ -1,12 +1,12 @@
 <div class="mall-filter mall-filter--set">
-    {% set selected = filter[property.hashId].values %}
+    {% set selected = filter[property.slug].values %}
     {% for value in property.getValuesForCategory(category) %}
         {% set isSelected = value.value in selected %}
         <div class="js-mall-filter mall-filter__option {{ isSelected ? 'mall-filter__option--selected' : '' }}">
             <input type="checkbox"
                    aria-hidden="true"
                    style="display: none"
-                   name="filter[{{ property.hashId }}][]"
+                   name="filter[{{ property.slug }}][]"
                    value="{{ value.safeValue }}"
                     {% if isSelected %}
                         checked

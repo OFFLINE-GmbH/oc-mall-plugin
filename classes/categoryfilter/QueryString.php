@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
 use Illuminate\Support\Collection;
-use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Property;
 
@@ -12,21 +11,13 @@ use OFFLINE\Mall\Models\Property;
  */
 class QueryString
 {
-    use HashIds;
-
     public function deserialize(array $query, Category $category): Collection
     {
-        if (count($query) < 1) {
+        $query = collect($query);
+
+        if ($query->count() < 1) {
             return collect([]);
         }
-
-        $query = collect($query)->mapWithKeys(function ($values, $id) {
-            if ( ! $this->isSpecialProperty($id)) {
-                $id = $this->decode($id);
-            }
-
-            return [$id => $values];
-        });
 
         $specialProperties = $query
             ->keys()
@@ -34,29 +25,36 @@ class QueryString
             ->map(function ($property) use ($query) {
                 $values = $query->get($property);
 
-                return new RangeFilter($property, $values['min'] ?? null, $values['max'] ?? null);
+                return new RangeFilter(
+                    $property,
+                    $values['min'] ?? null,
+                    $values['max'] ?? null
+                );
             });
 
-        $properties = $category->load('properties')->properties->whereIn('id', $query->keys());
+        $properties = $category->load('properties')->properties->whereIn('slug', $query->keys());
 
         return $properties->map(function (Property $property) use ($query) {
             if ($property->pivot->filter_type === 'set') {
-                return new SetFilter($property->id, $query->get($property->id));
-            } elseif ($property->pivot->filter_type === 'range') {
-                $values = $query->get($property->id);
-
-                return new RangeFilter($property->id, $values['min'] ?? null, $values['max'] ?? null);
+                return new SetFilter($property, $query->get($property->slug));
             }
-        })->concat($specialProperties)->keyBy('property');
+            if ($property->pivot->filter_type === 'range') {
+                $values = $query->get($property->slug);
+
+                return new RangeFilter(
+                    $property,
+                    $values['min'] ?? null,
+                    $values['max'] ?? null
+                );
+            }
+        })->concat($specialProperties)->keyBy(function ($item) {
+            return $item->property->slug ?? $item->property;
+        });
     }
 
     public function serialize(Collection $filter)
     {
-        $filter = $filter->mapWithKeys(function (Filter $filter) {
-            $property = $this->isSpecialProperty($filter->property)
-                ? $filter->property
-                : $this->encode($filter->property);
-
+        $filter = $filter->mapWithKeys(function (Filter $filter, $property) {
             return [
                 $property => $filter->getValues(),
             ];
