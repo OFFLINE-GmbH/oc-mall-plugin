@@ -138,19 +138,12 @@ tabs:
             type: partial
             path: $/offline/mall/controllers/products/_taxes.htm
             tab: 'offline.mall::lang.common.taxes'
-        main_image:
-            label: 'offline.mall::lang.common.main_image'
+        image_sets:
+            label: 'offline.mall::lang.common.images'
             oc.commentPosition: ''
-            mode: image
-            prompt: 'offline.mall::lang.common.select_image'
-            imageWidth: '120'
-            imageHeight: '120'
-            useCaption: true
-            thumbOptions:
-                mode: crop
-                extension: auto
             span: left
-            type: fileupload
+            type: partial
+            path: $/offline/mall/controllers/products/_image_sets.htm
             tab: 'offline.mall::lang.common.attachments'
         downloads:
             label: 'offline.mall::lang.common.downloads'
@@ -182,20 +175,6 @@ tabs:
                         span: right
                         type: text
                         required: true
-        images:
-            label: 'offline.mall::lang.common.images'
-            oc.commentPosition: ''
-            mode: image
-            prompt: 'offline.mall::lang.common.select_image'
-            imageWidth: '120'
-            imageHeight: '120'
-            useCaption: true
-            thumbOptions:
-                mode: crop
-                extension: auto
-            span: left
-            type: fileupload
-            tab: 'offline.mall::lang.common.attachments'
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''

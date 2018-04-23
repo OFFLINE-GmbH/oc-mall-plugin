@@ -23,7 +23,7 @@ class Variant extends \Model
 
     public $slugs = [];
     public $dates = ['deleted_at'];
-    public $with = ['product'];
+    public $with = ['product', 'image_sets'];
     public $jsonable = ['price', 'old_price'];
     public $casts = [
         'published'                    => 'boolean',
@@ -41,16 +41,14 @@ class Variant extends \Model
         'old_price'                    => 'sometimes|nullable',
     ];
     public $table = 'offline_mall_product_variants';
-    public $attachOne = [
-        'main_image' => File::class,
-    ];
     public $attachMany = [
-        'images'    => File::class,
-        'downloads' => File::class,
+        'temp_images' => File::class,
+        'downloads'   => File::class,
     ];
     public $belongsTo = [
         'product'      => Product::class,
         'cart_product' => CartProduct::class,
+        'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $morphMany = [
         'property_values' => [PropertyValue::class, 'name' => 'describable'],
@@ -68,6 +66,10 @@ class Variant extends \Model
     {
         parent::boot();
         static::saved(function (Variant $variant) {
+            if ($variant->image_set_id === null) {
+                $variant->createImageSetFromTempImages();
+            }
+
             $values = post('VariantPropertyValues');
             if ( ! $values) {
                 return;
@@ -84,6 +86,53 @@ class Variant extends \Model
                 $pv->save();
             }
         });
+    }
+
+    protected function createImageSetFromTempImages()
+    {
+        $tempImages = $this->temp_images()
+                           ->withDeferred(post('_session_key'))
+                           ->count();
+
+        if ($tempImages < 1) {
+            return;
+        }
+
+        return \DB::transaction(function () {
+            $set             = new ImageSet();
+            $set->name       = $this->name;
+            $set->product_id = $this->product_id;
+            $set->save();
+
+            $this->image_set_id = $set->id;
+            $this->save();
+
+            $this->commitDeferred(post('_session_key'));
+
+            return \DB::table('system_files')
+                      ->where('attachment_type', Variant::class)
+                      ->where('attachment_id', $this->id)
+                      ->where('field', 'temp_images')
+                      ->update([
+                          'attachment_type' => ImageSet::class,
+                          'attachment_id'   => $set->id,
+                          'field'           => 'images',
+                      ]);
+        });
+    }
+
+    public function getImageSetIdOptions()
+    {
+        $null = [
+            '' => '-- ' . trans('offline.mall::lang.image_sets.create_new'),
+        ];
+
+        $sets = Product::find(post('id', $this->product_id))->image_sets;
+        if ( ! $sets) {
+            return $null;
+        }
+
+        return $null + $sets->pluck('name', 'id')->toArray();
     }
 
     public function reduceStock(int $quantity): self

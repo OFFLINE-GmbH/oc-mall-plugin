@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -27,9 +28,37 @@ class VariantTest extends PluginTestCase
         $product->save();
         $this->product = $product;
 
-        $variant             = new Variant();
-        $variant->product_id = $product->id;
-        $variant->name       = 'Variant';
+        $variantSet             = new ImageSet();
+        $variantSet->name       = 'Variant Images';
+        $variantSet->product_id = $this->product->id;
+        $variantSet->save();
+
+        $productSet              = new ImageSet();
+        $productSet->name        = 'Product Images';
+        $productSet->is_main_set = true;
+        $productSet->product_id  = $this->product->id;
+        $productSet->save();
+
+        $file               = new File();
+        $file->disk_name    = 'variant.jpg';
+        $file->file_name    = 'variant.jpg';
+        $file->file_size    = 8;
+        $file->content_type = 'image/jpeg';
+
+        $variantSet->images()->save($file);
+
+        $file               = new File();
+        $file->disk_name    = 'product.jpg';
+        $file->file_name    = 'product.jpg';
+        $file->file_size    = 8;
+        $file->content_type = 'image/jpeg';
+
+        $productSet->images()->save($file);
+
+        $variant               = new Variant();
+        $variant->product_id   = $product->id;
+        $variant->name         = 'Variant';
+        $variant->image_set_id = $variantSet->id;
         $variant->save();
 
         $this->variant = $variant;
@@ -54,73 +83,43 @@ class VariantTest extends PluginTestCase
 
     public function test_it_keeps_own_files()
     {
-        $file               = new File();
-        $file->disk_name    = 'variant.jpg';
-        $file->file_name    = 'variant.jpg';
-        $file->file_size    = 8;
-        $file->content_type = 'image/jpeg';
-
-        $this->variant->main_image()->save($file);
-
-        $file               = new File();
-        $file->disk_name    = 'product.jpg';
-        $file->file_name    = 'product.jpg';
-        $file->file_size    = 8;
-        $file->content_type = 'image/jpeg';
-
-        $this->product->main_image()->save($file);
-
         $this->assertEquals('variant.jpg', $this->variant->main_image->disk_name);
         $this->assertEquals('product.jpg', $this->product->main_image->disk_name);
     }
 
     public function test_it_inherits_files()
     {
-        $file               = new File();
-        $file->disk_name    = 'product.jpg';
-        $file->file_name    = 'product.jpg';
-        $file->file_size    = 8;
-        $file->content_type = 'image/jpeg';
+        \DB::table('offline_mall_product_variants')
+           ->where('id', $this->variant->id)
+           ->update(['image_set_id' => null]);
 
-        $this->product->main_image()->save($file);
+        $this->variant = Variant::find($this->variant->id);
 
         $this->assertEquals('product.jpg', $this->variant->main_image->disk_name);
         $this->assertEquals('product.jpg', $this->product->main_image->disk_name);
     }
 
-    public function test_it_inherits_file_accessors()
+    public function test_it_inherits_file_accessors_for_images()
     {
         $file               = new File();
-        $file->disk_name    = 'product.jpg';
-        $file->file_name    = 'product.jpg';
+        $file->disk_name    = 'additional.jpg';
+        $file->file_name    = 'additional.jpg';
         $file->file_size    = 8;
         $file->content_type = 'image/jpeg';
 
-        $this->product->main_image()->save($file);
+        $this->product->main_image_set->images()->save($file);
 
-        $this->assertEquals('product.jpg', $this->variant->image->disk_name);
-        $this->assertEquals('product.jpg', $this->product->image->disk_name);
-    }
+        \DB::table('offline_mall_product_variants')
+           ->where('id', $this->variant->id)
+           ->update(['image_set_id' => null]);
 
-    public function test_it_inherits_file_accessors_for_images()
-    {
-        $getFile = function () {
-            $file               = new File();
-            $file->disk_name    = 'product.jpg';
-            $file->file_name    = 'product.jpg';
-            $file->file_size    = 8;
-            $file->content_type = 'image/jpeg';
-
-            return $file;
-        };
-
-        $this->product->main_image()->save($getFile());
-        $this->product->images()->save($getFile());
+        $this->variant = Variant::find($this->variant->id);
 
         $this->assertEquals(1, $this->variant->images->count());
         $this->assertNotNull($this->variant->main_image);
+        $this->assertNotNull($this->variant->image);
+        $this->assertTrue($this->variant->all_images->pluck('disk_name')->contains('additional.jpg'));
         $this->assertEquals(2, $this->variant->all_images->count());
-        $this->assertEquals(1, $this->variant->additional_images->count());
     }
 
     public function test_name_is_not_used_as_property_description()
