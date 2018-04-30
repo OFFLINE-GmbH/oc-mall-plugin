@@ -626,6 +626,10 @@
                     'required' => 'Wählen Sie Ihr Land aus.',
                     'exists'   => 'Das ausgewählte Land ist ungültig.',
                 ],
+                'state_id'      => [
+                    'required' => 'Wählen Sie Ihr Kanton/Bundesstaat',
+                    'exists'   => 'Der ausgewählte Wert ist ungültig.',
+                ],
             ],
         ],
         'categories'            => [

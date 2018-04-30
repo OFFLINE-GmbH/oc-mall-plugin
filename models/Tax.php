@@ -2,6 +2,7 @@
 
 use Model;
 use October\Rain\Database\Traits\Validation;
+use Rainlab\Location\Models\Country as RainLabCountry;
 
 class Tax extends Model
 {
@@ -25,8 +26,8 @@ class Tax extends Model
             'key'      => 'tax_id',
             'otherKey' => 'shipping_method_id',
         ],
-        'countries' => [
-            Country::class,
+        'countries'        => [
+            RainLabCountry::class,
             'table'    => 'offline_mall_country_tax',
             'key'      => 'tax_id',
             'otherKey' => 'country_id',

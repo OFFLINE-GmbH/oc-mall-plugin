@@ -6,8 +6,8 @@
         {{ address.name }}<br/>
         {{ address.lines }} <br/>
         {{ address.zip }} {{ address.city }}<br/>
-        {% if address.county_province %}
-            {{ address.county_province }} <br/>
+        {% if address.state_id %}
+            {{ address.state.name }} <br/>
         {% endif %}
         {{ address.country.name }}
     </p>

@@ -4,6 +4,7 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use RainLab\Location\Behaviors\LocationModel;
 
 class Address extends Model
 {
@@ -11,12 +12,14 @@ class Address extends Model
     use SoftDelete;
     use HashIds;
 
+    public $implement = [LocationModel::class];
+
     protected $dates = ['deleted_at'];
 
     public $rules = [
         'lines'      => 'required',
         'zip'        => 'required',
-        'country_id' => 'required|exists:offline_mall_countries,id',
+        'country_id' => 'required|exists:rainlab_location_countries,id',
         'city'       => 'required',
     ];
 
@@ -27,7 +30,7 @@ class Address extends Model
         'zip',
         'country_id',
         'city',
-        'county_province',
+        'state_id',
         'details',
     ];
 
@@ -35,7 +38,6 @@ class Address extends Model
 
     public $belongsTo = [
         'customer' => Customer::class,
-        'country'  => Country::class,
     ];
 
     public function getNameAttribute()
@@ -59,5 +61,26 @@ class Address extends Model
     public static function byCustomer(Customer $customer)
     {
         return self::where('customer_id', $customer->id);
+    }
+
+    public function toArray()
+    {
+        return [
+            'id'          => $this->id,
+            'company'     => $this->company,
+            'name'        => $this->name,
+            'lines'       => $this->lines,
+            'zip'         => $this->zip,
+            'city'        => $this->city,
+            'state_id'    => $this->state_id,
+            'state'       => $this->state,
+            'country_id'  => $this->country_id,
+            'country'     => $this->country,
+            'details'     => $this->details,
+            'customer_id' => $this->customer_id,
+            'created_at'  => $this->created_at,
+            'updated_at'  => $this->updated_at,
+            'deleted_at'  => $this->deleted_at,
+        ];
     }
 }

@@ -5,6 +5,7 @@ use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\Price;
 use System\Models\File;
+use Rainlab\Location\Models\Country as RainLabCountry;
 
 class ShippingMethod extends Model
 {
@@ -39,7 +40,7 @@ class ShippingMethod extends Model
             'otherKey' => 'tax_id',
         ],
         'countries' => [
-            Country::class,
+            RainLabCountry::class,
             'table'    => 'offline_mall_shipping_countries',
             'key'      => 'shipping_method_id',
             'otherKey' => 'country_id',

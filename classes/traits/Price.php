@@ -66,7 +66,9 @@ trait Price
         }
 
         if (is_array($value)) {
-            $value = $this->fillMissingCurrencies($value);
+            $value = array_filter($this->fillMissingCurrencies($value), function($item) {
+                return $item !== null;
+            });
         }
 
         return $format ? $this->formatPrice($value) : $this->roundPrice($value);
@@ -187,6 +189,5 @@ trait Price
 
             return $basePrice * (float)$this->currencies[$currency]['rate'] ?? 1;
         })->toArray();
-
     }
 }

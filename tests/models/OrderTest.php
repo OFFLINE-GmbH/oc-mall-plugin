@@ -189,7 +189,7 @@ class OrderTest extends PluginTestCase
 
     public function test_it_uses_the_correct_discounted_shipping_method()
     {
-        $cart   = $this->getSimpleCart();
+        $cart   = $this->getSimpleCart(true);
         $method = $cart->shipping_method;
 
         $this->assertEquals(1, $method->id);
@@ -215,7 +215,7 @@ class OrderTest extends PluginTestCase
 
     public function test_discount_number_of_usages_gets_updated()
     {
-        $cart                            = $this->getSimpleCart();
+        $cart                            = $this->getSimpleCart(true);
         $discount1                       = new Discount();
         $discount1->name                 = 'Shipping Test';
         $discount1->type                 = 'shipping';
@@ -331,9 +331,21 @@ class OrderTest extends PluginTestCase
         return $cart;
     }
 
-    protected function getSimpleCart(): Cart
+    protected function getSimpleCart($withProduct = false): Cart
     {
         $cart = new Cart();
+        if($withProduct) {
+            $product                     = Product::first();
+            $product->stackable          = true;
+            $product->price              = ['CHF' => 200, 'EUR' => 300];
+            $product->weight             = 400;
+            $product->stock              = 10;
+            $product->price_includes_tax = true;
+            $product->save();
+
+            $cart->addProduct($product, 2);
+        }
+
         $cart->setShippingMethod(ShippingMethod::first());
         $cart->setCustomer(Customer::first());
         $cart->setBillingAddress(Address::find(1));

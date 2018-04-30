@@ -196,7 +196,7 @@ class Product extends MallComponent
             return $this->product;
         }
 
-        $model = Variant::published()->with(['property_values', 'images', 'main_image']);
+        $model = Variant::published()->with(['property_values', 'image_sets']);
 
         if ($variant === ':slug') {
             return $this->variant = $model->where('product_id', $this->product->id)
@@ -216,9 +216,8 @@ class Product extends MallComponent
         $model   = ProductModel::published()->with([
             'variants',
             'variants.property_values',
-            'variants.images',
-            'variants.main_image',
-            'images',
+            'variants.image_sets',
+            'image_sets',
             'downloads',
             'taxes',
         ]);

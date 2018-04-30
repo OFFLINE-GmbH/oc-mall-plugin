@@ -12,7 +12,6 @@
     - builder_table_create_offline_mall_cart_products.php
     - builder_table_create_offline_mall_shipping_methods.php
     - builder_table_create_offline_mall_shipping_method_tax.php
-    - builder_table_create_offline_mall_countries.php
     - builder_table_create_offline_mall_country_tax.php
     - builder_table_create_offline_mall_shipping_method_rates.php
     - builder_table_create_offline_mall_cart_custom_field_value.php

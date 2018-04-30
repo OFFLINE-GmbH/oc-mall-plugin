@@ -628,6 +628,10 @@
                     'required' => 'Choose a country.',
                     'exists'   => 'The provided country is not valid.',
                 ],
+                'state_id'        => [
+                    'required' => 'Choose a state',
+                    'exists'   => 'The selected value is not valid.',
+                ],
             ],
         ],
         'categories'            => [
