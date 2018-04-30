@@ -5,6 +5,7 @@ use Event;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -89,6 +90,10 @@ class Order extends Model
             $initialOrderStatus = OrderState::where('flag', OrderState::FLAG_NEW)->first();
             if ( ! $initialOrderStatus) {
                 throw new RuntimeException('You have to create an order state with the "new" flag before accepting orders!');
+            }
+
+            if ($cart->products->count() < 1) {
+                throw new ValidationException(['Your order is empty. Please add a product to the cart.']);
             }
 
             $order                                          = new static;

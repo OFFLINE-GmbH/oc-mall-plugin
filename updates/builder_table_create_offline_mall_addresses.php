@@ -13,10 +13,10 @@ class BuilderTableCreateOfflineMallAddresses extends Migration
             $table->string('company')->nullable();
             $table->string('name')->nullable();
             $table->text('lines');
-            $table->string('city');
-            $table->string('county_province')->nullable();
             $table->string('zip', 20);
-            $table->integer('country_id')->unsigned();
+            $table->string('city');
+            $table->integer('state_id')->unsigned()->nullable()->index();
+            $table->integer('country_id')->unsigned()->nullable()->index();
             $table->text('details')->nullable();
             $table->integer('customer_id')->unsigned()->nullable();
             $table->timestamp('created_at')->nullable();
@@ -24,7 +24,7 @@ class BuilderTableCreateOfflineMallAddresses extends Migration
             $table->timestamp('deleted_at')->nullable();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('offline_mall_addresses');

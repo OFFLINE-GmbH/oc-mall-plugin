@@ -1,7 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use OFFLINE\Mall\Models\Country;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 
@@ -31,11 +30,11 @@ class OrdersList extends MallComponent
             return;
         }
 
-        $this->orders      = Order::byCustomer($user->customer)
-                                  ->with(['products', 'products.variant'])
-                                  ->orderBy('created_at', 'DESC')
-                                  ->get();
-        $this->countries   = Country::get()->pluck('name', 'id');
+        $this->orders = Order::byCustomer($user->customer)
+                             ->with(['products', 'products.variant'])
+                             ->orderBy('created_at', 'DESC')
+                             ->get();
+
         $this->paymentLink = $this->getPaymentLink();
     }
 

@@ -3,7 +3,6 @@
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
-use OFFLINE\Mall\Models\Country;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\User\Facades\Auth;
 
@@ -110,7 +109,6 @@ class AddressForm extends MallComponent
             return false;
         }
 
-        $this->setVar('countries', Country::orderBy('name')->get());
         $this->setVar('setAddressAs', $this->property('set'));
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
 

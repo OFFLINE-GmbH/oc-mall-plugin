@@ -36,7 +36,9 @@ use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
-use OFFLINE\Mall\Models\User as UserModel;
+use OFFLINE\Mall\Models\Tax;
+use OFFLINE\Mall\Models\User as RainLabUser;
+use RainLab\Location\Models\Country as RainLabCountry;
 use System\Classes\PluginBase;
 use Validator;
 
@@ -45,7 +47,7 @@ use Validator;
  */
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.Translate', 'RainLab.User'];
+    public $require = ['RainLab.Translate', 'RainLab.User', 'RainLab.Location'];
 
     public function boot()
     {
@@ -54,6 +56,7 @@ class Plugin extends PluginBase
         $this->registerStaticPagesEvents();
         $this->setContainerBindings();
         $this->addCustomValidatorRules();
+        $this->extendPlugins();
     }
 
     public function registerComponents()
@@ -82,7 +85,7 @@ class Plugin extends PluginBase
     {
         return [
             PropertyFields::class => 'mall.propertyfields',
-            Price::class => 'mall.price'
+            Price::class          => 'mall.price',
         ];
     }
 
@@ -185,13 +188,25 @@ class Plugin extends PluginBase
     protected function addCustomValidatorRules()
     {
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
-            $count = UserModel::with('customer')
-                         ->where('email', $value)
-                         ->whereHas('customer', function ($q) {
-                             $q->where('is_guest', 0);
-                         })->count();
+            $count = RainLabUser::with('customer')
+                                ->where('email', $value)
+                                ->whereHas('customer', function ($q) {
+                                    $q->where('is_guest', 0);
+                                })->count();
 
             return $count === 0;
+        });
+    }
+
+    protected function extendPlugins()
+    {
+        RainLabCountry::extend(function ($model) {
+            $model->belongsToMany['taxes'] = [
+                Tax::class,
+                'table'    => 'offline_mall_country_tax',
+                'key'      => 'country_id',
+                'otherKey' => 'tax_id',
+            ];
         });
     }
 }

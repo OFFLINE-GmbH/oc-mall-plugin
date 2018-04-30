@@ -2,10 +2,10 @@
 
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
-use OFFLINE\Mall\Models\Country;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use PluginTestCase;
+use RainLab\Location\Models\Country;
 
 class ShippingMethodTest extends PluginTestCase
 {

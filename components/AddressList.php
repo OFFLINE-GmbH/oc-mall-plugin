@@ -4,7 +4,6 @@ use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
-use OFFLINE\Mall\Models\Country;
 use OFFLINE\Mall\Models\GeneralSettings;
 
 class AddressList extends MallComponent
@@ -30,7 +29,6 @@ class AddressList extends MallComponent
     {
         if ($user = Auth::getUser()) {
             $this->addresses   = $user->customer->addresses;
-            $this->countries   = Country::get()->pluck('name', 'id');
             $this->addressPage = GeneralSettings::get('address_page');
         }
     }

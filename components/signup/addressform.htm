@@ -28,17 +28,6 @@
         <div data-validate-for="{{ type }}_city"></div>
     </div>
 </div>
-<div class="mall-form-control">
-    <label for="{{ type }}_county_province">{{ 'mall.form.county_province' | _ }}</label>
-    <input id="{{ type }}_county_province" name="{{ type }}_county_province" type="text">
-    <div data-validate-for="{{ type }}_county_province"></div>
-</div>
-<div class="mall-form-control">
-    <label for="{{ type }}_country_id">{{ 'mall.form.country' | _ }}</label>
-    <select id="{{ type }}_country_id" name="{{ type }}_country_id">
-        {% for country in countries %}
-            <option value="{{ country.id }}">{{ country.name }}</option>
-        {% endfor %}
-    </select>
-    <div data-validate-for="{{ type }}_country_id"></div>
+<div class="mall-two-fields" id="countryState_{{ type }}">
+    {% partial __SELF__ ~ '::countrystate' type=type %}
 </div>

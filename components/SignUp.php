@@ -2,7 +2,6 @@
 
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
-use OFFLINE\Mall\Models\Country;
 
 class SignUp extends MallComponent
 {
@@ -24,11 +23,6 @@ class SignUp extends MallComponent
                 'name' => 'offline.mall::lang.components.signup.properties.redirect.name',
             ],
         ];
-    }
-
-    public function init()
-    {
-        $this->setVar('countries', Country::get());
     }
 
     public function onSignIn()

@@ -175,6 +175,29 @@ class VariantTest extends PluginTestCase
         $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
     }
 
+
+    public function test_explicit_null_price_accessors_are_inherited()
+    {
+        $price          = ['CHF' => 20.50, 'EUR' => 80.50];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+
+        $this->product->price = $price;
+        $this->product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->product_id = $this->product->id;
+        $variant->price = ['CHF' => null, 'EUR' => null];
+        $variant->save();
+
+        $this->assertEquals($price, $variant->price);
+        $this->assertEquals($priceFormatted, $variant->price_formatted);
+        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
+        $this->assertEquals(20.50, $variant->priceInCurrency());
+        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
+        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+    }
+
     public function test_price_accessors_are_inherited_by_currency()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
