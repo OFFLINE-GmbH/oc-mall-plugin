@@ -8,9 +8,11 @@ use BackendMenu;
 use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
+use OFFLINE\Mall\Models\Variant;
 
 class Products extends Controller
 {
@@ -167,5 +169,16 @@ class Products extends Controller
         $this->optionFormWidget = $widget;
 
         return $widget;
+    }
+
+    protected function relationExtendRefreshResults($field)
+    {
+        if ($field !== 'variants') {
+            return;
+        }
+
+        return [
+            '#Products-update-RelationController-images-view' => $this->relationRenderView('images'),
+        ];
     }
 }

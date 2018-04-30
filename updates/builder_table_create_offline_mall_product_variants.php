@@ -11,6 +11,7 @@ class BuilderTableCreateOfflineMallProductVariants extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('product_id')->unsigned();
+            $table->integer('image_set_id')->unsigned()->nullable();
             $table->integer('stock')->nullable();
             $table->string('name')->nullable();
             $table->boolean('published')->default(true);

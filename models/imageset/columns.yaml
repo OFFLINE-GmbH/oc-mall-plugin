@@ -1,0 +1,19 @@
+columns:
+    images:
+        label: 'offline.mall::lang.common.main_image'
+        type: partial
+        path: $/offline/mall/models/imageset/_image.htm
+        searchable: true
+        sortable: false
+        width: 80
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    is_main_set:
+        label: 'offline.mall::lang.image_sets.is_main_set'
+        type: partial
+        path: $/offline/mall/models/imageset/_is_main_set.htm
+        searchable: true
+        sortable: true

@@ -31,5 +31,7 @@
     - builder_table_create_offline_mall_category_property.php
     - builder_table_create_offline_mall_order_states.php
     - builder_table_create_offline_mall_brands.php
+    - builder_table_create_offline_mall_image_sets.php
+    - builder_table_create_offline_mall_imageables.php
     - allow_non_unique_emails_for_rainlab_user.php
     - database_seeder.php

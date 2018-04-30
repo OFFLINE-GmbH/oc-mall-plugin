@@ -16,7 +16,7 @@ variants:
     label: 'offline.mall::lang.common.variants'
     view:
         list: $/offline/mall/models/variant/columns.yaml
-        toolbarButtons: create|delete
+        toolbarPartial: variants_toolbar
     manage:
         form: $/offline/mall/models/variant/fields.yaml
         recordsPerPage: 10
@@ -51,3 +51,12 @@ brand:
     manage:
         form: $/offline/mall/models/brand/fields.yaml
         list: $/offline/mall/models/brand/columns.yaml
+
+image_sets:
+    label: 'offline.mall::lang.common.images'
+    view:
+        list: $/offline/mall/models/imageset/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        list: $/offline/mall/models/imageset/columns.yaml
+        form: $/offline/mall/models/imageset/fields.yaml

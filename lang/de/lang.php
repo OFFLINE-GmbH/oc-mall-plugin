@@ -117,6 +117,7 @@
         'select_placeholder'   => '-- Bitte wählen',
         'main_image'           => 'Hauptbild',
         'images'               => 'Bilder',
+        'image_set'            => 'Bilderset',
         'attachments'          => 'Bilder/Downloads',
         'downloads'            => 'Downloads',
         'select_image'         => 'Bild auswählen',
@@ -245,6 +246,11 @@
         'price_includes_tax'                   => 'Preis ist inkl. Steuern',
         'price_includes_tax_comment'           => 'Der angegebene Preis enthält bereits alle Steuern',
         'group_by_property'                    => 'Attribut für Varianten-Gruppierung',
+    ],
+    'image_sets'               => [
+        'is_main_set'         => 'Ist Hauptset',
+        'is_main_set_comment' => 'Verwende dieses Set für die Produktbilder',
+        'create_new'          => 'Erstelle neues Set',
     ],
     'category'                 => [
         'name'         => 'Name',

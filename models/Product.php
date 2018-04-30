@@ -51,12 +51,8 @@ class Product extends Model
     ];
 
     public $table = 'offline_mall_products';
-
-    public $attachOne = [
-        'main_image' => File::class,
-    ];
+    public $with = ['image_sets'];
     public $attachMany = [
-        'images'    => File::class,
         'downloads' => File::class,
     ];
     public $belongsTo = [
@@ -81,6 +77,7 @@ class Product extends Model
     public $hasMany = [
         'variants'      => Variant::class,
         'cart_products' => CartProduct::class,
+        'image_sets'    => ImageSet::class,
     ];
     public $belongsToMany = [
         'custom_fields'   => [
