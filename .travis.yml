@@ -34,6 +34,7 @@ before_script:
   - php artisan october:up -v
   - php artisan plugin:install RainLab.Translate
   - php artisan plugin:install RainLab.User
+  - php artisan plugin:install RainLab.Location
   - cd ..
   - mv !(october) october/plugins/offline/mall
   - cd october
