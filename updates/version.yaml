@@ -27,10 +27,12 @@
     - builder_table_create_offline_mall_product_custom_field.php
     - builder_table_create_offline_mall_properties.php
     - builder_table_create_offline_mall_property_values.php
-    - builder_table_create_offline_mall_category_property.php
     - builder_table_create_offline_mall_order_states.php
     - builder_table_create_offline_mall_brands.php
     - builder_table_create_offline_mall_image_sets.php
     - builder_table_create_offline_mall_imageables.php
+    - builder_table_create_offline_mall_property_property_group.php
+    - builder_table_create_offline_mall_property_groups.php
+    - builder_table_create_offline_mall_category_property_group.php
     - allow_non_unique_emails_for_rainlab_user.php
     - database_seeder.php

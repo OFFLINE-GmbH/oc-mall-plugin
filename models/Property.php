@@ -32,13 +32,13 @@ class Property extends Model
         'property_values' => PropertyValue::class,
     ];
     public $belongsToMany = [
-        'categories' => [
-            Category::class,
-            'table'      => 'offline_mall_category_property',
+        'property_groups' => [
+            PropertyGroup::class,
+            'table'      => 'offline_mall_property_group_property',
             'key'        => 'property_id',
-            'otherKey'   => 'category_id',
+            'otherKey'   => 'property_group_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
-            'pivotModel' => CategoryProperty::class,
+            'pivotModel' => PropertyGroupProperty::class,
         ],
     ];
 

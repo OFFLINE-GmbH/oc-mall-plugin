@@ -29,15 +29,6 @@ class PropertyValue extends Model
     public $morphTo = [
         'describable' => [],
     ];
-    public $belongsToMany = [
-        'categories' => [
-            Category::class,
-            'table'    => 'offline_mall_category_property',
-            'key'      => 'property_id',
-            'otherKey' => 'category_id',
-            'pivot'    => ['use_for_variants'],
-        ],
-    ];
 
     /**
      * The parent's attribute type is stored to make trigger conditions

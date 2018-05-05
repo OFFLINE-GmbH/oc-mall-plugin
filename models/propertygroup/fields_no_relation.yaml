@@ -1,0 +1,9 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        span: auto
+        type: text
+    description:
+        label: 'offline.mall::lang.product.description'
+        span: auto
+        type: text

@@ -1,15 +1,15 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
-use Backend\Behaviors\FormController;
-use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
-use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use BackendMenu;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ReorderController;
 use Flash;
-use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\PropertyGroup;
 
-class Categories extends Controller
+class PropertyGroups extends Controller
 {
     public $implement = [
         ListController::class,
@@ -24,13 +24,13 @@ class Categories extends Controller
     public $relationConfig = 'config_relation.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.manage_categories',
+        'offline.mall.manage_properties',
     ];
 
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-categories');
+        BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-properties');
         $this->addJs('/plugins/offline/mall/assets/Sortable.js');
         $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
@@ -38,8 +38,8 @@ class Categories extends Controller
     public function onReorder()
     {
         $records = request()->input('rcd');
-        $model   = Category::findOrFail($this->params[0]);
-        $model->setRelationOrder('property_groups', $records, range(1, count($records)));
+        $model   = PropertyGroup::findOrFail($this->params[0]);
+        $model->setRelationOrder('properties', $records, range(1, count($records)));
 
         Flash::success(trans('offline.mall::lang.common.sorting_updated'));
     }

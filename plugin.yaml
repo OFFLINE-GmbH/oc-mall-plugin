@@ -69,7 +69,7 @@ navigation:
                     - offline.mall.manage_products
             mall-properties:
                 label: 'offline.mall::lang.common.properties'
-                url: offline/mall/properties
+                url: offline/mall/propertygroups
                 icon: icon-tags
                 permissions:
                     - offline.mall.manage_properties

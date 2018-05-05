@@ -1,0 +1,13 @@
+name: 'offline.mall::lang.common.property_groups'
+modelClass: OFFLINE\Mall\Models\PropertyGroup
+form: $/offline/mall/models/propertygroup/fields.yaml
+defaultRedirect: offline/mall/propertygroups
+create:
+    title: 'offline.mall::lang.titles.property_groups.create'
+    redirect: 'offline/mall/propertygroups/update/:id'
+    redirectClose: offline/mall/propertygroups
+update:
+    title: 'offline.mall::lang.titles.property_groups.edit'
+    redirect: offline/mall/propertygroups
+    redirectClose: offline/mall/propertygroups
+preview: {  }

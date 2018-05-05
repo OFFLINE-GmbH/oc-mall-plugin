@@ -1,0 +1,19 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+properties:
+    label: 'offline.mall::lang.common.property'
+    deferredBinding: false
+    showSorting: false
+    view:
+        list: $/offline/mall/models/property/columns_pivot.yaml
+        toolbarButtons: add|create|remove
+        defaultSort:
+            column: pivot[sort_order]
+            direction: asc
+    manage:
+        form: $/offline/mall/models/property/fields_pivot.yaml
+        list: $/offline/mall/models/property/columns.yaml
+    pivot:
+        form: $/offline/mall/models/property/fields_pivot.yaml

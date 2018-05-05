@@ -5,6 +5,7 @@ use Backend\Classes\FormWidgetBase;
 use Backend\FormWidgets\ColorPicker;
 use Backend\FormWidgets\FileUpload;
 use OFFLINE\Mall\Models\Property;
+use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
 
 /**
@@ -36,16 +37,18 @@ class PropertyFields extends FormWidgetBase
         $this->vars['values'] = $this->model->property_values ?? collect([]);
         $this->vars['model']  = $this->model;
 
-        $fields = optional($this->controller->vars['formModel']->category)->properties;
+        $groups = optional($this->controller->vars['formModel']->category)->property_groups;
 
         if ($this->controller->vars['formModel']->inventory_management_method !== 'single') {
             $useForVariants = $this->useVariantSpecificPropertiesOnly();
-            $fields         = $fields->filter(function (Property $property) use ($useForVariants) {
-                return (bool)$property->pivot->use_for_variants === $useForVariants;
-            });
+            $groups         = PropertyGroup::with([
+                'properties' => function ($q) use ($useForVariants) {
+                    $q->wherePivot('use_for_variants', $useForVariants);
+                },
+            ])->get();
         }
 
-        $this->vars['fields'] = $fields->sortBy('pivot.sort_order');
+        $this->vars['groups'] = $groups->sortBy('pivot.sort_order');
     }
 
     public function createFormWidget(Property $property, $value)
@@ -161,7 +164,7 @@ class PropertyFields extends FormWidgetBase
         return isset($this->formField->config['variantPropertiesOnly']) && $this->formField->config['variantPropertiesOnly'] === true;
     }
 
-    protected function fieldPrefix(): string
+    public function fieldPrefix(): string
     {
         return $this->formField->config['fieldPrefix'] ?? 'PropertyValues';
     }
