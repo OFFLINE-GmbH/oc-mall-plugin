@@ -29,6 +29,7 @@ class PropertyGroup extends Model
             'otherKey'   => 'property_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
             'pivotModel' => PropertyGroupProperty::class,
+            'order'      => 'pivot_sort_order ASC',
         ],
         'categories' => [
             Category::class,

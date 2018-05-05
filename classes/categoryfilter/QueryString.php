@@ -32,7 +32,7 @@ class QueryString
                 );
             });
 
-        $properties = $category->load('properties')->properties->whereIn('slug', $query->keys());
+        $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
         return $properties->map(function (Property $property) use ($query) {
             if ($property->pivot->filter_type === 'set') {

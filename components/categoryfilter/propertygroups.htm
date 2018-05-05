@@ -1,0 +1,12 @@
+{% if __SELF__.showPriceFilter %}
+    {% partial __SELF__ ~ '::price' %}
+{% endif %}
+{% for group in groups %}
+    <div class="mall-property-group">
+        <div class="mall-property-group__name">{{ group.name }}</div>
+        {% if group.description %}
+            <div class="mall-property-group__description">{{ group.description }}</div>
+        {% endif %}
+        {% partial __SELF__ ~ '::properties' props=group.properties %}
+    </div>
+{% endfor %}
