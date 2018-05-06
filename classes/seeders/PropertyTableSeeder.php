@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Seeders;
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Property;
+use OFFLINE\Mall\Models\PropertyGroup;
 
 class PropertyTableSeeder extends Seeder
 {
@@ -34,7 +35,12 @@ class PropertyTableSeeder extends Seeder
         ];
         $method->save();
 
+        $propertyGroup = new PropertyGroup();
+        $propertyGroup->name = 'Testgroup';
+        $propertyGroup->save();
+        $propertyGroup->properties()->attach([1, 2, 3]);
+
         $category = Category::first();
-        $category->properties()->attach([1, 2, 3]);
+        $category->property_groups()->attach($propertyGroup->id);
     }
 }
