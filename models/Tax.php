@@ -28,9 +28,10 @@ class Tax extends Model
         ],
         'countries'        => [
             RainLabCountry::class,
-            'table'    => 'offline_mall_country_tax',
-            'key'      => 'tax_id',
-            'otherKey' => 'country_id',
+            'table'      => 'offline_mall_country_tax',
+            'key'        => 'tax_id',
+            'otherKey'   => 'country_id',
+            'conditions' => 'is_enabled = 1',
         ],
     ];
 
