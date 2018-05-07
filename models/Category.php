@@ -101,7 +101,9 @@ class Category extends Model
      */
     public function filterFields($fields, $context = null)
     {
-        $fields->inherit_property_groups->hidden = $this->parent_id === null;
+        if (isset($fields->inherit_property_groups)) {
+            $fields->inherit_property_groups->hidden = $this->parent_id === null;
+        }
     }
 
     /**
