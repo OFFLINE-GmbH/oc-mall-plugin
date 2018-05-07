@@ -8,7 +8,7 @@ fields:
         label: 'offline.mall::lang.product.price'
         oc.commentPosition: ''
         span: right
-        type: number
+        type: mall.price
     image:
         label: 'offline.mall::lang.common.image'
         oc.commentPosition: ''
