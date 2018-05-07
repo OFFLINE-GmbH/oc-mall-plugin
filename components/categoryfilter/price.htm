@@ -1,12 +1,14 @@
-<div class="mall-property">
-    <div class="mall-property__label">
-        {{ 'offline.mall::lang.product.price' | __ }}
+
+<div class="mall-property-group">
+    <div class="mall-property-group__name mall-property-group__name--price">
+        <div>{{ 'mall.price' | _ }}</div>
         {% partial __SELF__ ~ '::clearfilter' id='price' %}
     </div>
-
-    {% partial __SELF__ ~ '::range'
-        id  = 'price'
-        slug  = 'price'
-        min = __SELF__.priceRange[0]
-        max = __SELF__.priceRange[1] %}
+    <div class="mall-property">
+        {% partial __SELF__ ~ '::range'
+            id  = 'price'
+            slug  = 'price'
+            min = __SELF__.priceRange[0]
+            max = __SELF__.priceRange[1] %}
+    </div>
 </div>

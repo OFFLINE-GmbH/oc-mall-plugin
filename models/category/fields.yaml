@@ -36,13 +36,12 @@ fields:
         type: text
 tabs:
     fields:
-        properties@update:
-            label: 'offline.mall::lang.product.properties'
+        property_groups@update:
             oc.commentPosition: ''
             span: full
             type: partial
-            path: $/offline/mall/controllers/categories/_properties.htm
-            tab: 'offline.mall::lang.product.properties'
+            path: $/offline/mall/controllers/categories/_property_groups.htm
+            tab: 'offline.mall::lang.common.property_groups'
         meta_title:
             label: 'offline.mall::lang.common.meta_title'
             oc.commentPosition: ''

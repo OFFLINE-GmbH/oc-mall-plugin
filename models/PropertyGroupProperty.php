@@ -6,7 +6,7 @@ use October\Rain\Database\Pivot;
 use October\Rain\Database\Traits\Nullable;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
 
-class CategoryProperty extends Pivot
+class PropertyGroupProperty extends Pivot
 {
     use Nullable;
     use SortableRelation;

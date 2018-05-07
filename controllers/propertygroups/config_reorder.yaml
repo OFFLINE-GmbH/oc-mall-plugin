@@ -1,0 +1,5 @@
+title: 'offline.mall::lang.common.property_groups'
+modelClass: OFFLINE\Mall\Models\PropertyGroup
+nameFrom: name
+toolbar:
+    buttons: reorder_toolbar

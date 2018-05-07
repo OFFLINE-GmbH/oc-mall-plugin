@@ -49,6 +49,10 @@
             'create' => 'Marke erstellen',
             'edit'   => 'Marke bearbeiten',
         ],
+        'property_groups'      => [
+            'create' => 'Gruppe erstellen',
+            'edit'   => 'Gruppe bearbeiten',
+        ],
     ],
     'menu_items'               => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -140,6 +144,7 @@
         'hide_published'       => 'Verstecke veröffentlichte',
         'slug'                 => 'URL',
         'name'                 => 'Name',
+        'group_name'           => 'Gruppenname',
         'add_value'            => 'Wert hinzufügen',
         'export_orders'        => 'Bestellungen exportieren',
         'use_backend_defaults' => 'Standard-Einstellung aus Backend-Settings übernehmen',
@@ -158,6 +163,8 @@
         'properties'           => 'Eigenschaften',
         'old_price'            => 'Alter Preis',
         'property'             => 'Eigenschaft',
+        'property_groups'      => 'Eigenschaftsgruppen',
+        'property_group'       => 'Eigenschaftsgruppe',
         'options'              => 'Optionen',
         'option'               => 'Option',
         'catalogue'            => 'Katalog',
@@ -626,7 +633,7 @@
                     'required' => 'Wählen Sie Ihr Land aus.',
                     'exists'   => 'Das ausgewählte Land ist ungültig.',
                 ],
-                'state_id'      => [
+                'state_id'        => [
                     'required' => 'Wählen Sie Ihr Kanton/Bundesstaat',
                     'exists'   => 'Der ausgewählte Wert ist ungültig.',
                 ],

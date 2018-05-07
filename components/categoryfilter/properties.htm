@@ -1,6 +1,3 @@
-{% if __SELF__.showPriceFilter %}
-    {% partial __SELF__ ~ '::price' %}
-{% endif %}
 {% for property in props %}
     {% partial __SELF__ ~ '::property' property=property filter=filter %}
 {% endfor %}

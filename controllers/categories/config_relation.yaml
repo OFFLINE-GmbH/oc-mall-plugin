@@ -2,17 +2,17 @@
 #  Relation Behavior Config
 # ===================================
 
-properties:
-    label: 'offline.mall::lang.common.property'
+property_groups:
+    label: 'offline.mall::lang.common.property_group'
     deferredBinding: false
     showSorting: false
     view:
-        list: $/offline/mall/models/property/columns_pivot.yaml
-        toolbarButtons: add|create|remove
+        list: $/offline/mall/models/propertygroup/columns_pivot.yaml
+        toolbarButtons: add|remove
+        recordUrl: '/offline/mall/propertygroups/update/:id'
         defaultSort:
-            column: sort_order
+            column: pivot[sort_order]
             direction: asc
     manage:
-        form: $/offline/mall/models/property/fields_pivot.yaml
-    pivot:
-        form: $/offline/mall/models/property/fields_pivot.yaml
+        form: $/offline/mall/models/propertygroup/fields_no_relation.yaml
+        list: $/offline/mall/models/propertygroup/columns.yaml

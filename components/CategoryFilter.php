@@ -7,6 +7,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Property;
+use OFFLINE\Mall\Models\PropertyGroup;
 use Session;
 use Validator;
 
@@ -24,7 +25,7 @@ class CategoryFilter extends MallComponent
      * All available property filters.
      * @var Collection
      */
-    public $props;
+    public $propertyGroups;
     /**
      * @var Collection
      */
@@ -121,7 +122,7 @@ class CategoryFilter extends MallComponent
     protected function setData()
     {
         $this->setVar('category', $this->getCategory());
-        $this->setVar('props', $this->getProps());
+        $this->setVar('propertyGroups', $this->getPropertyGroups());
         $this->setVar('filter', $this->getFilter());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setPriceRange();
@@ -132,9 +133,10 @@ class CategoryFilter extends MallComponent
         $category = $this->property('category');
 
         $with = [
-            'properties',
-            'properties.property_values',
-            'properties.property_values.property',
+            'property_groups.properties' => function ($q) {
+                $q->wherePivot('filter_type', '<>', null);
+            },
+            'property_groups.properties.property_values.property',
         ];
 
         if ($category === ':slug') {
@@ -156,10 +158,11 @@ class CategoryFilter extends MallComponent
         $this->setVar('priceRange', [$min, $max]);
     }
 
-    protected function getProps()
+    protected function getPropertyGroups()
     {
-        return $this->category->properties->reject(function (Property $property) {
-            return $property->pivot->filter_type === null;
+        return $this->category->property_groups->reject(function (PropertyGroup $group) {
+            return $group->properties->count() < 1;
+
         })->sortBy('pivot.sort_order');
     }
 

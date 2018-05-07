@@ -1,6 +1,8 @@
-<a class="mall-property__clear-filter js-mall-clear-filter"
-   href="javascript:;"
-   data-filter="{{ id }}"
-   style="{% if not filter[id] %}display: none{% endif %}">
-    {{ 'mall.reset.filter' | _ }}
-</a>
+<div class="mall-property__clear-filter">
+    <a class="js-mall-clear-filter"
+       href="javascript:;"
+       data-filter="{{ id }}"
+       style="{% if not filter[id] %}display: none{% endif %}">
+        {{ 'mall.reset.filter' | _ }}
+    </a>
+</div>

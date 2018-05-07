@@ -2,6 +2,7 @@
 
 use Cache;
 use Cms\Classes\Controller;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Model;
 use October\Rain\Database\Traits\NestedTree;
@@ -58,13 +59,12 @@ class Category extends Model
     ];
 
     public $belongsToMany = [
-        'properties' => [
-            Property::class,
-            'table'      => 'offline_mall_category_property',
+        'property_groups' => [
+            PropertyGroup::class,
+            'table'      => 'offline_mall_category_property_group',
             'key'        => 'category_id',
-            'otherKey'   => 'property_id',
-            'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
-            'pivotModel' => CategoryProperty::class,
+            'otherKey'   => 'property_group_id',
+            'pivot'      => ['sort_order'],
         ],
     ];
 
@@ -241,5 +241,15 @@ class Category extends Model
         })->unique();
 
         return Product::with('variants')->whereIn('id', $productIds)->get();
+    }
+
+    /**
+     * Returnes a flattened Collection of all available properties.
+     *
+     * @return Collection
+     */
+    public function getPropertiesAttribute()
+    {
+        return $this->load('property_groups.properties')->property_groups->map->properties->flatten();
     }
 }

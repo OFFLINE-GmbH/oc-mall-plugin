@@ -1,7 +1,7 @@
 {% if property.values.count > 0 %}
     <div class="mall-property">
         <div class="mall-property__label">
-            {{ property.name }}
+            <div>{{ property.name }}</div>
             {% partial __SELF__ ~ '::clearfilter' id=property.slug %}
         </div>
         {% partial __SELF__ ~ '::' ~ property.pivot.filter_type
