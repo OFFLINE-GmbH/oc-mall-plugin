@@ -4,12 +4,10 @@ namespace OFFLINE\Mall\Models;
 
 use October\Rain\Database\Pivot;
 use October\Rain\Database\Traits\Nullable;
-use OFFLINE\Mall\Classes\Traits\SortableRelation;
 
 class PropertyGroupProperty extends Pivot
 {
     use Nullable;
-    use SortableRelation;
 
     public $nullable = ['filter_type'];
 

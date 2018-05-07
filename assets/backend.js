@@ -8,7 +8,7 @@ function initializeSorting () {
             var $inputs = $(evt.target).find('td>div.drag-handle>input');
             var $form = $('<form style="display: none;">');
             $form.append($inputs.clone())
-                .request('onReorder', {
+                .request('onReorderRelation', {
                     complete: function () {
                         $form.remove();
                     }

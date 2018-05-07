@@ -35,7 +35,7 @@ class Categories extends Controller
         $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
-    public function onReorder()
+    public function onReorderRelation()
     {
         $records = request()->input('rcd');
         $model   = Category::findOrFail($this->params[0]);

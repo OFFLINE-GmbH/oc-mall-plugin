@@ -35,7 +35,7 @@ class PropertyGroups extends Controller
         $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
-    public function onReorder()
+    public function onReorderRelation()
     {
         $records = request()->input('rcd');
         $model   = PropertyGroup::findOrFail($this->params[0]);
