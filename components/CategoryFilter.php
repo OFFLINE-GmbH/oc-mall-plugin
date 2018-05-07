@@ -55,15 +55,21 @@ class CategoryFilter extends MallComponent
     public function defineProperties()
     {
         return [
-            'category'        => [
+            'category'            => [
                 'title'   => 'offline.mall::lang.common.category',
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
-            'showPriceFilter' => [
+            'showPriceFilter'     => [
                 'title'   => 'offline.mall::lang.components.categoryFilter.properties.showPriceFilter.title',
                 'default' => '1',
                 'type'    => 'checkbox',
+            ],
+            'includeSliderAssets' => [
+                'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeSliderAssets.title',
+                'description' => 'offline.mall::lang.components.categoryFilter.properties.includeSliderAssets.description',
+                'default'     => '1',
+                'type'        => 'checkbox',
             ],
         ];
     }
@@ -76,8 +82,10 @@ class CategoryFilter extends MallComponent
 
     public function init()
     {
-        $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.js');
-        $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.css');
+        if ((bool)$this->property('includeSliderAssets')) {
+            $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.js');
+            $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.css');
+        }
     }
 
     public function onRun()
@@ -155,12 +163,12 @@ class CategoryFilter extends MallComponent
         $max      = $products->max(function ($p) {
             return $p->priceInCurrency();
         });
-        $this->setVar('priceRange', [$min, $max]);
+        $this->setVar('priceRange', $min === $max ? false : [$min, $max]);
     }
 
     protected function getPropertyGroups()
     {
-        return $this->category->property_groups->reject(function (PropertyGroup $group) {
+        return $this->category->inherited_property_groups->reject(function (PropertyGroup $group) {
             return $group->properties->count() < 1;
 
         })->sortBy('pivot.sort_order');

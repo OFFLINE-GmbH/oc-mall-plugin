@@ -46,6 +46,10 @@ class Category extends Model
         'slug' => 'name',
     ];
 
+    public $casts = [
+        'inherit_property_groups' => 'boolean',
+    ];
+
     public $table = 'offline_mall_categories';
 
     public $hasMany = [
@@ -61,10 +65,10 @@ class Category extends Model
     public $belongsToMany = [
         'property_groups' => [
             PropertyGroup::class,
-            'table'      => 'offline_mall_category_property_group',
-            'key'        => 'category_id',
-            'otherKey'   => 'property_group_id',
-            'pivot'      => ['sort_order'],
+            'table'    => 'offline_mall_category_property_group',
+            'key'      => 'category_id',
+            'otherKey' => 'property_group_id',
+            'pivot'    => ['sort_order'],
         ],
     ];
 
@@ -75,12 +79,29 @@ class Category extends Model
     public static function boot()
     {
         parent::boot();
+        static::saving(function (self $category) {
+            if ($category->parent_id === null) {
+                $category->inherit_property_groups = false;
+            }
+            if ($category->inherit_property_groups === true) {
+                $category->property_groups()->detach();
+            }
+        });
         static::saved(function () {
             Cache::forget(self::ID_MAP_CACHE_KEY);
         });
         static::deleted(function () {
             Cache::forget(self::ID_MAP_CACHE_KEY);
         });
+    }
+
+    /**
+     * Don't show the inherits_property_groups field if this
+     * category i a root node.
+     */
+    public function filterFields($fields, $context = null)
+    {
+        $fields->inherit_property_groups->hidden = $this->parent_id === null;
     }
 
     /**
@@ -144,7 +165,7 @@ class Category extends Model
 
             $controller = new Controller();
             foreach ($items as $item) {
-                $entryUrl               = $controller->pageUrl($pageUrl, ['slug' => $item->slug]);
+                $entryUrl               = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
                 $branchItem             = [];
                 $branchItem['url']      = $entryUrl;
                 $branchItem['isActive'] = $entryUrl === $url;
@@ -215,7 +236,46 @@ class Category extends Model
     }
 
     /**
-     * Liefert alle Produkte in dieser Kategorie zurück.
+     * Returns the slug of this category prepended by
+     * the slugs of each parent category.
+     *
+     * @return string
+     */
+    public function getNestedSlugAttribute()
+    {
+        return $this->getParentsAndSelf()->map(function (Category $category) {
+            return $category->slug;
+        })->implode('/');
+    }
+
+    public function getInheritedPropertyGroupsAttribute()
+    {
+        return $this->inherit_property_groups ? $this->getInheritedPropertyGroups() : $this->property_groups;
+    }
+
+    /**
+     * Returns the property groups of the first parent
+     * that does not inherit them.
+     */
+    public function getInheritedPropertyGroups()
+    {
+        $groups = $this->getParents()->first(function (Category $category) {
+            return ! $category->inherit_property_groups;
+        })->property_groups;
+
+        if ($groups) {
+            $groups->load([
+                'properties' => function ($q) {
+                    $q->wherePivot('filter_type', '<>', null);
+                },
+            ]);
+        }
+
+        return $groups ?? new Collection();
+    }
+
+    /**
+     * Returns all products in this category.
      *
      * @param bool $useVariants
      *
