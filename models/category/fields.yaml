@@ -36,11 +36,23 @@ fields:
         type: text
 tabs:
     fields:
-        property_groups@update:
-            oc.commentPosition: ''
+        inherit_property_groups:
+            label: 'offline.mall::lang.category.inherit_property_groups'
+            span: auto
+            context: update
+            dependsOn: parent
+            type: switch
+            comment: 'offline.mall::lang.category.inherit_property_groups_comment'
+            tab: 'offline.mall::lang.common.property_groups'
+        property_groups:
             span: full
-            type: partial
             path: $/offline/mall/controllers/categories/_property_groups.htm
+            context: update
+            trigger:
+                action: hide
+                field: inherit_property_groups
+                condition: checked
+            type: partial
             tab: 'offline.mall::lang.common.property_groups'
         meta_title:
             label: 'offline.mall::lang.common.meta_title'

@@ -37,7 +37,7 @@ class PropertyFields extends FormWidgetBase
         $this->vars['values'] = $this->model->property_values ?? collect([]);
         $this->vars['model']  = $this->model;
 
-        $groups = optional($this->controller->vars['formModel']->category)->property_groups;
+        $groups = optional($this->controller->vars['formModel']->category)->inherited_property_groups;
 
         if ($this->controller->vars['formModel']->inventory_management_method !== 'single') {
             $useForVariants = $this->useVariantSpecificPropertiesOnly();
@@ -45,7 +45,7 @@ class PropertyFields extends FormWidgetBase
                 'properties' => function ($q) use ($useForVariants) {
                     $q->wherePivot('use_for_variants', $useForVariants);
                 },
-            ])->get();
+            ])->whereIn('id', $groups->pluck('id'))->get();
         }
 
         $this->vars['groups'] = $groups->sortBy('pivot.sort_order');

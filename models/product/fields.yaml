@@ -125,6 +125,7 @@ tabs:
             span: full
             type: mall.propertyfields
             tab: 'offline.mall::lang.common.properties'
+            dependsOn: category
         price_includes_tax:
             label: 'offline.mall::lang.product.price_includes_tax'
             span: auto
