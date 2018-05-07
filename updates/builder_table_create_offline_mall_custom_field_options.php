@@ -10,11 +10,11 @@ class BuilderTableCreateOfflineMallProductCustomFieldOptions extends Migration
         Schema::create('offline_mall_custom_field_options', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->integer('custom_field_id')->unsigned();
+            $table->integer('custom_field_id')->unsigned()->nullable();
             $table->string('name');
             $table->text('values')->nullable();
-            $table->integer('price')->nullable();
-            $table->integer('sort_order');
+            $table->text('price')->nullable();
+            $table->integer('sort_order')->nullable();
             $table->timestamps();
         });
     }
