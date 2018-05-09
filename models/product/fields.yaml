@@ -32,12 +32,13 @@ tabs:
                 action: hide
                 field: inventory_management_method
                 condition: 'value[variant]'
-        price:
-            label: 'offline.mall::lang.product.price'
+        category:
+            label: 'offline.mall::lang.common.category'
             oc.commentPosition: ''
-            prompt: 'offline.mall::lang.product.add_currency'
+            nameFrom: name
+            descriptionFrom: description
             span: auto
-            type: mall.price
+            type: relation
             tab: 'offline.mall::lang.product.general'
         inventory_management_method:
             label: 'offline.mall::lang.product.inventory_management_method'
@@ -48,20 +49,12 @@ tabs:
             span: auto
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-        old_price:
-            label: 'offline.mall::lang.common.old_price'
+        price:
+            label: 'offline.mall::lang.product.price'
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.product.add_currency'
             span: auto
             type: mall.price
-            tab: 'offline.mall::lang.product.general'
-        category:
-            label: 'offline.mall::lang.common.category'
-            oc.commentPosition: ''
-            nameFrom: name
-            descriptionFrom: description
-            span: auto
-            type: relation
             tab: 'offline.mall::lang.product.general'
         stock:
             label: 'offline.mall::lang.product.stock'
@@ -84,6 +77,13 @@ tabs:
             type: dropdown
             tab: 'offline.mall::lang.product.general'
             dependsOn: category
+        old_price:
+            label: 'offline.mall::lang.common.old_price'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.product.add_currency'
+            span: auto
+            type: mall.price
+            tab: 'offline.mall::lang.product.general'
         variants_section@update:
             label: 'offline.mall::lang.common.variants'
             span: full
