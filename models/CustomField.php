@@ -30,12 +30,6 @@ class CustomField extends Model
         'custom_field_options' => [CustomFieldOption::class, 'order' => 'sort_order'],
     ];
     public $belongsToMany = [
-        'variants' => [
-            Variant::class,
-            'table'    => 'offline_mall_product_variant_custom_field_option',
-            'key'      => 'custom_field_option_id',
-            'otherKey' => 'variant_id',
-        ],
         'products' => [
             Product::class,
             'table'    => 'offline_mall_product_custom_field',
