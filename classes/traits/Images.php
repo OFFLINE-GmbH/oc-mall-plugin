@@ -66,6 +66,6 @@ trait Images
     {
         return $this->image_sets instanceof ImageSet
             ? $this->image_sets
-            : $this->image_sets->sortByDesc('is_main_set')->first();
+            : optional($this->image_sets->sortByDesc('is_main_set'))->first();
     }
 }
