@@ -64,8 +64,16 @@ trait Images
      */
     public function getMainImageSetAttribute()
     {
-        return $this->image_sets instanceof ImageSet
-            ? $this->image_sets
-            : optional($this->image_sets->sortByDesc('is_main_set'))->first();
+        // Exactly one image set is available
+        if ($this->image_sets instanceof ImageSet) {
+            return $this->image_sets;
+        }
+
+        // No image sets available
+        if ( ! $this->image_sets instanceof Collection || $this->image_sets->count() < 1) {
+            return null;
+        }
+
+        return $this->image_sets->sortByDesc('is_main_set')->first();
     }
 }
