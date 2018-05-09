@@ -48,6 +48,13 @@ tabs:
             span: auto
             type: dropdown
             tab: 'offline.mall::lang.product.general'
+        old_price:
+            label: 'offline.mall::lang.common.old_price'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.product.add_currency'
+            span: auto
+            type: mall.price
+            tab: 'offline.mall::lang.product.general'
         category:
             label: 'offline.mall::lang.common.category'
             oc.commentPosition: ''
