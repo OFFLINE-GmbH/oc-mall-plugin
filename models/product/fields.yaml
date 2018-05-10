@@ -84,6 +84,12 @@ tabs:
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.product.general'
+        _table_trigger@update:
+            oc.commentPosition: ''
+            span: auto
+            type: partial
+            path: tabletrigger
+            tab: 'offline.mall::lang.product.general'
         variants_section@update:
             label: 'offline.mall::lang.common.variants'
             span: full
@@ -96,7 +102,7 @@ tabs:
             tab: 'offline.mall::lang.product.general'
         variants@update:
             span: full
-            path: $/offline/mall/controllers/products/_variants.htm
+            path: variants
             trigger:
                 action: hide
                 field: inventory_management_method
@@ -123,7 +129,7 @@ tabs:
             tab: 'offline.mall::lang.product.description'
         brand:
             span: auto
-            path: $/offline/mall/controllers/products/_brand.htm
+            path: brand
             type: partial
             tab: 'offline.mall::lang.product.description'
         _properties@update:
@@ -145,14 +151,14 @@ tabs:
             oc.commentPosition: ''
             span: left
             type: partial
-            path: $/offline/mall/controllers/products/_taxes.htm
+            path: taxes
             tab: 'offline.mall::lang.common.taxes'
         image_sets:
             label: 'offline.mall::lang.common.images'
             oc.commentPosition: ''
             span: left
             type: partial
-            path: $/offline/mall/controllers/products/_image_sets.htm
+            path: image_sets
             tab: 'offline.mall::lang.common.attachments'
         downloads:
             label: 'offline.mall::lang.common.downloads'
@@ -201,7 +207,7 @@ tabs:
             oc.commentPosition: ''
             span: right
             type: partial
-            path: $/offline/mall/controllers/products/_custom_fields.htm
+            path: custom_fields
             tab: 'offline.mall::lang.common.cart'
         quantity_default:
             label: 'offline.mall::lang.product.quantity_default'
@@ -225,7 +231,7 @@ tabs:
             label: 'offline.mall::lang.common.accessories'
             span: full
             type: partial
-            path: $/offline/mall/controllers/products/_accessories.htm
+            path: accessories
             tab: 'offline.mall::lang.common.accessories'
         meta_title:
             label: 'offline.mall::lang.common.meta_title'

@@ -66,7 +66,7 @@ trait Price
         }
 
         if (is_array($value)) {
-            $value = array_filter($this->fillMissingCurrencies($value), function($item) {
+            $value = array_filter($this->fillMissingCurrencies($value), function ($item) {
                 return $item !== null;
             });
         }
@@ -180,6 +180,12 @@ trait Price
      */
     protected function fillMissingCurrencies($value): array
     {
+        // We are in the backend editing the price information. In this case
+        // we actually want missing currencies to be displayed as null values.
+        if (session()->get('mall.variants.disable-inheritance')) {
+            return $value;
+        }
+
         $basePrice = $value[$this->baseCurrency['code']] ?? null;
 
         return collect($value)->map(function ($price, $currency) use ($basePrice) {

@@ -6,6 +6,9 @@ fields:
     code:
         label: 'offline.mall::lang.category.code'
         span: auto
+        preset:
+            field: name
+            type: slug
         type: text
         comment: 'offline.mall::lang.customer_group.code_comment'
 tabs:

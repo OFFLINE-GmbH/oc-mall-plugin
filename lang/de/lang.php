@@ -188,6 +188,7 @@
         'customers' => 'Kunden',
         'customer_groups' => 'Kundengruppen',
         'customer_group' => 'Kundengruppe',
+        'product_or_variant' => 'Produkt/Variante',
     ],
     'variant' => [
         'method' => [
@@ -260,6 +261,10 @@
         'price_includes_tax' => 'Preis ist inkl. Steuern',
         'price_includes_tax_comment' => 'Der angegebene Preis enthält bereits alle Steuern',
         'group_by_property' => 'Attribut für Varianten-Gruppierung',
+        'price_table_modal' => [
+            'title' => 'Übersicht für Preise und Lagerbestand',
+            'currency_dropdown' => 'Währung: ',
+        ]
     ],
     'image_sets' => [
         'is_main_set' => 'Ist Hauptset',

@@ -4,11 +4,13 @@ use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use Backend\Widgets\Table;
 use BackendMenu;
 use October\Rain\Database\Models\DeferredBinding;
+use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
-use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -40,16 +42,15 @@ class Products extends Controller
         $model                  = post('option_id') ? CustomFieldOption::find(post('option_id')) : null;
         $this->optionFormWidget = $this->createOptionFormWidget($model);
         $this->addCss('/plugins/offline/mall/assets/backend.css');
-    }
 
-    public function update($recordId = null)
-    {
-        // This is pretty hacky but it works. To get the original
-        // data from the Variant this session variable is flashed.
-        // The Variant model checks for the existence and doesn't
-        // inherit the parent product's data if it exists.
-        session()->flash('mall.variants.disable-inheritance');
-        parent::update($recordId);
+        if (count($this->params) > 0) {
+            // This is pretty hacky but it works. To get the original
+            // data from the Variant this session variable is flashed.
+            // The Variant model checks for the existence and doesn't
+            // inherit the parent product's data if it exists.
+            session()->flash('mall.variants.disable-inheritance');
+            $this->preparePriceTable();
+        }
     }
 
     public function formAfterUpdate(Product $model)
@@ -180,5 +181,92 @@ class Products extends Controller
         return [
             '#Products-update-RelationController-images-view' => $this->relationRenderView('images'),
         ];
+    }
+
+    public function onLoadPriceTable()
+    {
+        return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
+    }
+
+    protected function preparePriceTable()
+    {
+        $config = $this->makeConfig('config_table.yaml');
+
+        $customerGroups = CustomerGroup::orderBy('sort_order', 'ASC')->get();
+        $customerGroups->each(function (CustomerGroup $group) use ($config) {
+            $config->columns[$group->code] = [
+                'title' => sprintf(
+                    '%s %s',
+                    trans('offline.mall::lang.product.price'),
+                    $group->name
+                ),
+            ];
+        });
+        $this->vars['customerGroups'] = $customerGroups;
+
+        $widget = $this->makeFormWidget(Table::class, $config);
+        $widget->bindToController();
+
+        $model     = Product::find($this->params[0]);
+        $tableData = $model->variants->prepend($model);
+
+        $this->vars['pricetable']      = $widget;
+        $this->vars['currencies']      = CurrencySettings::currencies();
+        $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
+    }
+
+    public function onPriceTablePersist()
+    {
+        $states        = post('state', []);
+        $state         = [];
+        $firstCurrency = true;
+        $priceCols     = (new Product())->getPriceColumns();
+        collect($states)->each(function ($records, $currency) use (&$state, &$firstCurrency, $priceCols) {
+            foreach ($records as $record) {
+                if ($firstCurrency) {
+                    $state[$record['id']] = $record;
+                    foreach ($priceCols as $priceCol) {
+                        $state[$record['id']][$priceCol] = [];
+                    }
+                }
+
+                foreach ($priceCols as $priceCol) {
+                    $state[$record['id']][$priceCol][$currency] = $record[$priceCol];
+                }
+            }
+            $firstCurrency = false;
+        });
+
+        foreach ($state as $record) {
+            $model = $record['type'] === 'product' ? Product::class : Variant::class;
+            $model = (new $model)->find($record['original_id']);
+            $model->forceFill(array_only($record, ['stock', 'price', 'old_price']));
+            $model->save();
+        }
+    }
+
+    protected function processTableData($data)
+    {
+        return $this->vars['currencies']->map(function ($currency) use ($data) {
+            return $data->map(function ($item) use ($currency) {
+                $type = $item instanceof Variant ? 'variant' : 'product';
+
+                $data = [
+                    'id'          => $type . '-' . $item->id,
+                    'original_id' => $item->id,
+                    'type'        => $type,
+                    'name'        => $item->name,
+                    'stock'       => $item->stock,
+                    'price'       => $item->priceInCurrency($currency),
+                    'old_price'   => $item->oldPriceInCurrency($currency),
+                ];
+
+                $this->vars['customerGroups']->each(function (CustomerGroup $group) use (&$data) {
+                    $data[$group->code] = mt_rand(2000, 4000);
+                });
+
+                return $data;
+            });
+        });
     }
 }
