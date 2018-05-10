@@ -175,7 +175,6 @@ class VariantTest extends PluginTestCase
         $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
     }
 
-
     public function test_explicit_null_price_accessors_are_inherited()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
@@ -187,7 +186,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
-        $variant->price = ['CHF' => null, 'EUR' => null];
+        $variant->price      = ['CHF' => null, 'EUR' => null];
         $variant->save();
 
         $this->assertEquals($price, $variant->price);
@@ -240,6 +239,21 @@ class VariantTest extends PluginTestCase
         $this->assertEquals(20.50, $variant->oldPriceInCurrency());
         $this->assertEquals(2050, $variant->oldPriceInCurrencyInteger('CHF'));
         $this->assertEquals(8050, $variant->oldPriceInCurrencyInteger('EUR'));
+    }
+
+    public function test_stock_values()
+    {
+        $this->product->stock = 100;
+        $this->product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->product_id = $this->product->id;
+        $variant->stock      = 0;
+        $variant->price      = ['CHF' => null, 'EUR' => null];
+        $variant->save();
+
+        $this->assertEquals(0, $variant->stock);
     }
 
     public function test_name_fallback()

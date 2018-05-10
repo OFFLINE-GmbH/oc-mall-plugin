@@ -190,7 +190,7 @@ class Variant extends \Model
             $notEmpty = count($originalValue) > 0;
         }
 
-        return $originalValue && $notEmpty ? $originalValue : $parentValues;
+        return $originalValue !== null && $notEmpty ? $originalValue : $parentValues;
     }
 
     /**
