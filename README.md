@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
 
 **This plugin is under heavy development**. Don't use it in production yet. A first production ready version is  
-planned to be release in the Summer of 2018.
+planned to be released in the Summer of 2018.
 
 
 ## Access pricing information
