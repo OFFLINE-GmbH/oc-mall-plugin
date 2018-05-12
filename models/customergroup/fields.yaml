@@ -1,0 +1,18 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        span: auto
+        type: text
+    code:
+        label: 'offline.mall::lang.category.code'
+        span: auto
+        type: text
+        comment: 'offline.mall::lang.customer_group.code_comment'
+tabs:
+    fields:
+        customers:
+            span: full
+            path: users
+            context: update
+            type: partial
+            tab: 'offline.mall::lang.common.customers'

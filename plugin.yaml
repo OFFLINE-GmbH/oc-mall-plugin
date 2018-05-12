@@ -101,3 +101,6 @@ permissions:
     offline.mall.manage_properties:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_properties'
+    offline.mall.manage_customer_groups:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_customer_groups'

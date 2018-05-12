@@ -53,6 +53,10 @@
             'create' => 'Gruppe erstellen',
             'edit' => 'Gruppe bearbeiten',
         ],
+        'customer_groups' => [
+            'create' => 'Kundengruppe erstellen',
+            'update' => 'Kundengruppe bearbeiten',
+        ],
     ],
     'menu_items' => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -181,6 +185,9 @@
         'not_in_use' => 'Option nicht verwendet',
         'saved_changes' => 'Änderungen gespeichert',
         'none' => '-- Nicht definiert',
+        'customers' => 'Kunden',
+        'customer_groups' => 'Kundengruppen',
+        'customer_group' => 'Kundengruppe',
     ],
     'variant' => [
         'method' => [
@@ -418,6 +425,7 @@
             'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
         'manage_properties' => 'Produkt-Eigenschaften bearbeiten',
+        'manage_customer_groups' => 'Kann Kundengruppen verwalten',
     ],
     'components' => [
         'category' => [
@@ -753,5 +761,8 @@
             'new' => 'Status für neue Bestellungen setzen',
             'complete' => 'Bestellung gilt als abgeschlossen',
         ],
+    ],
+    'customer_group' => [
+        'code_comment' => 'Dieser Code kann zur Identifikation der Gruppe genutzt werden',
     ],
 ];

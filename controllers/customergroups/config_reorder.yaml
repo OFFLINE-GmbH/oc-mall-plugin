@@ -1,0 +1,5 @@
+title: 'offline.mall::lang.common.customer_groups'
+modelClass: OFFLINE\Mall\Models\CustomerGroup
+nameFrom: name
+toolbar:
+    buttons: reorder_toolbar
