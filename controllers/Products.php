@@ -9,6 +9,7 @@ use BackendMenu;
 use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\CustomerGroup;
+use OFFLINE\Mall\Models\CustomerGroupPrice;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\Product;
@@ -44,10 +45,9 @@ class Products extends Controller
         $this->addCss('/plugins/offline/mall/assets/backend.css');
 
         if (count($this->params) > 0) {
-            // This is pretty hacky but it works. To get the original
-            // data from the Variant this session variable is flashed.
-            // The Variant model checks for the existence and doesn't
-            // inherit the parent product's data if it exists.
+            // This is pretty hacky but it works. To get the original data from the Variant
+            // this session variable is flashed. The Variant model checks for the
+            // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
             $this->preparePriceTable();
         }
@@ -207,7 +207,11 @@ class Products extends Controller
         $widget = $this->makeFormWidget(Table::class, $config);
         $widget->bindToController();
 
-        $model     = Product::find($this->params[0]);
+        $model     = Product::with([
+            'customer_group_prices',
+            'variants',
+            'variants.customer_group_prices',
+        ])->find($this->params[0]);
         $tableData = $model->variants->prepend($model);
 
         $this->vars['pricetable']      = $widget;
@@ -220,7 +224,11 @@ class Products extends Controller
         $states        = post('state', []);
         $state         = [];
         $firstCurrency = true;
-        $priceCols     = (new Product())->getPriceColumns();
+        $priceCols     = $this->vars['customerGroups']
+            ->pluck('code')
+            ->merge((new Product())->getPriceColumns())
+            ->toArray();
+
         collect($states)->each(function ($records, $currency) use (&$state, &$firstCurrency, $priceCols) {
             foreach ($records as $record) {
                 if ($firstCurrency) {
@@ -238,10 +246,25 @@ class Products extends Controller
         });
 
         foreach ($state as $record) {
-            $model = $record['type'] === 'product' ? Product::class : Variant::class;
-            $model = (new $model)->find($record['original_id']);
+            $type  = $record['type'] === 'product' ? Product::class : Variant::class;
+            $model = (new $type)->find($record['original_id']);
             $model->forceFill(array_only($record, ['stock', 'price', 'old_price']));
             $model->save();
+
+            foreach ($this->vars['customerGroups'] as $group) {
+                if (count(array_filter($record[$group['code']])) < 1) {
+                    continue;
+                }
+
+                CustomerGroupPrice::updateOrCreate(
+                    [
+                        'customer_group_id' => $group['id'],
+                        'priceable_type'    => $type,
+                        'priceable_id'      => $record['original_id'],
+                    ],
+                    ['price' => $record[$group['code']]]
+                );
+            }
         }
     }
 
@@ -261,8 +284,10 @@ class Products extends Controller
                     'old_price'   => $item->oldPriceInCurrency($currency),
                 ];
 
-                $this->vars['customerGroups']->each(function (CustomerGroup $group) use (&$data) {
-                    $data[$group->code] = mt_rand(2000, 4000);
+                $prices = $item->customer_group_prices->keyBy('customer_group_id');
+
+                $this->vars['customerGroups']->each(function (CustomerGroup $group) use (&$data, $prices, $currency) {
+                    $data[$group->code] = optional($prices->get($group->id))->priceInCurrency($currency) ?? null;
                 });
 
                 return $data;

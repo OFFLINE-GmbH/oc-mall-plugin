@@ -35,6 +35,7 @@
     - builder_table_create_offline_mall_property_groups.php
     - builder_table_create_offline_mall_category_property_group.php
     - builder_table_create_offline_mall_customer_groups.php
+    - builder_table_create_offline_mall_customer_group_prices.php
     - allow_non_unique_emails_for_rainlab_user.php
     - add_customer_group_id_to_rainlab_users.php
     - database_seeder.php

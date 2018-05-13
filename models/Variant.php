@@ -51,7 +51,8 @@ class Variant extends \Model
         'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $morphMany = [
-        'property_values' => [PropertyValue::class, 'name' => 'describable'],
+        'property_values'       => [PropertyValue::class, 'name' => 'describable'],
+        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
     ];
 
     /**

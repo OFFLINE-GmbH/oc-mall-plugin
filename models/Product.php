@@ -73,6 +73,7 @@ class Product extends Model
     ];
     public $morphMany = [
         'property_values' => [PropertyValue::class, 'name' => 'describable'],
+        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable']
     ];
     public $hasMany = [
         'variants'      => Variant::class,
