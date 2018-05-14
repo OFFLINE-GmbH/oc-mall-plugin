@@ -56,10 +56,12 @@ tabs:
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.product.general'
+            context: create
         stock:
             label: 'offline.mall::lang.product.stock'
             oc.commentPosition: ''
             span: auto
+            context: create
             trigger:
                 action: hide
                 field: inventory_management_method
@@ -84,12 +86,14 @@ tabs:
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.product.general'
-        _table_trigger@update:
+            context: create
+        _table_trigger:
             oc.commentPosition: ''
             span: auto
             type: partial
-            path: tabletrigger
+            path: price_table_trigger
             tab: 'offline.mall::lang.product.general'
+            context: update
         variants_section@update:
             label: 'offline.mall::lang.common.variants'
             span: full

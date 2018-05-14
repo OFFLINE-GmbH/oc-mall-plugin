@@ -64,6 +64,12 @@
                     this.setCurrency(currency)
                     this.widget.dataSource.data = this.state[currency]
                     this.widget.updateDataTable()
+
+                    // "Disable" the product's stock field if variants are available
+                    var body = this.widget.getDataTableBody()
+                    if (body.children.length > 1) {
+                        body.children[0].children[1].classList.add('disabled')
+                    }
                 },
 
                 updateState: function () {

@@ -82,7 +82,10 @@ table.table.data tbody tr.orderfooter-taxes td {
 
 /** Highlights the product row **/
 .price-table-modal table.data tr:first-child td {
-    border-bottom-color: #bbb;
+    border-bottom-color: #ccc;
+}
+.price-table-modal table.data td.disabled {
+    color: #ccc;
 }
 
 .price-table-currency-selector .btn-link {
