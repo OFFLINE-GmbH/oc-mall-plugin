@@ -54,7 +54,11 @@ trait Price
             $attribute = str_replace('_formatted', '', $attribute);
         }
 
-        $value = parent::getAttribute($attribute);
+        if ($attribute === 'price' && method_exists($this, 'getUserSpecificPrice')) {
+            $value = $this->getUserSpecificPrice();
+        } else {
+            $value = parent::getAttribute($attribute);
+        }
 
         // If the model already implements an accessor we don't mess with the attribute.
         if (method_exists($this, sprintf('get%sAttribute', studly_case($attribute)))) {

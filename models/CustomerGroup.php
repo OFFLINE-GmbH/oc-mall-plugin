@@ -20,7 +20,8 @@ class CustomerGroup extends Model
     public $table = 'offline_mall_customer_groups';
 
     public $hasMany = [
-        'users' => [User::class, 'key' => 'offline_mall_customer_group_id'],
+        'users'                 => [User::class, 'key' => 'offline_mall_customer_group_id'],
+        'customer_group_prices' => [CustomerGroupPrice::class],
     ];
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];

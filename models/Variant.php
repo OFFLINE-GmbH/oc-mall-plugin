@@ -8,6 +8,7 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
 class Variant extends \Model
@@ -17,6 +18,7 @@ class Variant extends \Model
     use Images;
     use HashIds;
     use CustomFields;
+    use UserSpecificPrice;
     use Price {
         getAttribute as priceGetAttribute;
     }

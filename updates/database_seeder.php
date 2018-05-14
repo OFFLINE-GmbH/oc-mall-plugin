@@ -42,9 +42,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductTableSeeder::class);
         $this->call(CustomFieldTableSeeder::class);
         $this->call(ShippingMethodTableSeeder::class);
+        $this->call(CustomerGroupTableSeeder::class);
         $this->call(CustomerTableSeeder::class);
         $this->call(PropertyTableSeeder::class);
         $this->call(OrderStateTableSeeder::class);
-        $this->call(CustomerGroupTableSeeder::class);
     }
 }
