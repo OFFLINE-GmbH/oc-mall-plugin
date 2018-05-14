@@ -9,6 +9,7 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
 class Product extends Model
@@ -16,6 +17,7 @@ class Product extends Model
     use Validation;
     use SoftDelete;
     use Sluggable;
+    use UserSpecificPrice;
     use Price;
     use Images;
     use CustomFields;
@@ -72,7 +74,8 @@ class Product extends Model
         ],
     ];
     public $morphMany = [
-        'property_values' => [PropertyValue::class, 'name' => 'describable'],
+        'property_values'       => [PropertyValue::class, 'name' => 'describable'],
+        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
     ];
     public $hasMany = [
         'variants'      => Variant::class,

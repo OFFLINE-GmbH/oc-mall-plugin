@@ -1,0 +1,17 @@
+dataSource: client
+keyFrom: id
+recordsPerPage: false
+adding: false
+deleting: false
+searching: false
+alias: pricetable
+columns:
+    name:
+        title: offline.mall::lang.common.product_or_variant
+        readOnly: true
+    stock:
+        title: offline.mall::lang.product.stock
+    old_price:
+        title: offline.mall::lang.common.old_price
+    price:
+        title: offline.mall::lang.product.price

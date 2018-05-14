@@ -75,11 +75,19 @@ table.table.data tbody tr.orderfooter-taxes td {
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .1)
 }
 
-.fancy-layout .relation-behavior .form-tabless-fields {
-    background: transparent;
-    padding: 0;
+.modal-body--no-padding {
+    padding-left: 0;
+    padding-right: 0;
 }
-.fancy-layout .relation-behavior .form-tabless-fields label {
-    color: inherit;
-    text-transform: none;
+
+/** Highlights the product row **/
+.price-table-modal table.data tr:first-child td {
+    border-bottom-color: #ccc;
+}
+.price-table-modal table.data td.disabled {
+    color: #ccc;
+}
+
+.price-table-currency-selector .btn-link {
+    padding-left: 0;
 }

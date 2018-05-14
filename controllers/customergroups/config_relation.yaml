@@ -1,0 +1,13 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+users:
+    label: 'offline.mall::lang.common.customers'
+    manage:
+        form: $/rainlab/user/models/user/fields.yaml
+        list: $/rainlab/user/models/user/columns.yaml
+        showSearch: true
+    view:
+        list: $/rainlab/user/models/user/columns.yaml
+        toolbarButtons: add|remove

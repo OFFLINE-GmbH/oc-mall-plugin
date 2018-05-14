@@ -8,6 +8,7 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
 class Variant extends \Model
@@ -17,6 +18,7 @@ class Variant extends \Model
     use Images;
     use HashIds;
     use CustomFields;
+    use UserSpecificPrice;
     use Price {
         getAttribute as priceGetAttribute;
     }
@@ -51,7 +53,8 @@ class Variant extends \Model
         'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $morphMany = [
-        'property_values' => [PropertyValue::class, 'name' => 'describable'],
+        'property_values'       => [PropertyValue::class, 'name' => 'describable'],
+        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
     ];
 
     /**

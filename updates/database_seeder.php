@@ -3,8 +3,8 @@
 use October\Rain\Database\Model;
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Classes\Seeders\CategoryTableSeeder;
-use OFFLINE\Mall\Classes\Seeders\CountryTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomerTableSeeder;
+use OFFLINE\Mall\Classes\Seeders\CustomerGroupTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomFieldTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\OrderStateTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\PaymentMethodTableSeeder;
@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductTableSeeder::class);
         $this->call(CustomFieldTableSeeder::class);
         $this->call(ShippingMethodTableSeeder::class);
+        $this->call(CustomerGroupTableSeeder::class);
         $this->call(CustomerTableSeeder::class);
         $this->call(PropertyTableSeeder::class);
         $this->call(OrderStateTableSeeder::class);
