@@ -84,6 +84,6 @@ class Price extends FormWidgetBase
      */
     public function getPriceValue($currency)
     {
-        return $this->model->{$this->fieldName}[$currency] ?? false;
+        return $this->getLoadValue()[$currency] ?? false;
     }
 }
