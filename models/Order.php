@@ -107,7 +107,7 @@ class Order extends Model
             $order->taxes                                   = $cart->totals->taxes();
             $order->discounts                               = $cart->totals->appliedDiscounts();
             $order->ip_address                              = request()->ip();
-            $order->customer_id                             = Auth::getUser()->customer->id;
+            $order->customer_id                             = $cart->customer->id;
             $order->payment_method_id                       = $cart->payment_method_id;
             $order->payment_state                           = PendingState::class;
             $order->order_state_id                          = $initialOrderStatus->id;
