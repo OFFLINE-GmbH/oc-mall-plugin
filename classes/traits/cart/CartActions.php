@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Traits\Cart;
 
 use DB;
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Models\Cart;
@@ -28,7 +29,7 @@ trait CartActions
         ?Variant $variant = null,
         ?Collection $values = null
     ) {
-        return DB::transaction(function () use ($product, $quantity, $variant, $values) {
+        $cartEntry = DB::transaction(function () use ($product, $quantity, $variant, $values) {
             if ( ! $this->exists) {
                 $this->save();
             }
@@ -72,12 +73,20 @@ trait CartActions
             }
 
             $this->validateShippingMethod();
+
+            return $cartEntry;
         });
+
+        Event::fire('mall.cart.product.added', [$this, $cartEntry, $product, $quantity, $variant, $values]);
+
+        return $cartEntry;
     }
 
     public function removeProduct(CartProduct $product)
     {
         $product->delete();
+
+        Event::fire('mall.cart.product.removed', [$this, $product]);
 
         return $this;
     }
