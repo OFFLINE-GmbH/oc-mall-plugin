@@ -385,6 +385,9 @@
         'update_tracking_info' => 'Add tracking info',
         'invalid_status' => 'The selected status does not exist.',
         'updated' => 'Order update successful',
+        'deleted' => 'Order successfully deleted',
+        'deleting' => 'Deleting order...',
+        'delete_confirm' => 'Do you really want to delete this order?',
         'modal' => [
             'cancel' => 'Cancel',
             'update' => 'Update information',

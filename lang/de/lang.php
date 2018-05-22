@@ -384,6 +384,9 @@
         'update_tracking_info'                => 'Sendungsverfolgung hinterlegen',
         'invalid_status'                      => 'Der ausgewählte Status existiert nicht',
         'updated'                             => 'Bestellung aktualisiert',
+        'deleted'                             => 'Bestellung gelöscht',
+        'deleting'                            => 'Bestellung wird gelöscht...',
+        'delete_confirm'                      => 'Möchtest du diese Bestellung wirklich löschen?',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
