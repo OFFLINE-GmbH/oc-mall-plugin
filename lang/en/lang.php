@@ -388,6 +388,7 @@
         'deleted' => 'Order successfully deleted',
         'deleting' => 'Deleting order...',
         'delete_confirm' => 'Do you really want to delete this order?',
+        'update_invoice_number' => 'Set invoice number',
         'modal' => [
             'cancel' => 'Cancel',
             'update' => 'Update information',

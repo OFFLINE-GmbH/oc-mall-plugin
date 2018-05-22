@@ -387,6 +387,7 @@
         'deleted'                             => 'Bestellung gelöscht',
         'deleting'                            => 'Bestellung wird gelöscht...',
         'delete_confirm'                      => 'Möchtest du diese Bestellung wirklich löschen?',
+        'update_invoice_number'               => 'Rechnungsnummer ändern',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',

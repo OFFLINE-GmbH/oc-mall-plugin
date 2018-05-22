@@ -85,6 +85,16 @@ class Orders extends Controller
         $this->updateOrder($data);
     }
 
+    public function onUpdateInvoiceNumber()
+    {
+        $invoiceNumber = input('invoiceNumber');
+
+        $data = ['invoice_number' => $invoiceNumber];
+
+        Event::fire('mall.order.invoice_number.changed', $data);
+        $this->updateOrder($data);
+    }
+
     public function onDelete($recordId = null)
     {
         $order = Order::findOrFail($recordId);
