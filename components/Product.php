@@ -335,7 +335,7 @@ class Product extends MallComponent
                                 )
                                 ->where('describable_type', Variant::class)
                                 ->whereNull('offline_mall_product_variants.deleted_at')
-                                ->select(DB::raw('describable_type, describable_id count(*) as matching_attributes'))
+                                ->select(DB::raw('describable_type, describable_id, count(*) as matching_attributes'))
                                 ->groupBy(['describable_id', 'describable_type'])
                                 ->having('matching_attributes', $values->count())
                                 ->first();
