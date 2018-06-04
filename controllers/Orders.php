@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend;
 use Backend\Classes\Controller;
 use BackendMenu;
 use Event;
@@ -82,6 +83,26 @@ class Orders extends Controller
 
         Event::fire('mall.order.tracking_info.changed', $data);
         $this->updateOrder($data);
+    }
+
+    public function onUpdateInvoiceNumber()
+    {
+        $invoiceNumber = input('invoiceNumber');
+
+        $data = ['invoice_number' => $invoiceNumber];
+
+        Event::fire('mall.order.invoice_number.changed', $data);
+        $this->updateOrder($data);
+    }
+
+    public function onDelete($recordId = null)
+    {
+        $order = Order::findOrFail($recordId);
+        $order->delete();
+
+        Flash::success(trans('offline.mall::lang.order.deleted'));
+
+        return Backend::redirect('offline/mall/orders');
     }
 
     protected function updateOrder(array $attributes)

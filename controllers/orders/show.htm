@@ -30,6 +30,7 @@
                                 </div>
                             </div>
                             <?= $this->makePartial('tracking_modal') ?>
+                            <?= $this->makePartial('invoice_number_modal') ?>
 
                             <div style="margin-left: -20px; margin-right: -20px">
                                 <div class="control-list">
@@ -37,9 +38,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-buttons">
+                            <div class="loading-indicator-container">
+                                <button
+                                        type="button"
+                                        class="oc-icon-trash-o btn-icon danger pull-right"
+                                        data-request="onDelete"
+                                        data-load-indicator="<?= e(trans('offline.mall::lang.order.deleting')) ?>"
+                                        data-request-confirm="<?= e(trans('offline.mall::lang.order.delete_confirm')) ?>">
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
     <div class="layout-cell w-300 form-sidebar control-scrollpanel">
