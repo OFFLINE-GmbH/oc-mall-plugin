@@ -56,6 +56,8 @@ class Variant extends \Model
         'property_values'       => [PropertyValue::class, 'name' => 'describable'],
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
     ];
+    
+    protected $fillable = ['stock', 'name', 'published', 'price', 'old_price', 'allow_out_of_stock_purchases'];
 
     /**
      * The related products data is cached to speed uf the
