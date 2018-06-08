@@ -19,6 +19,8 @@ class ImageSet extends Model
         'product' => Product::class,
     ];
     public $with = ['images'];
+    
+    protected $fillable = ['name'];
 
     public static function boot()
     {
