@@ -134,6 +134,12 @@ class Category extends Model
     public static function getMenuTypeInfo($type)
     {
         $result = [];
+        if ($type == 'mall-category') {
+            $result = [
+                'references'   => self::listSubCategoryOptions(),
+            ];
+        }
+
         if ($type === 'all-mall-categories') {
             $result = [
                 'dynamicItems' => true,
@@ -141,6 +147,27 @@ class Category extends Model
         }
 
         return $result;
+    }
+
+    protected static function listSubCategoryOptions()
+    {
+        $category = self::getNested();
+        $iterator = function($categories) use (&$iterator) {
+            $result = [];
+            foreach ($categories as $category) {
+                if (!$category->children) {
+                    $result[$category->id] = $category->name;
+                }
+                else {
+                    $result[$category->id] = [
+                        'title' => $category->name,
+                        'items' => $iterator($category->children)
+                    ];
+                }
+            }
+            return $result;
+        };
+        return $iterator($category);
     }
 
     /**
@@ -154,7 +181,6 @@ class Category extends Model
     public static function resolveMenuItem($item, $url, $theme)
     {
         $structure = [];
-        $category  = new Category();
 
         if ( ! $pageUrl = GeneralSettings::get('category_page')) {
             throw new InvalidArgumentException(
@@ -162,28 +188,48 @@ class Category extends Model
             );
         }
 
-        $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $pageUrl, $url) {
-            $branch = [];
-
-            $controller = new Controller();
-            foreach ($items as $item) {
-                $entryUrl               = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
-                $branchItem             = [];
-                $branchItem['url']      = $entryUrl;
-                $branchItem['isActive'] = $entryUrl === $url;
-                $branchItem['title']    = $item->name;
-
-                if ($item->children) {
-                    $branchItem['items'] = $iterator($item->children, $item->slug);
-                }
-
-                $branch[] = $branchItem;
+        if($item->type == 'mall-category') {
+            $category = self::find($item->reference);
+            if (!$category) {
+                return;
             }
 
-            return $branch;
-        };
+            $controller = new Controller();
+            $entryUrl = $controller->pageUrl($pageUrl, ['slug' => $category->slug]);
 
-        $structure['items'] = $iterator($category->getEagerRoot());
+            $structure['url'] = $entryUrl;
+            $structure['isActive'] = $entryUrl === $url;
+            $structure['mtime'] = $category->updated_at;
+            $structure['title'] = $category->name;
+            $structure['code'] = $category->code;
+
+        } elseif ($item->type == 'all-mall-categories') {
+            $category  = new Category();
+
+            $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $pageUrl, $url) {
+                $branch = [];
+
+                $controller = new Controller();
+                foreach ($items as $item) {
+                    $entryUrl               = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
+                    $branchItem             = [];
+                    $branchItem['url']      = $entryUrl;
+                    $branchItem['isActive'] = $entryUrl === $url;
+                    $branchItem['title']    = $item->name;
+                    $branchItem['code']     = $item->code;
+
+                    if ($item->children) {
+                        $branchItem['items'] = $iterator($item->children, $item->slug);
+                    }
+
+                    $branch[] = $branchItem;
+                }
+
+                return $branch;
+            };
+
+            $structure['items'] = $iterator($category->getEagerRoot());
+        }
 
         return $structure;
     }
