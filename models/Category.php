@@ -238,7 +238,7 @@ class Category extends Model
         }
 
         $controller = new Controller();
-        $entryUrl = $controller->pageUrl($pageUrl, ['slug' => $item->slug]);
+        $entryUrl = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
 
         $result = [];
         $result['url'] = $entryUrl;
