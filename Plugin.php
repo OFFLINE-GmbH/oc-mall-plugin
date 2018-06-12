@@ -140,18 +140,19 @@ class Plugin extends PluginBase
     {
         Event::listen('pages.menuitem.listTypes', function () {
             return [
+                'mall-category'       => trans('offline.mall::lang.menu_items.single_category'),
                 'all-mall-categories' => trans('offline.mall::lang.menu_items.all_categories'),
             ];
         });
 
         Event::listen('pages.menuitem.getTypeInfo', function ($type) {
-            if ($type == 'all-mall-categories') {
+            if ($type == 'all-mall-categories' || $type == 'mall-category') {
                 return Category::getMenuTypeInfo($type);
             }
         });
 
         Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
-            if ($type == 'all-mall-categories') {
+            if ($type == 'all-mall-categories' || $type == 'mall-category') {
                 return Category::resolveMenuItem($item, $url, $theme);
             }
         });

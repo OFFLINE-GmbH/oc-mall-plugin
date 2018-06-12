@@ -60,6 +60,7 @@
     ],
     'menu_items' => [
         'all_categories' => 'All shop categories',
+        'single_category' => 'Single shop category'
     ],
     'currency_settings' => [
         'label' => 'Currencies',
