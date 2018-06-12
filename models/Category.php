@@ -149,6 +149,12 @@ class Category extends Model
         return $result;
     }
 
+    /**
+     * Lists all categories with nested sub categories
+     * This is used for the 'mall-category' menu type
+     *
+     * @return array
+     */
     protected static function listSubCategoryOptions()
     {
         $category = self::getNested();
@@ -182,41 +188,22 @@ class Category extends Model
     {
         $structure = [];
 
-        if ( ! $pageUrl = GeneralSettings::get('category_page')) {
-            throw new InvalidArgumentException(
-                'Mall: Please select a category page via the backend settings.'
-            );
-        }
-
         if($item->type == 'mall-category') {
             $category = self::find($item->reference);
             if (!$category) {
                 return;
             }
 
-            $controller = new Controller();
-            $entryUrl = $controller->pageUrl($pageUrl, ['slug' => $category->slug]);
-
-            $structure['url'] = $entryUrl;
-            $structure['isActive'] = $entryUrl === $url;
-            $structure['mtime'] = $category->updated_at;
-            $structure['title'] = $category->name;
-            $structure['code'] = $category->code;
+            $structure = self::getMenuItem($category, $url);
 
         } elseif ($item->type == 'all-mall-categories') {
             $category  = new Category();
 
-            $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $pageUrl, $url) {
+            $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
                 $branch = [];
 
-                $controller = new Controller();
                 foreach ($items as $item) {
-                    $entryUrl               = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
-                    $branchItem             = [];
-                    $branchItem['url']      = $entryUrl;
-                    $branchItem['isActive'] = $entryUrl === $url;
-                    $branchItem['title']    = $item->name;
-                    $branchItem['code']     = $item->code;
+                    $branchItem = self::getMenuItem($item, $url);
 
                     if ($item->children) {
                         $branchItem['items'] = $iterator($item->children, $item->slug);
@@ -232,6 +219,35 @@ class Category extends Model
         }
 
         return $structure;
+    }
+
+    /**
+     * Creates a single menu item result array
+     *
+     * @param $item Category
+     * @param $url string
+     *
+     * @return array
+     */
+    protected static function getMenuItem($item, $url)
+    {
+        if ( ! $pageUrl = GeneralSettings::get('category_page')) {
+            throw new InvalidArgumentException(
+                'Mall: Please select a category page via the backend settings.'
+            );
+        }
+
+        $controller = new Controller();
+        $entryUrl = $controller->pageUrl($pageUrl, ['slug' => $item->slug]);
+
+        $result = [];
+        $result['url'] = $entryUrl;
+        $result['isActive'] = $entryUrl === $url;
+        $result['mtime'] = $item->updated_at;
+        $result['title'] = $item->name;
+        $result['code'] = $item->code;
+
+        return $result;
     }
 
     public static function allowedSortingOptions()
