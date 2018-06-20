@@ -111,7 +111,7 @@ class Product extends Model
         ],
         'carts'           => [
             Cart::class,
-            'table'      => 'offline_mall_cart_product',
+            'table'      => 'offline_mall_cart_products',
             'key'        => 'product_id',
             'otherKey'   => 'cart_id',
             'deleted'    => true,
