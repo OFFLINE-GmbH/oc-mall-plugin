@@ -40,7 +40,7 @@ class Product extends Model
     public $rules = [
         'name'  => 'required',
         'slug'  => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
-        'price' => 'required',
+        'price' => 'required_if:inventory_management_method,single',
     ];
     public $casts = [
         'price_includes_tax'           => 'boolean',
