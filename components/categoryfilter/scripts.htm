@@ -29,7 +29,7 @@
             $propertiesForm.on('submit', function (e) {
                 e.preventDefault();
 
-                $.publish('mall.category.filter.start')
+                $.publish('mall.category.load.start')
                 $(this).request('{{ __SELF__ }}::onSetFilter', {
                     loading: $.oc.stripeLoadIndicator,
                     complete: function (response) {
@@ -43,12 +43,12 @@
                                 $('[data-filter="' + filter + '"]').show();
                             }
                         }
-                        $.publish('mall.category.filter.complete')
+                        $.publish('mall.category.load.complete')
                     },
                     error: function () {
                         $.oc.stripeLoadIndicator.hide()
                         $.oc.flashMsg({text: 'Fehler beim Ausführen der Suche.', class: 'error'})
-                        $.publish('mall.category.filter.error')
+                        $.publish('mall.category.load.error')
                     }
                 });
             });

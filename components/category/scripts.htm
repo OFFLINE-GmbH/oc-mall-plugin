@@ -1,15 +1,23 @@
 {% put scripts %}
     <script>
         $(function () {
-            $.subscribe('mall.category.filter.start', function() {
+            $.subscribe('mall.category.load.start', function () {
                 $('.mall-category').find('.mall-loader').css({opacity: 1, visibility: 'visible'})
             });
 
-            $.subscribe('mall.category.filter.complete', function () {
+            $.subscribe('mall.category.load.complete', function () {
                 $.request('{{ __SELF__ }}::onRun', {
                     update: {'{{ __SELF__ }}::entries': '.mall-category'},
                 });
             });
+
+            $('.mall-pagination--category a').on('click', function (e) {
+                e.preventDefault()
+                $.publish('mall.category.load.start')
+
+                history.replaceState(null, '', $(this).attr('href'))
+                $.publish('mall.category.load.complete')
+            })
         })
     </script>
 {% endput %}
