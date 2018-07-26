@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Seeders;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Address;
+use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomerGroup;
 use RainLab\Location\Models\Country;
@@ -22,7 +23,6 @@ class CustomerTableSeeder extends Seeder
 
     protected function createUser($email, $customerGroupId = null)
     {
-
         $user                                 = new User();
         $user->email                          = $email;
         $user->password                       = 'abcd';
@@ -31,9 +31,10 @@ class CustomerTableSeeder extends Seeder
         $user->offline_mall_customer_group_id = $customerGroupId;
         $user->save();
 
-        $customer          = new Customer();
-        $customer->name    = 'Floaty McFloatface';
-        $customer->user_id = $user->id;
+        $customer            = new Customer();
+        $customer->firstname = 'Float';
+        $customer->lastname  = 'McFloatface';
+        $customer->user_id   = $user->id;
         $customer->save();
 
         $shippingAddress             = new Address();

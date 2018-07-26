@@ -9,9 +9,9 @@ class CategoryTableSeeder extends Seeder
 {
     public function run()
     {
-        $method       = new Category();
-        $method->name = 'Default category';
-        $method->slug = 'default';
-        $method->save();
+        $category       = new Category();
+        $category->name = 'Default category';
+        $category->slug = 'default';
+        $category->save();
     }
 }

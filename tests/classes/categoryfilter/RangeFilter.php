@@ -14,15 +14,15 @@ class RangeFilterTest extends PluginTestCase
     public function test_it_filters_by_price()
     {
         $hit1        = Product::first();
-        $hit1->price = 200;
+        $hit1->price = ['CHF' => 200];
         $hit1->save();
 
         $hit2        = $hit1->replicate();
-        $hit2->price = 300;
+        $hit1->price = ['CHF' => 300];
         $hit2->save();
 
         $miss        = $hit2->replicate();
-        $miss->price = 100;
+        $hit1->price = ['CHF' => 100];
         $miss->save();
 
         $collection = collect([$hit1, $hit2, $miss]);

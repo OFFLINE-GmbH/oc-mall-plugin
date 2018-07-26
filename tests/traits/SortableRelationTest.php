@@ -7,7 +7,7 @@ use PluginTestCase;
 
 class SortableRelationTest extends PluginTestCase
 {
-    public function test_it_handels_initial_sort_order()
+    public function test_it_handles_initial_sort_order()
     {
         $category       = Category::first();
 
