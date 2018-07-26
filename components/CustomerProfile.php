@@ -4,6 +4,7 @@ use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use RainLab\User\Models\UserGroup;
 use Validator;
 
 class CustomerProfile extends MallComponent
@@ -50,16 +51,20 @@ class CustomerProfile extends MallComponent
             throw new ValidationException($validation);
         }
 
-        $this->user->customer->firstname = $data['firstname'];
-        $this->user->customer->lastname  = $data['lastname'];
-        $this->user->email               = $data['email'];
-        if ($data['password']) {
-            $this->user->password              = $data['password'];
-            $this->user->password_confirmation = $data['password_repeat'];
-            $this->user->customer->is_guest    = false;
-        }
-        $this->user->save();
-        $this->user->customer->save();
+        \DB::transaction(function () use ($data) {
+            $this->user->customer->firstname = $data['firstname'];
+            $this->user->customer->lastname  = $data['lastname'];
+            $this->user->email               = $data['email'];
+            if ($data['password']) {
+                $this->user->password              = $data['password'];
+                $this->user->password_confirmation = $data['password_repeat'];
+                $this->user->customer->is_guest    = false;
+
+                $this->user->groups()->detach(UserGroup::getGuestGroup());
+            }
+            $this->user->save();
+            $this->user->customer->save();
+        });
 
         // Re-authenticate the user with his new credentials
         Auth::login($this->user);

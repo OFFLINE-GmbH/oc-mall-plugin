@@ -126,6 +126,8 @@ class DefaultSignUpHandler implements SignUpHandler
         $user = Auth::register($data, true);
         if ($this->asGuest && $user && $group = UserGroup::getGuestGroup()) {
             $user->groups()->sync($group);
+        } else {
+            $user->groups()->sync([]);
         }
 
         return $user;
