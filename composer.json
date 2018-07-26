@@ -2,7 +2,8 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "*",
         "phpmd/phpmd": "^2.6",
-        "mockery/mockery": "^1.0"
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^7.2"
     },
     "autoload": {
         "files": [
