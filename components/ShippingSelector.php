@@ -9,6 +9,7 @@ class ShippingSelector extends MallComponent
 {
     public $cart;
     public $methods;
+    public $skipIfOnlyOneAvailable = true;
 
     public function componentDetails()
     {
@@ -20,19 +21,27 @@ class ShippingSelector extends MallComponent
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'skipIfOnlyOneAvailable' => [
+                'type'    => 'checkbox',
+                'label'   => 'Skip if only one method is available',
+                'default' => true,
+            ],
+        ];
     }
 
     public function onRun()
     {
         $this->setData();
+
+        if ($this->shouldSkipStep()) {
+            return $this->redirect();
+        }
     }
 
     public function onSubmit()
     {
-        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'confirm']);
-
-        return redirect()->to($url);
+        return $this->redirect();
     }
 
     public function onChangeMethod()
@@ -63,7 +72,22 @@ class ShippingSelector extends MallComponent
 
     protected function setData()
     {
+        $this->skipIfOnlyOneAvailable = (bool)$this->property('skipIfOnlyOneAvailable');
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
         $this->setVar('methods', ShippingMethod::getAvailableByCart($this->cart));
+    }
+
+    protected function redirect()
+    {
+        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'confirm']);
+
+        return redirect()->to($url);
+    }
+
+    protected function shouldSkipStep()
+    {
+        return $this->skipIfOnlyOneAvailable
+            && $this->methods->count() === 1
+            && request()->get('via') === 'payment';
     }
 }

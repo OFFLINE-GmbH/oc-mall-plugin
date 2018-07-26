@@ -7,7 +7,7 @@
 </div>
 
 <p class="mall-cart-summary__action">
-    <a href="{{ __SELF__.stepUrl('payment') }}">
+    <a href="{{ __SELF__.stepUrl('payment', {via: 'confirm'}) }}">
         {{ 'mall.change' | _ }}
     </a>
 </p>

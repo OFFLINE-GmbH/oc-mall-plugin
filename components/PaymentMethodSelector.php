@@ -63,7 +63,9 @@ class PaymentMethodSelector extends MallComponent
         // Just to prevent any data leakage we store credit card information encrypted to the session.
         session()->put('mall.payment_method.data', encrypt(json_encode($data)));
 
-        return redirect()->to($this->getStepUrl('shipping'));
+        $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
+
+        return redirect()->to($this->getStepUrl($nextStep, 'payment'));
     }
 
     public function onChangeMethod()
@@ -118,8 +120,13 @@ class PaymentMethodSelector extends MallComponent
         $this->setVar('paymentData', $paymentData);
     }
 
-    protected function getStepUrl($step): string
+    protected function getStepUrl($step, $via = null): string
     {
-        return $this->controller->pageUrl($this->page->page->fileName, ['step' => $step]);
+        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => $step]);
+        if ( ! $via) {
+            return $url;
+        }
+
+        return $url . '?' . http_build_query(['via' => $via]);
     }
 }

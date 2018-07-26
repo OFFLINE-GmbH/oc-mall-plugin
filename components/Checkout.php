@@ -62,7 +62,7 @@ class Checkout extends MallComponent
         $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
         $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
         $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
-        $this->addComponent(ShippingSelector::class, 'shippingSelector', []);
+        $this->addComponent(ShippingSelector::class, 'shippingSelector', ['skipIfOnlyOneAvailable' => true]);
         $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         $this->setData();
     }
@@ -145,9 +145,20 @@ class Checkout extends MallComponent
 
     public function stepUrl($step, $params = [])
     {
-        return $this->controller->pageUrl(
+        $via = false;
+        if (isset($params['via'])) {
+            $via = array_pull($params, 'via');
+        }
+
+        $url = $this->controller->pageUrl(
             $this->page->page->fileName,
             array_merge($params, ['step' => $step])
         );
+
+        if ( ! $via) {
+            return $url;
+        }
+
+        return $url . '?' . http_build_query(['via' => $via]);
     }
 }
