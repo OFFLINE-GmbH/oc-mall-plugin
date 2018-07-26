@@ -29,8 +29,34 @@ abstract class PaymentProvider
         }
     }
 
+    /**
+     * Register your custom backend settings fields.
+     *
+     * @return array
+     */
+    abstract public function settings(): array;
+
+    /**
+     * Specify any setting fields that should be stored encrypted.
+     *
+     * @return array
+     */
+    public function encryptedSettings(): array
+    {
+        return [];
+    }
+
+    /**
+     * This is the display name of your provider.
+     *
+     * @return string
+     */
     abstract public function name(): string;
 
+    /**
+     * This is an internal identifier.
+     * @return string
+     */
     abstract public function identifier(): string;
 
     abstract public function process();

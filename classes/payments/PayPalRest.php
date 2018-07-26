@@ -121,4 +121,31 @@ class PayPalRest extends PaymentProvider
 
         return $gateway;
     }
+
+    public function settings(): array
+    {
+        return [
+            'paypal_test_mode' => [
+                'label'   => 'offline.mall::lang.payment_gateway_settings.paypal.test_mode',
+                'comment' => 'offline.mall::lang.payment_gateway_settings.paypal.test_mode_comment',
+                'span'    => 'left',
+                'type'    => 'switch',
+            ],
+            'paypal_client_id' => [
+                'label' => 'offline.mall::lang.payment_gateway_settings.paypal.client_id',
+                'span'  => 'left',
+                'type'  => 'text',
+            ],
+            'paypal_secret'    => [
+                'label' => 'offline.mall::lang.payment_gateway_settings.paypal.secret',
+                'span'  => 'left',
+                'type'  => 'text',
+            ],
+        ];
+    }
+
+    public function encryptedSettings(): array
+    {
+        return ['paypal_client_id', 'paypal_secret'];
+    }
 }

@@ -82,4 +82,21 @@ class Stripe extends PaymentProvider
 
         return $result;
     }
+
+    public function settings(): array
+    {
+        return [
+            'stripe_api_key' => [
+                'label'   => 'offline.mall::lang.payment_gateway_settings.stripe.api_key',
+                'comment' => 'offline.mall::lang.payment_gateway_settings.stripe.api_key_comment',
+                'span'    => 'left',
+                'type'    => 'text',
+            ],
+        ];
+    }
+
+    public function encryptedSettings(): array
+    {
+        return ['stripe_api_key'];
+    }
 }
