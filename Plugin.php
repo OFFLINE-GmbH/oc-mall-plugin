@@ -49,7 +49,7 @@ use Validator;
  */
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.Translate', 'RainLab.User', 'RainLab.Location'];
+    public $require = ['RainLab.User', 'RainLab.Location'];
 
     public function boot()
     {
