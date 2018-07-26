@@ -157,7 +157,7 @@ class TotalsCalculator
     protected function calculateWeightTotal(): int
     {
         return $this->cart->products->sum(function (CartProduct $product) {
-            return $product->data->weight * $product->quantity;
+            return $product->weight * $product->quantity;
         });
     }
 

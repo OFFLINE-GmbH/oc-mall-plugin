@@ -32,11 +32,13 @@ class Variant extends \Model
         'allow_out_of_stock_purchases' => 'boolean',
         'id'                           => 'integer',
         'stock'                        => 'integer',
+        'weight'                       => 'integer',
     ];
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required|exists:offline_mall_products,id',
         'stock'                        => 'integer|nullable',
+        'weight'                       => 'integer|nullable',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
         'price'                        => 'sometimes|nullable',
@@ -56,7 +58,7 @@ class Variant extends \Model
         'property_values'       => [PropertyValue::class, 'name' => 'describable'],
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
     ];
-    
+
     protected $fillable = ['stock', 'name', 'published', 'price', 'old_price', 'allow_out_of_stock_purchases'];
 
     /**

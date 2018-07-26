@@ -64,6 +64,7 @@ trait CartActions
             $cartEntry->variant_id = $variant ? $variant->id : null;
             $cartEntry->quantity   = $quantity;
             $cartEntry->price      = $price;
+            $cartEntry->weight     = $variant ? $variant->weight : $product->weight;
 
             $this->products()->save($cartEntry);
             $this->load('products');

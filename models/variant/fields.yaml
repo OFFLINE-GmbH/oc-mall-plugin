@@ -71,3 +71,9 @@ tabs:
             thumbOptions:
                 mode: crop
                 extension: auto
+        weight:
+            label: 'offline.mall::lang.product.weight'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'

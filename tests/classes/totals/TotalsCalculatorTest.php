@@ -253,6 +253,33 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(5000, $calc->weightTotal());
     }
 
+    public function test_it_calculates_weight_total_with_variants()
+    {
+        $product         = $this->getProduct(100);
+        $product->weight = 1000;
+        $product->save();
+
+        $variantWeight             = new Variant();
+        $variantWeight->name       = 'Variant with Weight';
+        $variantWeight->product_id = $product->id;
+        $variantWeight->price      = ['CHF' => 100, 'EUR' => 150];
+        $variantWeight->weight     = 2000;
+        $variantWeight->save();
+
+        $variantNoWeight             = new Variant();
+        $variantNoWeight->name       = 'Variant without Weight';
+        $variantNoWeight->product_id = $product->id;
+        $variantNoWeight->price      = ['CHF' => 100, 'EUR' => 150];
+        $variantNoWeight->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2, $variantWeight);
+        $cart->addProduct($product, 1, $variantNoWeight);
+
+        $calc = new TotalsCalculator($cart);
+        $this->assertEquals(5000, $calc->weightTotal());
+    }
+
     public function test_it_calculates_shipping_cost_with_special_rates()
     {
         $tax1 = $this->getTax('Test 1', 10);

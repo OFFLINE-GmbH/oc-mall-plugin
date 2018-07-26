@@ -38,9 +38,10 @@ class Product extends Model
         'slug' => 'name',
     ];
     public $rules = [
-        'name'  => 'required',
-        'slug'  => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
-        'price' => 'required',
+        'name'   => 'required',
+        'slug'   => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
+        'price'  => 'required',
+        'weight' => 'integer|nullable',
     ];
     public $casts = [
         'price_includes_tax'           => 'boolean',

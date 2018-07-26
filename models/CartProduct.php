@@ -80,8 +80,8 @@ class CartProduct extends Model
 
             $entry->tax_factor = $this->taxFactor();
 
-            $entry->weight       = $this->data->weight;
-            $entry->total_weight = $this->weight;
+            $entry->weight       = $this->weight;
+            $entry->total_weight = $this->total_weight;
 
             $entry->width     = $this->item->width;
             $entry->length    = $this->item->length;
@@ -159,9 +159,9 @@ class CartProduct extends Model
         return $this->totalPreTaxes + $this->totalTaxes;
     }
 
-    public function getWeightAttribute(): float
+    public function getTotalWeightAttribute(): float
     {
-        return $this->data->weight * $this->quantity;
+        return $this->weight * $this->quantity;
     }
 
     protected function pricePreTaxes()
