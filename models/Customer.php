@@ -15,9 +15,10 @@ class Customer extends Model
         'is_guest' => 'boolean',
     ];
     public $rules = [
-        'name'     => 'required',
-        'is_guest' => 'boolean',
-        'user_id'  => 'required|exists:users,id',
+        'firstname' => 'required',
+        'lastname'  => 'required',
+        'is_guest'  => 'boolean',
+        'user_id'   => 'required|exists:users,id',
     ];
     public $table = 'offline_mall_customers';
     public $belongsTo = [
@@ -26,4 +27,9 @@ class Customer extends Model
     public $hasMany = [
         'addresses' => Address::class,
     ];
+
+    public function getNameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
 }

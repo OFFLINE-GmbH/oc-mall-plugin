@@ -33,7 +33,13 @@ class CustomerProfile extends MallComponent
         $data    = post();
         $handler = app(SignUpHandler::class);
 
-        $neededRules = array_only($handler::rules(false), ['name', 'email', 'password', 'password_repeat']);
+        $neededRules = array_only($handler::rules(false), [
+            'firstname',
+            'lastname',
+            'email',
+            'password',
+            'password_repeat',
+        ]);
         if ($data['password'] === '') {
             // The password is unchanged so we don't need to validate it.
             unset($neededRules['password'], $neededRules['password_repeat']);
@@ -44,8 +50,9 @@ class CustomerProfile extends MallComponent
             throw new ValidationException($validation);
         }
 
-        $this->user->customer->name = $data['name'];
-        $this->user->email          = $data['email'];
+        $this->user->customer->firstname = $data['firstname'];
+        $this->user->customer->lastname  = $data['lastname'];
+        $this->user->email               = $data['email'];
         if ($data['password']) {
             $this->user->password              = $data['password'];
             $this->user->password_confirmation = $data['password_repeat'];

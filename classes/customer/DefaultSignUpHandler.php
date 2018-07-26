@@ -44,17 +44,19 @@ class DefaultSignUpHandler implements SignUpHandler
 
             $user = $this->createUser($data);
 
-            $customer           = new Customer();
-            $customer->name     = $data['name'];
-            $customer->user_id  = $user->id;
-            $customer->is_guest = $this->asGuest;
+            $customer            = new Customer();
+            $customer->firstname = $data['firstname'];
+            $customer->lastname  = $data['lastname'];
+            $customer->user_id   = $user->id;
+            $customer->is_guest  = $this->asGuest;
             $customer->save();
 
             $addressData = $this->transformAddressKeys($data, 'billing');
+            $fullname    = $data['firstname'] . ' ' . $data['lastname'];
 
             $billing = new Address();
             $billing->fill($addressData);
-            $billing->name        = $addressData['address_name'] ?? $data['name'];
+            $billing->name        = $addressData['address_name'] ?? $fullname;
             $billing->customer_id = $customer->id;
             $billing->save();
             $customer->default_billing_address_id = $billing->id;
@@ -64,7 +66,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
                 $shipping = new Address();
                 $shipping->fill($addressData);
-                $shipping->name        = $addressData['address_name'] ?? $data['name'];
+                $shipping->name        = $addressData['address_name'] ?? $fullname;
                 $shipping->customer_id = $customer->id;
                 $shipping->save();
                 $customer->default_shipping_address_id = $shipping->id;
@@ -115,7 +117,7 @@ class DefaultSignUpHandler implements SignUpHandler
     protected function createUser($data): User
     {
         $data = [
-            'name'                  => $data['name'],
+            'name'                  => $data['firstname'] . ' ' . $data['lastname'],
             'email'                 => $data['email'],
             'password'              => $data['password'],
             'password_confirmation' => $data['password_repeat'],
@@ -123,7 +125,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
         $user = Auth::register($data, true);
         if ($this->asGuest && $user && $group = UserGroup::getGuestGroup()) {
-            $user->groups()->add($group);
+            $user->groups()->sync($group);
         }
 
         return $user;
@@ -156,7 +158,8 @@ class DefaultSignUpHandler implements SignUpHandler
     public static function rules($forSignup = true): array
     {
         return [
-            'name'                => 'required',
+            'firstname'           => 'required',
+            'lastname'            => 'required',
             'email'               => ['required', 'email', ($forSignup ? 'non_existing_user' : null)],
             'billing_lines'       => 'required',
             'billing_zip'         => 'required',
@@ -181,7 +184,8 @@ class DefaultSignUpHandler implements SignUpHandler
             'email.unique'            => trans('offline.mall::lang.components.signup.errors.email.unique'),
             'email.non_existing_user' => trans('offline.mall::lang.components.signup.errors.email.non_existing_user'),
 
-            'name.required'                => trans('offline.mall::lang.components.signup.errors.name.required'),
+            'firstname.required'           => trans('offline.mall::lang.components.signup.errors.firstname.required'),
+            'lastname.required'            => trans('offline.mall::lang.components.signup.errors.lastname.required'),
             'billing_lines.required'       => trans('offline.mall::lang.components.signup.errors.lines.required'),
             'billing_zip.required'         => trans('offline.mall::lang.components.signup.errors.zip.required'),
             'billing_city.required'        => trans('offline.mall::lang.components.signup.errors.city.required'),

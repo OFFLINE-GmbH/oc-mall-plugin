@@ -10,7 +10,8 @@ class BuilderTableCreateOfflineMallCustomers extends Migration
         Schema::create('offline_mall_customers', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->string('name');
+            $table->string('firstname');
+            $table->string('lastname');
             $table->boolean('is_guest')->default(0);
             $table->integer('user_id')->nullable()->unsigned();
             $table->integer('default_shipping_address_id')->nullable();

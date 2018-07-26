@@ -59,8 +59,8 @@
         ],
     ],
     'menu_items'               => [
-        'all_categories' => 'Alle Shop-Kategorien',
-        'single_category' => 'Einzelne Shop-Kategorie'
+        'all_categories'  => 'Alle Shop-Kategorien',
+        'single_category' => 'Einzelne Shop-Kategorie',
     ],
     'currency_settings'        => [
         'label'             => 'Währungen',
@@ -643,8 +643,11 @@
                     'unique'            => 'Es existiert bereits ein Benutzerkonto mit dieser Email',
                     'non_existing_user' => 'Es existiert bereits ein Benutzer mit dieser Email. Nutzen Sie die Passwort vergessen Funktion',
                 ],
-                'name'            => [
-                    'required' => 'Geben Sie Ihren Namen ein.',
+                'firstname'       => [
+                    'required' => 'Geben Sie Ihren Vornamen ein.',
+                ],
+                'lastname'        => [
+                    'required' => 'Geben Sie Ihren Nachnamen ein.',
                 ],
                 'lines'           => [
                     'required' => 'Geben Sie Ihre Adresse ein.',
