@@ -57,13 +57,13 @@ class Property extends Model
     public function getValuesForCategory($category)
     {
         $products      = $category->publishedProducts;
-        $productValues = PropertyValue::where('describable_type', Product::class)
+        $productValues = PropertyValue::where('describable_type', Product::MORPH_KEY)
                                       ->whereIn('describable_id', $products->pluck('id'))
                                       ->where('property_id', $this->id)
                                       ->groupBy('value')
                                       ->get();
 
-        $variantValues = PropertyValue::where('describable_type', Variant::class)
+        $variantValues = PropertyValue::where('describable_type', Variant::MORPH_KEY)
                                       ->whereIn('describable_id', $products->flatMap->variants->pluck('id'))
                                       ->where('property_id', $this->id)
                                       ->groupBy('value')

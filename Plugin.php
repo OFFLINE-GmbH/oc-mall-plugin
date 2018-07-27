@@ -31,18 +31,23 @@ use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
+use OFFLINE\Mall\Console\SeedDemoData;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
+use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\User as RainLabUser;
+use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country as RainLabCountry;
 use System\Classes\PluginBase;
 use Validator;
+use October\Rain\Database\Relations\Relation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,6 +64,15 @@ class Plugin extends PluginBase
         $this->setContainerBindings();
         $this->addCustomValidatorRules();
         $this->extendPlugins();
+
+        $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
+
+
+        Relation::morphMap([
+            Variant::MORPH_KEY  => Variant::class,
+            Product::MORPH_KEY  => Product::class,
+            ImageSet::MORPH_KEY => ImageSet::class,
+        ]);
     }
 
     public function registerComponents()

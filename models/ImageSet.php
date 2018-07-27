@@ -8,6 +8,8 @@ class ImageSet extends Model
 {
     use \October\Rain\Database\Traits\Validation;
 
+    const MORPH_KEY = 'imageset';
+
     public $rules = [
         'name' => 'required',
     ];

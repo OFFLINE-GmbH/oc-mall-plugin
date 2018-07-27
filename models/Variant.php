@@ -23,6 +23,8 @@ class Variant extends \Model
         getAttribute as priceGetAttribute;
     }
 
+    const MORPH_KEY = 'variant';
+
     public $slugs = [];
     public $dates = ['deleted_at'];
     public $with = ['product', 'image_sets'];
@@ -85,7 +87,7 @@ class Variant extends \Model
             foreach ($values as $id => $value) {
                 $pv = PropertyValue::firstOrNew([
                     'describable_id'   => $variant->id,
-                    'describable_type' => Variant::class,
+                    'describable_type' => Variant::MORPH_KEY,
                     'property_id'      => $id,
                 ]);
 
@@ -117,11 +119,11 @@ class Variant extends \Model
             $this->commitDeferred(post('_session_key'));
 
             return \DB::table('system_files')
-                      ->where('attachment_type', Variant::class)
+                      ->where('attachment_type', Variant::MORPH_KEY)
                       ->where('attachment_id', $this->id)
                       ->where('field', 'temp_images')
                       ->update([
-                          'attachment_type' => ImageSet::class,
+                          'attachment_type' => ImageSet::MORPH_KEY,
                           'attachment_id'   => $set->id,
                           'field'           => 'images',
                       ]);

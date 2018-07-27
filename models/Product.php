@@ -23,6 +23,8 @@ class Product extends Model
     use CustomFields;
     use HashIds;
 
+    const MORPH_KEY = 'product';
+
     protected $dates = ['deleted_at'];
     public $jsonable = ['links', 'price', 'old_price'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
