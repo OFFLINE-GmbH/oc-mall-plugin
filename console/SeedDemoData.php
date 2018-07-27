@@ -302,7 +302,7 @@ class SeedDemoData extends Command
         CurrencySettings::set('currencies', [
             [
                 'code'     => 'USD',
-                'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}{{ currency.symbol }}',
+                'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
                 'decimals' => 2,
                 'symbol'   => '$',
                 'rate'     => 1,
