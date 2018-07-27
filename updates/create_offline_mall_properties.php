@@ -11,10 +11,10 @@ class CreateOfflineMallProperties extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
+            $table->string('slug')->unique()->nullable();
             $table->string('type');
             $table->string('unit')->nullable();
             $table->text('options')->nullable();
-            $table->string('slug')->unique()->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

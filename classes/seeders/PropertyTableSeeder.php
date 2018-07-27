@@ -23,6 +23,12 @@ class PropertyTableSeeder extends Seeder
         $method->unit = 'mm';
         $method->save();
 
+        $method       = new Property();
+        $method->name = 'Depth';
+        $method->type = 'text';
+        $method->unit = 'mm';
+        $method->save();
+
         $method          = new Property();
         $method->name    = 'Size';
         $method->type    = 'dropdown';
@@ -36,9 +42,14 @@ class PropertyTableSeeder extends Seeder
         $method->save();
 
         $propertyGroup = new PropertyGroup();
-        $propertyGroup->name = 'Testgroup';
+        $propertyGroup->name = 'Dimensions';
         $propertyGroup->save();
         $propertyGroup->properties()->attach([1, 2, 3]);
+
+        $propertyGroup = new PropertyGroup();
+        $propertyGroup->name = 'Size';
+        $propertyGroup->save();
+        $propertyGroup->properties()->attach([4]);
 
         $category = Category::first();
         $category->property_groups()->attach($propertyGroup->id);

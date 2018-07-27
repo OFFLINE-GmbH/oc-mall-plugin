@@ -23,7 +23,7 @@ class Product extends Model
     use CustomFields;
     use HashIds;
 
-    const MORPH_KEY = 'product';
+    const MORPH_KEY = 'mall.product';
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['links', 'price', 'old_price'];
@@ -54,7 +54,33 @@ class Product extends Model
         'stock'                        => 'integer',
         'shippable'                    => 'boolean',
     ];
-
+    public $fillable = [
+        'category_id',
+        'brand_id',
+        'user_defined_id',
+        'name',
+        'slug',
+        'price',
+        'old_price',
+        'description_short',
+        'description',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'weight',
+        'inventory_management_method',
+        'quantity_default',
+        'quantity_min',
+        'quantity_max',
+        'stock',
+        'allow_out_of_stock_purchases',
+        'links',
+        'stackable',
+        'shippable',
+        'price_includes_tax',
+        'group_by_property_id',
+        'published',
+    ];
     public $table = 'offline_mall_products';
     public $with = ['image_sets'];
     public $attachMany = [

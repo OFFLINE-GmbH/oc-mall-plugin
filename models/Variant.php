@@ -23,7 +23,7 @@ class Variant extends \Model
         getAttribute as priceGetAttribute;
     }
 
-    const MORPH_KEY = 'variant';
+    const MORPH_KEY = 'mall.variant';
 
     public $slugs = [];
     public $dates = ['deleted_at'];
@@ -61,7 +61,17 @@ class Variant extends \Model
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
     ];
 
-    protected $fillable = ['stock', 'name', 'published', 'price', 'old_price', 'allow_out_of_stock_purchases'];
+    protected $fillable = [
+        'product_id',
+        'image_set_id',
+        'stock',
+        'name',
+        'published',
+        'price',
+        'old_price',
+        'weight',
+        'allow_out_of_stock_purchases',
+    ];
 
     /**
      * The related products data is cached to speed uf the

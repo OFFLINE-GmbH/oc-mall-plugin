@@ -24,13 +24,17 @@ class Brand extends Model
         'name'    => 'required',
         'website' => 'url',
     ];
-
+    public $fillable = [
+        'name',
+        'slug',
+        'description',
+        'website',
+        'sort_order',
+    ];
     public $table = 'offline_mall_brands';
-
     public $attachOne = [
         'logo' => File::class,
     ];
-
     public $hasMany = [
         'products' => Product::class,
     ];

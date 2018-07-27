@@ -8,21 +8,20 @@ class ImageSet extends Model
 {
     use \October\Rain\Database\Traits\Validation;
 
-    const MORPH_KEY = 'imageset';
+    const MORPH_KEY = 'mall.imageset';
 
+    public $with = ['images'];
+    protected $fillable = ['name', 'is_main_set', 'product_id'];
+    public $table = 'offline_mall_image_sets';
     public $rules = [
         'name' => 'required',
     ];
-    public $table = 'offline_mall_image_sets';
     public $attachMany = [
         'images' => File::class,
     ];
     public $belongsTo = [
         'product' => Product::class,
     ];
-    public $with = ['images'];
-    
-    protected $fillable = ['name'];
 
     public static function boot()
     {

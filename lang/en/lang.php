@@ -150,6 +150,7 @@
         'hide_published'       => 'Hide published',
         'slug'                 => 'URL',
         'name'                 => 'Name',
+        'display_name'         => 'Display name',
         'group_name'           => 'Group name',
         'add_value'            => 'Add value',
         'export_orders'        => 'Export orders',

@@ -3,7 +3,7 @@
 {% endif %}
 {% for group in groups %}
     <div class="mall-property-group">
-        <div class="mall-property-group__name">{{ group.name }}</div>
+        <div class="mall-property-group__name">{{ group.display_name | default(group.name) }}</div>
         {% if group.description %}
             <div class="mall-property-group__description">{{ group.description }}</div>
         {% endif %}

@@ -149,6 +149,7 @@
         'hide_published'       => 'Verstecke veröffentlichte',
         'slug'                 => 'URL',
         'name'                 => 'Name',
+        'display_name'         => 'Anzeigename',
         'group_name'           => 'Gruppenname',
         'add_value'            => 'Wert hinzufügen',
         'export_orders'        => 'Bestellungen exportieren',

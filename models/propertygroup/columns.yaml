@@ -4,6 +4,11 @@ columns:
         type: text
         searchable: true
         sortable: true
+    display_name:
+        label: 'offline.mall::lang.common.display_name'
+        type: text
+        searchable: true
+        sortable: true
     description:
         label: 'offline.mall::lang.product.description'
         type: text

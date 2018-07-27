@@ -11,6 +11,7 @@ class CreateOfflineMallPropertyGroups extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
+            $table->string('display_name')->nullable();
             $table->string('description')->nullable();
             $table->string('slug');
             $table->timestamp('created_at')->nullable();

@@ -14,10 +14,10 @@ class PropertyGroup extends Model
     public $slugs = [
         'slug' => 'name',
     ];
-
     public $rules = [
         'name' => 'required',
     ];
+    public $fillable = ['name', 'display_name', 'slug', 'description'];
 
     public $table = 'offline_mall_property_groups';
 

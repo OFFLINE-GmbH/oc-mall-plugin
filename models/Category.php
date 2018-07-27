@@ -25,33 +25,36 @@ class Category extends Model
     protected $dates = [
         'deleted_at',
     ];
-
     public $translatable = [
         'name',
         ['slug', 'index' => true],
         'meta_description',
         'meta_title',
     ];
-
     public $implement = [
         '@RainLab.Translate.Behaviors.TranslatableModel',
     ];
-
     public $rules = [
         'name' => 'required',
         'slug' => ['required', 'regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
     ];
-
+    public $fillable = [
+        'name',
+        'slug',
+        'code',
+        'meta_title',
+        'meta_description',
+        'parent_id',
+        'inherit_property_groups',
+        'sort_order',
+    ];
     public $slugs = [
         'slug' => 'name',
     ];
-
     public $casts = [
         'inherit_property_groups' => 'boolean',
     ];
-
     public $table = 'offline_mall_categories';
-
     public $hasMany = [
         'products'          => [
             Product::class,
@@ -61,7 +64,6 @@ class Category extends Model
             'scope' => 'published',
         ],
     ];
-
     public $belongsToMany = [
         'property_groups' => [
             PropertyGroup::class,
@@ -71,7 +73,6 @@ class Category extends Model
             'pivot'    => ['sort_order'],
         ],
     ];
-
     public $attachOne = [
         'image' => File::class,
     ];
@@ -136,7 +137,7 @@ class Category extends Model
         $result = [];
         if ($type == 'mall-category') {
             $result = [
-                'references'   => self::listSubCategoryOptions(),
+                'references' => self::listSubCategoryOptions(),
             ];
         }
 
@@ -158,21 +159,22 @@ class Category extends Model
     protected static function listSubCategoryOptions()
     {
         $category = self::getNested();
-        $iterator = function($categories) use (&$iterator) {
+        $iterator = function ($categories) use (&$iterator) {
             $result = [];
             foreach ($categories as $category) {
-                if (!$category->children) {
+                if ( ! $category->children) {
                     $result[$category->id] = $category->name;
-                }
-                else {
+                } else {
                     $result[$category->id] = [
                         'title' => $category->name,
-                        'items' => $iterator($category->children)
+                        'items' => $iterator($category->children),
                     ];
                 }
             }
+
             return $result;
         };
+
         return $iterator($category);
     }
 
@@ -188,16 +190,16 @@ class Category extends Model
     {
         $structure = [];
 
-        if($item->type == 'mall-category') {
+        if ($item->type == 'mall-category') {
             $category = self::find($item->reference);
-            if (!$category) {
+            if ( ! $category) {
                 return;
             }
 
             $structure = self::getMenuItem($category, $url);
 
         } elseif ($item->type == 'all-mall-categories') {
-            $category  = new Category();
+            $category = new Category();
 
             $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
                 $branch = [];
@@ -225,7 +227,7 @@ class Category extends Model
      * Creates a single menu item result array
      *
      * @param $item Category
-     * @param $url string
+     * @param $url  string
      *
      * @return array
      */
@@ -238,14 +240,14 @@ class Category extends Model
         }
 
         $controller = new Controller();
-        $entryUrl = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
+        $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
 
-        $result = [];
-        $result['url'] = $entryUrl;
+        $result             = [];
+        $result['url']      = $entryUrl;
         $result['isActive'] = $entryUrl === $url;
-        $result['mtime'] = $item->updated_at;
-        $result['title'] = $item->name;
-        $result['code'] = $item->code;
+        $result['mtime']    = $item->updated_at;
+        $result['title']    = $item->name;
+        $result['code']     = $item->code;
 
         return $result;
     }
@@ -374,6 +376,6 @@ class Category extends Model
      */
     public function getPropertiesAttribute()
     {
-        return $this->load('property_groups.properties')->property_groups->map->properties->flatten();
+        return $this->load('property_groups.properties')->inherited_property_groups->map->properties->flatten();
     }
 }

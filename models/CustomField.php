@@ -20,6 +20,12 @@ class CustomField extends Model
     public $casts = [
         'required' => 'boolean',
     ];
+    public $fillable = [
+        'name',
+        'type',
+        'price',
+        'required',
+    ];
     public $rules = [
         'product_id' => 'exists:offline_mall_products,id',
         'name'       => 'required',

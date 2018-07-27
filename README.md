@@ -7,6 +7,13 @@
 planned to be released towards the end of 2019.
 
 
+## Seed demo data
+
+```bash
+# All your existing data will be erased!
+php artisan mall:seed-demo
+```
+
 ## Access pricing information
 
 The price for a `Product` or `Variant` model is stored as an array of currency values.

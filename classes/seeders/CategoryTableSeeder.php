@@ -10,8 +10,8 @@ class CategoryTableSeeder extends Seeder
     public function run()
     {
         $category       = new Category();
-        $category->name = 'Default category';
-        $category->slug = 'default';
+        $category->name = 'Example category';
+        $category->slug = 'example';
         $category->save();
     }
 }

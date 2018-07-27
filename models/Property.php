@@ -28,6 +28,13 @@ class Property extends Model
         'name',
         'unit',
     ];
+    public $fillable = [
+        'name',
+        'type',
+        'unit',
+        'slug',
+        'options',
+    ];
     public $hasMany = [
         'property_values' => PropertyValue::class,
     ];

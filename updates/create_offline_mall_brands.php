@@ -11,6 +11,7 @@ class CreateOfflineMallBrands extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->string('website')->nullable();
             $table->integer('sort_order')->unsigned();
@@ -18,7 +19,7 @@ class CreateOfflineMallBrands extends Migration
             $table->timestamp('updated_at')->nullable();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('offline_mall_brands');
