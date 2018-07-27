@@ -5,6 +5,7 @@
 <?php else: ?>
     <?php if($groups): ?>
         <?php foreach($groups as $group): ?>
+            <?php if(count($group->properties) < 1) continue; ?>
                 <div class="form-group span-full">
                     <div class="field-section">
                         <h4><?= e($group->name) ?></h4>
