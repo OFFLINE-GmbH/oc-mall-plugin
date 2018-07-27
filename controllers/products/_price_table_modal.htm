@@ -48,7 +48,7 @@
         // Give the widget time to render
         setTimeout(function () {
             priceTable = {
-                state: JSON.parse('<?= $pricetableState ?>'),
+                state: JSON.parse('<?= addslashes($pricetableState) ?>'),
                 currencyLabel: $('.currency-label'),
                 activeCurrency: '<?= $currencies->first() ?>',
                 widget: $('#Table-pricetable').data('oc.table'),
