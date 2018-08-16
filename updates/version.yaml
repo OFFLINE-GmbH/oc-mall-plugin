@@ -38,5 +38,4 @@
     - create_offline_mall_customer_group_prices.php
     - allow_non_unique_emails_for_rainlab_user.php
     - add_customer_group_id_to_rainlab_users.php
-    - add_default_order_payment_methods.php
     - database_seeder.php
