@@ -3,6 +3,7 @@ modelClass: OFFLINE\Mall\Models\Product
 list: $/offline/mall/models/product/columns.yaml
 recordUrl: 'offline/mall/products/update/:id'
 noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
 showSetup: true
 showCheckboxes: true
 showSorting: 1
