@@ -13,7 +13,7 @@ class CreateOfflineMallOrderStates extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('color')->nullable();
-            $table->integer('sort_order')->nullable();
+            $table->integer('sort_order')->unsigned()->nullable();
             $table->string('flag')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

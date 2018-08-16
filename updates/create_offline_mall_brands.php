@@ -14,7 +14,7 @@ class CreateOfflineMallBrands extends Migration
             $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->string('website')->nullable();
-            $table->integer('sort_order')->unsigned();
+            $table->integer('sort_order')->unsigned()->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

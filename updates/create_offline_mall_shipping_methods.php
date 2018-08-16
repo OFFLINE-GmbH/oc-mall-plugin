@@ -13,7 +13,7 @@ class CreateOfflineMallShippingMethods extends Migration
             $table->string('name', 255);
             $table->text('description')->nullable();
             $table->text('price');
-            $table->integer('sort_order')->nullable();
+            $table->integer('sort_order')->unsigned()->nullable();
             $table->integer('guaranteed_delivery_days')->nullable();
             $table->text('available_below_total')->nullable();
             $table->text('available_above_total')->nullable();

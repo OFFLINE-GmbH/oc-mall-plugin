@@ -15,7 +15,7 @@ class CreateOfflineMallCategories extends Migration
             $table->string('code')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->integer('sort_order')->nullable();
+            $table->integer('sort_order')->unsigned()->nullable();
             $table->boolean('inherit_property_groups')->nullable()->default(0);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

@@ -13,7 +13,7 @@ class CreateOfflineMallCategoryPropertyGroup extends Migration
             $table->increments('id')->unsigned();
             $table->integer('category_id')->unsigned();
             $table->integer('property_group_id')->unsigned();
-            $table->integer('sort_order')->unsigned()->default(0);
+            $table->integer('sort_order')->unsigned()->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
