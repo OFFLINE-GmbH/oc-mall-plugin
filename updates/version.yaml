@@ -30,7 +30,6 @@
     - create_offline_mall_order_states.php
     - create_offline_mall_brands.php
     - create_offline_mall_image_sets.php
-    - create_offline_mall_imageables.php
     - create_offline_mall_property_property_group.php
     - create_offline_mall_property_groups.php
     - create_offline_mall_category_property_group.php
