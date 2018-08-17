@@ -192,7 +192,7 @@ class Plugin extends PluginBase
             $gateway = new DefaultPaymentGateway();
             $gateway->registerProvider(new Offline());
             $gateway->registerProvider(new PayPalRest());
-            $gateway->registerProvider(new Offline());
+            $gateway->registerProvider(new Stripe());
 
             return $gateway;
         });
