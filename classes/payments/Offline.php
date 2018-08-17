@@ -2,14 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Classes\PaymentState\FailedState;
-use OFFLINE\Mall\Classes\PaymentState\PaidState;
-use OFFLINE\Mall\Models\PaymentGatewaySettings;
-use Omnipay\Omnipay;
-use Throwable;
-use Validator;
-
 class Offline extends PaymentProvider
 {
     public function name(): string

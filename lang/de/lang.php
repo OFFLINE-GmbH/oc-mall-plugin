@@ -191,6 +191,8 @@
         'customer_groups'      => 'Kundengruppen',
         'customer_group'       => 'Kundengruppe',
         'product_or_variant'   => 'Produkt/Variante',
+        'code'                 => 'Code',
+        'code_comment'         => 'Dieser Code kann zur Identifikation der Gruppe genutzt werden',
     ],
     'variant'                  => [
         'method' => [
