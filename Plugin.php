@@ -190,7 +190,7 @@ class Plugin extends PluginBase
         });
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();
-            $gateway->registerProvider(new Stripe());
+            $gateway->registerProvider(new Offline());
             $gateway->registerProvider(new PayPalRest());
             $gateway->registerProvider(new Offline());
 
