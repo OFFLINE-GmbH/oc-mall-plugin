@@ -1,4 +1,4 @@
-c<?php return [
+<?php return [
     'plugin'                   => [
         'name'        => 'Mall',
         'description' => 'E-commerce solution for October CMS',
