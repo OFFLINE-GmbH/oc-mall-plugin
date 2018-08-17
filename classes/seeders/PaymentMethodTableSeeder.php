@@ -22,7 +22,7 @@ class PaymentMethodTableSeeder extends Seeder
         $method->save();
 
         $method                   = new PaymentMethod();
-        $method->name             = 'Offline';
+        $method->name             = 'Invoice';
         $method->payment_provider = 'offline';
         $method->sort_order       = 3;
         $method->save();
