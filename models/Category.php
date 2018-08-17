@@ -17,7 +17,6 @@ class Category extends Model
     use Validation;
     use SoftDelete;
     use NestedTree;
-    use Sluggable;
     use SortableRelation;
 
     public const ID_MAP_CACHE_KEY = 'oc-mall.categories.id_map';
@@ -47,9 +46,6 @@ class Category extends Model
         'parent_id',
         'inherit_property_groups',
         'sort_order',
-    ];
-    public $slugs = [
-        'slug' => 'name',
     ];
     public $casts = [
         'inherit_property_groups' => 'boolean',
@@ -86,6 +82,9 @@ class Category extends Model
             }
             if ($category->inherit_property_groups === true) {
                 $category->property_groups()->detach();
+            }
+            if ( ! $category->slug) {
+                $category->slug = str_slug($category->name);
             }
         });
         static::saved(function () {

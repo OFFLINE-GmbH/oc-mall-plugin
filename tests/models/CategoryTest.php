@@ -27,14 +27,18 @@ class CategoryTest extends PluginTestCase
 
         $this->child = $child;
 
-        $nestedChild         = new Category();
-        $nestedChild->name   = 'Child of the child';
-        $nestedChild->parent = $child->id;
-        $nestedChild->slug   = 'child';
-        $nestedChild->save();
-        // Overwrite the auto fixed child-2 slug
-        $nestedChild->slug = 'child';
-        $nestedChild->save();
+        try {
+            $nestedChild         = new Category();
+            $nestedChild->name   = 'Child of the child';
+            $nestedChild->parent = $child->id;
+            $nestedChild->slug   = 'child';
+            $nestedChild->save();
+            // Overwrite the auto fixed child-2 slug
+            $nestedChild->slug = 'child';
+            $nestedChild->save();
+        } catch (\Throwable $e) {
+            dd($e);
+        }
 
         $this->nestedChild = $nestedChild;
     }
