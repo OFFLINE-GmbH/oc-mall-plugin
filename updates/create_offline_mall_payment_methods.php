@@ -11,6 +11,7 @@ class CreateOfflineMallPaymentMethods extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');
+            $table->string('code');
             $table->text('description')->nullable();
             $table->text('payment_provider');
             $table->integer('sort_order')->unsigned()->nullable();

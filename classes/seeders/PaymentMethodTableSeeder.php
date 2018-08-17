@@ -20,5 +20,11 @@ class PaymentMethodTableSeeder extends Seeder
         $method->payment_provider = 'paypal-rest';
         $method->sort_order       = 2;
         $method->save();
+
+        $method                   = new PaymentMethod();
+        $method->name             = 'Offline';
+        $method->payment_provider = 'offline';
+        $method->sort_order       = 3;
+        $method->save();
     }
 }

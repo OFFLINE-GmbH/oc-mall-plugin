@@ -4,6 +4,15 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
+    code:
+        label: 'offline.mall::lang.common.code'
+        comment: 'offline.mall::lang.common.code_comment'
+        span: auto
+        type: text
+        placeholder: 'offline.mall::lang.common.code'
+        preset:
+            field: name
+            type: slug
     payment_provider:
         label: 'offline.mall::lang.common.payment_provider'
         oc.commentPosition: ''

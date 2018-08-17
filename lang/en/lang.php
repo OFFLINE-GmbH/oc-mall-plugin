@@ -192,6 +192,8 @@
         'customer_groups'      => 'Customer groups',
         'customer_group'       => 'Customer group',
         'product_or_variant'   => 'Product/Variant',
+        'code'                 => 'Code',
+        'code_comment'         => 'This code can be used to identify this record programmatically'
     ],
     'variant'                  => [
         'method' => [

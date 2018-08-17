@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
@@ -9,9 +10,10 @@ use System\Models\File;
 
 class PaymentMethod extends Model
 {
-    use Validation;
+    use Sluggable;
     use SoftDelete;
     use Sortable;
+    use Validation;
 
     public $rules = [
         'name'             => 'required',
@@ -19,6 +21,9 @@ class PaymentMethod extends Model
     ];
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $slugs = [
+        'code' => 'name',
+    ];
     public $translatable = [
         'name',
         'description',

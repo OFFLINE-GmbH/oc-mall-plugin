@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
+use OFFLINE\Mall\Classes\Payments\Offline;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
@@ -189,8 +190,9 @@ class Plugin extends PluginBase
         });
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();
-            $gateway->registerProvider(new Stripe());
+            $gateway->registerProvider(new Offline());
             $gateway->registerProvider(new PayPalRest());
+            $gateway->registerProvider(new Stripe());
 
             return $gateway;
         });
@@ -206,10 +208,10 @@ class Plugin extends PluginBase
     {
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
             $count = RainLabUser::with('customer')
-                                ->where('email', $value)
-                                ->whereHas('customer', function ($q) {
-                                    $q->where('is_guest', 0);
-                                })->count();
+                ->where('email', $value)
+                ->whereHas('customer', function ($q) {
+                    $q->where('is_guest', 0);
+                })->count();
 
             return $count === 0;
         });
