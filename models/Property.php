@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -61,30 +62,34 @@ class Property extends Model
         })->unique('value');
     }
 
-    public function getValuesForCategory($category)
+    public static function getValuesForProducts(Collection $properties, Collection $products)
     {
-        $products      = $category->publishedProducts;
         $productValues = PropertyValue::where('describable_type', Product::MORPH_KEY)
                                       ->whereIn('describable_id', $products->pluck('id'))
-                                      ->where('property_id', $this->id)
+                                      ->whereIn('property_id', $properties->pluck('id'))
                                       ->groupBy('value')
                                       ->get();
 
         $variantValues = PropertyValue::where('describable_type', Variant::MORPH_KEY)
                                       ->whereIn('describable_id', $products->flatMap->variants->pluck('id'))
-                                      ->where('property_id', $this->id)
+                                      ->whereIn('property_id', $properties->pluck('id'))
                                       ->groupBy('value')
                                       ->get();
 
         $values = $productValues->merge($variantValues)->unique('value');
+        $values = $values->groupBy('property_id')->map(function ($values) {
+            // if this property has options make sure to restore the original order
+            $firstProp = $values->first()->property;
+            if ( ! $firstProp->options) {
+                return $values;
+            }
 
-        // If this property has options make sure to restore the original order
-        if ($this->options) {
-            $order  = collect($this->options)->pluck('value')->flip();
-            $values = $values->sortBy(function ($value) use ($order) {
+            $order = collect($firstProp->options)->flatten()->flip();
+
+            return $values->sortBy(function ($value) use ($order) {
                 return $order[$value->value] ?? 0;
             });
-        }
+        });
 
         return $values;
     }

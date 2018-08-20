@@ -454,6 +454,10 @@
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
                 ],
+                'include_children' => [
+                    'title'       => 'Zeige Produkte aus Kinderkategorien an',
+                    'description' => 'Zeige alle Produkte von Kinderkategorien ebenfalls an',
+                ],
                 'product_page'  => [
                     'title'       => 'Produktdetails-Seite',
                     'description' => 'Seite, auf der die Produkt-Details angezeigt werden',
@@ -468,6 +472,10 @@
             'properties' => [
                 'showPriceFilter'     => [
                     'title' => 'Zeige Preis-Filter an',
+                ],
+                'includeChildren'     => [
+                    'title' => 'Zeige Filter aus Kinderkategorien auch an',
+                    'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfals',
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Binde noUI Slider ein',

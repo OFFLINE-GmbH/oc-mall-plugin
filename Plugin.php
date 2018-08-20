@@ -22,6 +22,7 @@ use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
+use OFFLINE\Mall\Components\CategoryProducts;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
@@ -208,10 +209,10 @@ class Plugin extends PluginBase
     {
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
             $count = RainLabUser::with('customer')
-                ->where('email', $value)
-                ->whereHas('customer', function ($q) {
-                    $q->where('is_guest', 0);
-                })->count();
+                                ->where('email', $value)
+                                ->whereHas('customer', function ($q) {
+                                    $q->where('is_guest', 0);
+                                })->count();
 
             return $count === 0;
         });

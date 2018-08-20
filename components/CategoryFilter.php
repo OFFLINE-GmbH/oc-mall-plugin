@@ -22,10 +22,24 @@ class CategoryFilter extends MallComponent
      */
     public $category;
     /**
+     * @var Collection<Product|Variant>
+     */
+    public $items;
+    /**
+     * All available property values.
+     *
+     * @var Collection
+     */
+    public $values;
+    /**
      * All available property filters.
      * @var Collection
      */
     public $propertyGroups;
+    /**
+     * @var Collection
+     */
+    public $props;
     /**
      * @var Collection
      */
@@ -39,6 +53,10 @@ class CategoryFilter extends MallComponent
      * @var boolean
      */
     public $showPriceFilter;
+    /**
+     * @var boolean
+     */
+    public $includeChildren;
     /**
      * @var array
      */
@@ -64,6 +82,12 @@ class CategoryFilter extends MallComponent
                 'title'   => 'offline.mall::lang.components.categoryFilter.properties.showPriceFilter.title',
                 'default' => '1',
                 'type'    => 'checkbox',
+            ],
+            'includeChildren'     => [
+                'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeChildren.title',
+                'description' => 'offline.mall::lang.components.categoryFilter.properties.includeChildren.description',
+                'default'     => '1',
+                'type'        => 'checkbox',
             ],
             'includeSliderAssets' => [
                 'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeSliderAssets.title',
@@ -129,40 +153,31 @@ class CategoryFilter extends MallComponent
 
     protected function setData()
     {
-        $this->setVar('category', $this->getCategory());
-        $this->setVar('propertyGroups', $this->getPropertyGroups());
-        $this->setVar('filter', $this->getFilter());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
+        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
+        $this->setVar('category', $this->getCategory());
         $this->setPriceRange();
+
+        $this->setVar('propertyGroups', $this->getPropertyGroups());
+        $this->setVar('props', $this->setProps());
+        $this->setVar('filter', $this->getFilter());
     }
 
     protected function getCategory()
     {
-        $category = $this->property('category');
-
-        $with = [
-            'property_groups.properties' => function ($q) {
-                $q->wherePivot('filter_type', '<>', null);
-            },
-            'property_groups.properties.property_values.property',
-        ];
-
-        if ($category === ':slug') {
-            return CategoryModel::getByNestedSlug($this->param('slug'), $with);
-        }
-
-        return CategoryModel::with($with)->findOrFail($category);
+        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
     protected function setPriceRange()
     {
-        $products = $this->category->getProducts();
-        $min      = $products->min(function ($p) {
+        $this->items = $this->category->getProducts(false, $this->includeChildren);
+        $prices      = $this->items->map(function ($p) {
             return $p->priceInCurrency();
-        });
-        $max      = $products->max(function ($p) {
-            return $p->priceInCurrency();
-        });
+        })->toArray();
+
+        $min = $prices ? min($prices) : 0;
+        $max = $prices ? max($prices) : 0;
+
         $this->setVar('priceRange', $min === $max ? false : [$min, $max]);
     }
 
@@ -170,8 +185,17 @@ class CategoryFilter extends MallComponent
     {
         return $this->category->inherited_property_groups->reject(function (PropertyGroup $group) {
             return $group->properties->count() < 1;
-
         })->sortBy('pivot.sort_order');
+    }
+
+    /**
+     * Pull all the properties from all property groups. These are needed
+     * to generate possible filter values.
+     */
+    protected function setProps()
+    {
+        $this->props  = $this->propertyGroups->flatMap->properties->unique();
+        $this->values = Property::getValuesForProducts($this->props, $this->items);
     }
 
     protected function getFilter()
@@ -193,15 +217,6 @@ class CategoryFilter extends MallComponent
             'filter'      => $filter,
             'queryString' => (new QueryString())->serialize($filter),
         ];
-    }
-
-    protected function hashKeys(Collection $data): Collection
-    {
-        return $data->mapWithKeys(function ($item, $key) {
-            $key = $this->isSpecialProperty($key) ? $key : $this->encode($key);
-
-            return [$key => $item];
-        });
     }
 
     protected function isSpecialProperty(string $prop): bool

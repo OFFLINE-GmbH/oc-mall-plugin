@@ -56,8 +56,8 @@ class Cruiser3000 extends DemoProduct
             [
                 'name'       => 'Cruiser 3000 27.5" S',
                 'stock'      => 4,
-                'price'      => ['USD' => 1795, 'CHF' => 2499, 'EUR' => 1295],
-                'old_price'  => ['USD' => 1995, 'CHF' => 2199, 'EUR' => 1495],
+                'price'      => ['USD' => 1795, 'CHF' => 2199, 'EUR' => 1295],
+                'old_price'  => ['USD' => 1995, 'CHF' => 2499, 'EUR' => 1495],
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
                     'wheel-size' => '27.5"',

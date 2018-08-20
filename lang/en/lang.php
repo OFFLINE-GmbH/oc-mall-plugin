@@ -455,6 +455,10 @@
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
                 ],
+                'include_children' => [
+                    'title'       => 'Include children',
+                    'description' => 'Show all products of child categories as well',
+                ],
                 'product_page'  => [
                     'title'       => 'Product page',
                     'description' => 'Page where product details are displayed',
@@ -469,6 +473,10 @@
             'properties' => [
                 'showPriceFilter'     => [
                     'title' => 'Show price filter',
+                ],
+                'includeChildren'     => [
+                    'title' => 'Include children',
+                    'description' => 'Include properties and filters from products in child categories as well',
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Include noUI Slider',

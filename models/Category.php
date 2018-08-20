@@ -264,6 +264,31 @@ class Category extends Model
         ];
     }
 
+    /**
+     * This method is used in components to find the category either
+     * by slug (if $id = ":slug") or by id.
+     *
+     * @param $slug
+     * @param $id
+     *
+     * @return mixed
+     */
+    public static function bySlugOrId($slug, $id)
+    {
+        $with = [
+            'property_groups.properties' => function ($q) {
+                $q->wherePivot('filter_type', '<>', null);
+            },
+            'property_groups.properties.property_values.property',
+        ];
+
+        if ($id === ':slug') {
+            return self::getByNestedSlug($slug, $with);
+        }
+
+        return self::with($with)->findOrFail($category);
+    }
+
     public static function getByNestedSlug(string $slug, array $with = [])
     {
         $slug = trim($slug, ' /');
@@ -343,10 +368,11 @@ class Category extends Model
      * Returns all products in this category.
      *
      * @param bool $useVariants
+     * @param bool $includeChildProducts
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getProducts($useVariants = true)
+    public function getProducts($useVariants = true, $includeChildProducts = false)
     {
         $this->publishedProducts->load(['variants', 'variants.image_sets']);
 
@@ -355,7 +381,9 @@ class Category extends Model
         });
 
         if ($useVariants) {
-            return $items;
+            return $includeChildProducts
+                ? $items->concat($this->getChildProducts($useVariants))->flatten()
+                : $items;
         }
 
         // If the variants should not be listed separately we select
@@ -365,11 +393,29 @@ class Category extends Model
             return $item->product_id ?? $item->id;
         })->unique();
 
-        return Product::with('variants')->whereIn('id', $productIds)->get();
+        $items = Product::with('variants')->whereIn('id', $productIds)->get();
+
+        return $includeChildProducts
+            ? $items->concat($this->getChildProducts($useVariants))->flatten()
+            : $items;
     }
 
     /**
-     * Returnes a flattened Collection of all available properties.
+     * Returns all products of all child categories.
+     *
+     * @param bool $useVariants
+     *
+     * @return Collection
+     */
+    public function getChildProducts($useVariants)
+    {
+        return $this->getAllChildren()->map(function (Category $category) use ($useVariants) {
+            return $category->getProducts($useVariants);
+        });
+    }
+
+    /**
+     * Returns a flattened Collection of all available properties.
      *
      * @return Collection
      */

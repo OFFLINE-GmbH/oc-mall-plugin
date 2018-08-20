@@ -12,7 +12,7 @@ use Url;
 class Category extends MallComponent
 {
     /**
-     * @var Category
+     * @var CategoryModel
      */
     public $category;
     /**
@@ -59,6 +59,12 @@ class Category extends MallComponent
                 'default'     => '0',
                 'type'        => 'checkbox',
             ],
+            'include_children' => [
+                'title'       => 'offline.mall::lang.components.category.properties.include_children.title',
+                'description' => 'offline.mall::lang.components.category.properties.include_children.description',
+                'default'     => '1',
+                'type'        => 'checkbox',
+            ],
             'per_page'      => [
                 'title'       => 'offline.mall::lang.components.category.properties.per_page.title',
                 'description' => 'offline.mall::lang.components.category.properties.per_page.description',
@@ -94,19 +100,14 @@ class Category extends MallComponent
     protected function getItems(): Collection
     {
         $showVariants = (bool)$this->property('show_variants');
+        $includeChildren = (bool)$this->property('include_children');
 
-        return $this->applyFilters($this->category->getProducts($showVariants));
+        return $this->applyFilters($this->category->getProducts($showVariants, $includeChildren));
     }
 
     protected function getCategory()
     {
-        $category = $this->property('category');
-
-        if ($category === ':slug') {
-            return CategoryModel::getByNestedSlug($this->param('slug'));
-        }
-
-        return CategoryModel::findOrFail($category);
+        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
     protected function paginate(Collection $items)
