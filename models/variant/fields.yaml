@@ -15,6 +15,11 @@ fields:
         oc.commentPosition: ''
         span: left
         type: text
+    user_defined_id:
+        label: 'offline.mall::lang.product.user_defined_id'
+        oc.commentPosition: ''
+        span: left
+        type: text
     stock:
         label: 'offline.mall::lang.product.stock'
         oc.commentPosition: ''

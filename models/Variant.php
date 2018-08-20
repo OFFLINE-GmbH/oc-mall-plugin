@@ -63,6 +63,7 @@ class Variant extends \Model
 
     protected $fillable = [
         'product_id',
+        'user_defined_id',
         'image_set_id',
         'stock',
         'name',

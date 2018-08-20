@@ -3,6 +3,11 @@ columns:
         label: 'offline.mall::lang.product.published_short'
         type: partial
         path: $/offline/mall/models/variant/_published.htm
+    user_defined_id:
+        label: 'offline.mall::lang.product.user_defined_id'
+        type: text
+        searchable: true
+        sortable: true
     name:
         type: text
         label: 'offline.mall::lang.common.name'
