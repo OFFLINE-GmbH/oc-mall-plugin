@@ -156,7 +156,7 @@ class Order extends Model
         $start   = $numbers->max;
 
         if ($start === 0) {
-            $start = GeneralSettings::get('order_start');
+            $start = (int)GeneralSettings::get('order_start');
         }
 
         $this->order_number = $start + 1;
