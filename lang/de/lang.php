@@ -105,8 +105,8 @@
         'links_comment'              => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
         'customizations'             => 'Optionen',
         'customizations_comment'     => 'Globale Konfigurationseinstellungen für deinen Shop',
-        'order_number_start'         => 'First order number',
-        'order_number_start_comment' => 'Initial id of the first order',
+        'order_number_start'         => 'Beginn Bestellungsnummerierung',
+        'order_number_start_comment' => 'Die erste Bestellung erhält diese Nummer',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
