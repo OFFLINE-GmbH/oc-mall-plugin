@@ -96,6 +96,14 @@ class Category extends Model
     }
 
     /**
+     * Clear menu categories cache after each modification
+     * */
+    public function afterSave()
+    {
+        Cache::forget('all-mall-categories');
+    }
+
+    /**
      * Don't show the inherits_property_groups field if this
      * category i a root node.
      */
@@ -185,39 +193,54 @@ class Category extends Model
      * @return array
      * @throws \InvalidArgumentException
      */
-    public static function resolveMenuItem($item, $url, $theme)
+    public static function resolveCategoryItem($item, $url, $theme)
     {
+        $category = self::find($item->reference);
+        if (!$category) {
+            return;
+        }
+
+        return self::getMenuItem($category, $url);
+    }
+
+    /**
+     * @param $item
+     * @param $url
+     * @param $theme
+     *
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public static function resolveCategoriesItem($item, $url, $theme)
+    {
+
+        if (Cache::has('all-mall-categories')) {
+            return Cache::get('all-mall-categories');
+        }
+
         $structure = [];
 
-        if ($item->type == 'mall-category') {
-            $category = self::find($item->reference);
-            if ( ! $category) {
-                return;
-            }
+        $category = new Category();
 
-            $structure = self::getMenuItem($category, $url);
+        $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
+            $branch = [];
 
-        } elseif ($item->type == 'all-mall-categories') {
-            $category = new Category();
+            foreach ($items as $item) {
+                $branchItem = self::getMenuItem($item, $url);
 
-            $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
-                $branch = [];
-
-                foreach ($items as $item) {
-                    $branchItem = self::getMenuItem($item, $url);
-
-                    if ($item->children) {
-                        $branchItem['items'] = $iterator($item->children, $item->slug);
-                    }
-
-                    $branch[] = $branchItem;
+                if ($item->children) {
+                    $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
 
-                return $branch;
-            };
+                $branch[] = $branchItem;
+            }
 
-            $structure['items'] = $iterator($category->getEagerRoot());
-        }
+            return $branch;
+        };
+
+        $structure['items'] = $iterator($category->getEagerRoot());
+
+        Cache::forever('all-mall-categories', $structure);
 
         return $structure;
     }

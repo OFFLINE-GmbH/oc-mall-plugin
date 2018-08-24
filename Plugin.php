@@ -3,6 +3,7 @@
 
 use App;
 use Backend\Widgets\Form;
+use Cache;
 use Event;
 use Hashids\Hashids;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
@@ -168,8 +169,11 @@ class Plugin extends PluginBase
         });
 
         Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
-            if ($type == 'all-mall-categories' || $type == 'mall-category') {
-                return Category::resolveMenuItem($item, $url, $theme);
+            if ($type == 'all-mall-categories') {
+                return Category::resolveCategoriesItem($item, $url, $theme);
+            }
+            if ($type == 'mall-category') {
+                return Category::resolveCategoryItem($item, $url, $theme);
             }
         });
     }
