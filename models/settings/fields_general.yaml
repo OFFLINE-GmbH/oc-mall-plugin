@@ -45,3 +45,10 @@ fields:
         type: switch
         default: true
         comment: offline.mall::lang.general_settings.auto_pop_comment
+
+    order_start:
+        label: offline.mall::lang.general_settings.order_number_start
+        comment: offline.mall::lang.general_settings.order_number_start_comment
+        type: text
+        span: right
+        default: 1
