@@ -6,6 +6,7 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -155,7 +156,7 @@ class Order extends Model
         $start   = $numbers->max;
 
         if ($start === 0) {
-            $start = 0; // @TODO: Add custom starting point for numbers
+            $start = GeneralSettings::get('order_start');
         }
 
         $this->order_number = $start + 1;

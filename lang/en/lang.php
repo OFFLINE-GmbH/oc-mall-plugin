@@ -87,25 +87,27 @@
         ],
     ],
     'general_settings'         => [
-        'category'               => 'Mall Shop',
-        'label'                  => 'Configuration',
-        'description'            => 'General settings',
-        'product_page'           => 'Product details page',
-        'product_page_comment'   => 'This is where the product details are displayed',
-        'address_page'           => 'Address page',
-        'address_page_comment'   => 'The addressForm component has to be present on this page',
-        'checkout_page'          => 'Checkout page',
-        'checkout_page_comment'  => 'The checkout component has to be present on this page',
-        'account_page'           => 'Account page',
-        'account_page_comment'   => 'The myAccount component has to be present on this page',
-        'category_page'          => 'Category page for products listing',
-        'auto_pop'               => 'Auto pop cart overlay',
-        'auto_pop_comment'       => 'Auto pop the cart overlay after a product was added to the shopping cart',
-        'links'                  => 'CMS pages',
-        'links_comment'          => 'Choose which pages are used to display your products',
-        'customizations'         => 'Customizations',
-        'customizations_comment' => 'Customize the features of your shop',
-        'category_page_comment'  => 'Add the "products" component to this page.',
+        'category'                   => 'Mall Shop',
+        'label'                      => 'Configuration',
+        'description'                => 'General settings',
+        'product_page'               => 'Product details page',
+        'product_page_comment'       => 'This is where the product details are displayed',
+        'address_page'               => 'Address page',
+        'address_page_comment'       => 'The addressForm component has to be present on this page',
+        'checkout_page'              => 'Checkout page',
+        'checkout_page_comment'      => 'The checkout component has to be present on this page',
+        'account_page'               => 'Account page',
+        'account_page_comment'       => 'The myAccount component has to be present on this page',
+        'category_page'              => 'Category page for products listing',
+        'auto_pop'                   => 'Auto pop cart overlay',
+        'auto_pop_comment'           => 'Auto pop the cart overlay after a product was added to the shopping cart',
+        'links'                      => 'CMS pages',
+        'links_comment'              => 'Choose which pages are used to display your products',
+        'customizations'             => 'Customizations',
+        'customizations_comment'     => 'Customize the features of your shop',
+        'category_page_comment'      => 'Add the "products" component to this page.',
+        'order_number_start'         => 'First order number',
+        'order_number_start_comment' => 'Initial id of the first order',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -193,7 +195,7 @@
         'customer_group'       => 'Customer group',
         'product_or_variant'   => 'Product/Variant',
         'code'                 => 'Code',
-        'code_comment'         => 'This code can be used to identify this record programmatically'
+        'code_comment'         => 'This code can be used to identify this record programmatically',
     ],
     'variant'                  => [
         'method' => [
@@ -450,8 +452,8 @@
                 'description' => 'Displays all products of a category',
             ],
             'properties' => [
-                'use_url'       => 'Use slug from URL',
-                'show_variants' => [
+                'use_url'          => 'Use slug from URL',
+                'show_variants'    => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
                 ],
@@ -459,7 +461,7 @@
                     'title'       => 'Include children',
                     'description' => 'Show all products of child categories as well',
                 ],
-                'product_page'  => [
+                'product_page'     => [
                     'title'       => 'Product page',
                     'description' => 'Page where product details are displayed',
                 ],
@@ -475,7 +477,7 @@
                     'title' => 'Show price filter',
                 ],
                 'includeChildren'     => [
-                    'title' => 'Include children',
+                    'title'       => 'Include children',
                     'description' => 'Include properties and filters from products in child categories as well',
                 ],
                 'includeSliderAssets' => [
