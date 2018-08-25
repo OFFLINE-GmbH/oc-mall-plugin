@@ -151,12 +151,8 @@ class Product extends MallComponent
 
     public function onChangeProperty()
     {
-        $valueIds = post('values');
-        if ( ! $valueIds) {
-            throw new ValidationException(['Missing input data']);
-        }
-
-        $variant = $this->getVariantByPropertyValues(post('values'));
+        $values  = post('values', []);
+        $variant = $this->getVariantByPropertyValues($values);
 
         $this->page['stock'] = $variant ? $variant->stock : 0;
         $this->page['item']  = $variant ? $variant : $this->getProduct();
@@ -164,15 +160,17 @@ class Product extends MallComponent
 
     public function onCheckProductStock()
     {
+        $this->setData();
+
         $slug = post('slug');
         if ( ! $slug) {
             throw new ValidationException(['Missing input data']);
         }
 
-        $product = ProductModel::published()->whereSlug($slug)->firstOrFail();
+        $item = $this->getItem();
 
-        $this->page['stock'] = $product ? $product->stock : 0;
-        $this->page['item']  = $product;
+        $this->page['stock'] = $item ? $item->stock : 0;
+        $this->page['item']  = $item;
     }
 
     public function setData()
@@ -251,7 +249,7 @@ class Product extends MallComponent
     }
 
     protected function getGroupedProperty(Variant $variant)
-   {
+    {
         if ( ! $variant->product->group_by_property_id) {
             return (object)['value' => 0];
         }
