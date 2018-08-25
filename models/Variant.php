@@ -74,14 +74,6 @@ class Variant extends \Model
         'allow_out_of_stock_purchases',
     ];
 
-    /**
-     * The related products data is cached to speed uf the
-     * getAttribute method below.
-     *
-     * @var Product
-     */
-    protected $parent;
-
     public static function boot()
     {
         parent::boot();
@@ -167,7 +159,7 @@ class Variant extends \Model
 
     public function custom_fields()
     {
-        return optional($this->parent)->custom_fields();
+        return $this->product->custom_fields();
     }
 
     public function scopePublished($query)
@@ -177,6 +169,11 @@ class Variant extends \Model
 
     public function getAttribute($attribute)
     {
+        // If any of the product relation columns are call don't override the method's default behaviour.
+        if (\in_array($attribute, ['product', 'product_id'])) {
+            return parent::getAttribute($attribute);
+        }
+
         $originalValue = parent::getAttribute($attribute);
         $isPriceColumn = $this->isPriceColumn($attribute);
 
@@ -186,12 +183,7 @@ class Variant extends \Model
                 : $originalValue;
         }
 
-        // Cache the "parent" product's data.
-        if ( ! $this->parent) {
-            $this->parent = Product::find($this->attributes['product_id']);
-        }
-
-        $parentValues = $this->parent->getAttribute($attribute);
+        $parentValues = $this->product->getAttribute($attribute);
 
         if ($isPriceColumn) {
             $value = $this->priceGetAttribute($attribute);
