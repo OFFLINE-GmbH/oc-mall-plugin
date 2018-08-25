@@ -392,7 +392,7 @@ class Category extends Model
      */
     public function getProducts($useVariants = true, $includeChildProducts = false)
     {
-        $this->publishedProducts->load(['variants', 'variants.image_sets']);
+        $this->publishedProducts->load(['variants', 'variants.image_sets', 'property_values', 'variants.property_values']);
 
         $items = $this->publishedProducts->flatMap(function (Product $product) {
             return $product->inventory_management_method === 'variant' ? $product->variants : [$product];

@@ -40,7 +40,6 @@ abstract class Filter
             return $item->getAttribute($this->property);
         }
 
-        $item->load('property_values');
         $value = $item->property_values->where('property_id', $this->property->id)->first();
         if ($value === null) {
             // The filtered property is specified on the product, not on the variant
