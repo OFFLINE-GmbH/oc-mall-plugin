@@ -169,7 +169,7 @@ class Variant extends \Model
 
     public function getAttribute($attribute)
     {
-        // If any of the product relation columns are call don't override the method's default behaviour.
+        // If any of the product relation columns are called don't override the method's default behaviour.
         if (\in_array($attribute, ['product', 'product_id'])) {
             return parent::getAttribute($attribute);
         }
