@@ -20,6 +20,7 @@ class Category extends Model
     use SortableRelation;
 
     public const ID_MAP_CACHE_KEY = 'oc-mall.categories.id_map';
+    public const ALL_CATEGORIES_CACHE_KEY = 'oc-mall.categories.all';
 
     protected $dates = [
         'deleted_at',
@@ -89,18 +90,12 @@ class Category extends Model
         });
         static::saved(function () {
             Cache::forget(self::ID_MAP_CACHE_KEY);
+            Cache::forget(self::ALL_CATEGORIES_CACHE_KEY);
         });
         static::deleted(function () {
             Cache::forget(self::ID_MAP_CACHE_KEY);
+            Cache::forget(self::ALL_CATEGORIES_CACHE_KEY);
         });
-    }
-
-    /**
-     * Clear menu categories cache after each modification
-     * */
-    public function afterSave()
-    {
-        Cache::forget('all-mall-categories');
     }
 
     /**
@@ -214,8 +209,8 @@ class Category extends Model
     public static function resolveCategoriesItem($item, $url, $theme)
     {
 
-        if (Cache::has('all-mall-categories')) {
-            return Cache::get('all-mall-categories');
+        if (Cache::has(self::ALL_CATEGORIES_CACHE_KEY)) {
+            return Cache::get(self::ALL_CATEGORIES_CACHE_KEY);
         }
 
         $structure = [];
@@ -240,7 +235,7 @@ class Category extends Model
 
         $structure['items'] = $iterator($category->getEagerRoot());
 
-        Cache::forever('all-mall-categories', $structure);
+        Cache::forever(self::ALL_CATEGORIES_CACHE_KEY, $structure);
 
         return $structure;
     }
@@ -329,7 +324,7 @@ class Category extends Model
      */
     public function getSlugMap()
     {
-        return \Cache::remember(self::ID_MAP_CACHE_KEY, 60 * 24, function () {
+        return \Cache::rememberForever(self::ID_MAP_CACHE_KEY, function () {
             $map = [];
 
             $buildSlugMap = function (?Category $parent = null, array &$map, string $base = '') use (&$buildSlugMap) {
