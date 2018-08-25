@@ -43,17 +43,17 @@ class Category extends MallComponent
     public function defineProperties()
     {
         return [
-            'category'      => [
+            'category'         => [
                 'title'   => 'offline.mall::lang.common.category',
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
-            'product_page'  => [
+            'product_page'     => [
                 'title'       => 'offline.mall::lang.components.category.properties.product_page.title',
                 'description' => 'offline.mall::lang.components.category.properties.product_page.description',
                 'type'        => 'dropdown',
             ],
-            'show_variants' => [
+            'show_variants'    => [
                 'title'       => 'offline.mall::lang.components.category.properties.show_variants.title',
                 'description' => 'offline.mall::lang.components.category.properties.show_variants.description',
                 'default'     => '0',
@@ -65,7 +65,7 @@ class Category extends MallComponent
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
-            'per_page'      => [
+            'per_page'         => [
                 'title'       => 'offline.mall::lang.components.category.properties.per_page.title',
                 'description' => 'offline.mall::lang.components.category.properties.per_page.description',
                 'default'     => '9',
@@ -99,10 +99,15 @@ class Category extends MallComponent
 
     protected function getItems(): Collection
     {
-        $showVariants = (bool)$this->property('show_variants');
+        $showVariants    = (bool)$this->property('show_variants');
         $includeChildren = (bool)$this->property('include_children');
 
-        return $this->applyFilters($this->category->getProducts($showVariants, $includeChildren));
+        $items = $this->applyFilters($this->category->getProducts(true, $includeChildren));
+        if ( ! $showVariants) {
+            return $items->pluck('product')->unique();
+        }
+
+        return $items;
     }
 
     protected function getCategory()
