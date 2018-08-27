@@ -331,7 +331,7 @@ class Product extends MallComponent
                                     'offline_mall_product_variants',
                                     'describable_id', '=', 'offline_mall_product_variants.id'
                                 )
-                                ->where('describable_type', Variant::class)
+                                ->where('describable_type', Variant::MORPH_KEY)
                                 ->whereNull('offline_mall_product_variants.deleted_at')
                                 ->select(DB::raw('describable_type, describable_id, count(*) as matching_attributes'))
                                 ->groupBy(['describable_id', 'describable_type'])
