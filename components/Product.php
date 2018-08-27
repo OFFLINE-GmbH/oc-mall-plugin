@@ -301,7 +301,7 @@ class Product extends MallComponent
         }
 
         $ids = PropertyValue::where('value', $groupedValue)
-                            ->where('describable_type', Variant::class)
+                            ->where('describable_type', Variant::MORPH_KEY)
                             ->where('product_id', $this->product->id)
                             ->leftJoin(
                                 'offline_mall_product_variants',
@@ -311,7 +311,7 @@ class Product extends MallComponent
                             ->unique();
 
         return PropertyValue::whereIn('describable_id', $ids)
-                            ->where('describable_type', Variant::class)
+                            ->where('describable_type', Variant::MORPH_KEY)
                             ->where('value', '<>', '')
                             ->whereNotNull('value')
                             ->get()
