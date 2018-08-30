@@ -174,22 +174,23 @@ class Variant extends \Model
             return parent::getAttribute($attribute);
         }
 
-        $originalValue = parent::getAttribute($attribute);
-        $isPriceColumn = $this->isPriceColumn($attribute);
+        $originalValue = $this->isPriceColumn($attribute)
+            ? $this->priceGetAttribute($attribute)
+            : parent::getAttribute($attribute);
 
         if (session()->get('mall.variants.disable-inheritance')) {
-            return $this->isPriceColumn($attribute) && $originalValue
-                ? $this->roundPrice($originalValue)
-                : $originalValue;
+            return $originalValue;
         }
 
         $parentValues = $this->product->getAttribute($attribute);
 
-        if ($isPriceColumn) {
-            $value = $this->priceGetAttribute($attribute);
+        if ($this->shouldMergeAttributeWithProduct($attribute)) {
+            if ($originalValue instanceof Collection) {
+                return $parentValues->merge($originalValue);
+            }
 
-            if (is_array($value)) {
-                return array_merge($parentValues ?: [], $value);
+            if (is_array($originalValue)) {
+                return array_merge($parentValues ?: [], $originalValue);
             }
         }
 
@@ -246,5 +247,10 @@ class Variant extends \Model
         }
 
         return $value !== null;
+    }
+
+    protected function shouldMergeAttributeWithProduct($key) : bool
+    {
+        return $this->isPriceColumn($key) || in_array($key, ['property_values']);
     }
 }
