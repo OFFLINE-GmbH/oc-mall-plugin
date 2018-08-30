@@ -65,6 +65,10 @@ trait Images
      */
     public function getMainImageSetAttribute()
     {
+        if ( ! $this->image_sets) {
+            return null;
+        }
+
         return $this->image_sets instanceof ImageSet
             ? $this->image_sets
             : optional($this->image_sets->sortByDesc('is_main_set'))->first();

@@ -1,6 +1,8 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use DB;
 use Model;
+use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -8,7 +10,7 @@ use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
-use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -18,15 +20,17 @@ class Product extends Model
     use SoftDelete;
     use Sluggable;
     use UserSpecificPrice;
-    use Price;
     use Images;
     use CustomFields;
     use HashIds;
+    use Nullable;
+    use PriceAccessors;
 
     const MORPH_KEY = 'mall.product';
 
     protected $dates = ['deleted_at'];
-    public $jsonable = ['links', 'price', 'old_price'];
+    public $jsonable = ['links'];
+    public $nullable = ['stock'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
@@ -42,7 +46,6 @@ class Product extends Model
     public $rules = [
         'name'   => 'required',
         'slug'   => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
-        'price'  => 'required',
         'weight' => 'integer|nullable',
     ];
     public $casts = [
@@ -60,8 +63,6 @@ class Product extends Model
         'user_defined_id',
         'name',
         'slug',
-        'price',
-        'old_price',
         'description_short',
         'description',
         'meta_title',
@@ -82,7 +83,7 @@ class Product extends Model
         'published',
     ];
     public $table = 'offline_mall_products';
-    public $with = ['image_sets'];
+    public $with = ['image_sets', 'prices'];
     public $attachMany = [
         'downloads' => File::class,
     ];
@@ -103,13 +104,15 @@ class Product extends Model
         ],
     ];
     public $morphMany = [
-        'property_values'       => [PropertyValue::class, 'name' => 'describable'],
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
+        'additional_prices'     => [Price::class, 'name' => 'priceable'],
     ];
     public $hasMany = [
-        'variants'      => Variant::class,
-        'cart_products' => CartProduct::class,
-        'image_sets'    => ImageSet::class,
+        'prices'          => [ProductPrice::class, 'conditions' => 'variant_id is null'],
+        'variants'        => Variant::class,
+        'cart_products'   => CartProduct::class,
+        'image_sets'      => ImageSet::class,
+        'property_values' => PropertyValue::class,
     ];
     public $belongsToMany = [
         'custom_fields'   => [
@@ -148,6 +151,19 @@ class Product extends Model
             'pivotModel' => CartProduct::class,
         ],
     ];
+
+    public function afterDelete()
+    {
+        $this->prices()->delete();
+        $this->additional_prices()->delete();
+        $this->variants()->delete();
+        $this->property_values()->delete();
+        $this->property_values()->delete();
+        DB::table('offline_mall_product_accessory')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
+    }
 
     public function scopePublished($query)
     {
@@ -197,8 +213,33 @@ class Product extends Model
         return $quantity;
     }
 
-    public function getPriceColumns()
+    public function groupPriceInCurrency($group, $currency)
     {
-        return ['price', 'old_price'];
+        if ($group instanceof CustomerGroup) {
+            $group = $group->id;
+        }
+        if ($currency instanceof Currency) {
+            $currency = $currency->id;
+        }
+
+        $prices = $this->customer_group_prices;
+
+        return optional($prices->where('currency_id', $currency)->where('customer_group_id', $group)->first())
+            ->decimal;
+    }
+
+    public function additionalPriceInCurrency($category, $currency)
+    {
+        if ($category instanceof PriceCategory) {
+            $category = $category->id;
+        }
+        if ($currency instanceof Currency) {
+            $currency = $currency->id;
+        }
+
+        $prices = $this->additional_prices;
+
+        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first())
+            ->decimal;
     }
 }

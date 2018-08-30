@@ -16,13 +16,13 @@ class CreateOfflineMallProductVariants extends Migration
             $table->integer('stock')->nullable();
             $table->string('name')->nullable();
             $table->boolean('published')->default(true);
-            $table->text('price')->nullable();
-            $table->text('old_price')->nullable();
             $table->integer('weight')->nullable()->unsigned();
             $table->boolean('allow_out_of_stock_purchases')->default(false);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
+
+            $table->index('product_id', 'idx_product_id');
         });
     }
 

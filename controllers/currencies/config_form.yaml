@@ -1,0 +1,11 @@
+name: Currencies
+modelClass: OFFLINE\Mall\Models\Currency
+form: $/offline/mall/models/currency/fields.yaml
+defaultRedirect: offline/mall/currencies
+create:
+    redirect: 'offline/mall/currencies/update/:id'
+    redirectClose: offline/mall/currencies
+update:
+    redirect: offline/mall/currencies
+    redirectClose: offline/mall/currencies
+preview: {  }

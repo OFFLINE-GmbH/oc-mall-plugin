@@ -12,13 +12,11 @@ use OFFLINE\Mall\Classes\Demo\Products\Jersey;
 use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CurrencySettings;
-use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
-use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\Variant;
 use Symfony\Component\Console\Input\InputOption;
 
 class SeedDemoData extends Command
@@ -299,27 +297,26 @@ class SeedDemoData extends Command
     protected function createCurrencies()
     {
         $this->output->writeln('Creating currencies...');
-        CurrencySettings::set('currencies', [
-            [
-                'code'     => 'USD',
-                'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
-                'decimals' => 2,
-                'symbol'   => '$',
-                'rate'     => 1,
-            ],
-            [
-                'code'     => 'EUR',
-                'format'   => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
-                'decimals' => 2,
-                'symbol'   => '€',
-                'rate'     => 1,
-            ],
-            [
-                'code'     => 'CHF',
-                'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
-                'decimals' => 2,
-                'rate'     => 1,
-            ],
+        DB::table('offline_mall_currencies')->truncate();
+        Currency::create([
+            'code'     => 'USD',
+            'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
+            'decimals' => 2,
+            'symbol'   => '$',
+            'rate'     => 1,
+        ]);
+        Currency::create([
+            'code'     => 'EUR',
+            'format'   => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
+            'decimals' => 2,
+            'symbol'   => '€',
+            'rate'     => 1,
+        ]);
+        Currency::create([
+            'code'     => 'CHF',
+            'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
+            'decimals' => 2,
+            'rate'     => 1,
         ]);
     }
 

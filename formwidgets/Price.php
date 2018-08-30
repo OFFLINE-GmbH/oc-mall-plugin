@@ -1,8 +1,7 @@
 <?php namespace OFFLINE\Mall\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Html\Helper as Html;
-use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Currency;
 
 /**
  * Copied from RainLab.Translate's MLText
@@ -15,7 +14,7 @@ class Price extends FormWidgetBase
 
     public function init()
     {
-        $this->defaultCurrency = CurrencySettings::currencies()->first();
+        $this->defaultCurrency = Currency::orderBy('is_default', 'DESC')->first();
         $this->addJs('/plugins/offline/mall/assets/pricewidget.js', 'OFFLINE.Mall');
         $this->addCss('/plugins/offline/mall/assets/pricewidget.css', 'OFFLINE.Mall');
     }
@@ -33,17 +32,7 @@ class Price extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
-        $values = [];
-        $data   = post('MallPrice');
-
-        $fieldName = implode('.', Html::nameToArray($this->fieldName));
-
-        foreach ($data as $currency => $_data) {
-            $value             = array_get($_data, $fieldName);
-            $values[$currency] = $value;
-        }
-
-        return $values;
+        return null;
     }
 
     /**
@@ -70,8 +59,8 @@ class Price extends FormWidgetBase
     public function prepareVars()
     {
         $this->vars['defaultCurrency'] = $this->defaultCurrency;
-        $this->vars['defaultValue']    = $this->getPriceValue($this->defaultCurrency);
-        $this->vars['currencies']      = CurrencySettings::currencies();
+        $this->vars['defaultValue']    = $this->getPriceValue($this->defaultCurrency->id);
+        $this->vars['currencies']      = Currency::orderBy('sort_order', 'ASC')->get();
         $this->vars['field']           = $this->formField;
     }
 
@@ -84,6 +73,22 @@ class Price extends FormWidgetBase
      */
     public function getPriceValue($currency)
     {
-        return $this->getLoadValue()[$currency] ?? false;
+        $value = $this->getLoadValue();
+        if ( ! $value) {
+            return null;
+        }
+
+        return $value->where('currency_id', $currency)->first()->decimal ?? false;
+    }
+
+    public function getLoadValue()
+    {
+        $relation = ltrim($this->valueFrom, '_');
+
+        if ($this->model->relationLoaded($relation)) {
+            return $this->model->getRelation($relation);
+        }
+
+        return null;
     }
 }

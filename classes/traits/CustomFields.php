@@ -4,9 +4,11 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use Validator;
+use  \OFFLINE\Mall\Models\Price as PriceModel;
 
 trait CustomFields
 {
@@ -20,16 +22,21 @@ trait CustomFields
      */
     public function priceIncludingCustomFieldValues(?Collection $values = null): array
     {
-        $price = $this->price;
+        $currencies = Currency::get();
         if ( ! $values || count($values) < 1) {
-            return $price;
+            return $currencies->mapWithKeys(function (Currency $currency) {
+                return [$currency->code => $this->priceInCurrency($currency)];
+            })->toArray();
         }
 
-        // Add the cost of each custom field value to all available currencies.
-        return collect($price)->map(function ($price, $currency) use ($values) {
-            return $values->reduce(function ($total, CustomFieldValue $value) use ($currency) {
-                return $total += $value->price()[$currency] ?? 0;
-            }, $price);
+        $price = $this->priceInCurrencyInteger();
+
+        return $currencies->mapWithKeys(function (Currency $currency) use ($values, $price) {
+            return [
+                $currency->code => $price + $values->sum(function (CustomFieldValue $value) use ($currency) {
+                        $value->priceInCurrency($currency);
+                    }),
+            ];
         })->toArray();
     }
 

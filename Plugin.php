@@ -2,6 +2,7 @@
 
 
 use App;
+use Backend\Facades\Backend;
 use Backend\Widgets\Form;
 use Cache;
 use Event;
@@ -23,7 +24,6 @@ use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
-use OFFLINE\Mall\Components\CategoryProducts;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
@@ -38,12 +38,16 @@ use OFFLINE\Mall\Console\SeedDemoData;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
 use OFFLINE\Mall\Models\Category;
-use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\CustomerGroup;
+use OFFLINE\Mall\Models\CustomField;
+use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ShippingMethod;
+use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\User as RainLabUser;
 use OFFLINE\Mall\Models\Variant;
@@ -70,11 +74,15 @@ class Plugin extends PluginBase
 
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
 
-
         Relation::morphMap([
-            Variant::MORPH_KEY  => Variant::class,
-            Product::MORPH_KEY  => Product::class,
-            ImageSet::MORPH_KEY => ImageSet::class,
+            Variant::MORPH_KEY            => Variant::class,
+            Product::MORPH_KEY            => Product::class,
+            ImageSet::MORPH_KEY           => ImageSet::class,
+            Discount::MORPH_KEY           => Discount::class,
+            CustomField::MORPH_KEY        => CustomField::class,
+            ShippingMethod::MORPH_KEY     => ShippingMethod::class,
+            CustomFieldOption::MORPH_KEY  => CustomFieldOption::class,
+            ShippingMethodRate::MORPH_KEY => ShippingMethodRate::class,
         ]);
     }
 
@@ -126,7 +134,7 @@ class Plugin extends PluginBase
                 'description' => 'offline.mall::lang.currency_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',
                 'icon'        => 'icon-money',
-                'class'       => CurrencySettings::class,
+                'url'         => Backend::url('offline/mall/currencies'),
                 'order'       => 20,
                 'permissions' => ['offline.mall.settings.manage_currency'],
                 'keywords'    => 'shop store mall currency',

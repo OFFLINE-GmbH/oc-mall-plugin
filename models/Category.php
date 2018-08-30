@@ -5,10 +5,11 @@ use Cms\Classes\Controller;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Model;
+use October\Rain\Database\QueryBuilder;
 use October\Rain\Database\Traits\NestedTree;
-use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Queries\VariantsInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Models\File;
 
@@ -191,7 +192,7 @@ class Category extends Model
     public static function resolveCategoryItem($item, $url, $theme)
     {
         $category = self::find($item->reference);
-        if (!$category) {
+        if ( ! $category) {
             return;
         }
 
@@ -293,18 +294,11 @@ class Category extends Model
      */
     public static function bySlugOrId($slug, $id)
     {
-        $with = [
-            'property_groups.properties' => function ($q) {
-                $q->wherePivot('filter_type', '<>', null);
-            },
-            'property_groups.properties.property_values.property',
-        ];
-
         if ($id === ':slug') {
-            return self::getByNestedSlug($slug, $with);
+            return self::getByNestedSlug($slug);
         }
 
-        return self::with($with)->findOrFail($category);
+        return self::findOrFail($id);
     }
 
     public static function getByNestedSlug(string $slug, array $with = [])
@@ -383,53 +377,25 @@ class Category extends Model
     }
 
     /**
-     * Returns all products in this category.
+     * Returns the query to get all products for an array of category ids.
      *
-     * @param bool $useVariants
-     * @param bool $includeChildProducts
+     * @param $categories
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return QueryBuilder
      */
-    public function getProducts($useVariants = true, $includeChildProducts = false)
+    public function getProductsQuery($categories)
     {
-        $this->publishedProducts->load(['variants', 'variants.image_sets', 'property_values', 'variants.property_values']);
-
-        $items = $this->publishedProducts->flatMap(function (Product $product) {
-            return $product->inventory_management_method === 'variant' ? $product->variants : [$product];
-        });
-
-        if ($useVariants) {
-            return $includeChildProducts
-                ? $items->concat($this->getChildProducts($useVariants))->flatten()
-                : $items;
-        }
-
-        // If the variants should not be listed separately we select
-        // all parent products with properties matching the current filter
-        // criteria.
-        $productIds = $items->map(function ($item) {
-            return $item->product_id ?? $item->id;
-        })->unique();
-
-        $items = Product::with('variants')->whereIn('id', $productIds)->get();
-
-        return $includeChildProducts
-            ? $items->concat($this->getChildProducts($useVariants))->flatten()
-            : $items;
+        return (new VariantsInCategoriesQuery($categories))->query();
     }
 
     /**
-     * Returns all products of all child categories.
+     * Returns the query to get all variants for an array of category ids.
      *
-     * @param bool $useVariants
-     *
-     * @return Collection
+     * @return QueryBuilder
      */
-    public function getChildProducts($useVariants)
+    public function getVariantsQuery($categories, ?Collection $filters)
     {
-        return $this->getAllChildren()->map(function (Category $category) use ($useVariants) {
-            return $category->getProducts($useVariants);
-        });
+        return (new VariantsInCategoriesQuery($categories, $filters))->query();
     }
 
     /**
@@ -440,5 +406,18 @@ class Category extends Model
     public function getPropertiesAttribute()
     {
         return $this->load('property_groups.properties')->inherited_property_groups->map->properties->flatten();
+    }
+
+    /**
+     * Return an array of all child category ids.
+     *
+     * @return array
+     */
+    public function getChildrenIds()
+    {
+        return $this->scopeAllChildren(\DB::table('offline_mall_categories'), true)
+                    ->get(['id'])
+                    ->pluck('id')
+                    ->toArray();
     }
 }

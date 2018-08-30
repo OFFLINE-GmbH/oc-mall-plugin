@@ -35,6 +35,10 @@
     - create_offline_mall_category_property_group.php
     - create_offline_mall_customer_groups.php
     - create_offline_mall_customer_group_prices.php
+    - create_offline_mall_price_categories.php
+    - create_offline_mall_prices.php
+    - create_offline_mall_product_prices.php
+    - create_offline_mall_currencies.php
     - allow_non_unique_emails_for_rainlab_user.php
     - add_customer_group_id_to_rainlab_users.php
     - database_seeder.php

@@ -5,12 +5,12 @@ namespace OFFLINE\Mall\Models;
 use DB;
 use Model;
 use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\JsonPrice;
 
 class CartProduct extends Model
 {
     use HashIds;
-    use Price;
+    use JsonPrice;
 
     public $table = 'offline_mall_cart_products';
     public $jsonable = ['price'];
@@ -177,7 +177,6 @@ class CartProduct extends Model
     {
         return $tax->percentageDecimal * $this->pricePreTaxes();
     }
-
 
     public function getCustomFieldValueDescriptionAttribute()
     {

@@ -3,6 +3,8 @@
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
 
+use OFFLINE\Mall\Models\ProductPrice;
+
 class Cruiser1500 extends DemoProduct
 {
     protected function attributes(): array
@@ -13,8 +15,6 @@ class Cruiser1500 extends DemoProduct
             'user_defined_id'              => 'CITY002',
             'name'                         => 'Cruiser 1500',
             'slug'                         => 'cruiser-1500',
-            'price'                        => ['USD' => 895, 'CHF' => 899, 'EUR' => 795],
-            'old_price'                    => null,
             'description_short'            => 'Think pink',
             'description'                  => '<p>Find your passion for city biking on Cruisers’ Model 1500. Whether you want to ride to the train or commute to work this is the right bike for you. The aluminium frame is feather light and durable.</p>',
             'meta_title'                   => 'Cruiser 1500 Citybike',
@@ -50,14 +50,23 @@ class Cruiser1500 extends DemoProduct
         ];
     }
 
+    protected function prices(): array
+    {
+        return [
+            new ProductPrice(['currency_id' => 1, 'price' => 895]),
+            new ProductPrice(['currency_id' => 2, 'price' => 795]),
+            new ProductPrice(['currency_id' => 3, 'price' => 899]),
+        ];
+    }
+
+
     protected function variants(): array
     {
         return [
             [
                 'name'       => 'Cruiser 1500 27.5" S',
                 'stock'      => 4,
-                'price'      => ['USD' => 895, 'CHF' => 899, 'EUR' => 795],
-                'old_price'  => ['USD' => 1195, 'CHF' => 1599, 'EUR' => 1795],
+                'price'      => $this->prices(),
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
                     'wheel-size' => '27.5"',

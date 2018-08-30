@@ -13,7 +13,6 @@ class CreateOfflineMallShippingMethodRates extends Migration
             $table->integer('shipping_method_id')->unsigned();
             $table->integer('from_weight')->unsigned()->default(0);
             $table->integer('to_weight')->unsigned()->nullable();
-            $table->text('price');
         });
     }
     

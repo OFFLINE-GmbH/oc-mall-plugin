@@ -3,6 +3,8 @@
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
 
+use OFFLINE\Mall\Models\ProductPrice;
+
 class Cruiser1000 extends DemoProduct
 {
     protected function attributes(): array
@@ -13,8 +15,6 @@ class Cruiser1000 extends DemoProduct
             'user_defined_id'              => 'CITY001',
             'name'                         => 'Cruiser 1000',
             'slug'                         => 'cruiser-1000',
-            'price'                        => ['USD' => 895, 'CHF' => 899, 'EUR' => 795],
-            'old_price'                    => null,
             'description_short'            => 'The ideal city bike',
             'description'                  => '<p>Find your passion for city biking on Cruisers’ Model 1000. Whether you want to ride to the train or commute to work this is the right bike for you. The aluminium frame is feather light and durable.</p>',
             'meta_title'                   => 'Cruiser 1000 Citybike',
@@ -42,11 +42,20 @@ class Cruiser1000 extends DemoProduct
     protected function properties(): array
     {
         return [
-            'color'  => '{"name":"Dark grey","hex":"#333333"}',
+            'color'       => '{"name":"Dark grey","hex":"#333333"}',
             'rear-travel' => '0',
             'fork-travel' => '110',
             'material'    => 'Aluminium',
             'gender'      => 'Unisex',
+        ];
+    }
+
+    protected function prices(): array
+    {
+        return [
+            new ProductPrice(['currency_id' => 1, 'price' => 895]),
+            new ProductPrice(['currency_id' => 2, 'price' => 795]),
+            new ProductPrice(['currency_id' => 3, 'price' => 899]),
         ];
     }
 
@@ -56,7 +65,7 @@ class Cruiser1000 extends DemoProduct
             [
                 'name'       => 'Cruiser 1000 27.5" S',
                 'stock'      => 4,
-                'price'      => ['USD' => 895, 'CHF' => 899, 'EUR' => 795],
+                'prices'     => $this->prices(),
                 'old_price'  => ['USD' => 1195, 'CHF' => 1599, 'EUR' => 1795],
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',

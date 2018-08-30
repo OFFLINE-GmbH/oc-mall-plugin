@@ -3,14 +3,14 @@
         class="dropdown-menu pull-right mall-price-dropdown-menu"
         role="menu"
         data-mall-price-dropdown>
-    <?php foreach ($currencies as $code): ?>
+    <?php foreach ($currencies as $currency): ?>
     <li role="presentation">
         <a
                 role="menuitem"
                 tabindex="-1"
-                data-switch-currency="<?= $code ?>"
+                data-switch-currency="<?= $currency->code ?>"
                 href="javascript:;">
-            <?= e($code) ?>
+            <?= e($currency->code) ?>
         </a>
     </li>
     <?php endforeach ?>

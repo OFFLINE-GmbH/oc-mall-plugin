@@ -1,13 +1,17 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use DB;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
+use OFFLINE\Mall\Models\Variant;
 use Session;
 use Validator;
 
@@ -21,6 +25,11 @@ class CategoryFilter extends MallComponent
      * @var CategoryModel
      */
     public $category;
+    /**
+     * An array of all subcategory ids.
+     * @var array
+     */
+    public $categories;
     /**
      * @var Collection<Product|Variant>
      */
@@ -58,6 +67,10 @@ class CategoryFilter extends MallComponent
      */
     public $includeChildren;
     /**
+     * @var boolean
+     */
+    public $includeVariants;
+    /**
      * @var array
      */
     public $priceRange;
@@ -86,6 +99,12 @@ class CategoryFilter extends MallComponent
             'includeChildren'     => [
                 'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeChildren.title',
                 'description' => 'offline.mall::lang.components.categoryFilter.properties.includeChildren.description',
+                'default'     => '1',
+                'type'        => 'checkbox',
+            ],
+            'includeVariants'     => [
+                'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeVariants.title',
+                'description' => 'offline.mall::lang.components.categoryFilter.properties.includeVariants.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
@@ -155,8 +174,19 @@ class CategoryFilter extends MallComponent
     {
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
+        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+
         $this->setVar('category', $this->getCategory());
-        $this->setPriceRange();
+
+        $categories = [$this->category->id];
+        if ($this->includeChildren) {
+            $categories = $this->category->getChildrenIds();
+        }
+        $this->setVar('categories', $categories);
+
+        if ($this->showPriceFilter) {
+            $this->setPriceRange();
+        }
 
         $this->setVar('propertyGroups', $this->getPropertyGroups());
         $this->setVar('props', $this->setProps());
@@ -170,22 +200,43 @@ class CategoryFilter extends MallComponent
 
     protected function setPriceRange()
     {
-        $this->items = $this->category->getProducts(false, $this->includeChildren);
-        $prices      = $this->items->map(function ($p) {
-            return $p->priceInCurrency();
-        })->toArray();
+        return;
+        $range = $this->getPriceRangeQuery()->first();
 
-        $min = $prices ? min($prices) : 0;
-        $max = $prices ? max($prices) : 0;
+        $min = $range->min;
+        $max = $range->max;
 
         $this->setVar('priceRange', $min === $max ? false : [$min, $max]);
     }
 
+    protected function getPriceRangeQuery()
+    {
+        $currency = Session::get(CurrencySettings::CURRENCY_SESSION_KEY);
+
+        $table = $this->includeVariants ? 'offline_mall_product_variants' : 'offline_mall_products';
+        $col   = $table . '.price';
+
+        $raw = '
+            MIN(CAST(JSON_EXTRACT(?, ?) as unsigned)) as min,
+            MAX(CAST(JSON_EXTRACT(?, ?) as unsigned)) as max
+        ';
+
+        $query = DB::table($table)->selectRaw($raw, [$col, '$.' . $currency, $col, '$.' . $currency]);
+
+        if ($this->includeVariants) {
+            $query->join('offline_mall_products', 'offline_mall_product_variants.product_id', '=',
+                'offline_mall_products.id');
+        }
+
+        return $query->whereIn('offline_mall_products.category_id', $this->categories);
+    }
+
     protected function getPropertyGroups()
     {
-        return $this->category->inherited_property_groups->reject(function (PropertyGroup $group) {
-            return $group->properties->count() < 1;
-        })->sortBy('pivot.sort_order');
+        return $this->category->load('property_groups.properties')
+            ->inherited_property_groups->reject(function (PropertyGroup $group) {
+                return $group->properties->count() < 1;
+            })->sortBy('pivot.sort_order');
     }
 
     /**
@@ -194,8 +245,9 @@ class CategoryFilter extends MallComponent
      */
     protected function setProps()
     {
-        $this->props  = $this->propertyGroups->flatMap->properties->unique();
-        $this->values = Property::getValuesForProducts($this->props, $this->items);
+        $this->props = $this->propertyGroups->flatMap->properties->unique();
+
+//        $this->values = Property::getValuesForCategory($this->props, $this->categories);
     }
 
     protected function getFilter()
@@ -222,5 +274,15 @@ class CategoryFilter extends MallComponent
     protected function isSpecialProperty(string $prop): bool
     {
         return \in_array($prop, Filter::$specialProperties, true);
+    }
+
+    public function getMinValue($values)
+    {
+        return $values->min('value');
+    }
+
+    public function getMaxValue($values)
+    {
+        return $values->max('value');
     }
 }

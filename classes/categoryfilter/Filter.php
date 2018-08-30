@@ -2,7 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Query\JoinClause;
+use October\Rain\Database\QueryBuilder;
 use OFFLINE\Mall\Models\Property;
 
 abstract class Filter
@@ -15,45 +16,41 @@ abstract class Filter
         $this->property = $property;
     }
 
-    abstract public function apply(Collection $items): Collection;
+    abstract public function apply(QueryBuilder $items, $index): QueryBuilder;
 
     abstract public function getValues(): array;
-
-    public function setFilterValues(Collection $items): Collection
-    {
-        return $items->map(function ($item) {
-            $item->setAttribute('filter_value', $this->getFilterValue($item));
-
-            return $item;
-        })->reject(function ($item) {
-            return $item->filter_value === null;
-        });
-    }
-
-    public function getFilterValue($item)
-    {
-        if ($this->isSpecialProperty()) {
-            if ($this->property === 'price') {
-                return $item->priceInCurrency();
-            }
-
-            return $item->getAttribute($this->property);
-        }
-
-        $value = $item->property_values->where('property_id', $this->property->id)->first();
-        if ($value === null) {
-            // The filtered property is specified on the product, not on the variant
-            $value = $item->product->property_values->where('property_id', $this->property->id)->first();
-        }
-
-        $value = $value ? $value->value : null;
-
-        return \is_array($value) ? json_encode($value) : $value;
-    }
 
     protected function isSpecialProperty(): bool
     {
         return ! $this->property instanceof Property
             && \in_array($this->property, self::$specialProperties, true);
+    }
+
+    /**
+     * Join the property_values table for each property to
+     * enable a AND query over all available values.
+     *
+     * @param QueryBuilder $query
+     * @param              $index
+     *
+     * @return string
+     */
+    protected function applyJoin(QueryBuilder $query, $index): string
+    {
+        $prevAlias = 'v' . ($index - 1);
+        $alias     = 'v' . $index;
+
+        if ($index > 1) {
+            $query->join(
+                "offline_mall_property_values as $alias",
+                function (JoinClause $join) use ($alias, $prevAlias) {
+                    $join->on("${prevAlias}.product_id", '=', "{$alias}.product_id")
+                         ->where("${prevAlias}.variant_id", '=', \DB::raw("${alias}.variant_id"))
+                         ->orWhereNull('v1.variant_id');
+                }
+            );
+        }
+
+        return $alias;
     }
 }

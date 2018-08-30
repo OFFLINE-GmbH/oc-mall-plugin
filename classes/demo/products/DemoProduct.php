@@ -8,6 +8,7 @@ use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
@@ -29,17 +30,26 @@ abstract class DemoProduct
 
     abstract protected function images(): array;
 
+    abstract protected function prices(): array;
+
+    protected function additionalPrices(): array
+    {
+        return [];
+    }
+
     public function create()
     {
         $this->product = Product::create($this->attributes());
         $this->product->taxes()->attach($this->taxes());
 
+        $this->product->prices()->saveMany($this->prices());
+        $this->product->additional_prices()->saveMany($this->additionalPrices());
+
         foreach ($this->properties() as $slug => $value) {
             PropertyValue::create([
-                'describable_id'   => $this->product->id,
-                'describable_type' => Product::MORPH_KEY,
-                'property_id'      => $this->property($slug)->id,
-                'value'            => $value,
+                'product_id'  => $this->product->id,
+                'property_id' => $this->property($slug)->id,
+                'value'       => $value,
             ]);
         }
 
@@ -66,12 +76,22 @@ abstract class DemoProduct
                 'old_price'    => $variant['old_price'] ?? null,
                 'published'    => true,
             ]);
+
+            if (isset($variant['prices'])) {
+                $variant['prices'] = collect($variant['prices'])->map(function ($price) {
+                    $price['product_id'] = $this->product->id;
+
+                    return $price;
+                });
+                $v->prices()->saveMany($variant['prices']);
+            }
+
             foreach ($variant['properties'] as $slug => $value) {
                 PropertyValue::create([
-                    'describable_id'   => $v->id,
-                    'describable_type' => Variant::MORPH_KEY,
-                    'property_id'      => $this->property($slug)->id,
-                    'value'            => $value,
+                    'variant_id'  => $v->id,
+                    'product_id'  => $v->product_id,
+                    'property_id' => $this->property($slug)->id,
+                    'value'       => $value,
                 ]);
             }
         }

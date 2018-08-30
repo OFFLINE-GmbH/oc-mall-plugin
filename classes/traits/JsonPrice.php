@@ -2,11 +2,11 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 
-trait Price
+trait JsonPrice
 {
     public $currencies;
     public $activeCurrency;
@@ -16,10 +16,10 @@ trait Price
     {
         parent::__construct(...$args);
 
-        $currencies           = collect(CurrencySettings::get('currencies'));
+        $currencies           = Currency::orderBy('is_default', 'DESC')->get();
         $this->currencies     = $currencies->keyBy('code');
         $this->baseCurrency   = $currencies->first();
-        $this->activeCurrency = CurrencySettings::activeCurrency();
+        $this->activeCurrency = Currency::activeCurrency();
     }
 
     public function getPriceColumns(): array
@@ -110,7 +110,7 @@ trait Price
                 if (\is_array($value)
                     && ( ! ends_with($method, 'Integer')
                         || ends_with($method, 'InCurrencyInteger'))) {
-                    $value = $value[$currency] ?? null;
+                    $value = $value[$currency->code] ?? null;
                 }
 
                 return $closure($value, $currency);
@@ -171,7 +171,7 @@ trait Price
 
     protected function useCurrency()
     {
-        return $this->activeCurrency['code'];
+        return $this->activeCurrency;
     }
 
     /**

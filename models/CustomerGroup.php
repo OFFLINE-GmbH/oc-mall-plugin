@@ -10,6 +10,10 @@ class CustomerGroup extends Model
     use Validation;
     use Sortable;
     use Sluggable;
+
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = ['name'];
+    public $table = 'offline_mall_customer_groups';
     public $rules = [
         'name' => 'required',
         'code' => 'required',
@@ -17,15 +21,17 @@ class CustomerGroup extends Model
     public $slugs = [
         'code' => 'name',
     ];
-    public $table = 'offline_mall_customer_groups';
-
     public $hasMany = [
-        'users'                 => [User::class, 'key' => 'offline_mall_customer_group_id'],
-        'customer_group_prices' => [CustomerGroupPrice::class],
+        'users'  => [User::class, 'key' => 'offline_mall_customer_group_id'],
+        'prices' => [CustomerGroupPrice::class],
     ];
 
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-    public $translatable = [
-        'name',
-    ];
+    public function priceInCurrency($currency)
+    {
+        if ($currency instanceof Currency) {
+            $currency = $currency->id;
+        }
+
+        return optional($this->prices->where('currency_id', $currency)->first())->decimal;
+    }
 }

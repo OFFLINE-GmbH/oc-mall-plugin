@@ -4,7 +4,7 @@ fields:
         oc.commentPosition: ''
         span: left
         type: text
-    price:
+    prices:
         label: 'offline.mall::lang.product.price'
         oc.commentPosition: ''
         span: right

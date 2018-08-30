@@ -71,6 +71,7 @@
         'currency_format'   => 'Format',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
+        'is_default'        => 'Is default',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Payment gateways',
@@ -479,6 +480,10 @@
                 'includeChildren'     => [
                     'title'       => 'Include children',
                     'description' => 'Include properties and filters from products in child categories as well',
+                ],
+                'includeVariants'     => [
+                    'title'       => 'Include variants',
+                    'description' => 'Show filters for variant properties',
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Include noUI Slider',

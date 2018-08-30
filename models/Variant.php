@@ -1,13 +1,14 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Illuminate\Support\Collection;
+use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
-use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -19,16 +20,16 @@ class Variant extends \Model
     use HashIds;
     use CustomFields;
     use UserSpecificPrice;
-    use Price {
-        getAttribute as priceGetAttribute;
-    }
+    use Nullable;
+    use PriceAccessors;
 
     const MORPH_KEY = 'mall.variant';
 
     public $slugs = [];
+    public $nullable = ['image_set_id', 'stock'];
+    public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
-    public $with = ['product', 'image_sets'];
-    public $jsonable = ['price', 'old_price'];
+    public $with = ['product', 'image_sets', 'prices'];
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
@@ -43,10 +44,7 @@ class Variant extends \Model
         'weight'                       => 'integer|nullable',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
-        'price'                        => 'sometimes|nullable',
-        'old_price'                    => 'sometimes|nullable',
     ];
-    public $table = 'offline_mall_product_variants';
     public $attachMany = [
         'temp_images' => File::class,
         'downloads'   => File::class,
@@ -56,11 +54,14 @@ class Variant extends \Model
         'cart_product' => CartProduct::class,
         'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
     ];
-    public $morphMany = [
-        'property_values'       => [PropertyValue::class, 'name' => 'describable'],
-        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
+    public $hasMany = [
+        'prices'          => ProductPrice::class,
+        'property_values' => PropertyValue::class,
     ];
-
+    public $morphMany = [
+        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
+        'additional_prices'     => [Price::class, 'name' => 'priceable'],
+    ];
     protected $fillable = [
         'product_id',
         'user_defined_id',
@@ -68,8 +69,6 @@ class Variant extends \Model
         'stock',
         'name',
         'published',
-        'price',
-        'old_price',
         'weight',
         'allow_out_of_stock_purchases',
     ];
@@ -89,9 +88,9 @@ class Variant extends \Model
 
             foreach ($values as $id => $value) {
                 $pv = PropertyValue::firstOrNew([
-                    'describable_id'   => $variant->id,
-                    'describable_type' => Variant::MORPH_KEY,
-                    'property_id'      => $id,
+                    'variant_id'  => $variant->id,
+                    'product_id'  => $variant->product_id,
+                    'property_id' => $id,
                 ]);
 
                 $pv->value = $value;
@@ -175,23 +174,12 @@ class Variant extends \Model
         }
 
         $originalValue = parent::getAttribute($attribute);
-        $isPriceColumn = $this->isPriceColumn($attribute);
 
         if (session()->get('mall.variants.disable-inheritance')) {
-            return $this->isPriceColumn($attribute) && $originalValue
-                ? $this->roundPrice($originalValue)
-                : $originalValue;
+            return $originalValue;
         }
 
         $parentValues = $this->product->getAttribute($attribute);
-
-        if ($isPriceColumn) {
-            $value = $this->priceGetAttribute($attribute);
-
-            if (is_array($value)) {
-                return array_merge($parentValues ?: [], $value);
-            }
-        }
 
         // In case of an empty Array or Collection we want to
         // return the parent's values
@@ -215,11 +203,6 @@ class Variant extends \Model
     public function getVariantIdAttribute()
     {
         return $this->hashId;
-    }
-
-    public function getPriceColumns()
-    {
-        return ['price', 'old_price'];
     }
 
     public function getPropertiesDescriptionAttribute()
@@ -246,5 +229,35 @@ class Variant extends \Model
         }
 
         return $value !== null;
+    }
+
+    public function groupPriceInCurrency($group, $currency)
+    {
+        if ($group instanceof CustomerGroup) {
+            $group = $group->id;
+        }
+        if ($currency instanceof Currency) {
+            $currency = $currency->id;
+        }
+
+        $prices = $this->customer_group_prices;
+
+        return optional($prices->where('currency_id', $currency)->where('customer_group_id', $group)->first())
+            ->decimal;
+    }
+
+    public function additionalPriceInCurrency($category, $currency)
+    {
+        if ($category instanceof PriceCategory) {
+            $category = $category->id;
+        }
+        if ($currency instanceof Currency) {
+            $currency = $currency->id;
+        }
+
+        $prices = $this->additional_prices;
+
+        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first())
+            ->decimal;
     }
 }

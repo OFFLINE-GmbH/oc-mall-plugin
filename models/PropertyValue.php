@@ -14,20 +14,19 @@ class PropertyValue extends Model
     ];
     public $fillable = [
         'value',
-        'describable_id',
-        'describable_type',
+        'product_id',
+        'variant_id',
         'property_id',
     ];
     public $with = ['property'];
     public $table = 'offline_mall_property_values';
     public $belongsTo = [
         'property' => [Property::class, 'deleted' => true],
+        'product'  => [Product::class],
+        'variant'  => [Variant::class],
     ];
     public $attachOne = [
         'image' => File::class,
-    ];
-    public $morphTo = [
-        'describable' => [],
     ];
 
     /**

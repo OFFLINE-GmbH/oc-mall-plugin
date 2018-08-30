@@ -15,8 +15,6 @@ class CreateOfflineMallProducts extends Migration
             $table->string('user_defined_id')->nullable();
             $table->string('name', 255);
             $table->string('slug', 255);
-            $table->text('price');
-            $table->text('old_price')->nullable();
             $table->string('description_short', 255)->nullable();
             $table->text('description')->nullable();
             $table->string('meta_title', 255)->nullable();

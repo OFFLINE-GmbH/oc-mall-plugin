@@ -18,7 +18,7 @@ tabs:
             span: left
             type: richeditor
             tab: 'offline.mall::lang.common.general'
-        price:
+        _prices:
             label: 'offline.mall::lang.product.price'
             oc.commentPosition: ''
             span: right
@@ -41,13 +41,13 @@ tabs:
             span: right
             type: fileupload
             tab: 'offline.mall::lang.common.general'
-        available_below_total:
+        _available_below_total:
             label: 'offline.mall::lang.shipping_method.available_below_total'
             oc.commentPosition: ''
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.common.conditions'
-        available_above_total:
+        _available_above_total:
             label: 'offline.mall::lang.shipping_method.available_above_total'
             oc.commentPosition: ''
             span: auto

@@ -2,7 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
-use Illuminate\Support\Collection;
+use October\Rain\Database\QueryBuilder;
 
 class RangeFilter extends Filter
 {
@@ -16,14 +16,16 @@ class RangeFilter extends Filter
         $this->maxValue = $maxValue;
     }
 
-    public function apply(Collection $items): Collection
+    public function apply(QueryBuilder $query, $index): QueryBuilder
     {
-        return $this->setFilterValues($items)->filter(function ($item) {
-            $minValue = $this->minValue ? $this->minValue : 0;
-            $maxValue = $this->maxValue ? $this->maxValue : PHP_INT_MAX;
+        $alias = $this->applyJoin($query, $index);
 
-            return (float)$item->filter_value >= (float)$minValue
-                && (float)$item->filter_value <= (float)$maxValue;
+        return $query->where(function ($query) use ($alias) {
+            $query->where("${alias}.property_id", $this->property->id)
+                  ->where(function ($query) use ($alias) {
+                      $query->where("${alias}.value", '>=', $this->minValue)
+                            ->where("${alias}.value", '<=', $this->maxValue);
+                  });
         });
     }
 

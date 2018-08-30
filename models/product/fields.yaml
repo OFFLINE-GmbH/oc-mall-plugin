@@ -49,7 +49,7 @@ tabs:
             span: auto
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-        price:
+        _initial_price:
             label: 'offline.mall::lang.product.price'
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.product.add_currency'
@@ -79,14 +79,6 @@ tabs:
             type: dropdown
             tab: 'offline.mall::lang.product.general'
             dependsOn: category
-        old_price:
-            label: 'offline.mall::lang.common.old_price'
-            oc.commentPosition: ''
-            prompt: 'offline.mall::lang.product.add_currency'
-            span: auto
-            type: mall.price
-            tab: 'offline.mall::lang.product.general'
-            context: create
         _table_trigger:
             oc.commentPosition: ''
             span: auto

@@ -1,0 +1,11 @@
+name: PriceCategories
+modelClass: OFFLINE\Mall\Models\PriceCategory
+form: $/offline/mall/models/pricecategory/fields.yaml
+defaultRedirect: offline/mall/pricecategories
+create:
+    redirect: 'offline/mall/pricecategories/update/:id'
+    redirectClose: offline/mall/pricecategories
+update:
+    redirect: offline/mall/pricecategories
+    redirectClose: offline/mall/pricecategories
+preview: {  }

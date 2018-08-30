@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Collection;
 use Model;
+use October\Rain\Database\QueryBuilder;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategories;
+use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 
 class Property extends Model
@@ -55,28 +58,11 @@ class Property extends Model
         return $this->pivot->sort_order;
     }
 
-    public function getValuesAttribute()
+    public static function getValuesForCategory(Collection $properties, $categories)
     {
-        return $this->property_values->reject(function (PropertyValue $value) {
-            return $value->value === '' || $value->value === null;
-        })->unique('value');
-    }
+        $raw = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
 
-    public static function getValuesForProducts(Collection $properties, Collection $products)
-    {
-        $productValues = PropertyValue::where('describable_type', Product::MORPH_KEY)
-                                      ->whereIn('describable_id', $products->pluck('id'))
-                                      ->whereIn('property_id', $properties->pluck('id'))
-                                      ->groupBy('value')
-                                      ->get();
-
-        $variantValues = PropertyValue::where('describable_type', Variant::MORPH_KEY)
-                                      ->whereIn('describable_id', $products->flatMap->variants->pluck('id'))
-                                      ->whereIn('property_id', $properties->pluck('id'))
-                                      ->groupBy('value')
-                                      ->get();
-
-        $values = $productValues->merge($variantValues)->unique('value');
+        $values = PropertyValue::hydrate($raw->toArray())->load('property');
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
             $firstProp = $values->first()->property;
@@ -92,16 +78,6 @@ class Property extends Model
         });
 
         return $values;
-    }
-
-    public function getMinValueAttribute()
-    {
-        return $this->values->min('value');
-    }
-
-    public function getMaxValueAttribute()
-    {
-        return $this->values->max('value');
     }
 
     public function getTypeOptions()

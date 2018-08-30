@@ -2,7 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
-use Illuminate\Support\Collection;
+use October\Rain\Database\QueryBuilder;
 
 class SetFilter extends Filter
 {
@@ -14,10 +14,13 @@ class SetFilter extends Filter
         $this->values = $values;
     }
 
-    public function apply(Collection $items): Collection
+    public function apply(QueryBuilder $query, $index): QueryBuilder
     {
-        return $this->setFilterValues($items)->filter(function ($item) {
-            return \in_array($item->filter_value, $this->values);
+        $alias = $this->applyJoin($query, $index);
+
+        return $query->where(function ($query) use ($alias) {
+            $query->where("${alias}.property_id", $this->property->id)
+                  ->whereIn("${alias}.value", $this->getValues());
         });
     }
 

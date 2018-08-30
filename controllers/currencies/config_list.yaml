@@ -1,0 +1,12 @@
+title: Currencies
+modelClass: OFFLINE\Mall\Models\Currency
+list: $/offline/mall/models/currency/columns.yaml
+recordUrl: 'offline/mall/currencies/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

@@ -2,24 +2,30 @@
 
 use Model;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
 class CustomFieldValue extends Model
 {
     use Validation;
-    use Price;
+    use PriceAccessors;
 
     public $rules = [
         'cart_product_id' => 'exists:offline_mall_cart_products,id',
         'custom_field_id' => 'exists:offline_mall_custom_fields,id',
     ];
     public $table = 'offline_mall_cart_custom_field_value';
-    public $jsonable = ['price'];
-    public $with = ['custom_field_option'];
+    public $with = ['custom_field_option', 'prices'];
     public $belongsTo = [
         'cart_product'        => CartProduct::class,
         'custom_field'        => CustomField::class,
         'custom_field_option' => CustomFieldOption::class,
+    ];
+    public $morphMany = [
+        'prices' => [
+            Price::class,
+            'name'       => 'priceable',
+            'conditions' => 'price_category_id is null and field is null',
+        ],
     ];
 
     /**
