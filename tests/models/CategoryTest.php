@@ -1,7 +1,7 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
 use OFFLINE\Mall\Models\Category;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class CategoryTest extends PluginTestCase
 {

@@ -106,5 +106,17 @@ class ShippingMethod extends Model
     {
         return $this->priceInCurrencyInteger(null, 'available_above_total');
     }
+
+    public function jsonSerialize()
+    {
+        $base = parent::jsonSerialize();
+        $this->prices->load('currency');
+        unset($base['price']);
+        $base['price'] = $this->prices->mapWithKeys(function ($price) {
+            return [$price->currency->code => $price];
+        });
+
+        return $base;
+    }
 }
 

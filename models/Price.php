@@ -25,6 +25,7 @@ class Price extends Model
     ];
     public $belongsTo = [
         'category' => [PriceCategory::class],
+        'currency' => [Currency::class],
     ];
 
     public function setPriceAttribute($value)
@@ -32,7 +33,7 @@ class Price extends Model
         if ($value === null) {
             return $this->attributes['price'] = null;
         }
-        $this->attributes['price'] = (int)$value * 100;
+        $this->attributes['price'] = (int)($value * 100);
     }
 
     public function getFloatAttribute()
@@ -41,7 +42,7 @@ class Price extends Model
             return null;
         }
 
-        return (float)$this->price / 100;
+        return (float)($this->price / 100);
     }
 
     public function getDecimalAttribute()

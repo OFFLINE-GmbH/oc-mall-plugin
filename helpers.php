@@ -1,7 +1,6 @@
 <?php
 
 use OFFLINE\Mall\Models\Currency;
-use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Product;
 
 if ( ! function_exists('round_money')) {

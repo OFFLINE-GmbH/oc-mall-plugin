@@ -5,9 +5,10 @@ use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class CartProductTest extends PluginTestCase
 {
@@ -22,8 +23,8 @@ class CartProductTest extends PluginTestCase
 
         $product                   = Product::first();
         $product->meta_description = 'Test';
-        $product->price            = ['CHF' => 200, 'EUR' => 150];
         $product->save();
+        $product->price            = ['CHF' => 200, 'EUR' => 150];
 
         $this->product = $product;
 
@@ -37,8 +38,12 @@ class CartProductTest extends PluginTestCase
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = ['CHF' => 100, 'EUR' => 150];
         $sizeA->sort_order = 1;
+        $sizeA->save();
+        $sizeA->prices()->save(new Price([
+            'currency_id' => 1,
+            'price' => 100,
+        ]));
 
         $field       = new CustomField();
         $field->name = 'Size';
@@ -48,8 +53,12 @@ class CartProductTest extends PluginTestCase
         $field2        = new CustomField();
         $field2->name  = 'Label';
         $field2->type  = 'text';
-        $field2->price = ['CHF' => 300, 'EUR' => 150];
         $field2->save();
+
+        $field2->prices()->save(new Price([
+            'currency_id' => 1,
+            'price' => 300,
+        ]));
 
         $field->custom_field_options()->save($sizeA);
 
@@ -100,7 +109,7 @@ class CartProductTest extends PluginTestCase
 
         $variant = $cartProduct->variant;
 
-        $this->assertEquals(20000, $variant->priceInteger()['CHF']);
-        $this->assertEquals(30000, $cartProduct->priceInteger()['CHF']);
+        $this->assertEquals(20000, $variant->priceInCurrencyInteger());
+        $this->assertEquals(30000, $cartProduct->priceInCurrencyInteger());
     }
 }

@@ -26,13 +26,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Old price',
         ]);
         Currency::create([
-            'code'     => 'CHF',
-            'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
-            'decimals' => 2,
-            'rate'     => 1,
+            'is_default' => app()->runningUnitTests(),
+            'code'       => 'CHF',
+            'format'     => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
+            'decimals'   => 2,
+            'rate'       => 1,
         ]);
         Currency::create([
-            'is_default' => true,
+            'is_default' => ! app()->runningUnitTests(),
             'code'       => 'EUR',
             'format'     => '{{ price|number_format(2, ".", "\'") }}{{ currency.symbol }}',
             'decimals'   => 2,
@@ -50,6 +51,5 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomerTableSeeder::class);
         $this->call(PropertyTableSeeder::class);
         $this->call(OrderStateTableSeeder::class);
-
     }
 }

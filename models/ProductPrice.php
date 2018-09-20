@@ -31,7 +31,7 @@ class ProductPrice extends Model
         if ($value === null) {
             return $this->attributes['price'] = null;
         }
-        $this->attributes['price'] = (int)$value * 100;
+        $this->attributes['price'] = (int)($value * 100);
     }
 
     public function getFloatAttribute()
@@ -40,7 +40,7 @@ class ProductPrice extends Model
             return null;
         }
 
-        return (float)$this->price / 100;
+        return (float)($this->price / 100);
     }
 
     public function getDecimalAttribute()
@@ -48,7 +48,6 @@ class ProductPrice extends Model
         if ($this->price === null) {
             return null;
         }
-
         return number_format($this->price / 100, 2, '.', '');
     }
 

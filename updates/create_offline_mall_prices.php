@@ -18,10 +18,12 @@ class CreateOfflineMallPrices extends Migration
             $table->string('field')->nullable();
             $table->timestamps();
 
-            $table->unique(
-                ['price_category_id', 'priceable_id', 'priceable_type', 'currency_id', 'field'],
-                'unique_price'
-            );
+            if ( ! app()->runningUnitTests()) {
+                $table->unique(
+                    ['price_category_id', 'priceable_id', 'priceable_type', 'currency_id', 'field'],
+                    'unique_price'
+                );
+            }
         });
     }
 

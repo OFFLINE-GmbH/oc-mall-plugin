@@ -2,6 +2,7 @@
 
 use Model;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
 class CustomFieldValue extends Model
@@ -39,16 +40,17 @@ class CustomFieldValue extends Model
      * @param null|CustomField       $field
      * @param null|CustomFieldOption $option
      *
-     * @return mixed|string
+     * @return null|Collection
      */
-    public function price(?CustomField $field = null, ?CustomFieldOption $option = null)
-    {
+    public function priceForFieldOption(?CustomField $field = null, ?CustomFieldOption $option = null) {
         $field  = $field ?? $this->custom_field;
         $option = $option ?? optional($field->custom_field_options)->find($this->custom_field_option_id);
 
-        $optionPrice = optional($option)->price;
+        $optionPrice = optional($option)->prices;
 
-        return $optionPrice ?: $field->price;
+        return $optionPrice && $optionPrice->count() > 0
+            ? $optionPrice
+            : $field->prices;
     }
 
     /**

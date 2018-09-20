@@ -9,13 +9,13 @@ trait UserSpecificPrice
     public function getUserSpecificPrice()
     {
         if ( ! $this->hasUserSpecificPrice()) {
-            return parent::getAttribute('price');
+            return null;
         }
 
         $group = optional(Auth::getUser())->offline_mall_customer_group_id;
-        $price = $this->customer_group_prices->where('customer_group_id', $group)->first()->getOriginal('price');
+        $price = $this->customer_group_prices->where('customer_group_id', $group);
 
-        return $price ? json_decode($price, true) : parent::getAttribute('price');
+        return $price && $price->count() > 0 ? $price : null;
     }
 
     protected function hasUserSpecificPrice(): bool

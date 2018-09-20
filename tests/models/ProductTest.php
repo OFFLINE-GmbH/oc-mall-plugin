@@ -2,7 +2,7 @@
 
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\Product;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class ProductTest extends PluginTestCase
 {
@@ -19,16 +19,15 @@ class ProductTest extends PluginTestCase
     public function test_price_accessors()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
-        $priceInt       = ['CHF' => 2050, 'EUR' => 8050];
         $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
 
         $product        = Product::first();
-        $product->price = $price;
         $product->save();
+        $product->price = $price;
 
-        $this->assertEquals($price, $product->price);
-        $this->assertEquals(json_encode($priceInt), $product->getOriginal('price'));
-        $this->assertEquals($priceFormatted, $product->price_formatted);
+        $product        = Product::first();
+
+        $this->assertEquals($priceFormatted['CHF'], $product->priceInCurrencyFormatted());
         $this->assertEquals(80.50, $product->priceInCurrency('EUR'));
         $this->assertEquals(20.50, $product->priceInCurrency());
         $this->assertEquals(2050, $product->priceInCurrencyInteger('CHF'));

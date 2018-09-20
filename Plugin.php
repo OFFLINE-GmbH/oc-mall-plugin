@@ -74,6 +74,11 @@ class Plugin extends PluginBase
 
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
 
+        $this->setMorphMap();
+    }
+
+    public function setMorphMap()
+    {
         Relation::morphMap([
             Variant::MORPH_KEY            => Variant::class,
             Product::MORPH_KEY            => Product::class,

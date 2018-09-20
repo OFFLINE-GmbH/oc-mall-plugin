@@ -7,7 +7,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class RangeFilterTest extends PluginTestCase
 {

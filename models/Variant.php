@@ -11,8 +11,9 @@ use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
+use Model;
 
-class Variant extends \Model
+class Variant extends Model
 {
     use Validation;
     use SoftDelete;
@@ -183,14 +184,52 @@ class Variant extends \Model
 
         // In case of an empty Array or Collection we want to
         // return the parent's values
-        $notEmpty = true;
+        $emtpy = false;
         if ($originalValue instanceof Collection) {
-            $notEmpty = $originalValue->count() > 0;
+            $emtpy = $originalValue->count() < 1;
         } elseif (is_array($originalValue)) {
-            $notEmpty = count($originalValue) > 0;
+            $emtpy = count($originalValue) < 1;
         }
 
-        return $originalValue !== null && $notEmpty ? $originalValue : $parentValues;
+        // Inherit parent's pricing information.
+        if ($attribute === 'prices') {
+            if ($emtpy) {
+                return $parentValues;
+            }
+
+            return $originalValue->map(function ($price) use ($parentValues) {
+                return $price->price !== null
+                    ? $price
+                    : $parentValues->where('currency_id', $price->currency_id)->first();
+            });
+        }
+
+        return $originalValue === null || $emtpy ? $parentValues : $originalValue;
+    }
+
+    /**
+     * This setter makes it easier to set price values
+     * in different currencies by providing an array of
+     * prices. It is mostly used for unit testing.
+     *
+     * @internal
+     *
+     * @param $value
+     */
+    public function setPriceAttribute($value)
+    {
+        if ( ! is_array($value)) {
+            return;
+        }
+        foreach ($value as $currency => $price) {
+            ProductPrice::updateOrCreate([
+                'variant_id'  => $this->id,
+                'product_id'  => $this->product->id,
+                'currency_id' => Currency::where('code', $currency)->firstOrFail()->id,
+            ], [
+                'price' => $price === null ? null : ($price / 100),
+            ]);
+        }
     }
 
     /**
@@ -246,18 +285,43 @@ class Variant extends \Model
             ->decimal;
     }
 
-    public function additionalPriceInCurrency($category, $currency)
+    public function additionalPriceInCurrency($category, $currency = null)
     {
-        if ($category instanceof PriceCategory) {
-            $category = $category->id;
+        if ($currency === null) {
+            $currency = Currency::activeCurrency()->id;
         }
         if ($currency instanceof Currency) {
             $currency = $currency->id;
         }
+        if (is_string($currency)) {
+            $currency = Currency::whereCode($currency)->firstOrFail()->id;
+        }
+        if ($category instanceof PriceCategory) {
+            $category = $category->id;
+        }
 
         $prices = $this->additional_prices;
 
-        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first())
-            ->decimal;
+        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first());
+    }
+
+    public function oldPriceInCurrencyInteger($currency = null)
+    {
+        return $this->additionalPriceInCurrency(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency)->integer;
+    }
+
+    public function oldPriceInCurrency($currency = null)
+    {
+        return $this->additionalPriceInCurrency(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency);
+    }
+
+    public function oldPrice()
+    {
+        return $this->additional_prices->where('price_category_id', PriceCategory::OLD_PRICE_CATEGORY_ID);
+    }
+
+    public function getOldPriceAttribute()
+    {
+        return $this->mapCurrencyPrices($this->oldPrice());
     }
 }

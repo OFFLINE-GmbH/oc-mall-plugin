@@ -28,11 +28,28 @@ class CustomerGroupPrice extends Model
 
     public function getFloatAttribute()
     {
-        return (float)$this->price / 100;
+        if ($this->price === null) {
+            return null;
+        }
+
+        return (float)($this->price / 100);
     }
 
     public function getDecimalAttribute()
     {
+        if ($this->price === null) {
+            return null;
+        }
+
         return number_format($this->price / 100, 2, '.', '');
+    }
+
+    public function getIntegerAttribute()
+    {
+        if ($this->price === null) {
+            return null;
+        }
+
+        return (int)$this->price;
     }
 }

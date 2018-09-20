@@ -165,6 +165,30 @@ class Product extends Model
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
     }
 
+    /**
+     * This setter makes it easier to set price values
+     * in different currencies by providing an array of
+     * prices. It is mostly used for unit testing.
+     *
+     * @internal
+     *
+     * @param $value
+     */
+    public function setPriceAttribute($value)
+    {
+        if ( ! is_array($value)) {
+            return;
+        }
+        foreach ($value as $currency => $price) {
+            ProductPrice::updateOrCreate([
+                'product_id'  => $this->id,
+                'currency_id' => Currency::where('code', $currency)->firstOrFail()->id,
+            ], [
+                'price' => $price,
+            ]);
+        }
+    }
+
     public function scopePublished($query)
     {
         return $query->where('published', true);

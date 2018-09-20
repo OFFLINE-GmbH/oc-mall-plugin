@@ -2,10 +2,12 @@
 
 use Model;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
 class Discount extends Model
 {
     use Validation;
+    use PriceAccessors;
 
     const MORPH_KEY = 'mall.discount';
 
@@ -68,9 +70,24 @@ class Discount extends Model
         return trans('offline.mall::lang.discounts.triggers');
     }
 
-    public function getPriceColumns()
+    public function amountInCurrencyInteger()
     {
-        return ['amount', 'alternate_price', 'shipping_price', 'total_to_reach'];
+        return $this->priceInCurrencyInteger(null, 'amount');
+    }
+
+    public function totalToReachInCurrencyInteger()
+    {
+        return $this->priceInCurrencyInteger(null, 'total_to_reach');
+    }
+
+    public function alternatePriceInCurrencyInteger()
+    {
+        return $this->priceInCurrencyInteger(null, 'alternate_price');
+    }
+
+    public function shippingPriceInCurrencyInteger()
+    {
+        return $this->priceInCurrencyInteger(null, 'shipping_price');
     }
 
     public function getProductIdOptions()

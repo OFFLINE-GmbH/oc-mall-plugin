@@ -3,7 +3,7 @@
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class SortableRelationTest extends PluginTestCase
 {

@@ -93,6 +93,7 @@ class TotalsCalculator
         $this->taxes = $this->getTaxTotals();
 
         $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
+
         $this->totalPostTaxes = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
     }
 
@@ -224,7 +225,7 @@ class TotalsCalculator
     /**
      * Process the discounts that are applied to the cart's total.
      */
-    protected function applyTotalDiscounts($total): float
+    protected function applyTotalDiscounts($total): ?float
     {
         $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])
                                    ->where(function ($q) {

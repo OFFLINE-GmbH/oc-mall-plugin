@@ -8,7 +8,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class SetFilterTest extends PluginTestCase
 {

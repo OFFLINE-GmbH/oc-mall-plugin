@@ -101,7 +101,7 @@ class CartProduct extends Model
 
     /**
      * Converts the custom field values into a simpler structure
-     * to save it to the order.
+     * to save it with the order.
      */
     public function convertCustomFieldValues()
     {
@@ -110,7 +110,12 @@ class CartProduct extends Model
             ->map(function (CustomFieldValue $value) {
                 $data                  = $value->toArray();
                 $data['display_value'] = $value->displayValue;
-                $data['price']         = $value->price($value->custom_field);
+
+                $prices = $value->priceForFieldOption($value->custom_field)->load('currency');
+
+                $data['price'] = $prices->mapWithKeys(function (Price $price) {
+                    return [$price->currency->code => $price->float];
+                })->toArray();
 
                 if (isset($data['custom_field']['custom_field_options'])) {
                     unset($data['custom_field']['custom_field_options']);

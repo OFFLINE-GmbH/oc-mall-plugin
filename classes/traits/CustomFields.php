@@ -8,7 +8,6 @@ use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use Validator;
-use  \OFFLINE\Mall\Models\Price as PriceModel;
 
 trait CustomFields
 {
@@ -25,7 +24,7 @@ trait CustomFields
         $currencies = Currency::get();
         if ( ! $values || count($values) < 1) {
             return $currencies->mapWithKeys(function (Currency $currency) {
-                return [$currency->code => $this->priceInCurrency($currency)];
+                return [$currency->code => $this->priceInCurrencyInteger($currency)];
             })->toArray();
         }
 
@@ -33,8 +32,12 @@ trait CustomFields
 
         return $currencies->mapWithKeys(function (Currency $currency) use ($values, $price) {
             return [
-                $currency->code => $price + $values->sum(function (CustomFieldValue $value) use ($currency) {
-                        $value->priceInCurrency($currency);
+                $currency->code =>
+                    $price + $values->sum(function (CustomFieldValue $value) use ($currency, $price) {
+                        $prices = $value->priceForFieldOption();
+
+                        return optional($prices->where('currency_id', $currency->id)->first())
+                            ->integer;
                     }),
             ];
         })->toArray();
@@ -108,7 +111,7 @@ trait CustomFields
             $value->value                  = $data['value'];
             $value->custom_field_id        = $data['field']->id;
             $value->custom_field_option_id = $option ? $option->id : null;
-            $value->price                  = $value->price($data['field'], $option);
+            $value->price                  = $value->priceForFieldOption($data['field'], $option);
 
             return $value;
         });

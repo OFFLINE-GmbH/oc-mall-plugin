@@ -9,12 +9,13 @@ use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class TotalsCalculatorTest extends PluginTestCase
 {
@@ -103,9 +104,9 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
 
         $shippingMethod->taxes()->attach($tax1);
 
@@ -132,9 +133,9 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 1);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
 
         $shippingMethod->taxes()->attach($tax2);
 
@@ -161,9 +162,9 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 3);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
 
         $shippingMethod->taxes()->attach($tax2);
 
@@ -189,9 +190,9 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 1);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
 
         $shippingMethod->taxes()->attach($tax1);
 
@@ -216,9 +217,9 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 1);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
 
         $shippingMethod->taxes()->attach($tax1);
 
@@ -294,15 +295,15 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
 
         $rate                     = new ShippingMethodRate();
         $rate->from_weight        = 2000;
-        $rate->price              = ['CHF' => 200, 'EUR' => 250];
         $rate->shipping_method_id = $shippingMethod->id;
         $rate->save();
+        $rate->price = ['CHF' => 200, 'EUR' => 250];
 
         $shippingMethod->taxes()->attach($tax1);
 
@@ -320,14 +321,14 @@ class TotalsCalculatorTest extends PluginTestCase
     {
         $product            = Product::first();
         $product->stackable = true;
-        $product->price     = ['CHF' => 200, 'EUR' => 150];
         $product->save();
+        $product->price     = ['CHF' => 20000, 'EUR' => 15000];
 
         $variant             = new Variant();
         $variant->name       = 'Variant';
         $variant->product_id = $product->id;
-        $variant->price      = ['CHF' => 100, 'EUR' => 150];
         $variant->save();
+        $variant->price      = ['CHF' => 10000, 'EUR' => 15000];
 
         $cart = $this->getCart();
         $cart->addProduct($product, 2, $variant);
@@ -339,18 +340,13 @@ class TotalsCalculatorTest extends PluginTestCase
 
     public function test_it_calculates_custom_fields_cost()
     {
-        $product            = Product::first();
-        $product->stackable = true;
-        $product->price     = ['CHF' => 200, 'EUR' => 150];
-        $product->save();
+        $product = $this->getProduct(['CHF' => 200, 'EUR' => 150]);
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = ['CHF' => 100, 'EUR' => 150];
         $sizeA->sort_order = 1;
         $sizeB             = new CustomFieldOption();
         $sizeB->name       = 'Size B';
-        $sizeB->price      = ['CHF' => 200, 'EUR' => 150];
         $sizeB->sort_order = 1;
 
         $field       = new CustomField();
@@ -360,6 +356,9 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $field->custom_field_options()->save($sizeA);
         $field->custom_field_options()->save($sizeB);
+
+        $sizeA->price = ['CHF' => 100, 'EUR' => 150];
+        $sizeB->price = ['CHF' => 200, 'EUR' => 150];
 
         $product->custom_fields()->attach($field);
 
@@ -382,10 +381,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
     public function test_it_calculates_custom_field_fallback_cost()
     {
-        $product            = Product::first();
-        $product->stackable = true;
-        $product->price     = ['CHF' => 200, 'EUR' => 150];
-        $product->save();
+        $product            = $this->getProduct(200);
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
@@ -394,11 +390,11 @@ class TotalsCalculatorTest extends PluginTestCase
         $sizeB->name       = 'Size B';
         $sizeB->sort_order = 1;
 
-        $field        = new CustomField();
-        $field->name  = 'Size';
-        $field->type  = 'dropdown';
-        $field->price = ['CHF' => 300, 'EUR' => 150];
+        $field       = new CustomField();
+        $field->name = 'Size';
+        $field->type = 'dropdown';
         $field->save();
+        $field->price = ['CHF' => 300, 'EUR' => 150];
 
         $field->custom_field_options()->save($sizeA);
         $field->custom_field_options()->save($sizeB);
@@ -434,8 +430,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger = 'code';
         $discount->name    = 'Test discount';
         $discount->type    = 'fixed_amount';
-        $discount->amount  = ['CHF' => 100, 'EUR' => 150];
         $discount->save();
+        $discount->amount()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 1,
+            'field'       => 'amount',
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -494,18 +494,22 @@ class TotalsCalculatorTest extends PluginTestCase
     public function test_it_applies_alternate_price_discounts()
     {
         $quantity = 5;
-        $price    = ['CHF' => 20000, 'EUR' => 24000];
+        $price    = ['CHF' => 200, 'EUR' => 240];
 
         $cart = $this->getCart();
         $cart->addProduct($this->getProduct($price), $quantity);
 
-        $discount                  = new Discount();
-        $discount->code            = 'Test';
-        $discount->name            = 'Test discount';
-        $discount->trigger         = 'code';
-        $discount->type            = 'alternate_price';
-        $discount->alternate_price = ['CHF' => 250, 'EUR' => 150];
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->name    = 'Test discount';
+        $discount->trigger = 'code';
+        $discount->type    = 'alternate_price';
         $discount->save();
+        $discount->alternate_price()->save(new Price([
+            'price' => 250,
+            'currency_id' => 1,
+            'field' => 'alternate_price'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -526,9 +530,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->prices()->save(new Price([
+            'price' => 200,
+            'currency_id' => 1,
+        ]));
 
         $shippingMethod->taxes()->attach($tax1);
 
@@ -540,7 +547,13 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger              = 'code';
         $discount->type                 = 'shipping';
         $discount->shipping_description = 'Test shipping';
-        $discount->shipping_price       = ['CHF' => 100, 'EUR' => 150];
+        $discount->save();
+
+        $discount->shipping_price()->save(new Price([
+            'price' => 100,
+            'currency_id' => 1,
+            'field' => 'shipping_price'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -557,13 +570,23 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
 
-        $discount                  = new Discount();
-        $discount->code            = 'Test';
-        $discount->name            = 'Test discount';
-        $discount->type            = 'alternate_price';
-        $discount->alternate_price = ['CHF' => 100, 'EUR' => 150];
-        $discount->trigger         = 'total';
-        $discount->total_to_reach  = ['CHF' => 300, 'EUR' => 150];
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'alternate_price';
+        $discount->trigger = 'total';
+        $discount->save();
+
+        $discount->alternate_price()->save(new Price([
+            'price' => 100,
+            'currency_id' => 1,
+            'field' => 'alternate_price'
+        ]));
+        $discount->total_to_reach()->save(new Price([
+            'price' => 300,
+            'currency_id' => 1,
+            'field' => 'total_to_reach'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -588,9 +611,19 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->code           = 'Test';
         $discount->name           = 'Test discount';
         $discount->type           = 'fixed_amount';
-        $discount->amount         = ['CHF' => 150, 'EUR' => 150];
         $discount->trigger        = 'total';
-        $discount->total_to_reach = ['CHF' => 300, 'EUR' => 150];
+        $discount->save();
+
+        $discount->total_to_reach()->save(new Price([
+            'price' => 300,
+            'currency_id' => 1,
+            'field' => 'total_to_reach'
+        ]));
+        $discount->amount()->save(new Price([
+            'price' => 150,
+            'currency_id' => 1,
+            'field' => 'amount'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -617,7 +650,13 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->type           = 'rate';
         $discount->rate           = 50;
         $discount->trigger        = 'total';
-        $discount->total_to_reach = ['CHF' => 300, 'EUR' => 150];
+        $discount->save();
+
+        $discount->total_to_reach()->save(new Price([
+            'price' => 300,
+            'currency_id' => 1,
+            'field' => 'total_to_reach'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -639,8 +678,8 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($product, 2);
 
         $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
 
         $cart->setShippingMethod($shippingMethod);
 
@@ -649,9 +688,19 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->name                 = 'Test discount';
         $discount->type                 = 'shipping';
         $discount->shipping_description = 'Test shipping';
-        $discount->shipping_price       = ['CHF' => 0, 'EUR' => 0];
         $discount->trigger              = 'total';
-        $discount->total_to_reach       = ['CHF' => 300, 'EUR' => 150];
+        $discount->save();
+
+        $discount->total_to_reach()->save(new Price([
+            'price' => 300,
+            'currency_id' => 1,
+            'field' => 'total_to_reach'
+        ]));
+        $discount->shipping_price()->save(new Price([
+            'price' => 0,
+            'currency_id' => 1,
+            'field' => 'shipping_price'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -678,9 +727,15 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->code            = 'Test';
         $discount->name            = 'Test discount';
         $discount->type            = 'alternate_price';
-        $discount->alternate_price = ['CHF' => 100, 'EUR' => 150];
         $discount->trigger         = 'product';
         $discount->product_id      = $productB->id;
+        $discount->save();
+
+        $discount->alternate_price()->save(new Price([
+            'price' => 100,
+            'currency_id' => 1,
+            'field' => 'alternate_price'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -704,12 +759,18 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($productA, 2);
 
         $discount             = new Discount();
-        $discount->code       = 'Test';
+        $discount->code       = 'xxxx';
         $discount->name       = 'Test discount';
         $discount->type       = 'fixed_amount';
-        $discount->amount     = ['CHF' => 150, 'EUR' => 150];
         $discount->trigger    = 'product';
         $discount->product_id = $productB->id;
+        $discount->save();
+
+        $discount->amount()->save(new Price([
+            'price' => 150,
+            'currency_id' => 1,
+            'field' => 'amount'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -739,6 +800,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->rate       = 50;
         $discount->trigger    = 'product';
         $discount->product_id = $productB->id;
+        $discount->save();
 
         $cart->applyDiscount($discount);
 
@@ -762,8 +824,8 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($productA, 2);
 
         $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
 
         $cart->setShippingMethod($shippingMethod);
 
@@ -772,9 +834,15 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->name                 = 'Test discount';
         $discount->type                 = 'shipping';
         $discount->shipping_description = 'Test shipping';
-        $discount->shipping_price       = ['CHF' => 0, 'EUR' => 150];
         $discount->trigger              = 'product';
         $discount->product_id           = $productB->id;
+        $discount->save();
+
+        $discount->shipping_price()->save(new Price([
+            'price' => 0,
+            'currency_id' => 1,
+            'field' => 'shipping_price'
+        ]));
 
         $cart->applyDiscount($discount);
 
@@ -790,14 +858,15 @@ class TotalsCalculatorTest extends PluginTestCase
     protected function getProduct($price)
     {
         if (is_int($price)) {
-            $price = ['CHF' => $price, 'EUR' => $price * 1.5];
+            $price = ['CHF' => $price, 'EUR' => $price];
         }
 
-        $product        = Product::first()->replicate();
-        $product->price = $price;
+        $product = Product::first()->replicate();
         $product->save();
+        $product->price = $price;
 
-        return $product;
+        // Reload everything to prevent stale relationships.
+        return Product::find($product->id);
     }
 
     protected function getCart(): Cart

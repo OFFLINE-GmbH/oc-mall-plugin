@@ -51,7 +51,7 @@ class DiscountApplier
         if ($discount->type === 'alternate_price') {
             $this->reducedTotal        = $discount->alternatePriceInCurrencyInteger();
             $this->reducedTotalIsFixed = true;
-            $savings                   = $this->total - $discount->alternatePriceInCurrencyInteger();
+            $savings                   = $this->total - $this->reducedTotal;
         }
 
         if ($discount->type === 'shipping') {

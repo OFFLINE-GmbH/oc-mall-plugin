@@ -41,8 +41,13 @@ trait JsonPrice
             return $this->attributes[$key] = null;
         }
 
-        $this->attributes[$key] = json_encode(array_map(function ($value) {
-            return $this->isNullthy($value) ? null : (float)$value * 100;
+        $this->attributes[$key] = $this->mapJsonPrice($value);
+    }
+
+    public function mapJsonPrice($value, $factor = 100)
+    {
+        return json_encode(array_map(function ($value) use ($factor) {
+            return $this->isNullthy($value) ? null : (float)$value * $factor;
         }, $value));
     }
 

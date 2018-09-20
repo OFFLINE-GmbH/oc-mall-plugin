@@ -11,6 +11,8 @@ class PriceCategory extends Model
     use Sortable;
     use Sluggable;
 
+    const OLD_PRICE_CATEGORY_ID = 1;
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $table = 'offline_mall_price_categories';
     public $translatable = ['name'];
@@ -26,6 +28,6 @@ class PriceCategory extends Model
         'code' => 'name',
     ];
     public $hasMany = [
-        'prices' => [Price::class, 'key' => 'price_category_id']
+        'prices' => [Price::class, 'key' => 'price_category_id'],
     ];
 }

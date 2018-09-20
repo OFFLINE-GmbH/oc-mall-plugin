@@ -63,8 +63,9 @@ trait CartActions
             $cartEntry->product_id = $product->id;
             $cartEntry->variant_id = $variant ? $variant->id : null;
             $cartEntry->quantity   = $quantity;
-            $cartEntry->price      = $price;
-            $cartEntry->weight     = $variant ? $variant->weight : $product->weight;
+            $cartEntry->weight = $variant ? $variant->weight : $product->weight;
+            // Skip any setter methods from the JsonPrice trait
+            $cartEntry->attributes['price'] = $cartEntry->mapJsonPrice($price, 1);
 
             $this->products()->save($cartEntry);
             $this->load('products');
