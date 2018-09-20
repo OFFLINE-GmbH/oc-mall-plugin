@@ -30,7 +30,7 @@ class Variant extends Model
     public $nullable = ['image_set_id', 'stock'];
     public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
-    public $with = ['product', 'image_sets', 'prices'];
+    public $with = ['product', 'image_sets', 'prices', 'additional_prices'];
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',

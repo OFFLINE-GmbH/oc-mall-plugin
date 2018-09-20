@@ -1,4 +1,4 @@
-<?php namespace OFFLINE\Mall\Console;
+    <?php namespace OFFLINE\Mall\Console;
 
 use DB;
 use Illuminate\Console\Command;
@@ -13,7 +13,6 @@ use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
-use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\Tax;
@@ -77,16 +76,18 @@ class SeedDemoData extends Command
     {
         $this->output->writeln('Creating products...');
 
-        // Bikes
-        (new Cruiser1000())->create();
-        (new Cruiser1500())->create();
-        (new Cruiser3000())->create();
-        (new Cruiser3500())->create();
-        (new Cruiser5000())->create();
+        for ($i = 0; $i < 1000; $i++) {
+            // Bikes
+            (new Cruiser1000())->create();
+            (new Cruiser1500())->create();
+            (new Cruiser3000())->create();
+            (new Cruiser3500())->create();
+            (new Cruiser5000())->create();
 
-        // Clothing
-        (new RedShirt())->create();
-        (new Jersey())->create();
+            // Clothing
+            (new RedShirt())->create();
+            (new Jersey())->create();
+        }
     }
 
     protected function createCategories()

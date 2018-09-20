@@ -23,6 +23,8 @@ class CreateOfflineMallPrices extends Migration
                     ['price_category_id', 'priceable_id', 'priceable_type', 'currency_id', 'field'],
                     'unique_price'
                 );
+                $table->index(['priceable_id', 'priceable_type'], 'idx_priceable');
+                $table->index('currency_id', 'idx_currency');
             }
         });
     }

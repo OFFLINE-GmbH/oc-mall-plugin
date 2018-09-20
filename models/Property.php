@@ -58,10 +58,9 @@ class Property extends Model
         return $this->pivot->sort_order;
     }
 
-    public static function getValuesForCategory(Collection $properties, $categories)
+    public static function getValuesForCategory($categories)
     {
         $raw = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
-
         $values = PropertyValue::hydrate($raw->toArray())->load('property');
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order

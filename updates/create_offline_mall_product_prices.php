@@ -18,6 +18,9 @@ class CreateOfflineMallProductPrices extends Migration
 
             if ( ! app()->runningUnitTests()) {
                 $table->unique(['product_id', 'currency_id', 'variant_id'], 'unique_price');
+                $table->index('product_id', 'idx_product');
+                $table->index('variant_id', 'idx_variant');
+                $table->index('currency_id', 'idx_currency');
             }
         });
     }

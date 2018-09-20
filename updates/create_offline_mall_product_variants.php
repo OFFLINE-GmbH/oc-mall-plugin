@@ -22,7 +22,9 @@ class CreateOfflineMallProductVariants extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
 
-            $table->index('product_id', 'idx_product_id');
+            if ( ! app()->runningUnitTests()) {
+                $table->index('product_id', 'idx_product_id');
+            }
         });
     }
 

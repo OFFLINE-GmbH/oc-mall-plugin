@@ -7,6 +7,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
@@ -74,6 +75,10 @@ class CategoryFilter extends MallComponent
      * @var array
      */
     public $priceRange;
+    /**
+     * @var Currency
+     */
+    public $currency;
 
     public function componentDetails()
     {
@@ -172,6 +177,7 @@ class CategoryFilter extends MallComponent
 
     protected function setData()
     {
+        $this->setVar('currency', Currency::activeCurrency());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
         $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
@@ -200,35 +206,25 @@ class CategoryFilter extends MallComponent
 
     protected function setPriceRange()
     {
-        return;
         $range = $this->getPriceRangeQuery()->first();
 
-        $min = $range->min;
-        $max = $range->max;
+        $min = round_money($range->min, $this->currency->decimals);
+        $max = round_money($range->max, $this->currency->decimals);
 
         $this->setVar('priceRange', $min === $max ? false : [$min, $max]);
     }
 
     protected function getPriceRangeQuery()
     {
-        $currency = Session::get(CurrencySettings::CURRENCY_SESSION_KEY);
-
-        $table = $this->includeVariants ? 'offline_mall_product_variants' : 'offline_mall_products';
-        $col   = $table . '.price';
-
-        $raw = '
-            MIN(CAST(JSON_EXTRACT(?, ?) as unsigned)) as min,
-            MAX(CAST(JSON_EXTRACT(?, ?) as unsigned)) as max
-        ';
-
-        $query = DB::table($table)->selectRaw($raw, [$col, '$.' . $currency, $col, '$.' . $currency]);
-
-        if ($this->includeVariants) {
-            $query->join('offline_mall_products', 'offline_mall_product_variants.product_id', '=',
-                'offline_mall_products.id');
-        }
-
-        return $query->whereIn('offline_mall_products.category_id', $this->categories);
+        return DB
+            ::table('offline_mall_product_prices')
+            ->selectRaw(DB::raw('min(price) as min, max(price) as max'))
+            ->join(
+                'offline_mall_products',
+                'offline_mall_product_prices.product_id', '=', 'offline_mall_products.id'
+            )
+            ->whereIn('offline_mall_products.category_id', $this->categories)
+            ->where('offline_mall_product_prices.currency_id', $this->currency->id);
     }
 
     protected function getPropertyGroups()
@@ -247,7 +243,7 @@ class CategoryFilter extends MallComponent
     {
         $this->props = $this->propertyGroups->flatMap->properties->unique();
 
-//        $this->values = Property::getValuesForCategory($this->props, $this->categories);
+        $this->values = Property::getValuesForCategory($this->categories);
     }
 
     protected function getFilter()

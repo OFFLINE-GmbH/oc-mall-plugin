@@ -34,7 +34,8 @@ class UniquePropertyValuesInCategoriesQuery
     {
         return DB
             ::table('offline_mall_products')
-            ->select('offline_mall_property_values.*')
+            ->selectRaw(\DB::raw('distinct offline_mall_property_values.value,
+  offline_mall_property_values.property_id'))
             ->where('offline_mall_products.published', true)
             ->where('offline_mall_product_variants.published', true)
             ->whereIn('offline_mall_products.category_id', $this->categories)
@@ -46,7 +47,6 @@ class UniquePropertyValuesInCategoriesQuery
                 '=',
                 'offline_mall_product_variants.product_id'
             )
-            ->join('offline_mall_property_values', 'offline_mall_products.id', '=', 'offline_mall_property_values.product_id')
-            ->groupBy('offline_mall_property_values.value');
+            ->join('offline_mall_property_values', 'offline_mall_products.id', '=', 'offline_mall_property_values.product_id');
     }
 }

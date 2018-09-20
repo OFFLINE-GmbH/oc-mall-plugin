@@ -19,6 +19,10 @@ class CreateOfflineMallCarts extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
+
+            if ( ! app()->runningUnitTests()) {
+                $table->index('session_id', 'idx_session_id');
+            }
         });
     }
 

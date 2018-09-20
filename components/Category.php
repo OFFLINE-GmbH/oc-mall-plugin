@@ -2,13 +2,10 @@
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use October\Rain\Database\Builder;
-use October\Rain\Database\QueryBuilder;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Variant;
 use Url;
 
@@ -129,7 +126,6 @@ class Category extends MallComponent
 
     protected function getItems(): Collection
     {
-        return Product::get();
         $page    = input('page', 1);
         $perPage = $this->perPage;
 

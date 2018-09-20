@@ -383,9 +383,9 @@ class Category extends Model
      *
      * @return QueryBuilder
      */
-    public function getProductsQuery($categories)
+    public function getProductsQuery($categories, ?Collection $filters)
     {
-        return (new VariantsInCategoriesQuery($categories))->query();
+        return (new VariantsInCategoriesQuery($categories, $filters))->query();
     }
 
     /**

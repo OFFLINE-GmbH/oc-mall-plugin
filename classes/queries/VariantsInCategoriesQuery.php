@@ -34,6 +34,7 @@ class VariantsInCategoriesQuery
                      ->select('variants.id as id')
                      ->join('offline_mall_products as products', 'variants.product_id', '=', 'products.id')
                      ->where('products.published', true)
+                     ->where('variants.published', true)
                      ->whereIn('products.category_id', $this->categories)
                      ->whereNull('variants.deleted_at')
                      ->whereNull('products.deleted_at');
