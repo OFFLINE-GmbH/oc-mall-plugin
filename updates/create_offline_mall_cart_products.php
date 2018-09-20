@@ -15,7 +15,7 @@ class CreateOfflineMallCartProducts extends Migration
             $table->integer('variant_id')->unsigned()->nullable();
             $table->integer('quantity')->default(1);
             $table->integer('weight')->unisgned()->nullable();
-            $table->json('price');
+            $table->text('price');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
