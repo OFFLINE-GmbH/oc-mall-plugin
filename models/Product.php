@@ -30,7 +30,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['links'];
-    public $nullable = ['stock'];
+    public $nullable = ['stock', 'group_by_property_id'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',

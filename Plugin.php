@@ -7,11 +7,14 @@ use Backend\Widgets\Form;
 use Cache;
 use Event;
 use Hashids\Hashids;
+use October\Rain\Database\Relations\Relation;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\Index\Filebase;
+use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\Offline;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
@@ -46,6 +49,7 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
@@ -54,7 +58,6 @@ use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country as RainLabCountry;
 use System\Classes\PluginBase;
 use Validator;
-use October\Rain\Database\Relations\Relation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -75,6 +78,14 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
 
         $this->setMorphMap();
+        $this->registerObservers();
+    }
+
+    public function registerObservers()
+    {
+        Product::observe(\OFFLINE\Mall\Classes\Observers\ProductObserver::class);
+        Variant::observe(\OFFLINE\Mall\Classes\Observers\VariantObserver::class);
+        PropertyValue::observe(\OFFLINE\Mall\Classes\Observers\PropertyValueObserver::class);
     }
 
     public function setMorphMap()
@@ -205,6 +216,9 @@ class Plugin extends PluginBase
         });
         $this->app->bind(SignUpHandler::class, function () {
             return new DefaultSignUpHandler();
+        });
+        $this->app->bind(Index::class, function () {
+            return new Filebase();
         });
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();

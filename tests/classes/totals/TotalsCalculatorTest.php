@@ -330,6 +330,8 @@ class TotalsCalculatorTest extends PluginTestCase
         $variant->save();
         $variant->price      = ['CHF' => 10000, 'EUR' => 15000];
 
+        $variant = Variant::find($variant->id);
+
         $cart = $this->getCart();
         $cart->addProduct($product, 2, $variant);
         $cart->addProduct($product, 1, $variant);

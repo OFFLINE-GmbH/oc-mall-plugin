@@ -30,7 +30,7 @@ class Variant extends Model
     public $nullable = ['image_set_id', 'stock'];
     public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
-    public $with = ['product', 'image_sets', 'prices', 'additional_prices'];
+    public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
@@ -259,6 +259,20 @@ class Variant extends Model
                 // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
                 return sprintf('%s: %s', e($value->property->name), $value->display_value);
             })->implode('<br />');
+    }
+
+    /**
+     * Return the property values of this variant and the inherited
+     * properties of the parent product.
+     *
+     * @return Collection<PropertyValue>
+     */
+    public function getAllPropertyValuesAttribute()
+    {
+        return PropertyValue::where('product_id', $this->product_id)
+                            ->whereNull('variant_id')
+                            ->get()
+                            ->merge($this->property_values);
     }
 
     protected function notNullthy($value): bool

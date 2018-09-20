@@ -28,9 +28,10 @@ class ProductPrice extends Model
 
     public function setPriceAttribute($value)
     {
-        if ($value === null) {
+        if ($value === null || $value === "") {
             return $this->attributes['price'] = null;
         }
+
         $this->attributes['price'] = (int)($value * 100);
     }
 

@@ -149,6 +149,8 @@ class VariantTest extends PluginTestCase
         $variant->save();
         $variant->price = $priceInt;
 
+        $variant = Variant::find($variant->id);
+
         $this->assertEquals($priceFormatted, $variant->price->toArray());
         $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
         $this->assertEquals(20.50, $variant->priceInCurrency());

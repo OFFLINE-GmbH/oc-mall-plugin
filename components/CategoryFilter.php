@@ -8,11 +8,8 @@ use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Currency;
-use OFFLINE\Mall\Models\CurrencySettings;
-use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
-use OFFLINE\Mall\Models\Variant;
 use Session;
 use Validator;
 

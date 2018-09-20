@@ -19,19 +19,6 @@ class QueryString
             return collect([]);
         }
 
-        $specialProperties = $query
-            ->keys()
-            ->intersect(Filter::$specialProperties)
-            ->map(function ($property) use ($query) {
-                $values = $query->get($property);
-
-                return new RangeFilter(
-                    $property,
-                    $values['min'] ?? null,
-                    $values['max'] ?? null
-                );
-            });
-
         $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
         return $properties->map(function (Property $property) use ($query) {
@@ -47,8 +34,6 @@ class QueryString
                     $values['max'] ?? null
                 );
             }
-        })->concat($specialProperties)->keyBy(function ($item) {
-            return $item->property->slug ?? $item->property;
         });
     }
 
@@ -56,15 +41,10 @@ class QueryString
     {
         $filter = $filter->mapWithKeys(function (Filter $filter, $property) {
             return [
-                $property => $filter->getValues(),
+                $property => $filter->values(),
             ];
         });
 
         return http_build_query(['filter' => $filter->toArray()]);
-    }
-
-    protected function isSpecialProperty(string $prop): bool
-    {
-        return \in_array($prop, Filter::$specialProperties, true);
     }
 }

@@ -1,4 +1,4 @@
-    <?php namespace OFFLINE\Mall\Console;
+<?php namespace OFFLINE\Mall\Console;
 
 use DB;
 use Illuminate\Console\Command;

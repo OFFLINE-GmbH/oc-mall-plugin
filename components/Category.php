@@ -3,6 +3,9 @@
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
+use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
@@ -116,33 +119,29 @@ class Category extends MallComponent
         if ($this->includeChildren) {
             $categories = $this->category->getChildrenIds();
         }
-        $this->setVar('categories', $categories);
 
+        $this->setVar('categories', $categories);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
         $this->setVar('pageNumber', (int)request('page', 1));
         $this->setVar('perPage', (int)$this->property('per_page'));
-        $this->setVar('items', $this->paginate($this->getItems()));
+        $this->setVar('items', $this->getItems());
     }
 
-    protected function getItems(): Collection
+    protected function getItems(): LengthAwarePaginator
     {
-        $page    = input('page', 1);
-        $perPage = $this->perPage;
+        $filters = $this->getFilters();
 
-        $query = $this->showVariants
-            ? $this->category->getVariantsQuery($this->categories, $this->getFilters())
-            : $this->category->getProductsQuery($this->categories, $this->getFilters());
+        $model    = $this->showVariants ? new Variant() : new Product();
+        $useIndex = $this->showVariants ? 'variants' : 'products';
 
-        $this->itemCount = $query->count();
+        /** @var Index $index */
+        $index  = app(Index::class);
+        $result = $index->fetch($useIndex, $filters, $this->perPage, $this->pageNumber);
 
-        $items = $query->skip(($page - 1) * $perPage)->take($perPage)->get();
-
-        // Rehydrate the Eloquent models since the variants where queried using the QueryBuilder.
-        // Since we need to eager load relationships we don't use hydrate() but execute an additional query.
-        $model = $this->showVariants ? new Variant() : new Product();
-        $items = $model->with(['image_sets.images'])->find($items->pluck('id'));
-
-        return $items;
+        return $this->paginate(
+            $model->with(['image_sets.images'])->find($result->ids),
+            $result->totalCount
+        );
     }
 
     protected function getCategory()
@@ -150,11 +149,11 @@ class Category extends MallComponent
         return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
-    protected function paginate(Collection $items)
+    protected function paginate(Collection $items, int $totalCount)
     {
         $paginator = new LengthAwarePaginator(
             $items,
-            $this->itemCount,
+            $totalCount,
             $this->perPage,
             $this->pageNumber
         );
@@ -174,6 +173,15 @@ class Category extends MallComponent
             $filter = [];
         }
 
-        return (new QueryString())->deserialize($filter, $this->category);
+        $filters = (new QueryString())->deserialize($filter, $this->category);
+        $filters->put('category_id', new SetFilter('category_id', $this->categories));
+
+        if (isset($filter['price'])) {
+            $price = $filter['price'];
+            $filters->put('price', new RangeFilter('prices', $price['min'] ?? 0, $price['max'] ?? 0));
+            unset($filter['price']);
+        }
+
+        return $filters;
     }
 }
