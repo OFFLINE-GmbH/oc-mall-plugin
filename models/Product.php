@@ -55,6 +55,7 @@ class Product extends Model
         'weight'                       => 'integer',
         'id'                           => 'integer',
         'stackable'                    => 'boolean',
+        'published'                    => 'boolean',
         'stock'                        => 'integer',
         'sales_count'                  => 'integer',
         'shippable'                    => 'boolean',

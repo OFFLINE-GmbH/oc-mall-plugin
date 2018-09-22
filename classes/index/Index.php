@@ -15,6 +15,8 @@ interface Index
 
     public function delete(string $index, $id);
 
+    public function drop(string $index);
+
     public function fetch(
         string $index,
         Collection $filters,

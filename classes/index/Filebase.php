@@ -15,6 +15,7 @@ class Filebase implements Index
 {
     protected $db;
     protected $jsonq;
+    protected $dir;
 
     public function __construct()
     {
@@ -23,8 +24,9 @@ class Filebase implements Index
             mkdir($dir);
         }
 
-        $this->db = new \Filebase\Database([
-            'dir'    => $dir,
+        $this->dir = $dir;
+        $this->db  = new \Filebase\Database([
+            'dir'    => $this->dir,
             'pretty' => false,
         ]);
 
@@ -56,6 +58,14 @@ class Filebase implements Index
         return $item->delete();
     }
 
+    public function drop(string $index)
+    {
+        $pattern = sprintf('%s/%s-*.json', $this->dir, $index);
+        foreach (glob($pattern) as $file) {
+            unlink($file);
+        }
+    }
+
     public function fetch(string $index, Collection $filters, SortOrder $order, int $perPage, int $forPage): IndexResult
     {
         $skip  = $perPage * ($forPage - 1);
@@ -72,6 +82,7 @@ class Filebase implements Index
     {
         $this->jsonq->collect($this->db->query()->results());
         $this->jsonq->where('index', '=', $index);
+        $this->jsonq->where('published', '=', true);
 
         $filters = $this->applySpecialFilters($filters);
         $this->applyCustomFilters($filters);

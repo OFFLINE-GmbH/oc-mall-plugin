@@ -21,7 +21,7 @@ class ProductObserver
     {
         $this->index->insert(ProductEntry::INDEX, new ProductEntry($product));
         foreach ($product->variants as $variant) {
-            $this->index->insert(VariantEntry::INDEX, $variant->id, new VariantEntry($variant));
+            $this->index->insert(VariantEntry::INDEX, new VariantEntry($variant));
         }
     }
 

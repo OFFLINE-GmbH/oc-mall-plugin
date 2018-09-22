@@ -37,6 +37,7 @@ use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
+use OFFLINE\Mall\Console\ReindexProducts;
 use OFFLINE\Mall\Console\SeedDemoData;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
@@ -76,6 +77,7 @@ class Plugin extends PluginBase
         $this->extendPlugins();
 
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
+        $this->registerConsoleCommand('offline.mall.reindex', ReindexProducts::class);
 
         $this->setMorphMap();
         $this->registerObservers();
