@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Index;
 
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 
 interface Index
 {
@@ -14,5 +15,11 @@ interface Index
 
     public function delete(string $index, $id);
 
-    public function fetch(string $index, Collection $filters, int $perPage, int $forPage): IndexResult;
+    public function fetch(
+        string $index,
+        Collection $filters,
+        SortOrder $order,
+        int $perPage,
+        int $forPage
+    ): IndexResult;
 }

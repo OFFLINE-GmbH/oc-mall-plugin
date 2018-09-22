@@ -490,6 +490,13 @@
                     'description' => 'Include all dependiencies of noUI Slider via cdnjs',
                 ],
             ],
+            'sortOrder'  => [
+                'bestseller' => 'Bestseller',
+                'priceLow'   => 'Lowest price',
+                'priceHigh'  => 'Highest price',
+                'latest'     => 'Latest',
+                'oldest'     => 'Oldest',
+            ],
         ],
         'myAccount'             => [
             'details'    => [

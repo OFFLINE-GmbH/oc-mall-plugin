@@ -25,6 +25,9 @@
                 }
                 $propertiesForm.trigger('submit');
             });
+            $body.on('change', '.js-mall-sorter', function () {
+                $propertiesForm.trigger('submit');
+            });
 
             $propertiesForm.on('submit', function (e) {
                 e.preventDefault();

@@ -1,4 +1,5 @@
 <form class="mall-category-filter">
+    {% partial __SELF__ ~ '::sorter' %}
     {% partial __SELF__ ~ '::propertygroups' groups=__SELF__.propertyGroups %}
 </form>
 {% partial __SELF__ ~ '::scripts' %}

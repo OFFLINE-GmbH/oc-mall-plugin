@@ -8,6 +8,7 @@ use Nahid\JsonQ\Jsonq;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 use OFFLINE\Mall\Models\Currency;
 
 class Filebase implements Index
@@ -55,10 +56,10 @@ class Filebase implements Index
         return $item->delete();
     }
 
-    public function fetch(string $index, Collection $filters, int $perPage, int $forPage): IndexResult
+    public function fetch(string $index, Collection $filters, SortOrder $order, int $perPage, int $forPage): IndexResult
     {
         $skip  = $perPage * ($forPage - 1);
-        $items = $this->search($index, $filters);
+        $items = $this->search($index, $filters, $order);
 
         $slice = array_map(function ($item) {
             return $item['id'];
@@ -67,13 +68,15 @@ class Filebase implements Index
         return new IndexResult($slice, count($items));
     }
 
-    protected function search(string $index, Collection $filters)
+    protected function search(string $index, Collection $filters, SortOrder $order)
     {
         $this->jsonq->collect($this->db->query()->results());
         $this->jsonq->where('index', '=', $index);
 
         $filters = $this->applySpecialFilters($filters);
         $this->applyCustomFilters($filters);
+
+        $this->jsonq->sortBy($order->property(), $order->order());
 
         return $this->jsonq->get();
     }

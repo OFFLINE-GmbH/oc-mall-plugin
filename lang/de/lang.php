@@ -489,6 +489,13 @@
                     'description' => 'Lädt die Abhängigkeiten für den noUI Slider via cdnjs',
                 ],
             ],
+            'sortOrder'  => [
+                'bestseller' => 'Bestseller',
+                'priceLow'   => 'Günstigste',
+                'priceHigh'  => 'Teuerste',
+                'latest'     => 'Neuste',
+                'oldest'     => 'Älteste',
+            ],
         ],
         'myAccount'             => [
             'details'    => [

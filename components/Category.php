@@ -3,8 +3,8 @@
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
-use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -130,25 +130,20 @@ class Category extends MallComponent
     protected function getItems(): LengthAwarePaginator
     {
         $filters = $this->getFilters();
+        $sortOrder = $this->getSortOrder();
 
         $model    = $this->showVariants ? new Variant() : new Product();
         $useIndex = $this->showVariants ? 'variants' : 'products';
 
         /** @var Index $index */
         $index  = app(Index::class);
-        $result = $index->fetch($useIndex, $filters, $this->perPage, $this->pageNumber);
+        $result = $index->fetch($useIndex, $filters, $sortOrder, $this->perPage, $this->pageNumber);
 
         return $this->paginate(
             $model->with(['image_sets.images'])->find($result->ids),
             $result->totalCount
         );
     }
-
-    protected function getCategory()
-    {
-        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
-    }
-
     protected function paginate(Collection $items, int $totalCount)
     {
         $paginator = new LengthAwarePaginator(
@@ -166,6 +161,11 @@ class Category extends MallComponent
         return $paginator->setPath($pageUrl);
     }
 
+    protected function getCategory()
+    {
+        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
+    }
+
     protected function getFilters()
     {
         $filter = request()->get('filter', []);
@@ -177,5 +177,10 @@ class Category extends MallComponent
         $filters->put('category_id', new SetFilter('category_id', $this->categories));
 
         return $filters;
+    }
+
+    protected function getSortOrder(): SortOrder
+    {
+        return SortOrder::fromKey(input('sort', SortOrder::default()));
     }
 }

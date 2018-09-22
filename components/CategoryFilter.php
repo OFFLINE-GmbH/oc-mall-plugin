@@ -6,6 +6,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
@@ -76,6 +77,14 @@ class CategoryFilter extends MallComponent
      * @var Currency
      */
     public $currency;
+    /**
+     * @var string
+     */
+    public $sortOrder;
+    /**
+     * @var array
+     */
+    public $sortOptions;
 
     public function componentDetails()
     {
@@ -140,9 +149,11 @@ class CategoryFilter extends MallComponent
 
     public function onSetFilter()
     {
+        $sortOrder = $this->getSortOrder();
+
         $data = collect(post('filter', []));
         if ($data->count() < 1) {
-            return $this->replaceFilter([]);
+            return $this->replaceFilter([], $sortOrder);
         }
 
         $properties = Property::whereIn('slug', $data->keys())->get();
@@ -170,7 +181,7 @@ class CategoryFilter extends MallComponent
             return count($values) ? [$id => new SetFilter($property, $values)] : [];
         });
 
-        return $this->replaceFilter($filter);
+        return $this->replaceFilter($filter, $sortOrder);
     }
 
     protected function setData()
@@ -195,6 +206,8 @@ class CategoryFilter extends MallComponent
         $this->setVar('propertyGroups', $this->getPropertyGroups());
         $this->setVar('props', $this->setProps());
         $this->setVar('filter', $this->getFilter());
+        $this->setVar('sortOrder', $this->getSortOrder());
+        $this->setVar('sortOptions', SortOrder::options());
     }
 
     protected function getCategory()
@@ -254,14 +267,21 @@ class CategoryFilter extends MallComponent
         return (new QueryString())->deserialize($filter, $this->category);
     }
 
-    protected function replaceFilter($filter)
+    protected function getSortOrder(): string
+    {
+        return input('sort', SortOrder::default());
+    }
+
+    protected function replaceFilter($filter, $sortOrder)
     {
         $this->setData();
         $this->setVar('filter', $filter);
+        $this->setVar('sortOrder', $sortOrder);
 
         return [
             'filter'      => $filter,
-            'queryString' => (new QueryString())->serialize($filter),
+            'sort'        => $sortOrder,
+            'queryString' => (new QueryString())->serialize($filter, $sortOrder),
         ];
     }
 

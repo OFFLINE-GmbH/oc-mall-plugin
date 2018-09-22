@@ -51,7 +51,7 @@ class QueryString
         })->union($specialProperties);
     }
 
-    public function serialize(Collection $filter)
+    public function serialize(Collection $filter, string $sortOrder)
     {
         $filter = $filter->mapWithKeys(function (Filter $filter, $property) {
             return [
@@ -59,6 +59,6 @@ class QueryString
             ];
         });
 
-        return http_build_query(['filter' => $filter->toArray()]);
+        return http_build_query(['filter' => $filter->toArray(), 'sort' => $sortOrder]);
     }
 }
