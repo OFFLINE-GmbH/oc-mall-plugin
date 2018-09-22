@@ -6,11 +6,11 @@ use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
+use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -25,6 +25,7 @@ class Product extends Model
     use HashIds;
     use Nullable;
     use PriceAccessors;
+    use StockAndQuantity;
 
     const MORPH_KEY = 'mall.product';
 
@@ -55,6 +56,7 @@ class Product extends Model
         'id'                           => 'integer',
         'stackable'                    => 'boolean',
         'stock'                        => 'integer',
+        'sales_count'                  => 'integer',
         'shippable'                    => 'boolean',
     ];
     public $fillable = [
@@ -199,16 +201,6 @@ class Product extends Model
         return $this->custom_fields()->whereIn('type', ['dropdown', 'color', 'image'])->get();
     }
 
-    public function reduceStock(int $quantity): self
-    {
-        $this->stock -= $quantity;
-        if ($this->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
-            throw new OutOfStockException($this);
-        }
-
-        return tap($this)->save();
-    }
-
     /**
      * We are using a simple dropdown for this attribute since the relation
      * widget has some problems with the emptyOption option.
@@ -218,23 +210,6 @@ class Product extends Model
     {
         return ['' => trans('offline.mall::lang.common.none')]
             + $this->category->properties->pluck('name', 'id')->toArray();
-    }
-
-    /**
-     * Enforce min and max quantity values for a product.
-     *
-     * @return int
-     */
-    public function normalizeQuantity($quantity): int
-    {
-        if ($this->quantity_min && $quantity < $this->quantity_min) {
-            return $this->quantity_min;
-        }
-        if ($this->quantity_max && $quantity > $this->quantity_max) {
-            return $this->quantity_max;
-        }
-
-        return $quantity;
     }
 
     public function groupPriceInCurrency($group, $currency)

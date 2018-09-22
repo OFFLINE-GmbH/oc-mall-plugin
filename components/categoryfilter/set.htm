@@ -1,7 +1,7 @@
 <div class="mall-filter mall-filter--set">
     {% set selected = filter[property.slug].values %}
     {% for value in values %}
-        {% set isSelected = value.value in selected %}
+        {% set isSelected = value.safeValue in selected %}
         <div class="js-mall-filter mall-filter__option {{ isSelected ? 'mall-filter__option--selected' : '' }}">
             <input type="checkbox"
                    aria-hidden="true"

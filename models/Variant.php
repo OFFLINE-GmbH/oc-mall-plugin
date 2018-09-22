@@ -1,17 +1,17 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Illuminate\Support\Collection;
+use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
+use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
-use Model;
 
 class Variant extends Model
 {
@@ -23,6 +23,7 @@ class Variant extends Model
     use UserSpecificPrice;
     use Nullable;
     use PriceAccessors;
+    use StockAndQuantity;
 
     const MORPH_KEY = 'mall.variant';
 
@@ -36,6 +37,7 @@ class Variant extends Model
         'allow_out_of_stock_purchases' => 'boolean',
         'id'                           => 'integer',
         'stock'                        => 'integer',
+        'sales_count'                  => 'integer',
         'weight'                       => 'integer',
     ];
     public $rules = [
@@ -145,16 +147,6 @@ class Variant extends Model
         }
 
         return $null + $sets->pluck('name', 'id')->toArray();
-    }
-
-    public function reduceStock(int $quantity): self
-    {
-        $this->stock -= $quantity;
-        if ($this->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
-            throw new OutOfStockException($this);
-        }
-
-        return tap($this)->save();
     }
 
     public function custom_fields()

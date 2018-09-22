@@ -344,7 +344,7 @@ class VariantTest extends PluginTestCase
         $variant->property_values()->save($value);
 
         $this->assertEquals(
-            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000" title="Red"></span>',
+            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: #ff0000" title="Red"></span>',
             $product->variants->where('id', $variant->id)->first()->properties_description
         );
     }

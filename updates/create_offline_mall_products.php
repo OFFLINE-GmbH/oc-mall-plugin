@@ -33,6 +33,7 @@ class CreateOfflineMallProducts extends Migration
             $table->boolean('price_includes_tax')->default(true);
             $table->integer('group_by_property_id')->nullable();
             $table->boolean('published')->default(false);
+            $table->integer('sales_count')->default(0)->unsigned();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

@@ -71,7 +71,7 @@ class PropertyValue extends Model
     {
         if ($this->property->type === 'color') {
             return sprintf(
-                '<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s" title="%s"></span>',
+                '<span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: %s" title="%s"></span>',
                 $this->value['hex'],
                 $this->value['name'] ?? ''
             );

@@ -15,8 +15,9 @@ class CreateOfflineMallProductVariants extends Migration
             $table->integer('image_set_id')->unsigned()->nullable();
             $table->integer('stock')->nullable();
             $table->string('name')->nullable();
-            $table->boolean('published')->default(true);
             $table->integer('weight')->nullable()->unsigned();
+            $table->boolean('published')->default(true);
+            $table->integer('sales_count')->default(0)->unsigned();
             $table->boolean('allow_out_of_stock_purchases')->default(false);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

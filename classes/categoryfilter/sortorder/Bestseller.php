@@ -12,7 +12,7 @@ class Bestseller extends SortOrder
 
     public function property(): string
     {
-        return 'sale_count';
+        return 'sales_count';
     }
 
     public function order(): string
