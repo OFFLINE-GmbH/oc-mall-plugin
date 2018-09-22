@@ -148,7 +148,7 @@ class CategoryFilter extends MallComponent
         $properties = Property::whereIn('slug', $data->keys())->get();
 
         $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
-            $property = $this->isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
+            $property = Filter::isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
             if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
                 if ($values['min'] === '' && $values['max'] === '') {
                     return [];
@@ -156,9 +156,10 @@ class CategoryFilter extends MallComponent
 
                 return [
                     $id => new RangeFilter(
-                        $property,
-                        $values['min'] ?? null,
-                        $values['max'] ?? null
+                        $property, [
+                            $values['min'] ?? null,
+                            $values['max'] ?? null,
+                        ]
                     ),
                 ];
             }
@@ -262,11 +263,6 @@ class CategoryFilter extends MallComponent
             'filter'      => $filter,
             'queryString' => (new QueryString())->serialize($filter),
         ];
-    }
-
-    protected function isSpecialProperty(string $prop): bool
-    {
-        return \in_array($prop, Filter::$specialProperties, true);
     }
 
     public function getMinValue($values)

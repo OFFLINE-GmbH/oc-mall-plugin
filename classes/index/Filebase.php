@@ -72,21 +72,45 @@ class Filebase implements Index
         $this->jsonq->collect($this->db->query()->results());
         $this->jsonq->where('index', '=', $index);
 
+        $filters = $this->applySpecialFilters($filters);
+        $this->applyCustomFilters($filters);
+
+        return $this->jsonq->get();
+    }
+
+    protected function applySpecialFilters(Collection $filters): Collection
+    {
         if ($filters->has('category_id')) {
             $category = $filters->pull('category_id');
             $this->jsonq->whereIn($category->property, $category->values());
         }
+
         if ($filters->has('price')) {
+            $price    = $filters->pull('price');
             $currency = Currency::activeCurrency()->code;
-            $price = $filters->pull('price');
+
             ['min' => $min, 'max' => $max] = $price->values();
-            $this->jsonq->where($price->property . '.' . $currency, '>=', (int)($min * 100));
-            $this->jsonq->where($price->property . '.' . $currency, '<=', (int)($max * 100));
+
+            $this->jsonq->where('prices.' . $currency, '>=', (int)($min * 100));
+            $this->jsonq->where('prices.' . $currency, '<=', (int)($max * 100));
         }
 
-        $this->applyFilters($filters);
+        return $filters;
+    }
 
-        return $this->jsonq->get();
+    protected function applyCustomFilters(Collection $filters)
+    {
+        $filters->each(function (Filter $filter) {
+            if ($filter instanceof SetFilter) {
+                $this->jsonq->where('property_values.' . $filter->property->id, 'includes', $filter->values());
+            }
+            if ($filter instanceof RangeFilter) {
+                $this->jsonq->where('property_values.' . $filter->property->id, 'includes between', [
+                    $filter->minValue,
+                    $filter->maxValue,
+                ]);
+            }
+        });
     }
 
     protected function key(string $index, $id): string
@@ -96,7 +120,7 @@ class Filebase implements Index
 
     protected function addMacros()
     {
-        $this->jsonq->macro('includes', function ($val, $comp) {
+        $this->jsonq::macro('includes', function ($val, $comp) {
             if (is_array($val)) {
                 if (is_array($val[0])) {
                     $val = array_map(function ($val) {
@@ -110,7 +134,7 @@ class Filebase implements Index
             return in_array($comp, $val);
         });
 
-        $this->jsonq->macro('includes between', function ($val, $comp) {
+        $this->jsonq::macro('includes between', function ($val, $comp) {
             foreach ($val as $value) {
                 if ($value >= $comp[0] && $value <= $comp[1]) {
                     return true;
@@ -118,21 +142,6 @@ class Filebase implements Index
             }
 
             return false;
-        });
-    }
-
-    protected function applyFilters(Collection $filters)
-    {
-        $filters->each(function (Filter $filter) {
-            if ($filter instanceof SetFilter) {
-                $this->jsonq->where('property_values.' . $filter->property->id, 'includes', $filter->values());
-            }
-            if ($filter instanceof RangeFilter) {
-                $this->jsonq->where('property_values.' . $filter->property->id, 'includes between', [
-                    $filter->minValue,
-                    $filter->maxValue,
-                ]);
-            }
         });
     }
 }

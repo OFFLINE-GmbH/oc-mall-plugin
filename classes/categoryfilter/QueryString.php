@@ -19,22 +19,36 @@ class QueryString
             return collect([]);
         }
 
+        // Map the special properties since they won't be found in the database.
+        $specialProperties = collect(Filter::$specialProperties)->mapWithKeys(function ($type, $prop) use ($query) {
+            if ( ! $query->has($prop)) {
+                return [];
+            }
+
+            return [$prop => new $type($prop, array_values($query->get($prop)))];
+        });
+
         $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
-        return $properties->map(function (Property $property) use ($query) {
+        // Map the user defined database properties.
+        return $properties->mapWithKeys(function (Property $property) use ($query) {
             if ($property->pivot->filter_type === 'set') {
-                return new SetFilter($property, $query->get($property->slug));
+                return [$property->slug => new SetFilter($property, $query->get($property->slug))];
             }
             if ($property->pivot->filter_type === 'range') {
                 $values = $query->get($property->slug);
 
-                return new RangeFilter(
-                    $property,
-                    $values['min'] ?? null,
-                    $values['max'] ?? null
-                );
+                return [
+                    $property->slug => new RangeFilter(
+                        $property,
+                        [
+                            $values['min'] ?? null,
+                            $values['max'] ?? null,
+                        ]
+                    ),
+                ];
             }
-        });
+        })->union($specialProperties);
     }
 
     public function serialize(Collection $filter)

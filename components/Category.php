@@ -176,12 +176,6 @@ class Category extends MallComponent
         $filters = (new QueryString())->deserialize($filter, $this->category);
         $filters->put('category_id', new SetFilter('category_id', $this->categories));
 
-        if (isset($filter['price'])) {
-            $price = $filter['price'];
-            $filters->put('price', new RangeFilter('prices', $price['min'] ?? 0, $price['max'] ?? 0));
-            unset($filter['price']);
-        }
-
         return $filters;
     }
 }
