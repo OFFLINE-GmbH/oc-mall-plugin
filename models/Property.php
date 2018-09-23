@@ -1,8 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Illuminate\Support\Collection;
 use Model;
-use October\Rain\Database\QueryBuilder;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -21,7 +19,7 @@ class Property extends Model
     public $jsonable = ['options'];
     public $rules = [
         'name' => 'required',
-        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image',
+        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -60,7 +58,7 @@ class Property extends Model
 
     public static function getValuesForCategory($categories)
     {
-        $raw = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
+        $raw    = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
         $values = PropertyValue::hydrate($raw->toArray())->load('property');
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
@@ -83,6 +81,8 @@ class Property extends Model
     {
         return [
             'text'     => trans('offline.mall::lang.custom_field_options.text'),
+            'integer'  => trans('offline.mall::lang.custom_field_options.integer'),
+            'float'    => trans('offline.mall::lang.custom_field_options.float'),
             'textarea' => trans('offline.mall::lang.custom_field_options.textarea'),
             'dropdown' => trans('offline.mall::lang.custom_field_options.dropdown'),
             'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),

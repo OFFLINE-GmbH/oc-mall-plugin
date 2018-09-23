@@ -57,6 +57,9 @@ class ReindexProducts extends Command
 
         $this->index->drop(ProductEntry::INDEX);
         $this->index->drop(VariantEntry::INDEX);
+
+        $this->index->create(ProductEntry::INDEX);
+        $this->index->create(VariantEntry::INDEX);
     }
 
     protected function reindex()

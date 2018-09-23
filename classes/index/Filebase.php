@@ -19,13 +19,9 @@ class Filebase implements Index
 
     public function __construct()
     {
-        $dir = storage_path('app/index');
-        if ( ! is_dir($dir)) {
-            mkdir($dir);
-        }
+        $this->create('');
 
-        $this->dir = $dir;
-        $this->db  = new \Filebase\Database([
+        $this->db = new \Filebase\Database([
             'dir'    => $this->dir,
             'pretty' => false,
         ]);
@@ -56,6 +52,15 @@ class Filebase implements Index
         $item = $this->db->get($this->key($index, $id));
 
         return $item->delete();
+    }
+
+    public function create(string $index)
+    {
+        $dir = storage_path('app/index');
+        if ( ! is_dir($dir)) {
+            mkdir($dir);
+        }
+        $this->dir = $dir;
     }
 
     public function drop(string $index)

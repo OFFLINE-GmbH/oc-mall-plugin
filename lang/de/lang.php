@@ -215,6 +215,8 @@
     ],
     'custom_field_options'     => [
         'text'       => 'Textfeld',
+        'integer'    => 'Ganzzahl',
+        'float'      => 'Gleitkommazahl',
         'textarea'   => 'Mehrzeiliges Textfeld',
         'dropdown'   => 'Auswahlliste',
         'checkbox'   => 'Checkbox',

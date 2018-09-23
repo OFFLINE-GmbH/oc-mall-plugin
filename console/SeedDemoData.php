@@ -10,6 +10,9 @@ use OFFLINE\Mall\Classes\Demo\Products\Cruiser3500;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser5000;
 use OFFLINE\Mall\Classes\Demo\Products\Jersey;
 use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Index\ProductEntry;
+use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
@@ -70,13 +73,18 @@ class SeedDemoData extends Command
           ->where('attachment_type', 'LIKE', 'OFFLINE%Mall%')
           ->orWhere('attachment_type', 'LIKE', 'mall.%')
           ->delete();
+
+        $index = app(Index::class);
+        $index->drop(ProductEntry::INDEX);
+        $index->drop(VariantEntry::INDEX);
     }
 
     protected function createProducts()
     {
         $this->output->writeln('Creating products...');
 
-        for ($i = 0; $i < 1000; $i++) {
+        $bar = $this->output->createProgressBar(7000);
+        for ($i = 0; $i < 143; $i++) {
             // Bikes
             (new Cruiser1000())->create();
             (new Cruiser1500())->create();
@@ -87,7 +95,9 @@ class SeedDemoData extends Command
             // Clothing
             (new RedShirt())->create();
             (new Jersey())->create();
+            $bar->advance(7);
         }
+        $bar->finish();
     }
 
     protected function createCategories()
@@ -229,13 +239,13 @@ class SeedDemoData extends Command
         ]);
         $fork       = Property::create([
             'name' => 'Fork travel',
-            'type' => 'text',
+            'type' => 'integer',
             'unit' => 'mm',
             'slug' => 'fork-travel',
         ]);
         $rear       = Property::create([
             'name' => 'Rear travel',
-            'type' => 'text',
+            'type' => 'integer',
             'unit' => 'mm',
             'slug' => 'rear-travel',
         ]);

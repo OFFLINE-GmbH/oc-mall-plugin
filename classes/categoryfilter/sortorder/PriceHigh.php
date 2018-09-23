@@ -15,7 +15,7 @@ class PriceHigh extends SortOrder
         return 'prices.' . $this->currency->code;
     }
 
-    public function order(): string
+    public function direction(): string
     {
         return 'desc';
     }

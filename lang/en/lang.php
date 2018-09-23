@@ -216,6 +216,8 @@
     ],
     'custom_field_options'     => [
         'text'       => 'Textfield',
+        'integer'    => 'Integer',
+        'float'      => 'Float',
         'textarea'   => 'Multi-line textfield',
         'dropdown'   => 'Dropdown',
         'checkbox'   => 'Checkbox',

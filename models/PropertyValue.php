@@ -48,16 +48,29 @@ class PropertyValue extends Model
 
     public function getValueAttribute()
     {
-        return optional($this->property)->type === 'color'
-            ? json_decode($this->getOriginal('value'), true)
-            : $this->getOriginal('value');
+        $type  = optional($this->property)->type;
+        $value = $this->getOriginal('value');
+
+        if ($type === 'float') {
+            return (float)$value;
+        }
+
+        if ($type === 'integer') {
+            return (int)$value;
+        }
+
+        if ($type === 'color') {
+            return json_decode($this->getOriginal('value'), true);
+        }
+
+        return $value;
     }
 
     /**
      * This attribute can be used if a safe string value
      * is needed even if the value is an array.
      */
-    public function getSafeValueAttribute(): string
+    public function getSafeValueAttribute()
     {
         return \is_array($this->value) ? json_encode($this->value) : $this->value;
     }

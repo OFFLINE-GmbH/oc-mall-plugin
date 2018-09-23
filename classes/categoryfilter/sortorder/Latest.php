@@ -15,7 +15,7 @@ class Latest extends SortOrder
         return 'created_at';
     }
 
-    public function order(): string
+    public function direction(): string
     {
         return 'desc';
     }

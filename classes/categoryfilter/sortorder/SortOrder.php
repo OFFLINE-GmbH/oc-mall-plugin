@@ -47,7 +47,7 @@ abstract class SortOrder
 
     abstract public function property(): string;
 
-    abstract public function order(): string;
+    abstract public function direction(): string;
 
     abstract public function key(): string;
 }

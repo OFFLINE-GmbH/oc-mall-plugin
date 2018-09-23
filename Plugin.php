@@ -13,6 +13,7 @@ use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\Index\ElasticSearch;
 use OFFLINE\Mall\Classes\Index\Filebase;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;

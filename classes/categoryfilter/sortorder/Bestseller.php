@@ -15,7 +15,7 @@ class Bestseller extends SortOrder
         return 'sales_count';
     }
 
-    public function order(): string
+    public function direction(): string
     {
         return 'desc';
     }

@@ -26,7 +26,7 @@ class VariantEntry implements Entry
         $variant = $this->variant;
         $variant->loadMissing(['prices.currency', 'property_values.property']);
 
-        $data                    = $variant->getAttributes();
+        $data                    = $variant->attributesToArray();
         $data['category_id']     = $variant->product->category_id;
         $data['index']           = self::INDEX;
         $data['prices']          = $this->mapPrices($variant->prices);
@@ -53,7 +53,7 @@ class VariantEntry implements Entry
         }
 
         return $input->groupBy('property_id')->map(function ($value) {
-            return $value->pluck('value')->unique()->filter();
+            return $value->pluck('safeValue')->unique()->filter()->values();
         })->filter();
     }
 }

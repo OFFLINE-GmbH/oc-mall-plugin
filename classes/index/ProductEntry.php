@@ -26,7 +26,7 @@ class ProductEntry implements Entry
         $product = $this->product;
         $product->loadMissing(['variants.prices.currency', 'prices.currency', 'property_values.property']);
 
-        $data                    = $product->getAttributes();
+        $data                    = $product->attributesToArray();
         $data['index']          = self::INDEX;
         $data['prices']          = $this->mapPrices($product->prices);
         $data['property_values'] = $this->mapProps($product->property_values);
@@ -52,7 +52,7 @@ class ProductEntry implements Entry
         }
 
         return $input->groupBy('property_id')->map(function ($value) {
-            return $value->pluck('value')->unique()->filter();
+            return $value->pluck('safeValue')->unique()->filter()->values();
         })->filter();
     }
 }
