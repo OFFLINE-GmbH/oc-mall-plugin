@@ -83,21 +83,16 @@ class SeedDemoData extends Command
     {
         $this->output->writeln('Creating products...');
 
-        $bar = $this->output->createProgressBar(7000);
-        for ($i = 0; $i < 143; $i++) {
-            // Bikes
-            (new Cruiser1000())->create();
-            (new Cruiser1500())->create();
-            (new Cruiser3000())->create();
-            (new Cruiser3500())->create();
-            (new Cruiser5000())->create();
+        // Bikes
+        (new Cruiser1000())->create();
+        (new Cruiser1500())->create();
+        (new Cruiser3000())->create();
+        (new Cruiser3500())->create();
+        (new Cruiser5000())->create();
 
-            // Clothing
-            (new RedShirt())->create();
-            (new Jersey())->create();
-            $bar->advance(7);
-        }
-        $bar->finish();
+        // Clothing
+        (new RedShirt())->create();
+        (new Jersey())->create();
     }
 
     protected function createCategories()
