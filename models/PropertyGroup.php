@@ -31,6 +31,16 @@ class PropertyGroup extends Model
             'pivotModel' => PropertyGroupProperty::class,
             'order'      => 'offline_mall_property_property_group.sort_order ASC',
         ],
+        'filterable_properties' => [
+            Property::class,
+            'table'      => 'offline_mall_property_property_group',
+            'key'        => 'property_group_id',
+            'otherKey'   => 'property_id',
+            'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
+            'pivotModel' => PropertyGroupProperty::class,
+            'order'      => 'offline_mall_property_property_group.sort_order ASC',
+            'conditions' => 'offline_mall_property_property_group.filter_type is not null'
+        ],
         'categories' => [
             Category::class,
             'table'    => 'offline_mall_category_property_group',

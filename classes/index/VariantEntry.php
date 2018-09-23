@@ -28,6 +28,7 @@ class VariantEntry implements Entry
 
         $data                    = $variant->attributesToArray();
         $data['category_id']     = $variant->product->category_id;
+        $data['brand_id']        = $variant->product->brand_id;
         $data['index']           = self::INDEX;
         $data['prices']          = $this->mapPrices($variant->prices);
         $data['property_values'] = $this->mapProps($variant->all_property_values);

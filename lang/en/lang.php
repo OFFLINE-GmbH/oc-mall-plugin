@@ -479,6 +479,9 @@
                 'showPriceFilter'     => [
                     'title' => 'Show price filter',
                 ],
+                'showBrandFilter'     => [
+                    'title' => 'Show brand filter',
+                ],
                 'includeChildren'     => [
                     'title'       => 'Include children',
                     'description' => 'Include properties and filters from products in child categories as well',

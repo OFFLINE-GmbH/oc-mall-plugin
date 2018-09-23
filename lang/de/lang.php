@@ -478,6 +478,9 @@
                 'showPriceFilter'     => [
                     'title' => 'Zeige Preis-Filter an',
                 ],
+                'showBrandFilter'     => [
+                    'title' => 'Zeige Marken-Filter an',
+                ],
                 'includeChildren'     => [
                     'title'       => 'Zeige Filter aus Kinderkategorien auch an',
                     'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfals',

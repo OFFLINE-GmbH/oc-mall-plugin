@@ -61,9 +61,9 @@ class ElasticSearch implements Index
     public function setMapping(string $index)
     {
         $this->client->indices()->putMapping([
-            'index'            => $index,
-            'type'             => $index,
-            'body'             => [
+            'index' => $index,
+            'type'  => $index,
+            'body'  => [
                 'dynamic_templates' => [
                     [
                         'property_values' => [
@@ -138,8 +138,14 @@ class ElasticSearch implements Index
     protected function applySpecialFilters(Collection $filters, array $query): array
     {
         if ($filters->has('category_id')) {
-            $category                                                                   = $filters->pull('category_id');
-            $query['query']['bool']['filter']['bool']['must'][]['terms']['category_id'] = $category->values();
+            $filter = $filters->pull('category_id');
+
+            $query['query']['bool']['filter']['bool']['must'][]['terms']['category_id'] = $filter->values();
+        }
+        if ($filters->has('brand')) {
+            $filter = $filters->pull('brand');
+
+            $query['query']['bool']['filter']['bool']['must'][]['terms']['brand_id'] = $filter->values();
         }
 
         if ($filters->has('price')) {

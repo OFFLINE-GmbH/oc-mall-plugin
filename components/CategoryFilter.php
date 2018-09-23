@@ -7,6 +7,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
+use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
@@ -64,6 +65,14 @@ class CategoryFilter extends MallComponent
     /**
      * @var boolean
      */
+    public $showBrandFilter;
+    /**
+     * @var Collection<Brand>
+     */
+    public $brands;
+    /**
+     * @var boolean
+     */
     public $includeChildren;
     /**
      * @var boolean
@@ -104,6 +113,11 @@ class CategoryFilter extends MallComponent
             ],
             'showPriceFilter'     => [
                 'title'   => 'offline.mall::lang.components.categoryFilter.properties.showPriceFilter.title',
+                'default' => '1',
+                'type'    => 'checkbox',
+            ],
+            'showBrandFilter'     => [
+                'title'   => 'offline.mall::lang.components.categoryFilter.properties.showBrandFilter.title',
                 'default' => '1',
                 'type'    => 'checkbox',
             ],
@@ -188,6 +202,7 @@ class CategoryFilter extends MallComponent
     {
         $this->setVar('currency', Currency::activeCurrency());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
+        $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
         $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
 
@@ -201,6 +216,9 @@ class CategoryFilter extends MallComponent
 
         if ($this->showPriceFilter) {
             $this->setPriceRange();
+        }
+        if ($this->showBrandFilter) {
+            $this->setBrands();
         }
 
         $this->setVar('propertyGroups', $this->getPropertyGroups());
@@ -236,6 +254,19 @@ class CategoryFilter extends MallComponent
             )
             ->whereIn('offline_mall_products.category_id', $this->categories)
             ->where('offline_mall_product_prices.currency_id', $this->currency->id);
+    }
+
+    protected function setBrands()
+    {
+        $brands = \DB::table('offline_mall_products')
+                     ->whereIn('offline_mall_products.category_id', $this->categories)
+                     ->select('offline_mall_brands.*')
+                     ->distinct()
+                     ->join('offline_mall_brands', 'offline_mall_products.brand_id', '=', 'offline_mall_brands.id')
+                     ->get()
+                     ->toArray();
+
+        $this->setVar('brands', Brand::hydrate($brands));
     }
 
     protected function getPropertyGroups()

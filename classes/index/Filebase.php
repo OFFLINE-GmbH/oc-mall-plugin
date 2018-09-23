@@ -92,7 +92,7 @@ class Filebase implements Index
         $filters = $this->applySpecialFilters($filters);
         $this->applyCustomFilters($filters);
 
-        $this->jsonq->sortBy($order->property(), $order->order());
+        $this->jsonq->sortBy($order->property(), $order->direction());
 
         return $this->jsonq->get();
     }
@@ -100,8 +100,13 @@ class Filebase implements Index
     protected function applySpecialFilters(Collection $filters): Collection
     {
         if ($filters->has('category_id')) {
-            $category = $filters->pull('category_id');
-            $this->jsonq->whereIn($category->property, $category->values());
+            $filter = $filters->pull('category_id');
+            $this->jsonq->whereIn($filter->property, $filter->values());
+        }
+
+        if ($filters->has('brand')) {
+            $filter = $filters->pull('brand');
+            $this->jsonq->whereIn('brand_id', $filter->values());
         }
 
         if ($filters->has('price')) {

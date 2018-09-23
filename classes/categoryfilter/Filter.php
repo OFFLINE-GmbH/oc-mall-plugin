@@ -7,6 +7,7 @@ abstract class Filter
     public static $specialProperties = [
         'price'       => RangeFilter::class,
         'category_id' => SetFilter::class,
+        'brand'       => SetFilter::class,
     ];
 
     public $property;

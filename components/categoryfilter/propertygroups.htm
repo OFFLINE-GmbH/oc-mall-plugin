@@ -1,3 +1,6 @@
+{% if __SELF__.showBrandFilter %}
+    {% partial __SELF__ ~ '::brands' %}
+{% endif %}
 {% if __SELF__.showPriceFilter %}
     {% partial __SELF__ ~ '::price' %}
 {% endif %}
@@ -7,6 +10,6 @@
         {% if group.description %}
             <div class="mall-property-group__description">{{ group.description }}</div>
         {% endif %}
-        {% partial __SELF__ ~ '::properties' props=group.properties %}
+        {% partial __SELF__ ~ '::properties' props=group.filterable_properties %}
     </div>
 {% endfor %}
