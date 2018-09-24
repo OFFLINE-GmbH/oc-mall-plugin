@@ -14,6 +14,9 @@ use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Product extends Model
 {
     use Validation;

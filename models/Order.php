@@ -13,6 +13,9 @@ use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use RainLab\Translate\Classes\Translator;
 use RuntimeException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Order extends Model
 {
     use Validation;
@@ -140,6 +143,10 @@ class Order extends Model
         return $order;
     }
 
+    /**
+     * This is here to provide custom rounding options for the
+     * end-user in future versions (like round to .05)
+     */
     protected function round($amount)
     {
         return round($amount);

@@ -15,6 +15,9 @@ use OFFLINE\Mall\Models\PropertyGroup;
 use Session;
 use Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class CategoryFilter extends MallComponent
 {
     /**

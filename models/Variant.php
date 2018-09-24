@@ -161,14 +161,11 @@ class Variant extends Model
 
     public function getAttribute($attribute)
     {
+        $originalValue       = parent::getAttribute($attribute);
+        $inheritanceDisabled = session()->get('mall.variants.disable-inheritance');
+
         // If any of the product relation columns are called don't override the method's default behaviour.
-        if (\in_array($attribute, ['product', 'product_id'])) {
-            return parent::getAttribute($attribute);
-        }
-
-        $originalValue = parent::getAttribute($attribute);
-
-        if (session()->get('mall.variants.disable-inheritance')) {
+        if ($inheritanceDisabled || \in_array($attribute, ['product', 'product_id'])) {
             return $originalValue;
         }
 
@@ -176,27 +173,18 @@ class Variant extends Model
 
         // In case of an empty Array or Collection we want to
         // return the parent's values
-        $emtpy = false;
-        if ($originalValue instanceof Collection) {
-            $emtpy = $originalValue->count() < 1;
-        } elseif (is_array($originalValue)) {
-            $emtpy = count($originalValue) < 1;
+        $empty = $this->isEmptyCollection($originalValue);
+
+        if ($attribute !== 'prices' || $empty) {
+            return $originalValue === null || $empty ? $parentValues : $originalValue;
         }
 
-        // Inherit parent's pricing information.
-        if ($attribute === 'prices') {
-            if ($emtpy) {
-                return $parentValues;
-            }
-
-            return $originalValue->map(function ($price) use ($parentValues) {
-                return $price->price !== null
-                    ? $price
-                    : $parentValues->where('currency_id', $price->currency_id)->first();
-            });
-        }
-
-        return $originalValue === null || $emtpy ? $parentValues : $originalValue;
+        // Inherit parent pricing info.
+        return $originalValue->map(function ($price) use ($parentValues) {
+            return $price->price !== null
+                ? $price
+                : $parentValues->where('currency_id', $price->currency_id)->first();
+        });
     }
 
     /**
@@ -329,5 +317,18 @@ class Variant extends Model
     public function getOldPriceAttribute()
     {
         return $this->mapCurrencyPrices($this->oldPrice());
+    }
+
+    protected function isEmptyCollection($originalValue): bool
+    {
+        if ($originalValue instanceof Collection) {
+            return $originalValue->count() < 1;
+        }
+
+        if (is_array($originalValue)) {
+            return count($originalValue) < 1;
+        }
+
+        return false;
     }
 }
