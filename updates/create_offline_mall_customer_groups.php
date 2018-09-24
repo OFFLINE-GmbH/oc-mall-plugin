@@ -7,8 +7,7 @@ class CreateOfflineMallCustomerGroups extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_customer_groups', function($table)
-        {
+        Schema::create('offline_mall_customer_groups', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name');

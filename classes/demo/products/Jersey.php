@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
-
 use OFFLINE\Mall\Models\ProductPrice;
 
 class Jersey extends DemoProduct

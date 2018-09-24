@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Index;
 
-
 class IndexResult
 {
     /**

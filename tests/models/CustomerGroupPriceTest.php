@@ -1,6 +1,5 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
-
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use RainLab\User\Facades\Auth;
 use OFFLINE\Mall\Models\CustomerGroup;
@@ -9,7 +8,6 @@ use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
-
 
 class CustomerGroupPriceTest extends PluginTestCase
 {

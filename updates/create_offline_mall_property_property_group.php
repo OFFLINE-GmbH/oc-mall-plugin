@@ -7,8 +7,7 @@ class CreateOfflineMallPropertyPropertyGroup extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_property_property_group', function($table)
-        {
+        Schema::create('offline_mall_property_property_group', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('property_id')->unsigned();

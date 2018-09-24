@@ -256,7 +256,6 @@ class Products extends Controller
         $currencies = Currency::get()->keyBy('code');
 
         foreach ($state as $currency => $records) {
-
             $currency = $currencies->get($currency);
 
             foreach ($records as $record) {
@@ -343,8 +342,10 @@ class Products extends Controller
 
                     $this->vars['additionalPriceCategories']
                         ->each(function (PriceCategory $category) use (&$data, $currency, $item) {
-                            $data['additional__' . $category->id] = $item->additionalPriceInCurrency
-                            ($category, $currency);
+                            $data['additional__' . $category->id] = $item->additionalPriceInCurrency(
+                                $category,
+                                $currency
+                            );
                         });
 
                     return $data;

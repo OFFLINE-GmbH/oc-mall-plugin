@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter\SortOrder;
 
-
 use OFFLINE\Mall\Models\Currency;
 
 abstract class SortOrder

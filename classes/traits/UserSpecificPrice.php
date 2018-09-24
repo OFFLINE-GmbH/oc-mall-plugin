@@ -25,5 +25,4 @@ trait UserSpecificPrice
             && optional(Auth::getUser())->offline_mall_customer_group_id !== null
             && $this->customer_group_prices->count() > 0;
     }
-
 }

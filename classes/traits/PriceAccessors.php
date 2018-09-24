@@ -3,7 +3,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;

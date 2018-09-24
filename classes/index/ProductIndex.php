@@ -3,7 +3,6 @@
 
 namespace OFFLINE\Mall\Classes\Index;
 
-
 interface ProductIndex
 {
     public function insert(ProductEntry $data);

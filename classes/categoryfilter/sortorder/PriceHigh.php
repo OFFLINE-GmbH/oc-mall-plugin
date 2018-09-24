@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter\SortOrder;
 
-
 class PriceHigh extends SortOrder
 {
     public function key(): string

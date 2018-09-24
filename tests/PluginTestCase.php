@@ -1,5 +1,6 @@
 <?php
 namespace OFFLINE\Mall\Tests;
+
 use System\Classes\PluginManager;
 
 class PluginTestCase extends \PluginTestCase

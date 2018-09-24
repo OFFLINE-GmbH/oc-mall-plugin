@@ -42,7 +42,8 @@ class CustomFieldValue extends Model
      *
      * @return null|Collection
      */
-    public function priceForFieldOption(?CustomField $field = null, ?CustomFieldOption $option = null) {
+    public function priceForFieldOption(?CustomField $field = null, ?CustomFieldOption $option = null)
+    {
         $field  = $field ?? $this->custom_field;
         $option = $option ?? optional($field->custom_field_options)->find($this->custom_field_option_id);
 

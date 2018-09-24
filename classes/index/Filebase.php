@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Index;
 
-
 use Illuminate\Support\Collection;
 use Nahid\JsonQ\Jsonq;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;

@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Models\Variant;
 

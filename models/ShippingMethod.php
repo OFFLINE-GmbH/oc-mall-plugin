@@ -119,4 +119,3 @@ class ShippingMethod extends Model
         return $base;
     }
 }
-

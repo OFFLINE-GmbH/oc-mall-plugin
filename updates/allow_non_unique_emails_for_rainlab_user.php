@@ -27,6 +27,5 @@ class AllowNonUniqueEmailsForRainlabUser extends Migration
 
     public function down()
     {
-
     }
 }

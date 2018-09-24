@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Index;
 
-
 use Elasticsearch\ClientBuilder;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;

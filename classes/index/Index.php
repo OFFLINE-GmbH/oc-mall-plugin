@@ -3,7 +3,6 @@
 
 namespace OFFLINE\Mall\Classes\Index;
 
-
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 

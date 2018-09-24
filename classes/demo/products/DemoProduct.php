@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
-
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CustomField;

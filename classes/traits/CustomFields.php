@@ -62,9 +62,9 @@ trait CustomFields
                              ->get()
                              ->mapWithKeys(function (CustomField $field) use ($values) {
                                  $value = $values->get($field->id);
-                                 if (\in_array($field->type, ['dropdown', 'image'], true)) {
-                                     $value = $this->decode($value);
-                                 }
+                                if (\in_array($field->type, ['dropdown', 'image'], true)) {
+                                    $value = $this->decode($value);
+                                }
 
                                  return [$field->id => ['field' => $field, 'value' => $value]];
                              });
