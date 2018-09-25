@@ -46,7 +46,10 @@ class Products extends Controller
             // this session variable is flashed. The Variant model checks for the
             // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
-            $this->preparePriceTable();
+
+            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER'), 'PriceTable')) {
+                $this->preparePriceTable();
+            }
         }
     }
 
@@ -62,7 +65,7 @@ class Products extends Controller
 
     public function formAfterUpdate(Product $model)
     {
-         $values = post('PropertyValues');
+        $values = post('PropertyValues');
         if ($values === null) {
             return;
         }

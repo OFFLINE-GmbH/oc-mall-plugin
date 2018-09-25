@@ -9,6 +9,7 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
+use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
@@ -23,12 +24,13 @@ class Variant extends Model
     use UserSpecificPrice;
     use Nullable;
     use PriceAccessors;
+    use ProductPriceAccessors;
     use StockAndQuantity;
 
     const MORPH_KEY = 'mall.variant';
 
     public $slugs = [];
-    public $nullable = ['image_set_id', 'stock'];
+    public $nullable = ['image_set_id'];
     public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
     public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
@@ -43,8 +45,8 @@ class Variant extends Model
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required|exists:offline_mall_products,id',
-        'stock'                        => 'integer|nullable',
-        'weight'                       => 'integer|nullable',
+        'stock'                        => 'nullable|integer',
+        'weight'                       => 'nullable|integer',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
     ];
@@ -262,61 +264,6 @@ class Variant extends Model
         }
 
         return $value !== null;
-    }
-
-    public function groupPriceInCurrency($group, $currency)
-    {
-        if ($group instanceof CustomerGroup) {
-            $group = $group->id;
-        }
-        if ($currency instanceof Currency) {
-            $currency = $currency->id;
-        }
-
-        $prices = $this->customer_group_prices;
-
-        return optional($prices->where('currency_id', $currency)->where('customer_group_id', $group)->first())
-            ->decimal;
-    }
-
-    public function additionalPriceInCurrency($category, $currency = null)
-    {
-        if ($currency === null) {
-            $currency = Currency::activeCurrency()->id;
-        }
-        if ($currency instanceof Currency) {
-            $currency = $currency->id;
-        }
-        if (is_string($currency)) {
-            $currency = Currency::whereCode($currency)->firstOrFail()->id;
-        }
-        if ($category instanceof PriceCategory) {
-            $category = $category->id;
-        }
-
-        $prices = $this->additional_prices;
-
-        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first());
-    }
-
-    public function oldPriceInCurrencyInteger($currency = null)
-    {
-        return $this->additionalPriceInCurrency(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency)->integer;
-    }
-
-    public function oldPriceInCurrency($currency = null)
-    {
-        return $this->additionalPriceInCurrency(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency);
-    }
-
-    public function oldPrice()
-    {
-        return $this->additional_prices->where('price_category_id', PriceCategory::OLD_PRICE_CATEGORY_ID);
-    }
-
-    public function getOldPriceAttribute()
-    {
-        return $this->mapCurrencyPrices($this->oldPrice());
     }
 
     protected function isEmptyCollection($originalValue): bool

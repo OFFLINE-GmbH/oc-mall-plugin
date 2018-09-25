@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
+use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
@@ -28,13 +29,14 @@ class Product extends Model
     use HashIds;
     use Nullable;
     use PriceAccessors;
+    use ProductPriceAccessors;
     use StockAndQuantity;
 
     const MORPH_KEY = 'mall.product';
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['links'];
-    public $nullable = ['stock', 'group_by_property_id'];
+    public $nullable = ['group_by_property_id'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
@@ -214,35 +216,5 @@ class Product extends Model
     {
         return ['' => trans('offline.mall::lang.common.none')]
             + $this->category->properties->pluck('name', 'id')->toArray();
-    }
-
-    public function groupPriceInCurrency($group, $currency)
-    {
-        if ($group instanceof CustomerGroup) {
-            $group = $group->id;
-        }
-        if ($currency instanceof Currency) {
-            $currency = $currency->id;
-        }
-
-        $prices = $this->customer_group_prices;
-
-        return optional($prices->where('currency_id', $currency)->where('customer_group_id', $group)->first())
-            ->decimal;
-    }
-
-    public function additionalPriceInCurrency($category, $currency)
-    {
-        if ($category instanceof PriceCategory) {
-            $category = $category->id;
-        }
-        if ($currency instanceof Currency) {
-            $currency = $currency->id;
-        }
-
-        $prices = $this->additional_prices;
-
-        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first())
-            ->decimal;
     }
 }

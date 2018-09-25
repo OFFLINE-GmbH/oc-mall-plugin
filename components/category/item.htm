@@ -17,7 +17,8 @@
                     {{ item.description_short }}
                 </div>
                 <div class="mall-category-item__old-price">
-                    {{ item.old_price ? (item.oldPriceInCurrencyFormatted() | raw) : '' }}
+                    {{ d(item.oldPriceInCurrencyFormatted()) }}
+                    {{ item.oldPrice.count > 0 ? (item.oldPriceInCurrencyFormatted() | raw) : '' }}
                 </div>
             </div>
         </div>

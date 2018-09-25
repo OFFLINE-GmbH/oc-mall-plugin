@@ -24,7 +24,7 @@ class CreateOfflineMallProducts extends Migration
             $table->integer('quantity_default')->nullable()->unsigned();
             $table->integer('quantity_min')->nullable()->unsigned();
             $table->integer('quantity_max')->nullable()->unsigned();
-            $table->integer('stock')->nullable();
+            $table->integer('stock')->default(0);
             $table->text('links')->nullable();
             $table->string('inventory_management_method')->default('single');
             $table->boolean('allow_out_of_stock_purchases')->default(false);
