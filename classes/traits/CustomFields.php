@@ -24,11 +24,11 @@ trait CustomFields
         $currencies = Currency::get();
         if ( ! $values || count($values) < 1) {
             return $currencies->mapWithKeys(function (Currency $currency) {
-                return [$currency->code => $this->priceInCurrencyInteger($currency)];
+                return [$currency->code => $this->price($currency)->integer];
             })->toArray();
         }
 
-        $price = $this->priceInCurrencyInteger();
+        $price = $this->price()->integer;
 
         return $currencies->mapWithKeys(function (Currency $currency) use ($values, $price) {
             return [

@@ -49,6 +49,7 @@ class Discount extends Model
         'name',
         'shipping_description',
     ];
+
     public static function boot()
     {
         parent::boot();
@@ -70,24 +71,24 @@ class Discount extends Model
         return trans('offline.mall::lang.discounts.triggers');
     }
 
-    public function amountInCurrencyInteger()
+    public function amountInCurrency($currency = null)
     {
-        return $this->priceInCurrencyInteger(null, 'amount');
+        return $this->price($currency, 'amount');
     }
 
-    public function totalToReachInCurrencyInteger()
+    public function totalToReachInCurrency($currency = null)
     {
-        return $this->priceInCurrencyInteger(null, 'total_to_reach');
+        return $this->price($currency, 'total_to_reach');
     }
 
-    public function alternatePriceInCurrencyInteger()
+    public function alternatePrice($currency = null)
     {
-        return $this->priceInCurrencyInteger(null, 'alternate_price');
+        return $this->price($currency, 'alternate_price');
     }
 
-    public function shippingPriceInCurrencyInteger()
+    public function shippingPrice($currency = null)
     {
-        return $this->priceInCurrencyInteger(null, 'shipping_price');
+        return $this->price($currency, 'shipping_price');
     }
 
     public function getProductIdOptions()

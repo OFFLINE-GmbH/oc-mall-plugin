@@ -30,7 +30,7 @@ class Price extends Model
 
     public function setPriceAttribute($value)
     {
-        if ($value === null) {
+        if ($value === null || $value === "") {
             return $this->attributes['price'] = null;
         }
         $this->attributes['price'] = (int)($value * 100);
@@ -61,5 +61,21 @@ class Price extends Model
         }
 
         return (int)$this->price;
+    }
+
+    public function getStringAttribute()
+    {
+        if ($this->price === null) {
+            return null;
+        }
+
+        return (string)$this;
+    }
+
+    public function __toString()
+    {
+        $model = $this instanceof Product || $this instanceof Variant ? $this : null;
+
+        return format_money($this->integer, $model);
     }
 }

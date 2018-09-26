@@ -50,27 +50,27 @@ print_r($product->price_formatted);
 
 ### Price in a specific currency 
 
-You can get the price in a specific currency by calling the `priceInCurrency`, `priceInCurrencyFormatted` or 
-`priceInCurrencyInteger` methods.
+You can get the price in a specific currency by calling the `price`, `priceFormatted` or 
+`priceInteger` methods.
 
 ```php
-echo $product->priceInCurrency();
+echo $product->price();
 
 > 20.50
 
-echo $product->priceInCurrency('EUR');
+echo $product->price('EUR');
 
 > 21.50
 
-echo $product->priceInCurrencyInteger();
+echo $product->price()->integer;
 
 > 2050
 
-echo $product->priceInCurrencyFormatted();
+echo $product->price()->string;
 
 > 'CHF 20.50'
 
-echo $product->priceInCurrencyFormatted('EUR');
+echo $product->price('EUR')->string;
 
 > '21.50 €'
 ``` 

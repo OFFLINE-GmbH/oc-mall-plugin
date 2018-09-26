@@ -10,7 +10,9 @@ use OFFLINE\Mall\Models\Variant;
 
 trait PriceAccessors
 {
-    protected function price($currency = null, $relation = 'prices')
+    use NullPrice;
+
+    protected function priceRelation($currency = null, $relation = 'prices')
     {
         if ($currency === null) {
             $currency = Currency::activeCurrency()->id;
@@ -24,28 +26,16 @@ trait PriceAccessors
 
         if (method_exists($this, 'getUserSpecificPrice')) {
             if ($specific = $this->getUserSpecificPrice()) {
-                return $specific->where('currency_id', $currency)->first();
+                return $specific->where('currency_id', $currency)->first() ?? $this->nullPrice();
             }
         }
 
-        return optional($this->$relation->where('currency_id', $currency)->first());
+        return $this->$relation->where('currency_id', $currency)->first() ?? $this->nullPrice();
     }
 
-    public function priceInCurrency($currency = null, $relation = 'prices')
+    public function price($currency = null, $relation = 'prices')
     {
-        return $this->price($currency, $relation)->decimal;
-    }
-
-    public function priceInCurrencyFormatted($currency = null, $relation = 'prices')
-    {
-        $price = $this->priceInCurrencyInteger($currency, $relation);
-
-        return format_money($price, $this);
-    }
-
-    public function priceInCurrencyInteger($currency = null, $relation = 'prices')
-    {
-        return $this->price($currency, $relation)->integer;
+        return $this->priceRelation($currency, $relation);
     }
 
     public function getPriceAttribute()

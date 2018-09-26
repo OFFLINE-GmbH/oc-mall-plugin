@@ -1,8 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Model;
-
-class CustomerGroupPrice extends Model
+class CustomerGroupPrice extends Price
 {
     use \October\Rain\Database\Traits\Validation;
 
@@ -20,36 +18,4 @@ class CustomerGroupPrice extends Model
         'priceable_type',
         'price',
     ];
-
-    public function setPriceAttribute($value)
-    {
-        $this->attributes['price'] = (int)$value * 100;
-    }
-
-    public function getFloatAttribute()
-    {
-        if ($this->price === null) {
-            return null;
-        }
-
-        return (float)($this->price / 100);
-    }
-
-    public function getDecimalAttribute()
-    {
-        if ($this->price === null) {
-            return null;
-        }
-
-        return number_format($this->price / 100, 2, '.', '');
-    }
-
-    public function getIntegerAttribute()
-    {
-        if ($this->price === null) {
-            return null;
-        }
-
-        return (int)$this->price;
-    }
 }

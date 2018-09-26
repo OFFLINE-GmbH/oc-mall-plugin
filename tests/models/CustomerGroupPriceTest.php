@@ -57,17 +57,17 @@ class CustomerGroupPriceTest extends PluginTestCase
         $price->currency_id       = 2;
         $product->customer_group_prices()->add($price);
 
-        $this->assertEquals(2000, $product->priceInCurrencyInteger());
+        $this->assertEquals(2000, $product->price()->integer);
 
         Auth::login(User::find(1)); // Is in customer group
 
-        $this->assertEquals(5000, $product->priceInCurrencyInteger());
-        $this->assertEquals(50.00, $product->priceInCurrency());
-        $this->assertEquals('CHF 50.00', $product->priceInCurrencyFormatted());
+        $this->assertEquals(5000, $product->price()->integer);
+        $this->assertEquals(50.00, $product->price()->decimal);
+        $this->assertEquals('CHF 50.00', (string)$product->price());
 
         Auth::login(User::find(2)); // Is not in customer group
 
         $product->customer_group_prices()->add($price);
-        $this->assertEquals(2000, $product->priceInCurrencyInteger());
+        $this->assertEquals(2000, $product->price()->integer);
     }
 }

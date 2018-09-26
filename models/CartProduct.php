@@ -70,7 +70,7 @@ class CartProduct extends Model
             $entry->taxes = $this->item->taxes;
 
             // Set the attribute directly to prevent the price mutator from being triggered
-            $entry->attributes['price_post_taxes'] = $this->priceInCurrencyInteger();
+            $entry->attributes['price_post_taxes'] = $this->price()->integer;
             $entry->attributes['price_taxes']      = $this->getTotalTaxesAttribute() / $this->quantity;
             $entry->attributes['price_pre_taxes']  = $this->pricePreTaxes();
 
@@ -138,10 +138,10 @@ class CartProduct extends Model
     public function getTotalPreTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
-            return $this->priceInCurrencyInteger() * $this->quantity - $this->totalTaxes;
+            return $this->price()->integer * $this->quantity - $this->totalTaxes;
         }
 
-        return $this->priceInCurrencyInteger() * $this->quantity;
+        return $this->price()->integer * $this->quantity;
     }
 
     public function getTotalTaxesAttribute(): float
@@ -149,16 +149,16 @@ class CartProduct extends Model
         if ($this->data->price_includes_tax) {
             $withoutTax = $this->pricePreTaxes();
 
-            return $this->priceInCurrencyInteger() * $this->quantity - $withoutTax;
+            return $this->price()->integer * $this->quantity - $withoutTax;
         }
 
-        return $this->taxFactor() * $this->priceInCurrencyInteger() * $this->quantity;
+        return $this->taxFactor() * $this->price()->integer * $this->quantity;
     }
 
     public function getTotalPostTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
-            return $this->priceInCurrencyInteger() * $this->quantity;
+            return $this->price()->integer * $this->quantity;
         }
 
         return $this->totalPreTaxes + $this->totalTaxes;
@@ -172,10 +172,10 @@ class CartProduct extends Model
     protected function pricePreTaxes()
     {
         if ($this->data->price_includes_tax) {
-            return 1 / (1 + $this->taxFactor()) * $this->priceInCurrencyInteger() * $this->quantity;
+            return 1 / (1 + $this->taxFactor()) * $this->price()->integer * $this->quantity;
         }
 
-        return $this->priceInCurrencyInteger() * $this->quantity;
+        return $this->price()->integer * $this->quantity;
     }
 
     public function totalForTax(Tax $tax)

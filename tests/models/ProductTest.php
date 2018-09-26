@@ -27,10 +27,9 @@ class ProductTest extends PluginTestCase
 
         $product        = Product::first();
 
-        $this->assertEquals($priceFormatted['CHF'], $product->priceInCurrencyFormatted());
-        $this->assertEquals(80.50, $product->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $product->priceInCurrency());
-        $this->assertEquals(2050, $product->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $product->priceInCurrencyFormatted('CHF'));
+        $this->assertEquals($priceFormatted['CHF'], $product->price()->string);
+        $this->assertEquals(80.50, $product->price('EUR')->decimal);
+        $this->assertEquals(20.50, $product->price()->decimal);
+        $this->assertEquals(2050, $product->price('CHF')->integer);
     }
 }

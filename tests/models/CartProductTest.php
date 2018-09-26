@@ -109,7 +109,7 @@ class CartProductTest extends PluginTestCase
 
         $variant = $cartProduct->variant;
 
-        $this->assertEquals(20000, $variant->priceInCurrencyInteger());
-        $this->assertEquals(30000, $cartProduct->priceInCurrencyInteger());
+        $this->assertEquals(20000, $variant->price()->integer);
+        $this->assertEquals(30000, $cartProduct->price()->integer);
     }
 }

@@ -4,12 +4,14 @@ use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\NullPrice;
 
 class CustomerGroup extends Model
 {
     use Validation;
     use Sortable;
     use Sluggable;
+    use NullPrice;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
@@ -26,12 +28,18 @@ class CustomerGroup extends Model
         'prices' => [CustomerGroupPrice::class],
     ];
 
-    public function priceInCurrency($currency)
+    public function price($currency)
     {
+        if ($currency === null) {
+            $currency = Currency::activeCurrency()->id;
+        }
         if ($currency instanceof Currency) {
             $currency = $currency->id;
         }
+        if (is_string($currency)) {
+            $currency = Currency::whereCode($currency)->firstOrFail()->id;
+        }
 
-        return optional($this->prices->where('currency_id', $currency)->first())->decimal;
+        return $this->prices->where('currency_id', $currency)->first() ?? $this->nullPrice();
     }
 }

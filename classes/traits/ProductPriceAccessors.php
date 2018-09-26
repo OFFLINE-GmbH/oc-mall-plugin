@@ -5,15 +5,11 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
-use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\PriceCategory;
-use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\Variant;
 
 trait ProductPriceAccessors
 {
-
-    public function groupPriceInCurrency($group, $currency)
+    public function groupPrice($group, $currency)
     {
         if ($group instanceof CustomerGroup) {
             $group = $group->id;
@@ -24,11 +20,11 @@ trait ProductPriceAccessors
 
         $prices = $this->customer_group_prices;
 
-        return optional($prices->where('currency_id', $currency)->where('customer_group_id', $group)->first())
-            ->decimal;
+        return $prices->where('currency_id', $currency)->where('customer_group_id', $group)->first()
+            ?? $this->nullPrice($currency);
     }
 
-    public function additionalPriceInCurrency($category, $currency = null)
+    public function additionalPrice($category, $currency = null)
     {
         if ($currency === null) {
             $currency = Currency::activeCurrency()->id;
@@ -45,34 +41,22 @@ trait ProductPriceAccessors
 
         $prices = $this->additional_prices;
 
-        return optional($prices->where('currency_id', $currency)->where('price_category_id', $category)->first())
-            ->decimal;
+        return $prices->where('currency_id', $currency)->where('price_category_id', $category)->first()
+            ?? $this->nullPrice($currency);
     }
 
-    public function oldPriceInCurrencyFormatted($currency = null)
-    {
-        $price = $this->oldPriceInCurrencyInteger($currency);
-
-        return format_money($price, $this);
-    }
-
-    public function oldPriceInCurrencyInteger($currency = null)
-    {
-        return $this->additionalPriceInCurrency(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency)->integer;
-    }
-
-    public function oldPriceInCurrency($currency = null)
-    {
-        return $this->additionalPriceInCurrency(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency);
-    }
-
-    public function oldPrice()
+    public function oldPriceRelations()
     {
         return $this->additional_prices->where('price_category_id', PriceCategory::OLD_PRICE_CATEGORY_ID);
     }
 
+    public function oldPrice($currency = null)
+    {
+        return $this->additionalPrice(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency);
+    }
+
     public function getOldPriceAttribute()
     {
-        return $this->mapCurrencyPrices($this->oldPrice());
+        return $this->mapCurrencyPrices($this->oldPriceRelations());
     }
 }

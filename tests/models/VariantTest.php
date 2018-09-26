@@ -152,10 +152,10 @@ class VariantTest extends PluginTestCase
         $variant = Variant::find($variant->id);
 
         $this->assertEquals($priceFormatted, $variant->price->toArray());
-        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+        $this->assertEquals(80.50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals('CHF 20.50', (string)$variant->price('CHF'));
     }
 
     public function test_price_accessors_are_inherited()
@@ -172,10 +172,10 @@ class VariantTest extends PluginTestCase
         $variant->save();
 
         $this->assertEquals($priceFormatted, $variant->price->toArray());
-        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+        $this->assertEquals(80.50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals('CHF 20.50', (string)$variant->price('CHF'));
     }
 
     public function test_explicit_null_price_accessors_are_inherited()
@@ -195,10 +195,10 @@ class VariantTest extends PluginTestCase
         $variant = Variant::find($variant->id);
 
         $this->assertEquals($priceFormatted, $variant->price->toArray());
-        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+        $this->assertEquals(80.50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals('CHF 20.50', (string)$variant->price('CHF'));
     }
 
     public function test_price_accessors_are_inherited_by_currency()
@@ -217,10 +217,10 @@ class VariantTest extends PluginTestCase
 
         $variant = Variant::find($variant->id);
         $this->assertEquals($priceFormatted, $variant->price->toArray());
-        $this->assertEquals(50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals(5000, $variant->priceInCurrencyInteger('EUR'));
+        $this->assertEquals(50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals(5000, $variant->price('EUR')->integer);
     }
 
     public function test_alternative_price_accessors()
@@ -247,10 +247,10 @@ class VariantTest extends PluginTestCase
         ]));
 
         $this->assertEquals($priceFormatted, $variant->old_price->toArray());
-        $this->assertEquals(80.50, $variant->oldPriceInCurrency('EUR')->decimal);
-        $this->assertEquals(20.50, $variant->oldPriceInCurrency()->decimal);
-        $this->assertEquals(2050, $variant->oldPriceInCurrencyInteger('CHF'));
-        $this->assertEquals(8050, $variant->oldPriceInCurrencyInteger('EUR'));
+        $this->assertEquals(80.50, $variant->oldPrice('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->oldPrice()->decimal);
+        $this->assertEquals(2050, $variant->oldPrice('CHF')->integer);
+        $this->assertEquals(8050, $variant->oldPrice('EUR')->integer);
     }
 
     public function test_stock_values()

@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Traits;
 
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 
@@ -83,46 +84,19 @@ trait JsonPrice
         return $format ? $this->formatPrice($value) : $this->roundPrice($value);
     }
 
-    /**
-     * Intercept calls to all {price}inCurrency methods.
-     */
-    public function __call($method, $parameters)
+    public function price($currency = null)
     {
-        $transformers = [
-            'Integer'             => function ($values, $currency) {
-                return array_map(function ($value) {
-                    return (int)$value * 100;
-                }, $values);
-            },
-            'InCurrency'          => function ($value, $currency) {
-                return $value;
-            },
-            'InCurrencyInteger'   => function ($value, $currency) {
-                return $value === null ? null : (int)($value * 100);
-            },
-            'InCurrencyFormatted' => function ($value, $currency) {
-                return format_money($value * 100, null, $currency);
-            },
-        ];
-
-        foreach ($transformers as $suffix => $closure) {
-            if (\in_array($method, $this->priceAccessorMethods($suffix), true)) {
-                $attr     = snake_case(preg_replace('/In(teger|Currency).*$/', '', $method));
-                $currency = $parameters[0] ?? $this->useCurrency();
-
-                $value = $this->getAttribute($attr);
-
-                if (\is_array($value)
-                    && ( ! ends_with($method, 'Integer')
-                        || ends_with($method, 'InCurrencyInteger'))) {
-                    $value = $value[$currency->code] ?? null;
-                }
-
-                return $closure($value, $currency);
-            }
+        if ($currency === null) {
+            $currency = Currency::activeCurrency();
+        }
+        if (is_string($currency)) {
+            $currency = Currency::whereCode($currency)->firstOrFail();
         }
 
-        return parent::__call($method, $parameters);
+        return new Price([
+            'price'       => $this->price[$currency->code] ?? 0,
+            'currency_id' => $currency->id,
+        ]);
     }
 
     protected function priceAccessorMethods(string $suffix): array

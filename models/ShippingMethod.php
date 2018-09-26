@@ -72,7 +72,7 @@ class ShippingMethod extends Model
 
     public function getPriceFormattedAttribute()
     {
-        return $this->priceInCurrencyFormatted();
+        return $this->price()->string;
     }
 
     public static function getAvailableByCart(Cart $cart)
@@ -89,22 +89,22 @@ class ShippingMethod extends Model
             })
             ->get()
             ->filter(function (ShippingMethod $method) use ($total) {
-                $below = $method->availableBelowTotalInCurrencyInteger();
-                $above = $method->availableAboveTotalInCurrencyInteger();
+                $below = $method->availableBelowTotalInCurrency()->integer;
+                $above = $method->availableAboveTotalInCurrency()->integer;
 
                 return ($below === null || $below > $total)
                     && ($above === null || $above <= $total);
             });
     }
 
-    public function availableBelowTotalInCurrencyInteger()
+    public function availableBelowTotalInCurrency()
     {
-        return $this->priceInCurrencyInteger(null, 'available_below_total');
+        return $this->price(null, 'available_below_total');
     }
 
-    public function availableAboveTotalInCurrencyInteger()
+    public function availableAboveTotalInCurrency()
     {
-        return $this->priceInCurrencyInteger(null, 'available_above_total');
+        return $this->price(null, 'available_above_total');
     }
 
     public function jsonSerialize()

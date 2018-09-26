@@ -158,16 +158,16 @@ trait ProductPriceTable
                         'type'        => $type,
                         'name'        => $item->name,
                         'stock'       => $item->stock,
-                        'price'       => $item->priceInCurrency($currency),
+                        'price'       => $item->price($currency),
                     ];
 
                     $this->vars['customerGroups']->each(function (CustomerGroup $group) use (&$data, $currency, $item) {
-                        $data['group__' . $group->id] = $item->groupPriceInCurrency($group, $currency) ?? null;
+                        $data['group__' . $group->id] = $item->groupPrice($group, $currency) ?? null;
                     });
 
                     $this->vars['additionalPriceCategories']
                         ->each(function (PriceCategory $category) use (&$data, $currency, $item) {
-                            $data['additional__' . $category->id] = $item->additionalPriceInCurrency(
+                            $data['additional__' . $category->id] = $item->additionalPrice(
                                 $category,
                                 $currency
                             );
