@@ -1,47 +1,72 @@
-language: php
-
-services:
-  - mysql
-
-php:
-  - 7.1
-  - 7.2
-  - nightly
-
 matrix:
   allow_failures:
     - php: nightly
 
-sudo: false
+  include:
+    - language: php
+      services:
+        - mysql
+      php:
+        - 7.1
+        - 7.2
+        - nightly
+      sudo: false
+      before_install:
+        - mysql -e 'CREATE DATABASE IF NOT EXISTS october;'
+      install:
+        - composer self-update
+        - travis_retry composer install --no-interaction --prefer-source
+      before_script:
+        - git clone https://github.com/octobercms/october.git
+        - mkdir -p ./october/plugins/offline/mall
+        - cd october
+        - composer self-update
+        - travis_retry composer install --no-interaction --prefer-source
+        - php artisan october:env
+        - php artisan key:generate
+        - echo "DB_HOST=127.0.0.1" > .env
+        - echo "DB_DATABASE=october" >> .env
+        - echo "DB_USERNAME=root" >> .env
+        - echo "DB_PASSWORD=" >> .env
+        - php artisan october:up -v
+        - php artisan plugin:install RainLab.Translate
+        - php artisan plugin:install RainLab.User
+        - php artisan plugin:install RainLab.Location
+        - cd ..
+        - mv !(october) october/plugins/offline/mall
+        - cd october
+        - php artisan october:up -v
+        - cd plugins/offline/mall
+        - composer install
+      script: ../../../vendor/bin/phpunit
 
-before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS october;'
-
-install:
-  - composer self-update
-  - travis_retry composer install --no-interaction --prefer-source
-
-before_script:
-  - git clone https://github.com/octobercms/october.git
-  - mkdir -p ./october/plugins/offline/mall
-  - cd october
-  - composer self-update
-  - travis_retry composer install --no-interaction --prefer-source
-  - php artisan october:env
-  - php artisan key:generate
-  - echo "DB_HOST=127.0.0.1" > .env
-  - echo "DB_DATABASE=october" >> .env
-  - echo "DB_USERNAME=root" >> .env
-  - echo "DB_PASSWORD=" >> .env
-  - php artisan october:up -v
-  - php artisan plugin:install RainLab.Translate
-  - php artisan plugin:install RainLab.User
-  - php artisan plugin:install RainLab.Location
-  - cd ..
-  - mv !(october) october/plugins/offline/mall
-  - cd october
-  - php artisan october:up -v
-  - cd plugins/offline/mall
-  - composer install
-
-script: ../../../vendor/bin/phpunit
+    - language: node_js
+      node_js:
+        - "10"
+       env:
+        - CXX=g++-4.8
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+      install:
+        - npm install -g vuepress
+      script:
+        - vuepress build
+      cache:
+        directories:
+          - "node_modules"
+        notifications:
+          email: false
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        local_dir: docs/dist
+        github-token: $GITHUB_TOKEN
+        repo: https://github.com/OFFLINE-GmbH/oc-mall-plugin
+        keep-history: false
+        target-branch: gh-pages
+        on:
+          branch: docs
