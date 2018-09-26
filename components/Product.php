@@ -126,13 +126,13 @@ class Product extends MallComponent
         $values  = $this->validateCustomFields(post('fields', []));
         $variant = null;
 
-        // We are adding a product
         if ($this->variantId === null) {
+            // We are adding a product
             $hasStock = $product->stock > 0 || $product->allow_out_of_stock_purchases;
         } else {
             // We are adding a product variant
             $variant  = $this->getVariantByPropertyValues(post('props'));
-            $hasStock = $variant !== null;
+            $hasStock = $variant !== null && ($variant->stock > 0 || $variant->allow_out_of_stock_purchases);
         }
 
         if ( ! $hasStock) {
@@ -312,17 +312,29 @@ class Product extends MallComponent
             return $this->decode($id);
         });
 
-        $values = PropertyValue::whereIn('id', $ids)->get(['value'])->pluck('value');
-        $value = PropertyValue::whereIn('value', $values)
-                                ->leftJoin(
-                                    'offline_mall_product_variants',
-                                    'variant_id', '=', 'offline_mall_product_variants.id'
-                                )
-                                ->whereNull('offline_mall_product_variants.deleted_at')
-                                ->select(DB::raw('variant_id, count(*) as matching_attributes'))
-                                ->groupBy(['variant_id'])
-                                ->having('matching_attributes', $values->count())
-                                ->first();
+        $query = PropertyValue
+            ::leftJoin(
+                'offline_mall_product_variants',
+                'variant_id', '=', 'offline_mall_product_variants.id'
+            )
+            ->whereNull('offline_mall_product_variants.deleted_at')
+            ->select(DB::raw('variant_id, count(*) as matching_attributes'))
+            ->groupBy(['variant_id'])
+            ->with('variant')
+            ->having('matching_attributes', count($ids));
+
+        $query->where(function ($query) use ($ids) {
+            PropertyValue::whereIn('id', $ids)
+                         ->get(['value', 'property_id'])
+                         ->each(function (PropertyValue $propertyValue) use (&$query) {
+                             $query->orWhereRaw(
+                                 '(property_id, value) = (?, ?)',
+                                 [$propertyValue->property_id, $propertyValue->value]
+                             );
+                         });
+        });
+
+        $value = $query->first();
 
         return $value ? $value->variant : null;
     }
