@@ -366,11 +366,7 @@ class Category extends Model
         })->property_groups;
 
         if ($groups) {
-            $groups->load([
-                'properties' => function ($q) {
-                    $q->wherePivot('filter_type', '<>', null);
-                },
-            ]);
+            $groups->load('properties');
         }
 
         return $groups ?? new Collection();

@@ -261,9 +261,7 @@ class Product extends MallComponent
     {
         $property = $this->getGroupedProperty($variant);
 
-        return \is_array($property->value)
-            ? json_encode($property->value)
-            : $property->value;
+        return \is_array($property->value) ? json_encode($property->value) : $property->value;
     }
 
     protected function getProps()
@@ -302,7 +300,7 @@ class Product extends MallComponent
             return collect([]);
         }
 
-        return PropertyValue::where('value', $groupedValue)
+        return PropertyValue::where('value', '<>', $groupedValue)
                             ->where('product_id', $this->product->id)
                             ->where('value', '<>', '')
                             ->whereNotNull('value')
