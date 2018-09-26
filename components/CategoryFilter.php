@@ -274,9 +274,9 @@ class CategoryFilter extends MallComponent
 
     protected function getPropertyGroups()
     {
-        return $this->category->load('property_groups.properties')
+        return $this->category->load('property_groups.filterable_properties')
             ->inherited_property_groups->reject(function (PropertyGroup $group) {
-                return $group->properties->count() < 1;
+                return $group->filterable_properties->count() < 1;
             })->sortBy('pivot.sort_order');
     }
 
@@ -286,7 +286,7 @@ class CategoryFilter extends MallComponent
      */
     protected function setProps()
     {
-        $this->props = $this->propertyGroups->flatMap->properties->unique();
+        $this->props = $this->propertyGroups->flatMap->filterable_properties->unique();
 
         $this->values = Property::getValuesForCategory($this->categories);
     }
