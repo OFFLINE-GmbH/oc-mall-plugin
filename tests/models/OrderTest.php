@@ -215,8 +215,10 @@ class OrderTest extends PluginTestCase
         $order = Order::fromCart($cart);
         $this->assertEquals($discount->shipping_description, $order->shipping['method']['name']);
         $this->assertEquals($discount->shippingPrice()->integer, $order->shipping['total']);
-        $this->assertEquals($discount->shippingPrice()->integer,
-            $order->shipping['method']['price']['CHF']['price']);
+        $this->assertEquals(
+            $discount->shippingPrice()->integer,
+            $order->shipping['method']['price']['CHF']['price']
+        );
     }
 
     public function test_discount_number_of_usages_gets_updated()
