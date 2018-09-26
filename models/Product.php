@@ -50,9 +50,12 @@ class Product extends Model
         'slug' => 'name',
     ];
     public $rules = [
-        'name'   => 'required',
-        'slug'   => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
-        'weight' => 'integer|nullable',
+        'name'                         => 'required',
+        'slug'                         => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
+        'weight'                       => 'integer|nullable',
+        'stock'                        => 'required_unless:inventory_management_method,variant',
+        'published'                    => 'boolean',
+        'allow_out_of_stock_purchases' => 'boolean',
     ];
     public $casts = [
         'price_includes_tax'           => 'boolean',
@@ -159,6 +162,13 @@ class Product extends Model
             'pivotModel' => CartProduct::class,
         ],
     ];
+
+    public function beforeCreate()
+    {
+        if ($this->inventory_management_method === 'variant' && $this->stock === null) {
+            $this->stock = 0;
+        }
+    }
 
     public function afterDelete()
     {

@@ -45,7 +45,7 @@ class Variant extends Model
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required|exists:offline_mall_products,id',
-        'stock'                        => 'nullable|integer',
+        'stock'                        => 'integer',
         'weight'                       => 'nullable|integer',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
