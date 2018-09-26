@@ -54,6 +54,7 @@ matrix:
       install:
         - npm install -g vuepress
       script:
+        - cd docs
         - vuepress build
       cache:
         directories:
