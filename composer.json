@@ -11,7 +11,7 @@
     ]
   },
   "require": {
-    "omnipay/omnipay": "^2.3",
+    "league/omnipay": "^2.3",
     "hashids/hashids": "^2.0",
     "filebase/filebase": "^1.0",
     "nahid/jsonq": "^5.2",
