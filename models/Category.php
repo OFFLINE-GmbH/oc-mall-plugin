@@ -377,28 +377,6 @@ class Category extends Model
     }
 
     /**
-     * Returns the query to get all products for an array of category ids.
-     *
-     * @param $categories
-     *
-     * @return QueryBuilder
-     */
-    public function getProductsQuery($categories, ?Collection $filters)
-    {
-        return (new VariantsInCategoriesQuery($categories, $filters))->query();
-    }
-
-    /**
-     * Returns the query to get all variants for an array of category ids.
-     *
-     * @return QueryBuilder
-     */
-    public function getVariantsQuery($categories, ?Collection $filters)
-    {
-        return (new VariantsInCategoriesQuery($categories, $filters))->query();
-    }
-
-    /**
      * Returns a flattened Collection of all available properties.
      *
      * @return Collection
