@@ -197,6 +197,8 @@
         'product_or_variant'   => 'Product/Variant',
         'code'                 => 'Code',
         'code_comment'         => 'This code can be used to identify this record programmatically',
+        'checked'              => 'Checked',
+        'unchecked'            => 'Unchecked',
     ],
     'variant'                  => [
         'method' => [
