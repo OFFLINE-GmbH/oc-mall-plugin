@@ -17,17 +17,17 @@
                     data-toggle="dropdown"
                     class="btn btn-link oc-icon-angle-down">
                 <?= e(trans('offline.mall::lang.product.price_table_modal.currency_dropdown')) ?>
-                <span class="currency-label"><?= $currencies->first() ?></span>
+                <span class="currency-label"><?= $currencies->first()->code ?></span>
             </a>
             <ul class="dropdown-menu" role="menu">
                 <?php foreach($currencies as $currency): ?>
                 <li role="presentation">
                     <a role="menuitem"
                        tabindex="-1"
-                       data-currency="<?= e($currency) ?>"
+                       data-currency="<?= e($currency->code) ?>"
                        class="js-change-currency"
                        href="javascript:;">
-                        <?= e($currency) ?>
+                        <?= e($currency->code) ?>
                     </a>
                 </li>
                 <?php endforeach; ?>
@@ -45,12 +45,13 @@
 <script>
     $(function () {
         var priceTable;
+
         // Give the widget time to render
         setTimeout(function () {
             priceTable = {
                 state: JSON.parse('<?= addslashes($pricetableState) ?>'),
                 currencyLabel: $('.currency-label'),
-                activeCurrency: '<?= $currencies->first() ?>',
+                activeCurrency: '<?= $currencies->first()->code ?>',
                 widget: $('#Table-pricetable').data('oc.table'),
 
                 init: function () {

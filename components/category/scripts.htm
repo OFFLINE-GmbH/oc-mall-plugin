@@ -11,7 +11,7 @@
                 });
             });
 
-            $('.mall-pagination--category a').on('click', function (e) {
+            $('body').on('click', '.mall-pagination--category a', function (e) {
                 e.preventDefault()
                 $.publish('mall.category.load.start')
 

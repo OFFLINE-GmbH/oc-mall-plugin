@@ -62,6 +62,7 @@ class Stripe extends PaymentProvider
             return $result;
         }
 
+
         $data               = (array)$response->getData();
         $result->successful = $response->isSuccessful();
 

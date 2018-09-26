@@ -71,6 +71,7 @@
         'currency_format'   => 'Formatierung',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Kurs zu Basiswährung',
+        'is_default'        => 'Ist Standard',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Zahlungsanbieter',
@@ -86,7 +87,7 @@
             'test_mode_comment' => 'Führe alle Zahlungen in der PayPal Sandbox aus.',
         ],
     ],
-    'general_settings' => [
+    'general_settings'         => [
         'category'                   => 'Mall',
         'label'                      => 'Grundkonfiguration',
         'description'                => 'Allgemeine Einstellungen',
@@ -214,6 +215,8 @@
     ],
     'custom_field_options'     => [
         'text'       => 'Textfeld',
+        'integer'    => 'Ganzzahl',
+        'float'      => 'Gleitkommazahl',
         'textarea'   => 'Mehrzeiliges Textfeld',
         'dropdown'   => 'Auswahlliste',
         'checkbox'   => 'Checkbox',
@@ -451,8 +454,8 @@
                 'description' => 'Zeigt alle Produkte in einer Kategorie an',
             ],
             'properties' => [
-                'use_url'       => 'Verwende Slug aus URL',
-                'show_variants' => [
+                'use_url'          => 'Verwende Slug aus URL',
+                'show_variants'    => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
                 ],
@@ -460,7 +463,7 @@
                     'title'       => 'Zeige Produkte aus Kinderkategorien an',
                     'description' => 'Zeige alle Produkte von Kinderkategorien ebenfalls an',
                 ],
-                'product_page'  => [
+                'product_page'     => [
                     'title'       => 'Produktdetails-Seite',
                     'description' => 'Seite, auf der die Produkt-Details angezeigt werden',
                 ],
@@ -475,14 +478,28 @@
                 'showPriceFilter'     => [
                     'title' => 'Zeige Preis-Filter an',
                 ],
+                'showBrandFilter'     => [
+                    'title' => 'Zeige Marken-Filter an',
+                ],
                 'includeChildren'     => [
-                    'title' => 'Zeige Filter aus Kinderkategorien auch an',
+                    'title'       => 'Zeige Filter aus Kinderkategorien auch an',
                     'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfals',
+                ],
+                'includeVariants'     => [
+                    'title'       => 'Varianten verwenden',
+                    'description' => 'Zeige Filter für alle Eigenschaften der Produktvarianten an',
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Binde noUI Slider ein',
                     'description' => 'Lädt die Abhängigkeiten für den noUI Slider via cdnjs',
                 ],
+            ],
+            'sortOrder'  => [
+                'bestseller' => 'Bestseller',
+                'priceLow'   => 'Günstigste',
+                'priceHigh'  => 'Teuerste',
+                'latest'     => 'Neuste',
+                'oldest'     => 'Älteste',
             ],
         ],
         'myAccount'             => [

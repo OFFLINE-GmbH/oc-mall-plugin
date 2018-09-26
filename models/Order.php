@@ -6,20 +6,21 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use RainLab\Translate\Classes\Translator;
-use RainLab\User\Facades\Auth;
 use RuntimeException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Order extends Model
 {
     use Validation;
     use SoftDelete;
-    use Price {
+    use JsonPrice {
         useCurrency as fallbackCurrency;
     }
     use HashIds;
@@ -99,7 +100,7 @@ class Order extends Model
 
             $order                                          = new static;
             $order->session_id                              = session()->getId();
-            $order->currency                                = CurrencySettings::activeCurrency();
+            $order->currency                                = Currency::activeCurrency();
             $order->lang                                    = Translator::instance()->getLocale();
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
             $order->billing_address                         = $cart->billing_address;
@@ -142,6 +143,10 @@ class Order extends Model
         return $order;
     }
 
+    /**
+     * This is here to provide custom rounding options for the
+     * end-user in future versions (like round to .05)
+     */
     protected function round($amount)
     {
         return round($amount);
@@ -179,7 +184,11 @@ class Order extends Model
 
     protected function useCurrency()
     {
-        return $this->currency['code'] ?? $this->fallbackCurrency();
+        if ($this->currency) {
+            return new Currency($this->currency);
+        }
+
+        return $this->fallbackCurrency();
     }
 
     /**

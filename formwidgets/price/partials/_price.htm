@@ -5,7 +5,7 @@
     <div
         id="<?= $this->getId() ?>"
         data-control="mall-price"
-        data-default-currency="<?= $defaultCurrency ?>"
+        data-default-currency="<?= $defaultCurrency->code ?>"
         data-placeholder-field="#<?= $field->getId('placeholderField') ?>"
         class="field-mall-price field-mall-price-text dropdown">
 
@@ -29,8 +29,6 @@
         </button>
 
         <?= $this->makePartial('currency_values') ?>
-
         <?= $this->makePartial('currency_selector') ?>
-
     </div>
 <?php endif ?>

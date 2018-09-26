@@ -49,20 +49,20 @@ class DiscountApplier
 
         $savings = 0;
         if ($discount->type === 'alternate_price') {
-            $this->reducedTotal        = $discount->alternatePriceInCurrencyInteger();
+            $this->reducedTotal        = $discount->alternatePrice()->integer;
             $this->reducedTotalIsFixed = true;
-            $savings                   = $this->total - $discount->alternatePriceInCurrencyInteger();
+            $savings                   = $this->total - $this->reducedTotal;
         }
 
         if ($discount->type === 'shipping') {
-            $this->reducedTotal        = $discount->shippingPriceInCurrencyInteger();
-            $savings                   = $this->cart->shipping_method->priceInCurrencyInteger() -
-                $discount->shippingPriceInCurrencyInteger();
+            $this->reducedTotal        = $discount->shippingPrice()->integer;
+            $savings                   = $this->cart->shipping_method->price()->integer -
+                $discount->shippingPrice()->integer;
             $this->reducedTotalIsFixed = true;
         }
 
         if ($discount->type === 'fixed_amount') {
-            $savings            = $discount->amountInCurrencyInteger();
+            $savings            = $discount->amountInCurrency()->integer;
             $this->reducedTotal -= $savings;
         }
 
@@ -104,7 +104,7 @@ class DiscountApplier
             return false;
         }
 
-        if ($discount->trigger === 'total' && (int)$discount->totalToReachInCurrencyInteger() <= $this->total) {
+        if ($discount->trigger === 'total' && (int)$discount->totalToReachInCurrency()->integer <= $this->total) {
             return true;
         }
 

@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
+use OFFLINE\Mall\Models\ProductPrice;
 
 class Cruiser5000 extends DemoProduct
 {
@@ -13,8 +14,6 @@ class Cruiser5000 extends DemoProduct
             'user_defined_id'              => 'MTB001',
             'name'                         => 'Cruiser 5000',
             'slug'                         => 'cruiser-5000',
-            'price'                        => ['USD' => 1995, 'CHF' => 2199, 'EUR' => 1495],
-            'old_price'                    => null,
             'description_short'            => 'The ideal beginner bike',
             'description'                  => '<p>Find your passion for mountain biking on Cruisers’ Model 5000. Whether you want to ride enduro, all-mountain, or downhill - and there\'s nothing stopping you from trying them all - this fun and friendly Cruiser Suspension Bike will help you climb and descend. This carbon mountain bike comes with fun guaranteed.</p>',
             'meta_title'                   => 'Cruiser 5000 Mountainbike',
@@ -31,6 +30,15 @@ class Cruiser5000 extends DemoProduct
             'price_includes_tax'           => true,
             'group_by_property_id'         => $this->property('wheel-size')->id,
             'published'                    => true,
+        ];
+    }
+
+    protected function prices(): array
+    {
+        return [
+            new ProductPrice(['currency_id' => 1, 'price' => 1995]),
+            new ProductPrice(['currency_id' => 2, 'price' => 1495]),
+            new ProductPrice(['currency_id' => 3, 'price' => 2199]),
         ];
     }
 
@@ -56,8 +64,7 @@ class Cruiser5000 extends DemoProduct
             [
                 'name'       => 'Cruiser 5000 27.5" S',
                 'stock'      => 4,
-                'price'      => ['USD' => 1795, 'CHF' => 2199, 'EUR' => 1295],
-                'old_price'  => ['USD' => 1995, 'CHF' => 2499, 'EUR' => 1495],
+                'price'      => $this->prices(),
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
                     'wheel-size' => '27.5"',

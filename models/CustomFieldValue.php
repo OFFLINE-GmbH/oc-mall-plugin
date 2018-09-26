@@ -2,24 +2,31 @@
 
 use Model;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Traits\Price;
+use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
 class CustomFieldValue extends Model
 {
     use Validation;
-    use Price;
+    use PriceAccessors;
 
     public $rules = [
         'cart_product_id' => 'exists:offline_mall_cart_products,id',
         'custom_field_id' => 'exists:offline_mall_custom_fields,id',
     ];
     public $table = 'offline_mall_cart_custom_field_value';
-    public $jsonable = ['price'];
-    public $with = ['custom_field_option'];
+    public $with = ['custom_field_option', 'prices'];
     public $belongsTo = [
         'cart_product'        => CartProduct::class,
         'custom_field'        => CustomField::class,
         'custom_field_option' => CustomFieldOption::class,
+    ];
+    public $morphMany = [
+        'prices' => [
+            Price::class,
+            'name'       => 'priceable',
+            'conditions' => 'price_category_id is null and field is null',
+        ],
     ];
 
     /**
@@ -33,16 +40,18 @@ class CustomFieldValue extends Model
      * @param null|CustomField       $field
      * @param null|CustomFieldOption $option
      *
-     * @return mixed|string
+     * @return null|Collection
      */
-    public function price(?CustomField $field = null, ?CustomFieldOption $option = null)
+    public function priceForFieldOption(?CustomField $field = null, ?CustomFieldOption $option = null)
     {
         $field  = $field ?? $this->custom_field;
         $option = $option ?? optional($field->custom_field_options)->find($this->custom_field_option_id);
 
-        $optionPrice = optional($option)->price;
+        $optionPrice = optional($option)->prices;
 
-        return $optionPrice ?: $field->price;
+        return $optionPrice && $optionPrice->count() > 0
+            ? $optionPrice
+            : $field->prices;
     }
 
     /**

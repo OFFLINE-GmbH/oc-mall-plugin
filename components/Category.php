@@ -3,6 +3,9 @@
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
+use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
+use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
@@ -16,6 +19,20 @@ class Category extends MallComponent
      */
     public $category;
     /**
+     * This category and all child category ids.
+     *
+     * @var array
+     */
+    public $categories;
+    /**
+     * @var bool
+     */
+    public $includeChildren;
+    /**
+     * @var bool
+     */
+    public $showVariants;
+    /**
      * @var Product|Variant
      */
     public $items;
@@ -27,6 +44,10 @@ class Category extends MallComponent
      * @var integer
      */
     public $pageNumber;
+    /**
+     * @var integer
+     */
+    public $itemCount;
     /**
      * @var string
      */
@@ -56,7 +77,7 @@ class Category extends MallComponent
             'show_variants'    => [
                 'title'       => 'offline.mall::lang.components.category.properties.show_variants.title',
                 'description' => 'offline.mall::lang.components.category.properties.show_variants.description',
-                'default'     => '0',
+                'default'     => '1',
                 'type'        => 'checkbox',
             ],
             'include_children' => [
@@ -90,36 +111,44 @@ class Category extends MallComponent
 
     protected function setData()
     {
+        $this->setVar('includeChildren', (bool)$this->property('include_children'));
+        $this->setVar('showVariants', (bool)$this->property('show_variants'));
         $this->setVar('category', $this->getCategory());
+
+        $categories = [$this->category->id];
+        if ($this->includeChildren) {
+            $categories = $this->category->getChildrenIds();
+        }
+
+        $this->setVar('categories', $categories);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
         $this->setVar('pageNumber', (int)request('page', 1));
         $this->setVar('perPage', (int)$this->property('per_page'));
-        $this->setVar('items', $this->paginate($this->getItems()));
+        $this->setVar('items', $this->getItems());
     }
 
-    protected function getItems(): Collection
+    protected function getItems(): LengthAwarePaginator
     {
-        $showVariants    = (bool)$this->property('show_variants');
-        $includeChildren = (bool)$this->property('include_children');
+        $filters = $this->getFilters();
+        $sortOrder = $this->getSortOrder();
 
-        $items = $this->applyFilters($this->category->getProducts(true, $includeChildren));
-        if ( ! $showVariants) {
-            return $items->pluck('product')->unique();
-        }
+        $model    = $this->showVariants ? new Variant() : new Product();
+        $useIndex = $this->showVariants ? 'variants' : 'products';
 
-        return $items;
+        /** @var Index $index */
+        $index  = app(Index::class);
+        $result = $index->fetch($useIndex, $filters, $sortOrder, $this->perPage, $this->pageNumber);
+
+        return $this->paginate(
+            $model->with(['image_sets.images'])->find($result->ids),
+            $result->totalCount
+        );
     }
-
-    protected function getCategory()
-    {
-        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
-    }
-
-    protected function paginate(Collection $items)
+    protected function paginate(Collection $items, int $totalCount)
     {
         $paginator = new LengthAwarePaginator(
-            $this->getPaginatorSlice($items),
-            $items->count(),
+            $items,
+            $totalCount,
             $this->perPage,
             $this->pageNumber
         );
@@ -132,12 +161,12 @@ class Category extends MallComponent
         return $paginator->setPath($pageUrl);
     }
 
-    protected function getPaginatorSlice($items)
+    protected function getCategory()
     {
-        return $items->slice(($this->pageNumber - 1) * $this->perPage, $this->perPage);
+        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
-    protected function applyFilters($items)
+    protected function getFilters()
     {
         $filter = request()->get('filter', []);
         if ( ! is_array($filter)) {
@@ -145,10 +174,13 @@ class Category extends MallComponent
         }
 
         $filters = (new QueryString())->deserialize($filter, $this->category);
-        foreach ($filters as $propertyId => $filter) {
-            $items = $filter->apply($items);
-        }
+        $filters->put('category_id', new SetFilter('category_id', $this->categories));
 
-        return $items;
+        return $filters;
+    }
+
+    protected function getSortOrder(): SortOrder
+    {
+        return SortOrder::fromKey(input('sort', SortOrder::default()));
     }
 }

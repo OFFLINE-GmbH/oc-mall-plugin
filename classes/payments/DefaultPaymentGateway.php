@@ -8,8 +8,8 @@ use Session;
 
 class DefaultPaymentGateway implements PaymentGateway
 {
-    public $provider;
-    public $providers = [];
+    protected $provider;
+    protected $providers = [];
 
     public function registerProvider(PaymentProvider $provider)
     {
@@ -59,5 +59,10 @@ class DefaultPaymentGateway implements PaymentGateway
     public function getProviders(): array
     {
         return $this->providers;
+    }
+
+    public function getActiveProvider(): PaymentProvider
+    {
+        return $this->provider;
     }
 }

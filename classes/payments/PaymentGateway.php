@@ -13,6 +13,8 @@ interface PaymentGateway
 
     public function getProviders(): array;
 
+    public function getActiveProvider(): PaymentProvider;
+
     public function init(PaymentMethod $paymentMethod, array $data);
 
     public function process(Order $order): PaymentResult;

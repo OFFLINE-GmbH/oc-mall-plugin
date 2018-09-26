@@ -1,0 +1,23 @@
+columns:
+    code:
+        label: 'offline.mall::lang.currency_settings.currency_code'
+        type: text
+        searchable: true
+    code:
+        label: 'offline.mall::lang.currency_settings.currency_code'
+        type: text
+        searchable: true
+    symbol:
+        label: 'offline.mall::lang.currency_settings.currency_symbol'
+        type: text
+        searchable: true
+    rate:
+        label: 'offline.mall::lang.currency_settings.currency_rate'
+        type: number
+    decimals:
+        label: 'offline.mall::lang.currency_settings.currency_decimals'
+        type: number
+    is_default:
+        label: 'offline.mall::lang.currency_settings.is_default'
+        type: switch
+        searchable: true

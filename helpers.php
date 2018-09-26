@@ -1,6 +1,6 @@
 <?php
 
-use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Product;
 
 if ( ! function_exists('round_money')) {
@@ -17,17 +17,15 @@ if ( ! function_exists('format_money')) {
     /**
      * Formats a price. Adds the currency if provided.
      *
-     * @param int          $value
-     * @param Product|null $product
-     * @param null         $currencyCode
+     * @param int           $value
+     * @param null|Product  $product
+     * @param null|Currency $currency
      *
      * @return string
      */
-    function format_money(?int $value, $product = null, $currencyCode = null)
+    function format_money(?int $value, $product = null, ?Currency $currency = null)
     {
-        $currency = $currencyCode
-            ? CurrencySettings::currencyByCode($currencyCode)
-            : CurrencySettings::activeCurrency();
+        $currency = $currency ?? Currency::activeCurrency();
 
         $value    = round_money($value, $currency['decimals']);
         $integers = floor($value);

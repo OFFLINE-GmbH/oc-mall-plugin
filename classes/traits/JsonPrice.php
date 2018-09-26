@@ -2,11 +2,12 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 
-trait Price
+trait JsonPrice
 {
     public $currencies;
     public $activeCurrency;
@@ -16,10 +17,10 @@ trait Price
     {
         parent::__construct(...$args);
 
-        $currencies           = collect(CurrencySettings::get('currencies'));
+        $currencies           = Currency::orderBy('is_default', 'DESC')->get();
         $this->currencies     = $currencies->keyBy('code');
         $this->baseCurrency   = $currencies->first();
-        $this->activeCurrency = CurrencySettings::activeCurrency();
+        $this->activeCurrency = Currency::activeCurrency();
     }
 
     public function getPriceColumns(): array
@@ -41,8 +42,13 @@ trait Price
             return $this->attributes[$key] = null;
         }
 
-        $this->attributes[$key] = json_encode(array_map(function ($value) {
-            return $this->isNullthy($value) ? null : (float)$value * 100;
+        $this->attributes[$key] = $this->mapJsonPrice($value);
+    }
+
+    public function mapJsonPrice($value, $factor = 100)
+    {
+        return json_encode(array_map(function ($value) use ($factor) {
+            return $this->isNullthy($value) ? null : (float)$value * $factor;
         }, $value));
     }
 
@@ -78,46 +84,19 @@ trait Price
         return $format ? $this->formatPrice($value) : $this->roundPrice($value);
     }
 
-    /**
-     * Intercept calls to all {price}inCurrency methods.
-     */
-    public function __call($method, $parameters)
+    public function price($currency = null)
     {
-        $transformers = [
-            'Integer'             => function ($values, $currency) {
-                return array_map(function ($value) {
-                    return (int)$value * 100;
-                }, $values);
-            },
-            'InCurrency'          => function ($value, $currency) {
-                return $value;
-            },
-            'InCurrencyInteger'   => function ($value, $currency) {
-                return $value === null ? null : (int)($value * 100);
-            },
-            'InCurrencyFormatted' => function ($value, $currency) {
-                return format_money($value * 100, null, $currency);
-            },
-        ];
-
-        foreach ($transformers as $suffix => $closure) {
-            if (\in_array($method, $this->priceAccessorMethods($suffix), true)) {
-                $attr     = snake_case(preg_replace('/In(teger|Currency).*$/', '', $method));
-                $currency = $parameters[0] ?? $this->useCurrency();
-
-                $value = $this->getAttribute($attr);
-
-                if (\is_array($value)
-                    && ( ! ends_with($method, 'Integer')
-                        || ends_with($method, 'InCurrencyInteger'))) {
-                    $value = $value[$currency] ?? null;
-                }
-
-                return $closure($value, $currency);
-            }
+        if ($currency === null) {
+            $currency = Currency::activeCurrency();
+        }
+        if (is_string($currency)) {
+            $currency = Currency::whereCode($currency)->firstOrFail();
         }
 
-        return parent::__call($method, $parameters);
+        return new Price([
+            'price'       => $this->price[$currency->code] ?? 0,
+            'currency_id' => $currency->id,
+        ]);
     }
 
     protected function priceAccessorMethods(string $suffix): array
@@ -171,7 +150,7 @@ trait Price
 
     protected function useCurrency()
     {
-        return $this->activeCurrency['code'];
+        return $this->activeCurrency;
     }
 
     /**

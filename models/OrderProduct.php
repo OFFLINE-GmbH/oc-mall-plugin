@@ -1,14 +1,14 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
-use OFFLINE\Mall\Classes\Traits\Price;
+use OFFLINE\Mall\Classes\Traits\JsonPrice;
 
 class OrderProduct extends Model
 {
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\SoftDelete;
 
-    use Price {
+    use JsonPrice {
         useCurrency as fallbackCurrency;
     }
 
@@ -73,6 +73,10 @@ class OrderProduct extends Model
 
     protected function useCurrency()
     {
-        return $this->order->currency['code'] ?? $this->fallbackCurrency();
+        if ($this->currency) {
+            return new Currency($this->currency);
+        }
+
+        return $this->fallbackCurrency();
     }
 }

@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use Validator;
@@ -20,16 +21,25 @@ trait CustomFields
      */
     public function priceIncludingCustomFieldValues(?Collection $values = null): array
     {
-        $price = $this->price;
+        $currencies = Currency::get();
         if ( ! $values || count($values) < 1) {
-            return $price;
+            return $currencies->mapWithKeys(function (Currency $currency) {
+                return [$currency->code => $this->price($currency)->integer];
+            })->toArray();
         }
 
-        // Add the cost of each custom field value to all available currencies.
-        return collect($price)->map(function ($price, $currency) use ($values) {
-            return $values->reduce(function ($total, CustomFieldValue $value) use ($currency) {
-                return $total += $value->price()[$currency] ?? 0;
-            }, $price);
+        $price = $this->price()->integer;
+
+        return $currencies->mapWithKeys(function (Currency $currency) use ($values, $price) {
+            return [
+                $currency->code =>
+                    $price + $values->sum(function (CustomFieldValue $value) use ($currency, $price) {
+                        $prices = $value->priceForFieldOption();
+
+                        return optional($prices->where('currency_id', $currency->id)->first())
+                            ->integer;
+                    }),
+            ];
         })->toArray();
     }
 
@@ -52,9 +62,9 @@ trait CustomFields
                              ->get()
                              ->mapWithKeys(function (CustomField $field) use ($values) {
                                  $value = $values->get($field->id);
-                                 if (\in_array($field->type, ['dropdown', 'image'], true)) {
-                                     $value = $this->decode($value);
-                                 }
+                                if (\in_array($field->type, ['dropdown', 'image'], true)) {
+                                    $value = $this->decode($value);
+                                }
 
                                  return [$field->id => ['field' => $field, 'value' => $value]];
                              });
@@ -101,7 +111,7 @@ trait CustomFields
             $value->value                  = $data['value'];
             $value->custom_field_id        = $data['field']->id;
             $value->custom_field_option_id = $option ? $option->id : null;
-            $value->price                  = $value->price($data['field'], $option);
+            $value->price                  = $value->priceForFieldOption($data['field'], $option);
 
             return $value;
         });

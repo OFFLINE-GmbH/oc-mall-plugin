@@ -1,7 +1,7 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use October\Rain\Router\Router as RainRouter;
-use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Currency;
 use Redirect;
 
 class CurrencyPicker extends MallComponent
@@ -24,8 +24,8 @@ class CurrencyPicker extends MallComponent
 
     public function onRun()
     {
-        $this->setVar('currencies', CurrencySettings::get('currencies'));
-        $this->setVar('activeCurrency', CurrencySettings::activeCurrency());
+        $this->setVar('currencies', Currency::orderBy('sort_order', 'ASC')->get());
+        $this->setVar('activeCurrency', Currency::activeCurrency());
     }
 
     public function onSwitchCurrency()
@@ -34,7 +34,7 @@ class CurrencyPicker extends MallComponent
             return;
         }
 
-        CurrencySettings::setActiveCurrency($currency);
+        Currency::setActiveCurrency(Currency::findOrFail($currency));
 
         $pageUrl = $this->getUrl();
 

@@ -7,7 +7,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class RangeFilterTest extends PluginTestCase
 {
@@ -27,7 +27,7 @@ class RangeFilterTest extends PluginTestCase
 
         $collection = collect([$hit1, $hit2, $miss]);
 
-        $filter = new RangeFilter('price', 20000, 35000);
+        $filter = new RangeFilter('price', [20000, 35000]);
         $result = $filter->apply($collection);
 
         $this->assertCount(2, $result);
@@ -63,7 +63,7 @@ class RangeFilterTest extends PluginTestCase
 
         $collection = collect([$hit1, $hit2, $miss]);
 
-        $filter = new RangeFilter($property, 200, 350);
+        $filter = new RangeFilter($property, [200, 350]);
         $result = $filter->apply($collection);
 
         $this->assertCount(2, $result);

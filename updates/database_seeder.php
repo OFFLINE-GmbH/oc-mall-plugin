@@ -12,7 +12,8 @@ use OFFLINE\Mall\Classes\Seeders\ProductTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\TaxTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\PropertyTableSeeder;
-use OFFLINE\Mall\Models\CurrencySettings;
+use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\PriceCategory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,20 +21,24 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        CurrencySettings::set('currencies', [
-            [
-                'code'     => 'CHF',
-                'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
-                'decimals' => 2,
-                'rate'     => 1,
-            ],
-            [
-                'code'     => 'EUR',
-                'format'   => '{{ price|number_format(2, ".", "\'") }}{{ currency.symbol }}',
-                'decimals' => 2,
-                'symbol'   => '€',
-                'rate'     => 1,
-            ],
+        PriceCategory::create([
+            'code' => 'old_price',
+            'name' => 'Old price',
+        ]);
+        Currency::create([
+            'is_default' => app()->runningUnitTests(),
+            'code'       => 'CHF',
+            'format'     => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
+            'decimals'   => 2,
+            'rate'       => 1,
+        ]);
+        Currency::create([
+            'is_default' => ! app()->runningUnitTests(),
+            'code'       => 'EUR',
+            'format'     => '{{ price|number_format(2, ".", "\'") }}{{ currency.symbol }}',
+            'decimals'   => 2,
+            'symbol'     => '€',
+            'rate'       => 1,
         ]);
 
         $this->call(CategoryTableSeeder::class);
@@ -46,6 +51,5 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomerTableSeeder::class);
         $this->call(PropertyTableSeeder::class);
         $this->call(OrderStateTableSeeder::class);
-
     }
 }

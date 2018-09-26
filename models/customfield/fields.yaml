@@ -4,7 +4,7 @@ fields:
         span: left
         type: switch
         comment: 'offline.mall::lang.custom_fields.required_comment'
-    price:
+    _prices:
         label: 'offline.mall::lang.product.price'
         span: right
         type: mall.price

@@ -2,15 +2,20 @@
 
 
 use App;
+use Backend\Facades\Backend;
 use Backend\Widgets\Form;
 use Cache;
 use Event;
 use Hashids\Hashids;
+use October\Rain\Database\Relations\Relation;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\Index\ElasticSearch;
+use OFFLINE\Mall\Classes\Index\Filebase;
+use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\Offline;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
@@ -23,7 +28,6 @@ use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Category as CategoryComponent;
 use OFFLINE\Mall\Components\CategoryFilter;
-use OFFLINE\Mall\Components\CategoryProducts;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
@@ -34,23 +38,28 @@ use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
+use OFFLINE\Mall\Console\ReindexProducts;
 use OFFLINE\Mall\Console\SeedDemoData;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
 use OFFLINE\Mall\Models\Category;
-use OFFLINE\Mall\Models\CurrencySettings;
 use OFFLINE\Mall\Models\CustomerGroup;
+use OFFLINE\Mall\Models\CustomField;
+use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\PropertyValue;
+use OFFLINE\Mall\Models\ShippingMethod;
+use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\User as RainLabUser;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country as RainLabCountry;
 use System\Classes\PluginBase;
 use Validator;
-use October\Rain\Database\Relations\Relation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,12 +78,30 @@ class Plugin extends PluginBase
         $this->extendPlugins();
 
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
+        $this->registerConsoleCommand('offline.mall.reindex', ReindexProducts::class);
 
+        $this->setMorphMap();
+        $this->registerObservers();
+    }
 
+    public function registerObservers()
+    {
+        Product::observe(\OFFLINE\Mall\Classes\Observers\ProductObserver::class);
+        Variant::observe(\OFFLINE\Mall\Classes\Observers\VariantObserver::class);
+        PropertyValue::observe(\OFFLINE\Mall\Classes\Observers\PropertyValueObserver::class);
+    }
+
+    public function setMorphMap()
+    {
         Relation::morphMap([
-            Variant::MORPH_KEY  => Variant::class,
-            Product::MORPH_KEY  => Product::class,
-            ImageSet::MORPH_KEY => ImageSet::class,
+            Variant::MORPH_KEY            => Variant::class,
+            Product::MORPH_KEY            => Product::class,
+            ImageSet::MORPH_KEY           => ImageSet::class,
+            Discount::MORPH_KEY           => Discount::class,
+            CustomField::MORPH_KEY        => CustomField::class,
+            ShippingMethod::MORPH_KEY     => ShippingMethod::class,
+            CustomFieldOption::MORPH_KEY  => CustomFieldOption::class,
+            ShippingMethodRate::MORPH_KEY => ShippingMethodRate::class,
         ]);
     }
 
@@ -126,7 +153,7 @@ class Plugin extends PluginBase
                 'description' => 'offline.mall::lang.currency_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',
                 'icon'        => 'icon-money',
-                'class'       => CurrencySettings::class,
+                'url'         => Backend::url('offline/mall/currencies'),
                 'order'       => 20,
                 'permissions' => ['offline.mall.settings.manage_currency'],
                 'keywords'    => 'shop store mall currency',
@@ -192,6 +219,9 @@ class Plugin extends PluginBase
         });
         $this->app->bind(SignUpHandler::class, function () {
             return new DefaultSignUpHandler();
+        });
+        $this->app->bind(Index::class, function () {
+            return new Filebase();
         });
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();

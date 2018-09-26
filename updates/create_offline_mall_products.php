@@ -15,8 +15,6 @@ class CreateOfflineMallProducts extends Migration
             $table->string('user_defined_id')->nullable();
             $table->string('name', 255);
             $table->string('slug', 255);
-            $table->text('price');
-            $table->text('old_price')->nullable();
             $table->string('description_short', 255)->nullable();
             $table->text('description')->nullable();
             $table->string('meta_title', 255)->nullable();
@@ -26,7 +24,7 @@ class CreateOfflineMallProducts extends Migration
             $table->integer('quantity_default')->nullable()->unsigned();
             $table->integer('quantity_min')->nullable()->unsigned();
             $table->integer('quantity_max')->nullable()->unsigned();
-            $table->integer('stock')->nullable();
+            $table->integer('stock')->default(0);
             $table->text('links')->nullable();
             $table->string('inventory_management_method')->default('single');
             $table->boolean('allow_out_of_stock_purchases')->default(false);
@@ -35,6 +33,7 @@ class CreateOfflineMallProducts extends Migration
             $table->boolean('price_includes_tax')->default(true);
             $table->integer('group_by_property_id')->nullable();
             $table->boolean('published')->default(false);
+            $table->integer('sales_count')->default(0)->unsigned();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

@@ -4,35 +4,32 @@ use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
-use Backend\Widgets\Table;
 use BackendMenu;
 use October\Rain\Database\Models\DeferredBinding;
-use OFFLINE\Mall\Models\CurrencySettings;
-use OFFLINE\Mall\Models\CustomerGroup;
-use OFFLINE\Mall\Models\CustomerGroupPrice;
+use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use OFFLINE\Mall\Models\Variant;
 
 class Products extends Controller
 {
+    use ProductPriceTable;
+
     public $implement = [
         ListController::class,
         FormController::class,
         RelationController::class,
     ];
-
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
     public $relationConfig = 'config_relation.yaml';
-
     public $requiredPermissions = [
         'offline.mall.manage_products',
     ];
-
     protected $optionFormWidget;
 
     public function __construct()
@@ -49,8 +46,21 @@ class Products extends Controller
             // this session variable is flashed. The Variant model checks for the
             // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
-            $this->preparePriceTable();
+
+            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER'), 'PriceTable')) {
+                $this->preparePriceTable();
+            }
         }
+    }
+
+    /**
+     * Save the initial price into the prices table.
+     *
+     * @param Product $model
+     */
+    public function formAfterCreate(Product $model)
+    {
+        $this->updateProductPrices($model, null, '_initial_price');
     }
 
     public function formAfterUpdate(Product $model)
@@ -64,9 +74,8 @@ class Products extends Controller
 
         foreach ($values as $id => $value) {
             $pv = PropertyValue::firstOrNew([
-                'describable_id'   => $model->id,
-                'describable_type' => Product::MORPH_KEY,
-                'property_id'      => $id,
+                'product_id'  => $model->id,
+                'property_id' => $id,
             ]);
 
             $pv->value = $value;
@@ -98,6 +107,8 @@ class Products extends Controller
         $model = CustomFieldOption::findOrNew(post('edit_id'));
         $model->fill($data);
         $model->save(null, $this->optionFormWidget->getSessionKey());
+
+        $this->updatePrices($model);
 
         $field = $this->getCustomFieldModel();
         $field->custom_field_options()->add($model, $this->optionFormWidget->getSessionKey());
@@ -183,115 +194,55 @@ class Products extends Controller
         ];
     }
 
-    public function onLoadPriceTable()
+    public function onRelationManageUpdate()
     {
-        return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
+        $parent = parent::onRelationManageUpdate();
+
+        // Store the pricing information with the custom fields.
+        if ($this->relationName === 'custom_fields') {
+            $model = $this->relationModel->find($this->vars['relationManageId']);
+            $this->updatePrices($model, '_prices');
+        } elseif ($this->relationName === 'variants') {
+            $variant = $this->relationModel->find($this->vars['relationManageId']);
+            $this->updateProductPrices($this->vars['formModel'], $variant);
+        }
+
+        return $parent;
     }
 
-    protected function preparePriceTable()
+    protected function updatePrices($model, $key = 'prices')
     {
-        $config = $this->makeConfig('config_table.yaml');
-
-        $customerGroups = CustomerGroup::orderBy('sort_order', 'ASC')->get();
-        $customerGroups->each(function (CustomerGroup $group) use ($config) {
-            $config->columns[$group->code] = [
-                'title' => sprintf(
-                    '%s %s',
-                    trans('offline.mall::lang.product.price'),
-                    $group->name
-                ),
-            ];
-        });
-        $this->vars['customerGroups'] = $customerGroups;
-
-        $widget = $this->makeFormWidget(Table::class, $config);
-        $widget->bindToController();
-
-        $model     = Product::with([
-            'customer_group_prices',
-            'variants',
-            'variants.customer_group_prices',
-        ])->find($this->params[0]);
-        $tableData = $model->variants->prepend($model);
-
-        $this->vars['pricetable']      = $widget;
-        $this->vars['currencies']      = CurrencySettings::currencies();
-        $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
-    }
-
-    public function onPriceTablePersist()
-    {
-        $states        = post('state', []);
-        $state         = [];
-        $firstCurrency = true;
-        $priceCols     = $this->vars['customerGroups']
-            ->pluck('code')
-            ->merge((new Product())->getPriceColumns())
-            ->toArray();
-
-        collect($states)->each(function ($records, $currency) use (&$state, &$firstCurrency, $priceCols) {
-            foreach ($records as $record) {
-                if ($firstCurrency) {
-                    $state[$record['id']] = $record;
-                    foreach ($priceCols as $priceCol) {
-                        $state[$record['id']][$priceCol] = [];
-                    }
-                }
-
-                foreach ($priceCols as $priceCol) {
-                    $state[$record['id']][$priceCol][$currency] = $record[$priceCol];
-                }
+        $data = post('MallPrice');
+        foreach ($data as $currency => $_data) {
+            $value = array_get($_data, $key);
+            if ($value === "") {
+                $value = null;
             }
-            $firstCurrency = false;
-        });
 
-        foreach ($state as $record) {
-            $type  = $record['type'] === 'product' ? Product::class : Variant::class;
-            $model = (new $type)->find($record['original_id']);
-            $model->forceFill(array_only($record, ['stock', 'price', 'old_price']));
-            $model->save();
-
-            foreach ($this->vars['customerGroups'] as $group) {
-                if (count(array_filter($record[$group['code']])) < 1) {
-                    continue;
-                }
-
-                CustomerGroupPrice::updateOrCreate(
-                    [
-                        'customer_group_id' => $group['id'],
-                        'priceable_type'    => $type,
-                        'priceable_id'      => $record['original_id'],
-                    ],
-                    ['price' => $record[$group['code']]]
-                );
-            }
+            Price::updateOrCreate([
+                'price_category_id' => null,
+                'priceable_id'      => $model->id,
+                'priceable_type'    => $model::MORPH_KEY,
+                'currency_id'       => $currency,
+            ], [
+                'price' => $value,
+            ]);
         }
     }
 
-    protected function processTableData($data)
+    protected function updateProductPrices($product, $variant, $key = '_prices')
     {
-        return $this->vars['currencies']->map(function ($currency) use ($data) {
-            return $data->map(function ($item) use ($currency) {
-                $type = $item instanceof Variant ? 'variant' : 'product';
+        $data = post('MallPrice');
+        foreach ($data as $currency => $_data) {
+            $value = array_get($_data, $key);
 
-                $data = [
-                    'id'          => $type . '-' . $item->id,
-                    'original_id' => $item->id,
-                    'type'        => $type,
-                    'name'        => $item->name,
-                    'stock'       => $item->stock,
-                    'price'       => $item->priceInCurrency($currency),
-                    'old_price'   => $item->oldPriceInCurrency($currency),
-                ];
-
-                $prices = $item->customer_group_prices->keyBy('customer_group_id');
-
-                $this->vars['customerGroups']->each(function (CustomerGroup $group) use (&$data, $prices, $currency) {
-                    $data[$group->code] = optional($prices->get($group->id))->priceInCurrency($currency) ?? null;
-                });
-
-                return $data;
-            });
-        });
+            ProductPrice::updateOrCreate([
+                'currency_id' => $currency,
+                'product_id'  => $product->id,
+                'variant_id'  => $variant->id ?? null,
+            ], [
+                'price' => $value,
+            ]);
+        }
     }
 }

@@ -11,7 +11,5 @@ columns:
         readOnly: true
     stock:
         title: offline.mall::lang.product.stock
-    old_price:
-        title: offline.mall::lang.common.old_price
     price:
         title: offline.mall::lang.product.price

@@ -2,32 +2,19 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter;
 
-use Illuminate\Support\Collection;
-
 class RangeFilter extends Filter
 {
     public $minValue;
     public $maxValue;
 
-    public function __construct($property, $minValue, $maxValue)
+    public function __construct($property, array $values)
     {
         parent::__construct($property);
-        $this->minValue = $minValue;
-        $this->maxValue = $maxValue;
+        $this->minValue = $values[0];
+        $this->maxValue = $values[1];
     }
 
-    public function apply(Collection $items): Collection
-    {
-        return $this->setFilterValues($items)->filter(function ($item) {
-            $minValue = $this->minValue ? $this->minValue : 0;
-            $maxValue = $this->maxValue ? $this->maxValue : PHP_INT_MAX;
-
-            return (float)$item->filter_value >= (float)$minValue
-                && (float)$item->filter_value <= (float)$maxValue;
-        });
-    }
-
-    public function getValues(): array
+    public function values(): array
     {
         return [
             'min' => $this->minValue,

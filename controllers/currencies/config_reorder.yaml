@@ -1,0 +1,5 @@
+title: Currencies
+modelClass: OFFLINE\Mall\Models\Currency
+nameFrom: code
+toolbar:
+    buttons: reorder_toolbar

@@ -14,20 +14,19 @@ class PropertyValue extends Model
     ];
     public $fillable = [
         'value',
-        'describable_id',
-        'describable_type',
+        'product_id',
+        'variant_id',
         'property_id',
     ];
     public $with = ['property'];
     public $table = 'offline_mall_property_values';
     public $belongsTo = [
         'property' => [Property::class, 'deleted' => true],
+        'product'  => [Product::class],
+        'variant'  => [Variant::class],
     ];
     public $attachOne = [
         'image' => File::class,
-    ];
-    public $morphTo = [
-        'describable' => [],
     ];
 
     /**
@@ -49,16 +48,29 @@ class PropertyValue extends Model
 
     public function getValueAttribute()
     {
-        return optional($this->property)->type === 'color'
-            ? json_decode($this->getOriginal('value'), true)
-            : $this->getOriginal('value');
+        $type  = optional($this->property)->type;
+        $value = $this->getOriginal('value');
+
+        if ($type === 'float') {
+            return (float)$value;
+        }
+
+        if ($type === 'integer') {
+            return (int)$value;
+        }
+
+        if ($type === 'color') {
+            return json_decode($this->getOriginal('value'), true);
+        }
+
+        return $value;
     }
 
     /**
      * This attribute can be used if a safe string value
      * is needed even if the value is an array.
      */
-    public function getSafeValueAttribute(): string
+    public function getSafeValueAttribute()
     {
         return \is_array($this->value) ? json_encode($this->value) : $this->value;
     }
@@ -72,7 +84,7 @@ class PropertyValue extends Model
     {
         if ($this->property->type === 'color') {
             return sprintf(
-                '<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s" title="%s"></span>',
+                '<span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: %s" title="%s"></span>',
                 $this->value['hex'],
                 $this->value['name'] ?? ''
             );

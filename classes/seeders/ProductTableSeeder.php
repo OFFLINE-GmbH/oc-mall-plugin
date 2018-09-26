@@ -16,8 +16,8 @@ class ProductTableSeeder extends Seeder
 
                 $product->slug  = 'test';
                 $product->stock = 20;
-                $product->price = ['CHF' => 20, 'EUR' => 30];
                 $product->save();
+                $product->price = ['CHF' => 20, 'EUR' => 30];
             } catch (\Throwable $e) {
                 dd($e);
             }

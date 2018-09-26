@@ -19,52 +19,46 @@ class QueryString
             return collect([]);
         }
 
-        $specialProperties = $query
-            ->keys()
-            ->intersect(Filter::$specialProperties)
-            ->map(function ($property) use ($query) {
-                $values = $query->get($property);
+        // Map the special properties since they won't be found in the database.
+        $specialProperties = collect(Filter::$specialProperties)->mapWithKeys(function ($type, $prop) use ($query) {
+            if ( ! $query->has($prop)) {
+                return [];
+            }
 
-                return new RangeFilter(
-                    $property,
-                    $values['min'] ?? null,
-                    $values['max'] ?? null
-                );
-            });
+            return [$prop => new $type($prop, array_values($query->get($prop)))];
+        });
 
         $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
-        return $properties->map(function (Property $property) use ($query) {
+        // Map the user defined database properties.
+        return $properties->mapWithKeys(function (Property $property) use ($query) {
             if ($property->pivot->filter_type === 'set') {
-                return new SetFilter($property, $query->get($property->slug));
+                return [$property->slug => new SetFilter($property, $query->get($property->slug))];
             }
             if ($property->pivot->filter_type === 'range') {
                 $values = $query->get($property->slug);
 
-                return new RangeFilter(
-                    $property,
-                    $values['min'] ?? null,
-                    $values['max'] ?? null
-                );
+                return [
+                    $property->slug => new RangeFilter(
+                        $property,
+                        [
+                            $values['min'] ?? null,
+                            $values['max'] ?? null,
+                        ]
+                    ),
+                ];
             }
-        })->concat($specialProperties)->keyBy(function ($item) {
-            return $item->property->slug ?? $item->property;
-        });
+        })->union($specialProperties);
     }
 
-    public function serialize(Collection $filter)
+    public function serialize(Collection $filter, string $sortOrder)
     {
         $filter = $filter->mapWithKeys(function (Filter $filter, $property) {
             return [
-                $property => $filter->getValues(),
+                $property => $filter->values(),
             ];
         });
 
-        return http_build_query(['filter' => $filter->toArray()]);
-    }
-
-    protected function isSpecialProperty(string $prop): bool
-    {
-        return \in_array($prop, Filter::$specialProperties, true);
+        return http_build_query(['filter' => $filter->toArray(), 'sort' => $sortOrder]);
     }
 }

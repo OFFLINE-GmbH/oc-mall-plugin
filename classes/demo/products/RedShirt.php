@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
+use OFFLINE\Mall\Models\ProductPrice;
 
 class RedShirt extends DemoProduct
 {
@@ -36,6 +37,15 @@ class RedShirt extends DemoProduct
     protected function taxes(): array
     {
         return [1];
+    }
+
+    protected function prices(): array
+    {
+        return [
+            new ProductPrice(['currency_id' => 1, 'price' => 9.90]),
+            new ProductPrice(['currency_id' => 2, 'price' => 11.90]),
+            new ProductPrice(['currency_id' => 3, 'price' => 6.90]),
+        ];
     }
 
     protected function properties(): array

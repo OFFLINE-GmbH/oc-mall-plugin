@@ -7,16 +7,17 @@ class CreateOfflineMallCustomerGroupPrices extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_customer_group_prices', function($table)
-        {
+        Schema::create('offline_mall_customer_group_prices', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('customer_group_id')->unsigned();
+            $table->integer('currency_id')->unsigned();
             $table->integer('priceable_id')->unsigned();
             $table->string('priceable_type');
-            $table->text('price');
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
+            $table->integer('price');
+            $table->timestamps();
+
+            $table->unique(['customer_group_id', 'priceable_id', 'priceable_type', 'currency_id'], 'unique_price');
         });
     }
     

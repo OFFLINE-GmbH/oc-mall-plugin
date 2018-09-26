@@ -64,6 +64,9 @@ class PropertyFields extends FormWidgetBase
                 return $this->checkbox($property, $value);
             case 'image':
                 return $this->image($property, $value);
+            case 'float':
+            case 'integer':
+                return $this->textfield($property, $value, 'number');
             default:
                 return $this->textfield($property, $value);
         }
@@ -88,9 +91,9 @@ class PropertyFields extends FormWidgetBase
         );
     }
 
-    private function textfield($property, $value)
+    private function textfield($property, $value, $type = 'text')
     {
-        return $this->makePartial('textfield', ['field' => $property, 'value' => $value]);
+        return $this->makePartial('textfield', ['field' => $property, 'value' => $value, 'type' => $type]);
     }
 
     private function textarea($property, $value)

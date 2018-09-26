@@ -10,15 +10,15 @@ use OFFLINE\Mall\Classes\Demo\Products\Cruiser3500;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser5000;
 use OFFLINE\Mall\Classes\Demo\Products\Jersey;
 use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Index\ProductEntry;
+use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
-use OFFLINE\Mall\Models\CurrencySettings;
-use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
-use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\Variant;
 use Symfony\Component\Console\Input\InputOption;
 
 class SeedDemoData extends Command
@@ -73,6 +73,10 @@ class SeedDemoData extends Command
           ->where('attachment_type', 'LIKE', 'OFFLINE%Mall%')
           ->orWhere('attachment_type', 'LIKE', 'mall.%')
           ->delete();
+
+        $index = app(Index::class);
+        $index->drop(ProductEntry::INDEX);
+        $index->drop(VariantEntry::INDEX);
     }
 
     protected function createProducts()
@@ -230,13 +234,13 @@ class SeedDemoData extends Command
         ]);
         $fork       = Property::create([
             'name' => 'Fork travel',
-            'type' => 'text',
+            'type' => 'integer',
             'unit' => 'mm',
             'slug' => 'fork-travel',
         ]);
         $rear       = Property::create([
             'name' => 'Rear travel',
-            'type' => 'text',
+            'type' => 'integer',
             'unit' => 'mm',
             'slug' => 'rear-travel',
         ]);
@@ -299,27 +303,26 @@ class SeedDemoData extends Command
     protected function createCurrencies()
     {
         $this->output->writeln('Creating currencies...');
-        CurrencySettings::set('currencies', [
-            [
-                'code'     => 'USD',
-                'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
-                'decimals' => 2,
-                'symbol'   => '$',
-                'rate'     => 1,
-            ],
-            [
-                'code'     => 'EUR',
-                'format'   => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
-                'decimals' => 2,
-                'symbol'   => '€',
-                'rate'     => 1,
-            ],
-            [
-                'code'     => 'CHF',
-                'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
-                'decimals' => 2,
-                'rate'     => 1,
-            ],
+        DB::table('offline_mall_currencies')->truncate();
+        Currency::create([
+            'code'     => 'USD',
+            'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
+            'decimals' => 2,
+            'symbol'   => '$',
+            'rate'     => 1,
+        ]);
+        Currency::create([
+            'code'     => 'EUR',
+            'format'   => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
+            'decimals' => 2,
+            'symbol'   => '€',
+            'rate'     => 1,
+        ]);
+        Currency::create([
+            'code'     => 'CHF',
+            'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
+            'decimals' => 2,
+            'rate'     => 1,
         ]);
     }
 

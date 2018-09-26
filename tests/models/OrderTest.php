@@ -12,12 +12,13 @@ use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderState;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 use RainLab\User\Facades\Auth;
 
 class OrderTest extends PluginTestCase
@@ -190,27 +191,34 @@ class OrderTest extends PluginTestCase
     public function test_it_uses_the_correct_discounted_shipping_method()
     {
         $cart   = $this->getSimpleCart(true);
-        $method = $cart->shipping_method;
+        $method = ShippingMethod::find($cart->shipping_method->id);
 
         $this->assertEquals(1, $method->id);
         $this->assertEquals('Default', $method->name);
-        $this->assertEquals(20, $method->price['CHF']);
 
         $discount                       = new Discount();
         $discount->name                 = 'Shipping Test';
         $discount->type                 = 'shipping';
         $discount->trigger              = 'code';
         $discount->code                 = 'SHIPPING';
-        $discount->shipping_price       = ['CHF' => 10, 'EUR' => 300];
         $discount->shipping_description = 'Reduced shipping';
         $discount->save();
+
+        $discount->shipping_price()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 10,
+            'field'       => 'shipping_price',
+        ]));
 
         $cart->applyDiscount($discount);
 
         $order = Order::fromCart($cart);
         $this->assertEquals($discount->shipping_description, $order->shipping['method']['name']);
-        $this->assertEquals($discount->shippingPriceInCurrencyInteger(), $order->shipping['total']);
-        $this->assertEquals($discount->shippingPriceInCurrencyInteger(), $order->shipping['method']['price']['CHF']);
+        $this->assertEquals($discount->shippingPrice()->integer, $order->shipping['total']);
+        $this->assertEquals(
+            $discount->shippingPrice()->integer,
+            $order->shipping['method']['price']['CHF']['price']
+        );
     }
 
     public function test_discount_number_of_usages_gets_updated()
@@ -220,20 +228,34 @@ class OrderTest extends PluginTestCase
         $discount1->name                 = 'Shipping Test';
         $discount1->type                 = 'shipping';
         $discount1->trigger              = 'total';
-        $discount1->total_to_reach       = ['CHF' => 0, 'EUR' => 0];
-        $discount1->shipping_price       = ['CHF' => 10, 'EUR' => 300];
         $discount1->shipping_description = 'Reduced shipping';
         $discount1->number_of_usages     = 10;
         $discount1->save();
 
+        $discount1->shipping_price()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 10,
+            'field'       => 'shipping_price',
+        ]));
+        $discount1->total_to_reach()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 0,
+            'field'       => 'total_to_reach',
+        ]));
+
         $discount2                   = new Discount();
         $discount2->name             = 'Amount Test';
         $discount2->type             = 'fixed_amount';
-        $discount2->amount           = ['CHF' => 20, 'EUR' => 300];
         $discount2->trigger          = 'code';
         $discount2->code             = 'TEST';
         $discount2->number_of_usages = 12;
         $discount2->save();
+
+        $discount2->amount()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 20,
+            'field'       => 'amount',
+        ]));
 
         $discount3                   = new Discount();
         $discount3->name             = 'Amount Test';
@@ -267,30 +289,41 @@ class OrderTest extends PluginTestCase
 
         $productA                     = Product::first();
         $productA->stackable          = true;
-        $productA->price              = ['CHF' => 200, 'EUR' => 300];
         $productA->weight             = 400;
         $productA->stock              = 10;
         $productA->price_includes_tax = true;
         $productA->save();
+        $productA->price = ['CHF' => 200, 'EUR' => 300];
         $productA->taxes()->attach([$tax1->id, $tax2->id]);
+        $productA = Product::find($productA->id);
 
         $productB                     = new Product;
         $productB->name               = 'Another Product';
-        $productB->price              = ['CHF' => 100, 'EUR' => 300];
         $productB->stock              = 10;
         $productB->weight             = 800;
         $productB->price_includes_tax = true;
         $productB->save();
+        $productB->price = ['CHF' => 100, 'EUR' => 300];
         $productB->taxes()->attach([$tax1->id, $tax2->id]);
+        $productB = Product::find($productB->id);
 
         $sizeA             = new CustomFieldOption();
         $sizeA->name       = 'Size A';
-        $sizeA->price      = ['CHF' => 100, 'EUR' => 300];
         $sizeA->sort_order = 1;
+        $sizeA->save();
+        $sizeA->prices()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 1,
+        ]));
+
         $sizeB             = new CustomFieldOption();
         $sizeB->name       = 'Size B';
-        $sizeB->price      = ['CHF' => 200, 'EUR' => 300];
         $sizeB->sort_order = 1;
+        $sizeB->save();
+        $sizeB->prices()->save(new Price([
+            'price'       => 200,
+            'currency_id' => 1,
+        ]));
 
         $field       = new CustomField();
         $field->name = 'Size';
@@ -315,9 +348,9 @@ class OrderTest extends PluginTestCase
         $cart->addProduct($productA, 1, null, collect([$customFieldValueB]));
         $cart->addProduct($productB, 2);
 
-        $shippingMethod        = ShippingMethod::first();
-        $shippingMethod->price = ['CHF' => 100, 'EUR' => 300];
+        $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 300];
 
         $shippingMethod->taxes()->attach([$tax1->id, $tax2->id]);
 
@@ -334,14 +367,16 @@ class OrderTest extends PluginTestCase
     protected function getSimpleCart($withProduct = false): Cart
     {
         $cart = new Cart();
-        if($withProduct) {
+        if ($withProduct) {
             $product                     = Product::first();
             $product->stackable          = true;
-            $product->price              = ['CHF' => 200, 'EUR' => 300];
             $product->weight             = 400;
             $product->stock              = 10;
             $product->price_includes_tax = true;
             $product->save();
+            $product->price = ['CHF' => 200, 'EUR' => 300];
+
+            $product = Product::first();
 
             $cart->addProduct($product, 2);
         }

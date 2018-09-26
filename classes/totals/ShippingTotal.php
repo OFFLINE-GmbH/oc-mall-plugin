@@ -84,7 +84,7 @@ class ShippingTotal implements \JsonSerializable
         }
 
         $method = $this->method;
-        $price  = $method->priceInCurrencyInteger();
+        $price  = $method->price()->integer;
 
         // If there are special rates let's see if they
         // need to be applied.
@@ -99,7 +99,7 @@ class ShippingTotal implements \JsonSerializable
             });
 
             if ($matchingRate) {
-                $price = $matchingRate->priceInCurrencyInteger();
+                $price = $matchingRate->price()->integer;
             }
         }
 
@@ -147,14 +147,14 @@ class ShippingTotal implements \JsonSerializable
 
         $method = $this->method->replicate(['id', 'name', 'price']);
 
-        $discount      = $this->appliedDiscount['discount'];
-        $method->name  = $discount->shipping_description;
-        $method->price = $discount->shipping_price;
+        $discount     = $this->appliedDiscount['discount'];
+        $method->name = $discount->shipping_description;
+        $method->setRelation('prices', $discount->shipping_price);
 
         return $method;
     }
 
-    private function applyDiscounts(int $price): float
+    private function applyDiscounts(int $price): ?float
     {
         $discounts = Discount::whereIn('trigger', ['total', 'product'])
                              ->where('type', 'shipping')

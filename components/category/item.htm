@@ -9,7 +9,7 @@
                     {{ item.name }}
                 </div>
                 <div class="mall-category-item__price">
-                    {{ item.priceInCurrencyFormatted() | raw }}
+                    {{ item.price() | raw }}
                 </div>
             </div>
             <div class="row flex">
@@ -17,7 +17,7 @@
                     {{ item.description_short }}
                 </div>
                 <div class="mall-category-item__old-price">
-                    {{ item.old_price ? (item.oldPriceInCurrencyFormatted() | raw) : '' }}
+                    {{ item.oldPrice.count > 0 ? (item.oldPrice() | raw) : '' }}
                 </div>
             </div>
         </div>

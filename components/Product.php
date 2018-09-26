@@ -8,8 +8,6 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
-use OFFLINE\Mall\Models\CustomField;
-use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -300,18 +298,8 @@ class Product extends MallComponent
             return collect([]);
         }
 
-        $ids = PropertyValue::where('value', $groupedValue)
-                            ->where('describable_type', Variant::MORPH_KEY)
+        return PropertyValue::where('value', $groupedValue)
                             ->where('product_id', $this->product->id)
-                            ->leftJoin(
-                                'offline_mall_product_variants',
-                                'offline_mall_property_values.describable_id', '=', 'offline_mall_product_variants.id')
-                            ->get(['describable_id'])
-                            ->pluck('describable_id')
-                            ->unique();
-
-        return PropertyValue::whereIn('describable_id', $ids)
-                            ->where('describable_type', Variant::MORPH_KEY)
                             ->where('value', '<>', '')
                             ->whereNotNull('value')
                             ->get()
@@ -325,20 +313,18 @@ class Product extends MallComponent
         });
 
         $values = PropertyValue::whereIn('id', $ids)->get(['value'])->pluck('value');
-
-        $variant = PropertyValue::whereIn('value', $values)
+        $value = PropertyValue::whereIn('value', $values)
                                 ->leftJoin(
                                     'offline_mall_product_variants',
-                                    'describable_id', '=', 'offline_mall_product_variants.id'
+                                    'variant_id', '=', 'offline_mall_product_variants.id'
                                 )
-                                ->where('describable_type', Variant::MORPH_KEY)
                                 ->whereNull('offline_mall_product_variants.deleted_at')
-                                ->select(DB::raw('describable_type, describable_id, count(*) as matching_attributes'))
-                                ->groupBy(['describable_id', 'describable_type'])
+                                ->select(DB::raw('variant_id, count(*) as matching_attributes'))
+                                ->groupBy(['variant_id'])
                                 ->having('matching_attributes', $values->count())
                                 ->first();
 
-        return $variant ? $variant->describable : null;
+        return $value ? $value->variant : null;
     }
 
     protected function getPropertyValues()

@@ -11,7 +11,7 @@
                 $propertiesForm.trigger('submit');
             });
             $body.on('click', '.js-mall-clear-filter', function () {
-                var $parent = $(this).closest('.mall-property-group');
+                var $parent = $(this).closest('.mall-property');
 
                 $parent.find(':input:not([type="checkbox"])').val('');
                 $parent.find('input[type="checkbox"]').prop('checked', false);
@@ -23,6 +23,9 @@
                         start: [slider.dataset.min, slider.dataset.max]
                     });
                 }
+                $propertiesForm.trigger('submit');
+            });
+            $body.on('change', '.js-mall-select-filter', function () {
                 $propertiesForm.trigger('submit');
             });
 

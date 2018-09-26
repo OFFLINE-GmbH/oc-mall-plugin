@@ -1,12 +1,13 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
 use OFFLINE\Mall\Models\ImageSet;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
-use PluginTestCase;
+use OFFLINE\Mall\Tests\PluginTestCase;
 use System\Models\File;
 
 class VariantTest extends PluginTestCase
@@ -24,9 +25,10 @@ class VariantTest extends PluginTestCase
         $product->slug               = 'test';
         $product->stock              = 20;
         $product->price_includes_tax = true;
-        $product->price              = ['CHF' => 20, 'EUR' => 30];
         $product->save();
-        $this->product = $product;
+        $product->price = ['CHF' => 20, 'EUR' => 30];
+
+        $this->product = Product::find($product->id);
 
         $variantSet             = new ImageSet();
         $variantSet->name       = 'Variant Images';
@@ -36,8 +38,8 @@ class VariantTest extends PluginTestCase
         $productSet              = new ImageSet();
         $productSet->name        = 'Product Images';
         $productSet->is_main_set = true;
-        $productSet->product_id  = $this->product->id;
-        $productSet->save();
+
+        $this->product->image_sets()->save($productSet);
 
         $file               = new File();
         $file->disk_name    = 'variant.jpg';
@@ -61,7 +63,10 @@ class VariantTest extends PluginTestCase
         $variant->image_set_id = $variantSet->id;
         $variant->save();
 
-        $this->variant = $variant;
+        $this->variant = Variant::find($variant->id);
+
+        $this->variant->refresh('image_sets');
+        $this->product->refresh('image_sets');
     }
 
     public function test_it_inherits_parent_fields()
@@ -135,23 +140,22 @@ class VariantTest extends PluginTestCase
 
     public function test_price_accessors()
     {
-        $price          = ['CHF' => 20.50, 'EUR' => 80.50];
         $priceInt       = ['CHF' => 2050, 'EUR' => 8050];
         $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
 
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
-        $variant->price      = $price;
         $variant->save();
+        $variant->price = $priceInt;
 
-        $this->assertEquals($price, $variant->price);
-        $this->assertEquals(json_encode($priceInt), $variant->getOriginal('price'));
-        $this->assertEquals($priceFormatted, $variant->price_formatted);
-        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+        $variant = Variant::find($variant->id);
+
+        $this->assertEquals($priceFormatted, $variant->price->toArray());
+        $this->assertEquals(80.50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals('CHF 20.50', (string)$variant->price('CHF'));
     }
 
     public function test_price_accessors_are_inherited()
@@ -167,12 +171,11 @@ class VariantTest extends PluginTestCase
         $variant->product_id = $this->product->id;
         $variant->save();
 
-        $this->assertEquals($price, $variant->price);
-        $this->assertEquals($priceFormatted, $variant->price_formatted);
-        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+        $this->assertEquals($priceFormatted, $variant->price->toArray());
+        $this->assertEquals(80.50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals('CHF 20.50', (string)$variant->price('CHF'));
     }
 
     public function test_explicit_null_price_accessors_are_inherited()
@@ -186,15 +189,16 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
-        $variant->price      = ['CHF' => null, 'EUR' => null];
         $variant->save();
+        $variant->price = ['CHF' => null, 'EUR' => null];
 
-        $this->assertEquals($price, $variant->price);
-        $this->assertEquals($priceFormatted, $variant->price_formatted);
-        $this->assertEquals(80.50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals('CHF 20.50', $variant->priceInCurrencyFormatted('CHF'));
+        $variant = Variant::find($variant->id);
+
+        $this->assertEquals($priceFormatted, $variant->price->toArray());
+        $this->assertEquals(80.50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals('CHF 20.50', (string)$variant->price('CHF'));
     }
 
     public function test_price_accessors_are_inherited_by_currency()
@@ -207,16 +211,16 @@ class VariantTest extends PluginTestCase
 
         $variant             = new Variant();
         $variant->name       = 'ABC';
-        $variant->price      = ['EUR' => 50];
         $variant->product_id = $this->product->id;
         $variant->save();
+        $variant->price = ['EUR' => 5000, 'CHF' => null];
 
-        $this->assertEquals(['CHF' => 20.50, 'EUR' => 50], $variant->price);
-        $this->assertEquals($priceFormatted, $variant->price_formatted);
-        $this->assertEquals(50, $variant->priceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->priceInCurrency());
-        $this->assertEquals(2050, $variant->priceInCurrencyInteger('CHF'));
-        $this->assertEquals(5000, $variant->priceInCurrencyInteger('EUR'));
+        $variant = Variant::find($variant->id);
+        $this->assertEquals($priceFormatted, $variant->price->toArray());
+        $this->assertEquals(50, $variant->price('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->price()->decimal);
+        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals(5000, $variant->price('EUR')->integer);
     }
 
     public function test_alternative_price_accessors()
@@ -229,16 +233,24 @@ class VariantTest extends PluginTestCase
 
         $variant             = new Variant();
         $variant->name       = 'ABC';
-        $variant->old_price  = $price;
         $variant->product_id = $this->product->id;
         $variant->save();
+        $variant->additional_prices()->save(new Price([
+            'price'             => 20.50,
+            'price_category_id' => 1,
+            'currency_id'       => 1,
+        ]));
+        $variant->additional_prices()->save(new Price([
+            'price'             => 80.50,
+            'price_category_id' => 1,
+            'currency_id'       => 2,
+        ]));
 
-        $this->assertEquals($price, $variant->old_price);
-        $this->assertEquals($priceFormatted, $variant->old_price_formatted);
-        $this->assertEquals(80.50, $variant->oldPriceInCurrency('EUR'));
-        $this->assertEquals(20.50, $variant->oldPriceInCurrency());
-        $this->assertEquals(2050, $variant->oldPriceInCurrencyInteger('CHF'));
-        $this->assertEquals(8050, $variant->oldPriceInCurrencyInteger('EUR'));
+        $this->assertEquals($priceFormatted, $variant->old_price->toArray());
+        $this->assertEquals(80.50, $variant->oldPrice('EUR')->decimal);
+        $this->assertEquals(20.50, $variant->oldPrice()->decimal);
+        $this->assertEquals(2050, $variant->oldPrice('CHF')->integer);
+        $this->assertEquals(8050, $variant->oldPrice('EUR')->integer);
     }
 
     public function test_stock_values()
@@ -266,12 +278,14 @@ class VariantTest extends PluginTestCase
 
         $height             = Property::find(1);
         $value              = new PropertyValue();
+        $value->product_id  = $product->id;
         $value->property_id = $height->id;
         $value->value       = 200;
         $variant->property_values()->save($value);
 
         $width              = Property::find(2);
         $value              = new PropertyValue();
+        $value->product_id  = $product->id;
         $value->property_id = $width->id;
         $value->value       = 400;
         $variant->property_values()->save($value);
@@ -293,12 +307,14 @@ class VariantTest extends PluginTestCase
         $height             = Property::find(1);
         $value              = new PropertyValue();
         $value->property_id = $height->id;
+        $value->product_id  = $product->id;
         $value->value       = null;
         $variant->property_values()->save($value);
 
         $width              = Property::find(2);
         $value              = new PropertyValue();
         $value->property_id = $width->id;
+        $value->product_id  = $product->id;
         $value->value       = 400;
         $variant->property_values()->save($value);
 
@@ -323,11 +339,12 @@ class VariantTest extends PluginTestCase
 
         $value              = new PropertyValue();
         $value->property_id = $color->id;
+        $value->product_id  = $product->id;
         $value->value       = ['hex' => '#ff0000', 'name' => 'Red'];
         $variant->property_values()->save($value);
 
         $this->assertEquals(
-            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: #ff0000" title="Red"></span>',
+            'Color: <span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: #ff0000" title="Red"></span>',
             $product->variants->where('id', $variant->id)->first()->properties_description
         );
     }

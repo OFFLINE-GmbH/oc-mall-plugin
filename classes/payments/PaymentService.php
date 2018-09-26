@@ -29,6 +29,8 @@ class PaymentService
             $result             = new PaymentResult();
             $result->successful = false;
             $result->message    = $e->getMessage();
+
+            $this->gateway->getActiveProvider()->logFailedPayment($this->order->toArray(), $e);
         }
 
         session()->forget('mall.payment_method.data');

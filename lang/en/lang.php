@@ -71,6 +71,7 @@
         'currency_format'   => 'Format',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
+        'is_default'        => 'Is default',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Payment gateways',
@@ -215,6 +216,8 @@
     ],
     'custom_field_options'     => [
         'text'       => 'Textfield',
+        'integer'    => 'Integer',
+        'float'      => 'Float',
         'textarea'   => 'Multi-line textfield',
         'dropdown'   => 'Dropdown',
         'checkbox'   => 'Checkbox',
@@ -476,14 +479,28 @@
                 'showPriceFilter'     => [
                     'title' => 'Show price filter',
                 ],
+                'showBrandFilter'     => [
+                    'title' => 'Show brand filter',
+                ],
                 'includeChildren'     => [
                     'title'       => 'Include children',
                     'description' => 'Include properties and filters from products in child categories as well',
+                ],
+                'includeVariants'     => [
+                    'title'       => 'Include variants',
+                    'description' => 'Show filters for variant properties',
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Include noUI Slider',
                     'description' => 'Include all dependiencies of noUI Slider via cdnjs',
                 ],
+            ],
+            'sortOrder'  => [
+                'bestseller' => 'Bestseller',
+                'priceLow'   => 'Lowest price',
+                'priceHigh'  => 'Highest price',
+                'latest'     => 'Latest',
+                'oldest'     => 'Oldest',
             ],
         ],
         'myAccount'             => [
