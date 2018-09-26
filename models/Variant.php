@@ -257,15 +257,6 @@ class Variant extends Model
                             ->merge($this->property_values);
     }
 
-    protected function notNullthy($value): bool
-    {
-        if ($value instanceof \Illuminate\Support\Collection) {
-            return $value->count() > 0;
-        }
-
-        return $value !== null;
-    }
-
     protected function isEmptyCollection($originalValue): bool
     {
         if ($originalValue instanceof Collection) {
