@@ -281,6 +281,10 @@ class Product extends MallComponent
                 'values'   => optional($values)->unique('value'),
             ];
         })->filter(function ($collection) {
+            if ($this->variant && $collection->property->pivot->use_for_variants != true) {
+                return false;
+            }
+
             return $collection->values && $collection->values->count() > 0;
         })->keyBy(function ($value) {
             return $value->property->id;

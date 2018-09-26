@@ -11,6 +11,10 @@ class PropertyGroupProperty extends Pivot
 
     public $nullable = ['filter_type'];
 
+    public $casts = [
+        'use_for_variants'
+    ];
+
     public static function getFilterTypeOptions($dashes = true)
     {
         return [
