@@ -66,7 +66,7 @@ matrix:
         skip-cleanup: true
         local_dir: docs/.vuepress/dist
         github-token: $GITHUB_TOKEN
-        repo: https://github.com/OFFLINE-GmbH/oc-mall-plugin
+        repo: OFFLINE-GmbH/oc-mall-plugin
         keep-history: false
         target-branch: gh-pages
         on:
