@@ -28,8 +28,7 @@ class PropertyGroup extends Model
             'key'        => 'property_group_id',
             'otherKey'   => 'property_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
-            'pivotModel' => PropertyGroupProperty::class,
-            'order'      => 'offline_mall_property_property_group.sort_order ASC',
+            'pivotModel' => PropertyGroupProperty::class
         ],
         'filterable_properties' => [
             Property::class,
