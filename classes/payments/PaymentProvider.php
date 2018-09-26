@@ -103,12 +103,12 @@ abstract class PaymentProvider
         return Session::get('mall.payment.id');
     }
 
-    protected function logFailedPayment(array $data = [], $response): PaymentLog
+    public function logFailedPayment(array $data = [], $response): PaymentLog
     {
         return $this->logPayment(true, $data, $response);
     }
 
-    protected function logSuccessfulPayment(array $data = [], $response): PaymentLog
+    public function logSuccessfulPayment(array $data = [], $response): PaymentLog
     {
         return $this->logPayment(false, $data, $response);
     }
