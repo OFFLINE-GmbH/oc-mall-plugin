@@ -11,6 +11,7 @@ class VariantEntry implements Entry
     const INDEX = 'variants';
 
     protected $variant;
+    protected $data;
 
     public function __construct(Variant $variant)
     {
@@ -18,11 +19,7 @@ class VariantEntry implements Entry
 
         // Make sure variants inherit variant data again.
         session()->forget('mall.variants.disable-inheritance');
-    }
 
-    public function data(): array
-    {
-        $variant = $this->variant;
         $variant->loadMissing(['prices.currency', 'property_values.property']);
 
         $data                    = $variant->attributesToArray();
@@ -32,7 +29,19 @@ class VariantEntry implements Entry
         $data['prices']          = $this->mapPrices($variant->prices);
         $data['property_values'] = $this->mapProps($variant->all_property_values);
 
-        return $data;
+        $this->data = $data;
+    }
+
+    public function data(): array
+    {
+        return $this->data;
+    }
+
+    public function withData(array $data): Entry
+    {
+        $this->data = array_merge($this->data, $data);
+
+        return $this;
     }
 
     protected function mapPrices(?Collection $input): Collection

@@ -129,7 +129,7 @@ class Category extends MallComponent
 
     protected function getItems(): LengthAwarePaginator
     {
-        $filters = $this->getFilters();
+        $filters   = $this->getFilters();
         $sortOrder = $this->getSortOrder();
 
         $model    = $this->showVariants ? new Variant() : new Product();
@@ -139,11 +139,34 @@ class Category extends MallComponent
         $index  = app(Index::class);
         $result = $index->fetch($useIndex, $filters, $sortOrder, $this->perPage, $this->pageNumber);
 
+        // Every id that is not an int will be a "ghosted" variant with an id like
+        // product-1. These ids have to be fetched separately. This enables us to
+        // query variants and products without variants from one product index.
+        $itemIds  = array_filter($result->ids, 'is_int');
+        $ghostIds = array_diff($result->ids, $itemIds);
+
+        $models = $model->with($this->productIncludes())->find($itemIds);
+        $ghosts = $this->getGhosts($ghostIds);
+
         return $this->paginate(
-            $model->with(['image_sets.images'])->find($result->ids),
+            $models->concat($ghosts),
             $result->totalCount
         );
     }
+
+    protected function getGhosts(array $ids)
+    {
+        if (count($ids) < 1) {
+            return collect([]);
+        }
+
+        $ids = array_map(function ($id) {
+            return (int)str_replace('product-', '', $id);
+        }, $ids);
+
+        return Product::with($this->productIncludes())->find($ids);
+    }
+
     protected function paginate(Collection $items, int $totalCount)
     {
         $paginator = new LengthAwarePaginator(
@@ -182,5 +205,13 @@ class Category extends MallComponent
     protected function getSortOrder(): SortOrder
     {
         return SortOrder::fromKey(input('sort', SortOrder::default()));
+    }
+
+    /**
+     * @return array
+     */
+    protected function productIncludes(): array
+    {
+        return ['image_sets.images'];
     }
 }

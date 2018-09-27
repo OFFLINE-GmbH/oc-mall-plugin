@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Product;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -17,6 +18,10 @@ class ReindexProducts extends Command
      * @var Index
      */
     protected $index;
+    /**
+     * @var ProductObserver
+     */
+    protected $observer;
 
     public function handle(Index $index)
     {
@@ -26,6 +31,8 @@ class ReindexProducts extends Command
         if ( ! $this->option('force') && ! $this->output->confirm($question, false)) {
             return 0;
         }
+
+        $this->observer = new ProductObserver($this->index);
 
         $this->cleanup();
         $this->reindex();
@@ -76,18 +83,10 @@ class ReindexProducts extends Command
             'variants.property_values.property',
         ])->chunk(200, function (Collection $products) use ($bar) {
             $products->each(function (Product $product) use ($bar) {
-                $this->indexProduct($product);
+                $this->observer->created($product);
                 $bar->advance();
             });
         });
         $bar->finish();
-    }
-
-    protected function indexProduct(Product $product)
-    {
-        $this->index->insert(ProductEntry::INDEX, new ProductEntry($product));
-        foreach ($product->variants as $variant) {
-            $this->index->insert(VariantEntry::INDEX, new VariantEntry($variant));
-        }
     }
 }

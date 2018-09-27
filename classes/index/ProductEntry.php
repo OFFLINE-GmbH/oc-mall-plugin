@@ -11,6 +11,7 @@ class ProductEntry implements Entry
     const INDEX = 'products';
 
     protected $product;
+    protected $data;
 
     public function __construct(Product $product)
     {
@@ -18,19 +19,27 @@ class ProductEntry implements Entry
 
         // Make sure variants inherit product data again.
         session()->forget('mall.variants.disable-inheritance');
+
+        $product->loadMissing(['variants.prices.currency', 'prices.currency', 'property_values.property']);
+
+        $data                    = $product->attributesToArray();
+        $data['index']           = self::INDEX;
+        $data['prices']          = $this->mapPrices($product->prices);
+        $data['property_values'] = $this->mapProps($product->property_values);
+
+        $this->data = $data;
     }
 
     public function data(): array
     {
-        $product = $this->product;
-        $product->loadMissing(['variants.prices.currency', 'prices.currency', 'property_values.property']);
+        return $this->data;
+    }
 
-        $data                    = $product->attributesToArray();
-        $data['index']          = self::INDEX;
-        $data['prices']          = $this->mapPrices($product->prices);
-        $data['property_values'] = $this->mapProps($product->property_values);
+    public function withData(array $data): Entry
+    {
+        $this->data = array_merge($this->data, $data);
 
-        return $data;
+        return $this;
     }
 
     protected function mapPrices(?Collection $input): Collection
