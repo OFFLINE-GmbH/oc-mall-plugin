@@ -132,7 +132,10 @@ class CartProduct extends Model
 
     public function getItemAttribute()
     {
-        return $this->variant ?? $this->product;
+        $model = $this->variant ?? $this->product;
+        $model->setRelations([]);
+
+        return $model;
     }
 
     public function getTotalPreTaxesAttribute(): float
