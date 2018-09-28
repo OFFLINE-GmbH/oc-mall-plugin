@@ -18,31 +18,26 @@ class PropertyValueObserver
 
     public function created(PropertyValue $value)
     {
-        if ($value->product) {
-            $this->index->update(ProductEntry::INDEX, $value->product->id, new ProductEntry($value->product));
-        }
-        if ($value->variant) {
-            $this->index->update(VariantEntry::INDEX, $value->variant->id, new VariantEntry($value->variant));
-        }
+        $this->handle($value);
     }
 
     public function updated(PropertyValue $value)
     {
-        if ($value->product) {
-            $this->index->update(ProductEntry::INDEX, $value->product->id, new ProductEntry($value->product));
-        }
-        if ($value->variant) {
-            $this->index->update(VariantEntry::INDEX, $value->variant->id, new VariantEntry($value->variant));
-        }
+        $this->handle($value);
     }
 
     public function deleted(PropertyValue $value)
     {
+        $this->handle($value);
+    }
+
+    protected function handle(PropertyValue $value)
+    {
         if ($value->product) {
-            $this->index->update(ProductEntry::INDEX, $value->product->id, new ProductEntry($value->product));
+            (new ProductObserver($this->index))->updated(($value->product));
         }
         if ($value->variant) {
-            $this->index->update(VariantEntry::INDEX, $value->variant->id, new VariantEntry($value->variant));
+            (new VariantObserver($this->index))->updated(($value->variant));
         }
     }
 }
