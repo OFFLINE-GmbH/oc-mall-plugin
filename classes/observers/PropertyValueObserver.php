@@ -3,8 +3,6 @@
 namespace OFFLINE\Mall\Classes\Observers;
 
 use OFFLINE\Mall\Classes\Index\Index;
-use OFFLINE\Mall\Classes\Index\ProductEntry;
-use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\PropertyValue;
 
 class PropertyValueObserver
