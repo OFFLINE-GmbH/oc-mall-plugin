@@ -135,15 +135,15 @@ class DefaultSignUpHandler implements SignUpHandler
 
     protected function transformAddressKeys(array $data, string $type): array
     {
-        $transformed = [];
-        foreach ($data as $key => $value) {
+        return collect($data)->mapWithKeys(function ($value, $key) use ($type) {
             if (starts_with($key, $type)) {
-                $newKey               = str_replace($type . '_', '', $key);
-                $transformed[$newKey] = $value;
-            }
-        }
+                $newKey = str_replace($type . '_', '', $key);
 
-        return $transformed;
+                return [$newKey => $value];
+            }
+
+            return [];
+        })->toArray();
     }
 
     protected function renameExistingGuestAccounts(array $data, $user)
