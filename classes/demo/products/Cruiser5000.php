@@ -50,7 +50,7 @@ class Cruiser5000 extends DemoProduct
     protected function properties(): array
     {
         return [
-            'color'  => '{"name":"Devil red","hex":"#e74c3c"}',
+            'color'       => ['name' => 'Devil\'s red', 'hex' => '#e74c3c'],
             'rear-travel' => '155',
             'fork-travel' => '160',
             'material'    => 'Carbon',

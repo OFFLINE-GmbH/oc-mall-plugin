@@ -41,7 +41,7 @@ class Cruiser1000 extends DemoProduct
     protected function properties(): array
     {
         return [
-            'color'       => '{"name":"Dark grey","hex":"#333333"}',
+            'color'       => ['name' => 'Dark grey', 'hex' => '#333333'],
             'rear-travel' => '0',
             'fork-travel' => '110',
             'material'    => 'Aluminium',

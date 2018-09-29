@@ -60,87 +60,87 @@ class Jersey extends DemoProduct
     {
         return [
             [
-                'name'       => 'Stormrider Jersey Men black/red/gray XS',
-                'stock'      => 5,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/red/gray XS',
+                'stock'        => 5,
+                'properties'   => [
                     'size'  => 'XS',
-                    'color' => '{"name":"black/red/gray","hex":"#413f40"}',
+                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
                 ],
-                'image_set_id' => $this->imageSets[0]->id
+                'image_set_id' => $this->imageSets[0]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/red/gray S',
-                'stock'      => 5,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/red/gray S',
+                'stock'        => 5,
+                'properties'   => [
                     'size'  => 'S',
-                    'color' => '{"name":"black/red/gray","hex":"#413f40"}',
+                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
                 ],
-                'image_set_id' => $this->imageSets[0]->id
+                'image_set_id' => $this->imageSets[0]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/red/gray M',
-                'stock'      => 3,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/red/gray M',
+                'stock'        => 3,
+                'properties'   => [
                     'size'  => 'M',
-                    'color' => '{"name":"black/red/gray","hex":"#413f40"}',
+                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
                 ],
-                'image_set_id' => $this->imageSets[0]->id
+                'image_set_id' => $this->imageSets[0]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/red/gray L',
-                'stock'      => 3,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/red/gray L',
+                'stock'        => 3,
+                'properties'   => [
                     'size'  => 'L',
-                    'color' => '{"name":"black/red/gray","hex":"#413f40"}',
+                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
                 ],
-                'image_set_id' => $this->imageSets[0]->id
+                'image_set_id' => $this->imageSets[0]->id,
             ],
 
 
             [
-                'name'       => 'Stormrider Jersey Men black/blue/white XS',
-                'stock'      => 5,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/blue/white XS',
+                'stock'        => 5,
+                'properties'   => [
                     'size'  => 'XS',
-                    'color' => '{"name":"black/blue/white","hex":"#09d2bf"}',
+                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
                 ],
-                'image_set_id' => $this->imageSets[1]->id
+                'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/blue/white S',
-                'stock'      => -2,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/blue/white S',
+                'stock'        => -2,
+                'properties'   => [
                     'size'  => 'S',
-                    'color' => '{"name":"black/blue/white","hex":"#09d2bf"}',
+                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
                 ],
-                'image_set_id' => $this->imageSets[1]->id
+                'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/blue/white M',
-                'stock'      => 3,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/blue/white M',
+                'stock'        => 3,
+                'properties'   => [
                     'size'  => 'M',
-                    'color' => '{"name":"black/blue/white","hex":"#09d2bf"}',
+                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
                 ],
-                'image_set_id' => $this->imageSets[1]->id
+                'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/blue/white L',
-                'stock'      => 3,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/blue/white L',
+                'stock'        => 3,
+                'properties'   => [
                     'size'  => 'L',
-                    'color' => '{"name":"black/blue/white","hex":"#09d2bf"}',
+                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
                 ],
-                'image_set_id' => $this->imageSets[1]->id
+                'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'       => 'Stormrider Jersey Men black/blue/white XL',
-                'stock'      => 8,
-                'properties' => [
+                'name'         => 'Stormrider Jersey Men black/blue/white XL',
+                'stock'        => 8,
+                'properties'   => [
                     'size'  => 'XL',
-                    'color' => '{"name":"black/blue/white","hex":"#09d2bf"}',
+                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
                 ],
-                'image_set_id' => $this->imageSets[1]->id
+                'image_set_id' => $this->imageSets[1]->id,
             ],
         ];
     }

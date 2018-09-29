@@ -12,7 +12,7 @@ trait CartSession
 {
     public static function byUser(?User $user)
     {
-        if ($user === null) {
+        if ($user === null || $user->customer === null) {
             return self::bySession();
         }
 

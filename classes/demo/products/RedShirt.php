@@ -64,7 +64,7 @@ class RedShirt extends DemoProduct
                 'stock'      => 2,
                 'properties' => [
                     'size'  => 'S',
-                    'color' => '{"name":"Red","hex":"#ff0000"}',
+                    'color' => ['name' => 'Red', 'hex' => '#ff0000'],
                 ],
             ],
             [
@@ -72,7 +72,7 @@ class RedShirt extends DemoProduct
                 'stock'      => 200,
                 'properties' => [
                     'size'  => 'M',
-                    'color' => '{"name":"Red","hex":"#ff0000"}',
+                    'color' => ['name' => 'Red', 'hex' => '#ff0000'],
                 ],
             ],
             [
@@ -80,7 +80,7 @@ class RedShirt extends DemoProduct
                 'stock'      => 0,
                 'properties' => [
                     'size'  => 'L',
-                    'color' => '{"name":"Red","hex":"#ff0000"}',
+                    'color' => ['name' => 'Red', 'hex' => '#ff0000'],
                 ],
             ],
         ];

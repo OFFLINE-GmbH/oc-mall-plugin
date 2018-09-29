@@ -41,7 +41,7 @@ class Cruiser1500 extends DemoProduct
     protected function properties(): array
     {
         return [
-            'color'  => '{"name":"Think pink","hex":"#f686aa"}',
+            'color'       => ['name' => 'Think pink', 'hex' => '#f686aa'],
             'rear-travel' => '0',
             'fork-travel' => '0',
             'material'    => 'Aluminium',
