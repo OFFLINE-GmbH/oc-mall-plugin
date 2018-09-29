@@ -40,8 +40,8 @@
             </div>
         </td>
         <td class="text-right"><?= e($item['quantity']) ?></td>
-        <td class="text-right"><?= e($item->pricePostTaxesInCurrencyFormatted()) ?></td>
-        <td class="text-right"><?= e($item->totalPostTaxesInCurrencyFormatted()) ?></td>
+        <td class="text-right"><?= e($item->pricePostTaxes()) ?></td>
+        <td class="text-right"><?= e($item->totalPostTaxes()) ?></td>
     </tr>
     <?php endforeach; ?>
     <tr class="orderfooter separator separator-bottom">
@@ -52,7 +52,7 @@
         </td>
         <td class="text-right">
             <span>
-                <?= e($order->totalProductPostTaxesInCurrencyFormatted()) ?>
+                <?= e($order->totalProductPostTaxes()) ?>
             </span>
         </td>
     </tr>
@@ -98,7 +98,7 @@
                 <?= e(trans('offline.mall::lang.order.grand_total')) ?>
             </span>
         </td>
-        <td class="text-right"><span><?= e($order->totalPostTaxesInCurrencyFormatted()) ?></span></td>
+        <td class="text-right"><span><?= e($order->totalPostTaxes()) ?></span></td>
     </tr>
     <?php if ($order['taxes']): ?>
     <?php foreach ($order['taxes'] as $tax): ?>

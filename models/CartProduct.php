@@ -61,7 +61,7 @@ class CartProduct extends Model
             $entry->product_id = $this->product->id;
             $entry->variant_id = optional($this->variant)->id ?? null;
 
-            $entry->item         = $this->item;
+            $entry->item         = $this->item_data;
             $entry->name         = $this->data->name;
             $entry->variant_name = optional($this->variant)->properties_description;
             $entry->description  = $this->item->description;
@@ -132,10 +132,17 @@ class CartProduct extends Model
 
     public function getItemAttribute()
     {
-        $model = $this->variant ?? $this->product;
-        $model->setRelations([]);
+        return $this->variant ?? $this->product;
+    }
 
-        return $model;
+    public function getItemDataAttribute()
+    {
+        $model = $this->variant ?? $this->product;
+
+        $data          = $model->attributesToArray();
+        $data['price'] = $model->price;
+
+        return $data;
     }
 
     public function getTotalPreTaxesAttribute(): float
