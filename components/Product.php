@@ -17,6 +17,10 @@ use Request;
 use Session;
 use Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Product extends MallComponent
 {
     use CustomFields;

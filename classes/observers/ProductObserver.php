@@ -91,5 +91,4 @@ class ProductObserver
     {
         return 'product-' . $product->id;
     }
-
 }

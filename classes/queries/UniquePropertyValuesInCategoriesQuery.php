@@ -51,7 +51,11 @@ class UniquePropertyValuesInCategoriesQuery
                 '=',
                 'offline_mall_product_variants.product_id'
             )
-            ->join('offline_mall_property_values', 'offline_mall_products.id', '=',
-                'offline_mall_property_values.product_id');
+            ->join(
+                'offline_mall_property_values',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_property_values.product_id'
+            );
     }
 }
