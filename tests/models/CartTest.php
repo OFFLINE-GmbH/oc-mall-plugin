@@ -10,7 +10,6 @@ use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
@@ -43,6 +42,7 @@ class CartTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'Variant';
         $variant->product_id = $product->id;
+        $variant->stock      = 20;
         $variant->save();
 
         $cart = new Cart();
@@ -65,6 +65,7 @@ class CartTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'Variant';
         $variant->product_id = $product->id;
+        $variant->stock      = 20;
         $variant->save();
 
         $cart = new Cart();
@@ -539,7 +540,7 @@ class CartTest extends PluginTestCase
     {
         DB::table('offline_mall_shipping_methods')->truncate();
 
-        $product = Product::first();
+        $product        = Product::first();
         $product->price = ['CHF' => 100, 'EUR' => 150];
 
         $product = Product::first();

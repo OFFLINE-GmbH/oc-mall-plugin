@@ -24,7 +24,7 @@ class CartProductTest extends PluginTestCase
         $product                   = Product::first();
         $product->meta_description = 'Test';
         $product->save();
-        $product->price            = ['CHF' => 200, 'EUR' => 150];
+        $product->price = ['CHF' => 200, 'EUR' => 150];
 
         $this->product = $product;
 
@@ -32,6 +32,7 @@ class CartProductTest extends PluginTestCase
         $variant->product_id = $product->id;
         $variant->name       = 'Variant';
         $variant->price      = null;
+        $variant->stock      = 20;
         $variant->save();
 
         $this->variant = $variant;
@@ -42,7 +43,7 @@ class CartProductTest extends PluginTestCase
         $sizeA->save();
         $sizeA->prices()->save(new Price([
             'currency_id' => 1,
-            'price' => 100,
+            'price'       => 100,
         ]));
 
         $field       = new CustomField();
@@ -50,14 +51,14 @@ class CartProductTest extends PluginTestCase
         $field->type = 'dropdown';
         $field->save();
 
-        $field2        = new CustomField();
-        $field2->name  = 'Label';
-        $field2->type  = 'text';
+        $field2       = new CustomField();
+        $field2->name = 'Label';
+        $field2->type = 'text';
         $field2->save();
 
         $field2->prices()->save(new Price([
             'currency_id' => 1,
-            'price' => 300,
+            'price'       => 300,
         ]));
 
         $field->custom_field_options()->save($sizeA);
@@ -71,9 +72,9 @@ class CartProductTest extends PluginTestCase
 
         $this->customFieldValueA = $customFieldValueA;
 
-        $customFieldValueB                         = new CustomFieldValue();
-        $customFieldValueB->custom_field_id        = $field2->id;
-        $customFieldValueB->value                  = 'Test';
+        $customFieldValueB                  = new CustomFieldValue();
+        $customFieldValueB->custom_field_id = $field2->id;
+        $customFieldValueB->value           = 'Test';
 
         $cart = new Cart();
         $cart->save();

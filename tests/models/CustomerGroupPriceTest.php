@@ -17,6 +17,7 @@ class CustomerGroupPriceTest extends PluginTestCase
         $variant             = new Variant();
         $variant->product_id = Product::first()->id;
         $variant->name       = 'Variant';
+        $variant->stock      = 20;
         $variant->save();
 
         app()->singleton('user.auth', function () {

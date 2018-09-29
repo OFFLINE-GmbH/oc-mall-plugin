@@ -266,12 +266,14 @@ class TotalsCalculatorTest extends PluginTestCase
         $variantWeight->product_id = $product->id;
         $variantWeight->price      = ['CHF' => 100, 'EUR' => 150];
         $variantWeight->weight     = 2000;
+        $variantWeight->stock      = 20;
         $variantWeight->save();
 
         $variantNoWeight             = new Variant();
         $variantNoWeight->name       = 'Variant without Weight';
         $variantNoWeight->product_id = $product->id;
         $variantNoWeight->price      = ['CHF' => 100, 'EUR' => 150];
+        $variantNoWeight->stock      = 20;
         $variantNoWeight->save();
 
         $cart = $this->getCart();

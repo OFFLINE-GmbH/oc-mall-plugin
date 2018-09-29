@@ -59,6 +59,7 @@ class VariantTest extends PluginTestCase
 
         $variant               = new Variant();
         $variant->product_id   = $product->id;
+        $variant->stock        = 20;
         $variant->name         = 'Variant';
         $variant->image_set_id = $variantSet->id;
         $variant->save();
@@ -132,6 +133,7 @@ class VariantTest extends PluginTestCase
         $product             = Product::first();
         $variant             = new Variant();
         $variant->name       = 'ABC';
+        $variant->stock      = 20;
         $variant->product_id = $product->id;
         $variant->save();
 
@@ -146,6 +148,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
+        $variant->stock      = 20;
         $variant->save();
         $variant->price = $priceInt;
 
@@ -168,6 +171,7 @@ class VariantTest extends PluginTestCase
 
         $variant             = new Variant();
         $variant->name       = 'ABC';
+        $variant->stock      = 20;
         $variant->product_id = $this->product->id;
         $variant->save();
 
@@ -188,6 +192,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
+        $variant->stock      = 20;
         $variant->save();
         $variant->price = ['CHF' => 11000, 'EUR' => null];
 
@@ -208,6 +213,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
+        $variant->stock      = 20;
         $variant->save();
         $variant->price = ['CHF' => null, 'EUR' => null];
 
@@ -231,6 +237,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
+        $variant->stock      = 20;
         $variant->save();
         $variant->price = ['EUR' => 5000, 'CHF' => null];
 
@@ -253,6 +260,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'ABC';
         $variant->product_id = $this->product->id;
+        $variant->stock      = 20;
         $variant->save();
         $variant->additional_prices()->save(new Price([
             'price'             => 20.50,
@@ -293,6 +301,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'Variant';
         $variant->product_id = $product->id;
+        $variant->stock      = 20;
         $variant->save();
 
         $height             = Property::find(1);
@@ -321,6 +330,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'Variant';
         $variant->product_id = $product->id;
+        $variant->stock      = 20;
         $variant->save();
 
         $height             = Property::find(1);
@@ -349,6 +359,7 @@ class VariantTest extends PluginTestCase
         $variant             = new Variant();
         $variant->name       = 'Variant';
         $variant->product_id = $product->id;
+        $variant->stock      = 20;
         $variant->save();
 
         $color       = new Property();
