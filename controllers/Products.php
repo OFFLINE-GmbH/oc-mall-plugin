@@ -79,7 +79,13 @@ class Products extends Controller
             ]);
 
             $pv->value = $value;
-            $pv->save();
+
+            // If the value became empty delete it.
+            if ($pv->value === null && $pv->exists) {
+                $pv->delete();
+            } else {
+                $pv->save();
+            }
 
             // Transfer any deferred media
             $property = $properties->find($id);

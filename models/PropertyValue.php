@@ -39,6 +39,16 @@ class PropertyValue extends Model
 
     public function setValueAttribute($value)
     {
+        $type = optional($this->property)->type;
+        if ($type === 'color') {
+            $name = $value['name'] ?? false;
+            $hex  = $value['hex'] ?? false;
+            // If both keys are empty store this value as null.
+            if ( ! $name && ! $hex) {
+                return $this->attributes['value'] = null;
+            }
+        }
+
         // Some attribute types (like color) have multiple values (a hex color and a display name)
         // These types of attribute values are stored as json string.
         $this->attributes['value'] = \is_array($value)
