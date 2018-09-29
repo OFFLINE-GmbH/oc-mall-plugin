@@ -2,6 +2,7 @@
 
 use Auth;
 use DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
@@ -96,7 +97,11 @@ class Product extends MallComponent
 
     public function onRun()
     {
-        $this->setData();
+        try {
+            $this->setData();
+        } catch (ModelNotFoundException $e) {
+            return $this->controller->run('404');
+        }
 
         // If this product is managed by it's variants we redirect to the first available variant.
         if ($this->product->inventory_management_method !== 'single' && ! $this->param('variant')) {
