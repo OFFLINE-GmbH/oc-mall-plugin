@@ -22,13 +22,13 @@ class PropertyGroup extends Model
     public $table = 'offline_mall_property_groups';
 
     public $belongsToMany = [
-        'properties' => [
+        'properties'            => [
             Property::class,
             'table'      => 'offline_mall_property_property_group',
             'key'        => 'property_group_id',
             'otherKey'   => 'property_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
-            'pivotModel' => PropertyGroupProperty::class
+            'pivotModel' => PropertyGroupProperty::class,
         ],
         'filterable_properties' => [
             Property::class,
@@ -38,9 +38,9 @@ class PropertyGroup extends Model
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
             'pivotModel' => PropertyGroupProperty::class,
             'order'      => 'offline_mall_property_property_group.sort_order ASC',
-            'conditions' => 'offline_mall_property_property_group.filter_type is not null'
+            'conditions' => 'offline_mall_property_property_group.filter_type is not null',
         ],
-        'categories' => [
+        'categories'            => [
             Category::class,
             'table'    => 'offline_mall_category_property_group',
             'key'      => 'property_group_id',
@@ -48,4 +48,13 @@ class PropertyGroup extends Model
             'pivot'    => ['sort_order'],
         ],
     ];
+
+    public function getDisplayNameAttribute()
+    {
+        if ($this->getOriginal('display_name')) {
+            return $this->getOriginal('display_name');
+        }
+
+        return $this->name;
+    }
 }
