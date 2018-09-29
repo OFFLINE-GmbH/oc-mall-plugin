@@ -231,7 +231,7 @@ class Plugin extends PluginBase
             return $gateway;
         });
         $this->app->singleton(Hashids::class, function () {
-            return new Hashids('oc-mall', 8);
+            return new Hashids(config('app.key', 'oc-mall'), 8);
         });
         $this->app->singleton('user.auth', function () {
             return AuthManager::instance();
