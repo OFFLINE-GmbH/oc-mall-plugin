@@ -43,6 +43,8 @@ class SeedDemoData extends Command
         $this->createCategories();
         $this->createTaxes();
         $this->createProducts();
+
+        $this->output->success('All done!');
     }
 
     /**
@@ -81,18 +83,34 @@ class SeedDemoData extends Command
 
     protected function createProducts()
     {
+        $this->output->newLine();
         $this->output->writeln('Creating products...');
+        $this->output->newLine();
+
+        $this->output->progressStart(7);
 
         // Bikes
         (new Cruiser1000())->create();
+        $this->output->progressAdvance();
+
         (new Cruiser1500())->create();
+        $this->output->progressAdvance();
+
         (new Cruiser3000())->create();
+        $this->output->progressAdvance();
+
         (new Cruiser3500())->create();
+        $this->output->progressAdvance();
+
         (new Cruiser5000())->create();
+        $this->output->progressAdvance();
 
         // Clothing
         (new RedShirt())->create();
+        $this->output->progressAdvance();
+
         (new Jersey())->create();
+        $this->output->progressFinish();
     }
 
     protected function createCategories()
