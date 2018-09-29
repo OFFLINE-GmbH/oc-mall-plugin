@@ -14,67 +14,6 @@ planned to be released towards the end of 2018.
 php artisan mall:seed-demo
 ```
 
-## Access pricing information
-
-The price for a `Product` or `Variant` model is stored as an array of currency values.
-
-The following accessors and 
-methods are also available for alternative price columns such as `old_price`. Simply modify the property/method names
- accordingly.
-
-### Prices as float values
-
-You can access the pricing information by accessing the `price` property directly:
-
-```php
-print_r($product->price);
-
-[
-    "CHF" => 20.50,
-    "EUR" => 21.50
-]
-``` 
-
-### Prices as formatted values 
-
-You can get all prices as a formatted string by accessing the `price_formatted` property:
-
-```php
-print_r($product->price_formatted);
-
-[
-    "CHF" => 'CHF 20.50',
-    "EUR" => '21.50 €'
-]
-``` 
-
-### Price in a specific currency 
-
-You can get the price in a specific currency by calling the `price`, `priceFormatted` or 
-`priceInteger` methods.
-
-```php
-echo $product->price();
-
-> 20.50
-
-echo $product->price('EUR');
-
-> 21.50
-
-echo $product->price()->integer;
-
-> 2050
-
-echo $product->price()->string;
-
-> 'CHF 20.50'
-
-echo $product->price('EUR')->string;
-
-> '21.50 €'
-``` 
-
 ## Access product images
 
 You can use the following methods to access product images:
