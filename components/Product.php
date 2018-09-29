@@ -202,21 +202,25 @@ class Product extends MallComponent
         return $this->variant = $model->where('product_id', $this->product->id)->findOrFail($variant);
     }
 
-    public function getProduct(): ProductModel
+    public function getProduct(?array $with = null): ProductModel
     {
         if ($this->product) {
             return $this->product;
         }
 
+        if ($with === null) {
+            $with = [
+                'variants',
+                'variants.property_values',
+                'variants.image_sets',
+                'image_sets',
+                'downloads',
+                'taxes',
+            ];
+        }
+
         $product = $this->property('product');
-        $model   = ProductModel::published()->with([
-            'variants',
-            'variants.property_values',
-            'variants.image_sets',
-            'image_sets',
-            'downloads',
-            'taxes',
-        ]);
+        $model   = ProductModel::published()->with($with);
 
         if ($product === ':slug') {
             return $model->transWhere('slug', $this->param('slug'))->firstOrFail();
@@ -314,12 +318,15 @@ class Product extends MallComponent
             return $this->decode($id);
         });
 
+        $product = $this->getProduct([]);
+
         $query = PropertyValue
             ::leftJoin(
                 'offline_mall_product_variants',
                 'variant_id', '=', 'offline_mall_product_variants.id'
             )
             ->whereNull('offline_mall_product_variants.deleted_at')
+            ->where('offline_mall_product_variants.product_id', $product->id)
             ->select(DB::raw('variant_id, count(*) as matching_attributes'))
             ->groupBy(['variant_id'])
             ->with('variant')

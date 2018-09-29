@@ -56,7 +56,7 @@ class OrderProduct extends Model
 
     public $belongsTo = [
         'variant' => Variant::class,
-        'order' => Order::class,
+        'order'   => Order::class,
     ];
 
     public function getPriceColumns()
@@ -78,5 +78,43 @@ class OrderProduct extends Model
         }
 
         return $this->fallbackCurrency();
+    }
+
+    public function pricePreTaxes()
+    {
+        return $this->toPriceModel('price_pre_taxes');
+    }
+
+    public function priceTaxes()
+    {
+        return $this->toPriceModel('price_taxes');
+    }
+
+    public function pricePostTaxes()
+    {
+        return $this->toPriceModel('price_post_taxes');
+    }
+
+    public function totalPreTaxes()
+    {
+        return $this->toPriceModel('total_pre_taxes');
+    }
+
+    public function totalTaxes()
+    {
+        return $this->toPriceModel('total_taxes');
+    }
+
+    public function totalPostTaxes()
+    {
+        return $this->toPriceModel('total_post_taxes');
+    }
+
+    protected function toPriceModel(string $key): Price
+    {
+        return new Price([
+            'currency_id' => $this->useCurrency()->id,
+            'price'       => $this->getOriginal($key) / 100,
+        ]);
     }
 }

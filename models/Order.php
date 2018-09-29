@@ -224,4 +224,57 @@ class Order extends Model
     {
         return $this->payment_state === PaidState::class;
     }
+
+    public function totalPreTaxes()
+    {
+        return $this->toPriceModel('total_pre_taxes');
+    }
+
+    public function totalTaxes()
+    {
+        return $this->toPriceModel('total_taxes');
+    }
+
+    public function totalPostTaxes()
+    {
+        return $this->toPriceModel('total_post_taxes');
+    }
+
+    public function totalProductPreTaxes()
+    {
+        return $this->toPriceModel('total_product_pre_taxes');
+    }
+
+    public function totalProductTaxes()
+    {
+        return $this->toPriceModel('total_product_taxes');
+    }
+
+    public function totalProductPostTaxes()
+    {
+        return $this->toPriceModel('total_product_post_taxes');
+    }
+
+    public function totalShippingPreTaxes()
+    {
+        return $this->toPriceModel('total_shipping_pre_taxes');
+    }
+
+    public function totalShippingTaxes()
+    {
+        return $this->toPriceModel('total_shipping_taxes');
+    }
+
+    public function totalShippingPostTaxes()
+    {
+        return $this->toPriceModel('total_shipping_post_taxes');
+    }
+
+    protected function toPriceModel(string $key): Price
+    {
+        return new Price([
+            'currency_id' => $this->useCurrency()->id,
+            'price'       => $this->getOriginal($key) / 100,
+        ]);
+    }
 }

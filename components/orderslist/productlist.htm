@@ -18,10 +18,10 @@
             </td>
             <td>{{ product.quantity }}</td>
             <td class="text-right">
-                {{ product.pricePostTaxesInCurrencyFormatted() | raw }}
+                {{ product.pricePostTaxes() | raw }}
             </td>
             <td class="text-right">
-                {{ product.totalPostTaxesInCurrencyFormatted() | raw }}
+                {{ product.totalPostTaxes() | raw }}
             </td>
         </tr>
     {% endfor %}
@@ -31,7 +31,7 @@
             {{ 'mall.total' | _ }}
         </td>
         <td class="text-right">
-            {{ order.totalProductPostTaxesInCurrencyFormatted | raw }}
+            {{ order.totalProductPostTaxes() | raw }}
         </td>
     </tr>
     <tr class="mall-cart__shipping">
@@ -63,7 +63,7 @@
             {{ "mall.grand_total" | _ }}
         </td>
         <td class="text-right">
-            {{ order.totalPostTaxesInCurrencyFormatted() | raw }}
+            {{ order.totalPostTaxes() | raw }}
         </td>
     </tr>
 </table>
