@@ -38,6 +38,7 @@ class ProductObserver
         $this->index->update(ProductEntry::INDEX, $product->id, $productEntry);
 
         if ($product->inventory_management_method === 'single') {
+            $this->handleInventoryManagementMethodChange($product);
             $this->index->update(
                 VariantEntry::INDEX,
                 $this->ghostId($product),
@@ -56,9 +57,7 @@ class ProductObserver
         if ($product->inventory_management_method === 'single') {
             $this->index->delete(VariantEntry::INDEX, $this->ghostId($product->id));
         } else {
-            foreach ($product->variants as $variant) {
-                $this->index->delete(VariantEntry::INDEX, $variant->id);
-            }
+            $this->removeVariantsFromIndex($product);
         }
     }
 
@@ -90,5 +89,27 @@ class ProductObserver
     protected function ghostId(Product $product): string
     {
         return 'product-' . $product->id;
+    }
+
+    /**
+     * @param Product $product
+     */
+    protected function handleInventoryManagementMethodChange(Product $product)
+    {
+        $methodWas = $product->getOriginal('inventory_management_method');
+        $methodIs  = $product->inventory_management_method;
+        if ($methodWas === 'variant' && $methodIs === 'single') {
+            $this->removeVariantsFromIndex($product);
+        }
+    }
+
+    /**
+     * @param Product $product
+     */
+    protected function removeVariantsFromIndex(Product $product)
+    {
+        foreach ($product->variants as $variant) {
+            $this->index->delete(VariantEntry::INDEX, $variant->id);
+        }
     }
 }

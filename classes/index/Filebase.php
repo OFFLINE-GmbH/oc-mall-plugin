@@ -49,6 +49,10 @@ class Filebase implements Index
     public function delete(string $index, $id)
     {
         $item = $this->db->get($this->key($index, $id));
+        if (count($item->getData()) < 1) {
+            // The item is not existing in the index and doesn't have to be deleted.
+            return;
+        }
 
         return $item->delete();
     }
