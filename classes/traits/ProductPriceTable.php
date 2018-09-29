@@ -48,7 +48,10 @@ trait ProductPriceTable
             'variants.additional_prices',
         ])->find($this->params[0]);
 
-        $tableData = $model->variants->prepend($model);
+        $tableData = collect([$model]);
+        if ($model->inventory_management_method === 'variant') {
+            $tableData = $model->variants->prepend($model);
+        }
 
         $this->vars['pricetable']      = $widget;
         $this->vars['currencies']      = Currency::orderBy('sort_order', 'ASC')->get();
@@ -151,7 +154,6 @@ trait ProductPriceTable
             return [
                 $currency->code => $data->map(function ($item) use ($currency) {
                     $type = $item instanceof Variant ? 'variant' : 'product';
-
                     $data = [
                         'id'          => $type . '-' . $item->id,
                         'original_id' => $item->id,
