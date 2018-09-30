@@ -1,24 +1,66 @@
-<div class="mall-two-fields mall-two-fields--number-cvv">
-    <div class="mall-form-control">
-        <label>{{ 'mall.payment_method.card_number' | _ }}</label>
-        <input type="text" name="payment_data[number]" value="{{ __SELF__.paymentData['number'] }}">
-        <div data-validate-for="number"></div>
+<div class="mall-form-control">
+    <label>{{ 'mall.payment_method.card_info' | _ }}</label>
+    <div id="card-element" class="mall-input mall-input-full">
+        {{ 'mall.please_wait' | _ }}
     </div>
-    <div class="mall-form-control">
-        <label>{{ 'mall.payment_method.card_cvv' | _ }}</label>
-        <input type="text" name="payment_data[cvv]" value="{{ __SELF__.paymentData['cvv'] }}">
-        <div data-validate-for="cvv"></div>
-    </div>
+    <div id="card-errors" data-validate-for="stripeToken"></div>
+
+    <input type="hidden" name="payment_data[token]" value="" id="stripe-token">
 </div>
-<div class="mall-two-fields mall-two-fields--expiration">
-    <div class="mall-form-control">
-        <label>{{ 'mall.payment_method.card_expiry_month' | _ }}</label>
-        <input type="text" name="payment_data[expiryMonth]" value="{{ __SELF__.paymentData['expiryMonth'] }}">
-        <div data-validate-for="expiryMonth"></div>
-    </div>
-    <div class="mall-form-control">
-        <label>{{ 'mall.payment_method.card_expiry_year' | _ }}</label>
-        <input type="text" name="payment_data[expiryYear]" value="{{ __SELF__.paymentData['expiryYear'] }}">
-        <div data-validate-for="expiryYear"></div>
-    </div>
-</div>
+
+<script>
+    $(function () {
+
+        {# Lazy load stripe.js to ensure everything works when changing the payment method. #}
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = 'https://js.stripe.com/v3/';
+        s.onload = initStripe;
+
+        document.head.appendChild(s)
+
+        function initStripe () {
+            var stripe = Stripe('{{ activeMethod.settings.stripe_publishable_key }}');
+            var elements = stripe.elements();
+
+            var card = elements.create('card');
+            card.mount('#card-element');
+
+            card.addEventListener('change', function (event) {
+                var displayError = document.getElementById('card-errors');
+                if (event.error) {
+                    displayError.textContent = event.error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+
+            var form = document.getElementById('mall-payment-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                var submit = form.querySelector('[type="submit"]')
+                submit.classList.add('oc-loading')
+                submit.disabled = true
+
+                stripe.createToken(card).then(function (result) {
+                    if (result.error) {
+                        var errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = result.error.message;
+                        submit.classList.remove('oc-loading')
+                        submit.disabled = false
+                    } else {
+                        stripeTokenHandler(result.token);
+                    }
+                });
+            });
+
+            function stripeTokenHandler (token) {
+                var input = document.getElementById('stripe-token')
+                input.value = token.id
+
+                $('#mall-payment-form').request('{{ __SELF__ }}::onSubmit')
+            }
+        }
+    });
+</script>

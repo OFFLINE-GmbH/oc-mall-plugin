@@ -1,6 +1,6 @@
 <p>{{ 'mall.payment_method.choose' | _ }}</p>
 
-<form data-request-validate data-request="{{ __SELF__ }}::onSubmit">
+<form id="mall-payment-form" data-request-validate>
     <div class="mall-payment-method">
         {% for method in __SELF__.methods %}
             {% partial __SELF__ ~ '::method' method=method %}

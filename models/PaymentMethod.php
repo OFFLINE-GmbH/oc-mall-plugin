@@ -21,6 +21,7 @@ class PaymentMethod extends Model
     ];
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $appends = ['settings'];
     public $slugs = [
         'code' => 'name',
     ];
@@ -51,5 +52,14 @@ class PaymentMethod extends Model
     public static function getDefault()
     {
         return static::first();
+    }
+
+    public function getSettingsAttribute()
+    {
+        /** @var PaymentGateway $gateway */
+        $gateway  = app(PaymentGateway::class);
+        $provider = $gateway->getProviderById($this->payment_provider);
+        
+        return $provider->getSettings();
     }
 }

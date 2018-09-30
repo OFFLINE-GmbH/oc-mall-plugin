@@ -1,0 +1,22 @@
+<script>
+    $(function () {
+        var $form = $('#mall-payment-form')
+        $('body').on('submit', '#mall-payment-form', function (e) {
+            if (e.originalEvent.defaultPrevented) {
+                return false;
+            }
+            e.preventDefault();
+
+            var submit = this.querySelector('[type="submit"]')
+            submit.classList.add('oc-loading')
+            submit.disabled = true
+            $form.request('{{ __SELF__ }}::onSubmit', {
+                error: function(res) {
+                    submit.classList.remove('oc-loading')
+                    submit.disabled = false
+                    this.error(res)
+                }
+            })
+        })
+    })
+</script>

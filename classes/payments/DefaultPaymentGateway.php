@@ -13,7 +13,7 @@ class DefaultPaymentGateway implements PaymentGateway
 
     public function registerProvider(PaymentProvider $provider)
     {
-        $this->providers[$provider->identifier()] = get_class($provider);
+        $this->providers[$provider->identifier()] = $provider;
     }
 
     public function getProviderById(string $identifier): PaymentProvider

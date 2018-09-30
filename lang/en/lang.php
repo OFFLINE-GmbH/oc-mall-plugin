@@ -77,8 +77,10 @@
         'label'       => 'Payment gateways',
         'description' => 'Configure your payment gateways',
         'stripe'      => [
-            'api_key'         => 'Stripe API key',
-            'api_key_comment' => 'You can find this key in your Stripe Dashboard',
+            'api_key'                 => 'Stripe API Key',
+            'api_key_comment'         => 'You can find this key in your Stripe Dashboard',
+            'publishable_key'         => 'Stripe Publishable Key',
+            'publishable_key_comment' => 'You can find this key in your Stripe Dashboard',
         ],
         'paypal'      => [
             'client_id'         => 'PayPal Client I',

@@ -77,8 +77,10 @@
         'label'       => 'Zahlungsanbieter',
         'description' => 'Einstellungen zu den Zahlungsanbietern',
         'stripe'      => [
-            'api_key'         => 'Stripe API-Key',
-            'api_key_comment' => 'Du findest diesen in deinem Stripe Dashboard',
+            'api_key'                 => 'Stripe API-Key',
+            'api_key_comment'         => 'Du findest diesen in deinem Stripe Dashboard',
+            'publishable_key'         => 'Stripe Publishable-Key',
+            'publishable_key_comment' => 'Du findest diesen in deinem Stripe Dashboard',
         ],
         'paypal'      => [
             'client_id'         => 'PayPal Client-ID',
