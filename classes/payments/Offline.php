@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use OFFLINE\Mall\Classes\PaymentState\PendingState;
+
 class Offline extends PaymentProvider
 {
     public function name(): string
@@ -21,8 +23,12 @@ class Offline extends PaymentProvider
 
     public function process(): PaymentResult
     {
-        $result = new PaymentResult();
-        $result->successful    = true;
+        $result             = new PaymentResult();
+        $result->successful = true;
+
+        $this->order->payment_state = PendingState::class;
+        $this->order->save();
+
         return $result;
     }
 
