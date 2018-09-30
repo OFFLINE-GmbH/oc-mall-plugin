@@ -31,8 +31,9 @@ class PaymentGatewaySettings extends Model
         $config                 = parent::getFieldConfig();
         $config->tabs['fields'] = [];
 
+        /** @var PaymentGateway $gateway */
         $gateway = app(PaymentGateway::class);
-        collect($gateway->providers)->each(function ($providerClass) use ($config) {
+        collect($gateway->getProviders())->each(function ($providerClass) use ($config) {
             /** @var PaymentProvider $provider */
             $provider = new $providerClass();
             $settings = $this->setDefaultTab($provider->settings(), $provider->name());

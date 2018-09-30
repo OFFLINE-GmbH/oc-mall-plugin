@@ -108,8 +108,10 @@ class PaymentMethodSelector extends MallComponent
             $this->workingOnModel = $order;
         }
 
+        $method = PaymentMethod::find($this->order->payment_method_id ?? $this->cart->payment_method_id);
+
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
-        $this->setVar('activeMethod', $this->order->payment_method_id ?? $this->cart->payment_method_id);
+        $this->setVar('activeMethod', $method);
 
         try {
             $paymentData = json_decode(decrypt(session()->get('mall.payment_method.data')), true);

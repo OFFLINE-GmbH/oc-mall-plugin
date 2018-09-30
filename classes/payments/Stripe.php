@@ -25,10 +25,7 @@ class Stripe extends PaymentProvider
     public function validate(): bool
     {
         $rules = [
-            'number'      => 'required|digits:16',
-            'expiryMonth' => 'required|integer|min:1|max:12',
-            'expiryYear'  => 'required|integer|min:' . date('Y'),
-            'cvv'         => 'required|digits:3',
+            'token' => 'required|size:28|regex:/tok_[0-9a-zA-z]{24}/',
         ];
 
         $validation = Validator::make($this->data, $rules);
@@ -51,7 +48,7 @@ class Stripe extends PaymentProvider
             $response = $gateway->purchase([
                 'amount'    => $this->order->total_in_currency,
                 'currency'  => $this->order->currency['code'],
-                'card'      => $this->data,
+                'token'     => $this->data['token'] ?? false,
                 'returnUrl' => $this->returnUrl(),
                 'cancelUrl' => $this->cancelUrl(),
             ])->send();
@@ -87,9 +84,15 @@ class Stripe extends PaymentProvider
     public function settings(): array
     {
         return [
-            'stripe_api_key' => [
+            'stripe_api_key'         => [
                 'label'   => 'offline.mall::lang.payment_gateway_settings.stripe.api_key',
                 'comment' => 'offline.mall::lang.payment_gateway_settings.stripe.api_key_comment',
+                'span'    => 'left',
+                'type'    => 'text',
+            ],
+            'stripe_publishable_key' => [
+                'label'   => 'offline.mall::lang.payment_gateway_settings.stripe.publishable_key',
+                'comment' => 'offline.mall::lang.payment_gateway_settings.stripe.publishable_key_comment',
                 'span'    => 'left',
                 'type'    => 'text',
             ],

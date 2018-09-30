@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Models\Order;
+use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use OFFLINE\Mall\Models\PaymentLog;
 use Request;
 use Session;
@@ -73,6 +74,13 @@ abstract class PaymentProvider
     {
         $this->data = $data;
         Session::put('mall.payment.data', $data);
+    }
+
+    public function getSettings()
+    {
+        return collect($this->settings())->mapWithKeys(function ($settings, $key) {
+            return [$key => PaymentGatewaySettings::get($key)];
+        });
     }
 
     protected function getOrderFromSession(): Order
