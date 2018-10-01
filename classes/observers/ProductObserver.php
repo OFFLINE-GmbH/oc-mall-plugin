@@ -45,6 +45,7 @@ class ProductObserver
                 $this->ghostVariant($product, $productEntry)
             );
         } else {
+            $this->index->delete(VariantEntry::INDEX, $this->ghostId($product));
             foreach ($product->variants as $variant) {
                 $this->index->update(VariantEntry::INDEX, $variant->id, new VariantEntry($variant));
             }
