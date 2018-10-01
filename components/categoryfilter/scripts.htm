@@ -12,6 +12,9 @@
             });
             $body.on('click', '.js-mall-clear-filter', function () {
                 var $parent = $(this).closest('.mall-property');
+                if ($parent.length < 1) {
+                    $parent = $(this).closest('.mall-property-group');
+                }
 
                 $parent.find(':input:not([type="checkbox"])').val('');
                 $parent.find('input[type="checkbox"]').prop('checked', false);
