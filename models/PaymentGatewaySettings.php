@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Models;
 
+use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\Encryptable;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
@@ -19,6 +20,26 @@ class PaymentGatewaySettings extends Model
     public $settingsFields = '$/offline/mall/models/settings/fields_payment_gateways.yaml';
 
     /**
+     * @var PaymentGateway
+     */
+    protected $gateway;
+    /**
+     * @var Collection<PaymentProvider>
+     */
+    protected $providers;
+
+    public function __construct(array $attributes = [])
+    {
+        $this->gateway   = app(PaymentGateway::class);
+        $this->providers = collect($this->gateway->getProviders());
+        $this->providers->each(function ($provider) {
+            $this->encryptable = array_merge($this->encryptable, $provider->encryptedSettings());
+        });
+
+        parent::__construct($attributes);
+    }
+
+    /**
      * Extend the setting form with input fields for each
      * registered plugin.
      */
@@ -31,15 +52,10 @@ class PaymentGatewaySettings extends Model
         $config                 = parent::getFieldConfig();
         $config->tabs['fields'] = [];
 
-        /** @var PaymentGateway $gateway */
-        $gateway = app(PaymentGateway::class);
-        collect($gateway->getProviders())->each(function ($providerClass) use ($config) {
-            /** @var PaymentProvider $provider */
-            $provider = new $providerClass();
+        $this->providers->each(function ($provider) use ($config) {
             $settings = $this->setDefaultTab($provider->settings(), $provider->name());
 
             $config->tabs['fields'] = array_merge($config->tabs['fields'], $settings);
-            $this->encryptable      = array_merge($this->encryptable, $provider->encryptedSettings());
         });
 
         return $config;
