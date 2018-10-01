@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductPrice;
 

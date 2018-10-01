@@ -10,7 +10,7 @@ class ProductPrice extends Price
 
     public $table = 'offline_mall_product_prices';
     public $nullable = ['price'];
-    // Remove parent relatoin
+    // Remove parent relation
     public $morphTo = [
     ];
     public $fillable = [
