@@ -286,9 +286,21 @@ class CategoryFilter extends MallComponent
      */
     protected function setProps()
     {
-        $this->props = $this->propertyGroups->flatMap->filterable_properties->unique();
-
         $this->values = Property::getValuesForCategory($this->categories);
+        $valueKeys    = $this->values->keys();
+        $props        = $this->propertyGroups->flatMap->filterable_properties->unique();
+
+        // Remove any property that has no available filters.
+        $this->props = $props->filter(function (Property $property) use ($valueKeys) {
+            return $valueKeys->contains($property->id);
+        });
+
+        $groupKeys = $this->props->pluck('pivot.property_group_id');
+
+        // Remove any property group that has no available properties.
+        $this->propertyGroups = $this->propertyGroups->filter(function (PropertyGroup $group) use ($groupKeys) {
+            return $groupKeys->contains($group->id);
+        });
     }
 
     protected function getFilter()
