@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Model;
+use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use Session;
@@ -10,6 +11,7 @@ class Currency extends Model
 {
     use Validation;
     use Sortable;
+    use SoftDelete;
 
     public const CURRENCY_SESSION_KEY = 'mall.currency.active';
 

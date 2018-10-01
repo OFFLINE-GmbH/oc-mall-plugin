@@ -18,6 +18,7 @@ class CreateOfflineMallCurrencies extends Migration
             $table->integer('sort_order')->nullable();
             $table->boolean('is_default')->default(0);
             $table->timestamps();
+            $table->timestamp('deleted_at');
         });
     }
 
