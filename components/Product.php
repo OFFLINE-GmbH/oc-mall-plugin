@@ -347,7 +347,7 @@ class Product extends MallComponent
                          ->each(function (PropertyValue $propertyValue) use (&$query) {
                              $query->orWhereRaw(
                                  '(property_id, value) = (?, ?)',
-                                 [$propertyValue->property_id, $propertyValue->value]
+                                 [$propertyValue->property_id, $propertyValue->safeValue]
                              );
                          });
         });
