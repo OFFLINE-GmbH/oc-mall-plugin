@@ -14,11 +14,7 @@
 
                 $.request('onChangeProperty', {
                     data: {values: values},
-                    loading: isInitial ? null : $.oc.stripeLoadIndicator,
-                    update: {
-                        '{{ __SELF__ }}::addtocart': '.mall-product__add-to-cart',
-                        '{{ __SELF__ }}::price': '.mall-product__price'
-                    }
+                    loading: isInitial ? null : $.oc.stripeLoadIndicator
                 })
             })
             var firstProperty = $('.js-mall-property-selector:first')
@@ -31,10 +27,7 @@
                 #}
                 $.request('onCheckProductStock', {
                     data: {slug: '{{ item.slug }}'},
-                    loading: null,
-                    update: {
-                        '{{ __SELF__ }}::addtocart': '.mall-product__add-to-cart'
-                    }
+                    loading: null
                 })
             }
             {% endif %}

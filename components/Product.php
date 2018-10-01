@@ -162,7 +162,9 @@ class Product extends MallComponent
         $variant = $this->getVariantByPropertyValues($values);
 
         $this->page['stock'] = $variant ? $variant->stock : 0;
-        $this->page['item']  = $variant ? $variant : $this->getProduct();
+        $this->page['item']  = $variant ?: $this->getProduct();
+
+        return $this->stockCheckResponse();
     }
 
     public function onCheckProductStock()
@@ -178,6 +180,8 @@ class Product extends MallComponent
 
         $this->page['stock'] = $item ? $item->stock : 0;
         $this->page['item']  = $item;
+
+        return $this->stockCheckResponse();
     }
 
     public function setData()
@@ -313,10 +317,12 @@ class Product extends MallComponent
             return collect([]);
         }
 
-        return PropertyValue::where('value', '<>', $groupedValue)
-                            ->where('product_id', $this->product->id)
+        return PropertyValue::where('product_id', $this->product->id)
                             ->where('value', '<>', '')
                             ->whereNotNull('value')
+                            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
+                                $q->where('value', '<>', $groupedValue);
+                            })
                             ->get()
                             ->groupBy('property_id');
     }
@@ -364,5 +370,18 @@ class Product extends MallComponent
         }
 
         return $this->variant->property_values->keyBy('property_id');
+    }
+
+    protected function stockCheckResponse(): array
+    {
+        $data = [
+            'stock' => $this->page['stock'],
+            'item'  => $this->page['item'],
+        ];
+
+        return [
+            '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),
+            '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
+        ];
     }
 }

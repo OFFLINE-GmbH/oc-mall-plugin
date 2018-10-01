@@ -1,4 +1,3 @@
-{% set stock = item.stock %}
 {% if not item.allow_out_of_stock_purchases %}
     <div class="mall-product__property-stock text-{{ stock > 0 ? 'green' : 'red' }}">
         {% if stock > 10 %}
