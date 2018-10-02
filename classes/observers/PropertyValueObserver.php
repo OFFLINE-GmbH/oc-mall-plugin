@@ -32,10 +32,10 @@ class PropertyValueObserver
     protected function handle(PropertyValue $value)
     {
         if ($value->product) {
-            (new ProductObserver($this->index))->updated(($value->product));
+            (new ProductObserver($this->index))->updated($value->product);
         }
         if ($value->variant) {
-            (new VariantObserver($this->index))->updated(($value->variant));
+            (new VariantObserver($this->index))->updated($value->variant);
         }
     }
 }

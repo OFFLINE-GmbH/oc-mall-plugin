@@ -138,7 +138,7 @@ class Category extends Model
     public static function getMenuTypeInfo($type)
     {
         $result = [];
-        if ($type == 'mall-category') {
+        if ($type === 'mall-category') {
             $result = [
                 'references' => self::listSubCategoryOptions(),
             ];
@@ -209,25 +209,19 @@ class Category extends Model
      */
     public static function resolveCategoriesItem($item, $url, $theme)
     {
-
         if (Cache::has(self::ALL_CATEGORIES_CACHE_KEY)) {
             return Cache::get(self::ALL_CATEGORIES_CACHE_KEY);
         }
 
         $structure = [];
-
-        $category = new Category();
-
-        $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
+        $category  = new Category();
+        $iterator  = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
             $branch = [];
-
             foreach ($items as $item) {
                 $branchItem = self::getMenuItem($item, $url);
-
                 if ($item->children) {
                     $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
-
                 $branch[] = $branchItem;
             }
 
@@ -248,6 +242,7 @@ class Category extends Model
      * @param $url  string
      *
      * @return array
+     * @throws \Cms\Classes\CmsException
      */
     protected static function getMenuItem($item, $url)
     {
