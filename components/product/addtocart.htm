@@ -10,7 +10,15 @@
     </div>
 {% endif %}
 {% if stock > 0 or item.allow_out_of_stock_purchases %}
-    <div class="mall-product__add-to-cart-button">
+    <div class="mall-product__add-to-cart-form">
+        <div class="mall-form-control">
+            <label for="quantity">{{ 'mall.quantity' | _ }}</label>
+            <input type="number"
+                   id="quantity"
+                   class="mall-input"
+                   min="{{ item.quantity_min }}" max="{{ item.quantity_max }}"
+                   name="quantity" value="{{ item.quantity_default }}">
+        </div>
         <button type="submit" data-attach-loading>
             {{ 'mall.cart.add' | _ }}
         </button>
