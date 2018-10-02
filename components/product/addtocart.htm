@@ -19,7 +19,7 @@
                    min="{{ item.quantity_min }}" max="{{ item.quantity_max }}"
                    name="quantity" value="{{ item.quantity_default | default(1) }}">
         </div>
-        <button type="submit" data-attach-loading>
+        <button type="submit" class="mall-add-to-cart-button" data-attach-loading>
             {{ 'mall.cart.add' | _ }}
         </button>
     </div>
