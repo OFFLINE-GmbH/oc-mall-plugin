@@ -225,7 +225,7 @@ class Product extends Model
     public function getGroupByPropertyIdOptions()
     {
         return ['' => trans('offline.mall::lang.common.none')]
-            + $this->category->properties->filter(function($q) {
+            + $this->category->properties->filter(function ($q) {
                 return $q->pivot->use_for_variants;
             })->pluck('name', 'id')->toArray();
     }
