@@ -148,9 +148,10 @@ class Product extends MallComponent
             throw new ValidationException(['stock' => trans('offline.mall::lang.common.out_of_stock_short')]);
         }
 
-        $cart = Cart::byUser(Auth::getUser());
+        $cart     = Cart::byUser(Auth::getUser());
+        $quantity = input('quantity', $product->quantity_default);
         try {
-            $cart->addProduct($product, 1, $variant, $values);
+            $cart->addProduct($product, $quantity, $variant, $values);
         } catch (OutOfStockException $e) {
             throw new ValidationException(['stock' => trans('offline.mall::lang.common.stock_limit_reached')]);
         }
