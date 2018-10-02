@@ -56,6 +56,8 @@ class PropertyGroup extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+
+        // Update the index for all products that are affected when properties are removed from this group.
         $this->bindEvent('model.relation.afterDetach', function ($relation, $properties) {
             if ($relation !== 'properties') {
                 return;

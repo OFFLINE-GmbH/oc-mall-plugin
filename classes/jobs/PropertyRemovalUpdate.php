@@ -4,7 +4,6 @@ namespace OFFLINE\Mall\Classes\Jobs;
 
 
 use Illuminate\Contracts\Queue\Job;
-use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\PropertyValue;
 
 class PropertyRemovalUpdate

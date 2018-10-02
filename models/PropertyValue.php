@@ -29,6 +29,10 @@ class PropertyValue extends Model
         'image' => File::class,
     ];
 
+    /**
+     * Scope that includes all inherited product property values
+     * if applied on a Variant model.
+     */
     public function scopeWithInherited($query, Variant $model)
     {
         $query->orWhere(function ($q) use ($model) {
