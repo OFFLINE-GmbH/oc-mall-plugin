@@ -17,7 +17,7 @@
                    id="quantity"
                    class="mall-input"
                    min="{{ item.quantity_min }}" max="{{ item.quantity_max }}"
-                   name="quantity" value="{{ item.quantity_default }}">
+                   name="quantity" value="{{ item.quantity_default | default(1) }}">
         </div>
         <button type="submit" data-attach-loading>
             {{ 'mall.cart.add' | _ }}
