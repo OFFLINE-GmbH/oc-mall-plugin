@@ -3,13 +3,13 @@
 use Cache;
 use Cms\Classes\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Queue;
 use InvalidArgumentException;
 use Model;
-use October\Rain\Database\QueryBuilder;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Queries\VariantsInCategoriesQuery;
+use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Models\File;
 
@@ -75,6 +75,53 @@ class Category extends Model
         'image' => File::class,
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Update the index for all products that are affected by this property group removal.
+        $this->bindEvent('model.relation.afterDetach', function ($relation, $groups) {
+            if ($relation !== 'property_groups') {
+                return;
+            }
+
+            $properties = $this->getPropertiesInGroups($groups)->toArray();
+
+            // Fetch all child categories that inherit this categories properties.
+            $categories = $this->scopeAllChildren(self::newQuery())
+                               ->where('inherit_property_groups', true)
+                               ->get()
+                               ->concat([$this]);
+
+            // Chunk the deletion and re-indexing since a lot of products and variants
+            // might be affected by this change.
+            Product::published()
+                   ->orderBy('id')
+                   ->whereIn('category_id', $categories->pluck('id'))
+                   ->chunk(25, function ($products) use ($properties) {
+                       $data = [
+                           'properties' => $properties,
+                           'products'   => $products->pluck('id'),
+                           'variants'   => $products->flatMap->variants->pluck('id'),
+                       ];
+                       Queue::push(PropertyRemovalUpdate::class, $data);
+                   });
+        });
+    }
+
+
+    /**
+     * Return all property ids that are in an array of group ids.
+     */
+    protected function getPropertiesInGroups(array $groupIds): Collection
+    {
+        return \DB::table('offline_mall_property_property_group')
+                  ->where('property_group_id', $groupIds)
+                  ->get(['property_id'])
+                  ->pluck('property_id')
+                  ->values();
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -138,7 +185,7 @@ class Category extends Model
     public static function getMenuTypeInfo($type)
     {
         $result = [];
-        if ($type == 'mall-category') {
+        if ($type === 'mall-category') {
             $result = [
                 'references' => self::listSubCategoryOptions(),
             ];
@@ -209,25 +256,19 @@ class Category extends Model
      */
     public static function resolveCategoriesItem($item, $url, $theme)
     {
-
         if (Cache::has(self::ALL_CATEGORIES_CACHE_KEY)) {
             return Cache::get(self::ALL_CATEGORIES_CACHE_KEY);
         }
 
         $structure = [];
-
-        $category = new Category();
-
-        $iterator = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
+        $category  = new Category();
+        $iterator  = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
             $branch = [];
-
             foreach ($items as $item) {
                 $branchItem = self::getMenuItem($item, $url);
-
                 if ($item->children) {
                     $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
-
                 $branch[] = $branchItem;
             }
 
@@ -248,6 +289,7 @@ class Category extends Model
      * @param $url  string
      *
      * @return array
+     * @throws \Cms\Classes\CmsException
      */
     protected static function getMenuItem($item, $url)
     {
@@ -389,7 +431,7 @@ class Category extends Model
      */
     public function getChildrenIds()
     {
-        return $this->scopeAllChildren(\DB::table('offline_mall_categories'), true)
+        return $this->scopeAllChildren(self::newQuery(), true)
                     ->get(['id'])
                     ->pluck('id')
                     ->toArray();

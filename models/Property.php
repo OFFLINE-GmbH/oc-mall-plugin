@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -43,13 +44,24 @@ class Property extends Model
     public $belongsToMany = [
         'property_groups' => [
             PropertyGroup::class,
-            'table'      => 'offline_mall_property_group_property',
+            'table'      => 'offline_mall_property_property_group',
             'key'        => 'property_id',
             'otherKey'   => 'property_group_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
             'pivotModel' => PropertyGroupProperty::class,
         ],
     ];
+
+    public function afterSave()
+    {
+        if ($this->pivot && ! $this->pivot->use_for_variants) {
+            $categories = $this->property_groups->flatMap->getRelatedCategories();
+
+            Product::whereIn('category_id', $categories->pluck('id'))
+                   ->where('group_by_property_id', $this->id)
+                   ->update(['group_by_property_id' => null]);
+        }
+    }
 
     public function getSortOrderAttribute()
     {

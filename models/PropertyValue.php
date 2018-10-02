@@ -30,6 +30,17 @@ class PropertyValue extends Model
     ];
 
     /**
+     * Scope that includes all inherited product property values
+     * if applied on a Variant model.
+     */
+    public function scopeWithInherited($query, Variant $model)
+    {
+        $query->orWhere(function ($q) use ($model) {
+            $q->where('product_id', $model->product->id)->where('variant_id', null);
+        });
+    }
+
+    /**
      * The parent's attribute type is stored to make trigger conditions
      * work in the custom backend relationship form.
      *

@@ -1,9 +1,13 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
+use OFFLINE\Mall\Classes\Observers\VariantObserver;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
+use OFFLINE\Mall\Console\ReindexProducts;
 
 class PropertyGroup extends Model
 {
@@ -49,6 +53,37 @@ class PropertyGroup extends Model
         ],
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Update the index for all products that are affected when properties are removed from this group.
+        $this->bindEvent('model.relation.afterDetach', function ($relation, $properties) {
+            if ($relation !== 'properties') {
+                return;
+            }
+
+            // Fetch all categories that use this property group. The property values for each
+            // product and variant in these categories has to be deleted. Furthermore, the
+            // products have to be re-indexed after the modification is done.
+            $categories = $this->getRelatedCategories();
+
+            // Chunk the deletion and re-indexing since a lot of products and variants
+            // might be affected by this change.
+            Product::published()
+                   ->orderBy('id')
+                   ->whereIn('category_id', $categories->pluck('id'))
+                   ->chunk(25, function ($products) use ($properties) {
+                       $data = [
+                           'properties' => $properties,
+                           'products'   => $products->pluck('id'),
+                           'variants'   => $products->flatMap->variants->pluck('id'),
+                       ];
+                       Queue::push(PropertyRemovalUpdate::class, $data);
+                   });
+        });
+    }
+
     public function getDisplayNameAttribute()
     {
         if ($this->getOriginal('display_name')) {
@@ -56,5 +91,14 @@ class PropertyGroup extends Model
         }
 
         return $this->name;
+    }
+
+    public function getRelatedCategories()
+    {
+        return $this->categories->flatMap(function (Category $category) {
+            return $category->getAllChildrenAndSelf()->filter(function (Category $category) {
+                return $category->inherit_property_groups === true || $category->nest_depth === 0;
+            });
+        });
     }
 }

@@ -60,8 +60,14 @@ class Variant extends Model
         'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $hasMany = [
-        'prices'          => ProductPrice::class,
-        'property_values' => PropertyValue::class,
+        'prices'              => ProductPrice::class,
+        'property_values'     => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
+        'all_property_values' => [
+            PropertyValue::class,
+            'key'      => 'variant_id',
+            'otherKey' => 'id',
+            'scope'    => 'withInherited',
+        ],
     ];
     public $morphMany = [
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
@@ -241,20 +247,6 @@ class Variant extends Model
                 // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
                 return sprintf('%s: %s', e($value->property->name), $value->display_value);
             })->implode('<br />');
-    }
-
-    /**
-     * Return the property values of this variant and the inherited
-     * properties of the parent product.
-     *
-     * @return Collection<PropertyValue>
-     */
-    public function getAllPropertyValuesAttribute()
-    {
-        return PropertyValue::where('product_id', $this->product_id)
-                            ->whereNull('variant_id')
-                            ->get()
-                            ->merge($this->property_values);
     }
 
     protected function isEmptyCollection($originalValue): bool
