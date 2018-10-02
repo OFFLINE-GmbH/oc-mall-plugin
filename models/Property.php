@@ -54,7 +54,7 @@ class Property extends Model
 
     public function afterSave()
     {
-        if ( ! $this->pivot->use_for_variants) {
+        if ($this->pivot && ! $this->pivot->use_for_variants) {
             $categories = $this->property_groups->flatMap->getRelatedCategories();
 
             Product::whereIn('category_id', $categories->pluck('id'))
