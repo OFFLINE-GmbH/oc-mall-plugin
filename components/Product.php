@@ -149,7 +149,7 @@ class Product extends MallComponent
         }
 
         $cart     = Cart::byUser(Auth::getUser());
-        $quantity = input('quantity', $product->quantity_default);
+        $quantity = (int)input('quantity', $product->quantity_default ?? 1);
         try {
             $cart->addProduct($product, $quantity, $variant, $values);
         } catch (OutOfStockException $e) {
