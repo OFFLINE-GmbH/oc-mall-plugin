@@ -73,6 +73,7 @@ class PropertyGroup extends Model
             Product::published()
                    ->orderBy('id')
                    ->whereIn('category_id', $categories->pluck('id'))
+                   ->with('variants')
                    ->chunk(25, function ($products) use ($properties) {
                        $data = [
                            'properties' => $properties,

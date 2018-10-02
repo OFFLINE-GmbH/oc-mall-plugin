@@ -5,6 +5,7 @@ use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategories;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -61,6 +62,26 @@ class Property extends Model
                    ->where('group_by_property_id', $this->id)
                    ->update(['group_by_property_id' => null]);
         }
+    }
+
+    public function afterDelete()
+    {
+        // Remove the property values from all related products.
+        $products = $this->property_values->pluck('product_id')->unique();
+
+        // Chunk the re-indexing since a lot of products and variants might be affected by this change.
+        Product::published()
+               ->orderBy('id')
+               ->whereIn('id', $products)
+               ->with('variants')
+               ->chunk(25, function ($products) {
+                   $data = [
+                       'properties' => [$this->id],
+                       'products'   => $products->pluck('id'),
+                       'variants'   => $products->flatMap->variants->pluck('id'),
+                   ];
+                   Queue::push(PropertyRemovalUpdate::class, $data);
+               });
     }
 
     public function getSortOrderAttribute()
