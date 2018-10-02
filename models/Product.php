@@ -176,7 +176,6 @@ class Product extends Model
         $this->additional_prices()->delete();
         $this->variants()->delete();
         $this->property_values()->delete();
-        $this->property_values()->delete();
         DB::table('offline_mall_product_accessory')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();

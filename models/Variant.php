@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use DB;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\Nullable;
@@ -110,6 +111,11 @@ class Variant extends Model
         });
     }
 
+    public function afterDelete()
+    {
+        DB::table('offline_mall_property_values')->where('variant_id', $this->id)->delete();
+    }
+
     protected function createImageSetFromTempImages()
     {
         $tempImages = $this->temp_images()
@@ -120,7 +126,7 @@ class Variant extends Model
             return;
         }
 
-        return \DB::transaction(function () {
+        return DB::transaction(function () {
             $set             = new ImageSet();
             $set->name       = $this->name;
             $set->product_id = $this->product_id;
@@ -131,15 +137,15 @@ class Variant extends Model
 
             $this->commitDeferred(post('_session_key'));
 
-            return \DB::table('system_files')
-                      ->where('attachment_type', Variant::MORPH_KEY)
-                      ->where('attachment_id', $this->id)
-                      ->where('field', 'temp_images')
-                      ->update([
-                          'attachment_type' => ImageSet::MORPH_KEY,
-                          'attachment_id'   => $set->id,
-                          'field'           => 'images',
-                      ]);
+            return DB::table('system_files')
+                     ->where('attachment_type', Variant::MORPH_KEY)
+                     ->where('attachment_id', $this->id)
+                     ->where('field', 'temp_images')
+                     ->update([
+                         'attachment_type' => ImageSet::MORPH_KEY,
+                         'attachment_id'   => $set->id,
+                         'field'           => 'images',
+                     ]);
         });
     }
 
