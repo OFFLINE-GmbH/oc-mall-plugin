@@ -81,7 +81,7 @@ class Category extends Model
 
         // Update the index for all products that are affected by this property group removal.
         $this->bindEvent('model.relation.afterDetach', function ($relation, $groups) {
-            if ($relation !== 'property_groups') {
+            if ($relation !== 'property_groups' || count($groups) < 1) {
                 return;
             }
 

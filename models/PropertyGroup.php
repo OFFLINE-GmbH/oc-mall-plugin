@@ -59,7 +59,7 @@ class PropertyGroup extends Model
 
         // Update the index for all products that are affected when properties are removed from this group.
         $this->bindEvent('model.relation.afterDetach', function ($relation, $properties) {
-            if ($relation !== 'properties') {
+            if ($relation !== 'properties' || count($properties) < 1) {
                 return;
             }
 
