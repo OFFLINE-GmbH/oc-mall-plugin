@@ -12,7 +12,7 @@ class CreateOfflineMallCurrencies extends Migration
             $table->increments('id')->unsigned();
             $table->string('code');
             $table->string('symbol')->nullable();
-            $table->integer('rate')->default(1);
+            $table->decimal('rate', 12, 4)->default(1);
             $table->integer('decimals')->default(2);
             $table->text('format');
             $table->integer('sort_order')->nullable();
