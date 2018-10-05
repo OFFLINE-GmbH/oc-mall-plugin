@@ -1,0 +1,23 @@
+subject = "Confirmation for order #{{ order.order_number }}"
+description = "Sent when a checkout has succeeded"
+==
+
+Hi {{ order.customer.firstname }}
+
+Thank you very much for your order. We received the following information:
+
+{% partial 'mall.order.table' order=order %}
+
+{% partial 'panel' body %}
+    {% if order.payment_state == 'OFFLINE\\Mall\\Classes\\PaymentState\\PaidState' %}
+        The order has been paid on {{ order.payment.created_at }}.
+    {% else %}
+        The payment for this order is currently pending.
+    {% endif %}
+{% endpartial %}
+
+You can check the status of your order by visiting the account section of our store.
+
+{% partial 'button' url=app_url type='primary' body %}
+    View order status online
+{% endpartial %}

@@ -1,0 +1,12 @@
+name: 'offline.mall::lang.common.notifications'
+modelClass: OFFLINE\Mall\Models\Notification
+form: $/offline/mall/models/notification/fields.yaml
+defaultRedirect: offline/mall/notifications
+create:
+    title: 'offline.mall::lang.titles.notifications.create'
+    redirect: 'offline/mall/notifications/update/:id'
+    redirectClose: offline/mall/notifications
+update:
+    title: 'offline.mall::lang.titles.notifications.update'
+    redirect: offline/mall/notifications
+    redirectClose: offline/mall/notifications

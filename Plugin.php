@@ -5,14 +5,15 @@ use App;
 use Backend\Facades\Backend;
 use Backend\Widgets\Form;
 use Cache;
-use Event;
 use Hashids\Hashids;
+use Illuminate\Support\Facades\Event;
 use October\Rain\Database\Relations\Relation;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Index\Filebase;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
@@ -56,8 +57,10 @@ use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\User as RainLabUser;
 use OFFLINE\Mall\Models\Variant;
+use OFFLINE\Mall\NotifyRules\Conditions\CustomerAttributeCondition;
 use RainLab\Location\Models\Country as RainLabCountry;
 use System\Classes\PluginBase;
+use System\Helpers\View;
 use Validator;
 
 /**
@@ -81,6 +84,9 @@ class Plugin extends PluginBase
 
         $this->setMorphMap();
         $this->registerObservers();
+        $this->registerEvents();
+
+        \Illuminate\Support\Facades\View::share('app_url', config('app.url'));
     }
 
     public function registerObservers()
@@ -134,6 +140,28 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerMailTemplates()
+    {
+        return [
+            'offline.mall::mail.customer.created',
+            'offline.mall::mail.order.state_changed',
+            'offline.mall::mail.order.shipped',
+            'offline.mall::mail.checkout.succeeded',
+            'offline.mall::mail.checkout.failed',
+            'offline.mall::mail.payment.failed',
+            'offline.mall::mail.payment.paid',
+            'offline.mall::mail.payment.refunded',
+        ];
+    }
+
+    public function registerMailPartials()
+    {
+        return [
+            'mall.order.table'    => 'offline.mall::mail._partials.order.table',
+            'mall.order.tracking' => 'offline.mall::mail._partials.order.tracking',
+        ];
+    }
+
     public function registerSettings()
     {
         return [
@@ -166,6 +194,16 @@ class Plugin extends PluginBase
                 'order'       => 30,
                 'permissions' => ['offline.mall.settings.manage_payment_gateways'],
                 'keywords'    => 'shop store mall payment gateways',
+            ],
+            'notification_settings'     => [
+                'label'       => 'offline.mall::lang.notification_settings.label',
+                'description' => 'offline.mall::lang.notification_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-envelope',
+                'url'         => Backend::url('offline/mall/notifications'),
+                'order'       => 40,
+                'permissions' => ['offline.mall.manage_notifications'],
+                'keywords'    => 'shop store mall notifications email mail',
             ],
         ];
     }
@@ -315,5 +353,11 @@ class Plugin extends PluginBase
                 ],
             ]);
         });
+    }
+
+    protected function registerEvents()
+    {
+        $this->app->bind('MailingEventHandler', MailingEventHandler::class);
+        Event::subscribe('MailingEventHandler');
     }
 }

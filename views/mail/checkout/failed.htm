@@ -1,0 +1,14 @@
+subject = "Checkout error for order ({{ order.order_number }})"
+description = "Sent when a checkout has failed"
+==
+
+Hi {{ order.customer.firstname }}
+
+We are very sorry that there was a problem during your checkout process. We will look
+into the problem and contact you with further information.
+
+To check the status of your order you may log in to our store at any time.
+
+{% partial 'button' url=app_url type='primary' body %}
+    View order status online
+{% endpartial %}

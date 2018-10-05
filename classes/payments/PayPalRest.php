@@ -33,6 +33,8 @@ class PayPalRest extends PaymentProvider
         $gateway = $this->getGateway();
 
         $result   = new PaymentResult();
+        $result->order = $this->order;
+
         $response = null;
         try {
             $response = $gateway->purchase([

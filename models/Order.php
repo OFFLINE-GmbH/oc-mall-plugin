@@ -25,7 +25,7 @@ class Order extends Model
     }
     use HashIds;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'shipped_at'];
     public $rules = [
         'currency'                         => 'required',
         'shipping_address_same_as_billing' => 'required|boolean',
@@ -45,6 +45,7 @@ class Order extends Model
         'payment_data',
     ];
     public $table = 'offline_mall_orders';
+    public $hasOne = ['payment' => PaymentLog::class];
     public $hasMany = [
         'products'     => OrderProduct::class,
         'payment_logs' => [PaymentLog::class, 'order' => 'created_at DESC'],
@@ -58,6 +59,11 @@ class Order extends Model
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
     ];
+    /**
+     * Use to define if the shipping notification should be sent.
+     * @var bool
+     */
+    public $shippingNotification = false;
 
     public static function boot()
     {
@@ -77,7 +83,15 @@ class Order extends Model
             if ($order->isDirty('payment_state')) {
                 Event::fire('mall.order.payment_state.changed', [$order]);
             }
+            if ($order->getOriginal('shipped_at') === null && $order->isDirty('shipped_at')) {
+                Event::fire('mall.order.shipped', [$order]);
+            }
         });
+    }
+
+    public function getIsShippedAttribute()
+    {
+        return $this->shipped_at !== null;
     }
 
     public static function byCustomer(Customer $customer)
@@ -139,6 +153,8 @@ class Order extends Model
         // Drop any saved payment information since the order has been
         // created successfully.
         session()->forget('mall.payment_method.data');
+
+        Event::fire('mall.order.created', [$order]);
 
         return $order;
     }

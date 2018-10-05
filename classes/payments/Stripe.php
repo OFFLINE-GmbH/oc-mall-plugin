@@ -42,6 +42,7 @@ class Stripe extends PaymentProvider
         $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
 
         $result = new PaymentResult();
+        $result->order = $this->order;
 
         $response = null;
         try {

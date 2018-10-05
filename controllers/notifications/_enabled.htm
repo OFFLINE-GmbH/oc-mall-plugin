@@ -1,0 +1,17 @@
+<?php $action = $record->enabled ? 'disable' : 'enable'; ?>
+<label class="custom-switch" data-check="oc-disable-<?= $record->id ?>" style="margin-bottom:0">
+    <input data-request="onToggleClicked"
+        data-request-data="action: '<?= $action ?>', checked: [<?= $record->id ?>]"
+        type="checkbox"
+        name="disable_<?= $record->id ?>"
+        value="<?= !$record->enabled ?>"
+        <?php if ($record->enabled) : ?>checked=checked<?php endif; ?>
+        data-stripe-load-indicator
+    >
+
+    <span>
+        <span><?= e(trans('system::lang.plugins.check_yes')) ?></span>
+        <span><?= e(trans('system::lang.plugins.check_no')) ?></span>
+    </span>
+    <a class="slide-button"></a>
+</label>

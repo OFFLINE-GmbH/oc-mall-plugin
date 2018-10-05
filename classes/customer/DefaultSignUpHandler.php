@@ -38,7 +38,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
         $this->validate($data);
 
-        Event::fire('mall.user.beforeSignup', [$this, $data]);
+        Event::fire('mall.customer.beforeSignup', [$this, $data]);
 
         $user = DB::transaction(function () use ($data) {
 
@@ -85,7 +85,7 @@ class DefaultSignUpHandler implements SignUpHandler
         // the email of all existing guest accounts registered to the same email.
         $this->renameExistingGuestAccounts($data, $user);
 
-        Event::fire('mall.user.afterSignup', [$this, $data]);
+        Event::fire('mall.customer.afterSignup', [$user, $this]);
 
         $credentials = [
             'login'    => array_get($data, 'email'),
@@ -117,7 +117,8 @@ class DefaultSignUpHandler implements SignUpHandler
     protected function createUser($data): User
     {
         $data = [
-            'name'                  => $data['firstname'] . ' ' . $data['lastname'],
+            'name'                  => $data['firstname'],
+            'surname'               => $data['lastname'],
             'email'                 => $data['email'],
             'password'              => $data['password'],
             'password_confirmation' => $data['password_repeat'],

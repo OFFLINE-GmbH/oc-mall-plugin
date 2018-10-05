@@ -25,6 +25,7 @@ class Offline extends PaymentProvider
     {
         $result             = new PaymentResult();
         $result->successful = true;
+        $result->order      = $this->order;
 
         $this->order->payment_state = PendingState::class;
         $this->order->save();

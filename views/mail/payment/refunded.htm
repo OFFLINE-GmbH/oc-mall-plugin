@@ -1,0 +1,12 @@
+subject = "Your payment was refunded"
+description = "Sent when a payment for an order was refunded"
+==
+
+Hi {{ order.customer.firstname }}
+
+We just refunded the payment for your order **#{{ order.order_number }}**.
+Please be aware that it may take multiple days until you receive your funds.
+
+{% partial 'button' url=app_url type='primary' body %}
+    Check the status of your order online
+{% endpartial %}

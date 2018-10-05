@@ -1,0 +1,93 @@
+name = "Order table"
+==
+<div class="table">
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th style="text-align:left; width: 50%">
+                {{ 'offline.mall::lang.product.name' | trans }}
+            </th>
+            <th style="text-align: right; width: 10%">
+                {{ 'offline.mall::lang.order.quantity' | trans }}
+            </th>
+            <th style="text-align: right; width: 20%">
+                {{ 'offline.mall::lang.product.price' | trans }}
+            </th>
+            <th style="text-align: right; width: 20%">
+                {{ 'offline.mall::lang.order.total' | trans }}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for item in order.products %}
+            <tr>
+                <td style="vertical-align: top">
+                    {{ item.name }}<br/>
+                    {{ item.variant_name | raw }}
+                    <div class="attributes">
+                        {% for field in item.custom_field_values %}
+                            {{ field.custom_field.name }}: {{ field.display_value }}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td style="vertical-align: top; text-align: right">{{ item.quantity }}</td>
+                <td style="vertical-align: top; text-align: right">{{ item.pricePostTaxes() }}</td>
+                <td style="vertical-align: top; text-align: right">{{ item.totalPostTaxes() }}</td>
+            </tr>
+        {% endfor %}
+        <tr class="orderfooter separator separator-bottom">
+            <td colspan="3" style="border-top: 1px solid #f5f8fa; font-style: italic;">
+                {{ 'offline.mall::lang.order.subtotal' | trans }}
+            </td>
+            <td style="text-align: right; border-top: 1px solid #f5f8fa; font-style: italic;">
+                {{ order.totalProductPostTaxes() }}
+            </td>
+        </tr>
+        {% for entry in order.discounts %}
+            <tr class="orderdiscount">
+                <td colspan="3">
+                    {{ 'offline.mall::lang.common.discount' | trans }}:
+                    {{ entry.discount.name }}
+                </td>
+                <td style="text-align: right">
+                    {{ entry.savings_formatted }}
+                </td>
+            </tr>
+        {% endfor %}
+        {% if order.shipping %}
+            <tr class="orderfooter separator">
+                <td colspan="3">
+                    {{ 'offline.mall::lang.common.shipping' | trans }}:
+                    {{ order.shipping.method.name }}
+                    {% if order.shipping.appliedDiscount %}
+                        ({{ order.shipping.appliedDiscount.discount.name }},
+                        {{ order.shipping.appliedDiscount.savings }}
+                    {% endif %}
+                </td>
+                <td style="text-align: right">
+                    {{ order.shipping.method.price_formatted }}
+                </td>
+            </tr>
+        {% endif %}
+        <tr class="orderfooter-bottomline">
+            <td colspan="3" style=" border-top: 1px solid #f5f8fa; font-weight: bold;">
+                {{ 'offline.mall::lang.order.grand_total' | trans }}
+            </td>
+            <td style="text-align: right; border-top: 1px solid #f5f8fa; font-weight: bold;">
+                {{ order.totalPostTaxes() }}
+            </td>
+        </tr>
+        {% for entry in order.taxes %}
+            <tr class="orderfooter orderfooter-taxes separator">
+                <td colspan="3" style="font-size: 80%; color: #666">
+                    {{ entry.tax.name }} ({{ entry.tax.percentage }} %)
+                </td>
+                <td style="text-align: right; font-size: 80%; color: #666">
+                    {{ entry.total_formatted }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

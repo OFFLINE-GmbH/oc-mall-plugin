@@ -2,6 +2,7 @@
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
@@ -10,6 +11,7 @@ use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
+use RainLab\Translate\Models\Message;
 use Url;
 
 class Category extends MallComponent

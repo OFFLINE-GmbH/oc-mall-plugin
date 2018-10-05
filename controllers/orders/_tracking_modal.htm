@@ -5,18 +5,47 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">
-                        <?= e(trans('offline.mall::lang.order.update_tracking_info')) ?>
+                        <?= e(trans('offline.mall::lang.order.update_shipping_state')) ?>
                     </h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group span-left">
                         <label><?= e(trans('offline.mall::lang.order.tracking_number')) ?></label>
-                        <input type="text" name="trackingNumber" value="<?= e($order->tracking_number) ?>" class="form-control"/>
+                        <input type="text" name="trackingNumber" value="<?= e($order->tracking_number) ?>"
+                               class="form-control"/>
                     </div>
 
                     <div class="form-group span-right">
                         <label><?= e(trans('offline.mall::lang.order.tracking_url')) ?></label>
-                        <input type="text" name="trackingUrl" value="<?= e($order->tracking_url) ?>" class="form-control"/>
+                        <input type="text" name="trackingUrl" value="<?= e($order->tracking_url) ?>"
+                               class="form-control"/>
+                    </div>
+
+                    <div class="form-group checkboxlist-field span-full">
+                        <div class="checkbox custom-checkbox">
+                            <input id="mark-as-shipped" name="shipped" value="1"
+                                   type="checkbox"
+                                   checked
+                            >
+                            <label class="choice" for="mark-as-shipped">
+                                <?= e(trans('offline.mall::lang.order.tracking_shipped'))?>
+                            </label>
+                            <p class="help-block">
+                                <?= e(trans('offline.mall::lang.order.tracking_shipped_comment')) ?>
+                            </p>
+                        </div>
+                        <div class="checkbox custom-checkbox">
+                            <input id="send-notification" name="notification" value="1"
+                                   type="checkbox"
+                                   <?= $order->is_shipped ? '' : 'checked' ?>
+                            >
+                            <label class="choice" for="send-notification">
+                                <?= e(trans('offline.mall::lang.order.tracking_notification'))?>
+                            </label>
+                            <p class="help-block">
+                                <?= e(trans('offline.mall::lang.order.tracking_notification_comment')) ?>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

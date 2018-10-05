@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use Cms\Classes\Controller;
+use Illuminate\Support\Facades\Event;
 
 class PaymentRedirector
 {
@@ -48,7 +49,16 @@ class PaymentRedirector
         }
 
         if ($result->successful) {
+            if (optional($result->order)->wasRecentlyCreated) {
+                Event::fire('mall.checkout.succeeded', [$result]);
+            }
+
             return $this->finalRedirect('successful');
+        }
+
+
+        if (optional($result->order)->wasRecentlyCreated) {
+            Event::fire('mall.checkout.failed', [$result]);
         }
 
         return $this->finalRedirect('failed');
