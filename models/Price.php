@@ -2,6 +2,7 @@
 
 use Model;
 use October\Rain\Database\Traits\Nullable;
+use OFFLINE\Mall\Classes\Utils\Money;
 
 class Price extends Model
 {
@@ -27,6 +28,16 @@ class Price extends Model
         'category' => [PriceCategory::class],
         'currency' => [Currency::class],
     ];
+    /**
+     * @var Money
+     */
+    protected $money;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->money = app(Money::class);
+    }
 
     public function setPriceAttribute($value)
     {
@@ -76,6 +87,6 @@ class Price extends Model
     {
         $model = $this instanceof Product || $this instanceof Variant ? $this : null;
 
-        return format_money($this->integer, $model);
+        return $this->money->format($this->integer, $model);
     }
 }

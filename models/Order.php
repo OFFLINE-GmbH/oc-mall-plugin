@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
+use OFFLINE\Mall\Classes\Utils\Money;
 use RainLab\Translate\Classes\Translator;
 use RuntimeException;
 
@@ -80,7 +81,7 @@ class Order extends Model
             if ($order->isDirty('tracking_url') || $order->isDirty('tracking_number')) {
                 Event::fire('mall.order.tracking.changed', [$order]);
             }
-            if ($order->isDirty('payment_state')) {
+            if ($order->isDirty('payment_state') && $order->wasRecentlyCreated === false) {
                 Event::fire('mall.order.payment_state.changed', [$order]);
             }
             if ($order->getOriginal('shipped_at') === null && $order->isDirty('shipped_at')) {
@@ -218,7 +219,7 @@ class Order extends Model
         $total = (int)$this->getOriginal('total_post_taxes');
         $total *= (float)$this->currency['rate'];
 
-        return round_money($total, $this->currency['decimals']);
+        return app(Money::class)->round($total, $this->currency['decimals']);
     }
 
     public function getPaymentStateLabelAttribute()

@@ -6,6 +6,7 @@ use BackendMenu;
 use Event;
 use Flash;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderState;
 
@@ -41,6 +42,7 @@ class Orders extends Controller
 
         $order                      = Order::with('products', 'order_state')->findOrFail($this->params[0]);
         $this->vars['order']        = $order;
+        $this->vars['money']        = app(Money::class);
         $this->vars['orderStates']  = OrderState::orderBy('sort_order', 'ASC')->get();
         $this->vars['paymentState'] = $this->paymentStatePartial($order);
     }

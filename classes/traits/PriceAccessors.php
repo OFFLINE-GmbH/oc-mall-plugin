@@ -3,6 +3,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
@@ -11,6 +12,18 @@ use OFFLINE\Mall\Models\Variant;
 trait PriceAccessors
 {
     use NullPrice;
+
+    /**
+     * @var Money
+     */
+    protected $money;
+
+    protected static function bootPriceAccessors()
+    {
+        static::extend(function ($model) {
+            $model->money = app(Money::class);
+        });
+    }
 
     protected function priceRelation($currency = null, $relation = 'prices')
     {
@@ -58,7 +71,7 @@ trait PriceAccessors
                 $product = $this;
             }
 
-            return [$code => format_money($price->integer, $product, $price->currency)];
+            return [$code => $this->money->format($price->integer, $product, $price->currency)];
         });
     }
 

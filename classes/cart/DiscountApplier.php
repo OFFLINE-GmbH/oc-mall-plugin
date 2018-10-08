@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Cart;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Discount;
 
@@ -28,6 +29,10 @@ class DiscountApplier
      * @var bool
      */
     private $reducedTotalIsFixed = false;
+    /**
+     * @var Money
+     */
+    private $money;
 
     public function __construct(Cart $cart, float $total, float $baseTotal = null)
     {
@@ -35,6 +40,7 @@ class DiscountApplier
         $this->total        = $total;
         $this->reducedTotal = $baseTotal ?? $total;
         $this->discounts    = collect([]);
+        $this->money        = app(Money::class);
     }
 
     public function apply(Discount $discount): ?bool
@@ -74,7 +80,7 @@ class DiscountApplier
         $this->discounts->push([
             'discount'          => $discount,
             'savings'           => $savings * -1,
-            'savings_formatted' => format_money($savings * -1),
+            'savings_formatted' => $this->money->format($savings * -1),
         ]);
 
         return true;

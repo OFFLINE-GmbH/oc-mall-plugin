@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use JsonSerializable;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Tax;
 
 class TaxTotal implements JsonSerializable
@@ -19,11 +20,16 @@ class TaxTotal implements JsonSerializable
      * @var float
      */
     private $total;
+    /**
+     * @var Money
+     */
+    private $money;
 
     public function __construct(float $preTax, Tax $tax)
     {
         $this->preTax = $preTax;
         $this->tax    = $tax;
+        $this->money  = app(Money::class);
 
         $this->calculate();
     }
@@ -55,8 +61,8 @@ class TaxTotal implements JsonSerializable
             'tax'              => $this->tax,
             'amount'           => round($this->preTax),
             'total'            => round($this->total),
-            'amount_formatted' => format_money(round($this->preTax)),
-            'total_formatted'  => format_money(round($this->total)),
+            'amount_formatted' => $this->money->format(round($this->preTax)),
+            'total_formatted'  => $this->money->format(round($this->total)),
         ];
     }
 }

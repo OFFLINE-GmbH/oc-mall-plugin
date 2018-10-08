@@ -22,6 +22,8 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
+use OFFLINE\Mall\Classes\Utils\DefaultMoney;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Components\AddressForm;
 use OFFLINE\Mall\Components\AddressList;
 use OFFLINE\Mall\Components\AddressSelector;
@@ -59,8 +61,10 @@ use OFFLINE\Mall\Models\User as RainLabUser;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\NotifyRules\Conditions\CustomerAttributeCondition;
 use RainLab\Location\Models\Country as RainLabCountry;
+use System\Classes\MarkupManager;
 use System\Classes\PluginBase;
 use System\Helpers\View;
+use System\Twig\MailPartialTokenParser;
 use Validator;
 
 /**
@@ -210,9 +214,20 @@ class Plugin extends PluginBase
 
     public function registerMarkupTags()
     {
+        // If the mail token parser is only registered temporarily the sending
+        // of emails with the sync queue driver will fail since Twig gets initialized
+        // before the parser is registered and therefore the partial tag is unknown.
+        // @see https://github.com/octobercms/october/issues/3341#issuecomment-427586226
+        $markupManager = MarkupManager::instance();
+        $markupManager->registerTokenParsers([
+            new MailPartialTokenParser,
+        ]);
+
         return [
             'filters' => [
-                'money' => 'format_money',
+                'money' => function (...$args) {
+                    return app(Money::class)->format(...$args);
+                },
             ],
         ];
     }
@@ -259,6 +274,9 @@ class Plugin extends PluginBase
         });
         $this->app->bind(Index::class, function () {
             return new Filebase();
+        });
+        $this->app->singleton(Money::class, function () {
+            return new DefaultMoney();
         });
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();

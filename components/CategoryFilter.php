@@ -7,6 +7,7 @@ use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Currency;
@@ -97,6 +98,10 @@ class CategoryFilter extends MallComponent
      * @var array
      */
     public $sortOptions;
+    /**
+     * @var Money
+     */
+    protected $money;
 
     public function componentDetails()
     {
@@ -157,6 +162,7 @@ class CategoryFilter extends MallComponent
             $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.js');
             $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.css');
         }
+        $this->money = app(Money::class);
     }
 
     public function onRun()
@@ -240,8 +246,8 @@ class CategoryFilter extends MallComponent
     {
         $range = $this->getPriceRangeQuery()->first();
 
-        $min = round_money($range->min, $this->currency->decimals);
-        $max = round_money($range->max, $this->currency->decimals);
+        $min = $this->money->round($range->min, $this->currency->decimals);
+        $max = $this->money->round($range->max, $this->currency->decimals);
 
         $this->setVar('priceRange', $min === $max ? false : [$min, $max]);
     }

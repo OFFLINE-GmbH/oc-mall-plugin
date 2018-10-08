@@ -81,7 +81,7 @@
                 <?= e($order['shipping']['method']['name']) ?>
                 <?php if($order['shipping']['appliedDiscount']): ?>
                     (<?= e($order['shipping']['appliedDiscount']['discount']['name']) ?>,
-                     <?= e(format_money($order['shipping']['appliedDiscount']['savings'])) ?>)
+                     <?= e($money->format($order['shipping']['appliedDiscount']['savings'])) ?>)
                 <?php endif; ?>
             </span>
         </td>
