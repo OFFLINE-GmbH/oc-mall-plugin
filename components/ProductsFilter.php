@@ -19,12 +19,12 @@ use Validator;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CategoryFilter extends MallComponent
+class ProductsFilter extends MallComponent
 {
     /**
      * @var string
      */
-    public const FILTER_KEY = 'oc-mall.category.filter';
+    public const FILTER_KEY = 'oc-mall.products.filter';
     /**
      * @var CategoryModel
      */
@@ -106,8 +106,8 @@ class CategoryFilter extends MallComponent
     public function componentDetails()
     {
         return [
-            'name'        => 'offline.mall::lang.components.categoryFilter.details.name',
-            'description' => 'offline.mall::lang.components.categoryFilter.details.description',
+            'name'        => 'offline.mall::lang.components.productsFilter.details.name',
+            'description' => 'offline.mall::lang.components.productsFilter.details.description',
         ];
     }
 
@@ -120,30 +120,30 @@ class CategoryFilter extends MallComponent
                 'type'    => 'dropdown',
             ],
             'showPriceFilter'     => [
-                'title'   => 'offline.mall::lang.components.categoryFilter.properties.showPriceFilter.title',
+                'title'   => 'offline.mall::lang.components.productsFilter.properties.showPriceFilter.title',
                 'default' => '1',
                 'type'    => 'checkbox',
             ],
             'showBrandFilter'     => [
-                'title'   => 'offline.mall::lang.components.categoryFilter.properties.showBrandFilter.title',
+                'title'   => 'offline.mall::lang.components.productsFilter.properties.showBrandFilter.title',
                 'default' => '1',
                 'type'    => 'checkbox',
             ],
             'includeChildren'     => [
-                'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeChildren.title',
-                'description' => 'offline.mall::lang.components.categoryFilter.properties.includeChildren.description',
+                'title'       => 'offline.mall::lang.components.productsFilter.properties.includeChildren.title',
+                'description' => 'offline.mall::lang.components.productsFilter.properties.includeChildren.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
             'includeVariants'     => [
-                'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeVariants.title',
-                'description' => 'offline.mall::lang.components.categoryFilter.properties.includeVariants.description',
+                'title'       => 'offline.mall::lang.components.productsFilter.properties.includeVariants.title',
+                'description' => 'offline.mall::lang.components.productsFilter.properties.includeVariants.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
             'includeSliderAssets' => [
-                'title'       => 'offline.mall::lang.components.categoryFilter.properties.includeSliderAssets.title',
-                'description' => 'offline.mall::lang.components.categoryFilter.properties.includeSliderAssets.description',
+                'title'       => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.title',
+                'description' => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],

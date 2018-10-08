@@ -489,9 +489,9 @@
                 ],
             ],
         ],
-        'categoryFilter'        => [
+        'productsFilter'        => [
             'details'    => [
-                'name'        => 'Kategorie-Filter',
+                'name'        => 'Produkte-Filter',
                 'description' => 'Filtert die Produkte einer Kategorie',
             ],
             'properties' => [

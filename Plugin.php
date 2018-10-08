@@ -29,7 +29,7 @@ use OFFLINE\Mall\Components\AddressList;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Products as ProductsComponent;
-use OFFLINE\Mall\Components\CategoryFilter;
+use OFFLINE\Mall\Components\ProductsFilter;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
@@ -125,7 +125,7 @@ class Plugin extends PluginBase
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
             ProductsComponent::class     => 'products',
-            CategoryFilter::class        => 'categoryFilter',
+            ProductsFilter::class        => 'productsFilter',
             ProductComponent::class      => 'product',
             DiscountApplier::class       => 'discountApplier',
             MyAccount::class             => 'myAccount',

@@ -490,9 +490,9 @@
                 ],
             ],
         ],
-        'categoryFilter'        => [
+        'productsFilter'        => [
             'details'    => [
-                'name'        => 'Category filter',
+                'name'        => 'Products filter',
                 'description' => 'Filters the products from a category',
             ],
             'properties' => [
