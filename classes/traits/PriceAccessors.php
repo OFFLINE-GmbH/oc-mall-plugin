@@ -27,23 +27,17 @@ trait PriceAccessors
 
     protected function priceRelation($currency = null, $relation = 'prices')
     {
-        if ($currency === null) {
-            $currency = Currency::activeCurrency()->id;
-        }
-        if ($currency instanceof Currency) {
-            $currency = $currency->id;
-        }
-        if (is_string($currency)) {
-            $currency = Currency::whereCode($currency)->firstOrFail()->id;
-        }
+        $currency = Currency::resolve($currency);
 
         if (method_exists($this, 'getUserSpecificPrice')) {
             if ($specific = $this->getUserSpecificPrice()) {
-                return $specific->where('currency_id', $currency)->first() ?? $this->nullPrice();
+                return $specific->where('currency_id', $currency->id)->first()
+                    ?? $this->nullPrice($currency, $specific);
             }
         }
 
-        return $this->$relation->where('currency_id', $currency)->first() ?? $this->nullPrice();
+        return $this->$relation->where('currency_id', $currency->id)->first()
+            ?? $this->nullPrice($currency, $this->$relation);
     }
 
     public function price($currency = null, $relation = 'prices')

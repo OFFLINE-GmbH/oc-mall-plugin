@@ -39,6 +39,20 @@ class Price extends Model
         $this->money = app(Money::class);
     }
 
+    public function beforeCreate()
+    {
+        if ($this->price === null) {
+            return false;
+        }
+    }
+
+    public function beforeSave()
+    {
+        if ($this->price === null) {
+            return $this->delete();
+        }
+    }
+
     public function setPriceAttribute($value)
     {
         if ($value === null || $value === "") {

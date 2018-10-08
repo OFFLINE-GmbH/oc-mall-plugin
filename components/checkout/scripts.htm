@@ -23,9 +23,11 @@
                             )
                         }
                         this.error(jqXHR)
+                        document.location.href = '{{ __SELF__.accountPage | page }}'
                     },
                     handleValidationMessage: function (message, fields) {
-                        alert(message)
+                        alert("There was an error while processing your order: " + message)
+                        document.location.href = '{{ __SELF__.accountPage | page }}'
                     }
                 })
             });
