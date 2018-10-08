@@ -469,13 +469,13 @@
         'manage_notifications'   => 'Can manage notifications',
     ],
     'components'               => [
-        'category'              => [
+        'products'              => [
             'details'    => [
-                'name'        => 'Category',
-                'description' => 'Displays all products of a category',
+                'name'        => 'Products',
+                'description' => 'Displays a list of products',
             ],
             'properties' => [
-                'use_url'          => 'Use slug from URL',
+                'use_url'          => 'Use category slug from URL',
                 'show_variants'    => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
