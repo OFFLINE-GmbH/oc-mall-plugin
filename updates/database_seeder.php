@@ -13,6 +13,8 @@ use OFFLINE\Mall\Classes\Seeders\ProductTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\TaxTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\PropertyTableSeeder;
+use OFFLINE\Mall\Classes\Utils\DefaultMoney;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\PriceCategory;
 
@@ -21,6 +23,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
+
+        app()->singleton(Money::class, function () {
+            return new DefaultMoney();
+        });
 
         PriceCategory::create([
             'code' => 'old_price',
