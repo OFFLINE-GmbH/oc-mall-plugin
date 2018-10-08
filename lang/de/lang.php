@@ -482,11 +482,7 @@
                 'include_children' => [
                     'title'       => 'Zeige Produkte aus Kinderkategorien an',
                     'description' => 'Zeige alle Produkte von Kinderkategorien ebenfalls an',
-                ],
-                'product_page'     => [
-                    'title'       => 'Produktdetails-Seite',
-                    'description' => 'Seite, auf der die Produkt-Details angezeigt werden',
-                ],
+                ]
             ],
         ],
         'productsFilter'        => [

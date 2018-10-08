@@ -484,10 +484,6 @@
                     'title'       => 'Include children',
                     'description' => 'Show all products of child categories as well',
                 ],
-                'product_page'     => [
-                    'title'       => 'Product page',
-                    'description' => 'Page where product details are displayed',
-                ],
             ],
         ],
         'productsFilter'        => [
