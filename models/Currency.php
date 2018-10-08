@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\DB;
 use Model;
-use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use Session;
@@ -11,7 +10,6 @@ class Currency extends Model
 {
     use Validation;
     use Sortable;
-    use SoftDelete;
 
     public const CURRENCY_SESSION_KEY = 'mall.currency.active';
 
@@ -40,6 +38,13 @@ class Currency extends Model
         if ($this->is_default) {
             DB::table($this->table)->where('id', '<>', $this->id)->update(['is_default' => false]);
         }
+    }
+
+    public function afterDelete()
+    {
+        DB::table('offline_mall_prices')->where('currency_id', $this->id)->delete();
+        DB::table('offline_mall_product_prices')->where('currency_id', $this->id)->delete();
+        DB::table('offline_mall_customer_group_prices')->where('currency_id', $this->id)->delete();
     }
 
     /**
