@@ -8,6 +8,7 @@ class PaidState extends PaymentState
     {
         return [
             PendingState::class,
+            RefundedState::class,
         ];
     }
 }

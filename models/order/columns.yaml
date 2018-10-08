@@ -25,6 +25,12 @@ columns:
         path: $/offline/mall/models/order/_payment_state.htm
         sortable: true
         searchable: true
+    shipped:
+        label: 'offline.mall::lang.order.shipped'
+        type: partial
+        path: $/offline/mall/models/order/_shipped.htm
+        sortable: true
+        searchable: true
     customer:
         label: 'offline.mall::lang.order.customer'
         path: $/offline/mall/models/order/_customer.htm

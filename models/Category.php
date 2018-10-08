@@ -130,7 +130,7 @@ class Category extends Model
             if ($category->parent_id === null) {
                 $category->inherit_property_groups = false;
             }
-            if ($category->inherit_property_groups === true) {
+            if ($category->inherit_property_groups === true && $category->property_groups()->count() > 0) {
                 $category->property_groups()->detach();
             }
             if ( ! $category->slug) {

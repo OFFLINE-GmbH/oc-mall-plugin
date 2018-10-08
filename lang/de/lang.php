@@ -57,6 +57,9 @@
             'create' => 'Kundengruppe erstellen',
             'update' => 'Kundengruppe bearbeiten',
         ],
+        'notifications'        => [
+            'update' => 'Benachrichtigung aktualisieren',
+        ],
     ],
     'menu_items'               => [
         'all_categories'  => 'Alle Shop-Kategorien',
@@ -88,6 +91,10 @@
             'test_mode'         => 'Test-Modus',
             'test_mode_comment' => 'Führe alle Zahlungen in der PayPal Sandbox aus.',
         ],
+    ],
+    'notification_settings'    => [
+        'label'       => 'Benachrichtigungen',
+        'description' => 'Benachrichtigungen konfigurieren',
     ],
     'general_settings'         => [
         'category'                   => 'Mall',
@@ -200,6 +207,8 @@
         'code_comment'         => 'Dieser Code kann zur Identifikation der Gruppe genutzt werden',
         'checked'              => 'Aktiv',
         'unchecked'            => 'Inaktiv',
+        'notifications'        => 'Benachrichtigungen',
+        'notification'         => 'Benachrichtigung',
     ],
     'variant'                  => [
         'method' => [
@@ -366,6 +375,10 @@
         'credit_card_last4_digits'            => 'Letzte 4 Ziffern',
         'tracking_number'                     => 'Trackingnummer',
         'tracking_url'                        => 'Tracking-URL',
+        'tracking_shipped'                    => 'Bestellung als versendet markieren',
+        'tracking_shipped_comment'            => 'Die Bestellung wird nach dem Speichern als versendet markiert',
+        'tracking_notification'               => 'Benachrichtigung versenden',
+        'tracking_notification_comment'       => 'Eine Benachrichtigung mit den Trackinginformationen wird an den Kunden gesendet',
         'shipping_fees'                       => 'Versandkosten',
         'shipping_provider'                   => 'Spediteur',
         'shipping_method'                     => 'Versandart',
@@ -394,13 +407,15 @@
         'items'                               => 'Artikel',
         'quantity'                            => 'Menge',
         'shipping_address_is_same_as_billing' => 'Rechnungs- und Versandadresse sind gleich',
-        'update_tracking_info'                => 'Sendungsverfolgung hinterlegen',
+        'update_shipping_state'               => 'Versandstatus aktualisieren',
         'invalid_status'                      => 'Der ausgewählte Status existiert nicht',
         'updated'                             => 'Bestellung aktualisiert',
         'deleted'                             => 'Bestellung gelöscht',
         'deleting'                            => 'Bestellung wird gelöscht...',
         'delete_confirm'                      => 'Möchtest du diese Bestellung wirklich löschen?',
         'update_invoice_number'               => 'Rechnungsnummer ändern',
+        'shipped'                             => 'Versendet',
+        'not_shipped'                         => 'Versand ausstehend',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
@@ -450,6 +465,7 @@
         ],
         'manage_properties'      => 'Produkt-Eigenschaften bearbeiten',
         'manage_customer_groups' => 'Kann Kundengruppen verwalten',
+        'manage_notifications'   => 'Kann Benachrichtigungen verwalten',
     ],
     'components'               => [
         'category'              => [
@@ -811,7 +827,9 @@
             'complete' => 'Bestellung gilt als abgeschlossen',
         ],
     ],
-    'customer_group'           => [
-        'code_comment' => 'Dieser Code kann zur Identifikation der Gruppe genutzt werden',
+    'notifications'            => [
+        'enabled'         => 'Aktiviert',
+        'enabled_comment' => 'Diese Benachrichtigung versenden',
+        'template'        => 'Mail-Template',
     ],
 ];

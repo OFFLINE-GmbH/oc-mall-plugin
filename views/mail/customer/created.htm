@@ -1,0 +1,14 @@
+subject = "Welcome to our store, {{ user.customer.firstname }}!"
+description = "Sent after a customer signs up"
+==
+
+Hi {{ user.customer.firstname }}
+
+Welcome to our store! You can log in using your e-mail address {{ user.email }}
+and start shopping immediately.
+
+Your user account enables you to keep track of open and past orders.
+
+{% partial 'button' url=app_url type='primary' body %}
+    Visit our store
+{% endpartial %}

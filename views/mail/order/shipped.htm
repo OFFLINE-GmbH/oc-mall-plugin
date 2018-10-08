@@ -1,0 +1,13 @@
+subject = "Your order has been shipped"
+description = "Sent when tracking information was added"
+==
+
+Hi {{ order.customer.firstname }}
+
+We just wanted to let you know that your order **#{{ order.order_number }}** has been shipped.
+
+{% partial 'mall.order.tracking' order=order %}
+
+{% partial 'button' url=app_url type='primary' body %}
+    Check your order online
+{% endpartial %}

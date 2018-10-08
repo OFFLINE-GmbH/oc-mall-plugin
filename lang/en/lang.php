@@ -57,6 +57,9 @@
             'create' => 'Create group',
             'update' => 'Edit group',
         ],
+        'notifications'        => [
+            'update' => 'Update notification',
+        ],
     ],
     'menu_items'               => [
         'all_categories'  => 'All shop categories',
@@ -88,6 +91,10 @@
             'test_mode'         => 'Test mode',
             'test_mode_comment' => 'Run all payments in the PayPal Sandbox.',
         ],
+    ],
+    'notification_settings'    => [
+        'label'       => 'Notifications',
+        'description' => 'Configure store notifications',
     ],
     'general_settings'         => [
         'category'                   => 'Mall Shop',
@@ -201,6 +208,8 @@
         'code_comment'         => 'This code can be used to identify this record programmatically',
         'checked'              => 'Checked',
         'unchecked'            => 'Unchecked',
+        'notifications'        => 'Notifications',
+        'notification'         => 'Notification',
     ],
     'variant'                  => [
         'method' => [
@@ -367,6 +376,10 @@
         'credit_card_last4_digits'            => 'Last 4 digits',
         'tracking_number'                     => 'Tracking number',
         'tracking_url'                        => 'Tracking url',
+        'tracking_shipped'                    => 'Mark order as shipped',
+        'tracking_shipped_comment'            => 'The order will be marked as shipped',
+        'tracking_notification'               => 'Send notification',
+        'tracking_notification_comment'       => 'A notification containing the tracking information will be sent to the customer',
         'shipping_fees'                       => 'Shipping fees',
         'shipping_provider'                   => 'Shipping provider',
         'shipping_method'                     => 'Shipping method',
@@ -395,13 +408,15 @@
         'items'                               => 'Items',
         'quantity'                            => 'Quantity',
         'shipping_address_is_same_as_billing' => 'Shipping address is same as billing address',
-        'update_tracking_info'                => 'Add tracking info',
+        'update_shipping_state'               => 'Update shipping state',
         'invalid_status'                      => 'The selected status does not exist.',
         'updated'                             => 'Order update successful',
         'deleted'                             => 'Order successfully deleted',
         'deleting'                            => 'Deleting order...',
         'delete_confirm'                      => 'Do you really want to delete this order?',
         'update_invoice_number'               => 'Set invoice number',
+        'shipped'                             => 'Shipped',
+        'not_shipped'                         => 'Pending',
         'modal'                               => [
             'cancel' => 'Cancel',
             'update' => 'Update information',
@@ -451,6 +466,7 @@
         ],
         'manage_properties'      => 'Can edit product properites',
         'manage_customer_groups' => 'Can manage customer groups',
+        'manage_notifications'   => 'Can manage notifications',
     ],
     'components'               => [
         'category'              => [
@@ -823,5 +839,10 @@
         'delivered' => 'Delivered',
         'pending'   => 'Pending',
         'cancelled' => 'Cancelled',
+    ],
+    'notifications'            => [
+        'enabled'         => 'Enabled',
+        'enabled_comment' => 'This notification is enabled',
+        'template'        => 'Mail template',
     ],
 ];

@@ -1,0 +1,13 @@
+<button type="button" class="btn btn-default oc-icon-money"
+        data-toggle="dropdown">
+    <?= e(trans('offline.mall::lang.order.change_payment_status')) ?>
+</button>
+
+<ul class="dropdown-menu"
+    data-dropdown-title="<?= e(trans('offline.mall::lang.order.change_payment_status')) ?>">
+    <?php foreach($order['payment_state']::getAvailableTransitions() as $state): ?>
+    <li><a href="#" tabindex="-1"
+           data-request-data="state: '<?= addslashes($state) ?>', id: <?= e($order['id']) ?>"
+           data-request="onChangePaymentState"><?= e($state::label()) ?></a></li>
+    <?php endforeach; ?>
+</ul>

@@ -1,0 +1,41 @@
+columns:
+    enabled:
+        label:  'offline.mall::lang.notifications.enabled'
+        type: partial
+        path: enabled
+        sortable: false
+        clickable: false
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    description:
+        label: 'offline.mall::lang.product.description'
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: 'offline.mall::lang.common.code'
+        type: text
+        searchable: true
+        sortable: true
+    template:
+        label: 'offline.mall::lang.notifications.template'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: 'offline.mall::lang.common.sort_order'
+        type: number
+        invisible: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        invisible: true
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        invisible: true
+        sortable: true

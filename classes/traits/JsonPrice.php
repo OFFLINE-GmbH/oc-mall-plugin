@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
@@ -12,6 +13,10 @@ trait JsonPrice
     public $currencies;
     public $activeCurrency;
     public $baseCurrency;
+    /**
+     * @var Money
+     */
+    protected $money;
 
     public function __construct(...$args)
     {
@@ -21,6 +26,7 @@ trait JsonPrice
         $this->currencies     = $currencies->keyBy('code');
         $this->baseCurrency   = $currencies->first();
         $this->activeCurrency = Currency::activeCurrency();
+        $this->money          = app(Money::class);
     }
 
     public function getPriceColumns(): array
@@ -117,7 +123,7 @@ trait JsonPrice
         }
 
         return collect($price)->map(function ($price, $currency) use ($product) {
-            return format_money($price, $product, $currency);
+            return $this->money->format($price, $product, $currency);
         })->toArray();
     }
 

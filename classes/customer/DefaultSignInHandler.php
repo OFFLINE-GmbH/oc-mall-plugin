@@ -44,7 +44,7 @@ class DefaultSignInHandler implements SignInHandler
         ];
 
         Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
-        Event::fire('mall.user.beforeAuthenticate', [$this, $credentials]);
+        Event::fire('mall.customer.beforeAuthenticate', [$this, $credentials]);
 
         $user = Auth::authenticate($credentials, true);
 

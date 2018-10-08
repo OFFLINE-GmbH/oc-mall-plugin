@@ -6,6 +6,7 @@ use BackendMenu;
 use Event;
 use Flash;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderState;
 
@@ -39,9 +40,11 @@ class Orders extends Controller
         $this->pageTitle = trans('offline.mall::lang.titles.orders.show');
         $this->addCss('/plugins/offline/mall/assets/backend.css');
 
-        $order                     = Order::with('products', 'order_state')->findOrFail($this->params[0]);
-        $this->vars['order']       = $order;
-        $this->vars['orderStates'] = OrderState::orderBy('sort_order', 'ASC')->get();
+        $order                      = Order::with('products', 'order_state')->findOrFail($this->params[0]);
+        $this->vars['order']        = $order;
+        $this->vars['money']        = app(Money::class);
+        $this->vars['orderStates']  = OrderState::orderBy('sort_order', 'ASC')->get();
+        $this->vars['paymentState'] = $this->paymentStatePartial($order);
     }
 
     public function onChangeOrderState()
@@ -70,7 +73,8 @@ class Orders extends Controller
         $order->save();
 
         return [
-            '#payment_state' => trans($newState::label()),
+            '#payment-state'        => trans($newState::label()),
+            '#payment-state-toggle' => $this->paymentStatePartial($order),
         ];
     }
 
@@ -78,11 +82,20 @@ class Orders extends Controller
     {
         $trackingNumber = input('trackingNumber');
         $trackingUrl    = input('trackingUrl');
+        $notification   = (bool)input('notification', false);
+        $shipped        = (bool)input('shipped', false);
 
         $data = ['tracking_url' => $trackingUrl, 'tracking_number' => $trackingNumber];
 
-        Event::fire('mall.order.tracking_info.changed', $data);
-        $this->updateOrder($data);
+        if ($shipped) {
+            $data['shipped_at'] = now();
+        }
+
+        $order = $this->updateOrder($data);
+
+        $order->shippingNotification = $notification;
+
+        Event::fire('mall.order.shipped', [$order]);
     }
 
     public function onUpdateInvoiceNumber()
@@ -91,7 +104,6 @@ class Orders extends Controller
 
         $data = ['invoice_number' => $invoiceNumber];
 
-        Event::fire('mall.order.invoice_number.changed', $data);
         $this->updateOrder($data);
     }
 
@@ -112,5 +124,12 @@ class Orders extends Controller
 
         $order->save();
         Flash::success(trans('offline.mall::lang.order.updated'));
+
+        return $order;
+    }
+
+    protected function paymentStatePartial($order)
+    {
+        return $this->makePartial('payment_state', ['order' => $order]);
     }
 }

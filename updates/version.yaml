@@ -41,4 +41,5 @@
     - create_offline_mall_currencies.php
     - allow_non_unique_emails_for_rainlab_user.php
     - add_customer_group_id_to_rainlab_users.php
+    - create_offline_mall_notifications.php
     - database_seeder.php
