@@ -64,29 +64,24 @@ class Products extends MallComponent
     public function defineProperties()
     {
         return [
-            'category'         => [
+            'category'        => [
                 'title'   => 'offline.mall::lang.common.category',
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
-            'product_page'     => [
-                'title'       => 'offline.mall::lang.components.products.properties.product_page.title',
-                'description' => 'offline.mall::lang.components.products.properties.product_page.description',
-                'type'        => 'dropdown',
-            ],
-            'show_variants'    => [
+            'showVariants'    => [
                 'title'       => 'offline.mall::lang.components.products.properties.show_variants.title',
                 'description' => 'offline.mall::lang.components.products.properties.show_variants.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
-            'include_children' => [
+            'includeChildren' => [
                 'title'       => 'offline.mall::lang.components.products.properties.include_children.title',
                 'description' => 'offline.mall::lang.components.products.properties.include_children.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
-            'per_page'         => [
+            'perPage'         => [
                 'title'       => 'offline.mall::lang.components.products.properties.per_page.title',
                 'description' => 'offline.mall::lang.components.products.properties.per_page.description',
                 'default'     => '9',
@@ -111,8 +106,8 @@ class Products extends MallComponent
 
     protected function setData()
     {
-        $this->setVar('includeChildren', (bool)$this->property('include_children'));
-        $this->setVar('showVariants', (bool)$this->property('show_variants'));
+        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
+        $this->setVar('showVariants', (bool)$this->property('showVariants'));
         $this->setVar('category', $this->getCategory());
 
         $categories = [$this->category->id];
@@ -123,7 +118,7 @@ class Products extends MallComponent
         $this->setVar('categories', $categories);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
         $this->setVar('pageNumber', (int)request('page', 1));
-        $this->setVar('perPage', (int)$this->property('per_page'));
+        $this->setVar('perPage', (int)$this->property('perPage'));
         $this->setVar('items', $this->getItems());
     }
 
