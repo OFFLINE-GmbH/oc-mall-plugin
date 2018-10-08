@@ -5,6 +5,7 @@
         {% if order.tracking_number %}
             {{ 'offline.mall::lang.order.tracking_number' | trans }}: {{ order.tracking_number }}
         {% endif %}
+        <br />
         {% if order.tracking_url %}
             {{ 'offline.mall::lang.order.tracking_url' | trans }}: [{{ order.tracking_url }}]({{ order.tracking_url }})
         {% endif %}
