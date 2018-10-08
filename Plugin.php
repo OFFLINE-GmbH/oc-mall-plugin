@@ -214,14 +214,14 @@ class Plugin extends PluginBase
 
     public function registerMarkupTags()
     {
-        // If the mail token parser is only registered temporarily the sending
-        // of emails with the sync queue driver will fail since Twig gets initialized
-        // before the parser is registered and therefore the partial tag is unknown.
-        // @see https://github.com/octobercms/october/issues/3341#issuecomment-427586226
-        $markupManager = MarkupManager::instance();
-        $markupManager->registerTokenParsers([
-            new MailPartialTokenParser,
-        ]);
+//        // If the mail token parser is only registered temporarily the sending
+//        // of emails with the sync queue driver will fail since Twig gets initialized
+//        // before the parser is registered and therefore the partial tag is unknown.
+//        // @see https://github.com/octobercms/october/issues/3341#issuecomment-427586226
+//        $markupManager = MarkupManager::instance();
+//        $markupManager->registerTokenParsers([
+//            new MailPartialTokenParser,
+//        ]);
 
         return [
             'filters' => [
