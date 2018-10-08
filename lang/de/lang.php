@@ -468,13 +468,13 @@
         'manage_notifications'   => 'Kann Benachrichtigungen verwalten',
     ],
     'components'               => [
-        'category'              => [
+        'products'              => [
             'details'    => [
-                'name'        => 'Kategorie',
-                'description' => 'Zeigt alle Produkte in einer Kategorie an',
+                'name'        => 'Produkte',
+                'description' => 'Zeigt eine Liste von Produkten an',
             ],
             'properties' => [
-                'use_url'          => 'Verwende Slug aus URL',
+                'use_url'          => 'Verwende Kategorie-Slug aus URL',
                 'show_variants'    => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
@@ -489,9 +489,9 @@
                 ],
             ],
         ],
-        'categoryFilter'        => [
+        'productsFilter'        => [
             'details'    => [
-                'name'        => 'Kategorie-Filter',
+                'name'        => 'Produkte-Filter',
                 'description' => 'Filtert die Produkte einer Kategorie',
             ],
             'properties' => [

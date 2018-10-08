@@ -28,8 +28,8 @@ use OFFLINE\Mall\Components\AddressForm;
 use OFFLINE\Mall\Components\AddressList;
 use OFFLINE\Mall\Components\AddressSelector;
 use OFFLINE\Mall\Components\Cart;
-use OFFLINE\Mall\Components\Category as CategoryComponent;
-use OFFLINE\Mall\Components\CategoryFilter;
+use OFFLINE\Mall\Components\Products as ProductsComponent;
+use OFFLINE\Mall\Components\ProductsFilter;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
@@ -124,8 +124,8 @@ class Plugin extends PluginBase
             AddressForm::class           => 'addressForm',
             PaymentMethodSelector::class => 'paymentMethodSelector',
             Checkout::class              => 'checkout',
-            CategoryComponent::class     => 'category',
-            CategoryFilter::class        => 'categoryFilter',
+            ProductsComponent::class     => 'products',
+            ProductsFilter::class        => 'productsFilter',
             ProductComponent::class      => 'product',
             DiscountApplier::class       => 'discountApplier',
             MyAccount::class             => 'myAccount',
@@ -214,14 +214,14 @@ class Plugin extends PluginBase
 
     public function registerMarkupTags()
     {
-        // If the mail token parser is only registered temporarily the sending
-        // of emails with the sync queue driver will fail since Twig gets initialized
-        // before the parser is registered and therefore the partial tag is unknown.
-        // @see https://github.com/octobercms/october/issues/3341#issuecomment-427586226
-        $markupManager = MarkupManager::instance();
-        $markupManager->registerTokenParsers([
-            new MailPartialTokenParser,
-        ]);
+//        // If the mail token parser is only registered temporarily the sending
+//        // of emails with the sync queue driver will fail since Twig gets initialized
+//        // before the parser is registered and therefore the partial tag is unknown.
+//        // @see https://github.com/octobercms/october/issues/3341#issuecomment-427586226
+//        $markupManager = MarkupManager::instance();
+//        $markupManager->registerTokenParsers([
+//            new MailPartialTokenParser,
+//        ]);
 
         return [
             'filters' => [

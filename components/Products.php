@@ -2,7 +2,6 @@
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Mail;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
@@ -11,10 +10,9 @@ use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
-use RainLab\Translate\Models\Message;
 use Url;
 
-class Category extends MallComponent
+class Products extends MallComponent
 {
     /**
      * @var CategoryModel
@@ -58,8 +56,8 @@ class Category extends MallComponent
     public function componentDetails()
     {
         return [
-            'name'        => 'offline.mall::lang.components.category.details.name',
-            'description' => 'offline.mall::lang.components.category.details.description',
+            'name'        => 'offline.mall::lang.components.products.details.name',
+            'description' => 'offline.mall::lang.components.products.details.description',
         ];
     }
 
@@ -72,25 +70,25 @@ class Category extends MallComponent
                 'type'    => 'dropdown',
             ],
             'product_page'     => [
-                'title'       => 'offline.mall::lang.components.category.properties.product_page.title',
-                'description' => 'offline.mall::lang.components.category.properties.product_page.description',
+                'title'       => 'offline.mall::lang.components.products.properties.product_page.title',
+                'description' => 'offline.mall::lang.components.products.properties.product_page.description',
                 'type'        => 'dropdown',
             ],
             'show_variants'    => [
-                'title'       => 'offline.mall::lang.components.category.properties.show_variants.title',
-                'description' => 'offline.mall::lang.components.category.properties.show_variants.description',
+                'title'       => 'offline.mall::lang.components.products.properties.show_variants.title',
+                'description' => 'offline.mall::lang.components.products.properties.show_variants.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
             'include_children' => [
-                'title'       => 'offline.mall::lang.components.category.properties.include_children.title',
-                'description' => 'offline.mall::lang.components.category.properties.include_children.description',
+                'title'       => 'offline.mall::lang.components.products.properties.include_children.title',
+                'description' => 'offline.mall::lang.components.products.properties.include_children.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
             'per_page'         => [
-                'title'       => 'offline.mall::lang.components.category.properties.per_page.title',
-                'description' => 'offline.mall::lang.components.category.properties.per_page.description',
+                'title'       => 'offline.mall::lang.components.products.properties.per_page.title',
+                'description' => 'offline.mall::lang.components.products.properties.per_page.description',
                 'default'     => '9',
                 'type'        => 'string',
             ],
@@ -99,7 +97,7 @@ class Category extends MallComponent
 
     public function getCategoryOptions()
     {
-        return [':slug' => trans('offline.mall::lang.components.category.properties.use_url')]
+        return [':slug' => trans('offline.mall::lang.components.products.properties.use_url')]
             + CategoryModel::get()->pluck('name', 'id')->toArray();
     }
 
