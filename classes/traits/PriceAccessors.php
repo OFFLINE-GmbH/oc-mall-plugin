@@ -12,7 +12,6 @@ use OFFLINE\Mall\Models\Variant;
 trait PriceAccessors
 {
     use NullPrice;
-
     /**
      * @var Money
      */
@@ -32,12 +31,12 @@ trait PriceAccessors
         if (method_exists($this, 'getUserSpecificPrice')) {
             if ($specific = $this->getUserSpecificPrice()) {
                 return $specific->where('currency_id', $currency->id)->first()
-                    ?? $this->nullPrice($currency, $specific);
+                    ?? $this->nullPrice($currency, $specific, $relation);
             }
         }
 
         return $this->$relation->where('currency_id', $currency->id)->first()
-            ?? $this->nullPrice($currency, $this->$relation);
+            ?? $this->nullPrice($currency, $this->$relation, $relation);
     }
 
     public function price($currency = null, $relation = 'prices')

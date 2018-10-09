@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             'format'     => '{{ price|number_format(2, ".", "\'") }}{{ currency.symbol }}',
             'decimals'   => 2,
             'symbol'     => '€',
-            'rate'       => 1,
+            'rate'       => 1.14,
         ]);
 
         $this->call(CategoryTableSeeder::class);

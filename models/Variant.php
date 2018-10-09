@@ -186,7 +186,7 @@ class Variant extends Model
         $parentValues = $this->product->getAttribute($attribute);
 
         // In case of an empty Array or Collection we want to
-        // return the parent's values
+        // return the parent's values.
         $empty = $this->isEmptyCollection($originalValue);
 
         if ($attribute !== 'prices' || $empty) {
@@ -195,9 +195,7 @@ class Variant extends Model
 
         // Inherit parent pricing info.
         return $originalValue->map(function ($price) use ($parentValues) {
-            return $price->price !== null
-                ? $price
-                : $parentValues->where('currency_id', $price->currency_id)->first();
+            return $price->price === null ? $this->nullPrice($price->currency, $parentValues) : $price;
         });
     }
 
