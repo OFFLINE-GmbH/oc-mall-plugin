@@ -18,6 +18,7 @@ use Validator;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsFilter extends MallComponent
 {
