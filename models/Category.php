@@ -2,6 +2,7 @@
 
 use Cache;
 use Cms\Classes\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use InvalidArgumentException;
@@ -20,8 +21,21 @@ class Category extends Model
     use NestedTree;
     use SortableRelation;
 
-    public const ID_MAP_CACHE_KEY = 'oc-mall.categories.id_map';
-    public const ALL_CATEGORIES_CACHE_KEY = 'oc-mall.categories.all';
+    /**
+     * Cache key to store the slug/id map.
+     * @var string
+     */
+    public const MAP_CACHE_KEY = 'oc-mall.categories.map';
+    /**
+     * Cache key to store the category tree.
+     * @var string
+     */
+    public const TREE_CACHE_KEY = 'oc-mall.categories.tree';
+    /**
+     * This locale is used if RainLab.Translate is not available.
+     * @var string
+     */
+    public const DEFAULT_LOCALE = 'default';
 
     protected $dates = [
         'deleted_at',
@@ -110,19 +124,10 @@ class Category extends Model
         });
     }
 
-
     /**
-     * Return all property ids that are in an array of group ids.
+     * Boot method of the Category model
+     * @return void
      */
-    protected function getPropertiesInGroups(array $groupIds): Collection
-    {
-        return \DB::table('offline_mall_property_property_group')
-                  ->where('property_group_id', $groupIds)
-                  ->get(['property_id'])
-                  ->pluck('property_id')
-                  ->values();
-    }
-
     public static function boot()
     {
         parent::boot();
@@ -137,14 +142,62 @@ class Category extends Model
                 $category->slug = str_slug($category->name);
             }
         });
-        static::saved(function () {
-            Cache::forget(self::ID_MAP_CACHE_KEY);
-            Cache::forget(self::ALL_CATEGORIES_CACHE_KEY);
+        static::saved(function (self $model) {
+            $model->purgeCache();
+            $model->warmCache();
         });
-        static::deleted(function () {
-            Cache::forget(self::ID_MAP_CACHE_KEY);
-            Cache::forget(self::ALL_CATEGORIES_CACHE_KEY);
+        static::deleted(function (self $model) {
+            $model->purgeCache();
+            $model->warmCache();
         });
+    }
+
+    /**
+     * Return all property ids that are in an array of group ids.
+     */
+    protected function getPropertiesInGroups(array $groupIds): Collection
+    {
+        return \DB::table('offline_mall_property_property_group')
+                  ->where('property_group_id', $groupIds)
+                  ->get(['property_id'])
+                  ->pluck('property_id')
+                  ->values();
+    }
+
+    /**
+     * Translate url parameters when the user switches the active locale.
+     *
+     * @param $params
+     * @param $oldLocale
+     * @param $newLocale
+     *
+     * @return mixed
+     */
+    public static function translateParams($params, $oldLocale, $newLocale)
+    {
+        $newParams = $params;
+        foreach ($params as $paramName => $paramValue) {
+            $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+            if ($records) {
+                $records->translateContext($newLocale);
+                $newParams[$paramName] = $records->$paramName;
+            } elseif ($paramName === 'slug') {
+                // Translate nested slugs.
+                $model    = new self;
+                $category = array_get($model->getSlugMap($oldLocale), $newParams['slug'] ?? -1);
+                if ( ! $category) {
+                    continue;
+                }
+
+                $translationMap = array_flip($model->getSlugMap($newLocale));
+                $translatedSlug = array_get($translationMap, $category);
+                if ($translatedSlug) {
+                    $newParams['slug'] = $translatedSlug;
+                }
+            }
+        }
+
+        return $newParams;
     }
 
     /**
@@ -257,16 +310,21 @@ class Category extends Model
      */
     public static function resolveCategoriesItem($item, $url, $theme)
     {
-        if (Cache::has(self::ALL_CATEGORIES_CACHE_KEY)) {
-            return Cache::get(self::ALL_CATEGORIES_CACHE_KEY);
+        $category = new Category();
+        $locale   = $category->getLocale();
+
+        if (Cache::has($category->treeCacheKey($locale))) {
+            return Cache::get($category->treeCacheKey($locale));
         }
 
         $structure = [];
-        $category  = new Category();
-        $iterator  = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url) {
+        $iterator  = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url, $locale) {
             $branch = [];
             foreach ($items as $item) {
                 $branchItem = self::getMenuItem($item, $url);
+                if ($locale !== static::DEFAULT_LOCALE && $item->rainlabTranslateInstalled()) {
+                    $item->translateContext($locale);
+                }
                 if ($item->children) {
                     $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
@@ -278,7 +336,7 @@ class Category extends Model
 
         $structure['items'] = $iterator($category->getEagerRoot());
 
-        Cache::forever(self::ALL_CATEGORIES_CACHE_KEY, $structure);
+        Cache::forever($category->treeCacheKey($locale), $structure);
 
         return $structure;
     }
@@ -350,7 +408,7 @@ class Category extends Model
 
         $slugMap = (new Category)->getSlugMap();
         if ( ! isset($slugMap[$slug])) {
-            return null;
+            throw new ModelNotFoundException(sprintf('Category with slug %s not found.', $slug));
         }
 
         return Category::with($with)->findOrFail($slugMap[$slug]);
@@ -359,12 +417,20 @@ class Category extends Model
     /**
      * Returns a cached map of category_ids and slug pairs.
      */
-    public function getSlugMap()
+    public function getSlugMap($locale = null)
     {
-        return \Cache::rememberForever(self::ID_MAP_CACHE_KEY, function () {
+        $locale = $this->getLocale($locale);
+
+        return \Cache::rememberForever($this->mapCacheKey($locale), function () use ($locale) {
             $map = [];
 
-            $buildSlugMap = function (?Category $parent = null, array &$map, string $base = '') use (&$buildSlugMap) {
+            $buildSlugMap = function (?Category $parent = null, array &$map, string $base = '') use (
+                &$buildSlugMap,
+                $locale
+            ) {
+                if ($parent->rainlabTranslateInstalled()) {
+                    $parent->translateContext($locale);
+                }
                 $slug       = trim($base . '/' . $parent->slug, '/');
                 $map[$slug] = $parent->id;
                 foreach ($parent->children as $child) {
@@ -372,12 +438,60 @@ class Category extends Model
                 }
             };
 
-            foreach (Category::getAllRoot() as $parent) {
+            $model = new Category();
+            foreach ($model->getAllRoot() as $parent) {
                 $buildSlugMap($parent, $map);
             }
 
             return $map;
         });
+    }
+
+    /**
+     * Return a locale specific id map cache key.
+     *
+     * @param $locale
+     *
+     * @return string
+     */
+    protected function mapCacheKey($locale)
+    {
+        return self::MAP_CACHE_KEY . '.' . $locale;
+    }
+
+    /**
+     * Return a locale specific tree cache key.
+     *
+     * @param $locale
+     *
+     * @return string
+     */
+    protected function treeCacheKey($locale)
+    {
+        return self::TREE_CACHE_KEY . '.' . $locale;
+    }
+
+    /**
+     * Purge all cached category data.
+     * @return void
+     */
+    protected function purgeCache()
+    {
+        foreach ($this->getLocales() as $locale) {
+            Cache::forget($this->treeCacheKey($locale));
+            Cache::forget($this->mapCacheKey($locale));
+        }
+    }
+
+    /**
+     * Pre-populate the cache.
+     * @return void
+     */
+    protected function warmCache()
+    {
+        foreach ($this->getLocales() as $locale) {
+            $this->getSlugMap($locale);
+        }
     }
 
     /**
@@ -436,5 +550,51 @@ class Category extends Model
                     ->get(['id'])
                     ->pluck('id')
                     ->toArray();
+    }
+
+    /**
+     * Returns the currently active locale.
+     *
+     * @param $locale
+     *
+     * @return string
+     */
+    protected function getLocale($locale = null): string
+    {
+        if ($locale !== null) {
+            return $locale;
+        }
+
+        $locale = self::DEFAULT_LOCALE;
+        if (class_exists(\RainLab\Translate\Classes\Translator::class)) {
+            $locale = \RainLab\Translate\Classes\Translator::instance()->getLocale();
+        }
+
+        return $locale;
+    }
+
+    /**
+     * Returns an array of all available locales.
+     *
+     * @return array
+     */
+    protected function getLocales(): array
+    {
+        $locales = [self::DEFAULT_LOCALE];
+        if ($this->rainlabTranslateInstalled()) {
+            $locales = \RainLab\Translate\Models\Locale::get(['code'])->pluck('code')->toArray();
+        }
+
+        return $locales;
+    }
+
+    /**
+     * Check if the Translator class of RainLab.Translate is available.
+     *
+     * @return bool
+     */
+    protected function rainlabTranslateInstalled(): bool
+    {
+        return class_exists(\RainLab\Translate\Classes\Translator::class);
     }
 }

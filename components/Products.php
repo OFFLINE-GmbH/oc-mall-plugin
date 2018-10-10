@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
@@ -98,7 +99,11 @@ class Products extends MallComponent
 
     public function onRun()
     {
-        $this->setData();
+        try {
+            $this->setData();
+        } catch (ModelNotFoundException $e) {
+            return $this->controller->run('404');
+        }
 
         $this->page->title            = $this->category->meta_title ?: $this->category->name;
         $this->page->meta_description = $this->category->meta_description;
