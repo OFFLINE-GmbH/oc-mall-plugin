@@ -6,7 +6,6 @@ use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
@@ -163,6 +162,33 @@ class Product extends Model
             'pivotModel' => CartProduct::class,
         ],
     ];
+
+
+    /**
+     * Translate url parameters when the user switches the active locale.
+     *
+     * @param $params
+     * @param $oldLocale
+     * @param $newLocale
+     *
+     * @return mixed
+     */
+    public static function translateParams($params, $oldLocale, $newLocale)
+    {
+        $newParams = $params;
+        foreach ($params as $paramName => $paramValue) {
+            if ($paramName !== 'slug') {
+                continue;
+            }
+            $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+            if ($records) {
+                $records->translateContext($newLocale);
+                $newParams[$paramName] = $records->$paramName;
+            }
+        }
+
+        return $newParams;
+    }
 
     public function beforeCreate()
     {

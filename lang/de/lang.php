@@ -210,6 +210,7 @@
         'notifications'        => 'Benachrichtigungen',
         'notification'         => 'Benachrichtigung',
         'price_missing'        => 'Gib mindestens ein Preis in der Hauptwährung an',
+        'slug_unique'          => 'Die URL existiert bereits',
     ],
     'variant'                  => [
         'method' => [

@@ -253,6 +253,16 @@ class Plugin extends PluginBase
                 return Category::resolveCategoryItem($item, $url, $theme);
             }
         });
+
+        // Translate slugs
+        Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+            if ($page->getBaseFileName() === GeneralSettings::get('category_page')) {
+                return Category::translateParams($params, $oldLocale, $newLocale);
+            }
+            if ($page->getBaseFileName() === GeneralSettings::get('product_page')) {
+                return Product::translateParams($params, $oldLocale, $newLocale);
+            }
+        });
     }
 
     protected function registerSiteSearchEvents()
