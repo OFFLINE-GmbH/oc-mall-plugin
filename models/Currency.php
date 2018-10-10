@@ -15,6 +15,8 @@ class Currency extends Model
     public const CURRENCY_SESSION_KEY = 'mall.currency.active';
     public const DEFAULT_CURRENCY_CACHE_KEY = 'mall.currency.default';
 
+    public static $defaultCurrency;
+
     public $rules = [
         'code'     => 'required|unique:offline_mall_currencies,code',
         'rate'     => 'required',
@@ -78,6 +80,10 @@ class Currency extends Model
      */
     public static function defaultCurrency()
     {
+        if (static::$defaultCurrency) {
+            return static::$defaultCurrency;
+        }
+
         $currency = Cache::rememberForever(static::DEFAULT_CURRENCY_CACHE_KEY, function () {
             $currency = static::orderBy('is_default', 'DESC')->first();
             static::guardMissingCurrency($currency);
@@ -85,7 +91,9 @@ class Currency extends Model
             return $currency->toArray();
         });
 
-        return (new Currency)->newFromBuilder($currency);
+        static::$defaultCurrency = (new Currency)->newFromBuilder($currency);
+
+        return static::$defaultCurrency;
     }
 
     protected static function guardMissingCurrency($currency)

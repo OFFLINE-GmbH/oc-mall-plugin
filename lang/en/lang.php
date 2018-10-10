@@ -210,6 +210,7 @@
         'unchecked'            => 'Unchecked',
         'notifications'        => 'Notifications',
         'notification'         => 'Notification',
+        'price_missing'        => 'Enter at least a price for the default currency',
     ],
     'variant'                  => [
         'method' => [

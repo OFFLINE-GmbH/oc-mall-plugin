@@ -55,6 +55,7 @@ tabs:
             prompt: 'offline.mall::lang.product.add_currency'
             span: auto
             type: mall.price
+            required: true
             tab: 'offline.mall::lang.product.general'
             context: create
         stock:

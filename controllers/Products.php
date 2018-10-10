@@ -219,36 +219,39 @@ class Products extends Controller
     protected function updatePrices($model, $key = 'prices')
     {
         $data = post('MallPrice');
-        foreach ($data as $currency => $_data) {
-            $value = array_get($_data, $key);
-            if ($value === "") {
-                $value = null;
-            }
+        \DB::transaction(function () use ($model, $key, $data) {
+            foreach ($data as $currency => $_data) {
+                $value = array_get($_data, $key);
+                if ($value === '') {
+                    $value = null;
+                }
 
-            Price::updateOrCreate([
-                'price_category_id' => null,
-                'priceable_id'      => $model->id,
-                'priceable_type'    => $model::MORPH_KEY,
-                'currency_id'       => $currency,
-            ], [
-                'price' => $value,
-            ]);
-        }
+                Price::updateOrCreate([
+                    'price_category_id' => null,
+                    'priceable_id'      => $model->id,
+                    'priceable_type'    => $model::MORPH_KEY,
+                    'currency_id'       => $currency,
+                ], [
+                    'price' => $value,
+                ]);
+            }
+        });
     }
 
     protected function updateProductPrices($product, $variant, $key = '_prices')
     {
-        $data = post('MallPrice');
-        foreach ($data as $currency => $_data) {
-            $value = array_get($_data, $key);
-
-            ProductPrice::updateOrCreate([
-                'currency_id' => $currency,
-                'product_id'  => $product->id,
-                'variant_id'  => $variant->id ?? null,
-            ], [
-                'price' => $value,
-            ]);
-        }
+        \DB::transaction(function () use ($product, $variant, $key) {
+            $data = post('MallPrice');
+            foreach ($data as $currency => $_data) {
+                $value = array_get($_data, $key);
+                ProductPrice::updateOrCreate([
+                    'currency_id' => $currency,
+                    'product_id'  => $product->id,
+                    'variant_id'  => $variant->id ?? null,
+                ], [
+                    'price' => $value,
+                ]);
+            }
+        });
     }
 }
