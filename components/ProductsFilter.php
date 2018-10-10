@@ -244,7 +244,20 @@ class ProductsFilter extends MallComponent
 
     protected function setPriceRange()
     {
-        $range = $this->getPriceRangeQuery()->first();
+        $range = $this->getPriceRangeQuery(Currency::defaultCurrency())->first();
+
+        // If the active currency is not the default currency we might have to
+        // extend the range by dynamically calculated prices.
+        if ($this->currency->id !== Currency::defaultCurrency()->id) {
+            $calculatedMin = $range->min * $this->currency->rate;
+            $calculatedMax = $range->max * $this->currency->rate;
+
+            $currencyRange = $this->getPriceRangeQuery($this->currency)->first();
+
+            $range->min = $this->smaller($currencyRange->min, $calculatedMin);
+            $range->max = $this->bigger($currencyRange->max, $calculatedMax);
+        }
+
 
         $min = $this->money->round($range->min, $this->currency->decimals);
         $max = $this->money->round($range->max, $this->currency->decimals);
@@ -252,7 +265,7 @@ class ProductsFilter extends MallComponent
         $this->setVar('priceRange', $min === $max ? false : [$min, $max]);
     }
 
-    protected function getPriceRangeQuery()
+    protected function getPriceRangeQuery(Currency $currency)
     {
         return DB
             ::table('offline_mall_product_prices')
@@ -262,7 +275,7 @@ class ProductsFilter extends MallComponent
                 'offline_mall_product_prices.product_id', '=', 'offline_mall_products.id'
             )
             ->whereIn('offline_mall_products.category_id', $this->categories)
-            ->where('offline_mall_product_prices.currency_id', $this->currency->id);
+            ->where('offline_mall_product_prices.currency_id', $currency->id);
     }
 
     protected function setBrands()
@@ -345,5 +358,15 @@ class ProductsFilter extends MallComponent
     public function getMaxValue($values)
     {
         return $values->max('value');
+    }
+
+    protected function smaller($a, $b)
+    {
+        return $a > $b ? $b : $a;
+    }
+
+    protected function bigger($a, $b)
+    {
+        return $a > $b ? $a : $b;
     }
 }
