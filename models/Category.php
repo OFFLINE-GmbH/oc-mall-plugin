@@ -10,6 +10,7 @@ use Model;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Classes\PluginManager;
@@ -142,6 +143,9 @@ class Category extends Model
             if ( ! $category->slug) {
                 $category->slug = str_slug($category->name);
             }
+        });
+        static::saving(function (self $model) {
+            $this->validateUniqueSlug($model);
         });
         static::saved(function (self $model) {
             $model->purgeCache();
@@ -323,9 +327,7 @@ class Category extends Model
             $branch = [];
             foreach ($items as $item) {
                 $branchItem = self::getMenuItem($item, $url);
-                if ($locale !== static::DEFAULT_LOCALE && $item->rainlabTranslateInstalled()) {
-                    $item->translateContext($locale);
-                }
+                $item->setTranslateContext($locale);
                 if ($item->children) {
                     $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
@@ -429,9 +431,7 @@ class Category extends Model
                 &$buildSlugMap,
                 $locale
             ) {
-                if ($parent->rainlabTranslateInstalled()) {
-                    $parent->translateContext($locale);
-                }
+                $parent->setTranslateContext($locale);
                 $slug       = trim($base . '/' . $parent->slug, '/');
                 $map[$slug] = $parent->id;
                 foreach ($parent->children as $child) {
@@ -504,6 +504,8 @@ class Category extends Model
     public function getNestedSlugAttribute()
     {
         return $this->getParentsAndSelf()->map(function (Category $category) {
+            $category->setTranslateContext($this->translateContext());
+
             return $category->slug;
         })->implode('/');
     }
@@ -554,6 +556,33 @@ class Category extends Model
     }
 
     /**
+     * Make sure the category's slug is not yet in use.
+     *
+     * @param self $model
+     *
+     * @throws ValidationException
+     */
+    public function validateUniqueSlug(self $model)
+    {
+        foreach ($model->getLocales() as $locale) {
+            $slug = '';
+            $model->setTranslateContext($locale);
+            if ($model->parent_id) {
+                $parent = Category::find($model->parent_id);
+                $parent->setTranslateContext($locale);
+                $prefix = $parent->nested_slug;
+                $slug   .= trim($prefix, '/') . '/';
+            }
+            $slug .= trim($model->slug, '/');
+            $map  = $model->getSlugMap($locale);
+
+            if (array_key_exists($slug, $map) && $map[$slug] !== $model->id) {
+                throw new ValidationException(['slug' => trans('offline.mall::lang.common.slug_unique')]);
+            }
+        }
+    }
+
+    /**
      * Returns the currently active locale.
      *
      * @param $locale
@@ -597,5 +626,17 @@ class Category extends Model
     protected function rainlabTranslateInstalled(): bool
     {
         return PluginManager::instance()->exists('RainLab.Translate');
+    }
+
+    /**
+     * Conditionally set the translate context.
+     *
+     * @param string $locale
+     */
+    public function setTranslateContext(string $locale)
+    {
+        if ($this->rainlabTranslateInstalled()) {
+            $this->translateContext($locale);
+        }
     }
 }

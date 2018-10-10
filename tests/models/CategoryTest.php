@@ -75,7 +75,7 @@ class CategoryTest extends PluginTestCase
         } catch (\Throwable $e) {
             $this->assertInstanceOf(ModelNotFoundException::class, $e);
         }
-        
+
         try {
             Category::getByNestedSlug('child/child');
         } catch (\Throwable $e) {

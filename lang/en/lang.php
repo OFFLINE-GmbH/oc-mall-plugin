@@ -211,6 +211,7 @@
         'notifications'        => 'Notifications',
         'notification'         => 'Notification',
         'price_missing'        => 'Enter at least a price for the default currency',
+        'slug_unique'          => 'The URL has to be unique',
     ],
     'variant'                  => [
         'method' => [
