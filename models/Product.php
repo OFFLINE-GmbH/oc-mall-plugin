@@ -163,6 +163,33 @@ class Product extends Model
         ],
     ];
 
+
+    /**
+     * Translate url parameters when the user switches the active locale.
+     *
+     * @param $params
+     * @param $oldLocale
+     * @param $newLocale
+     *
+     * @return mixed
+     */
+    public static function translateParams($params, $oldLocale, $newLocale)
+    {
+        $newParams = $params;
+        foreach ($params as $paramName => $paramValue) {
+            if ($paramName !== 'slug') {
+                continue;
+            }
+            $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+            if ($records) {
+                $records->translateContext($newLocale);
+                $newParams[$paramName] = $records->$paramName;
+            }
+        }
+
+        return $newParams;
+    }
+
     public function beforeCreate()
     {
         if ($this->inventory_management_method === 'variant' && $this->stock === null) {

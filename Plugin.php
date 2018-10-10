@@ -259,6 +259,9 @@ class Plugin extends PluginBase
             if ($page->getBaseFileName() === GeneralSettings::get('category_page')) {
                 return Category::translateParams($params, $oldLocale, $newLocale);
             }
+            if ($page->getBaseFileName() === GeneralSettings::get('product_page')) {
+                return Product::translateParams($params, $oldLocale, $newLocale);
+            }
         });
     }
 
