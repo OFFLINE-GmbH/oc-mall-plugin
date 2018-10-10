@@ -145,7 +145,7 @@ class Category extends Model
             }
         });
         static::saving(function (self $model) {
-            $this->validateUniqueSlug($model);
+            $model->validateUniqueSlug($model);
         });
         static::saved(function (self $model) {
             $model->purgeCache();
