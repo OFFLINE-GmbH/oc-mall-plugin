@@ -12,6 +12,7 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
+use System\Classes\PluginManager;
 use System\Models\File;
 
 class Category extends Model
@@ -595,6 +596,6 @@ class Category extends Model
      */
     protected function rainlabTranslateInstalled(): bool
     {
-        return class_exists(\RainLab\Translate\Classes\Translator::class);
+        return PluginManager::instance()->exists('RainLab.Translate');
     }
 }

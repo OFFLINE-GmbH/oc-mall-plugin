@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Tests\PluginTestCase;
 
@@ -66,13 +67,19 @@ class CategoryTest extends PluginTestCase
         $hit = Category::getByNestedSlug('parent/child/');
         $this->assertEquals($this->child->id, $hit->id);
 
-        $hit = Category::getByNestedSlug('child');
-        $this->assertNull($hit);
-
         $hit = Category::getByNestedSlug('parent/child/child');
         $this->assertEquals($this->nestedChild->id, $hit->id);
 
-        $hit = Category::getByNestedSlug('child/child');
-        $this->assertNull($hit);
+        try {
+            Category::getByNestedSlug('child');
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(ModelNotFoundException::class, $e);
+        }
+        
+        try {
+            Category::getByNestedSlug('child/child');
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(ModelNotFoundException::class, $e);
+        }
     }
 }
