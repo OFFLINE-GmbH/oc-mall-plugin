@@ -25,6 +25,13 @@ class CreateOfflineMallCategories extends Migration
             $table->integer('nest_left')->nullable();
             $table->integer('nest_right')->nullable();
             $table->integer('nest_depth')->nullable();
+
+            if ( ! app()->runningUnitTests()) {
+                $table->index('deleted_at', 'idx_deleted_at');
+                $table->index('parent_id', 'idx_parent_id');
+                $table->index('nest_left', 'idx_nest_left');
+                $table->index('nest_right', 'idx_nest_right');
+            }
         });
     }
 
