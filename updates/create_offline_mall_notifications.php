@@ -7,8 +7,7 @@ class CreateOfflineMallNotifications extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_notifications', function($table)
-        {
+        Schema::create('offline_mall_notifications', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->boolean('enabled')->default(1);

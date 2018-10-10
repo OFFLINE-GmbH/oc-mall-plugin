@@ -4,6 +4,7 @@
 namespace OFFLINE\Mall\Classes\Traits;
 
 use Backend\Widgets\Table;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\CustomerGroupPrice;
@@ -60,15 +61,33 @@ trait ProductPriceTable
 
     public function onPriceTablePersist()
     {
-        $state      = post('state', []);
-        $currencies = Currency::get()->keyBy('code');
+        \DB::transaction(function () {
+            $state                     = post('state', []);
+            $currencies                = Currency::get()->keyBy('code');
+            $hasPriceInDefaultCurrency = false;
 
-        foreach ($state as $currency => $records) {
-            $currency = $currencies->get($currency);
-            foreach ($records as $record) {
-                $this->persistPriceTableRow($record, $currency);
+            foreach ($state as $currency => $records) {
+                $currency = $currencies->get($currency);
+                foreach ($records as $record) {
+                    if ($this->hasDefaultCurrencyPrice($record, $currency)) {
+                        $hasPriceInDefaultCurrency = true;
+                    }
+                    $this->persistPriceTableRow($record, $currency);
+                }
             }
-        }
+
+            if ( ! $hasPriceInDefaultCurrency) {
+                throw new ValidationException(['prices' => trans('offline.mall::lang.common.price_missing')]);
+            }
+        });
+    }
+
+    protected function hasDefaultCurrencyPrice($record, $currency)
+    {
+        return $record['type'] === 'product'
+            && $currency->id === Currency::defaultCurrency()->id
+            && $record['price'] !== ''
+            && $record['price'] !== null;
     }
 
     protected function persistPriceTableRow($record, $currency)

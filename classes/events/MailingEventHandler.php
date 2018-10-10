@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Events;
 
-
 use Illuminate\Support\Facades\Mail;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;

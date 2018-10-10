@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Currency;
 
 /**
@@ -27,11 +28,34 @@ class Price extends FormWidgetBase
     }
 
     /**
-     * Returns an array of translated values for this field
+     * The price widget's form values have to be handled manually
+     * in the controller since the prices might go to different models
+     * and different fields at once.
+     *
+     * This mode is "misused" to add basic validation to make sure that
+     * at least one price in the default currency is provided if the
+     * field's required attribute is set to true.
+     *
      * @return array
      */
     public function getSaveValue($value)
     {
+        if ($this->formField->required !== true) {
+            return null;
+        }
+
+        $values = collect(post('MallPrice'))->map(function ($value, $key) {
+            if ($value[$this->valueFrom] === '' || $value[$this->valueFrom] === null) {
+                return null;
+            }
+
+            return $key;
+        })->filter();
+
+        if ( ! $values->has($this->defaultCurrency->id)) {
+            throw new ValidationException([$this->valueFrom => trans('offline.mall::lang.common.price_missing')]);
+        }
+
         return null;
     }
 

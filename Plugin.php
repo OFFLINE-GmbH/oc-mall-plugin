@@ -42,6 +42,7 @@ use OFFLINE\Mall\Components\ShippingSelector;
 use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\Console\ReindexProducts;
 use OFFLINE\Mall\Console\SeedDemoData;
+use OFFLINE\Mall\Console\SystemCheck;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
 use OFFLINE\Mall\Models\Category;
@@ -85,6 +86,7 @@ class Plugin extends PluginBase
 
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
         $this->registerConsoleCommand('offline.mall.reindex', ReindexProducts::class);
+        $this->registerConsoleCommand('offline.mall.system-check', SystemCheck::class);
 
         $this->setMorphMap();
         $this->registerObservers();

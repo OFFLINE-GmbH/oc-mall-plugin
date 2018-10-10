@@ -37,6 +37,12 @@ class CreateOfflineMallProducts extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
+
+            if ( ! app()->runningUnitTests()) {
+                $table->index('deleted_at', 'idx_deleted_at');
+                $table->index('slug', 'idx_slug');
+                $table->index('category_id', 'idx_category_id');
+            }
         });
     }
 

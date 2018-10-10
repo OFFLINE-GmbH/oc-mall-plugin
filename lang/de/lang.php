@@ -209,6 +209,7 @@
         'unchecked'            => 'Inaktiv',
         'notifications'        => 'Benachrichtigungen',
         'notification'         => 'Benachrichtigung',
+        'price_missing'        => 'Gib mindestens ein Preis in der Hauptwährung an',
     ],
     'variant'                  => [
         'method' => [
@@ -482,7 +483,7 @@
                 'include_children' => [
                     'title'       => 'Zeige Produkte aus Kinderkategorien an',
                     'description' => 'Zeige alle Produkte von Kinderkategorien ebenfalls an',
-                ]
+                ],
             ],
         ],
         'productsFilter'        => [

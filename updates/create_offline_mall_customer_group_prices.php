@@ -17,10 +17,13 @@ class CreateOfflineMallCustomerGroupPrices extends Migration
             $table->integer('price');
             $table->timestamps();
 
-            $table->unique(['customer_group_id', 'priceable_id', 'priceable_type', 'currency_id'], 'unique_price');
+            if ( ! app()->runningUnitTests()) {
+                $table->unique(['customer_group_id', 'priceable_id', 'priceable_type', 'currency_id'], 'unique_price');
+                $table->index('currency_id', 'idx_currency');
+            }
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('offline_mall_customer_group_prices');
