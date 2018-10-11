@@ -118,7 +118,7 @@ class Property extends Model
             'float'    => trans('offline.mall::lang.custom_field_options.float'),
             'textarea' => trans('offline.mall::lang.custom_field_options.textarea'),
             'dropdown' => trans('offline.mall::lang.custom_field_options.dropdown'),
-            'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),
+//            'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),
             'color'    => trans('offline.mall::lang.custom_field_options.color'),
 //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
         ];
