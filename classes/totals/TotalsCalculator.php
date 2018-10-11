@@ -91,14 +91,7 @@ class TotalsCalculator
         $this->productTaxes     = $this->calculateProductTaxes();
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
-        $this->shippingTaxes = optional($this->cart->shipping_method)->taxes->filter(function (Tax $tax) {
-            // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->cart->shipping_address === null) {
-                return $tax->countries->count() === 0;
-            }
-            return $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
-        });
-
+        $this->shippingTaxes = $this->filterShippingTaxes();
         $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
         $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
 
@@ -252,5 +245,26 @@ class TotalsCalculator
         $this->appliedDiscounts = $applier->applyMany($discounts);
 
         return $applier->reducedTotal();
+    }
+
+    /**
+     * Filter out shipping taxes that have to be applied for
+     * the current shipping address of the cart.
+     *
+     * @return Collection
+     */
+    protected function filterShippingTaxes()
+    {
+        $shippingTaxes = optional($this->cart->shipping_method)->taxes ?? new Collection();
+
+        return $shippingTaxes->filter(function (Tax $tax) {
+            // If no shipping address is available only include taxes that have no country restrictions.
+            if ($this->cart->shipping_address === null) {
+                return $tax->countries->count() === 0;
+            }
+
+            return $tax->countries->count() === 0
+                || $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
+        });
     }
 }
