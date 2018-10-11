@@ -41,7 +41,7 @@ abstract class SortOrder
 
     public function label(): string
     {
-        return trans('offline.mall::lang.components.categoryFilter.sortOrder.' . camel_case($this->key()));
+        return trans('offline.mall::lang.components.productsFilter.sortOrder.' . camel_case($this->key()));
     }
 
     abstract public function property(): string;
