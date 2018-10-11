@@ -91,7 +91,7 @@ class TotalsCalculator
         $this->productTaxes     = $this->calculateProductTaxes();
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
-        $this->shippingTaxes = optional($this->cart->shipping_method->taxes)->filter(function (Tax $tax) {
+        $this->shippingTaxes = optional($this->cart->shipping_method)->taxes->filter(function (Tax $tax) {
             // If no shipping address is available only include taxes that have no country restrictions.
             if ($this->cart->shipping_address === null) {
                 return $tax->countries->count() === 0;
