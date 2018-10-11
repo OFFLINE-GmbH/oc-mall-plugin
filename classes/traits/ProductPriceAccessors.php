@@ -19,8 +19,19 @@ trait ProductPriceAccessors
 
         $prices = $this->customer_group_prices;
 
-        return $prices->where('currency_id', $currency->id)->where('customer_group_id', $group)->first()
-            ?? $this->nullPrice($currency, $prices->where('customer_group_id', $group));
+        $filter = function ($query) use ($group) {
+            return $query->where('customer_group_id', $group);
+        };
+
+        $query = $this->withFilter($filter, $prices->where('currency_id', $currency->id));
+
+        return $query->first()
+            ?? $this->nullPrice(
+                $currency,
+                $this->withFilter($filter, $prices),
+                'customer_group_prices',
+                $filter
+            );
     }
 
     public function additionalPrice($category, $currency = null)
@@ -29,8 +40,19 @@ trait ProductPriceAccessors
 
         $prices = $this->additional_prices;
 
-        return $prices->where('currency_id', $currency->id)->where('price_category_id', $category)->first()
-            ?? $this->nullPrice($currency, $prices->where('price_category_id', $category));
+        $filter = function ($query) use ($category) {
+            return $query->where('price_category_id', $category);
+        };
+
+        $query = $this->withFilter($filter, $prices->where('currency_id', $currency->id));
+
+        return $query->first()
+            ?? $this->nullPrice(
+                $currency,
+                $this->withFilter($filter, $prices),
+                'additional_prices',
+                $filter
+            );
     }
 
     public function oldPriceRelations()

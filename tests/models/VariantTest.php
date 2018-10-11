@@ -201,6 +201,25 @@ class VariantTest extends PluginTestCase
         $this->assertEquals(110.00, $variant->price('CHF')->decimal);
     }
 
+    public function test_price_accessors_for_other_fields_are_not_inherited()
+    {
+        $price = ['CHF' => 100, 'EUR' => 90];
+
+        $this->product->price = $price;
+        $this->product->save();
+
+        $variant             = new Variant();
+        $variant->name       = 'ABC';
+        $variant->product_id = $this->product->id;
+        $variant->stock      = 20;
+        $variant->save();
+        $variant->price = ['CHF' => 11000, 'EUR' => 10000];
+
+        $variant = Variant::find($variant->id);
+        $this->assertEquals(null, (int)$variant->oldPrice('EUR')->decimal);
+        $this->assertEquals(null, $variant->oldPrice('CHF')->decimal);
+    }
+
     public function test_explicit_null_price_accessors_are_inherited()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];

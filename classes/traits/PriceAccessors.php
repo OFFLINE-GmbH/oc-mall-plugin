@@ -3,6 +3,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use Closure;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
@@ -24,24 +25,26 @@ trait PriceAccessors
         });
     }
 
-    protected function priceRelation($currency = null, $relation = 'prices')
+    protected function priceRelation($currency = null, $relation = 'prices', ?Closure $filter = null)
     {
         $currency = Currency::resolve($currency);
 
         if (method_exists($this, 'getUserSpecificPrice')) {
             if ($specific = $this->getUserSpecificPrice()) {
-                return $specific->where('currency_id', $currency->id)->first()
-                    ?? $this->nullPrice($currency, $specific, $relation);
+                $query = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
+
+                return $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter);
             }
         }
 
-        return $this->$relation->where('currency_id', $currency->id)->first()
-            ?? $this->nullPrice($currency, $this->$relation, $relation);
+        $query = $this->withFilter($filter, $this->$relation->where('currency_id', $currency->id));
+
+        return $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter);
     }
 
-    public function price($currency = null, $relation = 'prices')
+    public function price($currency = null, $relation = 'prices', ?Closure $filter = null)
     {
-        return $this->priceRelation($currency, $relation);
+        return $this->priceRelation($currency, $relation, $filter);
     }
 
     public function getPriceAttribute()
@@ -97,5 +100,14 @@ trait PriceAccessors
                 'price' => $price,
             ]);
         }
+    }
+
+    private function withFilter(?Closure $filter = null, $query)
+    {
+        if ($filter) {
+            return $filter($query);
+        }
+
+        return $query;
     }
 }
