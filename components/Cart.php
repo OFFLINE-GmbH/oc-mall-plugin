@@ -16,6 +16,7 @@ class Cart extends MallComponent
     public $defaultMinQuantity = 1;
     public $defaultMaxQuantity = 100;
     public $showDiscountApplier = true;
+    public $showTaxes = true;
     public $productPage;
 
     public function componentDetails()
@@ -31,7 +32,12 @@ class Cart extends MallComponent
         return [
             'showDiscountApplier' => [
                 'type'    => 'checkbox',
-                'name'    => 'offline.mall::lang.components.cart.properties.showDiscountApplier.name',
+                'title'   => 'offline.mall::lang.components.cart.properties.showDiscountApplier.title',
+                'default' => 1,
+            ],
+            'showTaxes'           => [
+                'type'    => 'checkbox',
+                'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.name',
                 'default' => 1,
             ],
         ];
@@ -103,5 +109,6 @@ class Cart extends MallComponent
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
         $this->setVar('showDiscountApplier', $this->property('showDiscountApplier'));
+        $this->setVar('showTaxes', $this->property('showTaxes'));
     }
 }

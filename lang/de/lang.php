@@ -588,9 +588,17 @@
             ],
         ],
         'cart'                  => [
-            'details' => [
+            'details'    => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt den Warenkorb an',
+            ],
+            'properties' => [
+                'showDiscountApplier' => [
+                    'title' => 'Rabatt-Code-Feld anzeigen',
+                ],
+                'showTaxes'           => [
+                    'title' => 'Steuern ausweisen',
+                ],
             ],
         ],
         'checkout'              => [

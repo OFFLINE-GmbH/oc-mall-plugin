@@ -64,6 +64,10 @@ class TotalsCalculator
      * @var Collection
      */
     protected $appliedDiscounts;
+    /**
+     * @var Collection
+     */
+    public $shippingTaxes;
 
     public function __construct(Cart $cart)
     {
@@ -71,7 +75,7 @@ class TotalsCalculator
             'products',
             'products.data.taxes',
             'shipping_method',
-            'shipping_method.taxes',
+            'shipping_method.taxes.countries',
             'shipping_method.rates',
             'discounts'
         );
@@ -86,6 +90,14 @@ class TotalsCalculator
         $this->productPreTaxes  = $this->calculateProductPreTaxes();
         $this->productTaxes     = $this->calculateProductTaxes();
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
+
+        $this->shippingTaxes = optional($this->cart->shipping_method->taxes)->filter(function (Tax $tax) {
+            // If no shipping address is available only include taxes that have no country restrictions.
+            if ($this->cart->shipping_address === null) {
+                return $tax->countries->count() === 0;
+            }
+            return $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
+        });
 
         $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
         $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
@@ -113,11 +125,10 @@ class TotalsCalculator
     {
         $shippingTaxes = new Collection();
         $shippingTotal = $this->shippingTotal->totalPreTaxesOriginal();
-        if ($this->cart->shipping_method) {
-            $shippingTaxes = optional($this->cart->shipping_method)->taxes
-                ->map(function (Tax $tax) use ($shippingTotal) {
-                    return new TaxTotal($shippingTotal, $tax);
-                });
+        if ($this->shippingTaxes) {
+            $shippingTaxes = $this->shippingTaxes->map(function (Tax $tax) use ($shippingTotal) {
+                return new TaxTotal($shippingTotal, $tax);
+            });
         }
 
         $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {

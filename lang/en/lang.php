@@ -590,9 +590,17 @@
             'added_to_cart' => 'Added product successfully',
         ],
         'cart'                  => [
-            'details' => [
+            'details'    => [
                 'name'        => 'Cart',
                 'description' => 'Displays the shopping cart',
+            ],
+            'properties' => [
+                'showDiscountApplier' => [
+                    'title' => 'Show discount applier',
+                ],
+                'showTaxes'           => [
+                    'title' => 'Show taxes',
+                ],
             ],
         ],
         'checkout'              => [
