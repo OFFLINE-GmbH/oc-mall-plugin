@@ -3,17 +3,17 @@
 use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
+use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
-use OFFLINE\Mall\Classes\Observers\VariantObserver;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
-use OFFLINE\Mall\Console\ReindexProducts;
 
 class PropertyGroup extends Model
 {
     use Validation;
     use Sluggable;
     use SortableRelation;
+    use Sortable;
 
     public $slugs = [
         'slug' => 'name',

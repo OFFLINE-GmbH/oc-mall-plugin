@@ -14,6 +14,7 @@ class CreateOfflineMallPropertyGroups extends Migration
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
             $table->string('slug');
+            $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
