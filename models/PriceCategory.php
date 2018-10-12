@@ -30,4 +30,9 @@ class PriceCategory extends Model
     public $hasMany = [
         'prices' => [Price::class, 'key' => 'price_category_id'],
     ];
+
+    public function afterDelete()
+    {
+        DB::table('offline_mall_prices')->where('price_category_id', $this->id)->delete();
+    }
 }

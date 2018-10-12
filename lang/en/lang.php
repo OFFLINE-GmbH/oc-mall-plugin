@@ -96,6 +96,10 @@
         'label'       => 'Notifications',
         'description' => 'Configure store notifications',
     ],
+    'price_category_settings' => [
+        'label'       => 'Price categories',
+        'description' => 'Configure additional price categories',
+    ],
     'general_settings'         => [
         'category'                   => 'Mall Shop',
         'label'                      => 'Configuration',
@@ -456,19 +460,21 @@
         'open'          => 'Open',
     ],
     'permissions'              => [
-        'manage_products'        => 'Can manage products',
-        'manage_categories'      => 'Can manage categories',
-        'manage_orders'          => 'Can manage orders',
-        'manage_discounts'       => 'Can manage discounts',
-        'settings'               => [
+        'manage_products'         => 'Can manage products',
+        'manage_categories'       => 'Can manage categories',
+        'manage_orders'           => 'Can manage orders',
+        'manage_discounts'        => 'Can manage discounts',
+        'settings'                => [
             'manage_general'         => 'Can change general shop settings',
             'manage_api'             => 'Can change api shop settings',
             'manage_currency'        => 'Can change currecy shop settings',
             'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
-        'manage_properties'      => 'Can edit product properites',
-        'manage_customer_groups' => 'Can manage customer groups',
-        'manage_notifications'   => 'Can manage notifications',
+        'manage_properties'       => 'Can edit product properites',
+        'manage_customer_groups'  => 'Can manage customer groups',
+        'manage_notifications'    => 'Can manage notifications',
+        'manage_price_categories' => 'Can manage price categories',
+
     ],
     'components'               => [
         'products'              => [

@@ -187,6 +187,16 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_currency'],
                 'keywords'    => 'shop store mall currency',
             ],
+            'price_categories_settings'         => [
+                'label'       => 'offline.mall::lang.price_category_settings.label',
+                'description' => 'offline.mall::lang.price_category_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-pie-chart',
+                'url'         => Backend::url('offline/mall/pricecategories'),
+                'order'       => 20,
+                'permissions' => ['offline.mall.settings.manage_price_categories'],
+                'keywords'    => 'shop store mall currency price categories',
+            ],
             'payment_gateways_settings' => [
                 'label'       => 'offline.mall::lang.payment_gateway_settings.label',
                 'description' => 'offline.mall::lang.payment_gateway_settings.description',

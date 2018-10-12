@@ -107,3 +107,6 @@ permissions:
     offline.mall.manage_notifications:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_notifications'
+    offline.mall.manage_price_categories:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_price_categories'

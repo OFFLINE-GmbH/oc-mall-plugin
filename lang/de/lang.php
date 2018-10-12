@@ -96,6 +96,10 @@
         'label'       => 'Benachrichtigungen',
         'description' => 'Benachrichtigungen konfigurieren',
     ],
+    'price_category_settings' => [
+        'label'       => 'Preiskategorien',
+        'description' => 'Zusätzliche Preiskategorien verwalten',
+    ],
     'general_settings'         => [
         'category'                   => 'Mall',
         'label'                      => 'Grundkonfiguration',
@@ -455,19 +459,20 @@
         'open'          => 'Zahlung ausstehend',
     ],
     'permissions'              => [
-        'manage_products'        => 'Kann Produkte verwalten',
-        'manage_categories'      => 'Kann Kategorien verwalten',
-        'manage_orders'          => 'Kann Bestellungen verwalten',
-        'manage_discounts'       => 'Kann Rabatte verwalten',
-        'settings'               => [
+        'manage_products'         => 'Kann Produkte verwalten',
+        'manage_categories'       => 'Kann Kategorien verwalten',
+        'manage_orders'           => 'Kann Bestellungen verwalten',
+        'manage_discounts'        => 'Kann Rabatte verwalten',
+        'settings'                => [
             'manage_general'         => 'Kann die Grundeinstellungen des Shops verändern',
             'manage_api'             => 'Kann die API-Konfiguration des Shops verändern',
             'manage_currency'        => 'Kann die Währungs-Einstellungen des Shops verändern',
             'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
-        'manage_properties'      => 'Produkt-Eigenschaften bearbeiten',
-        'manage_customer_groups' => 'Kann Kundengruppen verwalten',
-        'manage_notifications'   => 'Kann Benachrichtigungen verwalten',
+        'manage_properties'       => 'Produkt-Eigenschaften bearbeiten',
+        'manage_customer_groups'  => 'Kann Kundengruppen verwalten',
+        'manage_notifications'    => 'Kann Benachrichtigungen verwalten',
+        'manage_price_categories' => 'Kann Preiskategorien verwalten',
     ],
     'components'               => [
         'products'              => [
