@@ -15,6 +15,13 @@ class PropertyGroup extends Model
     use SortableRelation;
     use Sortable;
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name',
+        'display_name',
+        'description'
+    ];
+
     public $slugs = [
         'slug' => 'name',
     ];
