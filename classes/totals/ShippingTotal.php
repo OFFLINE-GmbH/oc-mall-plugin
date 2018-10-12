@@ -35,6 +35,10 @@ class ShippingTotal implements \JsonSerializable
      * @var int
      */
     private $appliedDiscount;
+    /**
+     * @var int
+     */
+    protected $price;
 
     public function __construct(?ShippingMethod $method, TotalsCalculator $totals)
     {
@@ -46,9 +50,9 @@ class ShippingTotal implements \JsonSerializable
 
     protected function calculate()
     {
-        $this->total    = $this->calculateTotal();
         $this->taxes    = $this->calculateTaxes();
         $this->preTaxes = $this->calculatePreTax();
+        $this->total    = $this->calculateTotal();
     }
 
     protected function calculatePreTax()
@@ -57,9 +61,13 @@ class ShippingTotal implements \JsonSerializable
             return 0;
         }
 
-        $price = $this->total;
+        $price = $this->getPrice();
 
-        return $price - $this->taxes;
+        if ($this->method->price_includes_tax) {
+            return $price - $this->taxes;
+        }
+
+        return $price;
     }
 
     protected function calculateTaxes(): float
@@ -68,13 +76,17 @@ class ShippingTotal implements \JsonSerializable
             return 0;
         }
 
-        $price = $this->total;
+        $price = $this->getPrice();
 
         $totalTaxPercentage = $this->totals->shippingTaxes->sum('percentageDecimal');
 
-        return $this->totals->shippingTaxes->reduce(function ($total, Tax $tax) use ($price, $totalTaxPercentage) {
-            return $total += $price / (1 + $totalTaxPercentage) * $tax->percentageDecimal;
-        }, 0);
+        return $this->totals->shippingTaxes->sum(function (Tax $tax) use ($price, $totalTaxPercentage) {
+            if ($this->method->price_includes_tax) {
+                return $price / (1 + $totalTaxPercentage) * $tax->percentageDecimal;
+            }
+
+            return $price * $tax->percentageDecimal;
+        });
     }
 
     protected function calculateTotal(): float
@@ -83,27 +95,11 @@ class ShippingTotal implements \JsonSerializable
             return 0;
         }
 
-        $method = $this->method;
-        $price  = $method->price()->integer;
+        $price  = $this->getPrice();
 
-        // If there are special rates let's see if they
-        // need to be applied.
-        if ($method->rates->count() > 0) {
-            $weight = $this->totals->weightTotal();
-
-            $matchingRate = $method->rates->first(function (ShippingMethodRate $rate) use ($weight) {
-                $compareFrom = $rate->from_weight === null || $rate->from_weight <= $weight;
-                $compareTo   = $rate->to_weight === null || $rate->to_weight >= $weight;
-
-                return $compareFrom && $compareTo;
-            });
-
-            if ($matchingRate) {
-                $price = $matchingRate->price()->integer;
-            }
+        if ($this->method->price_includes_tax === false) {
+            $price += $this->taxes;
         }
-
-        $price = $this->applyDiscounts($price);
 
         return $price > 0 ? $price : 0;
     }
@@ -192,5 +188,38 @@ class ShippingTotal implements \JsonSerializable
             'total'           => $this->total,
             'appliedDiscount' => $this->appliedDiscount,
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getPrice()
+    {
+        if ($this->price) {
+            return $this->price;
+        }
+
+        $price = $this->method->price()->integer;
+
+        // If there are special rates let's see if they need to be applied.
+        if ($this->method->rates->count() > 0) {
+            $weight       = $this->totals->weightTotal();
+            $matchingRate = $this->method->rates->first(function (ShippingMethodRate $rate) use ($weight) {
+                $compareFrom = $rate->from_weight === null || $rate->from_weight <= $weight;
+                $compareTo   = $rate->to_weight === null || $rate->to_weight >= $weight;
+
+                return $compareFrom && $compareTo;
+            });
+
+            if ($matchingRate) {
+                $price = $matchingRate->price()->integer;
+            }
+        }
+
+        $price = $this->applyDiscounts($price);
+
+        $this->price = $price;
+
+        return $price;
     }
 }

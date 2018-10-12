@@ -14,6 +14,7 @@ class CreateOfflineMallShippingMethods extends Migration
             $table->text('description')->nullable();
             $table->integer('sort_order')->unsigned()->nullable();
             $table->integer('guaranteed_delivery_days')->nullable();
+            $table->boolean('price_includes_tax')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

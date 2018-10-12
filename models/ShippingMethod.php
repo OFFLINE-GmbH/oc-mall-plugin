@@ -24,6 +24,9 @@ class ShippingMethod extends Model
     public $rules = [
         'name' => 'required',
     ];
+    public $casts = [
+        'price_includes_tax' => 'boolean',
+    ];
     public $table = 'offline_mall_shipping_methods';
     public $appends = ['price_formatted'];
     public $morphMany = [
@@ -64,6 +67,14 @@ class ShippingMethod extends Model
             'otherKey' => 'country_id',
         ],
     ];
+
+    public function afterDelete()
+    {
+        \DB::table('offline_mall_prices')
+           ->where('priceable_type', self::MORPH_KEY)
+           ->where('priceable_id', $this->id)
+           ->delete();
+    }
 
     public static function getDefault(): self
     {

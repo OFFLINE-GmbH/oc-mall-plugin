@@ -18,6 +18,13 @@ tabs:
             span: left
             type: richeditor
             tab: 'offline.mall::lang.common.general'
+        price_includes_tax:
+            label: 'offline.mall::lang.product.price_includes_tax'
+            span: auto
+            default: 1
+            type: switch
+            comment: 'offline.mall::lang.product.price_includes_tax_comment'
+            tab: 'offline.mall::lang.common.general'
         _prices:
             label: 'offline.mall::lang.product.price'
             oc.commentPosition: ''
