@@ -8,6 +8,7 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\ShippingMethod;
+use System\Classes\SettingsManager;
 
 class ShippingMethods extends Controller
 {
@@ -23,10 +24,15 @@ class ShippingMethods extends Controller
     public $reorderConfig = 'config_reorder.yaml';
     public $relationConfig = 'config_relation.yaml';
 
+    public $requiredPermissions = [
+        'offline.mall.settings.manage_shipping_methods',
+    ];
+
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-shipping-methods');
+        BackendMenu::setContext('October.System', 'system', 'settings');
+        SettingsManager::setContext('OFFLINE.Mall', 'shipping_method_settings');
     }
 
     public function formAfterCreate(ShippingMethod $model)

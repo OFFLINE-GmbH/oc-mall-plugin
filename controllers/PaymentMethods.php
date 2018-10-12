@@ -5,6 +5,7 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use BackendMenu;
+use System\Classes\SettingsManager;
 
 class PaymentMethods extends Controller
 {
@@ -25,6 +26,7 @@ class PaymentMethods extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-payment-methods');
+        BackendMenu::setContext('October.System', 'system', 'settings');
+        SettingsManager::setContext('OFFLINE.Mall', 'payment_method_settings');
     }
 }

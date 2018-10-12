@@ -96,12 +96,23 @@
         'label'       => 'Notifications',
         'description' => 'Configure store notifications',
     ],
-    'price_category_settings' => [
+    'price_category_settings'  => [
         'label'       => 'Price categories',
         'description' => 'Configure additional price categories',
     ],
+    'order_state_settings'     => [
+        'description' => 'Configure order states',
+    ],
+    'payment_method_settings'  => [
+        'description' => 'Manage payment methods',
+    ],
+    'shipping_method_settings' => [
+        'description' => 'Manage shipping methods',
+    ],
     'general_settings'         => [
-        'category'                   => 'Mall Shop',
+        'category'                   => 'Mall: General',
+        'category_payments'          => 'Mall: Payments',
+        'category_orders'            => 'Mall: Orders',
         'label'                      => 'Configuration',
         'description'                => 'General settings',
         'product_page'               => 'Product details page',
@@ -474,7 +485,8 @@
         'manage_customer_groups'  => 'Can manage customer groups',
         'manage_notifications'    => 'Can manage notifications',
         'manage_price_categories' => 'Can manage price categories',
-
+        'manage_order_states'     => 'Can manage order states',
+        'manage_shipping_methods' => 'Can manage shipping methods',
     ],
     'components'               => [
         'products'              => [

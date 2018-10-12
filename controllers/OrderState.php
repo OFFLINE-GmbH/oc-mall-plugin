@@ -5,6 +5,7 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use BackendMenu;
+use System\Classes\SettingsManager;
 
 class OrderState extends Controller
 {
@@ -19,13 +20,14 @@ class OrderState extends Controller
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.manage_orders',
+        'offline.mall.manage_order_states',
     ];
 
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-order-states');
+        BackendMenu::setContext('October.System', 'system', 'settings');
+        SettingsManager::setContext('OFFLINE.Mall', 'order_state_settings');
     }
 
     public function index()

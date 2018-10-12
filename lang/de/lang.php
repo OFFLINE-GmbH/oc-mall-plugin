@@ -96,12 +96,23 @@
         'label'       => 'Benachrichtigungen',
         'description' => 'Benachrichtigungen konfigurieren',
     ],
-    'price_category_settings' => [
+    'price_category_settings'  => [
         'label'       => 'Preiskategorien',
         'description' => 'Zusätzliche Preiskategorien verwalten',
     ],
+    'order_state_settings'     => [
+        'description' => 'Mögliche Status für Bestellungen verwalten',
+    ],
+    'payment_method_settings'  => [
+        'description' => 'Zahlungsmethoden verwalten',
+    ],
+    'shipping_method_settings'  => [
+        'description' => 'Versandarten verwalten',
+    ],
     'general_settings'         => [
-        'category'                   => 'Mall',
+        'category'                   => 'Mall: Allgemein',
+        'category_payments'          => 'Mall: Zahlungen',
+        'category_orders'            => 'Mall: Bestellungen',
         'label'                      => 'Grundkonfiguration',
         'description'                => 'Allgemeine Einstellungen',
         'product_page'               => 'Produkt-Seite',
@@ -473,6 +484,8 @@
         'manage_customer_groups'  => 'Kann Kundengruppen verwalten',
         'manage_notifications'    => 'Kann Benachrichtigungen verwalten',
         'manage_price_categories' => 'Kann Preiskategorien verwalten',
+        'manage_order_states'     => 'Kann Bestellstatus verwalten',
+        'manage_shipping_methods' => 'Kann Versandarten verwalten',
     ],
     'components'               => [
         'products'              => [
