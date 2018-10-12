@@ -2,31 +2,37 @@
 
 use October\Rain\Database\Model;
 use October\Rain\Database\Updates\Seeder;
+use OFFLINE\Mall\Classes\Registration\BootServiceContainer;
+use OFFLINE\Mall\Classes\Registration\BootTwig;
 use OFFLINE\Mall\Classes\Seeders\CategoryTableSeeder;
-use OFFLINE\Mall\Classes\Seeders\CustomerTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomerGroupTableSeeder;
+use OFFLINE\Mall\Classes\Seeders\CustomerTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\CustomFieldTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\NotificationTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\OrderStateTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\PaymentMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ProductTableSeeder;
+use OFFLINE\Mall\Classes\Seeders\PropertyTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\TaxTableSeeder;
-use OFFLINE\Mall\Classes\Seeders\PropertyTableSeeder;
-use OFFLINE\Mall\Classes\Utils\DefaultMoney;
-use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\PriceCategory;
 
 class DatabaseSeeder extends Seeder
 {
+    public $app;
+
+    use BootTwig;
+    use BootServiceContainer;
+
     public function run()
     {
-        Model::unguard();
+        $this->app = app();
 
-        app()->singleton(Money::class, function () {
-            return new DefaultMoney();
-        });
+        $this->registerTwigEnvironment();
+        $this->registerServices();
+
+        Model::unguard();
 
         PriceCategory::create([
             'code' => 'old_price',
