@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7699f8287a3977ed0677df524fc6fb30",
+    "content-hash": "01b8c3695fd50bf831e81f783d2be6fd",
     "packages": [
         {
             "name": "elasticsearch/elasticsearch",
@@ -531,16 +531,16 @@
         },
         {
             "name": "nahid/jsonq",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nahid/jsonq.git",
-                "reference": "72128f1a337bec2645464aeb42b62c5c76413619"
+                "reference": "b225c52587f08774df06eb66fd7e646241a88b4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nahid/jsonq/zipball/72128f1a337bec2645464aeb42b62c5c76413619",
-                "reference": "72128f1a337bec2645464aeb42b62c5c76413619",
+                "url": "https://api.github.com/repos/nahid/jsonq/zipball/b225c52587f08774df06eb66fd7e646241a88b4c",
+                "reference": "b225c52587f08774df06eb66fd7e646241a88b4c",
                 "shasum": ""
             },
             "require": {
@@ -574,7 +574,7 @@
                 "jsonq",
                 "query"
             ],
-            "time": "2018-10-05T18:33:37+00:00"
+            "time": "2018-10-11T09:37:07+00:00"
         },
         {
             "name": "omnipay/2checkout",
