@@ -60,6 +60,10 @@
         'notifications'        => [
             'update' => 'Update notification',
         ],
+        'taxes'                => [
+            'create' => 'Create tax',
+            'update' => 'Edit tax',
+        ],
     ],
     'menu_items'               => [
         'all_categories'  => 'All shop categories',
@@ -108,6 +112,9 @@
     ],
     'shipping_method_settings' => [
         'description' => 'Manage shipping methods',
+    ],
+    'tax_settings' => [
+        'description' => 'Manage taxes',
     ],
     'general_settings'         => [
         'category'                   => 'Mall: General',
@@ -487,6 +494,7 @@
         'manage_price_categories' => 'Can manage price categories',
         'manage_order_states'     => 'Can manage order states',
         'manage_shipping_methods' => 'Can manage shipping methods',
+        'manage_taxes'            => 'Can manage taxes',
     ],
     'components'               => [
         'products'              => [

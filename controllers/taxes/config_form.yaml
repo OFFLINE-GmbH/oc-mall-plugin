@@ -1,0 +1,12 @@
+name: 'offline.mall::lang.common.taxes'
+modelClass: OFFLINE\Mall\Models\Tax
+form: $/offline/mall/models/tax/fields.yaml
+defaultRedirect: offline/mall/taxes
+create:
+    title: 'offline.mall::lang.titles.taxes.create'
+    redirect: 'offline/mall/taxes/update/:id'
+    redirectClose: offline/mall/taxes
+update:
+    title: 'offline.mall::lang.titles.taxes.update'
+    redirect: offline/mall/taxes
+    redirectClose: offline/mall/taxes

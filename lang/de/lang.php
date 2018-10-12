@@ -60,6 +60,10 @@
         'notifications'        => [
             'update' => 'Benachrichtigung aktualisieren',
         ],
+        'taxes'                => [
+            'create' => 'Steuer erstellen',
+            'update' => 'Steuer bearbeiten',
+        ],
     ],
     'menu_items'               => [
         'all_categories'  => 'Alle Shop-Kategorien',
@@ -106,8 +110,11 @@
     'payment_method_settings'  => [
         'description' => 'Zahlungsmethoden verwalten',
     ],
-    'shipping_method_settings'  => [
+    'shipping_method_settings' => [
         'description' => 'Versandarten verwalten',
+    ],
+    'tax_settings' => [
+        'description' => 'Steuern verwalten',
     ],
     'general_settings'         => [
         'category'                   => 'Mall: Allgemein',
@@ -480,12 +487,13 @@
             'manage_currency'        => 'Kann die Währungs-Einstellungen des Shops verändern',
             'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
-        'manage_properties'       => 'Produkt-Eigenschaften bearbeiten',
+        'manage_properties'       => 'Kann Produkt-Eigenschaften verwalten',
         'manage_customer_groups'  => 'Kann Kundengruppen verwalten',
         'manage_notifications'    => 'Kann Benachrichtigungen verwalten',
         'manage_price_categories' => 'Kann Preiskategorien verwalten',
         'manage_order_states'     => 'Kann Bestellstatus verwalten',
         'manage_shipping_methods' => 'Kann Versandarten verwalten',
+        'manage_taxes'            => 'Kann Steuern verwalten',
     ],
     'components'               => [
         'products'              => [
