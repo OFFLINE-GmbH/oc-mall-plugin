@@ -71,6 +71,8 @@ class SeedDemoData extends Command
     {
         $this->output->writeln('Resetting plugin data...');
         Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall']);
+        Artisan::call('cache:clear');
+
         DB::table('system_files')
           ->where('attachment_type', 'LIKE', 'OFFLINE%Mall%')
           ->orWhere('attachment_type', 'LIKE', 'mall.%')
