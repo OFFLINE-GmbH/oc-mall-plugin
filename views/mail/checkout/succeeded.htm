@@ -10,7 +10,7 @@ Thank you very much for your order. We received the following information:
 
 {% partial 'panel' body %}
     {% if order.payment_state == 'OFFLINE\\Mall\\Classes\\PaymentState\\PaidState' %}
-        The order has been paid on {{ order.payment.created_at }}.
+        The order has been paid on {{ order.payment_log.created_at }}.
     {% else %}
         The payment for this order is currently pending.
     {% endif %}

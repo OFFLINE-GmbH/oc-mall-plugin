@@ -196,6 +196,7 @@
         'payment_gateway'      => 'Zahlungsgateway',
         'payment_provider'     => 'Zahlungsanbieter',
         'payment_methods'      => 'Zahlungsmethoden',
+        'payment'              => 'Zahlung',
         'image'                => 'Bild',
         'color'                => 'Farbe',
         'unit'                 => 'Einheit',
@@ -226,13 +227,14 @@
         'customer_group'       => 'Kundengruppe',
         'product_or_variant'   => 'Produkt/Variante',
         'code'                 => 'Code',
-        'code_comment'         => 'Dieser Code kann zur Identifikation der Gruppe genutzt werden',
+        'code_comment'         => 'Dieser Code kann zur Identifikation genutzt werden',
         'checked'              => 'Aktiv',
         'unchecked'            => 'Inaktiv',
         'notifications'        => 'Benachrichtigungen',
         'notification'         => 'Benachrichtigung',
         'price_missing'        => 'Gib mindestens ein Preis in der Hauptwährung an',
         'slug_unique'          => 'Die URL existiert bereits',
+        'fees'                 => 'Gebühren',
     ],
     'variant'                  => [
         'method' => [
@@ -379,6 +381,12 @@
             'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
         ],
     ],
+    'payment_method'           => [
+        'price'                  => 'Fixkosten',
+        'price_comment'          => 'Der Betrag wird zum Total dazugerechnet',
+        'fee_percentage'         => 'Prozentuale Kosten',
+        'fee_percentage_comment' => 'Prozent des Gesamttotals, wird zum Total dazugerechnet',
+    ],
     'order'                    => [
         'order_number'                        => 'Bestellungsnummer',
         'invoice_number'                      => 'Rechnungsnummer',
@@ -457,10 +465,6 @@
         'available_below_total'    => 'Verfügbar wenn Totalbetrag kleiner',
         'countries'                => 'Verfügbar für den Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandmethode weltweit verwendet werden.',
-    ],
-    'payment_method'           => [
-        'price_fixed'      => 'Aufpreis fix',
-        'price_percentage' => 'Aufpreis prozentual (des Gesamttotals)',
     ],
     'payment_status'           => [
         'paid'          => 'Bezahlt',

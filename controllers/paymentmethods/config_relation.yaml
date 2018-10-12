@@ -1,0 +1,13 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+taxes:
+    label: 'offline.mall::lang.common.taxes'
+    view:
+        list: $/offline/mall/models/tax/columns.yaml
+        toolbarButtons: add|create|remove
+    manage:
+        form: $/offline/mall/models/tax/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true

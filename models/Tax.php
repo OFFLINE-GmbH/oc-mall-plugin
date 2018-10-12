@@ -30,6 +30,12 @@ class Tax extends Model
             'key'      => 'tax_id',
             'otherKey' => 'shipping_method_id',
         ],
+        'payment_methods' => [
+            PaymentMethod::class,
+            'table'    => 'offline_mall_payment_method_tax',
+            'key'      => 'tax_id',
+            'otherKey' => 'payment_method_id',
+        ],
         'countries'        => [
             RainLabCountry::class,
             'table'      => 'offline_mall_country_tax',

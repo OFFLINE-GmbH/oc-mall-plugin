@@ -53,6 +53,7 @@ use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
+use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\ShippingMethod;
@@ -106,6 +107,7 @@ class Plugin extends PluginBase
             ImageSet::MORPH_KEY           => ImageSet::class,
             Discount::MORPH_KEY           => Discount::class,
             CustomField::MORPH_KEY        => CustomField::class,
+            PaymentMethod::MORPH_KEY      => PaymentMethod::class,
             ShippingMethod::MORPH_KEY     => ShippingMethod::class,
             CustomFieldOption::MORPH_KEY  => CustomFieldOption::class,
             ShippingMethodRate::MORPH_KEY => ShippingMethodRate::class,
@@ -187,7 +189,7 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_currency'],
                 'keywords'    => 'shop store mall currency',
             ],
-            'price_categories_settings'         => [
+            'price_categories_settings' => [
                 'label'       => 'offline.mall::lang.price_category_settings.label',
                 'description' => 'offline.mall::lang.price_category_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',
@@ -197,7 +199,7 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_price_categories'],
                 'keywords'    => 'shop store mall currency price categories',
             ],
-            'tax_settings'     => [
+            'tax_settings'              => [
                 'label'       => 'offline.mall::lang.common.taxes',
                 'description' => 'offline.mall::lang.tax_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category',
@@ -227,7 +229,7 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_payment_gateways'],
                 'keywords'    => 'shop store mall payment gateways',
             ],
-            'payment_method_settings' => [
+            'payment_method_settings'   => [
                 'label'       => 'offline.mall::lang.common.payment_methods',
                 'description' => 'offline.mall::lang.payment_method_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category_payments',
@@ -237,7 +239,7 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_payment_methods'],
                 'keywords'    => 'shop store mall payment methods',
             ],
-            'shipping_method_settings'     => [
+            'shipping_method_settings'  => [
                 'label'       => 'offline.mall::lang.common.shipping_methods',
                 'description' => 'offline.mall::lang.shipping_method_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category_orders',
@@ -247,7 +249,7 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.manage_shipping_methods'],
                 'keywords'    => 'shop store mall shipping methods',
             ],
-            'order_state_settings'     => [
+            'order_state_settings'      => [
                 'label'       => 'offline.mall::lang.common.order_states',
                 'description' => 'offline.mall::lang.order_state_settings.description',
                 'category'    => 'offline.mall::lang.general_settings.category_orders',
@@ -305,7 +307,7 @@ class Plugin extends PluginBase
         });
 
         // Translate slugs
-        Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+        Event::listen('translate.localePicker.translateParams', function ($page, $params, $oldLocale, $newLocale) {
             if ($page->getBaseFileName() === GeneralSettings::get('category_page')) {
                 return Category::translateParams($params, $oldLocale, $newLocale);
             }

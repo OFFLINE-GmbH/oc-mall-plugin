@@ -179,17 +179,6 @@ class ShippingTotal implements \JsonSerializable
         return $applier->reducedTotal();
     }
 
-    public function jsonSerialize()
-    {
-        return [
-            'method'          => $this->method(),
-            'preTaxes'        => $this->preTaxes,
-            'taxes'           => $this->taxes,
-            'total'           => $this->total,
-            'appliedDiscount' => $this->appliedDiscount,
-        ];
-    }
-
     /**
      * @return mixed
      */
@@ -221,5 +210,21 @@ class ShippingTotal implements \JsonSerializable
         $this->price = $price;
 
         return $price;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'method'          => $this->method(),
+            'preTaxes'        => $this->preTaxes,
+            'taxes'           => $this->taxes,
+            'total'           => $this->total,
+            'appliedDiscount' => $this->appliedDiscount,
+        ];
+    }
+
+    public function __toString()
+    {
+        return (string)json_encode($this->jsonSerialize());
     }
 }

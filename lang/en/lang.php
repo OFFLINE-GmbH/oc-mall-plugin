@@ -113,7 +113,7 @@
     'shipping_method_settings' => [
         'description' => 'Manage shipping methods',
     ],
-    'tax_settings' => [
+    'tax_settings'             => [
         'description' => 'Manage taxes',
     ],
     'general_settings'         => [
@@ -197,6 +197,7 @@
         'payment_gateway'      => 'Payment gateway',
         'payment_provider'     => 'Payment provider',
         'payment_methods'      => 'Payment methods',
+        'payment'              => 'Payment',
         'image'                => 'Image',
         'color'                => 'Color',
         'unit'                 => 'Unit',
@@ -234,6 +235,7 @@
         'notification'         => 'Notification',
         'price_missing'        => 'Enter at least a price for the default currency',
         'slug_unique'          => 'The URL has to be unique',
+        'fees'                 => 'Gebühren',
     ],
     'variant'                  => [
         'method' => [
@@ -380,6 +382,12 @@
             'usage_limit_reached' => 'This promo code has been applied to many times and is therefore no longer valid.',
         ],
     ],
+    'payment_method'           => [
+        'price'                  => 'Fixed fee',
+        'price_comment'          => 'The amount to add to the order\'s total',
+        'fee_percentage'         => 'Percentage fee',
+        'fee_percentage_comment' => 'The percentage of the total to add to the order\'s total',
+    ],
     'order'                    => [
         'order_number'                        => 'Order number',
         'invoice_number'                      => 'Invoice number',
@@ -458,10 +466,6 @@
         'available_below_total'    => 'Available if total is lower than',
         'countries'                => 'Available for shipping to these countries',
         'countries_comment'        => 'If no country is selected this method is available worldwide.',
-    ],
-    'payment_method'           => [
-        'price_fixed'      => 'Fixed fee',
-        'price_percentage' => 'Procentual fee (of grand total)',
     ],
     'payment_status'           => [
         'paid'          => 'Paid',

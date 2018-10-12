@@ -22,6 +22,7 @@ class CreateOfflineMallOrders extends Migration
             $table->text('custom_fields')->nullable();
             $table->text('shipping')->nullable();
             $table->text('taxes')->nullable();
+            $table->text('payment')->nullable();
             $table->text('discounts')->nullable();
             $table->integer('payment_method_id')->nullable();
             $table->text('payment_data')->nullable();
@@ -29,10 +30,14 @@ class CreateOfflineMallOrders extends Migration
             $table->integer('total_shipping_pre_taxes')->nullable();
             $table->integer('total_shipping_taxes')->nullable();
             $table->integer('total_shipping_post_taxes')->nullable();
+            $table->integer('total_payment_pre_taxes')->nullable();
+            $table->integer('total_payment_taxes')->nullable();
+            $table->integer('total_payment_post_taxes')->nullable();
             $table->integer('total_product_pre_taxes')->nullable();
             $table->integer('total_product_taxes')->nullable();
             $table->integer('total_product_post_taxes')->nullable();
             $table->integer('total_taxes')->nullable();
+            $table->integer('total_pre_payment')->nullable();
             $table->integer('total_pre_taxes')->nullable();
             $table->integer('total_post_taxes')->nullable();
             $table->string('tracking_number')->nullable();

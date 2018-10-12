@@ -24,6 +24,7 @@
     - create_offline_mall_shipping_countries.php
     - create_offline_mall_payments_log.php
     - create_offline_mall_payment_methods.php
+    - create_offline_mall_payment_method_tax.php
     - create_offline_mall_product_custom_field.php
     - create_offline_mall_properties.php
     - create_offline_mall_property_values.php

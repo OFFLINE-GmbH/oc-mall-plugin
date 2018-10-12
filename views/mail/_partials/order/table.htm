@@ -70,6 +70,17 @@ name = "Order table"
                 </td>
             </tr>
         {% endif %}
+        {% if order.payment and order.payment.total > 0 %}
+            <tr class="orderfooter separator">
+                <td colspan="3">
+                    {{ 'offline.mall::lang.common.payment' | trans }}:
+                    {{ order.payment.method.name }}
+                </td>
+                <td style="text-align: right">
+                    {{ order.payment.total | money }}
+                </td>
+            </tr>
+        {% endif %}
         <tr class="orderfooter-bottomline">
             <td colspan="3" style=" border-top: 1px solid #f5f8fa; font-weight: bold;">
                 {{ 'offline.mall::lang.order.grand_total' | trans }}
