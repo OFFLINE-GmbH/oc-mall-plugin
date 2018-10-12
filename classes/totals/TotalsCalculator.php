@@ -68,6 +68,18 @@ class TotalsCalculator
      * @var Collection
      */
     public $shippingTaxes;
+    /**
+     * @var int
+     */
+    protected $totalPrePayment;
+    /**
+     * @var PaymentTotal
+     */
+    protected $paymentTotal;
+    /**
+     * @var Collection
+     */
+    public $paymentTaxes;
 
     public function __construct(Cart $cart)
     {
@@ -95,11 +107,15 @@ class TotalsCalculator
         $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
         $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
 
-        $this->taxes = $this->getTaxTotals();
-
         $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
 
-        $this->totalPostTaxes = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
+        $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
+        $this->paymentTaxes = $this->filterPaymentTaxes();
+        $this->paymentTotal  = new PaymentTotal($this->cart->payment_method, $this);
+
+        $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
+
+        $this->taxes = $this->getTaxTotals();
     }
 
     protected function calculateProductPreTaxes(): float
@@ -124,13 +140,21 @@ class TotalsCalculator
             });
         }
 
+        $paymentTaxes = new Collection();
+        $paymentTotal = $this->paymentTotal->totalPreTaxesOriginal();
+        if ($this->paymentTaxes) {
+            $paymentTaxes = $this->paymentTaxes->map(function (Tax $tax) use ($paymentTotal) {
+                return new TaxTotal($paymentTotal, $tax);
+            });
+        }
+
         $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {
             return $product->data->taxes->map(function (Tax $tax) use ($product) {
                 return new TaxTotal($product->totalPreTaxes, $tax);
             });
         });
 
-        $combined = $productTaxes->concat($shippingTaxes);
+        $combined = $productTaxes->concat($shippingTaxes)->concat($paymentTaxes);
 
         $this->totalTaxes = $combined->sum(function (TaxTotal $tax) {
             return $tax->total();
@@ -166,6 +190,11 @@ class TotalsCalculator
         });
     }
 
+    public function paymentTotal(): PaymentTotal
+    {
+        return $this->paymentTotal;
+    }
+
     public function shippingTotal(): ShippingTotal
     {
         return $this->shippingTotal;
@@ -184,6 +213,11 @@ class TotalsCalculator
     public function totalTaxes(): float
     {
         return $this->totalTaxes;
+    }
+
+    public function totalPrePayment(): float
+    {
+        return $this->totalPrePayment;
     }
 
     public function productPreTaxes(): float
@@ -255,9 +289,30 @@ class TotalsCalculator
      */
     protected function filterShippingTaxes()
     {
-        $shippingTaxes = optional($this->cart->shipping_method)->taxes ?? new Collection();
+        $taxes = optional($this->cart->shipping_method)->taxes ?? new Collection();
 
-        return $shippingTaxes->filter(function (Tax $tax) {
+        return $taxes->filter(function (Tax $tax) {
+            // If no shipping address is available only include taxes that have no country restrictions.
+            if ($this->cart->shipping_address === null) {
+                return $tax->countries->count() === 0;
+            }
+
+            return $tax->countries->count() === 0
+                || $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
+        });
+    }
+
+    /**
+     * Filter out payment taxes that have to be applied for
+     * the current shipping address of the cart.
+     *
+     * @return Collection
+     */
+    protected function filterPaymentTaxes()
+    {
+        $taxes = optional($this->cart->payment_method)->taxes ?? new Collection();
+
+        return $taxes->filter(function (Tax $tax) {
             // If no shipping address is available only include taxes that have no country restrictions.
             if ($this->cart->shipping_address === null) {
                 return $tax->countries->count() === 0;

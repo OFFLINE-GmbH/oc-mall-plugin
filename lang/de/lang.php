@@ -196,6 +196,7 @@
         'payment_gateway'      => 'Zahlungsgateway',
         'payment_provider'     => 'Zahlungsanbieter',
         'payment_methods'      => 'Zahlungsmethoden',
+        'payment'              => 'Zahlung',
         'image'                => 'Bild',
         'color'                => 'Farbe',
         'unit'                 => 'Einheit',

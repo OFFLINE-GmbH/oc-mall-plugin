@@ -92,6 +92,21 @@
         </td>
     </tr>
     <?php endif; ?>
+    <?php if ($order['payment']): ?>
+    <tr class="orderfooter separator">
+        <td colspan="3">
+            <span>
+                <?= e(trans('offline.mall::lang.common.payment')) ?>:
+                <?= e($order['payment']['method']['name']) ?>
+            </span>
+        </td>
+        <td class="text-right">
+            <span>
+                <?= e($money->format($order['payment']['total'])) ?>
+            </span>
+        </td>
+    </tr>
+    <?php endif; ?>
     <tr class="orderfooter-bottomline">
         <td colspan="3">
             <span>

@@ -39,15 +39,20 @@ tabs:
             span: auto
             type: fileupload
             tab: 'offline.mall::lang.product.description'
-        fee_percentage:
-            label: 'offline.mall::lang.payment_method.fee_percentage'
-            span: auto
-            type: text
-            comment: 'offline.mall::lang.payment_method.fee_percentage_comment'
-            tab: 'offline.mall::lang.common.fees'
         _prices:
             label: 'offline.mall::lang.payment_method.price'
-            span: auto
+            span: left
             type: mall.price
             comment: 'offline.mall::lang.payment_method.price_comment'
+            tab: 'offline.mall::lang.common.fees'
+        taxes:
+            span: right
+            path: taxes
+            type: partial
+            tab: 'offline.mall::lang.common.fees'
+        fee_percentage:
+            label: 'offline.mall::lang.payment_method.fee_percentage'
+            span: left
+            type: text
+            comment: 'offline.mall::lang.payment_method.fee_percentage_comment'
             tab: 'offline.mall::lang.common.fees'

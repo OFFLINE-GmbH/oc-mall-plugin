@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
@@ -16,17 +17,21 @@ class PaymentMethod extends Model
     use Sortable;
     use Validation;
     use PriceAccessors;
+    use Nullable;
 
     const MORPH_KEY = 'mall.payment_method';
 
     public $rules = [
         'name'             => 'required',
         'payment_provider' => 'required',
+        'fee_percentage'   => 'nullable|max:99',
     ];
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $appends = ['settings'];
     public $with = ['prices'];
+    public $nullable = ['fee_percentage'];
+    public $hidden = ['settings', 'prices'];
     public $slugs = [
         'code' => 'name',
     ];
@@ -50,6 +55,14 @@ class PaymentMethod extends Model
             'conditions' => 'price_category_id is null and field is null',
         ],
     ];
+    public $belongsToMany = [
+        'taxes' => [
+            Tax::class,
+            'table'    => 'offline_mall_payment_method_tax',
+            'key'      => 'payment_method_id',
+            'otherKey' => 'tax_id',
+        ],
+    ];
 
     public function afterDelete()
     {
@@ -61,6 +74,7 @@ class PaymentMethod extends Model
 
     public function getPaymentProviderOptions(): array
     {
+        /** @var PaymentGateway $gateway */
         $gateway = app(PaymentGateway::class);
 
         $options = [];

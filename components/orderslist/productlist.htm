@@ -57,6 +57,15 @@
             </td>
         </tr>
     {% endfor %}
+    <tr class="mall-cart__payment">
+        <td></td>
+        <td colspan="2">
+            {{ order.payment.method.name }}
+        </td>
+        <td class="text-right">
+            {{ order.payment.total | money }}
+        </td>
+    </tr>
     <tr class="mall-cart__grand-total">
         <td></td>
         <td colspan="2">

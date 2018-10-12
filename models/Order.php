@@ -40,13 +40,14 @@ class Order extends Model
         'shipping_address',
         'custom_fields',
         'taxes',
+        'payment',
         'currency',
         'discounts',
         'shipping',
         'payment_data',
     ];
     public $table = 'offline_mall_orders';
-    public $hasOne = ['payment' => PaymentLog::class];
+    public $hasOne = ['payment_log' => PaymentLog::class];
     public $hasMany = [
         'products'     => OrderProduct::class,
         'payment_logs' => [PaymentLog::class, 'order' => 'created_at DESC'],
@@ -113,6 +114,8 @@ class Order extends Model
                 throw new ValidationException(['Your order is empty. Please add a product to the cart.']);
             }
 
+            $totals = $cart->totals;
+
             $order                                          = new static;
             $order->session_id                              = session()->getId();
             $order->currency                                = Currency::activeCurrency();
@@ -120,24 +123,29 @@ class Order extends Model
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
             $order->billing_address                         = $cart->billing_address;
             $order->shipping_address                        = $cart->shipping_address;
-            $order->shipping                                = $cart->totals->shippingTotal();
-            $order->taxes                                   = $cart->totals->taxes();
-            $order->discounts                               = $cart->totals->appliedDiscounts();
+            $order->shipping                                = $totals->shippingTotal();
+            $order->payment                                 = $totals->paymentTotal();
+            $order->taxes                                   = $totals->taxes();
+            $order->discounts                               = $totals->appliedDiscounts();
             $order->ip_address                              = request()->ip();
             $order->customer_id                             = $cart->customer->id;
             $order->payment_method_id                       = $cart->payment_method_id;
             $order->payment_state                           = PendingState::class;
             $order->order_state_id                          = $initialOrderStatus->id;
-            $order->attributes['total_shipping_pre_taxes']  = $order->round($cart->totals->shippingTotal()->totalPreTaxes());
-            $order->attributes['total_shipping_taxes']      = $order->round($cart->totals->shippingTotal()->totalTaxes());
-            $order->attributes['total_shipping_post_taxes'] = $order->round($cart->totals->shippingTotal()->totalPostTaxes());
-            $order->attributes['total_product_pre_taxes']   = $order->round($cart->totals->productPreTaxes());
-            $order->attributes['total_product_taxes']       = $order->round($cart->totals->productTaxes());
-            $order->attributes['total_product_post_taxes']  = $order->round($cart->totals->productPostTaxes());
-            $order->attributes['total_pre_taxes']           = $order->round($cart->totals->totalPreTaxes());
-            $order->attributes['total_taxes']               = $order->round($cart->totals->totalTaxes());
-            $order->attributes['total_post_taxes']          = $order->round($cart->totals->totalPostTaxes());
-            $order->total_weight                            = $order->round($cart->totals->weightTotal());
+            $order->attributes['total_shipping_pre_taxes']  = $order->round($totals->shippingTotal()->totalPreTaxes());
+            $order->attributes['total_shipping_taxes']      = $order->round($totals->shippingTotal()->totalTaxes());
+            $order->attributes['total_shipping_post_taxes'] = $order->round($totals->shippingTotal()->totalPostTaxes());
+            $order->attributes['total_payment_pre_taxes']   = $order->round($totals->paymentTotal()->totalPreTaxes());
+            $order->attributes['total_payment_taxes']       = $order->round($totals->paymentTotal()->totalTaxes());
+            $order->attributes['total_payment_post_taxes']  = $order->round($totals->paymentTotal()->totalPostTaxes());
+            $order->attributes['total_product_pre_taxes']   = $order->round($totals->productPreTaxes());
+            $order->attributes['total_product_taxes']       = $order->round($totals->productTaxes());
+            $order->attributes['total_product_post_taxes']  = $order->round($totals->productPostTaxes());
+            $order->attributes['total_pre_payment']         = $order->round($totals->totalPrePayment());
+            $order->attributes['total_pre_taxes']           = $order->round($totals->totalPreTaxes());
+            $order->attributes['total_taxes']               = $order->round($totals->totalTaxes());
+            $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
+            $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
 
             $cart->products->each(function (CartProduct $entry) use ($order) {
@@ -190,6 +198,9 @@ class Order extends Model
             'total_shipping_pre_taxes',
             'total_shipping_taxes',
             'total_shipping_post_taxes',
+            'total_payment_pre_taxes',
+            'total_payment_taxes',
+            'total_payment_post_taxes',
             'total_product_pre_taxes',
             'total_product_taxes',
             'total_product_post_taxes',
@@ -285,6 +296,21 @@ class Order extends Model
     public function totalShippingPostTaxes()
     {
         return $this->toPriceModel('total_shipping_post_taxes');
+    }
+
+    public function totalPaymentPreTaxes()
+    {
+        return $this->toPriceModel('total_payment_pre_taxes');
+    }
+
+    public function totalPaymentTaxes()
+    {
+        return $this->toPriceModel('total_payment_taxes');
+    }
+
+    public function totalPaymentPostTaxes()
+    {
+        return $this->toPriceModel('total_payment_post_taxes');
     }
 
     protected function toPriceModel(string $key): Price

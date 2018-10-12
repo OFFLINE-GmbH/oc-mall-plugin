@@ -12,6 +12,9 @@ use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
 use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
 use Session;
 
+/**
+ * @property TotalsCalculator totals
+ */
 class Cart extends Model
 {
     use Validation;
@@ -22,15 +25,11 @@ class Cart extends Model
 
     protected $dates = ['deleted_at'];
     protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
-
     public $rules = [];
-
     public $table = 'offline_mall_carts';
-
     public $hasMany = [
         'products' => [CartProduct::class, 'deleted' => true],
     ];
-
     public $belongsTo = [
         'shipping_method'  => ShippingMethod::class,
         'payment_method'   => PaymentMethod::class,
@@ -38,18 +37,15 @@ class Cart extends Model
         'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
         'customer'         => [Customer::class, 'deleted' => true],
     ];
-
     public $belongsToMany = [
         'discounts' => [
             Discount::class,
             'table' => 'offline_mall_cart_discount',
         ],
     ];
-
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
     ];
-
     public $fillable = ['session_id', 'customer_id'];
 
     /**

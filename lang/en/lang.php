@@ -197,6 +197,7 @@
         'payment_gateway'      => 'Payment gateway',
         'payment_provider'     => 'Payment provider',
         'payment_methods'      => 'Payment methods',
+        'payment'              => 'Payment',
         'image'                => 'Image',
         'color'                => 'Color',
         'unit'                 => 'Unit',
