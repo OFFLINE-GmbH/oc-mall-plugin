@@ -15,6 +15,7 @@ class Brand extends Model
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
+        'description',
         'website',
     ];
     public $slugs = [
