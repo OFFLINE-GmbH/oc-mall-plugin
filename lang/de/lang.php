@@ -24,9 +24,9 @@
             'preview' => 'Rabatt-Vorschau',
         ],
         'shipping_methods'     => [
-            'create'  => 'Versandart erstellen',
-            'update'  => 'Versandart bearbeiten',
-            'preview' => 'Versandart-Vorschau',
+            'create'  => 'Versandmethode erstellen',
+            'update'  => 'Versandmethode bearbeiten',
+            'preview' => 'Versandmethode-Vorschau',
         ],
         'payment_methods'      => [
             'create'  => 'Zahlungsmethode erstellen',
@@ -111,7 +111,7 @@
         'description' => 'Zahlungsmethoden verwalten',
     ],
     'shipping_method_settings' => [
-        'description' => 'Versandarten verwalten',
+        'description' => 'Versandmethoden verwalten',
     ],
     'tax_settings' => [
         'description' => 'Steuern verwalten',
@@ -151,7 +151,7 @@
         'rates'                => 'Konditionen',
         'inventory'            => 'Lagerbestand',
         'accessories'          => 'Zubehör',
-        'shipping_methods'     => 'Versandarten',
+        'shipping_methods'     => 'Versandmethoden',
         'accessory'            => 'Zubehör',
         'custom_fields'        => 'Benutzerdefinierte Felder',
         'variants'             => 'Varianten',
@@ -405,7 +405,7 @@
         'tracking_notification_comment'       => 'Eine Benachrichtigung mit den Trackinginformationen wird an den Kunden gesendet',
         'shipping_fees'                       => 'Versandkosten',
         'shipping_provider'                   => 'Spediteur',
-        'shipping_method'                     => 'Versandart',
+        'shipping_method'                     => 'Versandmethode',
         'card_holder_name'                    => 'Kartenhalter',
         'card_type'                           => 'Kartentyp',
         'payment_method'                      => 'Zahlungsmethode',
@@ -456,7 +456,7 @@
         'available_above_total'    => 'Verfügbar wenn Totalbetrag grösser oder gleich',
         'available_below_total'    => 'Verfügbar wenn Totalbetrag kleiner',
         'countries'                => 'Verfügbar für den Versand in diese Länder',
-        'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandart weltweit verwendet werden.',
+        'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandmethode weltweit verwendet werden.',
     ],
     'payment_method'           => [
         'price_fixed'      => 'Aufpreis fix',
@@ -492,7 +492,7 @@
         'manage_notifications'    => 'Kann Benachrichtigungen verwalten',
         'manage_price_categories' => 'Kann Preiskategorien verwalten',
         'manage_order_states'     => 'Kann Bestellstatus verwalten',
-        'manage_shipping_methods' => 'Kann Versandarten verwalten',
+        'manage_shipping_methods' => 'Kann Versandmethoden verwalten',
         'manage_taxes'            => 'Kann Steuern verwalten',
     ],
     'components'               => [
