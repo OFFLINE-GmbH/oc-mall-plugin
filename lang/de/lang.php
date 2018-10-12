@@ -113,7 +113,7 @@
     'shipping_method_settings' => [
         'description' => 'Versandmethoden verwalten',
     ],
-    'tax_settings' => [
+    'tax_settings'             => [
         'description' => 'Steuern verwalten',
     ],
     'general_settings'         => [
