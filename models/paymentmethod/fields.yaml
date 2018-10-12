@@ -18,21 +18,36 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: dropdown
-    logo:
-        label: 'offline.mall::lang.common.logo'
-        oc.commentPosition: ''
-        mode: image
-        imageWidth: '200'
-        imageHeight: '200'
-        useCaption: 0
-        thumbOptions:
-            mode: crop
-            extension: auto
-        span: right
-        type: fileupload
-    description:
-        label: 'offline.mall::lang.product.description'
-        size: huge
-        oc.commentPosition: ''
-        span: left
-        type: richeditor
+tabs:
+    fields:
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: huge
+            span: auto
+            type: richeditor
+            tab: 'offline.mall::lang.product.description'
+        logo:
+            label: 'offline.mall::lang.common.logo'
+            oc.commentPosition: ''
+            mode: image
+            imageWidth: '200'
+            imageHeight: '200'
+            useCaption: 0
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: auto
+            type: fileupload
+            tab: 'offline.mall::lang.product.description'
+        fee_percentage:
+            label: 'offline.mall::lang.payment_method.fee_percentage'
+            span: auto
+            type: text
+            comment: 'offline.mall::lang.payment_method.fee_percentage_comment'
+            tab: 'offline.mall::lang.common.fees'
+        _prices:
+            label: 'offline.mall::lang.payment_method.price'
+            span: auto
+            type: mall.price
+            comment: 'offline.mall::lang.payment_method.price_comment'
+            tab: 'offline.mall::lang.common.fees'

@@ -6,6 +6,7 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
+use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use System\Models\File;
 
 class PaymentMethod extends Model
@@ -14,6 +15,9 @@ class PaymentMethod extends Model
     use SoftDelete;
     use Sortable;
     use Validation;
+    use PriceAccessors;
+
+    const MORPH_KEY = 'mall.payment_method';
 
     public $rules = [
         'name'             => 'required',
@@ -22,8 +26,12 @@ class PaymentMethod extends Model
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $appends = ['settings'];
+    public $with = ['prices'];
     public $slugs = [
         'code' => 'name',
+    ];
+    public $casts = [
+        'fee_percentage' => 'float',
     ];
     public $translatable = [
         'name',
@@ -35,6 +43,21 @@ class PaymentMethod extends Model
     public $attachOne = [
         'logo' => File::class,
     ];
+    public $morphMany = [
+        'prices' => [
+            Price::class,
+            'name'       => 'priceable',
+            'conditions' => 'price_category_id is null and field is null',
+        ],
+    ];
+
+    public function afterDelete()
+    {
+        \DB::table('offline_mall_prices')
+           ->where('priceable_type', self::MORPH_KEY)
+           ->where('priceable_id', $this->id)
+           ->delete();
+    }
 
     public function getPaymentProviderOptions(): array
     {
@@ -59,7 +82,7 @@ class PaymentMethod extends Model
         /** @var PaymentGateway $gateway */
         $gateway  = app(PaymentGateway::class);
         $provider = $gateway->getProviderById($this->payment_provider);
-        
+
         return $provider->getSettings();
     }
 }
