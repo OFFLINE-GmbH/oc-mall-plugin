@@ -63,6 +63,9 @@ use OFFLINE\Mall\Models\User as RainLabUser;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country as RainLabCountry;
 use System\Classes\PluginBase;
+use System\Twig\Extension as TwigExtension;
+use System\Twig\Loader as TwigLoader;
+use Twig_Environment;
 use Validator;
 
 /**
@@ -264,15 +267,6 @@ class Plugin extends PluginBase
 
     public function registerMarkupTags()
     {
-//        // If the mail token parser is only registered temporarily the sending
-//        // of emails with the sync queue driver will fail since Twig gets initialized
-//        // before the parser is registered and therefore the partial tag is unknown.
-//        // @see https://github.com/octobercms/october/issues/3341#issuecomment-427586226
-//        $markupManager = MarkupManager::instance();
-//        $markupManager->registerTokenParsers([
-//            new MailPartialTokenParser,
-//        ]);
-
         return [
             'filters' => [
                 'money' => function (...$args) {
@@ -351,6 +345,12 @@ class Plugin extends PluginBase
         });
         $this->app->singleton('user.auth', function () {
             return AuthManager::instance();
+        });
+        $this->app->singleton('mall.twig.environment', function ($app) {
+            $twig = new Twig_Environment(new TwigLoader, ['auto_reload' => true]);
+            $twig->addExtension(new TwigExtension);
+
+            return $twig;
         });
     }
 
