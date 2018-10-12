@@ -197,6 +197,16 @@ class Plugin extends PluginBase
                 'permissions' => ['offline.mall.settings.manage_price_categories'],
                 'keywords'    => 'shop store mall currency price categories',
             ],
+            'tax_settings'     => [
+                'label'       => 'offline.mall::lang.common.taxes',
+                'description' => 'offline.mall::lang.tax_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-percent',
+                'url'         => Backend::url('offline/mall/taxes'),
+                'order'       => 40,
+                'permissions' => ['offline.mall.manage_taxes'],
+                'keywords'    => 'shop store mall tax taxes',
+            ],
             'notification_settings'     => [
                 'label'       => 'offline.mall::lang.notification_settings.label',
                 'description' => 'offline.mall::lang.notification_settings.description',
