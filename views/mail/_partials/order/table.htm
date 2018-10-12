@@ -32,8 +32,8 @@ name = "Order table"
                     </div>
                 </td>
                 <td style="vertical-align: top; text-align: right">{{ item.quantity }}</td>
-                <td style="vertical-align: top; text-align: right">{{ item.pricePostTaxes() }}</td>
-                <td style="vertical-align: top; text-align: right">{{ item.totalPostTaxes() }}</td>
+                <td style="vertical-align: top; text-align: right">{{ item.pricePostTaxes() | raw }}</td>
+                <td style="vertical-align: top; text-align: right">{{ item.totalPostTaxes() | raw }}</td>
             </tr>
         {% endfor %}
         <tr class="orderfooter separator separator-bottom">
@@ -41,7 +41,7 @@ name = "Order table"
                 {{ 'offline.mall::lang.order.subtotal' | trans }}
             </td>
             <td style="text-align: right; border-top: 1px solid #f5f8fa; font-style: italic;">
-                {{ order.totalProductPostTaxes() }}
+                {{ order.totalProductPostTaxes() | raw }}
             </td>
         </tr>
         {% for entry in order.discounts %}
@@ -77,7 +77,7 @@ name = "Order table"
                     {{ order.payment.method.name }}
                 </td>
                 <td style="text-align: right">
-                    {{ order.payment.total | money }}
+                    {{ order.payment.total | money | raw  }}
                 </td>
             </tr>
         {% endif %}
@@ -86,7 +86,7 @@ name = "Order table"
                 {{ 'offline.mall::lang.order.grand_total' | trans }}
             </td>
             <td style="text-align: right; border-top: 1px solid #f5f8fa; font-weight: bold;">
-                {{ order.totalPostTaxes() }}
+                {{ order.totalPostTaxes() | raw }}
             </td>
         </tr>
         {% for entry in order.taxes %}
