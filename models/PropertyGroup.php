@@ -56,7 +56,7 @@ class PropertyGroup extends Model
             'table'    => 'offline_mall_category_property_group',
             'key'      => 'property_group_id',
             'otherKey' => 'category_id',
-            'pivot'    => ['sort_order'],
+            'pivot'    => ['relation_sort_order'],
         ],
     ];
 

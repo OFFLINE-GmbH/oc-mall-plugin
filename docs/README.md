@@ -1,24 +1,19 @@
-# VuePress
+---
+prev: false
+next: /getting-started/installation.html
+---
 
+# oc-mall
 
-## Seed demo data
+> E-commerce solution for October CMS
 
-```bash
-# All your existing data will be erased!
-php artisan mall:seed-demo
-```
+This is the official documentation website for the [oc-mall plugin](https://github.com/OFFLINE-GmbH/oc-mall-plugin) for October CMS.
 
-## Access product images
+You can help us to improve the documentation by clicking on the "Help us" link at the bottom of each page.
 
-You can use the following methods to access product images:
+[Let's get started!](/getting-started/installation.md)
 
-```php
-// Get the first image of the main image set
-$product->main_image;
+## Links
 
-// Get all images except the main image
-$product->images;
-
-// Get all available images, including the main image
-$product->all_images;
-```
+* [GitHub](https://github.com/OFFLINE-GmbH/oc-mall-plugin) 
+* [October Marketplace](https://octobercms.com/plugin/offline-mall) 

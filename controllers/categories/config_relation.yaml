@@ -11,7 +11,7 @@ property_groups:
         toolbarButtons: add|remove
         recordUrl: '/offline/mall/propertygroups/update/:id'
         defaultSort:
-            column: pivot[sort_order]
+            column: pivot[relation_sort_order]
             direction: asc
     manage:
         form: $/offline/mall/models/propertygroup/fields_no_relation.yaml

@@ -7,7 +7,7 @@ use Exception;
 
 trait SortableRelation
 {
-    public function setRelationOrder($relationName, $itemIds, $itemOrders = null)
+    public function setRelationOrder($relationName, $itemIds, $itemOrders = null, $sortKey = 'sort_order')
     {
         if ( ! is_array($itemIds)) {
             $itemIds = [$itemIds];
@@ -27,7 +27,7 @@ trait SortableRelation
             DB::table($relation['table'])
               ->where($relation['key'], $this->id)
               ->where($relation['otherKey'], $id)
-              ->update(['sort_order' => $order]);
+              ->update([$sortKey => $order]);
         }
     }
 }
