@@ -97,6 +97,7 @@ class Product extends Model
     public $with = ['image_sets', 'prices'];
     public $attachMany = [
         'downloads' => File::class,
+        'initial_images' => File::class,
     ];
     public $belongsTo = [
         'category'          => Category::class,

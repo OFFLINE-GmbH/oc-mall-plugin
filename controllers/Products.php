@@ -9,11 +9,13 @@ use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
+use DB;
 
 class Products extends Controller
 {
@@ -54,13 +56,31 @@ class Products extends Controller
     }
 
     /**
-     * Save the initial price into the prices table.
+     * Save the initial price into the prices table and create an
+     * initial image set if images have been uploaded.
      *
      * @param Product $model
      */
     public function formAfterCreate(Product $model)
     {
         $this->updateProductPrices($model, null, '_initial_price');
+
+        if ($model->initial_images->count() > 0) {
+            $imageSet = ImageSet::create([
+                'name'        => $model->name,
+                'is_main_set' => $model->true,
+                'product_id'  => $model->id,
+            ]);
+            DB::table('system_files')
+              ->where('field', 'initial_images')
+              ->where('attachment_type', Product::MORPH_KEY)
+              ->where('attachment_id', $model->id)
+              ->update([
+                  'field'           => 'images',
+                  'attachment_type' => ImageSet::MORPH_KEY,
+                  'attachment_id'   => $imageSet->id,
+              ]);
+        }
     }
 
     public function formAfterUpdate(Product $model)

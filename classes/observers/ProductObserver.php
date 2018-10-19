@@ -56,7 +56,7 @@ class ProductObserver
     {
         $this->index->delete(ProductEntry::INDEX, $product->id);
         if ($product->inventory_management_method === 'single') {
-            $this->index->delete(VariantEntry::INDEX, $this->ghostId($product->id));
+            $this->index->delete(VariantEntry::INDEX, $this->ghostId($product));
         } else {
             $this->removeVariantsFromIndex($product);
         }
