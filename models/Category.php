@@ -84,7 +84,7 @@ class Category extends Model
             'table'    => 'offline_mall_category_property_group',
             'key'      => 'category_id',
             'otherKey' => 'property_group_id',
-            'pivot'    => ['sort_order'],
+            'pivot'    => ['relation_sort_order'],
         ],
     ];
     public $attachOne = [

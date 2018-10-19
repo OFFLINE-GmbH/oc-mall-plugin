@@ -39,7 +39,7 @@ class Categories extends Controller
     {
         $records = request()->input('rcd');
         $model   = Category::findOrFail($this->params[0]);
-        $model->setRelationOrder('property_groups', $records, range(1, count($records)));
+        $model->setRelationOrder('property_groups', $records, range(1, count($records)), 'relation_sort_order');
 
         Flash::success(trans('offline.mall::lang.common.sorting_updated'));
     }
