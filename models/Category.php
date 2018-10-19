@@ -184,7 +184,7 @@ class Category extends Model
         foreach ($params as $paramName => $paramValue) {
             $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
             if ($records) {
-                $records->translateContext($newLocale);
+                $records->setTranslateContext($newLocale);
                 $newParams[$paramName] = $records->$paramName;
             } elseif ($paramName === 'slug') {
                 // Translate nested slugs.
@@ -504,7 +504,7 @@ class Category extends Model
     public function getNestedSlugAttribute()
     {
         return $this->getParentsAndSelf()->map(function (Category $category) {
-            $category->setTranslateContext($this->translateContext());
+            $category->setTranslateContext($this->getTranslateContext());
 
             return $category->slug;
         })->implode('/');
@@ -638,5 +638,17 @@ class Category extends Model
         if ($this->rainlabTranslateInstalled()) {
             $this->translateContext($locale);
         }
+    }
+
+    /**
+     * Conditionally gets the translate context.
+     */
+    public function getTranslateContext()
+    {
+        if ($this->rainlabTranslateInstalled()) {
+            return $this->translateContext();
+        }
+
+        return self::DEFAULT_LOCALE;
     }
 }
