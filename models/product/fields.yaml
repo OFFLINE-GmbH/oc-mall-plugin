@@ -156,6 +156,7 @@ tabs:
             span: left
             type: partial
             path: image_sets
+            context: update
             tab: 'offline.mall::lang.common.attachments'
         downloads:
             label: 'offline.mall::lang.common.downloads'
