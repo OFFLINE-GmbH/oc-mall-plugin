@@ -258,6 +258,7 @@
         'integer'    => 'Integer',
         'float'      => 'Float',
         'textarea'   => 'Multi-line textfield',
+        'richeditor'   => 'Richtext',
         'dropdown'   => 'Dropdown',
         'checkbox'   => 'Checkbox',
         'color'      => 'Color',

@@ -257,6 +257,7 @@
         'integer'    => 'Ganzzahl',
         'float'      => 'Gleitkommazahl',
         'textarea'   => 'Mehrzeiliges Textfeld',
+        'richeditor' => 'Richtext',
         'dropdown'   => 'Auswahlliste',
         'checkbox'   => 'Checkbox',
         'color'      => 'Farbe',

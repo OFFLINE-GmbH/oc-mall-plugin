@@ -4,6 +4,7 @@ use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Backend\FormWidgets\ColorPicker;
 use Backend\FormWidgets\FileUpload;
+use Backend\FormWidgets\RichEditor;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -62,6 +63,8 @@ class PropertyFields extends FormWidgetBase
                 return $this->dropdown($property, $value);
             case 'checkbox':
                 return $this->checkbox($property, $value);
+            case 'richeditor':
+                return $this->richeditor($property, $value);
             case 'image':
                 return $this->image($property, $value);
             case 'float':
@@ -99,6 +102,25 @@ class PropertyFields extends FormWidgetBase
     private function textarea($property, $value)
     {
         return $this->makePartial('textarea', ['field' => $property, 'value' => $value]);
+    }
+
+    private function richeditor($property, $value)
+    {
+        $config = $this->makeConfig([
+            'model' => new PropertyValue(),
+        ]);
+
+        $formField        = $this->newFormField($property);
+        $formField->value = $value;
+
+        $widget             = new RichEditor($this->controller, $formField, $config);
+        $widget->allowEmpty = true;
+        $widget->bindToController();
+
+        return $this->makePartial(
+            'richeditor',
+            ['field' => $property, 'widget' => $widget, 'value' => $value]
+        );
     }
 
     private function dropdown($property, $value)
