@@ -70,4 +70,4 @@ matrix:
         keep-history: false
         target-branch: gh-pages
         on:
-          branch: docs
+          branch: develop
