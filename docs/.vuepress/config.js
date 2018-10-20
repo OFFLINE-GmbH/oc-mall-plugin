@@ -36,7 +36,7 @@ module.exports = {
             {
                 title: 'Extending',
                 children: [
-                    '/extending/payment-gateways'
+                    '/extending/payment-providers'
                 ]
             },
             {
