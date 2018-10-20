@@ -12,32 +12,7 @@ class GeneralSettings extends Model
     public $settingsCode = 'offline_mall_settings';
     public $settingsFields = '$/offline/mall/models/settings/fields_general.yaml';
 
-    public function getProductPageOptions()
-    {
-        return $this->getPages();
-    }
-
-    public function getCategoryPageOptions()
-    {
-        return $this->getPages();
-    }
-
-    public function getAddressPageOptions()
-    {
-        return $this->getPages();
-    }
-
-    public function getCheckoutPageOptions()
-    {
-        return $this->getPages();
-    }
-
-    public function getAccountPageOptions()
-    {
-        return $this->getPages();
-    }
-
-    protected function getPages()
+    public function getPageOptions()
     {
         return Page::sortBy('baseFileName')->lists('title', 'baseFileName');
     }

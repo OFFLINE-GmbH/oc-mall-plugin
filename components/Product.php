@@ -9,6 +9,7 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -154,6 +155,12 @@ class Product extends MallComponent
             $cart->addProduct($product, $quantity, $variant, $values);
         } catch (OutOfStockException $e) {
             throw new ValidationException(['stock' => trans('offline.mall::lang.common.stock_limit_reached')]);
+        }
+
+        if ((bool)GeneralSettings::get('redirect_to_cart', false) === true) {
+            $checkoutPage = GeneralSettings::get('cart_page');
+
+            return Redirect::to($this->controller->pageUrl($checkoutPage));
         }
     }
 
