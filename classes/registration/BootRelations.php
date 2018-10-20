@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use Backend\Facades\Backend;
 use Illuminate\Support\Facades\Event;
 use October\Rain\Database\Relations\Relation;

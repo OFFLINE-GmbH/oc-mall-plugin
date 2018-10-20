@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use OFFLINE\Mall\Components\AddressForm;
 use OFFLINE\Mall\Components\AddressList;
 use OFFLINE\Mall\Components\AddressSelector;
@@ -56,6 +55,5 @@ trait BootComponents
 
     protected function bootComponents()
     {
-
     }
 }

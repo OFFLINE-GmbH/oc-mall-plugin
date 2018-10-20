@@ -10,6 +10,9 @@ use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class TotalsCalculator
 {
     /**

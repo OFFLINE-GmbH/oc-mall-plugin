@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use OFFLINE\Mall\Classes\Utils\Money;
 use System\Twig\Extension as TwigExtension;
 use System\Twig\Loader as TwigLoader;

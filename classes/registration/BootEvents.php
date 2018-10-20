@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use Illuminate\Support\Facades\Event;
 use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
