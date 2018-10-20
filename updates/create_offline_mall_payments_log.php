@@ -13,6 +13,7 @@ class CreateOfflineMallPaymentsLog extends Migration
             $table->string('reference');
             $table->boolean('failed')->default(true);
             $table->string('payment_method')->nullable();
+            $table->string('payment_provider')->nullable();
             $table->string('ip')->nullable();
             $table->string('session_id')->nullable();
             $table->text('data')->nullable();

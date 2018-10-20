@@ -3,25 +3,35 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Classes\PaymentState\FailedState;
-use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Omnipay;
 use Throwable;
 use Validator;
 
+/**
+ * Process the payment via Stripe.
+ */
 class Stripe extends PaymentProvider
 {
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return 'Stripe';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function identifier(): string
     {
         return 'stripe';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validate(): bool
     {
         $rules = [
@@ -36,13 +46,13 @@ class Stripe extends PaymentProvider
         return true;
     }
 
-    public function process(): PaymentResult
+    /**
+     * {@inheritdoc}
+     */
+    public function process(PaymentResult $result): PaymentResult
     {
         $gateway = Omnipay::create('Stripe');
         $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
-
-        $result = new PaymentResult();
-        $result->order = $this->order;
 
         $response = null;
         try {
@@ -54,34 +64,25 @@ class Stripe extends PaymentProvider
                 'cancelUrl' => $this->cancelUrl(),
             ])->send();
         } catch (Throwable $e) {
-            $result->successful    = false;
-            $result->failedPayment = $this->logFailedPayment([], $e);
-
-            return $result;
+            return $result->fail([], $e);
         }
 
+        $data = (array)$response->getData();
 
-        $data               = (array)$response->getData();
-        $result->successful = $response->isSuccessful();
-
-        if ($result->successful) {
-            $payment                               = $this->logSuccessfulPayment($data, $response);
-            $this->order->payment_id               = $payment->id;
-            $this->order->payment_data             = $data;
-            $this->order->card_type                = $data['source']['brand'];
-            $this->order->card_holder_name         = $data['source']['name'];
-            $this->order->credit_card_last4_digits = $data['source']['last4'];
-            $this->order->payment_state            = PaidState::class;
-            $this->order->save();
-        } else {
-            $result->failedPayment      = $this->logFailedPayment($data, $response);
-            $this->order->payment_state = FailedState::class;
-            $this->order->save();
+        if ( ! $response->isSuccessful()) {
+            return $result->fail($data, $response);
         }
 
-        return $result;
+        $this->order->card_type                = $data['source']['brand'];
+        $this->order->card_holder_name         = $data['source']['name'];
+        $this->order->credit_card_last4_digits = $data['source']['last4'];
+
+        return $result->success($data, $response);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function settings(): array
     {
         return [
@@ -100,6 +101,9 @@ class Stripe extends PaymentProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function encryptedSettings(): array
     {
         return ['stripe_api_key'];
