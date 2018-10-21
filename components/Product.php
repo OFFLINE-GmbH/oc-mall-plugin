@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
+use OFFLINE\Mall\Classes\Queries\VariantByPropertyValuesQuery;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -19,45 +20,63 @@ use Session;
 use Validator;
 
 /**
+ * The Product component displays all information of a single Product.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Product extends MallComponent
 {
     use CustomFields;
-
     /**
+     * The item to display.
+     *
      * @var Product|Variant;
      */
     public $item;
     /**
+     * The Product model belonging to the item.
+     *
      * @var ProductModel;
      */
     public $product;
     /**
+     * The Variants belonging to the ProductModel.
+     *
      * @var Collection
      */
     public $variants;
     /**
+     * All available PropertyValues of the Variant.
+     *
      * @var Collection
      */
     public $variantPropertyValues;
     /**
-     * Available product properties. Named "props" to prevent
-     * naming conflict with base class.
+     * Available Property models.
+     *
+     * Named "props" to prevent naming conflict with base class.
      *
      * @var Collection
      */
     public $props;
     /**
+     * The Variant to display.
+     *
      * @var Variant
      */
     public $variant;
     /**
+     * The ID of the Variant to display.
      * @var integer
      */
-    public $variantId;
+    protected $variantId;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -66,6 +85,11 @@ class Product extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [
@@ -83,12 +107,22 @@ class Product extends MallComponent
         ];
     }
 
+    /**
+     * Options array for the products dropdown.
+     *
+     * @return array
+     */
     public function getProductOptions()
     {
         return [':slug' => trans('offline.mall::lang.components.category.properties.use_url')]
             + ProductModel::get()->pluck('name', 'id')->toArray();
     }
 
+    /**
+     * Options array for the variants dropdown.
+     *
+     * @return array
+     */
     public function getVariantOptions()
     {
         $product = Request::input('product');
@@ -100,6 +134,11 @@ class Product extends MallComponent
             + ProductModel::find($product)->variants->pluck('name', 'id')->toArray();
     }
 
+    /**
+     * The component is executed.
+     *
+     * @return string|void
+     */
     public function onRun()
     {
         try {
@@ -108,8 +147,9 @@ class Product extends MallComponent
             return $this->controller->run('404');
         }
 
-        // If this product is managed by it's variants we redirect to the first available variant.
-        if ($this->product->inventory_management_method !== 'single' && ! $this->param('variant')) {
+        // If a Product model is displayed but it's management method is "variants" the user
+        // should be redirected to the first Variant of this Product.
+        if ($this->product->inventory_management_method === 'variant' && ! $this->param('variant')) {
 
             $variant = $this->product->variants->first();
             if ( ! $variant) {
@@ -121,28 +161,51 @@ class Product extends MallComponent
                 'variant' => $variant->hashId,
             ]);
 
-            return Redirect::to($url);
+            return redirect()->to($url);
         }
 
         $this->page->title            = $this->item->meta_title ?? $this->item->name;
         $this->page->meta_description = $this->item->meta_description;
     }
 
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return void
+     */
+    public function setData()
+    {
+        $variantId = $this->decode($this->param('variant'));
+
+        $this->setVar('variantId', $variantId);
+        $this->setVar('item', $this->getItem());
+        $this->setVar('variants', $this->getVariants());
+        $this->setVar('variantPropertyValues', $this->getPropertyValues());
+        $this->setVar('props', $this->getProps());
+    }
+
+    /**
+     * Add a product to the cart.
+     *
+     * @return mixed
+     * @throws ValidationException
+     */
     public function onAddToCart()
     {
         $this->setData();
 
         $product = $this->getProduct();
-        $values  = $this->validateCustomFields(post('fields', []));
         $variant = null;
+        $values  = $this->validateCustomFields(post('fields', []));
 
+        // If no variantId is available we can safely use the Product model for stock checks.
         if ($this->variantId === null) {
-            // We are adding a product
-            $hasStock = $product->stock > 0 || $product->allow_out_of_stock_purchases;
+            $hasStock = $product->allow_out_of_stock_purchases || $product->stock > 0;
         } else {
-            // We are adding a product variant
+            // In case a Variant is added we have to retrieve the model first by the selected props
+            // and then check the available stock on this model instead.
             $variant  = $this->getVariantByPropertyValues(post('props'));
-            $hasStock = $variant !== null && ($variant->stock > 0 || $variant->allow_out_of_stock_purchases);
+            $hasStock = $variant !== null && ($variant->allow_out_of_stock_purchases || $variant->stock > 0);
         }
 
         if ( ! $hasStock) {
@@ -157,13 +220,22 @@ class Product extends MallComponent
             throw new ValidationException(['stock' => trans('offline.mall::lang.common.stock_limit_reached')]);
         }
 
+        // If the redirect_to_cart option is set to true the user is redirected to the cart.
         if ((bool)GeneralSettings::get('redirect_to_cart', false) === true) {
-            $checkoutPage = GeneralSettings::get('cart_page');
+            $cartPage = GeneralSettings::get('cart_page');
 
-            return Redirect::to($this->controller->pageUrl($checkoutPage));
+            return Redirect::to($this->controller->pageUrl($cartPage));
         }
     }
 
+    /**
+     * The user changed a property of the product.
+     *
+     * Check the stock for the currentyl selected Variant and return
+     * the information back to the user.
+     *
+     * @return array
+     */
     public function onChangeProperty()
     {
         $values  = post('values', []);
@@ -175,6 +247,12 @@ class Product extends MallComponent
         return $this->stockCheckResponse();
     }
 
+    /**
+     * Check the stock for the currently selected item.
+     *
+     * @return array
+     * @throws ValidationException
+     */
     public function onCheckProductStock()
     {
         $this->setData();
@@ -192,37 +270,41 @@ class Product extends MallComponent
         return $this->stockCheckResponse();
     }
 
-    public function setData()
-    {
-        $variantId = $this->decode($this->param('variant'));
-
-        $this->setVar('variantId', $variantId);
-        $this->setVar('item', $this->getItem());
-        $this->setVar('variants', $this->getVariants());
-        $this->setVar('variantPropertyValues', $this->getPropertyValues());
-        $this->setVar('props', $this->getProps());
-    }
-
+    /**
+     * Fetch the item to display.
+     *
+     * This can be either a Product or a Variant depending
+     * on the given input values.
+     *
+     * @return ProductModel|Variant
+     */
     protected function getItem()
     {
         $this->product = $this->getProduct();
-        $variant       = $this->property('variant');
 
-        // No Variant was requested via URL
+        // If no Variant is specified as URL parameter the Product
+        // model can be returned directly.
         if ( ! $this->param('variant')) {
             return $this->product;
         }
 
-        $model = Variant::published()->with(['property_values', 'image_sets']);
+        $variantId    = $this->property('variant');
+        $variantModel = Variant::published()->with(['property_values', 'image_sets']);
 
-        if ($variant === ':slug') {
-            return $this->variant = $model->where('product_id', $this->product->id)
-                                          ->findOrFail($this->variantId);
-        }
+        // If :slug is set as Variant ID we can fall back to the URL parameter.
+        // Otherwise use the Variant the admin as defined as Component property.
+        $id = $variantId === ':slug' ? $this->variantId : $variantId;
 
-        return $this->variant = $model->where('product_id', $this->product->id)->findOrFail($variant);
+        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($id);
     }
 
+    /**
+     * Get the ProductModel.
+     *
+     * @param array|null $with
+     *
+     * @return ProductModel
+     */
     public function getProduct(?array $with = null): ProductModel
     {
         if ($this->product) {
@@ -250,27 +332,40 @@ class Product extends MallComponent
         return $model->findOrFail($product);
     }
 
+    /**
+     * Get all Variants that belong to this ProductModel.
+     *
+     * @return Collection
+     */
     protected function getVariants(): Collection
     {
+        // Single Products won't have any Variants.
         if ($this->product->inventory_management_method === 'single' || ! $this->product->group_by_property_id) {
             return collect();
         }
 
         $variants = $this->product->variants->reject(function (Variant $variant) {
-            // Remove the currently active variant
+            // Only display "other" Variants, so remove the currently displayed.
             return $variant->id === $this->variantId;
         })->groupBy(function (Variant $variant) {
             return $this->getGroupedPropertyValue($variant);
         });
 
         if ($this->variant) {
-            // Remove the property value of the currently viewed variant
+            // Remove the property value of the currently viewed variant.
             $variants->pull($this->getGroupedPropertyValue($this->variant));
         }
 
         return $variants;
     }
 
+    /**
+     * Get the Property this Variant is grouped by.
+     *
+     * @param Variant $variant
+     *
+     * @return PropertyValue|object
+     */
     protected function getGroupedProperty(Variant $variant)
     {
         if ( ! $variant->product->group_by_property_id) {
@@ -282,6 +377,13 @@ class Product extends MallComponent
         });
     }
 
+    /**
+     * Get the PropertyValue this Variant is grouped by.
+     *
+     * @param Variant $variant
+     *
+     * @return mixed
+     */
     protected function getGroupedPropertyValue(Variant $variant)
     {
         $property = $this->getGroupedProperty($variant);
@@ -289,6 +391,11 @@ class Product extends MallComponent
         return \is_array($property->value) ? json_encode($property->value) : $property->value;
     }
 
+    /**
+     * Get all Properties of this item.
+     *
+     * @return Collection
+     */
     protected function getProps()
     {
         $valueMap = $this->getValueMap();
@@ -314,6 +421,13 @@ class Product extends MallComponent
         });
     }
 
+    /**
+     * Get a map of all PropertyValues.
+     *
+     * The key is the property_id, the value is the PropertyValue model.
+     *
+     * @return Collection
+     */
     protected function getValueMap()
     {
         if ( ! $this->variant) {
@@ -325,16 +439,24 @@ class Product extends MallComponent
             return collect([]);
         }
 
-        return PropertyValue::where('product_id', $this->product->id)
-                            ->where('value', '<>', '')
-                            ->whereNotNull('value')
-                            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
-                                $q->where('value', '<>', $groupedValue);
-                            })
-                            ->get()
-                            ->groupBy('property_id');
+        return PropertyValue
+            ::where('product_id', $this->product->id)
+            ->where('value', '<>', '')
+            ->whereNotNull('value')
+            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
+                $q->where('value', '<>', $groupedValue);
+            })
+            ->get()
+            ->groupBy('property_id');
     }
 
+    /**
+     * Find a Variant by a set of PropertyValue ids.
+     *
+     * @param $valueIds
+     *
+     * @return null
+     */
     protected function getVariantByPropertyValues($valueIds)
     {
         $ids = collect($valueIds)->map(function ($id) {
@@ -343,34 +465,16 @@ class Product extends MallComponent
 
         $product = $this->getProduct([]);
 
-        $query = PropertyValue
-            ::leftJoin(
-                'offline_mall_product_variants',
-                'variant_id', '=', 'offline_mall_product_variants.id'
-            )
-            ->whereNull('offline_mall_product_variants.deleted_at')
-            ->where('offline_mall_product_variants.product_id', $product->id)
-            ->select(DB::raw('variant_id, count(*) as matching_attributes'))
-            ->groupBy(['variant_id'])
-            ->with('variant')
-            ->having('matching_attributes', count($ids));
-
-        $query->where(function ($query) use ($ids) {
-            PropertyValue::whereIn('id', $ids)
-                         ->get(['value', 'property_id'])
-                         ->each(function (PropertyValue $propertyValue) use (&$query) {
-                             $query->orWhereRaw(
-                                 '(property_id, value) = (?, ?)',
-                                 [$propertyValue->property_id, $propertyValue->safeValue]
-                             );
-                         });
-        });
-
-        $value = $query->first();
+        $value = (new VariantByPropertyValuesQuery($product, $ids))->query()->first();
 
         return $value ? $value->variant : null;
     }
 
+    /**
+     * Return all PropertyValues of the current Variant.
+     *
+     * @return Collection
+     */
     protected function getPropertyValues()
     {
         if ( ! $this->variant) {
@@ -380,6 +484,11 @@ class Product extends MallComponent
         return $this->variant->property_values->keyBy('property_id');
     }
 
+    /**
+     * Return the currently available stock information back to the user.
+     *
+     * @return array
+     */
     protected function stockCheckResponse(): array
     {
         $data = [
