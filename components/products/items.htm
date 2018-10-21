@@ -4,6 +4,8 @@
     {% endfor %}
 </div>
 
-<div class="mall-pagination mall-pagination--products">
-    {{ items | raw }}
-</div>
+{% if __SELF__.paginate %}
+    <div class="mall-pagination mall-pagination--products">
+        {{ items | raw }}
+    </div>
+{% endif %}

@@ -510,14 +510,31 @@
                 'description' => 'Displays a list of products',
             ],
             'properties' => [
-                'use_url'          => 'Use category slug from URL',
-                'show_variants'    => [
+                'no_category_filter' => 'Don\'t filter by category',
+                'use_url'            => 'Use category slug from URL',
+                'show_variants'      => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
                 ],
-                'include_children' => [
+                'include_children'   => [
                     'title'       => 'Include children',
                     'description' => 'Show all products of child categories as well',
+                ],
+                'per_page'           => [
+                    'title'       => 'Per page',
+                    'description' => 'How many products to display per page',
+                ],
+                'paginate'           => [
+                    'title'       => 'Paginate',
+                    'description' => 'Paginate the result (show more than one page)',
+                ],
+                'sort'           => [
+                    'title'       => 'Sort',
+                    'description' => 'This overrides the user\'s sort preference',
+                ],
+                'set_page_title'     => [
+                    'title'       => 'Set page title',
+                    'description' => 'Use the category\'s name as page title',
                 ],
             ],
         ],
@@ -810,43 +827,6 @@
                 'logoutLabel'            => [
                     'title'       => 'Logout label',
                     'description' => 'Link text for the logout link',
-                ],
-            ],
-        ],
-        'products'              => [
-            'details'    => [
-                'name'        => 'Products',
-                'description' => 'Displays a list of products',
-            ],
-            'properties' => [
-                'categoryFilter'      => [
-                    'title'       => 'Category filter',
-                    'description' => 'Only show products from this category',
-                    'no_filter'   => 'Show all products',
-                    'by_slug'     => 'Load category from slug',
-                ],
-                'categorySlug'        => [
-                    'title'       => 'Category slug parameter',
-                    'description' => 'Use this parameter to load the category from the url',
-                ],
-                'displayCustomFields' => [
-                    'title'       => 'Show custom fields',
-                    'description' => 'Show all custom fields directly on the product page',
-                ],
-                'productsPerPage'     => [
-                    'title' => 'Number of products per page',
-                ],
-                'noProductsMessage'   => [
-                    'title'       => '«No products» message',
-                    'description' => 'This text will be displayed if a category is empty',
-                ],
-                'sortOrder'           => [
-                    'title'       => 'Sort order',
-                    'description' => 'How the products will be sorted',
-                ],
-                'productPage'         => [
-                    'title'       => 'Product page',
-                    'description' => 'Product links will point to this page. If nothing is selected, the defaults from the backend settings will be used.',
                 ],
             ],
         ],

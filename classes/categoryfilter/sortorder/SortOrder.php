@@ -39,6 +39,17 @@ abstract class SortOrder
         ];
     }
 
+    public static function dropdownOptions()
+    {
+        return [
+            'bestseller' => (new Bestseller())->label(),
+            'latest'     => (new Latest())->label(),
+            'price_low'  => (new PriceLow())->label(),
+            'price_high' => (new PriceHigh())->label(),
+            'oldest'     => (new Oldest())->label(),
+        ];
+    }
+
     public function label(): string
     {
         return trans('offline.mall::lang.components.productsFilter.sortOrder.' . camel_case($this->key()));

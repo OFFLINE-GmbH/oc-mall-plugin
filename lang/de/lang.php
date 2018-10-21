@@ -509,14 +509,31 @@
                 'description' => 'Zeigt eine Liste von Produkten an',
             ],
             'properties' => [
-                'use_url'          => 'Verwende Kategorie-Slug aus URL',
-                'show_variants'    => [
+                'no_category_filter' => 'Nicht nach Kategorie filtern',
+                'use_url'            => 'Verwende Kategorie-Slug aus URL',
+                'show_variants'      => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
                 ],
-                'include_children' => [
+                'include_children'   => [
                     'title'       => 'Zeige Produkte aus Kinderkategorien an',
                     'description' => 'Zeige alle Produkte von Kinderkategorien ebenfalls an',
+                ],
+                'per_page'           => [
+                    'title'       => 'Produkte pro Seite',
+                    'description' => 'Wie viele Produkte pro Seite angezeigt werden',
+                ],
+                'paginate'           => [
+                    'title'       => 'Verwende Seiten',
+                    'description' => 'Zeige Seitenauswahl um mehr Produkte zu laden',
+                ],
+                'sort'               => [
+                    'title'       => 'Sortierung',
+                    'description' => 'Sortier-Einstellungen des Benutzers werden übersteuert',
+                ],
+                'set_page_title'     => [
+                    'title'       => 'Setze Seitentitel',
+                    'description' => 'Verwende den Name der Kategorie als Seitentitel',
                 ],
             ],
         ],
@@ -808,43 +825,6 @@
                 'logoutLabel'            => [
                     'title'       => 'Logout-Text',
                     'description' => 'Link-Text für den Logout-Link',
-                ],
-            ],
-        ],
-        'products'              => [
-            'details'    => [
-                'name'        => 'Produkt-Liste',
-                'description' => 'Zeigt eine Liste von Produkten an',
-            ],
-            'properties' => [
-                'categoryFilter'      => [
-                    'title'       => 'Kategorie-Filter',
-                    'description' => 'Zeige nur Produkte aus dieser Kategorie an.',
-                    'no_filter'   => 'Alle Produkte anzeigen',
-                    'by_slug'     => 'Kategorie aus URL übernehmen',
-                ],
-                'categorySlug'        => [
-                    'title'       => 'Kategorie URL-Parameter',
-                    'description' => 'Verwende diesen Parameter um den Kategorie-Filter aus der URL zu übernehmen',
-                ],
-                'displayCustomFields' => [
-                    'title'       => 'Zeige Produkt-Optionen an',
-                    'description' => 'Zeige Auswahlfelder für Optionen für ein Produkt an',
-                ],
-                'productsPerPage'     => [
-                    'title' => 'Anzahl Produkte pro Seite',
-                ],
-                'noProductsMessage'   => [
-                    'title'       => '«Keine Produkte»-Meldung',
-                    'description' => 'Dieser Test wird angezeigt, wenn keine Artikel angezeigt werden können.',
-                ],
-                'sortOrder'           => [
-                    'title'       => 'Sortierung',
-                    'description' => 'Nach welchem Attribut die Produkte sortiert werden.',
-                ],
-                'productPage'         => [
-                    'title'       => 'Produkt-Seite',
-                    'description' => 'Die Produkt-Links werden auf diese Seite verweisen.',
                 ],
             ],
         ],
