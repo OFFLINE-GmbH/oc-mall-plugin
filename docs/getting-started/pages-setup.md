@@ -39,7 +39,7 @@ is_hidden = 0
 [products]
 category = ":slug"
 setPageTitle = 1
-showVariants = 1
+includeVariants = 1
 includeChildren = 1
 perPage = 9
 
@@ -53,6 +53,7 @@ showPriceFilter = 1
             {% component 'productsFilter' %}
         </div>
         <div class="col-12 col-md-8">
+            <h2>{{ products.category.name }}</h2>
             {% component 'products' %}
         </div>
     </div>

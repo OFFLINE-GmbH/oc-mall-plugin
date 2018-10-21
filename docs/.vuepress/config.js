@@ -32,6 +32,7 @@ module.exports = {
                 children: [
                     '/components/product',
                     '/components/products',
+                    '/components/products-filter',
                     '/components/cart',
                     '/components/discount-applier',
                     '/components/checkout',

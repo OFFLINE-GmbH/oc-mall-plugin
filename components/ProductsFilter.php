@@ -161,16 +161,6 @@ class ProductsFilter extends MallComponent
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
-            'showPriceFilter'     => [
-                'title'   => 'offline.mall::lang.components.productsFilter.properties.showPriceFilter.title',
-                'default' => '1',
-                'type'    => 'checkbox',
-            ],
-            'showBrandFilter'     => [
-                'title'   => 'offline.mall::lang.components.productsFilter.properties.showBrandFilter.title',
-                'default' => '1',
-                'type'    => 'checkbox',
-            ],
             'includeChildren'     => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeChildren.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeChildren.description',
@@ -182,6 +172,16 @@ class ProductsFilter extends MallComponent
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeVariants.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
+            ],
+            'showPriceFilter'     => [
+                'title'   => 'offline.mall::lang.components.productsFilter.properties.showPriceFilter.title',
+                'default' => '1',
+                'type'    => 'checkbox',
+            ],
+            'showBrandFilter'     => [
+                'title'   => 'offline.mall::lang.components.productsFilter.properties.showBrandFilter.title',
+                'default' => '1',
+                'type'    => 'checkbox',
             ],
             'includeSliderAssets' => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.title',

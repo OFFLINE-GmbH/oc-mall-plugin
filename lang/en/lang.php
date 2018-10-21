@@ -512,7 +512,7 @@
             'properties' => [
                 'no_category_filter' => 'Don\'t filter by category',
                 'use_url'            => 'Use category slug from URL',
-                'show_variants'      => [
+                'include_variants'   => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
                 ],
@@ -528,7 +528,7 @@
                     'title'       => 'Paginate',
                     'description' => 'Paginate the result (show more than one page)',
                 ],
-                'sort'           => [
+                'sort'               => [
                     'title'       => 'Sort',
                     'description' => 'This overrides the user\'s sort preference',
                 ],

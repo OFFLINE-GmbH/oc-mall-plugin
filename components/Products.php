@@ -34,7 +34,7 @@ class Products extends MallComponent
      * Display Variants, not Products
      * @var bool
      */
-    public $showVariants;
+    public $includeVariants;
     /**
      * All items to display.
      *
@@ -122,9 +122,9 @@ class Products extends MallComponent
                 'default'     => '0',
                 'type'        => 'checkbox',
             ],
-            'showVariants'    => [
-                'title'       => 'offline.mall::lang.components.products.properties.show_variants.title',
-                'description' => 'offline.mall::lang.components.products.properties.show_variants.description',
+            'includeVariants'    => [
+                'title'       => 'offline.mall::lang.components.products.properties.include_variants.title',
+                'description' => 'offline.mall::lang.components.products.properties.include_variants.description',
                 'default'     => '1',
                 'type'        => 'checkbox',
             ],
@@ -208,7 +208,7 @@ class Products extends MallComponent
     {
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
         $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
-        $this->setVar('showVariants', (bool)$this->property('showVariants'));
+        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
         $this->setVar('paginate', (bool)$this->property('paginate'));
         $this->setVar('sort', $this->property('sort'));
         $this->setVar('category', $this->getCategory());
@@ -238,8 +238,8 @@ class Products extends MallComponent
         $filters   = $this->getFilters();
         $sortOrder = $this->getSortOrder();
 
-        $model    = $this->showVariants ? new Variant() : new Product();
-        $useIndex = $this->showVariants ? 'variants' : 'products';
+        $model    = $this->includeVariants ? new Variant() : new Product();
+        $useIndex = $this->includeVariants ? 'variants' : 'products';
 
         /** @var Index $index */
         $index  = app(Index::class);

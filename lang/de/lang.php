@@ -511,7 +511,7 @@
             'properties' => [
                 'no_category_filter' => 'Nicht nach Kategorie filtern',
                 'use_url'            => 'Verwende Kategorie-Slug aus URL',
-                'show_variants'      => [
+                'include_variants'   => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
                 ],

@@ -23,7 +23,7 @@ Include all products or variants from child categories as well.
 If a category is defined, overwrite the page's title with the category's name. Also set any SEO information stored 
 with the category. 
 
-### `showVariants` (bool)
+### `includeVariants` (bool)
 
 Set this to `true` to list all [Variants](../digging-deeper/products.md) as single items.
 Set this to `false` to list only [Products](../digging-deeper/products.md).
@@ -57,7 +57,7 @@ The sort mode applied to the result set. Possible values are:
 [products]
 category = ":slug"
 setPageTitle = 1
-showVariants = 1
+includeVariants = 1
 includeChildren = 1
 perPage = 9
 ```
@@ -68,7 +68,7 @@ perPage = 9
 [products]
 perPage = 4
 paginate = 0
-showVariants = 0
+includeVariants = 0
 sort = "bestseller"
 ```
 
@@ -78,6 +78,6 @@ sort = "bestseller"
 [products]
 perPage = 4
 paginate = 0
-showVariants = 1
+includeVariants = 1
 sort = "latest"
 ```
