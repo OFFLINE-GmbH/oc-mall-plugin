@@ -30,7 +30,8 @@ module.exports = {
             {
                 title: 'Components',
                 children: [
-                    '/components/product'
+                    '/components/product',
+                    '/components/products'
                 ]
             },
             {
