@@ -34,6 +34,7 @@ module.exports = {
                     '/components/products',
                     '/components/cart',
                     '/components/discount-applier',
+                    '/components/checkout',
                     '/components/address-form',
                     '/components/address-list',
                     '/components/address-selector',
