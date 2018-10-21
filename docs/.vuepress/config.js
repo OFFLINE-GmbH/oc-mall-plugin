@@ -36,6 +36,7 @@ module.exports = {
                     '/components/discount-applier',
                     '/components/checkout',
                     '/components/my-account',
+                    '/components/orders-list',
                     '/components/address-form',
                     '/components/currency-picker',
                     '/components/customer-profile',
