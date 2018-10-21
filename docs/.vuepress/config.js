@@ -33,6 +33,7 @@ module.exports = {
                     '/components/product',
                     '/components/products',
                     '/components/cart',
+                    '/components/discount-applier',
                 ]
             },
             {

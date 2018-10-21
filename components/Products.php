@@ -170,7 +170,7 @@ class Products extends MallComponent
     }
 
     /**
-     * Option array for the sort order dropdown.
+     * Options array for the sort order dropdown.
      *
      * @return array
      */

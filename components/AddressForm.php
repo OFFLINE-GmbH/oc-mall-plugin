@@ -6,13 +6,41 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\User\Facades\Auth;
 
+/**
+ * The AddressForm component displays a form to edit an address.
+ */
 class AddressForm extends MallComponent
 {
+    /**
+     * The address model.
+     *
+     * @var Address
+     */
     public $address;
+    /**
+     * A list of all available countries.
+     *
+     * @var \Illuminate\Support\Collection
+     */
     public $countries;
+    /**
+     * If this address is used as "billing" or "shipping" address.
+     *
+     * @var string
+     */
     public $setAddressAs;
+    /**
+     * The user's cart.
+     *
+     * @var Cart
+     */
     public $cart;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -21,6 +49,11 @@ class AddressForm extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [
@@ -39,11 +72,21 @@ class AddressForm extends MallComponent
         ];
     }
 
+    /**
+     * Options array for the address options dropdown.
+     *
+     * @return array
+     */
     public function getAddressOptions()
     {
         return Address::get()->pluck('name', 'id');
     }
 
+    /**
+     * Options array for the redirect options dropdown.
+     *
+     * @return array
+     */
     public function getRedirectOptions()
     {
         return [
@@ -52,6 +95,11 @@ class AddressForm extends MallComponent
         ];
     }
 
+    /**
+     * Options array for the "set as" dropdown.
+     *
+     * @return array
+     */
     public function getSetOptions()
     {
         return [
@@ -61,6 +109,37 @@ class AddressForm extends MallComponent
         ];
     }
 
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return bool
+     */
+    public function setData()
+    {
+        $user = Auth::getUser();
+        if ( ! $user) {
+            return false;
+        }
+
+        $this->setVar('setAddressAs', $this->property('set'));
+        $this->setVar('cart', Cart::byUser(Auth::getUser()));
+
+        $hashId = $this->property('address');
+        if ($hashId === 'new') {
+            return true;
+        }
+
+        $id = $this->decode($hashId);
+        $this->setVar('address', Address::byCustomer($user->customer)->findOrFail($id));
+
+        return true;
+    }
+
+    /**
+     * The component is executed.
+     *
+     * @return string|void
+     */
     public function onRun()
     {
         if ( ! $this->setData()) {
@@ -68,6 +147,11 @@ class AddressForm extends MallComponent
         }
     }
 
+    /**
+     * The user submitted the edit form.
+     *
+     * @return string|void
+     */
     public function onSubmit()
     {
         $this->setData();
@@ -102,35 +186,26 @@ class AddressForm extends MallComponent
         return null;
     }
 
-    protected function setData()
-    {
-        $user = Auth::getUser();
-        if ( ! $user) {
-            return false;
-        }
-
-        $this->setVar('setAddressAs', $this->property('set'));
-        $this->setVar('cart', Cart::byUser(Auth::getUser()));
-
-        $hashId = $this->property('address');
-        if ($hashId === 'new') {
-            return true;
-        }
-
-        $id = $this->decode($hashId);
-        $this->setVar('address', Address::byCustomer($user->customer)->findOrFail($id));
-
-        return true;
-    }
-
+    /**
+     * Get the redirect url.
+     *
+     * @return string
+     */
     protected function getRedirectUrl()
     {
-        $redirect = $this->property('redirect');
         $url      = '';
+        $redirect = $this->property('redirect');
+
         if ($redirect === 'checkout') {
-            $url = $this->controller->pageUrl(GeneralSettings::get('checkout_page'), ['step' => 'confirm']);
+            $url = $this->controller->pageUrl(
+                GeneralSettings::get('checkout_page'),
+                ['step' => 'confirm']
+            );
         } elseif ($redirect === 'account') {
-            $url = $this->controller->pageUrl(GeneralSettings::get('account_page'), ['page' => 'addresses']);
+            $url = $this->controller->pageUrl(
+                GeneralSettings::get('account_page'),
+                ['page' => 'addresses']
+            );
         }
 
         return $url;
