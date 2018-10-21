@@ -15,18 +15,51 @@ use OFFLINE\Mall\Models\PaymentMethod;
 use Redirect;
 use Request;
 use Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
+ * The Checkout component orchestrates the checkout process.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Checkout extends MallComponent
 {
+    /**
+     * The user's cart.
+     *
+     * @var Cart
+     */
     public $cart;
+    /**
+     * The error massage received from the PaymentProvider.
+     *
+     * @var string
+     */
     public $paymentError;
+    /**
+     * The currently active step.
+     *
+     * @var string
+     */
     public $step;
+    /**
+     * The order that was created during checkout.
+     *
+     * @var Order
+     */
     public $order;
+    /**
+     * The name of the my account page.
+     *
+     * @var string
+     */
     public $accountPage;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -35,6 +68,11 @@ class Checkout extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [
@@ -45,6 +83,11 @@ class Checkout extends MallComponent
         ];
     }
 
+    /**
+     * Options array for the step dropdown.
+     *
+     * @return array
+     */
     public function getStepOptions()
     {
         return [
@@ -57,6 +100,13 @@ class Checkout extends MallComponent
         ];
     }
 
+    /**
+     * The component is initialized.
+     *
+     * All child components get added.
+     *
+     * @return void
+     */
     public function init()
     {
         $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
@@ -67,59 +117,11 @@ class Checkout extends MallComponent
         $this->setData();
     }
 
-    public function onRun()
-    {
-        // An off-site payment has been completed
-        if ($type = request()->input('return')) {
-            return $this->handleOffSiteReturn($type);
-        }
-
-        // If no step is provided or the step is invalid redirect the user to
-        // the payment method selection screen.
-        $step = $this->property('step');
-        if ( ! $step || ! array_key_exists($step, $this->getStepOptions())) {
-            $url = $this->stepUrl('payment');
-
-            return redirect()->to($url);
-        }
-
-        if ($step === 'failed' && $this->order) {
-            $this->paymentError = optional($this->order->payment_logs->first())->message ?? 'Unknown error';
-        }
-    }
-
-    public function onCheckout()
-    {
-        $this->setData();
-
-        if ($this->cart->shipping_method_id === null || $this->cart->payment_method_id === null) {
-            throw new ValidationException([trans('offline.mall::lang.components.checkout.errors.missing_settings')]);
-        }
-
-        try {
-            $paymentData = json_decode(decrypt(session()->get('mall.payment_method.data')), true);
-        } catch (DecryptException $e) {
-            $paymentData = [];
-        }
-
-        $paymentMethod = PaymentMethod::findOrFail($this->cart->payment_method_id);
-
-        $gateway = app(PaymentGateway::class);
-        $gateway->init($paymentMethod, $paymentData);
-
-        $order = DB::transaction(function () {
-            return Order::fromCart($this->cart);
-        });
-
-        $paymentService = new PaymentService(
-            $gateway,
-            $order,
-            $this->page->page->fileName
-        );
-
-        return $paymentService->process();
-    }
-
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return void
+     */
     protected function setData()
     {
         $user = Auth::getUser();
@@ -138,11 +140,102 @@ class Checkout extends MallComponent
         }
     }
 
+    /**
+     * The component is executed.
+     *
+     * @return RedirectResponse|void
+     * @throws \Cms\Classes\CmsException
+     */
+    public function onRun()
+    {
+        // An off-site payment has been completed
+        if ($type = request()->input('return')) {
+            return $this->handleOffSiteReturn($type);
+        }
+
+        // If no step is provided or the step is invalid, redirect the user to
+        // the payment method selection screen.
+        $step = $this->property('step');
+        if ( ! $step || ! array_key_exists($step, $this->getStepOptions())) {
+            $url = $this->stepUrl('payment');
+
+            return redirect()->to($url);
+        }
+
+        // If an order has been created but something failed we can fetch the paymentError
+        // from the order's payment logs.
+        if ($step === 'failed' && $this->order) {
+            $this->paymentError = optional($this->order->payment_logs->first())->message ?? 'Unknown error';
+        }
+    }
+
+    /**
+     * Handle the checkout process.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
+     * @throws \Cms\Classes\CmsException
+     */
+    public function onCheckout()
+    {
+        $this->setData();
+
+        if ($this->cart->shipping_method_id === null || $this->cart->payment_method_id === null) {
+            throw new ValidationException(
+                [trans('offline.mall::lang.components.checkout.errors.missing_settings')]
+            );
+        }
+
+        // Safely decrypt and decode any payment data. Fall back to an empty array if something goes wrong.
+        try {
+            $paymentData = json_decode(decrypt(session()->get('mall.payment_method.data')), true);
+        } catch (DecryptException $e) {
+            $paymentData = [];
+        }
+
+        $paymentMethod = PaymentMethod::findOrFail($this->cart->payment_method_id);
+
+        // Grab the PaymentGateway from the Service Container.
+        $gateway = app(PaymentGateway::class);
+        $gateway->init($paymentMethod, $paymentData);
+
+        // Create the order first.
+        $order = DB::transaction(function () {
+            return Order::fromCart($this->cart);
+        });
+
+        // If the order was created successfully proceed with the payment.
+        $paymentService = new PaymentService(
+            $gateway,
+            $order,
+            $this->page->page->fileName
+        );
+
+        return $paymentService->process();
+    }
+
+    /**
+     * The user was redirected back to the store from an
+     * external payment service.
+     *
+     * @param string $type
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Cms\Classes\CmsException
+     */
     protected function handleOffSiteReturn($type)
     {
         return (new PaymentRedirector($this->page->page->fileName))->handleOffSiteReturn($type);
     }
 
+    /**
+     * Return the URL for a specific checkout step.
+     *
+     * @param       $step
+     * @param array $params
+     *
+     * @return string
+     */
     public function stepUrl($step, $params = [])
     {
         $via = false;
