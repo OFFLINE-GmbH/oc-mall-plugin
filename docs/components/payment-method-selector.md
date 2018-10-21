@@ -1,7 +1,7 @@
 # PaymentMethodSelector
 
 The `PaymentMethodSelector` component displays all available payment methods and let's the user 
-chose an option and provide additional data.
+provide additional data.
 
  
 ## Properties
