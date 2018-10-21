@@ -55,7 +55,7 @@ class AddressList extends MallComponent
     }
 
     /**
-     * The component initialized.
+     * The component is initialized.
      *
      * @return void
      */

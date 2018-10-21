@@ -88,7 +88,7 @@ class Cart extends MallComponent
     }
 
     /**
-     * The component initialized.
+     * The component is initialized.
      *
      * Adds the DiscountApplier component as child component.
      *
