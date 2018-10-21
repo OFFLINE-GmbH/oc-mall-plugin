@@ -35,7 +35,7 @@
             $propertiesForm.on('submit', function (e) {
                 e.preventDefault();
 
-                $.publish('mall.category.load.start')
+                $.publish('mall.products.load.start')
                 $(this).request('{{ __SELF__ }}::onSetFilter', {
                     loading: $.oc.stripeLoadIndicator,
                     complete: function (response) {
@@ -49,12 +49,12 @@
                                 $('[data-filter="' + filter + '"]').show();
                             }
                         }
-                        $.publish('mall.category.load.complete')
+                        $.publish('mall.products.load.complete')
                     },
                     error: function () {
                         $.oc.stripeLoadIndicator.hide()
                         $.oc.flashMsg({text: 'Fehler beim Ausführen der Suche.', class: 'error'})
-                        $.publish('mall.category.load.error')
+                        $.publish('mall.products.load.error')
                     }
                 });
             });

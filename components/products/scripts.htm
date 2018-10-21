@@ -1,22 +1,22 @@
 {% put scripts %}
     <script>
         $(function () {
-            $.subscribe('mall.category.load.start', function () {
-                $('.mall-category').find('.mall-loader').css({opacity: 1, visibility: 'visible'})
+            $.subscribe('mall.products.load.start', function () {
+                $('.mall-products').find('.mall-loader').css({opacity: 1, visibility: 'visible'})
             });
 
-            $.subscribe('mall.category.load.complete', function () {
+            $.subscribe('mall.products.load.complete', function () {
                 $.request('{{ __SELF__ }}::onRun', {
-                    update: {'{{ __SELF__ }}::entries': '.mall-category'},
+                    update: {'{{ __SELF__ }}::entries': '.mall-products'},
                 });
             });
 
-            $('body').on('click', '.mall-pagination--category a', function (e) {
+            $('body').on('click', '.mall-pagination--products a', function (e) {
                 e.preventDefault()
-                $.publish('mall.category.load.start')
+                $.publish('mall.products.load.start')
 
                 history.replaceState(null, '', $(this).attr('href'))
-                $.publish('mall.category.load.complete')
+                $.publish('mall.products.load.complete')
             })
         })
     </script>
