@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use Hashids\Hashids;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;

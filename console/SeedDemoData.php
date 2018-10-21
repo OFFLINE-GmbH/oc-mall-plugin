@@ -130,7 +130,7 @@ class SeedDemoData extends Command
             'meta_description' => 'Take a look at our bikes and find what you are looking for.',
         ]);
         foreach ($this->bikePropertyGroups as $index => $group) {
-            $bikes->property_groups()->attach($group, ['sort_order' => $index]);
+            $bikes->property_groups()->attach($group, ['relation_sort_order' => $index]);
         }
 
         Category::create([
@@ -163,7 +163,7 @@ class SeedDemoData extends Command
             'meta_description' => 'Check out our huge sports clothes range',
         ]);
         foreach ($this->clothingPropertyGroups as $index => $group) {
-            $clothing->property_groups()->attach($group, ['sort_order' => $index]);
+            $clothing->property_groups()->attach($group, ['relation_sort_order' => $index]);
         }
     }
 

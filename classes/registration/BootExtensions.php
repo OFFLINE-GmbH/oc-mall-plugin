@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use Backend\Widgets\Form;
 use Illuminate\Support\Facades\Event;
 use OFFLINE\Mall\Models\CustomerGroup;

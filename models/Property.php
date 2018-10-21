@@ -21,7 +21,7 @@ class Property extends Model
     public $jsonable = ['options'];
     public $rules = [
         'name' => 'required',
-        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer',
+        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer,richeditor',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -117,6 +117,7 @@ class Property extends Model
             'integer'  => trans('offline.mall::lang.custom_field_options.integer'),
             'float'    => trans('offline.mall::lang.custom_field_options.float'),
             'textarea' => trans('offline.mall::lang.custom_field_options.textarea'),
+            'richeditor' => trans('offline.mall::lang.custom_field_options.richeditor'),
             'dropdown' => trans('offline.mall::lang.custom_field_options.dropdown'),
 //            'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),
             'color'    => trans('offline.mall::lang.custom_field_options.color'),

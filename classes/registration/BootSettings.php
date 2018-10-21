@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use Backend\Facades\Backend;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;

@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-
 use OFFLINE\Mall\Models\User as RainLabUser;
 use Validator;
 

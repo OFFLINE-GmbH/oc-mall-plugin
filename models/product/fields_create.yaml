@@ -1,0 +1,74 @@
+fields:
+    name:
+        label: 'offline.mall::lang.product.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        placeholder: 'offline.mall::lang.product.name'
+    _initial_price:
+        label: 'offline.mall::lang.product.price'
+        oc.commentPosition: ''
+        prompt: 'offline.mall::lang.product.add_currency'
+        span: auto
+        type: mall.price
+        required: true
+        tab: 'offline.mall::lang.product.general'
+tabs:
+    fields:
+        category:
+            label: 'offline.mall::lang.common.category'
+            oc.commentPosition: ''
+            nameFrom: name
+            descriptionFrom: description
+            span: auto
+            type: relation
+            tab: 'offline.mall::lang.product.general'
+        inventory_management_method:
+            label: 'offline.mall::lang.product.inventory_management_method'
+            oc.commentPosition: ''
+            options:
+                single: 'offline.mall::lang.variant.method.single'
+                variant: 'offline.mall::lang.variant.method.variant'
+            span: auto
+            type: dropdown
+            tab: 'offline.mall::lang.product.general'
+        stock:
+            label: 'offline.mall::lang.product.stock'
+            oc.commentPosition: ''
+            span: auto
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[variant]'
+            type: number
+            tab: 'offline.mall::lang.product.general'
+        meta_title:
+            label: 'offline.mall::lang.common.meta_title'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.product.general'
+            preset:
+                field: name
+                type: exact
+        user_defined_id:
+            label: 'offline.mall::lang.product.user_defined_id'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.product.general'
+        meta_description:
+            label: 'offline.mall::lang.common.meta_description'
+            size: large
+            oc.commentPosition: ''
+            span: auto
+            type: textarea
+            tab: 'offline.mall::lang.product.general'
+        initial_images:
+            label: 'offline.mall::lang.common.images'
+            oc.commentPosition: ''
+            span: auto
+            type: fileupload
+            mode: image
+            imageWidth: 260
+            tab: 'offline.mall::lang.product.general'

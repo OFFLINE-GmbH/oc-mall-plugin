@@ -1,22 +1,22 @@
-<div class="mall-category-item">
+<div class="mall-products-item">
     <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}">
-        <div class="mall-category-item__image">
+        <div class="mall-products-item__image">
             <img src="{{ item.image.thumb('auto', 240) }}" alt="{{ item.name }}"/>
         </div>
-        <div class="mall-category-item__info">
+        <div class="mall-products-item__info">
             <div class="row flex">
-                <div class="mall-category-item__name">
+                <div class="mall-products-item__name">
                     {{ item.name }}
                 </div>
-                <div class="mall-category-item__price">
+                <div class="mall-products-item__price">
                     {{ item.price() | raw }}
                 </div>
             </div>
             <div class="row flex">
-                <div class="mall-category-item__short-description">
+                <div class="mall-products-item__short-description">
                     {{ item.description_short }}
                 </div>
-                <div class="mall-category-item__old-price">
+                <div class="mall-products-item__old-price">
                     {{ item.oldPrice.count > 0 ? (item.oldPrice() | raw) : '' }}
                 </div>
             </div>

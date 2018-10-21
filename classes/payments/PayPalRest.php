@@ -2,8 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
-use OFFLINE\Mall\Classes\PaymentState\FailedState;
-use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Omnipay;
 use Request;
@@ -11,29 +9,41 @@ use Session;
 use Throwable;
 use Validator;
 
+/**
+ * Process the payment via PayPal's REST API.
+ */
 class PayPalRest extends PaymentProvider
 {
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return 'PayPal Rest API';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function identifier(): string
     {
         return 'paypal-rest';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validate(): bool
     {
         return true;
     }
 
-    public function process()
+    /**
+     * {@inheritdoc}
+     */
+    public function process(PaymentResult $result): PaymentResult
     {
         $gateway = $this->getGateway();
-
-        $result   = new PaymentResult();
-        $result->order = $this->order;
 
         $response = null;
         try {
@@ -44,42 +54,41 @@ class PayPalRest extends PaymentProvider
                 'cancelUrl' => $this->cancelUrl(),
             ])->send();
         } catch (Throwable $e) {
-            $result->successful    = false;
-            $result->failedPayment = $this->logFailedPayment([], $e);
-
-            return $result;
+            return $result->fail([], $e);
         }
 
         // PayPal has to return a RedirectResponse if everything went well
-        if ($response->isRedirect()) {
-            Session::put('mall.payment.callback', self::class);
-            Session::put('mall.paypal.transactionReference', $response->getTransactionReference());
-            $result->redirect    = true;
-            $result->redirectUrl = $response->getRedirectResponse()->getTargetUrl();
-
-            return $result;
+        if ( ! $response->isRedirect()) {
+            return $result->fail((array)$response->getData(), $response);
         }
 
-        $data                  = (array)$response->getData();
-        $result->failedPayment = $this->logFailedPayment($data, $response);
+        Session::put('mall.payment.callback', self::class);
+        Session::put('mall.paypal.transactionReference', $response->getTransactionReference());
 
-        return $result;
+        return $result->redirect($response->getRedirectResponse()->getTargetUrl());
     }
 
-    public function complete(): PaymentResult
+    /**
+     * PayPal has processed the payment and redirected the user back.
+     *
+     * @param PaymentResult $result
+     *
+     * @return PaymentResult
+     */
+    public function complete(PaymentResult $result): PaymentResult
     {
-        $result  = new PaymentResult();
         $key     = Session::pull('mall.paypal.transactionReference');
         $payerId = Request::input('PayerID');
 
         if ( ! $key || ! $payerId) {
-            info('Missing payment data', ['key' => $key, 'payer' => $payerId]);
-            $result->successful = false;
-
-            return $result;
+            return $result->fail([
+                'msg'   => 'Missing payment data',
+                'key'   => $key,
+                'payer' => $payerId,
+            ], null);
         }
 
-        $this->setOrder($this->getOrderFromSession());
+        $this->setOrder($result->order);
 
         try {
             $response = $this->getGateway()->completePurchase([
@@ -87,31 +96,23 @@ class PayPalRest extends PaymentProvider
                 'payerId'              => $payerId,
             ])->send();
         } catch (Throwable $e) {
-            $result->successful    = false;
-            $result->failedPayment = $this->logFailedPayment([], $e);
-
-            return $result;
+            return $result->fail([], $e);
         }
 
         $data = (array)$response->getData();
 
-        $result->successful = $response->isSuccessful();
-
-        if ($result->successful) {
-            $payment                    = $this->logSuccessfulPayment($data, $response);
-            $this->order->payment_id    = $payment->id;
-            $this->order->payment_data  = $data;
-            $this->order->payment_state = PaidState::class;
-            $this->order->save();
-        } else {
-            $result->failedPayment      = $this->logFailedPayment($data, $response);
-            $this->order->payment_state = FailedState::class;
-            $this->order->save();
+        if ( ! $response->isSuccessful()) {
+            return $result->fail($data, $response);
         }
 
-        return $result;
+        return $result->success($data, $response);
     }
 
+    /**
+     * Build the Omnipay Gateway for PayPal.
+     *
+     * @return \Omnipay\Common\GatewayInterface
+     */
     protected function getGateway()
     {
         $gateway = Omnipay::create('PayPal_Rest');
@@ -124,6 +125,9 @@ class PayPalRest extends PaymentProvider
         return $gateway;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function settings(): array
     {
         return [
@@ -146,6 +150,9 @@ class PayPalRest extends PaymentProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function encryptedSettings(): array
     {
         return ['paypal_client_id', 'paypal_secret'];

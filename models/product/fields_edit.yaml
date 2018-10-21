@@ -49,27 +49,7 @@ tabs:
             span: auto
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-        _initial_price:
-            label: 'offline.mall::lang.product.price'
-            oc.commentPosition: ''
-            prompt: 'offline.mall::lang.product.add_currency'
-            span: auto
-            type: mall.price
-            required: true
-            tab: 'offline.mall::lang.product.general'
-            context: create
-        stock:
-            label: 'offline.mall::lang.product.stock'
-            oc.commentPosition: ''
-            span: auto
-            context: create
-            trigger:
-                action: hide
-                field: inventory_management_method
-                condition: 'value[variant]'
-            type: number
-            tab: 'offline.mall::lang.product.general'
-        group_by_property_id@update:
+        group_by_property_id:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
             span: right
@@ -86,8 +66,7 @@ tabs:
             type: partial
             path: price_table_trigger
             tab: 'offline.mall::lang.product.general'
-            context: update
-        variants_section@update:
+        variants_section:
             label: 'offline.mall::lang.common.variants'
             span: full
             trigger:
@@ -97,7 +76,7 @@ tabs:
             type: section
             comment: 'offline.mall::lang.products.variants_comment'
             tab: 'offline.mall::lang.product.general'
-        variants@update:
+        variants:
             span: full
             path: variants
             trigger:
@@ -129,7 +108,7 @@ tabs:
             path: brand
             type: partial
             tab: 'offline.mall::lang.product.description'
-        _properties@update:
+        _properties:
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.common.add_value'
             span: full
@@ -199,7 +178,7 @@ tabs:
             type: switch
             comment: 'offline.mall::lang.product.stackable_comment'
             tab: 'offline.mall::lang.common.cart'
-        custom_fields@update:
+        custom_fields:
             label: 'offline.mall::lang.common.custom_fields'
             oc.commentPosition: ''
             span: right
