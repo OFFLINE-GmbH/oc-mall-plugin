@@ -2,6 +2,7 @@
 
 use Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
@@ -10,15 +11,55 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Validator;
 
+/**
+ * The PaymentMethodSelector component allows the user
+ * to select a payment method during checkout.
+ */
 class PaymentMethodSelector extends MallComponent
 {
+    /**
+     * The user's cart.
+     *
+     * @var Cart
+     */
     public $cart;
+    /**
+     * The active payment method.
+     *
+     * @var PaymentMethod
+     */
     public $activeMethod;
+    /**
+     * Payment data.
+     *
+     * @var Collection
+     */
     public $paymentData;
+    /**
+     * All available PaymentMethods
+     * @var Collection
+     */
     public $methods;
+    /**
+     * The current order.
+     *
+     * @var Order
+     */
     public $order;
+    /**
+     * Depending on whether the order is paid during checkout
+     * or later on the component is working on either the Order
+     * or the Cart model.
+     *
+     * @var Order|Cart
+     */
     public $workingOnModel;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -27,72 +68,21 @@ class PaymentMethodSelector extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [];
     }
 
-    public function onRun()
-    {
-        return $this->setData();
-    }
-
-    public function onSubmit()
-    {
-        $this->setData();
-        $data = post('payment_data', []);
-
-        // Create the payment gateway to trigger the validation.
-        // If not all specified data is valid an exception is thrown here.
-        $paymentMethod = PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
-        $gateway       = app(PaymentGateway::class);
-        $gateway->init($paymentMethod, $data);
-
-        // If a order is present this is not a normal checkout flow but a
-        // retry for a payment of an already existing order.
-        if ($this->order) {
-            $paymentService = new PaymentService(
-                $gateway,
-                $this->order,
-                $this->page->page->fileName
-            );
-
-            return $paymentService->process();
-        }
-
-        // Just to prevent any data leakage we store credit card information encrypted to the session.
-        session()->put('mall.payment_method.data', encrypt(json_encode($data)));
-
-        $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
-
-        return redirect()->to($this->getStepUrl($nextStep, 'payment'));
-    }
-
-    public function onChangeMethod()
-    {
-        $this->setData();
-
-        $rules = [
-            'id' => 'required|exists:offline_mall_payment_methods,id',
-        ];
-
-        $validation = Validator::make(post(), $rules);
-        if ($validation->fails()) {
-            throw new ValidationException($validation);
-        }
-
-        $id = post('id');
-
-        $this->workingOnModel->payment_method_id = $id;
-        $this->workingOnModel->save();
-
-        $this->setData();
-
-        return [
-            '.mall-payment-method-selector' => $this->renderPartial($this->alias . '::selector'),
-        ];
-    }
-
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return void
+     */
     protected function setData()
     {
         $user = Auth::getUser();
@@ -122,6 +112,95 @@ class PaymentMethodSelector extends MallComponent
         $this->setVar('paymentData', $paymentData);
     }
 
+    /**
+     * The component is executed.
+     *
+     * @return string|void
+     */
+    public function onRun()
+    {
+        return $this->setData();
+    }
+
+    /**
+     * The user has selected a payment method.
+     *
+     * Any specified payment data is stored in the session.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Cms\Classes\CmsException
+     */
+    public function onSubmit()
+    {
+        $this->setData();
+        $data = post('payment_data', []);
+
+        // Create the payment gateway to trigger the validation.
+        // If not all specified data is valid an exception is thrown here.
+        $paymentMethod = PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
+        $gateway       = app(PaymentGateway::class);
+        $gateway->init($paymentMethod, $data);
+
+        // If an order is already available, this is not the normal checkout flow but a
+        // subsequent try to pay for an existing order for which the payment failed.
+        if ($this->order) {
+            // In case the order already exists the payment can be executed directly.
+            $paymentService = new PaymentService(
+                $gateway,
+                $this->order,
+                $this->page->page->fileName
+            );
+
+            return $paymentService->process();
+        }
+
+        // Just to prevent any data leakage we store credit card information encrypted to the session.
+        session()->put('mall.payment_method.data', encrypt(json_encode($data)));
+
+        $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
+
+        return redirect()->to($this->getStepUrl($nextStep, 'payment'));
+    }
+
+    /**
+     * A different payment method has been selected.
+     *
+     * @return array
+     * @throws ValidationException
+     */
+    public function onChangeMethod()
+    {
+        $this->setData();
+
+        $rules = [
+            'id' => 'required|exists:offline_mall_payment_methods,id',
+        ];
+
+        $validation = Validator::make(post(), $rules);
+        if ($validation->fails()) {
+            throw new ValidationException($validation);
+        }
+
+        $id = post('id');
+
+        $this->workingOnModel->payment_method_id = $id;
+        $this->workingOnModel->save();
+
+        $this->setData();
+
+        return [
+            '.mall-payment-method-selector' => $this->renderPartial($this->alias . '::selector'),
+        ];
+    }
+
+    /**
+     * Get the URL to a specific checkout step.
+     *
+     * @param      $step
+     * @param null $via
+     *
+     * @return string
+     */
     protected function getStepUrl($step, $via = null): string
     {
         $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => $step]);
