@@ -1,22 +1,29 @@
-# AddressList
+# AddressSelector
 
-The `AddressList` component displays a list of a user's addresses.
+The `AddressSelector` component displays an address that belongs to the user's cart. It gives  the user the 
+ability to edit it or select a different address.
 
-It generates edit links for the [AddressForm](./address-form.md) component
-and gives the user the ability to delete an Address.
+This component is part of the [Checkout component](./checkout.md) and is used to display the currently active billing and shipping 
+Address on the checkout page. 
  
 ## Properties
 
-There are no properties available for this component.
+### `type` (string)
+
+Display the `billing` or `shipping` address of the user's cart. 
 
 ## Example implementations
 
 ::: tip 
-This component is part of the [myAccount component](./my-account.md). You do not have to implement it separately.
+This component is part of the [Checkout component](./checkout.md). You do not have to implement it separately.
 ::: 
 
-### Display the address list
+### Display the address selector
 
 ```ini
-[addressList]
+[addressSelector shippingAddress]
+type = "shipping"
+
+[addressSelector billingAddress]
+type = "billing"
 ```

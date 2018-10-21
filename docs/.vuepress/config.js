@@ -36,6 +36,7 @@ module.exports = {
                     '/components/discount-applier',
                     '/components/address-form',
                     '/components/address-list',
+                    '/components/address-selector',
                 ]
             },
             {
