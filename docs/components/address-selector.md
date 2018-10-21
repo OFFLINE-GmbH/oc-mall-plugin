@@ -26,4 +26,8 @@ type = "shipping"
 
 [addressSelector billingAddress]
 type = "billing"
+==
+
+{% component 'shippingAddress' %}
+{% component 'billingAddress' %}
 ```
