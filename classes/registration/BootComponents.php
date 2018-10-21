@@ -16,7 +16,7 @@ use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\Products as ProductsComponent;
 use OFFLINE\Mall\Components\ProductsFilter;
-use OFFLINE\Mall\Components\ShippingSelector;
+use OFFLINE\Mall\Components\ShippingMethodSelector;
 use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
@@ -26,22 +26,22 @@ trait BootComponents
     public function registerComponents()
     {
         return [
-            Cart::class                  => 'cart',
-            SignUp::class                => 'signUp',
-            ShippingSelector::class      => 'shippingSelector',
-            AddressSelector::class       => 'addressSelector',
-            AddressForm::class           => 'addressForm',
-            PaymentMethodSelector::class => 'paymentMethodSelector',
-            Checkout::class              => 'checkout',
-            ProductsComponent::class     => 'products',
-            ProductsFilter::class        => 'productsFilter',
-            ProductComponent::class      => 'product',
-            DiscountApplier::class       => 'discountApplier',
-            MyAccount::class             => 'myAccount',
-            OrdersList::class            => 'ordersList',
-            CustomerProfile::class       => 'customerProfile',
-            AddressList::class           => 'addressList',
-            CurrencyPicker::class        => 'currencyPicker',
+            Cart::class                   => 'cart',
+            SignUp::class                 => 'signUp',
+            ShippingMethodSelector::class => 'shippingMethodSelector',
+            AddressSelector::class        => 'addressSelector',
+            AddressForm::class            => 'addressForm',
+            PaymentMethodSelector::class  => 'paymentMethodSelector',
+            Checkout::class               => 'checkout',
+            ProductsComponent::class      => 'products',
+            ProductsFilter::class         => 'productsFilter',
+            ProductComponent::class       => 'product',
+            DiscountApplier::class        => 'discountApplier',
+            MyAccount::class              => 'myAccount',
+            OrdersList::class             => 'ordersList',
+            CustomerProfile::class        => 'customerProfile',
+            AddressList::class            => 'addressList',
+            CurrencyPicker::class         => 'currencyPicker',
         ];
     }
 

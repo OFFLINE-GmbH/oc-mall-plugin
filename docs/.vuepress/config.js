@@ -37,6 +37,7 @@ module.exports = {
                     '/components/discount-applier',
                     '/components/checkout',
                     '/components/payment-method-selector',
+                    '/components/shipping-method-selector',
                     '/components/address-selector',
                     '/components/my-account',
                     '/components/orders-list',

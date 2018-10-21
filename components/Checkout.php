@@ -112,7 +112,7 @@ class Checkout extends MallComponent
         $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
         $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
         $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
-        $this->addComponent(ShippingSelector::class, 'shippingSelector', ['skipIfOnlyOneAvailable' => true]);
+        $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector', ['skipIfOnlyOneAvailable' => true]);
         $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         $this->setData();
     }

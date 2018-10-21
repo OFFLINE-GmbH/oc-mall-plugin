@@ -666,7 +666,7 @@
                 'description' => 'Zeigt eine Eingabemöglichkeit für Gutscheincodes an',
             ],
         ],
-        'shippingSelector'      => [
+        'shippingMethodSelector'      => [
             'details' => [
                 'name'        => 'Auswahl für Versandmethode',
                 'description' => 'Zeige eine Auflistung aller Versandmethoden an',

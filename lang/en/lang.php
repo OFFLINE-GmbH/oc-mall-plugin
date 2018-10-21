@@ -668,7 +668,7 @@
                 'description' => 'Displays a promo code input field',
             ],
         ],
-        'shippingSelector'      => [
+        'shippingMethodSelector'      => [
             'details' => [
                 'name'        => 'Shipping selector',
                 'description' => 'Displays a list of all available shipping methods',
