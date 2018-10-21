@@ -38,7 +38,9 @@ is_hidden = 0
 
 [products]
 category = ":slug"
+setPageTitle = 1
 showVariants = 1
+includeChildren = 1
 perPage = 9
 
 [productsFilter]

@@ -1,1 +1,1 @@
-# Shipping methods
+# Payment methods

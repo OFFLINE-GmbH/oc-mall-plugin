@@ -30,13 +30,14 @@ module.exports = {
             {
                 title: 'Components',
                 children: [
-                    '/components/product'
+                    '/components/product',
+                    '/components/products'
                 ]
             },
             {
                 title: 'Extending',
                 children: [
-                    '/extending/payment-gateways'
+                    '/extending/payment-providers'
                 ]
             },
             {
