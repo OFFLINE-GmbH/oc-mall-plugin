@@ -4,8 +4,16 @@ use Auth;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
 
+/**
+ * The DiscountApplier component allow the user to enter a discount code.
+ */
 class DiscountApplier extends MallComponent
 {
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -14,11 +22,23 @@ class DiscountApplier extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [];
     }
 
+    /**
+     * A discount code has been entered.
+     *
+     * Applies the discount code directly to the Cart model.
+     *
+     * @throws ValidationException
+     */
     public function onApplyDiscount()
     {
         $code = strtoupper(post('code'));
