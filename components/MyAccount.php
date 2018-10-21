@@ -1,12 +1,31 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Http\RedirectResponse;
 use OFFLINE\Mall\Models\GeneralSettings;
 
+/**
+ * The MyAccount component displays an overview of a customer's account.
+ */
 class MyAccount extends MallComponent
 {
+    /**
+     * The currently active sub-page.
+     *
+     * @var string
+     */
     public $currentPage;
+    /**
+     * The name of the account page.
+     *
+     * @var string
+     */
     public $accountPage;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -15,6 +34,11 @@ class MyAccount extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [
@@ -25,6 +49,11 @@ class MyAccount extends MallComponent
         ];
     }
 
+    /**
+     * Options array for the page dropdown.
+     *
+     * @return array
+     */
     public function getPageOptions()
     {
         return [
@@ -34,6 +63,13 @@ class MyAccount extends MallComponent
         ];
     }
 
+    /**
+     * The component is initialized.
+     *
+     * All child components get added.
+     *
+     * @return void
+     */
     public function init()
     {
         $this->currentPage = $this->property('page');
@@ -48,6 +84,11 @@ class MyAccount extends MallComponent
         }
     }
 
+    /**
+     * The component is executed.
+     *
+     * @return RedirectResponse?
+     */
     public function onRun()
     {
         if ($this->currentPage === false || ! array_key_exists($this->currentPage, $this->getPageOptions())) {
@@ -55,6 +96,14 @@ class MyAccount extends MallComponent
         }
     }
 
+    /**
+     * Return the URL to a specific sub-page.
+     *
+     * @param       $page
+     * @param array $params
+     *
+     * @return string
+     */
     public function pageUrl($page, $params = [])
     {
         return $this->controller->pageUrl(
