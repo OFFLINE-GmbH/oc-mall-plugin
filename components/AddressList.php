@@ -1,17 +1,41 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
+use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\GeneralSettings;
 
+/**
+ * Display a list of user addresses.
+ */
 class AddressList extends MallComponent
 {
+    /**
+     * All available countries.
+     *
+     * @var Collection
+     */
     public $countries;
+    /**
+     * All of the user's addresses.
+     *
+     * @var Collection
+     */
     public $addresses;
+    /**
+     * The name of the address edit page.
+     *
+     * @var string
+     */
     public $addressPage;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -20,11 +44,21 @@ class AddressList extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [];
     }
 
+    /**
+     * The component initialized.
+     *
+     * @return void
+     */
     public function init()
     {
         if ($user = Auth::getUser()) {
@@ -33,6 +67,12 @@ class AddressList extends MallComponent
         }
     }
 
+    /**
+     * The user deleted an address.
+     *
+     * @return array
+     * @throws ValidationException
+     */
     public function onDelete()
     {
         $id       = $this->decode(post('id'));
