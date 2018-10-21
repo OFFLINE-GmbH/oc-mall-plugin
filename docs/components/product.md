@@ -1,6 +1,6 @@
 # Product
 
-The `Product` component is used to display a single [`Product` or `Variant`](../digging-deeper/products.md).
+The `Product` component displays a single [`Product` or `Variant`](../digging-deeper/products.md).
 
 ## Properties
 

@@ -31,7 +31,8 @@ module.exports = {
                 title: 'Components',
                 children: [
                     '/components/product',
-                    '/components/products'
+                    '/components/products',
+                    '/components/cart',
                 ]
             },
             {

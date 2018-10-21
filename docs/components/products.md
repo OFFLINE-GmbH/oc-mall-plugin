@@ -1,6 +1,6 @@
 # Products
 
-The `Products` component is used to display a list of products. The list can be sorted, filtered and paginated.
+The `Products` component displays a list of products. The list can be sorted, filtered and paginated.
 
 ## Properties
 
