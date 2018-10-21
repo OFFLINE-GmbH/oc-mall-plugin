@@ -35,10 +35,11 @@ module.exports = {
                     '/components/cart',
                     '/components/discount-applier',
                     '/components/checkout',
-                    '/components/currency-picker',
-                    '/components/address-form',
-                    '/components/address-list',
                     '/components/address-selector',
+                    '/components/address-form',
+                    '/components/currency-picker',
+                    '/components/customer-profile',
+                    '/components/address-list',
                 ]
             },
             {
