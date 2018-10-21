@@ -1,14 +1,33 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use October\Rain\Router\Router as RainRouter;
 use OFFLINE\Mall\Models\Currency;
-use Redirect;
 
+/**
+ * The CurrencyPicker allows the user to select a currenty.
+ */
 class CurrencyPicker extends MallComponent
 {
+    /**
+     * All available currencies.
+     *
+     * @var Collection
+     */
     public $currencies;
+    /**
+     * The currently active currency.
+     *
+     * @var Currency
+     */
     public $activeCurrency;
 
+    /**
+     * Component details.
+     *
+     * @return array
+     */
     public function componentDetails()
     {
         return [
@@ -17,17 +36,32 @@ class CurrencyPicker extends MallComponent
         ];
     }
 
+    /**
+     * Properties of this component.
+     *
+     * @return array
+     */
     public function defineProperties()
     {
         return [];
     }
 
+    /**
+     * The component is executed.
+     *
+     * @return void
+     */
     public function onRun()
     {
         $this->setVar('currencies', Currency::orderBy('sort_order', 'ASC')->get());
         $this->setVar('activeCurrency', Currency::activeCurrency());
     }
 
+    /**
+     * The user selected a different currency.
+     *
+     * @return RedirectResponse
+     */
     public function onSwitchCurrency()
     {
         if ( ! $currency = post('currency')) {
@@ -42,9 +76,16 @@ class CurrencyPicker extends MallComponent
         $query   = http_build_query(request()->query());
         $pageUrl = $query ? $pageUrl . '?' . $query : $pageUrl;
 
-        return Redirect::to($pageUrl);
+        return redirect()->to($pageUrl);
     }
 
+    /**
+     * Return the URL of the current page.
+     *
+     * Handle static and cms pages.
+     *
+     * @return string
+     */
     protected function getUrl()
     {
         $page = $this->getPage();
