@@ -36,6 +36,7 @@ module.exports = {
                     '/components/cart',
                     '/components/discount-applier',
                     '/components/checkout',
+                    '/components/signup',
                     '/components/payment-method-selector',
                     '/components/shipping-method-selector',
                     '/components/address-selector',

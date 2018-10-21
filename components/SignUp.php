@@ -6,7 +6,7 @@ use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 
 /**
  * The SignUp component displays a signup and login form
- * for a customer to authenticate.
+ * for user authentication.
  */
 class SignUp extends MallComponent
 {
