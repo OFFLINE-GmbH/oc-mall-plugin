@@ -17,6 +17,7 @@ use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
 use Request;
 use Session;
+use System\Classes\PluginManager;
 use Validator;
 
 /**
@@ -502,5 +503,15 @@ class Product extends MallComponent
             '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),
             '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
         ];
+    }
+
+    /**
+     * Check if RainLab.Translate is available.
+     *
+     * @return bool
+     */
+    protected function rainlabTranslateInstalled(): bool
+    {
+        return PluginManager::instance()->exists('RainLab.Translate');
     }
 }
