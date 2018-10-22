@@ -122,7 +122,7 @@ class Products extends MallComponent
                 'default'     => '0',
                 'type'        => 'checkbox',
             ],
-            'includeVariants'    => [
+            'includeVariants' => [
                 'title'       => 'offline.mall::lang.components.products.properties.include_variants.title',
                 'description' => 'offline.mall::lang.components.products.properties.include_variants.description',
                 'default'     => '1',
@@ -303,7 +303,8 @@ class Products extends MallComponent
         );
 
         $filter = request()->get('filter', []);
-        $paginator->appends('filter', $filter);
+        $sort   = request()->get('sort');
+        $paginator->appends('filter', $filter)->appends('sort', $sort);
 
         $pageUrl = $this->controller->pageUrl(
             $this->page->fileName,
