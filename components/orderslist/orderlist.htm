@@ -1,10 +1,10 @@
 <table class="mall-orders-list__table mall-table">
     <tr>
         <th>#</th>
-        <th>{{ 'mall.created_at' | _ }}</th>
-        <th>{{ 'mall.order.order_state' | _ }}</th>
-        <th>{{ 'mall.order.payment_state' | _ }}</th>
-        <th class="text-right">{{ 'mall.total' | _ }}</th>
+        <th>{{ 'offline.mall::frontend.created_at' | trans }}</th>
+        <th>{{ 'offline.mall::frontend.order.order_state' | trans }}</th>
+        <th>{{ 'offline.mall::frontend.order.payment_state' | trans }}</th>
+        <th class="text-right">{{ 'offline.mall::frontend.total' | trans }}</th>
     </tr>
     {% for order in orders %}
         <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }}">

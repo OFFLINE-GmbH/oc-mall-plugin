@@ -1,29 +1,29 @@
 <div class="mall-form-control">
-    <label for="{{ type }}_company">{{ 'mall.form.company' | _ }}</label>
+    <label for="{{ type }}_company">{{ 'offline.mall::frontend.form.company' | trans }}</label>
     <input id="{{ type }}_company" type="text"
-           placeholder="{{ 'mall.form.company_placeholder' | _ }}" name="{{ type }}_company">
+           placeholder="{{ 'offline.mall::frontend.form.company_placeholder' | trans }}" name="{{ type }}_company">
     <div data-validate-for="{{ type }}_company"></div>
 </div>
 <div class="mall-form-control">
-    <label for="{{ type }}_address_name">{{ 'mall.form.recipient' | _ }}</label>
+    <label for="{{ type }}_address_name">{{ 'offline.mall::frontend.form.recipient' | trans }}</label>
     <input id="{{ type }}_address_name" type="text"
-           placeholder="{{ 'mall.form.recipient_placeholder' | _ }}"
+           placeholder="{{ 'offline.mall::frontend.form.recipient_placeholder' | trans }}"
            name="{{ type }}_address_name">
     <div data-validate-for="{{ type }}_address_name"></div>
 </div>
 <div class="mall-form-control">
-    <label for="{{ type }}_lines">{{ 'mall.form.address_lines' | _ }}</label>
+    <label for="{{ type }}_lines">{{ 'offline.mall::frontend.form.address_lines' | trans }}</label>
     <textarea id="{{ type }}_lines" type="text" name="{{ type }}_lines"></textarea>
     <div data-validate-for="{{ type }}_lines"></div>
 </div>
 <div class="mall-two-fields">
     <div class="mall-form-control">
-        <label for="{{ type }}_zip">{{ 'mall.form.zip' | _ }}</label>
+        <label for="{{ type }}_zip">{{ 'offline.mall::frontend.form.zip' | trans }}</label>
         <input id="{{ type }}_zip" name="{{ type }}_zip" type="text">
         <div data-validate-for="{{ type }}_zip"></div>
     </div>
     <div class="mall-form-control">
-        <label for="{{ type }}_city">{{ 'mall.form.city' | _ }}</label>
+        <label for="{{ type }}_city">{{ 'offline.mall::frontend.form.city' | trans }}</label>
         <input id="{{ type }}_city" name="{{ type }}_city" type="text">
         <div data-validate-for="{{ type }}_city"></div>
     </div>

@@ -2,11 +2,11 @@
       data-request-validate
       data-request-success="$.publish('mall.discount.applied')">
     <div class="mall-form-control">
-        <label for="code">{{ 'mall.discount.label' | _ }}</label>
-        <input name="code" type="text" id="code" placeholder="{{ 'mall.discount.placeholder' | _ }}">
+        <label for="code">{{ 'offline.mall::frontend.discount.label' | trans }}</label>
+        <input name="code" type="text" id="code" placeholder="{{ 'offline.mall::frontend.discount.placeholder' | trans }}">
         <div data-validate-for="code"></div>
     </div>
     <div>
-        <button type="submit" class="mall-btn">{{ 'mall.discount.apply' | _ }}</button>
+        <button type="submit" class="mall-btn">{{ 'offline.mall::frontend.discount.apply' | trans }}</button>
     </div>
 </form>

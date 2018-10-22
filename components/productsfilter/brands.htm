@@ -1,12 +1,12 @@
 <div class="mall-property-group">
     <div class="mall-property-group__name" for="mall-brands">
-        {{ 'mall.brands' | _ }}
+        {{ 'offline.mall::frontend.brands' | trans }}
     </div>
     <div class="mall-filter">
         <div class="mall-form-control">
             {% set selected = filter['brand'].values %}
             <select name="filter[brand][]" id="mall-brands" class="js-mall-select-filter">
-                <option value="">-- {{ 'mall.show_all' | _ }}</option>
+                <option value="">-- {{ 'offline.mall::frontend.show_all' | trans }}</option>
                 {% for brand in __SELF__.brands %}
                     <option value="{{ brand.id }}" {{ brand.id in selected ? 'selected' }}>
                         {{ brand.name }}

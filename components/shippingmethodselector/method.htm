@@ -16,13 +16,13 @@
                     {% if method.guaranteed_delivery_days %}
                         <div class="mall-shipping-method__delivery-days">
                             {% set days = method.guaranteed_delivery_days %}
-                            {{ 'mall.shipping_method.guaranteed_delivery_days' | __(days, {days: days}) }}
+                            {{ 'offline.mall::frontend.shipping_method.guaranteed_delivery_days' | trans_(days, {days: days}) }}
                         </div>
                     {% endif %}
                     <div class="mall-shipping-method__price">
                         {{ method.price().integer > 0
                         ? (method.price().string | raw)
-                        : ('mall.no_additional_charges' | _) }}
+                        : ('offline.mall::frontend.no_additional_charges' | trans) }}
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                 {% endif %}
                 <div class="mall-shipping-method__submit">
                     <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
-                        {{ 'mall.shipping_method.proceed' | _ }}
+                        {{ 'offline.mall::frontend.shipping_method.proceed' | trans }}
                     </button>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                     data-attach-loading
                     data-request="{{ __SELF__ }}::onChangeMethod"
                     data-request-data="id: '{{ method.id }}'">
-                {{ 'mall.shipping_method.button_label' | _ }}
+                {{ 'offline.mall::frontend.shipping_method.button_label' | trans }}
             </button>
         {% endif %}
     </div>

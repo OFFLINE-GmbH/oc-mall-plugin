@@ -4,10 +4,10 @@
 
 {% set id = type ~ '_country_id' %}
 <div class="mall-form-control">
-    <label for="{{ id }}">{{ 'mall.form.country' | _ }}</label>
+    <label for="{{ id }}">{{ 'offline.mall::frontend.form.country' | trans }}</label>
     {{ form_select_country(id, countryId, {
         id: id,
-        emptyOption: ('mall.select' | _ ),
+        emptyOption: ('offline.mall::frontend.select' | trans ),
         'data-request': 'onInit',
         'data-request-data' : ("type: '" ~ type ~ "'"),
         'data-request-update': {
@@ -19,10 +19,10 @@
 
 {% set id = type ~ '_state_id' %}
 <div class="mall-form-control">
-    <label for="{{ id }}">{{ 'mall.form.state' | _ }}</label>
+    <label for="{{ id }}">{{ 'offline.mall::frontend.form.state' | trans }}</label>
     {{ form_select_state(id, countryId, stateId, {
         id: id,
-        emptyOption: ('mall.select' | _ ),
+        emptyOption: ('offline.mall::frontend.select' | trans ),
     }) }}
     <div data-validate-for="{{ id }}"></div>
 </div>

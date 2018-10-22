@@ -1,4 +1,4 @@
-<p>{{ 'mall.shipping_method.choose' | _ }}</p>
+<p>{{ 'offline.mall::frontend.shipping_method.choose' | trans }}</p>
 <form data-request-validate data-request="{{ __SELF__ }}::onSubmit">
     <div class="mall-shipping-method">
         {% for method in __SELF__.methods %}
