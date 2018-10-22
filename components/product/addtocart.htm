@@ -3,7 +3,7 @@
         {% if stock > 10 %}
             {{ 'offline.mall::frontend.stock.many_available' | trans }}
         {% elseif stock > 0 %}
-            {{ 'offline.mall::frontend.stock.available' | trans_(stock, {stock: stock}) }}
+            {{ 'offline.mall::frontend.stock.available' | trans_choice(stock, {stock: stock}) }}
         {% else %}
             {{ 'offline.mall::frontend.stock.unavailable' | trans }}
         {% endif %}

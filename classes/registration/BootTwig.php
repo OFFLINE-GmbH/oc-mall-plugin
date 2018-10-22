@@ -31,6 +31,9 @@ trait BootTwig
         if ( ! class_exists('RainLab\Translate\Behaviors\TranslatableModel')) {
             $filters['_']  = ['Lang', 'get'];
             $filters['__'] = ['Lang', 'choice'];
+            $filters['trans_choice'] = function(...$args) {
+                return trans_choice(...$args);
+            };
         }
 
         return [

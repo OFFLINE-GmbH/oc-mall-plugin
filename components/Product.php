@@ -326,7 +326,9 @@ class Product extends MallComponent
         $model   = ProductModel::published()->with($with);
 
         if ($product === ':slug') {
-            return $model->transWhere('slug', $this->param('slug'))->firstOrFail();
+            $method = $this->rainlabTranslateInstalled() ? 'transWhere' : 'where';
+
+            return $model->$method('slug', $this->param('slug'))->firstOrFail();
         }
 
         return $model->findOrFail($product);
