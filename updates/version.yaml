@@ -1,5 +1,5 @@
 0.1.0:
-    - 'Initialize plugin.'
+    - 'Initial release'
     - create_offline_mall_products.php
     - create_offline_mall_product_variants.php
     - create_offline_mall_product_accessory.php
