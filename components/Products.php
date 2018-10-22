@@ -254,8 +254,15 @@ class Products extends MallComponent
         $models = $model->with($this->productIncludes())->find($itemIds);
         $ghosts = $this->getGhosts($ghostIds);
 
+        // Insert the Ghost models back at their old position so the sort order remains.
+        $resultSet = collect($result->ids)->map(function ($id) use ($models, $ghosts) {
+            return is_int($id)
+                ? $models->find($id)
+                : $ghosts->find(str_replace('product-', '', $id));
+        });
+
         return $this->paginate(
-            $models->concat($ghosts),
+            $resultSet,
             $result->totalCount
         );
     }
