@@ -1,0 +1,14 @@
+name: 'offline.mall::lang.common.shipping_methods'
+modelClass: OFFLINE\Mall\Models\ShippingMethod
+form: $/offline/mall/models/shippingmethod/fields.yaml
+defaultRedirect: offline/mall/shippingmethods
+create:
+    title: 'offline.mall::lang.titles.shipping_methods.create'
+    redirect: 'offline/mall/shippingmethods/update/:id'
+    redirectClose: offline/mall/shippingmethods
+update:
+    title: 'offline.mall::lang.titles.shipping_methods.update'
+    redirect: offline/mall/shippingmethods
+    redirectClose: offline/mall/shippingmethods
+preview:
+    title: 'offline.mall::lang.titles.shipping_methods.preview'

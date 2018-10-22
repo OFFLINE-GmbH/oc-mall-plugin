@@ -1,0 +1,25 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        span: auto
+        type: text
+    website:
+        label: 'offline.mall::lang.common.website'
+        span: auto
+        type: text
+    description:
+        label: 'offline.mall::lang.product.description'
+        size: large
+        span: auto
+        type: richeditor
+    logo:
+        label: 'offline.mall::lang.common.logo'
+        mode: image
+        imageWidth: '200'
+        imageHeight: '200'
+        useCaption: 0
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload

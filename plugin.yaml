@@ -1,0 +1,102 @@
+plugin:
+    name: 'offline.mall::lang.plugin.name'
+    description: 'offline.mall::lang.plugin.description'
+    author: 'OFFLINE GmbH'
+    icon: oc-icon-shopping-cart
+    homepage: ''
+navigation:
+    mall-orders:
+        label: 'offline.mall::lang.common.orders'
+        url: offline/mall/orders
+        icon: icon-shopping-cart
+        order: 801
+        permissions:
+            - 'offline.mall.*'
+        sideMenu:
+            mall-orders:
+                label: 'offline.mall::lang.common.orders'
+                url: offline/mall/orders
+                icon: icon-check-circle
+                permissions:
+                    - offline.mall.manage_orders
+            mall-discounts:
+                label: 'offline.mall::lang.common.discounts'
+                url: offline/mall/discounts
+                icon: icon-gift
+                permissions:
+                    - offline.mall.manage_discounts
+    mall-catalogue:
+        label: 'offline.mall::lang.common.catalogue'
+        url: offline/mall/products
+        icon: icon-book
+        order: 800
+        permissions:
+            - offline.mall.manage_products
+        sideMenu:
+            mall-products:
+                label: 'offline.mall::lang.common.products'
+                url: offline/mall/products
+                icon: icon-cart-plus
+                permissions:
+                    - offline.mall.manage_products
+            mall-categories:
+                label: 'offline.mall::lang.common.categories'
+                url: offline/mall/categories
+                icon: icon-sitemap
+                permissions:
+                    - offline.mall.manage_categories
+            mall-brands:
+                label: 'offline.mall::lang.common.brands'
+                url: offline/mall/brands
+                icon: icon-cube
+                permissions:
+                    - offline.mall.manage_products
+            mall-properties:
+                label: 'offline.mall::lang.common.properties'
+                url: offline/mall/propertygroups
+                icon: icon-tags
+                permissions:
+                    - offline.mall.manage_properties
+permissions:
+    offline.mall.manage_products:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_products'
+    offline.mall.manage_categories:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_categories'
+    offline.mall.manage_orders:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_orders'
+    offline.mall.manage_discounts:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_discounts'
+    offline.mall.settings.manage_general:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.settings.manage_general'
+    offline.mall.settings.manage_api:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.settings.manage_api'
+    offline.mall.settings.manage_currency:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.settings.manage_currency'
+    offline.mall.settings.manage_payment_methods:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.settings.manage_payment_methods'
+    offline.mall.manage_properties:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_properties'
+    offline.mall.manage_customer_groups:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_customer_groups'
+    offline.mall.manage_notifications:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_notifications'
+    offline.mall.manage_price_categories:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_price_categories'
+    offline.mall.manage_order_states:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_order_states'
+    offline.mall.manage_shipping_methods:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_shipping_methods'

@@ -1,0 +1,14 @@
+subject = "The status of your order changed"
+description = "Sent when the status of an order changes"
+==
+
+Hi {{ order.customer.firstname }}
+
+We just wanted to let you know that your order **#{{ order.order_number }}** now
+has a new status of **{{ order.order_state.name }}**.
+
+{% partial 'mall.order.tracking' order=order %}
+
+{% partial 'button' url=app_url type='primary' body %}
+    Check your order online
+{% endpartial %}

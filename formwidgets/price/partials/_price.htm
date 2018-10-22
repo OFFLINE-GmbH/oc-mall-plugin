@@ -1,0 +1,34 @@
+<!-- Text -->
+<?php if ($this->previewMode): ?>
+    <span class="form-control"><?= $field->value ? e($field->value) : '&nbsp;' ?></span>
+<?php else: ?>
+    <div
+        id="<?= $this->getId() ?>"
+        data-control="mall-price"
+        data-default-currency="<?= $defaultCurrency->code ?>"
+        data-placeholder-field="#<?= $field->getId('placeholderField') ?>"
+        class="field-mall-price field-mall-price-text dropdown">
+
+        <input
+            type="text"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId('placeholderField') ?>"
+            value="<?= e($defaultValue) ?>"
+            placeholder="<?= e(trans($field->placeholder)) ?>"
+            class="form-control"
+            autocomplete="off"
+            <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
+            <?= $field->getAttributes() ?>
+        />
+
+        <button
+            class="btn btn-default mall-price-btn"
+            data-toggle="dropdown"
+            data-active-currency
+            type="button">
+        </button>
+
+        <?= $this->makePartial('currency_values') ?>
+        <?= $this->makePartial('currency_selector') ?>
+    </div>
+<?php endif ?>

@@ -1,0 +1,7 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+    code:
+        label: 'offline.mall::lang.common.code'
+        type: text

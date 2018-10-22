@@ -1,0 +1,40 @@
+{% if type %}
+    {% set type = (type ~ '_') %}
+{% endif %}
+<div class="mall-form-control">
+    <label for="{{ type }}company">{{ 'mall.form.company' | _ }}</label>
+    <input id="{{ type }}company" type="text"
+           value="{{ address.company }}"
+           placeholder="{{ 'mall.form.company_placeholder' | _ }}" name="{{ type }}company">
+    <div data-validate-for="{{ type }}company"></div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}address_name">{{ 'mall.form.recipient' | _ }}</label>
+    <input id="{{ type }}address_name" type="text"
+           value="{{ address.name }}"
+           placeholder="{{ 'mall.form.recipient_placeholder' | _ }}"
+           name="{{ type }}address_name">
+    <div data-validate-for="{{ type }}address_name"></div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}lines">{{ 'mall.form.address_lines' | _ }}</label>
+    <textarea id="{{ type }}lines" type="text" name="{{ type }}lines">{{ address.lines }}</textarea>
+    <div data-validate-for="{{ type }}lines"></div>
+</div>
+<div class="mall-two-fields">
+    <div class="mall-form-control">
+        <label for="{{ type }}zip">{{ 'mall.form.zip' | _ }}</label>
+        <input id="{{ type }}zip" name="{{ type }}zip" type="text"
+               value="{{ address.zip }}">
+        <div data-validate-for="{{ type }}zip"></div>
+    </div>
+    <div class="mall-form-control">
+        <label for="{{ type }}city">{{ 'mall.form.city' | _ }}</label>
+        <input id="{{ type }}city" name="{{ type }}city" type="text"
+               value="{{ address.city }}">
+        <div data-validate-for="{{ type }}city"></div>
+    </div>
+</div>
+<div class="mall-two-fields" id="countryState">
+    {% partial __SELF__ ~ '::countrystate' type=type countryId=address.country_id stateId=address.state_id %}
+</div>

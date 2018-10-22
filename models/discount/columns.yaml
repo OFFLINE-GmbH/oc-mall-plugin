@@ -1,0 +1,25 @@
+columns:
+    name:
+        label: 'offline.mall::lang.discounts.name'
+        type: text
+        searchable: true
+        sortable: true
+    expires:
+        label: 'offline.mall::lang.discounts.expires'
+        type: date
+        sortable: true
+    number_of_usages:
+        label: 'offline.mall::lang.discounts.number_of_usages'
+        type: number
+        searchable: true
+        sortable: true
+    type:
+        label: 'offline.mall::lang.discounts.type'
+        type: text
+        searchable: true
+        sortable: true
+    trigger:
+        label: 'offline.mall::lang.discounts.trigger'
+        type: text
+        searchable: true
+        sortable: true

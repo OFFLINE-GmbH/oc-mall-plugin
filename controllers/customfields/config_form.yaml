@@ -1,0 +1,11 @@
+name: 'offline.mall::lang.common.custom_fields'
+modelClass: OFFLINE\Mall\Models\CustomField
+form: $/offline/mall/models/customfield/fields.yaml
+defaultRedirect: offline/mall/customfields
+create:
+    redirect: 'offline/mall/customfields/update/:id'
+    redirectClose: offline/mall/customfields
+update:
+    redirect: offline/mall/customfields
+    redirectClose: offline/mall/customfields
+preview: {  }

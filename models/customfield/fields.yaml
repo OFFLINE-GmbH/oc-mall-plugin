@@ -1,0 +1,43 @@
+fields:
+    required:
+        label: 'offline.mall::lang.custom_fields.required'
+        span: left
+        type: switch
+        comment: 'offline.mall::lang.custom_fields.required_comment'
+    _prices:
+        label: 'offline.mall::lang.product.price'
+        span: right
+        type: mall.price
+    name:
+        label: 'offline.mall::lang.custom_fields.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+
+    _type_dropdown:
+        label: 'offline.mall::lang.custom_fields.type'
+        oc.commentPosition: ''
+        options:
+            text: 'offline.mall::lang.custom_field_options.text'
+            textarea: 'offline.mall::lang.custom_field_options.textarea'
+            checkbox: 'offline.mall::lang.custom_field_options.checkbox'
+            dropdown: 'offline.mall::lang.custom_field_options.dropdown'
+            image: 'offline.mall::lang.custom_field_options.image'
+            color: 'offline.mall::lang.custom_field_options.color'
+        span: auto
+        type: dropdown
+
+    options:
+        type: partial
+        path: $/offline/mall/controllers/customfields/_field_options.htm
+        trigger:
+            action: show
+            field: _type_dropdown
+            condition: value[dropdown] or value[image] or value[color]
+
+    type:
+        label: 'offline.mall::lang.custom_fields.type'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        cssClass: 'hide'

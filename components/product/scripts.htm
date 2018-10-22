@@ -1,0 +1,44 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $body = $('body');
+            var $addToCart = $('.mall-product__add-to-cart');
+
+            {% if not item.allow_out_of_stock_purchases %}
+            $body.on('change', '.js-mall-property-selector', function (e, isInitial) {
+                var values = $('[data-mall-property]').map(function () {
+                    return this.value;
+                }).toArray();
+
+                $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'mall.stock.checking' | _ }}</div>');
+
+                $.request('onChangeProperty', {
+                    data: {values: values},
+                    loading: isInitial ? null : $.oc.stripeLoadIndicator
+                })
+            })
+            var firstProperty = $('.js-mall-property-selector:first')
+            if (firstProperty.length) {
+                firstProperty.trigger('change', true)
+            } else {
+                {#
+                   In case the product has no special properties we simply check the stock once
+                   since nothing can be configured afterwards.
+                #}
+                $.request('onCheckProductStock', {
+                    data: {slug: '{{ item.slug }}'},
+                    loading: null
+                })
+            }
+            {% endif %}
+
+            {# Handle clicks on the image selector for custom field type "image" and "color" #}
+            $body.on('click', '.mall-option-selector', function () {
+                $(this.dataset.target).val(this.dataset.value).trigger('change');
+
+                $(this).parent().find('.is-active').removeClass('is-active');
+                $(this).addClass('is-active');
+            });
+        })
+    </script>
+{% endput %}

@@ -1,0 +1,11 @@
+fields:
+    property:
+        label: 'offline.mall::lang.common.property'
+        oc.commentPosition: ''
+        span: auto
+        type: relation
+    value:
+        label: 'offline.mall::lang.product.property_value'
+        oc.commentPosition: ''
+        span: auto
+        type: text

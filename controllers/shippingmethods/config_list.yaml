@@ -1,0 +1,12 @@
+title: 'offline.mall::lang.common.shipping_methods'
+modelClass: OFFLINE\Mall\Models\ShippingMethod
+list: $/offline/mall/models/shippingmethod/columns.yaml
+recordUrl: 'offline/mall/shippingmethods/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

@@ -1,0 +1,27 @@
+<div class="dropdown dropdown-fixed">
+    <button type="button"
+            class="btn btn-primary oc-icon-map-signs"
+            data-toggle="dropdown">
+        <?= e(trans('offline.mall::lang.order.change_order_status')) ?>
+    </button>
+    <ul class="dropdown-menu"
+        data-dropdown-title="<?= e(trans('offline.mall::lang.order.change_order_status')) ?>">
+        <?php foreach($orderStates as $state): ?>
+        <li><a href="#" tabindex="-1"
+               data-request-data="state: '<?= e($state->id) ?>', id: <?= e($order['id']) ?>"
+               data-request="onChangeOrderState"><?= e($state->name) ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<div class="dropdown dropdown-fixed" id="payment-state-toggle">
+    <?= $paymentState ?>
+</div>
+
+<a data-toggle="modal" href="#content-tracking" class="btn btn-default  oc-icon-map-marker">
+    <?= e(trans('offline.mall::lang.order.update_shipping_state')) ?>
+</a>
+
+<a data-toggle="modal" href="#content-invoice-number" class="btn btn-default  oc-icon-file-text">
+    <?= e(trans('offline.mall::lang.order.update_invoice_number')) ?>
+</a>

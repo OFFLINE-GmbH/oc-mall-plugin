@@ -1,0 +1,13 @@
+title: 'offline.mall::lang.common.discounts'
+modelClass: OFFLINE\Mall\Models\Discount
+list: $/offline/mall/models/discount/columns.yaml
+recordUrl: 'offline/mall/discounts/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+showSorting: 1
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

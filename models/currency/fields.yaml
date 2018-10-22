@@ -1,0 +1,31 @@
+fields:
+    is_default:
+        type: switch
+        label: offline.mall::lang.currency_settings.is_default
+        span: full
+    code:
+        type: text
+        label: offline.mall::lang.currency_settings.currency_code
+        span: auto
+    symbol:
+        type: text
+        label: offline.mall::lang.currency_settings.currency_symbol
+        span: auto
+    rate:
+        type: text
+        label: offline.mall::lang.currency_settings.currency_rate
+        span: auto
+    decimals:
+        type: text
+        label: offline.mall::lang.currency_settings.currency_decimals
+        span: auto
+    format:
+        type: codeeditor
+        label: offline.mall::lang.currency_settings.currency_format
+        span: left
+        size: small
+        language: twig
+    help:
+        type: partial
+        span: right
+        path: $/offline/mall/models/currency/_help.htm

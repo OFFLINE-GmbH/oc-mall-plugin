@@ -1,0 +1,15 @@
+title: 'offline.mall::lang.common.property_groups'
+modelClass: OFFLINE\Mall\Models\PropertyGroup
+list: $/offline/mall/models/propertygroup/columns.yaml
+recordUrl: 'offline/mall/propertygroups/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: name
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

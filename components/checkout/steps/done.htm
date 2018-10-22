@@ -1,0 +1,10 @@
+<div class="mall-checkout-result mall-checkout-result--successful">
+    {% if __SELF__.order.is_paid %}
+        <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.payment.successful.heading' | _ }}</h3>
+        <p>{{ 'mall.checkout.payment.successful.line_1' | _ }}</p>
+    {% else %}
+        <h3 class="mall-checkout-result__heading">{{ 'mall.checkout.order.successful.heading' | _ }}</h3>
+        <p>{{ 'mall.checkout.order.successful.line_1' | _ }}</p>
+    {% endif %}
+    {% partial __SELF__ ~ '::resultactions' %}
+</div>

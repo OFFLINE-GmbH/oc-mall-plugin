@@ -1,0 +1,12 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $('.js-mall-toggle-shipping-address').on('click', function () {
+                $('.mall-shipping-address').toggle(this.checked);
+            });
+            $('.js-mall-toggle-guest-signup').on('click', function () {
+                $('.mall-signup__password-inputs').toggle(! this.checked);
+            });
+        })
+    </script>
+{% endput %}

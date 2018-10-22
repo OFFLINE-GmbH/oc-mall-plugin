@@ -1,0 +1,9 @@
+columns:
+    property:
+        label: 'offline.mall::lang.common.property'
+        type: text
+        searchable: true
+    value:
+        label: 'offline.mall::lang.product.property_value'
+        type: text
+        searchable: true

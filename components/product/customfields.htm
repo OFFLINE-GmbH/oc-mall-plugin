@@ -1,0 +1,5 @@
+{% for field in fields %}
+    <div class="mall-product__property {{ field.required ? 'is-required' : '' }}">
+        {% partial __SELF__ ~ '::customfields/' ~ field.type field=field %}
+    </div>
+{% endfor %}

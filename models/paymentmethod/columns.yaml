@@ -1,0 +1,14 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+    code:
+        label: 'offline.mall::lang.common.code'
+        type: text
+    description:
+        label: 'offline.mall::lang.product.description'
+        type: text
+        invisible: true
+    payment_provider:
+        label: 'offline.mall::lang.common.payment_provider'
+        type: text

@@ -1,0 +1,7 @@
+<?php $id = uniqid(); ?>
+
+<label for="<?= $id ?>"><?= e($field->name) ?></label>
+<input type="<?= $type ?>"
+       name="<?= e($this->fieldPrefix()) ?>[<?= e($field->id) ?>]" class="form-control" id="<?= $id ?>"
+       value="<?= e($value) ?>"
+>

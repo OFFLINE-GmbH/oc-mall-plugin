@@ -1,0 +1,16 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: partial
+        path: $/offline/mall/models/shippingmethod/_price.htm
+        searchable: true
+        sortable: true
+    guaranteed_delivery_days:
+        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
+        type: number
+        sortable: true

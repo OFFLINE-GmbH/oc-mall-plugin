@@ -1,0 +1,37 @@
+columns:
+    user_defined_id:
+        label: 'offline.mall::lang.product.user_defined_id'
+        type: text
+        searchable: true
+        sortable: true
+    name:
+        label: 'offline.mall::lang.product.name'
+        type: text
+        searchable: true
+        sortable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: partial
+        path: $/offline/mall/models/product/_price.htm
+        searchable: true
+        sortable: true
+    published:
+        label: 'offline.mall::lang.product.published'
+        type: partial
+        path: $/offline/mall/models/product/_published.htm
+        sortable: true
+    taxable:
+        label: 'offline.mall::lang.product.taxable'
+        type: partial
+        path: $/offline/mall/models/product/_taxable.htm
+        sortable: true
+    category:
+        label: 'offline.mall::lang.common.category'
+        relation: category
+        select: name
+        sortable: true
+        searchable: true
+    stock:
+        label: 'offline.mall::lang.product.stock'
+        type: number
+        invisible: true

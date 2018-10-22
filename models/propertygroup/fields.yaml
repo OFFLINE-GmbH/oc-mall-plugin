@@ -1,0 +1,24 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        span: auto
+        type: text
+    display_name:
+        label: 'offline.mall::lang.common.display_name'
+        span: auto
+        type: text
+    description:
+        label: 'offline.mall::lang.product.description'
+        span: auto
+        type: text
+tabs:
+    fields:
+        properties:
+            span: full
+            cssClass: ''
+            path: properties
+            context:
+                - update
+                - preview
+            type: partial
+            tab: 'offline.mall::lang.common.properties'

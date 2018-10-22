@@ -1,0 +1,24 @@
+{% set countryId = countryId|default(form_value('country_id')) %}
+{% set stateId = stateId|default(form_value('state_id')) %}
+
+{% set id = type ~ 'country_id' %}
+<div class="mall-form-control">
+    <label for="{{ id }}">{{ 'mall.form.country' | _ }}</label>
+    {{ form_select_country(id, countryId, {
+        id: id,
+        'data-request': 'onInit',
+        'data-request-update': {
+            (__SELF__ ~ '::countrystate'): '#countryState'
+        }
+    }) }}
+    <div data-validate-for="{{ type }}country_id"></div>
+</div>
+
+{% set id = type ~ 'state_id' %}
+<div class="mall-form-control">
+    <label for="{{ id }}">{{ 'mall.form.state' | _ }}</label>
+    {{ form_select_state(id, countryId, stateId, {
+        id: id,
+    }) }}
+    <div data-validate-for="{{ id }}"></div>
+</div>

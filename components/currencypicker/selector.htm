@@ -1,0 +1,9 @@
+{{ form_open() }}
+<select name="currency" data-request="{{ __SELF__ }}::onSwitchCurrency" class="mall-selectbox-sm">
+    {% for currency in __SELF__.currencies %}
+        <option value="{{ currency.id }}" {{ currency.id == __SELF__.activeCurrency.id ? 'selected' }}>
+            {{ currency.code }}
+        </option>
+    {% endfor %}
+</select>
+{{ form_close() }}

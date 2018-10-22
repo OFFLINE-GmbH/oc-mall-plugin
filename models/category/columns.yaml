@@ -1,0 +1,11 @@
+columns:
+    name:
+        label: 'offline.mall::lang.category.name'
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: 'offline.mall::lang.common.slug'
+        type: text
+        searchable: true
+        sortable: true

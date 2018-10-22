@@ -1,0 +1,5 @@
+title: 'offline.mall::lang.titles.payment_methods.reorder'
+modelClass: OFFLINE\Mall\Models\PaymentMethod
+nameFrom: name
+toolbar:
+    buttons: reorder_toolbar

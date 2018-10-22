@@ -1,0 +1,98 @@
+table.table.data tbody tr.orderfooter td {
+    background: #eee;
+    border-top: none;
+}
+
+table.table.data tbody tr.orderdiscount td {
+    background: #eee;
+    border-top: none;
+}
+
+table.table.data tbody tr.orderfooter.separator td {
+    border-top: 1px solid #ccc;
+}
+
+table.table.data tbody tr.orderfooter.separator-bottom td {
+    border-bottom: 1px solid #ccc;
+}
+
+table.table.data tbody tr.orderfooter-bottomline td {
+    background: #ddd;
+    border-top: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    font-weight: bold;
+}
+
+table.table.data tbody tr.orderfooter-taxes td {
+    background: transparent;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-box {
+    background: #fafafa;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 1px #ccc;
+    border-radius: 2px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.sidebar-box--with-icon {
+    padding-left: 40px;
+}
+
+.sidebar-box .icon {
+    position: absolute;
+    left: 15px;
+    top: 22px;
+}
+
+.sidebar-box p:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar-box__heading {
+    margin-top: 0;
+    font-size: 1.2em;
+    margin-bottom: .75em;
+}
+
+.attributes {
+    color: rgba(0,0,0,.5);
+}
+
+.mall-badge {
+    display: inline-block;
+    padding: .15em .5em;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .1)
+}
+
+.modal-body--no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/** Highlights the product row **/
+.price-table-modal table.data tr:first-child td {
+    border-bottom-color: #ccc;
+}
+.price-table-modal table.data td.disabled {
+    color: #ccc;
+}
+.price-table-modal table.headers th:not(:first-child),
+.price-table-modal table.data td:not(:first-child),
+.price-table-modal table.data td:not(:first-child) .string-input {
+    text-align: right;
+}
+
+.price-table-currency-selector .btn-link {
+    padding-left: 0;
+}

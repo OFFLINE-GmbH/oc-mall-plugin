@@ -1,0 +1,33 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    type:
+        label: 'offline.mall::lang.custom_fields.type'
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+    unit:
+        label: 'offline.mall::lang.common.unit'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    options:
+        label: 'offline.mall::lang.common.options'
+        oc.commentPosition: ''
+        prompt: 'Add new item'
+        span: full
+        trigger:
+            action: show
+            field: type
+            condition: 'value[dropdown]'
+        type: repeater
+        form:
+            fields:
+                value:
+                    label: 'offline.mall::lang.common.option'
+                    oc.commentPosition: ''
+                    span: full
+                    type: text

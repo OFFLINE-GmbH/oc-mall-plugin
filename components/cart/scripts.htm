@@ -1,0 +1,45 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $body = $('body');
+
+            $.subscribe('mall.discount.applied', refreshCart);
+            $.subscribe('mall.shipping.update', refreshCart);
+
+            function refreshCart () {
+                $.request('{{ __SELF__ }}::onRun', {
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                })
+            }
+
+            $body.on('change', '.js-mall-quantity', function () {
+                $.request('{{ __SELF__ }}::onUpdateQuantity', {
+                    data: {id: this.dataset.id, quantity: this.value},
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    loading: $.oc.stripeLoadIndicator,
+                    flash: true,
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                    },
+                    handleFlashMessage: function (message, type) {
+                        $.oc.flashMsg({text: message, class: type})
+                    }
+                })
+            });
+            $body.on('click', '.js-mall-remove-product', function () {
+                $.request('{{ __SELF__ }}::onRemoveProduct', {
+                    data: {id: this.dataset.id},
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    loading: $.oc.stripeLoadIndicator,
+                    confirm: '{{ 'mall.confirm' | _ }}',
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                        $.publish('mall.cart.productRemoved')
+                    }
+                })
+            });
+        })
+    </script>
+{% endput %}

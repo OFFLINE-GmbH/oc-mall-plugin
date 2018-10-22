@@ -1,0 +1,8 @@
+<?php $id = uniqid(); ?>
+
+<label for="<?= $id ?>"><?= e($field->name) ?></label>
+<div style="overflow: auto;">
+    <?= $widget->render() ?>
+</div>
+<input type="hidden" name="<?= e($this->fieldPrefix()) ?>[<?= e($field->id) ?>]" class="form-control" value="<?= e($value) ?>">
+<input type="hidden" name="_session_key" value="<?= $session_key ?>">

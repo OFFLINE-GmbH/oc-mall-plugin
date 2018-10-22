@@ -1,0 +1,132 @@
+columns:
+    token:
+        label: token
+        type: text
+    invoice_number:
+        label: invoice_number
+        type: text
+    currency:
+        label: currency
+        type: text
+    email:
+        label: email
+        type: text
+    billing_address:
+        label: billing_address
+        type: text
+    shipping_address:
+        label: shipping_address
+        type: text
+    shipping_address_same_as_billing:
+        label: shipping_address_same_as_billing
+        type: boolean
+    credit_card_last4_digits:
+        label: credit_card_last4_digits
+        type: text
+    tracking_number:
+        label: tracking_number
+        type: text
+    tracking_url:
+        label: tracking_url
+        type: text
+    shipping_fees:
+        label: shipping_fees
+        type: text
+    shipping_provider:
+        label: shipping_provider
+        type: text
+    shipping_method:
+        label: shipping_method
+        type: text
+    adjusted_amount:
+        label: adjusted_amount
+        type: text
+    rebate_amount:
+        label: rebate_amount
+        type: text
+    taxes:
+        label: taxes
+        type: text
+    items_total:
+        label: items_total
+        type: text
+    subtotal:
+        label: subtotal
+        type: text
+    taxable_total:
+        label: taxable_total
+        type: text
+    grand_total:
+        label: grand_total
+        type: text
+    total_weight:
+        label: total_weight
+        type: text
+    total_rebate_rate:
+        label: total_rebate_rate
+        type: text
+    notes:
+        label: notes
+        type: text
+    discount_codes:
+        label: discount_codes
+        type: text
+    discounts:
+        label: discounts
+        type: text
+    custom_fields:
+        label: custom_fields
+        type: text
+    shipping_enabled:
+        label: shipping_enabled
+        type: text
+    payment_transaction_id:
+        label: payment_transaction_id
+        type: text
+    metadata:
+        label: metadata
+        type: text
+    ip_address:
+        label: ip_address
+        type: text
+    user_id:
+        label: user_id
+        type: text
+    card_holder_name:
+        label: card_holder_name
+        type: text
+    card_type:
+        label: card_type
+        type: text
+    payment_method:
+        label: payment_method
+        type: text
+    payment_gateway_used:
+        label: payment_gateway_used
+        type: text
+    tax_provider:
+        label: tax_provider
+        type: text
+    lang:
+        label: lang
+        type: text
+    creation_date:
+        label: creation_date
+        type: text
+    modification_date:
+        label: modification_date
+        type: text
+    completition_date:
+        label: completition_date
+        type: text
+    status:
+        label: status
+        type: text
+    payment_status:
+        label: payment_status
+        type: text
+    will_be_paid_later:
+        label: will_be_paid_later
+        type: boolean
+
+

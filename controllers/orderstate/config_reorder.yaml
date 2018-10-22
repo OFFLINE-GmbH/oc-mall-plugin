@@ -1,0 +1,5 @@
+title: 'offline.mall::lang.titles.order_states.reorder'
+modelClass: OFFLINE\Mall\Models\OrderState
+nameFrom: name
+toolbar:
+    buttons: reorder_toolbar

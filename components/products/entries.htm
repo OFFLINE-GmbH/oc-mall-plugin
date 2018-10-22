@@ -1,0 +1,7 @@
+{% partial __SELF__ ~ '::loader' %}
+
+{% if __SELF__.items.count %}
+    {% partial __SELF__ ~ '::items' items=__SELF__.items %}
+{% else %}
+    {% partial __SELF__ ~ '::empty' %}
+{% endif %}

@@ -1,0 +1,27 @@
+<div id="optionList">
+    <?= $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm', ['items' =>
+    $model->custom_field_options, 'type' => $model->type]) ?>
+</div>
+<script>
+    $(function () {
+        var $trigger = $('.js-create-option-form');
+        var $optionsList = $('#optionList');
+        var $typeDropdown = $('#Form-relationCustomFieldsManageForm-field-CustomField-_type_dropdown');
+        var $typeInput = $('#Form-relationCustomFieldsManageForm-field-CustomField-type');
+
+        $typeDropdown.on('change', function () {
+            $trigger.data('request-data', "type: '" + this.value + "'")
+            $typeInput.val(this.value)
+        })
+
+        $('body').on('oc-mall.custom-field-options.reloaded', handleTypeDropdownState)
+
+        function handleTypeDropdownState () {
+            var itemCount = $optionsList.find('tbody tr').length;
+            $typeDropdown.prop('disabled', itemCount > 1)
+        }
+
+        $typeInput.val($typeDropdown.val())
+        handleTypeDropdownState();
+    })
+</script>

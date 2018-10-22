@@ -1,0 +1,8 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+export:
+    title: offline.mall::lang.titles.orders.export
+    modelClass: OFFLINE\Mall\Models\OrderExport
+    list: $/offline/mall/models/order/export_columns.yaml

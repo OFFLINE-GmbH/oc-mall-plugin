@@ -1,0 +1,16 @@
+fields:
+    from_weight:
+        label: 'offline.mall::lang.shipping_method_rates.from_weight'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+    to_weight:
+        label: 'offline.mall::lang.shipping_method_rates.to_weight'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+    _prices:
+        label: 'offline.mall::lang.product.price'
+        oc.commentPosition: ''
+        span: auto
+        type: mall.price

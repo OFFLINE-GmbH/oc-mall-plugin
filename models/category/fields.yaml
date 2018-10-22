@@ -1,0 +1,69 @@
+fields:
+    parent:
+        label: 'offline.mall::lang.category.parent'
+        type: dropdown
+        span: left
+    slug:
+        label: 'offline.mall::lang.common.slug'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    name:
+        label: 'offline.mall::lang.category.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    image:
+        label: 'offline.mall::lang.common.main_image'
+        oc.commentPosition: ''
+        mode: image
+        prompt: 'offline.mall::lang.common.select_image'
+        imageWidth: '120'
+        imageHeight: '120'
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    code:
+        label: 'offline.mall::lang.category.code'
+        comment: 'offline.mall::lang.category.code_comment'
+        span: left
+        type: text
+tabs:
+    fields:
+        inherit_property_groups:
+            label: 'offline.mall::lang.category.inherit_property_groups'
+            span: auto
+            context: update
+            dependsOn: parent
+            type: switch
+            comment: 'offline.mall::lang.category.inherit_property_groups_comment'
+            tab: 'offline.mall::lang.common.property_groups'
+        property_groups:
+            span: full
+            path: $/offline/mall/controllers/categories/_property_groups.htm
+            context: update
+            trigger:
+                action: hide
+                field: inherit_property_groups
+                condition: checked
+            type: partial
+            tab: 'offline.mall::lang.common.property_groups'
+        meta_title:
+            label: 'offline.mall::lang.common.meta_title'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.seo'
+        meta_description:
+            label: 'offline.mall::lang.common.meta_description'
+            size: large
+            oc.commentPosition: ''
+            span: left
+            type: textarea
+            tab: 'offline.mall::lang.common.seo'

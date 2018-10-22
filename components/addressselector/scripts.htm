@@ -1,0 +1,22 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $body = $('body');
+            $body.on('click', '.mall-address-selector--{{ __SELF__.type }} .js-change-address', function () {
+                $.request('{{ __SELF__ }}::onChangeAddress', {
+                    update: {'{{ __SELF__ }}::changeAddress': $(this).closest('.mall-address')},
+                    loading: $.oc.stripeLoadIndicator,
+                })
+            });
+            $body.on('change', '.mall-address-selector--{{ __SELF__.type }} #mall_address_id', function () {
+                if (this.value === 'new') {
+                    document.location.href = '{{ __SELF__.addressPage | page({
+                        address: "new",
+                        redirect: "checkout",
+                        set: __SELF__.type,
+                    }) }}'
+                }
+            });
+        })
+    </script>
+{% endput %}

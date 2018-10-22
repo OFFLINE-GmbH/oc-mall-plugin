@@ -1,0 +1,11 @@
+<div class="mall-products__products">
+    {% for item in items %}
+        {% partial __SELF__ ~ '::item' item=item %}
+    {% endfor %}
+</div>
+
+{% if __SELF__.paginate %}
+    <div class="mall-pagination mall-pagination--products">
+        {{ items | raw }}
+    </div>
+{% endif %}

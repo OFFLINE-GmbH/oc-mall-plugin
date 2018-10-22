@@ -1,0 +1,9 @@
+<?php if($value): ?>
+<span class="oc-icon-circle text-success">
+    <?= e(trans('offline.mall::lang.product.published')) ?>
+</span>
+<?php else: ?>
+<span class="oc-icon-circle text-muted">
+    <?= e(trans('offline.mall::lang.product.not_published')) ?>
+</span>
+<?php endif; ?>

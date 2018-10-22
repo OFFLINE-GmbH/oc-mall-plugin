@@ -1,0 +1,7 @@
+<h2>{{ 'mall.shipping_method' | _ }}</h2>
+
+{% if __SELF__.methods.count > 0 %}
+    {% partial __SELF__ ~ '::methods' %}
+{% else %}
+    {% partial __SELF__ ~ '::empty' %}
+{% endif %}

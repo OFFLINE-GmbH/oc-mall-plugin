@@ -1,0 +1,123 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="popup">×</button>
+    <h4 class="modal-title">
+        <?= e(trans('offline.mall::lang.product.price_table_modal.title')) ?>
+    </h4>
+</div>
+
+<div class="modal-body modal-body--no-padding price-table-modal">
+    <?= $widget->render(); ?>
+</div>
+
+<div class="modal-footer">
+    <div class="pull-left text-left">
+        <div class="dropdown price-table-currency-selector">
+            <a
+                    href="javascript:;"
+                    data-toggle="dropdown"
+                    class="btn btn-link oc-icon-angle-down">
+                <?= e(trans('offline.mall::lang.product.price_table_modal.currency_dropdown')) ?>
+                <span class="currency-label"><?= $currencies->first()->code ?></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <?php foreach($currencies as $currency): ?>
+                <li role="presentation">
+                    <a role="menuitem"
+                       tabindex="-1"
+                       data-currency="<?= e($currency->code) ?>"
+                       class="js-change-currency"
+                       href="javascript:;">
+                        <?= e($currency->code) ?>
+                    </a>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary js-persist">
+        <?= e(trans('backend::lang.form.save')) ?>
+    </button>
+    <button type="button" class="btn btn-default js-cancel" data-dismiss="popup">
+        <?= e(trans('backend::lang.form.cancel')) ?>
+    </button>
+</div>
+
+<script>
+    $(function () {
+        var priceTable;
+
+        // Give the widget time to render
+        setTimeout(function () {
+            priceTable = {
+                state: JSON.parse('<?= addslashes($pricetableState) ?>'),
+                currencyLabel: $('.currency-label'),
+                activeCurrency: '<?= $currencies->first()->code ?>',
+                widget: $('#Table-pricetable').data('oc.table'),
+
+                init: function () {
+                    this.render(this.activeCurrency, true)
+                },
+
+                render: function (currency, initial) {
+                    if (initial !== true) {
+                        priceTable.updateState()
+                    }
+                    this.setCurrency(currency)
+                    this.widget.dataSource.data = this.state[currency]
+                    this.widget.updateDataTable()
+
+                    // "Disable" the product's stock field if variants are available
+                    var body = this.widget.getDataTableBody()
+                    if (body.children.length > 1) {
+                        body.children[0].children[1].classList.add('disabled')
+                    }
+                },
+
+                updateState: function () {
+                    if (this.widget.activeCellProcessor) {
+                        this.widget.activeCellProcessor.onUnfocus()
+                    }
+
+                    var root = this
+                    var oldState = this.state[this.activeCurrency]
+                    var newState = Array.from(this.widget.getDataTableBody().children).map(function (row) {
+                        return root.widget.getRowData(row)
+                    })
+                    this.state[this.activeCurrency] = $.extend(true, oldState, newState)
+
+                    // The stock value needs to stay the same for all currencies
+                    for (var currency in this.state) {
+                        for (var id in this.state[currency]) {
+                            this.state[currency][id].stock = newState[id].stock
+                        }
+                    }
+                },
+
+                setCurrency: function (currency) {
+                    this.activeCurrency = currency
+                    this.currencyLabel.text(currency)
+                },
+
+                persist () {
+                    priceTable.updateState()
+                    $.request('onPriceTablePersist', {
+                        data: {state: this.state},
+                        loading: $.oc.stripeLoadIndicator,
+                        success: function (data) {
+                            this.success(data)
+                            $('.js-cancel').trigger('click')
+                        }
+                    })
+                }
+            }
+            priceTable.init()
+        })
+
+        $('.js-change-currency').on('click', function () {
+            priceTable.render(this.dataset.currency);
+        })
+        $('.js-persist').on('click', function () {
+            priceTable.persist();
+        })
+    })
+</script>

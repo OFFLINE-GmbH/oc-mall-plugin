@@ -1,0 +1,3 @@
+{% for property in props %}
+    {% partial __SELF__ ~ '::property' property=property filter=__SELF__.filter %}
+{% endfor %}

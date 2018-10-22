@@ -1,0 +1,13 @@
+title: 'offline.mall::lang.common.payment_methods'
+modelClass: OFFLINE\Mall\Models\PaymentMethod
+list: $/offline/mall/models/paymentmethod/columns.yaml
+recordUrl: 'offline/mall/paymentmethods/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+showSorting: 1
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

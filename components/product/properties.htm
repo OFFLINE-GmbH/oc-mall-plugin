@@ -1,0 +1,19 @@
+{% for item in props %}
+    {% set propertyValue = __SELF__.variantPropertyValues[item.property.id] %}
+    {% if item.property.id == __SELF__.product.group_by_property_id %}
+        {# Preset the property used to group the variants. #}
+        <input type="hidden"
+               data-mall-property
+               name="props[{{ item.property.hashId }}]"
+               value="{{ propertyValue.hashId }}">
+    {% else %}
+        <div class="mall-product__property mall-form-control">
+            <label for="{{ item.property.hashId }}">{{ item.property.name }}</label>
+            {% if item.property.type == 'color' %}
+                {% partial __SELF__ ~ '::properties/color' item=item propertyValue=propertyValue %}
+            {% else %}
+                {% partial __SELF__ ~ '::properties/default' item=item propertyValue=propertyValue %}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endfor %}

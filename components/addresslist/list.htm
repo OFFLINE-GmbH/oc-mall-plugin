@@ -1,0 +1,29 @@
+<table class="mall-table mall-address-list__table">
+    {% for address in __SELF__.addresses %}
+        <tr>
+            <td>
+                {% if address.company %}
+                    {{ address.company }}<br/>
+                {% endif %}
+                {{ address.name }}<br/>
+            </td>
+            <td>
+                {{ address.lines | nl2br }}<br/>
+                {{ address.zip }} {{ address.city }}<br/>
+                {% if address.state_id %}
+                    {{ address.state.name }}<br/>
+                {% endif %}
+                {{ address.country.name }}
+            </td>
+            <td class="mall-address-list__table-actions">
+                <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: 'account'}) }}">{{ 'mall.edit' | _ }}</a>
+                {% if __SELF__.addresses.count > 1 %}
+                    <a href="javascript:;" data-request="onDelete" data-request-data="id: '{{ address.hashId }}'"
+                       data-request-confirm="{{ 'mall.are_you_sure' | _ }}">
+                        {{ 'mall.delete' | _ }}
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

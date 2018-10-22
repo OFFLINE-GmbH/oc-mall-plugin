@@ -1,0 +1,17 @@
+<div class="mall-filter mall-filter--range">
+
+    <div class="mall-slider-handles"
+         data-start="{{ filter[slug].minValue | default(min) }}"
+         data-end="{{ filter[slug].maxValue | default(max) }}"
+         data-min="{{ min }}"
+         data-max="{{ max }}"
+         data-target="{{ slug }}"
+         style="width: 100%"></div>
+
+    <input data-min="{{ slug }}"
+           type="hidden" name="filter[{{ slug }}][min]"
+           value="{{ filter[slug].minValue }}">
+    <input data-max="{{ slug }}"
+           type="hidden" name="filter[{{ slug }}][max]"
+           value="{{ filter[slug].maxValue }}">
+</div>

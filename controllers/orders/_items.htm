@@ -1,0 +1,135 @@
+<table class="table data">
+    <thead>
+    <tr>
+        <th>
+            <span>
+                <?= e(trans('offline.mall::lang.product.name')) ?>
+            </span>
+        </th>
+        <th class="text-right">
+            <span>
+                <?= e(trans('offline.mall::lang.order.quantity')) ?>
+            </span>
+        </th>
+        <th class="text-right">
+            <span>
+                <?= e(trans('offline.mall::lang.product.price')) ?>
+            </span>
+        </th>
+        <th class="text-right">
+            <span>
+                <?= e(trans('offline.mall::lang.order.total')) ?>
+            </span>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($order['products'] as $item): ?>
+    <tr>
+        <td>
+            <a href="<?= e(URL::to('/backend/offline/mall/products/update/' . $item['product_id'])); ?>">
+                <?= e($item['name']) ?><br/>
+            </a>
+            <?= $item['variant_name'] ?>
+            <div class="attributes">
+                <?php if($item['custom_field_values']): ?>
+                <?php foreach($item['custom_field_values'] as $field): ?>
+                <?= e($field['custom_field']['name']) ?>: <?= $field['display_value'] ?><br/>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </td>
+        <td class="text-right"><?= e($item['quantity']) ?></td>
+        <td class="text-right"><?= e($item->pricePostTaxes()) ?></td>
+        <td class="text-right"><?= e($item->totalPostTaxes()) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <tr class="orderfooter separator separator-bottom">
+        <td colspan="3">
+            <span>
+                <?= e(trans('offline.mall::lang.order.subtotal')) ?>
+            </span>
+        </td>
+        <td class="text-right">
+            <span>
+                <?= e($order->totalProductPostTaxes()) ?>
+            </span>
+        </td>
+    </tr>
+    <?php if($order['discounts']): ?>
+    <?php foreach ($order['discounts'] as $entry): ?>
+    <tr class="orderdiscount">
+        <td colspan="3">
+            <span>
+                <?= e(trans('offline.mall::lang.common.discount')) ?>:
+                <?= e($entry['discount']['name']) ?>
+            </span>
+        </td>
+        <td class="text-right">
+            <span>
+                <?= e($entry['savings_formatted']) ?>
+            </span>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    <?php if ($order['shipping']): ?>
+    <tr class="orderfooter separator">
+        <td colspan="3">
+            <span>
+                <?= e(trans('offline.mall::lang.common.shipping')) ?>:
+                <?= e($order['shipping']['method']['name']) ?>
+                <?php if($order['shipping']['appliedDiscount']): ?>
+                    (<?= e($order['shipping']['appliedDiscount']['discount']['name']) ?>,
+                     <?= e($money->format($order['shipping']['appliedDiscount']['savings'])) ?>)
+                <?php endif; ?>
+            </span>
+        </td>
+        <td class="text-right">
+            <span>
+                <?= e($order['shipping']['method']['price_formatted']) ?>
+            </span>
+        </td>
+    </tr>
+    <?php endif; ?>
+    <?php if ($order['payment']): ?>
+    <tr class="orderfooter separator">
+        <td colspan="3">
+            <span>
+                <?= e(trans('offline.mall::lang.common.payment')) ?>:
+                <?= e($order['payment']['method']['name']) ?>
+            </span>
+        </td>
+        <td class="text-right">
+            <span>
+                <?= e($money->format($order['payment']['total'])) ?>
+            </span>
+        </td>
+    </tr>
+    <?php endif; ?>
+    <tr class="orderfooter-bottomline">
+        <td colspan="3">
+            <span>
+                <?= e(trans('offline.mall::lang.order.grand_total')) ?>
+            </span>
+        </td>
+        <td class="text-right"><span><?= e($order->totalPostTaxes()) ?></span></td>
+    </tr>
+    <?php if ($order['taxes']): ?>
+    <?php foreach ($order['taxes'] as $tax): ?>
+    <tr class="orderfooter orderfooter-taxes separator">
+        <td colspan="3">
+            <span>
+                <?= e($tax['tax']['name']) ?> (<?= e($tax['tax']['percentage']) ?> %)
+            </span>
+        </td>
+        <td class="text-right">
+            <span>
+                <?= e($tax['total_formatted']); ?>
+            </span>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    </tbody>
+</table>

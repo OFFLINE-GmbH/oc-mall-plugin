@@ -1,0 +1,51 @@
+fields:
+    name:
+        label: 'offline.mall::lang.custom_field_options.option'
+        oc.commentPosition: ''
+        span: left
+        type: text
+    prices:
+        label: 'offline.mall::lang.product.price'
+        oc.commentPosition: ''
+        span: right
+        type: mall.price
+    image:
+        label: 'offline.mall::lang.common.image'
+        oc.commentPosition: ''
+        mode: image
+        imageWidth: '150'
+        imageHeight: '150'
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        type: fileupload
+        trigger:
+            action: show
+            field: field_type
+            condition: value[image]
+    values:
+        label: 'offline.mall::lang.product.property_value'
+        oc.commentPosition: ''
+        prompt: 'Add new item'
+        span: full
+        type: repeater
+        trigger:
+            action: show
+            field: field_type
+            condition: value[color]
+        form:
+            fields:
+                color:
+                    label: 'offline.mall::lang.common.color'
+                    oc.commentPosition: ''
+                    span: full
+                    type: colorpicker
+
+
+    field_type:
+        oc.commentPosition: ''
+        span: right
+        type: text
+        cssClass: 'hidden'

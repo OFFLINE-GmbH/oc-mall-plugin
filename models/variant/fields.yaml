@@ -1,0 +1,80 @@
+fields:
+    published:
+        label: 'offline.mall::lang.product.published'
+        span: auto
+        type: switch
+        comment: 'offline.mall::lang.product.published_comment'
+        default: true
+    allow_out_of_stock_purchases:
+        label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
+        span: auto
+        type: switch
+        comment: 'offline.mall::lang.product.allow_out_of_stock_purchases_comment'
+    name:
+        label: 'offline.mall::lang.common.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    user_defined_id:
+        label: 'offline.mall::lang.product.user_defined_id'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    stock:
+        label: 'offline.mall::lang.product.stock'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+    _prices:
+        label: 'offline.mall::lang.product.price'
+        oc.commentPosition: ''
+        span: auto
+        type: mall.price
+tabs:
+    fields:
+        _properties:
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: full
+            type: mall.propertyfields
+            variantPropertiesOnly: true
+            fieldPrefix: VariantPropertyValues
+            tab: 'offline.mall::lang.common.properties'
+        downloads:
+            label: 'offline.mall::lang.common.downloads'
+            mode: file
+            prompt: 'offline.mall::lang.common.select_file'
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: right
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        image_set_id:
+            label: 'offline.mall::lang.common.images'
+            type: dropdown
+            span: left
+            tab: 'offline.mall::lang.common.attachments'
+        temp_images:
+            type: fileupload
+            mode: image
+            prompt: 'offline.mall::lang.common.select_image'
+            tab: 'offline.mall::lang.common.attachments'
+            span: left
+            imageWidth: '120'
+            imageHeight: '120'
+            useCaption: true
+            trigger:
+                action: show
+                field: image_set_id
+                condition: value[]
+            thumbOptions:
+                mode: crop
+                extension: auto
+        weight:
+            label: 'offline.mall::lang.product.weight'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'

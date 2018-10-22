@@ -1,0 +1,28 @@
+{% set type = type|default(form_value('type')) %}
+{% set countryId = form_value(type ~ '_country_id') %}
+{% set stateId = form_value(type ~ '_state_id') %}
+
+{% set id = type ~ '_country_id' %}
+<div class="mall-form-control">
+    <label for="{{ id }}">{{ 'mall.form.country' | _ }}</label>
+    {{ form_select_country(id, countryId, {
+        id: id,
+        emptyOption: ('mall.select' | _ ),
+        'data-request': 'onInit',
+        'data-request-data' : ("type: '" ~ type ~ "'"),
+        'data-request-update': {
+            (__SELF__ ~ '::countrystate'): ('#countryState_' ~ type)
+        }
+    }) }}
+    <div data-validate-for="{{ id }}"></div>
+</div>
+
+{% set id = type ~ '_state_id' %}
+<div class="mall-form-control">
+    <label for="{{ id }}">{{ 'mall.form.state' | _ }}</label>
+    {{ form_select_state(id, countryId, stateId, {
+        id: id,
+        emptyOption: ('mall.select' | _ ),
+    }) }}
+    <div data-validate-for="{{ id }}"></div>
+</div>

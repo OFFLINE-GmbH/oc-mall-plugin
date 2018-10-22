@@ -1,0 +1,16 @@
+subject = "The payment for your order has failed"
+description = "Sent when a payment for an order fails"
+==
+
+Hi {{ order.customer.firstname }}
+
+We just wanted to let you know that the payment for your order **#{{ order.order_number }}**
+has failed.
+
+Please login to your account and try again to pay the order.
+
+If you continue to experience problems with payments please contact us.
+
+{% partial 'button' url=app_url type='primary' body %}
+    Check your order online
+{% endpartial %}

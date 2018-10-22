@@ -1,0 +1,34 @@
+<div class="control-popup modal fade" id="content-invoice-number" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form class="form-elements" role="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        <?= e(trans('offline.mall::lang.order.update_invoice_number')) ?>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><?= e(trans('offline.mall::lang.order.invoice_number')) ?></label>
+                        <input type="text" name="invoiceNumber" value="<?= e($order->invoice_number) ?>" class="form-control"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal">
+                        <?= e(trans('offline.mall::lang.order.modal.cancel')) ?>
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            data-attach-loading
+                            data-request="onUpdateInvoiceNumber"
+                            data-request-data="id: <?= e($order['id']) ?>"
+                            data-request-success="$('#content-invoice-number').modal('hide');">
+                        <?= e(trans('offline.mall::lang.order.modal.update')) ?>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

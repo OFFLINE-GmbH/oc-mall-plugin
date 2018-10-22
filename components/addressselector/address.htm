@@ -1,0 +1,19 @@
+<div class="mall-address">
+    <p>
+        {% if address.company %}
+            {{ address.company }}<br/>
+        {% endif %}
+        {{ address.name }}<br/>
+        {{ address.lines }} <br/>
+        {{ address.zip }} {{ address.city }}<br/>
+        {% if address.state_id %}
+            {{ address.state.name }} <br/>
+        {% endif %}
+        {{ address.country.name }}
+    </p>
+    <p class="mall-address__actions">
+        <a href="javascript:;" class="js-change-address" data-type="{{ __SELF__.type }}">
+            {{ 'mall.change' | _ }}
+        </a>
+    </p>
+</div>

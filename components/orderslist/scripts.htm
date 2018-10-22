@@ -1,0 +1,14 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            $('.mall-orders-list__order').on('click', function (e) {
+                if (e.target.tagName.toLowerCase() === 'a') {
+                    return;
+                }
+
+                $(this).next('tr').toggle();
+                $(this).toggleClass('is-open')
+            });
+        });
+    </script>
+{% endput %}

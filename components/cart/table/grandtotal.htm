@@ -1,0 +1,9 @@
+<tr class="mall-cart__grand-total">
+    <td></td>
+    <td colspan="3">
+        {{ 'mall.grand_total' | _ }}
+    </td>
+    <td class="text-right">
+        {{ cart.totals.totalPostTaxes | money }}
+    </td>
+</tr>

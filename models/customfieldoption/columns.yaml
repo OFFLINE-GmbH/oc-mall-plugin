@@ -1,0 +1,10 @@
+columns:
+    custom_field_id:
+        label: custom_field_id
+        type: number
+    name:
+        label: 'offline.mall::lang.custom_field_options.option'
+        type: text
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: mall.price

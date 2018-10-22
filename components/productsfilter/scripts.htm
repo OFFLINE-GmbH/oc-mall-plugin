@@ -1,0 +1,83 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $propertiesForm = $('.mall-products-filter');
+            var $body = $('body');
+
+            $body.on('click', '.js-mall-filter', function () {
+                var $input = $(this).find('input');
+                $(this).toggleClass('mall-filter__option--selected')
+                $input.prop('checked', ! $input.prop('checked'));
+                $propertiesForm.trigger('submit');
+            });
+            $body.on('click', '.js-mall-clear-filter', function () {
+                var $parent = $(this).closest('.mall-property');
+                if ($parent.length < 1) {
+                    $parent = $(this).closest('.mall-property-group');
+                }
+
+                $parent.find(':input:not([type="checkbox"])').val('');
+                $parent.find('input[type="checkbox"]').prop('checked', false);
+                $parent.find('.mall-filter__option--selected').removeClass('mall-filter__option--selected')
+
+                var slider = $parent.find('.mall-slider-handles')[0]
+                if (slider) {
+                    slider.noUiSlider.updateOptions({
+                        start: [slider.dataset.min, slider.dataset.max]
+                    });
+                }
+                $propertiesForm.trigger('submit');
+            });
+            $body.on('change', '.js-mall-select-filter', function () {
+                $propertiesForm.trigger('submit');
+            });
+
+            $propertiesForm.on('submit', function (e) {
+                e.preventDefault();
+
+                $.publish('mall.products.load.start')
+                $(this).request('{{ __SELF__ }}::onSetFilter', {
+                    loading: $.oc.stripeLoadIndicator,
+                    complete: function (response) {
+                        $.oc.stripeLoadIndicator.hide()
+                        if (response.responseJSON.hasOwnProperty('queryString')) {
+                            history.replaceState(null, '', '?' + response.responseJSON.queryString)
+                        }
+                        $('[data-filter]').hide()
+                        if (response.responseJSON.hasOwnProperty('filter')) {
+                            for (var filter of Object.keys(response.responseJSON.filter)) {
+                                $('[data-filter="' + filter + '"]').show();
+                            }
+                        }
+                        $.publish('mall.products.load.complete')
+                    },
+                    error: function () {
+                        $.oc.stripeLoadIndicator.hide()
+                        $.oc.flashMsg({text: 'Fehler beim Ausführen der Suche.', class: 'error'})
+                        $.publish('mall.products.load.error')
+                    }
+                });
+            });
+
+            $('.mall-slider-handles').each(function () {
+                var el = this;
+                noUiSlider.create(el, {
+                    start: [el.dataset.start, el.dataset.end],
+                    connect: true,
+                    range: {
+                        min: [parseFloat(el.dataset.min)],
+                        max: [parseFloat(el.dataset.max)]
+                    },
+                    pips: {
+                        mode: 'range',
+                        density: 20
+                    }
+                }).on('change', function (values) {
+                    $('[data-min="' + el.dataset.target + '"]').val(values[0])
+                    $('[data-max="' + el.dataset.target + '"]').val(values[1])
+                    $propertiesForm.trigger('submit');
+                });
+            })
+        })
+    </script>
+{% endput %}

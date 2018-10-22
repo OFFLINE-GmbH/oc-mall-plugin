@@ -1,0 +1,12 @@
+<p>
+    {% if address.company %}
+        {{ address.company }}<br />
+    {% endif %}
+    {{ address.name }}<br />
+    {{ address.lines | nl2br }}<br />
+    {{ address.zip }} {{ address.city }}<br />
+    {% if address.state_id %}
+        {{ address.state.name }}<br />
+    {% endif %}
+    {{ address.country.name }}
+</p>

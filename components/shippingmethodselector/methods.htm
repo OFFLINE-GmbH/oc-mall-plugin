@@ -1,0 +1,8 @@
+<p>{{ 'mall.shipping_method.choose' | _ }}</p>
+<form data-request-validate data-request="{{ __SELF__ }}::onSubmit">
+    <div class="mall-shipping-method">
+        {% for method in __SELF__.methods %}
+            {% partial __SELF__ ~ '::method' method=method %}
+        {% endfor %}
+    </div>
+</form>

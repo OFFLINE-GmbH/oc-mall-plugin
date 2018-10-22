@@ -1,0 +1,5 @@
+title: PriceCategories
+modelClass: OFFLINE\Mall\Models\PriceCategory
+nameFrom: name
+toolbar:
+    buttons: reorder_toolbar

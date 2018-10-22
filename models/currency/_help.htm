@@ -1,0 +1,52 @@
+<div class="callout fade in callout-info">
+    <div class="header">
+        <i class="icon-info"></i>
+        <p>
+            Currency format help
+        </p>
+    </div>
+    <div class="content">
+        <p>
+            The default currency format is<br/>
+            <code>{{ currency.code }} {{ price|number_format(currency.decimals, '.', '\'') }}</code>
+        </p>
+        <p>
+            The following variables are available:
+        </p>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Example value</th>
+            </tr>
+            </thead>
+            <tr>
+                <td><code>price</code></td>
+                <td>The full price of the product as float</td>
+                <td>1500.40</td>
+            </tr>
+            <tr>
+                <td><code>integers</code></td>
+                <td>The price without decimals</td>
+                <td>1500</td>
+            </tr>
+            <tr>
+                <td><code>decimals</code></td>
+                <td>Only the decimals of the price</td>
+                <td>40</td>
+            </tr>
+            <tr>
+                <td><code>currency</code></td>
+                <td>The currency data you specified</td>
+                <td>{code: "EUR", rate: 1, symbol: "€", decimals: 2}</td>
+            </tr>
+            <tr>
+                <td><code>product</code></td>
+                <td>The product model this price is from.</td>
+                <td>A full model instance</td>
+            </tr>
+        </table>
+        <p>Visit <a href="https://github.com/OFFLINE-GmbH/oc-snipcartshop-plugin/#custom-currency-format" target="_blank">this plugin's documentation</a> for more examples.</p>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+columns:
+    invoice_number:
+        label: 'offline.mall::lang.order.invoice_number'
+        type: number
+        searchable: true
+        sortable: true
+    order_number:
+        label: 'offline.mall::lang.order.order_number'
+        type: text
+        searchable: true
+        sortable: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        sortable: true
+    order_state:
+        label: 'offline.mall::lang.order.status'
+        type: partial
+        path: $/offline/mall/models/order/_order_state.htm
+        sortable: true
+        searchable: true
+    payment_state:
+        label: 'offline.mall::lang.order.payment_status'
+        type: partial
+        path: $/offline/mall/models/order/_payment_state.htm
+        sortable: true
+        searchable: true
+    shipped:
+        label: 'offline.mall::lang.order.shipped'
+        type: partial
+        path: $/offline/mall/models/order/_shipped.htm
+        sortable: true
+        searchable: true
+    customer:
+        label: 'offline.mall::lang.order.customer'
+        path: $/offline/mall/models/order/_customer.htm
+        relation: customer
+        type: partial
+        searchable: true
+        sortable: true
+    total_post_taxes:
+        label: 'offline.mall::lang.order.grand_total'
+        path: $/offline/mall/models/order/_total.htm
+        type: partial
+        align: center
+        sortable: true

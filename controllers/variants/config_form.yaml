@@ -1,0 +1,11 @@
+name: 'offline.mall::lang.common.variants'
+modelClass: OFFLINE\Mall\Models\Variant
+form: $/offline/mall/models/variant/fields.yaml
+defaultRedirect: offline/mall/variants
+create:
+    redirect: 'offline/mall/variants/update/:id'
+    redirectClose: offline/mall/variants
+update:
+    redirect: offline/mall/variants
+    redirectClose: offline/mall/variants
+preview: {  }

@@ -1,0 +1,8 @@
+{% if cart.products.count < 1 %}
+    {% partial __SELF__ ~ '::empty' %}
+{% else %}
+    {% partial __SELF__ ~ '::table/base' %}
+    {% if __SELF__.showDiscountApplier %}
+        {% partial __SELF__ ~ '::discountapplier' %}
+    {% endif %}
+{% endif %}

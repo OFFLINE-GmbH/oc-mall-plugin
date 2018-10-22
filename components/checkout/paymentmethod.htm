@@ -1,0 +1,13 @@
+<div class="mall-cart-summary__method-logo">
+    {% if __SELF__.cart.payment_method.logo %}
+        <img src="{{ __SELF__.cart.payment_method.logo.thumb(150, 'auto') }}" alt=""/>
+    {% else %}
+        {{ __SELF__.cart.payment_method.name }}
+    {% endif %}
+</div>
+
+<p class="mall-cart-summary__action">
+    <a href="{{ __SELF__.stepUrl('payment', {via: 'confirm'}) }}">
+        {{ 'mall.change' | _ }}
+    </a>
+</p>

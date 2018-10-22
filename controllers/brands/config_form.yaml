@@ -1,0 +1,13 @@
+name: Brands
+modelClass: OFFLINE\Mall\Models\Brand
+form: $/offline/mall/models/brand/fields.yaml
+defaultRedirect: offline/mall/brands
+create:
+    title: 'offline.mall::lang.titles.brands.create'
+    redirect: 'offline/mall/brands/update/:id'
+    redirectClose: offline/mall/brands
+update:
+    title: 'offline.mall::lang.titles.brands.edit'
+    redirect: offline/mall/brands
+    redirectClose: offline/mall/brands
+preview: {  }

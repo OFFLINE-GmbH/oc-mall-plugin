@@ -1,0 +1,10 @@
+<!-- Individual values -->
+<?php foreach ($currencies as $currency): ?>
+<input
+        type="hidden"
+        name="<?= $field->getName('MallPrice['.$currency->id.']') ?>"
+        value="<?= e($this->getPriceValue($currency->id)) ?>"
+        data-currency-value="<?= $currency->code ?>"
+<?= $field->getAttributes() ?>
+/>
+<?php endforeach ?>

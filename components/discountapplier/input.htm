@@ -1,0 +1,12 @@
+<form data-request="onApplyDiscount"
+      data-request-validate
+      data-request-success="$.publish('mall.discount.applied')">
+    <div class="mall-form-control">
+        <label for="code">{{ 'mall.discount.label' | _ }}</label>
+        <input name="code" type="text" id="code" placeholder="{{ 'mall.discount.placeholder' | _ }}">
+        <div data-validate-for="code"></div>
+    </div>
+    <div>
+        <button type="submit" class="mall-btn">{{ 'mall.discount.apply' | _ }}</button>
+    </div>
+</form>

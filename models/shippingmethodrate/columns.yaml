@@ -1,0 +1,17 @@
+columns:
+    from_weight:
+        label: 'offline.mall::lang.shipping_method_rates.from_weight'
+        type: number
+        searchable: true
+        sortable: true
+    to_weight:
+        label: 'offline.mall::lang.shipping_method_rates.to_weight'
+        type: number
+        searchable: true
+        sortable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: partial
+        path: $/offline/mall/models/shippingmethodrate/_price.htm
+        searchable: true
+        sortable: true

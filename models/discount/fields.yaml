@@ -1,0 +1,118 @@
+fields:
+    name:
+        label: 'offline.mall::lang.discounts.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    expires:
+        label: 'offline.mall::lang.discounts.expires'
+        oc.commentPosition: ''
+        mode: date
+        span: auto
+        type: datepicker
+    section_type:
+        label: 'offline.mall::lang.discounts.section_type'
+        span: left
+        type: section
+    section_trigger:
+        label: 'offline.mall::lang.discounts.section_trigger'
+        span: auto
+        type: section
+    type:
+        label: 'offline.mall::lang.discounts.type'
+        oc.commentPosition: ''
+        span: left
+        type: dropdown
+    trigger:
+        label: 'offline.mall::lang.discounts.trigger'
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+    _amount:
+        label: 'offline.mall::lang.discounts.amount'
+        oc.commentPosition: ''
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[fixed_amount]
+        type: mall.price
+    _total_to_reach:
+        label: 'offline.mall::lang.discounts.total_to_reach'
+        oc.commentPosition: ''
+        span: auto
+        trigger:
+            action: show
+            field: trigger
+            condition: value[total]
+        type: mall.price
+    rate:
+        label: 'offline.mall::lang.discounts.rate'
+        oc.commentPosition: ''
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[rate]
+        type: number
+    max_number_of_usages:
+        label: 'offline.mall::lang.discounts.max_number_of_usages'
+        oc.commentPosition: ''
+        span: left
+        type: text
+    code:
+        label: 'offline.mall::lang.discounts.code'
+        oc.commentPosition: ''
+        span: auto
+        trigger:
+            action: show
+            field: trigger
+            condition: value[code]
+        type: text
+    _alternate_price:
+        label: 'offline.mall::lang.discounts.alternate_price'
+        oc.commentPosition: ''
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[alternate_price]
+        type: mall.price
+    shipping_description:
+        label: 'offline.mall::lang.discounts.shipping_description'
+        oc.commentPosition: ''
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[shipping]
+        type: text
+    product_id:
+        label: 'offline.mall::lang.common.product'
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: dropdown
+        trigger:
+            action: show
+            field: trigger
+            condition: value[product]
+    shipping_guaranteed_days_to_delivery:
+        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
+        oc.commentPosition: ''
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[shipping]
+        type: number
+    _shipping_price:
+        label: 'offline.mall::lang.discounts.shipping_price'
+        oc.commentPosition: ''
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[shipping]
+        type: mall.price

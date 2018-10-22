@@ -1,0 +1,10 @@
+<label style="display: block"><?= e(trans('offline.mall::lang.product.price_table_modal.label')) ?></label>
+<a href="javascript:;"
+   class="btn btn-default oc-icon-tag"
+   data-control="popup"
+   data-size="huge"
+   data-extra-data="id: <?= $this->params[0] ?>"
+   data-handler="onLoadPriceTable"
+>
+    <?= e(trans('offline.mall::lang.product.price_table_modal.trigger')) ?>
+</a>

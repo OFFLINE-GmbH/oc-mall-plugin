@@ -1,0 +1,7 @@
+<?php
+if($value) {
+    echo $value->map(function($item){
+        return $item->custom_field->name . ': ' . $item->name;
+    })->implode(', ');
+}
+?>

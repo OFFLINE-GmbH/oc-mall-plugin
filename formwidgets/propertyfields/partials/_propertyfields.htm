@@ -1,0 +1,33 @@
+<?php if ($this->previewMode): ?>
+    <div class="form-control">
+        <?= json_encode($values) ?>
+    </div>
+<?php else: ?>
+    <?php if($groups): ?>
+        <?php foreach($groups as $group): ?>
+            <?php if(count($group->properties) < 1) continue; ?>
+                <div class="form-group span-full">
+                    <div class="field-section">
+                        <h4><?= e($group->name) ?></h4>
+
+                        <?php if ($group->description): ?>
+                            <p class="help-block"><?= e($group->description) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php
+                if($group->properties):
+                    $i = 0;
+                    foreach($group->properties as $field):
+                        $i++;
+                        $value = $values->where('property_id', $field->id)->first();
+                        $currentValue = $value ? $value->value : '';
+                    ?>
+                        <div class="form-group span-<?= $i % 2 ? 'left' : 'right' ?>">
+                            <?= $this->createFormWidget($field, $currentValue); ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif ?>
+            <?php endforeach; ?>
+        <?php endif ?>
+<?php endif ?>

@@ -1,0 +1,42 @@
+{% set url = (productPage | page({slug: product.data.slug, variant: product.variant.hashId})) %}
+<tr class="mall-cart__product">
+    <td>
+        <a href="{{ url }}">
+            <img src="{{ product.data.image.thumb(100, auto) }}" alt=""/>
+        </a>
+    </td>
+    <td>
+        <a href="{{ url }}">
+            {{ product.data.name }}
+        </a>
+        {% if product.variant %}
+            <br/>
+            <span class="text-muted">
+                {{ product.variant.properties_description | raw }}
+            </span>
+        {% endif %}
+        {% if product.custom_field_values %}
+            <br/>
+            <span class="text-muted">
+                {{ product.custom_field_value_description | raw }}
+            </span>
+        {% endif %}
+        <div>
+            <a href="javascript:;"
+               class="js-mall-remove-product"
+               data-id="{{ product.hashId }}"
+            >
+                {{ 'mall.remove' | _ }}
+            </a>
+        </div>
+    </td>
+    <td class="text-right">
+        {% partial __SELF__ ~ '::table/quantitydropdown' product=product %}
+    </td>
+    <td class="text-right">
+        {{ product.price() | raw }}
+    </td>
+    <td class="text-right">
+        {{ product.totalPostTaxes | money }}
+    </td>
+</tr>

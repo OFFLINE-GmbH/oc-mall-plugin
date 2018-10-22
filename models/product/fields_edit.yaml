@@ -1,0 +1,230 @@
+fields:
+    name:
+        label: 'offline.mall::lang.product.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        placeholder: 'offline.mall::lang.product.name'
+    slug:
+        label: 'offline.mall::lang.common.slug'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        placeholder: 'offline.mall::lang.common.slug'
+        preset:
+            field: name
+            type: slug
+tabs:
+    fields:
+        published:
+            label: 'offline.mall::lang.product.published'
+            span: left
+            type: switch
+            comment: 'offline.mall::lang.product.published_comment'
+            tab: 'offline.mall::lang.product.general'
+        allow_out_of_stock_purchases:
+            label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
+            span: right
+            type: switch
+            comment: 'offline.mall::lang.product.allow_out_of_stock_purchases_comment'
+            tab: 'offline.mall::lang.product.general'
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[variant]'
+        category:
+            label: 'offline.mall::lang.common.category'
+            oc.commentPosition: ''
+            nameFrom: name
+            descriptionFrom: description
+            span: auto
+            type: relation
+            tab: 'offline.mall::lang.product.general'
+        inventory_management_method:
+            label: 'offline.mall::lang.product.inventory_management_method'
+            oc.commentPosition: ''
+            options:
+                single: 'offline.mall::lang.variant.method.single'
+                variant: 'offline.mall::lang.variant.method.variant'
+            span: auto
+            type: dropdown
+            tab: 'offline.mall::lang.product.general'
+        group_by_property_id:
+            label: 'offline.mall::lang.product.group_by_property'
+            oc.commentPosition: ''
+            span: right
+            trigger:
+                action: show
+                field: inventory_management_method
+                condition: 'value[variant]'
+            type: dropdown
+            tab: 'offline.mall::lang.product.general'
+            dependsOn: category
+        _table_trigger:
+            oc.commentPosition: ''
+            span: auto
+            type: partial
+            path: price_table_trigger
+            tab: 'offline.mall::lang.product.general'
+        variants_section:
+            label: 'offline.mall::lang.common.variants'
+            span: full
+            trigger:
+                action: show
+                field: inventory_management_method
+                condition: 'value[variant]'
+            type: section
+            comment: 'offline.mall::lang.products.variants_comment'
+            tab: 'offline.mall::lang.product.general'
+        variants:
+            span: full
+            path: variants
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[single]'
+            type: partial
+            tab: 'offline.mall::lang.product.general'
+        description_short:
+            label: 'offline.mall::lang.product.description_short'
+            oc.commentPosition: ''
+            span: left
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        user_defined_id:
+            label: 'offline.mall::lang.product.user_defined_id'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: giant
+            span: left
+            type: richeditor
+            tab: 'offline.mall::lang.product.description'
+        brand:
+            span: auto
+            path: brand
+            type: partial
+            tab: 'offline.mall::lang.product.description'
+        _properties:
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: full
+            type: mall.propertyfields
+            tab: 'offline.mall::lang.common.properties'
+            dependsOn: category
+        price_includes_tax:
+            label: 'offline.mall::lang.product.price_includes_tax'
+            span: auto
+            default: 1
+            type: switch
+            comment: 'offline.mall::lang.product.price_includes_tax_comment'
+            tab: 'offline.mall::lang.common.taxes'
+        taxes:
+            label: 'offline.mall::lang.common.taxes'
+            oc.commentPosition: ''
+            span: left
+            type: partial
+            path: taxes
+            tab: 'offline.mall::lang.common.taxes'
+        image_sets:
+            label: 'offline.mall::lang.common.images'
+            oc.commentPosition: ''
+            span: left
+            type: partial
+            path: image_sets
+            tab: 'offline.mall::lang.common.attachments'
+        downloads:
+            label: 'offline.mall::lang.common.downloads'
+            oc.commentPosition: ''
+            mode: file
+            prompt: 'offline.mall::lang.common.select_file'
+            useCaption: true
+            span: right
+            type: fileupload
+            tab: 'offline.mall::lang.common.attachments'
+        links:
+            label: 'offline.mall::lang.product.links'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: right
+            type: repeater
+            tab: 'offline.mall::lang.common.attachments'
+            form:
+                fields:
+                    title:
+                        label: 'offline.mall::lang.product.link_title'
+                        oc.commentPosition: ''
+                        span: left
+                        type: text
+                        required: true
+                    url:
+                        label: 'offline.mall::lang.product.link_target'
+                        oc.commentPosition: ''
+                        span: right
+                        type: text
+                        required: true
+        weight:
+            label: 'offline.mall::lang.product.weight'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        stackable:
+            label: 'offline.mall::lang.product.stackable'
+            span: auto
+            type: switch
+            comment: 'offline.mall::lang.product.stackable_comment'
+            tab: 'offline.mall::lang.common.cart'
+        custom_fields:
+            label: 'offline.mall::lang.common.custom_fields'
+            oc.commentPosition: ''
+            span: right
+            type: partial
+            path: custom_fields
+            tab: 'offline.mall::lang.common.cart'
+        quantity_default:
+            label: 'offline.mall::lang.product.quantity_default'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.cart'
+        quantity_min:
+            label: 'offline.mall::lang.product.quantity_min'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.cart'
+        quantity_max:
+            label: 'offline.mall::lang.product.quantity_max'
+            oc.commentPosition: ''
+            span: left
+            type: number
+            tab: 'offline.mall::lang.common.cart'
+        accessories:
+            label: 'offline.mall::lang.common.accessories'
+            span: full
+            type: partial
+            path: accessories
+            tab: 'offline.mall::lang.common.accessories'
+        meta_title:
+            label: 'offline.mall::lang.common.meta_title'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.seo'
+        meta_keywords:
+            label: 'offline.mall::lang.common.meta_keywords'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.seo'
+        meta_description:
+            label: 'offline.mall::lang.common.meta_description'
+            size: large
+            oc.commentPosition: ''
+            span: left
+            type: textarea
+            tab: 'offline.mall::lang.common.seo'

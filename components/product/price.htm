@@ -1,0 +1,8 @@
+{% if item.oldPrice().integer %}
+    <div class="mall-product__old-price">
+        {{ item.oldPrice() | raw }}
+    </div>
+{% endif %}
+<div class="mall-product__current-price">
+    {{ item.price() | raw }}
+</div>

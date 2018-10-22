@@ -1,0 +1,15 @@
+name: 'offline.mall::lang.common.product'
+modelClass: OFFLINE\Mall\Models\Product
+form: $/offline/mall/models/product/fields_edit.yaml
+defaultRedirect: offline/mall/products
+create:
+    title: 'offline.mall::lang.titles.products.create'
+    redirect: 'offline/mall/products/update/:id'
+    redirectClose: offline/mall/products
+    form: $/offline/mall/models/product/fields_create.yaml
+update:
+    title: 'offline.mall::lang.titles.products.update'
+    redirect: offline/mall/products
+    redirectClose: offline/mall/products
+preview:
+    title: 'offline.mall::lang.titles.products.preview'

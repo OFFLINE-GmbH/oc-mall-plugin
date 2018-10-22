@@ -1,0 +1,75 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    guaranteed_delivery_days:
+        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
+        oc.commentPosition: ''
+        span: auto
+        type: number
+tabs:
+    fields:
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: huge
+            oc.commentPosition: ''
+            span: left
+            type: richeditor
+            tab: 'offline.mall::lang.common.general'
+        price_includes_tax:
+            label: 'offline.mall::lang.product.price_includes_tax'
+            span: auto
+            default: 1
+            type: switch
+            comment: 'offline.mall::lang.product.price_includes_tax_comment'
+            tab: 'offline.mall::lang.common.general'
+        _prices:
+            label: 'offline.mall::lang.product.price'
+            oc.commentPosition: ''
+            span: right
+            type: mall.price
+            tab: 'offline.mall::lang.common.general'
+        taxes:
+            span: right
+            path: $/offline/mall/controllers/shippingmethods/_taxes.htm
+            type: partial
+            tab: 'offline.mall::lang.common.general'
+        logo:
+            label: 'offline.mall::lang.common.logo'
+            oc.commentPosition: ''
+            mode: image
+            imageWidth: '150'
+            useCaption: 0
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: right
+            type: fileupload
+            tab: 'offline.mall::lang.common.general'
+        _available_below_total:
+            label: 'offline.mall::lang.shipping_method.available_below_total'
+            oc.commentPosition: ''
+            span: auto
+            type: mall.price
+            tab: 'offline.mall::lang.common.conditions'
+        _available_above_total:
+            label: 'offline.mall::lang.shipping_method.available_above_total'
+            oc.commentPosition: ''
+            span: auto
+            type: mall.price
+            tab: 'offline.mall::lang.common.conditions'
+        countries:
+            label: 'offline.mall::lang.shipping_method.countries'
+            nameFrom: name
+            descriptionFrom: description
+            span: auto
+            type: relation
+            comment: 'offline.mall::lang.shipping_method.countries_comment'
+            tab: 'offline.mall::lang.common.conditions'
+        rates:
+            span: auto
+            path: $/offline/mall/controllers/shippingmethods/_rates.htm
+            type: partial
+            tab: 'offline.mall::lang.common.conditions'

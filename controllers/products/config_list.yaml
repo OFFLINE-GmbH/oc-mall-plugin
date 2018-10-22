@@ -1,0 +1,18 @@
+title: 'offline.mall::lang.common.products'
+modelClass: OFFLINE\Mall\Models\Product
+list: $/offline/mall/models/product/columns.yaml
+recordUrl: 'offline/mall/products/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+showSorting: 1
+defaultSort:
+    column: name
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+
+filter: config_filter.yaml

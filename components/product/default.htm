@@ -1,0 +1,11 @@
+<form data-request="onAddToCart" data-request-success="$.publish('mall.cart.productAdded')">
+    <div class="mall-product">
+        <div class="mall-product__info">
+            {% partial __SELF__ ~ '::info' %}
+        </div>
+        <div class="mall-product__cart">
+            {% partial __SELF__ ~ '::cart' %}
+        </div>
+    </div>
+</form>
+{% partial __SELF__ ~ '::scripts' %}

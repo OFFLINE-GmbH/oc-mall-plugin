@@ -1,0 +1,66 @@
+fields:
+    links:
+        label: offline.mall::lang.general_settings.links
+        comment: offline.mall::lang.general_settings.links_comment
+        type: section
+
+    product_page:
+        label: offline.mall::lang.general_settings.product_page
+        span: left
+        type: dropdown
+        options: getPageOptions
+        comment: offline.mall::lang.general_settings.product_page_comment
+
+    category_page:
+        label: offline.mall::lang.general_settings.category_page
+        span: right
+        type: dropdown
+        options: getPageOptions
+        comment: offline.mall::lang.general_settings.category_page_comment
+
+    address_page:
+        label: offline.mall::lang.general_settings.address_page
+        span: left
+        type: dropdown
+        options: getPageOptions
+        comment: offline.mall::lang.general_settings.address_page_comment
+
+    checkout_page:
+        label: offline.mall::lang.general_settings.checkout_page
+        span: right
+        type: dropdown
+        options: getPageOptions
+        comment: offline.mall::lang.general_settings.checkout_page_comment
+
+    account_page:
+        label: offline.mall::lang.general_settings.account_page
+        span: left
+        type: dropdown
+        options: getPageOptions
+        comment: offline.mall::lang.general_settings.account_page_comment
+
+    cart_page:
+        label: offline.mall::lang.general_settings.cart_page
+        span: right
+        type: dropdown
+        options: getPageOptions
+        comment: offline.mall::lang.general_settings.cart_page_comment
+
+    customizations:
+        label: offline.mall::lang.general_settings.customizations
+        comment: offline.mall::lang.general_settings.customizations_comment
+        type: section
+
+    redirect_to_cart:
+        label: offline.mall::lang.general_settings.redirect_to_cart
+        span: left
+        type: switch
+        default: true
+        comment: offline.mall::lang.general_settings.redirect_to_cart_comment
+
+    order_start:
+        label: offline.mall::lang.general_settings.order_number_start
+        comment: offline.mall::lang.general_settings.order_number_start_comment
+        type: text
+        span: right
+        default: 1

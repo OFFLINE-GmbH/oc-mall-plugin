@@ -1,0 +1,4 @@
+<?php $id = uniqid(); ?>
+
+<label for="<?= $id ?>"><?= e($field->name) ?></label>
+<textarea name="<?= e($this->fieldPrefix()) ?>[<?= e($field->id) ?>]" class="form-control" id="<?= $id ?>"><?= e($value) ?></textarea>

@@ -1,0 +1,36 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $body = $('body');
+            var $overlay = $('.mall-overlay');
+
+            $.subscribe('mall.address.update', function () {
+                $.request('{{ __SELF__ }}::onRun', {
+                    update: {'{{ __SELF__ }}::shippingmethod': '.mall-cart-summary__shipping-method > div'},
+                })
+            });
+
+            $body.on('click', '.js-mall-checkout', function (e) {
+                e.preventDefault()
+                $overlay.prependTo($body).show()
+                $.request('{{ __SELF__ }}::onCheckout', {
+                    error: function (jqXHR) {
+                        $overlay.hide();
+                        if (jqXHR.status === 406) {
+                            return this.options.handleValidationMessage(
+                                jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE'],
+                                jqXHR.responseJSON['X_OCTOBER_ERROR_FIELDS']
+                            )
+                        }
+                        this.error(jqXHR)
+                        document.location.href = '{{ __SELF__.accountPage | page }}'
+                    },
+                    handleValidationMessage: function (message, fields) {
+                        alert("There was an error while processing your order: " + message)
+                        document.location.href = '{{ __SELF__.accountPage | page }}'
+                    }
+                })
+            });
+        })
+    </script>
+{% endput %}

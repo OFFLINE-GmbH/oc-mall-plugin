@@ -1,0 +1,9 @@
+<?php if($value): ?>
+<span class="oc-icon-circle text-success">
+    <?= e(trans('offline.mall::lang.product.is_taxable')) ?>
+</span>
+<?php else: ?>
+<span class="oc-icon-circle text-muted">
+    <?= e(trans('offline.mall::lang.product.is_not_taxable')) ?>
+</span>
+<?php endif; ?>
