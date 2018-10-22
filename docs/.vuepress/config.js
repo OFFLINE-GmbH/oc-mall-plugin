@@ -50,9 +50,11 @@ module.exports = {
                 ]
             },
             {
-                title: 'Extending',
+                title: 'Development',
                 children: [
-                    '/extending/payment-providers'
+                    '/development/product-model',
+                    '/development/payment-providers',
+                    '/development/pricing-information'
                 ]
             },
             {
