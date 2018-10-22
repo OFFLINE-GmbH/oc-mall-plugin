@@ -1,7 +1,7 @@
 <div class="mall-products-item">
     <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}">
         <div class="mall-products-item__image">
-            <img src="{{ item.image.thumb('auto', 240) }}" alt="{{ item.name }}"/>
+            {% partial __SELF__ ~ '::image' image=item.image %}
         </div>
         <div class="mall-products-item__info">
             <div class="mall-products-item__info-primary">
