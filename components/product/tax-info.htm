@@ -1,8 +1,8 @@
 {% if item.taxes %}
     {% if item.price_includes_tax %}
-        {{ 'mall.tax.inclusive' | _ }}
+        {{ 'offline.mall::frontend.tax.inclusive' | trans }}
     {% else %}
-        {{ 'mall.tax.exclusive' | _ }}
+        {{ 'offline.mall::frontend.tax.exclusive' | trans }}
     {% endif %}
     {% for tax in item.taxes %}
         {{ tax.name }}

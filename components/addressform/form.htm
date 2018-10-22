@@ -2,34 +2,34 @@
     {% set type = (type ~ '_') %}
 {% endif %}
 <div class="mall-form-control">
-    <label for="{{ type }}company">{{ 'mall.form.company' | _ }}</label>
+    <label for="{{ type }}company">{{ 'offline.mall::frontend.form.company' | trans }}</label>
     <input id="{{ type }}company" type="text"
            value="{{ address.company }}"
-           placeholder="{{ 'mall.form.company_placeholder' | _ }}" name="{{ type }}company">
+           placeholder="{{ 'offline.mall::frontend.form.company_placeholder' | trans }}" name="{{ type }}company">
     <div data-validate-for="{{ type }}company"></div>
 </div>
 <div class="mall-form-control">
-    <label for="{{ type }}address_name">{{ 'mall.form.recipient' | _ }}</label>
+    <label for="{{ type }}address_name">{{ 'offline.mall::frontend.form.recipient' | trans }}</label>
     <input id="{{ type }}address_name" type="text"
            value="{{ address.name }}"
-           placeholder="{{ 'mall.form.recipient_placeholder' | _ }}"
+           placeholder="{{ 'offline.mall::frontend.form.recipient_placeholder' | trans }}"
            name="{{ type }}address_name">
     <div data-validate-for="{{ type }}address_name"></div>
 </div>
 <div class="mall-form-control">
-    <label for="{{ type }}lines">{{ 'mall.form.address_lines' | _ }}</label>
+    <label for="{{ type }}lines">{{ 'offline.mall::frontend.form.address_lines' | trans }}</label>
     <textarea id="{{ type }}lines" type="text" name="{{ type }}lines">{{ address.lines }}</textarea>
     <div data-validate-for="{{ type }}lines"></div>
 </div>
 <div class="mall-two-fields">
     <div class="mall-form-control">
-        <label for="{{ type }}zip">{{ 'mall.form.zip' | _ }}</label>
+        <label for="{{ type }}zip">{{ 'offline.mall::frontend.form.zip' | trans }}</label>
         <input id="{{ type }}zip" name="{{ type }}zip" type="text"
                value="{{ address.zip }}">
         <div data-validate-for="{{ type }}zip"></div>
     </div>
     <div class="mall-form-control">
-        <label for="{{ type }}city">{{ 'mall.form.city' | _ }}</label>
+        <label for="{{ type }}city">{{ 'offline.mall::frontend.form.city' | trans }}</label>
         <input id="{{ type }}city" name="{{ type }}city" type="text"
                value="{{ address.city }}">
         <div data-validate-for="{{ type }}city"></div>

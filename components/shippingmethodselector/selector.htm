@@ -1,4 +1,4 @@
-<h2>{{ 'mall.shipping_method' | _ }}</h2>
+<h2>{{ 'offline.mall::frontend.shipping_method' | trans }}</h2>
 
 {% if __SELF__.methods.count > 0 %}
     {% partial __SELF__ ~ '::methods' %}

@@ -10,7 +10,7 @@
                     return this.value;
                 }).toArray();
 
-                $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'mall.stock.checking' | _ }}</div>');
+                $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'offline.mall::frontend.stock.checking' | trans }}</div>');
 
                 $.request('onChangeProperty', {
                     data: {values: values},

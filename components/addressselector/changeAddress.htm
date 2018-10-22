@@ -2,7 +2,7 @@
       data-request-validate
       data-request-success="$.publish('mall.address.update')">
     <div class="mall-form-control">
-        <label for="mall_address_id">{{ 'mall.address_selector.select' | _ }}</label>
+        <label for="mall_address_id">{{ 'offline.mall::frontend.address_selector.select' | trans }}</label>
         <select id="mall_address_id" name="id">
             {% for address in addresses %}
                 <option value="{{ address.id }}" {{ address.id == activeAddress ? 'selected' : '' }}>
@@ -10,7 +10,7 @@
                 </option>
             {% endfor %}
             <option value="new">
-                {{ 'mall.address_selector.create' | _ }}
+                {{ 'offline.mall::frontend.address_selector.create' | trans }}
             </option>
         </select>
         <div data-validate-for="id"></div>
@@ -18,11 +18,11 @@
 
     <div class="mall-form-actions">
         <button class="mall-btn mall-btn--primary mall-btn--sm" type="submit">
-            {{ 'mall.apply' | _ }}
+            {{ 'offline.mall::frontend.apply' | trans }}
         </button>
         <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: 'checkout'}) }}"
            class="mall-btn mall-btn--link mall-btn--sm">
-            {{ 'mall.address_selector.edit' | _ }}
+            {{ 'offline.mall::frontend.address_selector.edit' | trans }}
         </a>
     </div>
 

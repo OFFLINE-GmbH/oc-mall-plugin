@@ -2,19 +2,19 @@
     <nav class="mall-my-account__nav">
         <div class="mall-my-account__nav-item
                 {{ __SELF__.currentPage == 'orders' ? 'mall-my-account__nav-item--active' : '' }}">
-            <a href="{{ __SELF__.pageUrl('orders') }}">{{ 'mall.orders' | _ }}</a>
+            <a href="{{ __SELF__.pageUrl('orders') }}">{{ 'offline.mall::frontend.orders' | trans }}</a>
         </div>
         <div class="mall-my-account__nav-item
                 {{ __SELF__.currentPage == 'profile' ? 'mall-my-account__nav-item--active' : '' }}">
-            <a href="{{ __SELF__.pageUrl('profile') }}">{{ 'mall.profile' | _ }}</a>
+            <a href="{{ __SELF__.pageUrl('profile') }}">{{ 'offline.mall::frontend.profile' | trans }}</a>
         </div>
         <div class="mall-my-account__nav-item
                 {{ __SELF__.currentPage == 'addresses' ? 'mall-my-account__nav-item--active' : '' }}">
-            <a href="{{ __SELF__.pageUrl('addresses') }}">{{ 'mall.addresses' | _ }}</a>
+            <a href="{{ __SELF__.pageUrl('addresses') }}">{{ 'offline.mall::frontend.addresses' | trans }}</a>
         </div>
         <div class="mall-my-account__nav-item">
             <a href="javascript:;" data-request="onLogout" data-request-data="redirect: '/'">
-                {{ 'mall.session.logout' | _ }}
+                {{ 'offline.mall::frontend.session.logout' | trans }}
             </a>
         </div>
     </nav>
