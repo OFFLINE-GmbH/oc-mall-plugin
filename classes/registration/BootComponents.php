@@ -9,6 +9,7 @@ use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
+use OFFLINE\Mall\Components\MallDependencies;
 use OFFLINE\Mall\Components\DiscountApplier;
 use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\OrdersList;
@@ -42,6 +43,7 @@ trait BootComponents
             CustomerProfile::class        => 'customerProfile',
             AddressList::class            => 'addressList',
             CurrencyPicker::class         => 'currencyPicker',
+            MallDependencies::class       => 'mallDependencies',
         ];
     }
 

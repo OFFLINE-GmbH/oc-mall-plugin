@@ -12,7 +12,7 @@ module.exports = {
                 title: 'Installation',
                 children: [
                     '/getting-started/installation',
-                    '/getting-started/pages-setup'
+                    '/getting-started/theme-setup',
                 ]
             },
             {
@@ -30,6 +30,7 @@ module.exports = {
             {
                 title: 'Components',
                 children: [
+                    '/components/mall-dependencies',
                     '/components/product',
                     '/components/products',
                     '/components/products-filter',

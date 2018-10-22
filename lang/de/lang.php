@@ -602,6 +602,14 @@
             'properties' => [
             ],
         ],
+        'dependencies'        => [
+            'details'    => [
+                'name'        => 'Frontend-Abhängigkeiten',
+                'description' => 'Bindet alle benötigten Frontend-Abhängigkeiten ein',
+            ],
+            'properties' => [
+            ],
+        ],
         'addressList'           => [
             'details'    => [
                 'name'        => 'Adressliste',

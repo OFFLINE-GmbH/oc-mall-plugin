@@ -13,7 +13,12 @@ You can help us to improve the documentation by clicking on the "Help us" link a
 
 [Let's get started!](/getting-started/installation.md)
 
+## Demo
+
+You can find a demo of this plugin on [mall.offline.swiss](https://mall.offline.swiss).
+
 ## Links
 
 * [GitHub](https://github.com/OFFLINE-GmbH/oc-mall-plugin) 
-* [October Marketplace](https://octobercms.com/plugin/offline-mall) 
+* [October Marketplace](https://octobercms.com/plugin/offline-mall)
+* [Demo Theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) 

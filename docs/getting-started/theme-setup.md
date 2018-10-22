@@ -1,6 +1,23 @@
-# Pages setup
+# Theme setup
 
-On this page you can find a minimal demo implementation of each CMS page `oc-mall` provides.
+## Layout
+
+The [`mallDependencies` component](../components/mall-dependencies.md) includes all required frontend assets.
+
+The component should be placed on each layout that provides shop functionality.  
+
+```ini
+description = "Default Layout"
+
+[mallDependencies]
+==
+<!DOCTYPE html>
+...
+```
+
+## Pages
+
+In this section you can find a minimal demo implementation of each CMS page `oc-mall` needs.
 
 You are free to change them as you wish. Just make sure to keep the required `url` parameters.
 
@@ -8,7 +25,7 @@ You are free to change them as you wish. Just make sure to keep the required `ur
 To get started quickly simply copy and paste the markup to the respective cms page file.
 :::
 
-## product.htm
+### product.htm
 
 The product page displays a single product using the [Product component](../components/product.md).
 
@@ -25,7 +42,7 @@ variant = ":slug"
 {% component 'product' %}
 ``` 
 
-## category.htm
+### category.htm
 
 The category page displays all products in a category using the [Products component](../components/products.md). The 
 products can be filtered using the [ProductsFilter component](../components/products-filter.md).
@@ -60,7 +77,7 @@ showPriceFilter = 1
 </div>
 ``` 
 
-## cart.htm
+### cart.htm
 
 The cart displays the cart to the user using the [Cart component](../components/cart.md). 
 
@@ -82,7 +99,7 @@ showTaxes = 0
 {% endif %}
 ``` 
 
-## checkout.htm
+### checkout.htm
 
 The checkout page hosts the complete checkout process. 
 
@@ -103,7 +120,7 @@ step = "{{ :step }}"
 {% endif %}
 ``` 
 
-## myaccount.htm
+### myaccount.htm
 
 The my account page displays an account overview to the user using the
 [myAccount component](../components/my-account.md). 
@@ -124,7 +141,7 @@ page = "{{ :page }}"
 {% component 'myAccount' %}
 ``` 
 
-## address.htm
+### address.htm
 
 The address page displays an edit form for a user's address using the
 [AddressForm component](../components/address-form.md). 
@@ -146,7 +163,7 @@ step = "{{ :step }}"
 {% endif %}
 ``` 
 
-## login.htm
+### login.htm
 
 The login form displays a signup form for unregistered users using the
 [signUp component](../components/sign-up.md). 

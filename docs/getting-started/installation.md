@@ -1,6 +1,6 @@
 ---
 sidebarDepth: 3
-next: /getting-started/pages-setup
+next: /getting-started/theme-setup
 ---
 
 # Getting started
@@ -87,7 +87,8 @@ URL parameters as shown below.
 
 
 ::: tip
-You can find example contents for each of these pages in the [Pages Setup](./pages-setup.md) section. 
+You can find example contents for each of these pages in the
+[Theme Setup](./theme-setup.md) section. 
 :::
  
 #### Link pages

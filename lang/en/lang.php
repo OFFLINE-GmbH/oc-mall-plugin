@@ -603,6 +603,14 @@
             'properties' => [
             ],
         ],
+        'dependencies'        => [
+            'details'    => [
+                'name'        => 'Frontend dependencies',
+                'description' => 'Includes all needed frontend dependencies',
+            ],
+            'properties' => [
+            ],
+        ],
         'addressList'           => [
             'details'    => [
                 'name'        => 'Address list',

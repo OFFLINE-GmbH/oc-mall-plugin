@@ -106,7 +106,6 @@ class Cart extends MallComponent
      */
     public function onRun()
     {
-        $this->addJs('assets/pubsub.js');
         $this->setData();
     }
 
