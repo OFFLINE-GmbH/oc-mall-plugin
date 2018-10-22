@@ -107,6 +107,6 @@ class Price extends Model
     {
         $model = $this instanceof Product || $this instanceof Variant ? $this : null;
 
-        return $this->money->format($this->integer, $model);
+        return $this->money->format($this->integer, $model, $this->currency);
     }
 }

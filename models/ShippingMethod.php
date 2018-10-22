@@ -100,22 +100,22 @@ class ShippingMethod extends Model
             })
             ->get()
             ->filter(function (ShippingMethod $method) use ($total) {
-                $below = $method->availableBelowTotalInCurrency()->integer;
-                $above = $method->availableAboveTotalInCurrency()->integer;
+                $below = $method->availableBelowTotal()->integer;
+                $above = $method->availableAboveTotal()->integer;
 
                 return ($below === null || $below > $total)
                     && ($above === null || $above <= $total);
             });
     }
 
-    public function availableBelowTotalInCurrency()
+    public function availableBelowTotal($currency = null)
     {
-        return $this->price(null, 'available_below_total');
+        return $this->price($currency, 'available_below_total');
     }
 
-    public function availableAboveTotalInCurrency()
+    public function availableAboveTotal($currency = null)
     {
-        return $this->price(null, 'available_above_total');
+        return $this->price($currency, 'available_above_total');
     }
 
     public function jsonSerialize()

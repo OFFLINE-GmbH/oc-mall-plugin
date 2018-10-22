@@ -71,12 +71,12 @@ class Discount extends Model
         return trans('offline.mall::lang.discounts.triggers');
     }
 
-    public function amountInCurrency($currency = null)
+    public function amount($currency = null)
     {
         return $this->price($currency, 'amount');
     }
 
-    public function totalToReachInCurrency($currency = null)
+    public function totalToReach($currency = null)
     {
         return $this->price($currency, 'total_to_reach');
     }
