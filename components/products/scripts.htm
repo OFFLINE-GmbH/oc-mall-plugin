@@ -17,6 +17,11 @@
 
                 history.replaceState(null, '', $(this).attr('href'))
                 $.publish('mall.products.load.complete')
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             })
         })
     </script>
