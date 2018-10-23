@@ -16,7 +16,9 @@
                     {% if method.guaranteed_delivery_days %}
                         <div class="mall-shipping-method__delivery-days">
                             {% set days = method.guaranteed_delivery_days %}
-                            {{ 'offline.mall::frontend.shipping_method.guaranteed_delivery_days' | trans_choice(days, {days: days}) }}
+                            {{ 'offline.mall::frontend.shipping_method.guaranteed_delivery_days'
+                                | transchoice(days, {days: days})
+                            }}
                         </div>
                     {% endif %}
                     <div class="mall-shipping-method__price">
