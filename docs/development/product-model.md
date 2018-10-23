@@ -20,6 +20,11 @@ A product's property values are accessible via the `property_values` relationshi
 $model->property_values;
 ```   
 
+::: warning CAUTION
+If you are working with Variants make sure to call the `all_property_values` relation instead.
+This incldes all property values of the `Product` and the `Variant` together.
+:::
+
 ## Custom fields
 
 Custom fields can be used by the customer to add additional information 

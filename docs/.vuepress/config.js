@@ -53,6 +53,7 @@ module.exports = {
                 title: 'Development',
                 children: [
                     '/development/product-model',
+                    '/development/variant-model',
                     '/development/payment-providers',
                     '/development/pricing-information'
                 ]
