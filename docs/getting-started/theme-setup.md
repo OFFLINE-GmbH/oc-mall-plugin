@@ -34,6 +34,28 @@ description = "Default Layout"
 ...
 ```
 
+### Framework extras
+
+`oc-mall`'s components require October's [AJAX framework](https://octobercms.com/docs/ajax/introduction)
+ to work. Make sure to include the framework either by using one of the
+[Combiner aliases](./https://octobercms.com/docs/markup/filter-theme#combiner-aliases) or
+the `{% framework extras %}` tag.
+
+```twig
+...
+{% framework extras %}
+</body>
+</html>
+``` 
+
+
+### Static pages menu
+
+If you are using the `RainLab.Pages` plugin, you can add the `All mall shop categories` entry to your navigation. 
+
+This will render a tree of all available categories in your theme. 
+
+
 ## Pages
 
 In this section you can find a minimal demo implementation of each CMS page `oc-mall` needs.
@@ -198,12 +220,6 @@ redirect = "/account"
 ==
 {% component 'signUp' %}
 ``` 
-
-## Static pages menu
-
-If you are using the `RainLab.Pages` plugin, you can add the `All mall shop categories` entry to your navigation. 
-
-This will render a tree of all available categories in your theme. 
 
 ## Take a look around
 
