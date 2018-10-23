@@ -4,13 +4,30 @@ Once the plugin is [installed and configured](./installation.md), follow the ste
 
 ## Layout
 
+### `mallDependencies`
+
 The [`mallDependencies` component](../components/mall-dependencies.md) includes all required frontend assets.
 
 The component should be placed on each layout that provides shop functionality.  
 
-```ini
+```ini{3}
 description = "Default Layout"
 
+[mallDependencies]
+==
+<!DOCTYPE html>
+...
+```
+
+### `session`
+
+RainLab.Users's `session` component should be placed on every layout that
+provides shop functionality. This makes sure the user remains logged in while browsing your store.
+
+```ini{3}
+description = "Default Layout"
+
+[session]
 [mallDependencies]
 ==
 <!DOCTYPE html>
