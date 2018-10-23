@@ -29,9 +29,11 @@
                         {% endif %}
                     </div>
                     <div class="mall-payment-method__submit">
-                        {% set label = __SELF__.order ? 'mall.payment_method.pay_now' : 'mall.payment_method.proceed' %}
+                        {% set label = __SELF__.order
+                            ? 'offline.mall::frontend.payment_method.pay_now'
+                            : 'offline.mall::frontend.payment_method.proceed' %}
                         <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
-                            {{ label | _ }}
+                            {{ label | trans }}
                         </button>
                     </div>
                 </div>
