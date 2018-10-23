@@ -211,6 +211,29 @@ class Product extends Model
     }
 
     /**
+     * Alias for property_values relationship.
+     *
+     * This can be useful if a shop uses Products and Variants together.
+     * With this alias the all_property_values relation becomes available
+     * on Products as it is on Variants.
+     */
+    public function all_property_values()
+    {
+        return $this->property_values();
+    }
+
+    /**
+     * Alias for property_values.
+     *
+     * @see $this->all_property_values()
+     */
+    public function getAllPropertyValuesAttribute()
+    {
+        return $this->property_values;
+    }
+
+
+    /**
      * This setter makes it easier to set price values
      * in different currencies by providing an array of
      * prices. It is mostly used for unit testing.
