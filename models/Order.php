@@ -11,8 +11,8 @@ use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use OFFLINE\Mall\Classes\Utils\Money;
-use RainLab\Translate\Classes\Translator;
 use RuntimeException;
+use System\Classes\PluginManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -119,7 +119,7 @@ class Order extends Model
             $order                                          = new static;
             $order->session_id                              = session()->getId();
             $order->currency                                = Currency::activeCurrency();
-            $order->lang                                    = Translator::instance()->getLocale();
+            $order->lang                                    = $order->getLocale();
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
             $order->billing_address                         = $cart->billing_address;
             $order->shipping_address                        = $cart->shipping_address;
@@ -319,5 +319,14 @@ class Order extends Model
             'currency_id' => $this->useCurrency()->id,
             'price'       => $this->getOriginal($key) / 100,
         ]);
+    }
+
+    protected function getLocale()
+    {
+        if (PluginManager::instance()->exists('RainLab.Translate')) {
+            return \RainLab\Translate\Classes\Translator::instance()->getLocale();
+        }
+
+        return 'default';
     }
 }
