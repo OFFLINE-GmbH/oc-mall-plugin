@@ -42,7 +42,9 @@ class PriceRangeQuery
             ->selectRaw(DB::raw('min(price) as min, max(price) as max'))
             ->join(
                 'offline_mall_products',
-                'offline_mall_product_prices.product_id', '=', 'offline_mall_products.id'
+                'offline_mall_product_prices.product_id',
+                '=',
+                'offline_mall_products.id'
             )
             ->whereIn('offline_mall_products.category_id', $this->categories)
             ->where('offline_mall_product_prices.currency_id', $this->currency->id);

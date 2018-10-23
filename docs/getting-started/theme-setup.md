@@ -196,13 +196,14 @@ At this point your shop is configured and set up correctly.
 Run `php artisan mall:check` again to make sure there are no problems left.
 :::
 
-If you don't have a navigation in your theme yet simply visit some of
-these URLs to get a first impression of your new online store.
-
 ::: tip
 In case you missed it: You can seed the shop with demo data.
 Visit the [Installation Page](./installation.md) to find out more.
 ::: 
+
+If you don't have a navigation in your theme yet, simply visit some of
+these URLs to get a first impression of your new online store.
+
 
 ::: tip INFO
 The following URLs only work if you copied the default URL structure.
