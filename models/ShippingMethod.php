@@ -35,12 +35,12 @@ class ShippingMethod extends Model
             'name'       => 'priceable',
             'conditions' => 'price_category_id is null and field is null',
         ],
-        'available_below_total' => [
+        'available_below_totals' => [
             Price::class,
             'name'       => 'priceable',
             'conditions' => 'price_category_id is null and field = "available_below_total"',
         ],
-        'available_above_total' => [
+        'available_above_totals' => [
             Price::class,
             'name'       => 'priceable',
             'conditions' => 'price_category_id is null and field = "available_above_total"',
@@ -110,12 +110,12 @@ class ShippingMethod extends Model
 
     public function availableBelowTotal($currency = null)
     {
-        return $this->price($currency, 'available_below_total');
+        return $this->price($currency, 'available_below_totals');
     }
 
     public function availableAboveTotal($currency = null)
     {
-        return $this->price($currency, 'available_above_total');
+        return $this->price($currency, 'available_above_totals');
     }
 
     public function jsonSerialize()

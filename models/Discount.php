@@ -25,7 +25,7 @@ class Discount extends Model
         'shipping_description'                 => 'required_if:type,shipping',
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
-    public $with = ['shipping_price', 'alternate_price', 'amount', 'total_to_reach'];
+    public $with = ['shipping_prices', 'alternate_prices', 'amounts', 'totals_to_reach'];
     public $table = 'offline_mall_discounts';
     public $dates = ['expires'];
     public $casts = [
@@ -33,10 +33,10 @@ class Discount extends Model
         'max_number_of_usages' => 'integer',
     ];
     public $morphMany = [
-        'shipping_price'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
-        'alternate_price' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "alternate_price"'],
-        'amount'          => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amount"'],
-        'total_to_reach'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "total_to_reach"'],
+        'shipping_prices'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
+        'alternate_prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "alternate_price"'],
+        'amounts'          => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amount"'],
+        'totals_to_reach'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "total_to_reach"'],
     ];
     public $belongsTo = [
         'product' => [Product::class],
@@ -73,22 +73,22 @@ class Discount extends Model
 
     public function amount($currency = null)
     {
-        return $this->price($currency, 'amount');
+        return $this->price($currency, 'amounts');
     }
 
     public function totalToReach($currency = null)
     {
-        return $this->price($currency, 'total_to_reach');
+        return $this->price($currency, 'totals_to_reach');
     }
 
     public function alternatePrice($currency = null)
     {
-        return $this->price($currency, 'alternate_price');
+        return $this->price($currency, 'alternate_prices');
     }
 
     public function shippingPrice($currency = null)
     {
-        return $this->price($currency, 'shipping_price');
+        return $this->price($currency, 'shipping_prices');
     }
 
     public function getProductIdOptions()
