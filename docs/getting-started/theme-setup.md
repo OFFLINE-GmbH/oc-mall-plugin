@@ -1,5 +1,7 @@
 # Theme setup
 
+Once the plugin is [installed and configured](./installation.md), follow the steps below to set up your theme.
+
 ## Layout
 
 The [`mallDependencies` component](../components/mall-dependencies.md) includes all required frontend assets.
@@ -179,3 +181,36 @@ redirect = "/account"
 ==
 {% component 'signUp' %}
 ``` 
+
+## Static pages menu
+
+If you are using the `RainLab.Pages` plugin, you can add the `All mall shop categories` entry to your navigation. 
+
+This will render a tree of all available categories in your theme. 
+
+## Take a look around
+
+At this point your shop is configured and set up correctly. 
+
+::: tip
+Run `php artisan mall:check` again to make sure there are no problems left.
+:::
+
+If you don't have a navigation in your theme yet simply visit some of
+these URLs to get a first impression of your new online store.
+
+::: tip
+In case you missed it: You can seed the shop with demo data.
+Visit the [Installation Page](./installation.md) to find out more.
+::: 
+
+::: tip INFO
+The following URLs only work if you copied the default URL structure.
+Adapt the links to your custom URLs if you made any changes.
+::: 
+
+* http://example.test/category/bikes
+* http://example.test/product/cruiser-1500
+* http://example.test/login
+* http://example.test/cart
+

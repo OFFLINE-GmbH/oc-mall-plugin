@@ -11,6 +11,15 @@ Take a look at the [Product model's code](https://github.com/OFFLINE-GmbH/oc-mal
 
 To access a product's pricing information see [accessing pricing information](./pricing-information.md).
 
+## Property values
+
+A product's property values are accessible via the `property_values` relationship.
+
+
+```php
+$model->property_values;
+```   
+
 ## Custom fields
 
 Custom fields can be used by the customer to add additional information 

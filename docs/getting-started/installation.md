@@ -20,7 +20,7 @@ php artisan plugin:install rainlab.location
 php artisan plugin:install offline.mall
 ``` 
 
-### Checking your installation
+### Check your installation
 
 After the plugin has been successfully installed you can run the `mall:check` command to validate your installation. 
 
@@ -37,7 +37,7 @@ we didn't configure the plugin yet.
 
 ## Demo data
 
-To get a feeling for how `oc-mall` works you can run the following command to pre-populate your installation with 
+To get a feeling for how `oc-mall` works, you can run the following command to pre-populate your installation with 
 demo data. 
 
 ```bash
@@ -49,7 +49,7 @@ This will erase all shop data and reset all settings! Do not run this command if
 installation. 
 :::
 
-You can always revert to a blank installation by running
+You can always revert back to a blank installation by running
 
 ```bash
 php artisan plugin:refresh offline.mall
@@ -57,23 +57,28 @@ php artisan plugin:refresh offline.mall
 
 ## Configuration
 
-Once your installation is complete follow the configuration steps below.
+Once your installation is complete, follow the configuration steps below.
 
 ### Locations
 
-Visit `Backend settings -> Location -> Countries & States`. Make sure only the countries that you are shipping to are
- enabled. Disable every other country in the list. 
+Visit `Backend settings -> Location -> Countries & States`. Make sure that
+only countries you are shipping to are enabled. Disable every other
+country in the list. 
 
 
 ### Pages
 
-`oc-mall` expects your website to have a few predefined pages to show product or order details. These pages have to be 
+`oc-mall` expects your website to have a few predefined pages to show
+product, account or order details. These pages have to be 
 selected via the backend settings page.
 
 #### Create pages
 
 First, create the following CMS pages in your theme. You can name them as you wish, just make sure to include the same 
 URL parameters as shown below.
+
+You can create them without any additional markup. We will populate 
+them in the upcomming [Theme Setup](./theme-setup.md) step.
 
 | File              | Url                                   |
 | ----------------- | ------------------------------------- | 
@@ -98,7 +103,7 @@ in the respective dropdown field.
 
 ::: tip
 If you are not sure on how to create these pages take a look at the
-[oc-mall-theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) theme for reference. 
+[oc-mall-theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) for reference. 
 :::
 
 ### Currencies
