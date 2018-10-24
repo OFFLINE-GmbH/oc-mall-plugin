@@ -1,10 +1,34 @@
 # oc-mall
-> E-commerce solution for October CMS 
+> E-commerce solution for October CMS
 
-[![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
 
 **This plugin is under heavy development**. Don't use it in production yet. A first production ready version is  
 planned to be released towards the end of 2018.
+
+[![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
+
+`oc-mall` is a fully featured online shop solution for October CMS.
+
+* Manage Products and Variants
+* Stock management
+* Checkout via Stripe and PayPal supported out-of-the-box
+* Custom payment providers 
+* Integrated with RainLab.User
+* Multi-currency and multi-language (integrates with RainLab.Translate)
+* Shipping and Tax management
+* Specific prices for different customer groups
+* Unlimited additional price fields (reseller, retail, reduced, etc)
+* Custom order states
+* Flexible e-mail notifications
+* Easily extendable with custom features
+
+The documentation of this plugin can be found here:
+[https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
+
+A live demo of the plugin can be found here:
+[https://mall.offline.swiss](https://mall.offline.swiss)
+
+For support and development requests please file an issue on GitHub.
 
 ## Contributing
 
