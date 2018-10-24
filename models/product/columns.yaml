@@ -13,7 +13,7 @@ columns:
         label: 'offline.mall::lang.product.price'
         type: partial
         path: $/offline/mall/models/product/_price.htm
-        searchable: true
+        searchable: false
         sortable: true
     published:
         label: 'offline.mall::lang.product.published'
