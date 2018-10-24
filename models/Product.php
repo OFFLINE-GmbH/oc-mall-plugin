@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
+use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
@@ -26,6 +27,7 @@ class Product extends Model
     use UserSpecificPrice;
     use Images;
     use CustomFields;
+    use PropertyValues;
     use HashIds;
     use Nullable;
     use PriceAccessors;
@@ -96,7 +98,7 @@ class Product extends Model
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
     public $attachMany = [
-        'downloads' => File::class,
+        'downloads'      => File::class,
         'initial_images' => File::class,
     ];
     public $belongsTo = [

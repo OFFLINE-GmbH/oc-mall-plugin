@@ -17,6 +17,11 @@ You can help us to improve the documentation by clicking on the "Help us" link a
 
 You can find a demo of this plugin on [mall.offline.swiss](https://mall.offline.swiss).
 
+## Requirements
+
+* PHP7.1+
+* October Build 444+
+
 ## Links
 
 * [GitHub](https://github.com/OFFLINE-GmbH/oc-mall-plugin) 

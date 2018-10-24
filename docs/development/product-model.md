@@ -25,6 +25,13 @@ If you are working with Variants make sure to call the `all_property_values` rel
 This incldes all property values of the `Product` and the `Variant` together.
 :::
 
+To get the value of a specific property the `getPropertyValue` method can be used.
+
+```php
+// Returns the value of Property ID 4
+$model->getPropertyValue(4);
+```
+
 ## Custom fields
 
 Custom fields can be used by the customer to add additional information 

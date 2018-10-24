@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
+use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
@@ -26,6 +27,7 @@ class Variant extends Model
     use Nullable;
     use PriceAccessors;
     use ProductPriceAccessors;
+    use PropertyValues;
     use StockAndQuantity;
 
     const MORPH_KEY = 'mall.variant';
@@ -234,23 +236,6 @@ class Variant extends Model
     public function getVariantIdAttribute()
     {
         return $this->hashId;
-    }
-
-    public function getPropertiesDescriptionAttribute()
-    {
-        return $this->propertyValuesAsString();
-    }
-
-    public function propertyValuesAsString()
-    {
-        return $this->property_values
-            ->reject(function (PropertyValue $value) {
-                return $value->value === '' || $value->value === null || $value->property === null;
-            })
-            ->map(function (PropertyValue $value) {
-                // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
-                return sprintf('%s: %s', e($value->property->name), $value->display_value);
-            })->implode('<br />');
     }
 
     protected function isEmptyCollection($originalValue): bool
