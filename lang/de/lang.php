@@ -237,6 +237,7 @@
         'price_missing'        => 'Gib mindestens ein Preis in der Hauptwährung an',
         'slug_unique'          => 'Die URL existiert bereits',
         'fees'                 => 'Gebühren',
+        'value'                => 'Wert',
     ],
     'variant'                  => [
         'method' => [
@@ -309,9 +310,12 @@
         'link_target'                          => 'Link-Ziel',
         'properties'                           => 'Eigenschaften',
         'links'                                => 'Links',
+        'details'                              => 'Details',
         'price_includes_tax'                   => 'Preis ist inkl. Steuern',
         'price_includes_tax_comment'           => 'Der angegebene Preis enthält bereits alle Steuern',
         'group_by_property'                    => 'Attribut für Varianten-Gruppierung',
+        'additional_descriptions'              => 'Zusätzliche Beschreibungen',
+        'additional_properties'                => 'Zusätzliche Eigenschaften',
         'price_table_modal'                    => [
             'trigger'           => 'Preise und Lagerbestand bearbeiten',
             'label'             => 'Preise und Lagerbestand',
@@ -503,7 +507,7 @@
         'manage_taxes'            => 'Kann Steuern verwalten',
     ],
     'components'               => [
-        'products'              => [
+        'products'               => [
             'details'    => [
                 'name'        => 'Produkte',
                 'description' => 'Zeigt eine Liste von Produkten an',
@@ -537,7 +541,7 @@
                 ],
             ],
         ],
-        'productsFilter'        => [
+        'productsFilter'         => [
             'details'    => [
                 'name'        => 'Produkte-Filter',
                 'description' => 'Filtert die Produkte einer Kategorie',
@@ -570,7 +574,7 @@
                 'oldest'     => 'Älteste',
             ],
         ],
-        'myAccount'             => [
+        'myAccount'              => [
             'details'    => [
                 'name'        => 'Benutzeraccount',
                 'description' => 'Zeigt dem Kunden alle Informationen zu seinem Bentzerkonto an',
@@ -586,7 +590,7 @@
                 'addresses' => 'Adressliste',
             ],
         ],
-        'customerProfile'       => [
+        'customerProfile'        => [
             'details'    => [
                 'name'        => 'Kundenprofil',
                 'description' => 'Zeigt ein Formular zur Bearbeitung der Kundendaten an.',
@@ -594,7 +598,7 @@
             'properties' => [
             ],
         ],
-        'currencyPicker'        => [
+        'currencyPicker'         => [
             'details'    => [
                 'name'        => 'Währungsauswahl',
                 'description' => 'Zeigt eine Auswahl für die aktive Währung an',
@@ -602,7 +606,7 @@
             'properties' => [
             ],
         ],
-        'dependencies'        => [
+        'dependencies'           => [
             'details'    => [
                 'name'        => 'Frontend-Abhängigkeiten',
                 'description' => 'Bindet alle benötigten Frontend-Abhängigkeiten ein',
@@ -610,7 +614,7 @@
             'properties' => [
             ],
         ],
-        'addressList'           => [
+        'addressList'            => [
             'details'    => [
                 'name'        => 'Adressliste',
                 'description' => 'Zeigt alle erfassten Adressen eines Kunden an',
@@ -625,7 +629,7 @@
                 'address_deleted' => 'Adresse gelöscht',
             ],
         ],
-        'ordersList'            => [
+        'ordersList'             => [
             'details'    => [
                 'name'        => 'Bestellungsliste',
                 'description' => 'Zeigt alle Bestellungen eines Kunden an',
@@ -633,7 +637,7 @@
             'properties' => [
             ],
         ],
-        'product'               => [
+        'product'                => [
             'details'    => [
                 'name'        => 'Produkt-Details',
                 'description' => 'Zeigt die Details zu einem Produkt an',
@@ -645,7 +649,7 @@
                 ],
             ],
         ],
-        'cart'                  => [
+        'cart'                   => [
             'details'    => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt den Warenkorb an',
@@ -659,7 +663,7 @@
                 ],
             ],
         ],
-        'checkout'              => [
+        'checkout'               => [
             'details' => [
                 'name'        => 'Checkout',
                 'description' => 'Komponente für den Bestellvorgang',
@@ -668,13 +672,13 @@
                 'missing_settings' => 'Bitte wählen Sie eine Zahlungs- und Versandmethode aus.',
             ],
         ],
-        'discountApplier'       => [
+        'discountApplier'        => [
             'details' => [
                 'name'        => 'Gutschein-Code Eingabe',
                 'description' => 'Zeigt eine Eingabemöglichkeit für Gutscheincodes an',
             ],
         ],
-        'shippingMethodSelector'      => [
+        'shippingMethodSelector' => [
             'details' => [
                 'name'        => 'Auswahl für Versandmethode',
                 'description' => 'Zeige eine Auflistung aller Versandmethoden an',
@@ -683,7 +687,7 @@
                 'unavailable' => 'Die ausgewählte Versandmethode ist für Ihre Bestellung nicht verfügbar.',
             ],
         ],
-        'paymentMethodSelector' => [
+        'paymentMethodSelector'  => [
             'details' => [
                 'name'        => 'Auswahl für Zahlungsmethode',
                 'description' => 'Zeige eine Auflistung aller Zahlungsmethoden an',
@@ -692,7 +696,7 @@
                 'unavailable' => 'Die ausgewählte Zahlungsmethode ist für Ihre Bestellung nicht verfügbar.',
             ],
         ],
-        'addressSelector'       => [
+        'addressSelector'        => [
             'details' => [
                 'name'        => 'Auswahl für Adressen',
                 'description' => 'Zeige eine Auflistung aller Adressen eines Kunden an',
@@ -700,7 +704,7 @@
             'errors'  => [
             ],
         ],
-        'addressForm'           => [
+        'addressForm'            => [
             'details'    => [
                 'name'        => 'Bearbeitungsformular für Adressen',
                 'description' => 'Zeigt ein Formular an um Adressen zu bearbeiten',
@@ -724,7 +728,7 @@
                 'shipping' => 'Versandadresse',
             ],
         ],
-        'signup'                => [
+        'signup'                 => [
             'details'    => [
                 'name'        => 'Anmeldung',
                 'description' => 'Zeigt ein Formular für die Registrierung oder das Login an',
@@ -782,7 +786,7 @@
                 ],
             ],
         ],
-        'categories'            => [
+        'categories'             => [
             'details'    => [
                 'name'        => 'Kategorien',
                 'description' => 'Listet vorhandene Kategorien auf',
@@ -804,7 +808,7 @@
             'no_parent'  => 'Zeige alle Kategorien',
             'by_slug'    => 'Verwende Kategorie aus URL als Startkategorie',
         ],
-        'cartSummary'           => [
+        'cartSummary'            => [
             'details'    => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt die Anzahl Produkte und den Gesamtwert des Warenkorbes an',
@@ -820,7 +824,7 @@
                 ],
             ],
         ],
-        'customerDashboard'     => [
+        'customerDashboard'      => [
             'details'    => [
                 'name'        => 'Kundenkonto',
                 'description' => 'Zeigt den Link zum Öffnen des Kundenkontos an',

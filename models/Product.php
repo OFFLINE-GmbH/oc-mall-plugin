@@ -37,7 +37,7 @@ class Product extends Model
     const MORPH_KEY = 'mall.product';
 
     protected $dates = ['deleted_at'];
-    public $jsonable = ['links'];
+    public $jsonable = ['links', 'additional_descriptions', 'additional_properties'];
     public $nullable = ['group_by_property_id'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
