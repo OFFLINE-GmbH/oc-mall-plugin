@@ -249,7 +249,7 @@ class ProductsFilter extends MallComponent
         $this->setVar('props', $this->setProps());
         $this->setVar('filter', $this->getFilter());
         $this->setVar('sortOrder', $this->getSortOrder());
-        $this->setVar('sortOptions', SortOrder::options());
+        $this->setVar('sortOptions', SortOrder::options(true));
     }
 
     /**
