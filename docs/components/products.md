@@ -81,3 +81,39 @@ paginate = 0
 includeVariants = 1
 sort = "latest"
 ```
+
+### Display four random items from the same category of the currently viewed product
+
+```ini
+title = "Product"
+url = "/product/:slug/:variant?"
+layout = "default"
+is_hidden = 0
+
+[product]
+product = ":slug"
+variant = ":slug"
+
+[products relatedProducts]
+setPageTitle = 0
+includeVariants = 1
+includeChildren = 0
+perPage = 4
+paginate = 0
+sort = "random"
+==
+use OFFLINE\Mall\Models\Category;
+function onStart() {
+    // Fetch the category from the product component.
+    $category = Category::find(optional($this->page->components['product']->item)->category_id);
+    if ($category) {
+        // If a category is available, use it for the products component.
+        $this->page->components['products']->category = $category;
+    }
+}
+==
+{% component 'product' %}
+
+<h2>Other products from this category</h2>
+{% component 'relatedProducts' %}
+```
