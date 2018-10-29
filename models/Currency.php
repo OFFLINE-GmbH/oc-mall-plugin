@@ -59,7 +59,7 @@ class Currency extends Model
 
     /**
      * Returns the currently active currency from the session.
-     * @return array
+     * @return Currency
      * @throws \RuntimeException
      */
     public static function activeCurrency()

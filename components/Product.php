@@ -72,6 +72,11 @@ class Product extends MallComponent
      * @var integer
      */
     protected $variantId;
+    /**
+     * Indicate's that the requested product has not been found.
+     * @var bool
+     */
+    protected $isNotFound;
 
     /**
      * Component details.
@@ -142,9 +147,7 @@ class Product extends MallComponent
      */
     public function onRun()
     {
-        try {
-            $this->setData();
-        } catch (ModelNotFoundException $e) {
+        if ($this->isNotFound) {
             return $this->controller->run('404');
         }
 
@@ -170,17 +173,24 @@ class Product extends MallComponent
     }
 
     /**
-     * This method sets all variables needed for this component to work.
+     * The component is initialized.
      *
      * @return void
      */
-    public function setData()
+    public function init()
     {
         $variantId = $this->decode($this->param('variant'));
-
         $this->setVar('variantId', $variantId);
-        $this->setVar('item', $this->getItem());
-        $this->setVar('variants', $this->getVariants());
+
+        try {
+            $this->setVar('item', $this->getItem());
+            $this->setVar('variants', $this->getVariants());
+        } catch (ModelNotFoundException $e) {
+            $this->isNotFound = true;
+
+            return;
+        }
+
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
     }
@@ -193,8 +203,6 @@ class Product extends MallComponent
      */
     public function onAddToCart()
     {
-        $this->setData();
-
         $product = $this->getProduct();
         $variant = null;
         $values  = $this->validateCustomFields(post('fields', []));
@@ -256,8 +264,6 @@ class Product extends MallComponent
      */
     public function onCheckProductStock()
     {
-        $this->setData();
-
         $slug = post('slug');
         if ( ! $slug) {
             throw new ValidationException(['Missing input data']);

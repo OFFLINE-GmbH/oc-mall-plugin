@@ -324,10 +324,14 @@ class Products extends MallComponent
     /**
      * Retrieve the Category by ID or from the page's :slug parameter.
      *
-     * @return Collection|null
+     * @return CategoryModel|null
      */
     protected function getCategory()
     {
+        if ($this->category) {
+            return $this->category;
+        }
+
         if ($this->property('category') === null) {
             return null;
         }
