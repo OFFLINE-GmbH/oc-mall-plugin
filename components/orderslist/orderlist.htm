@@ -1,27 +1,29 @@
-<table class="mall-orders-list__table mall-table">
-    <tr>
-        <th>#</th>
-        <th>{{ 'offline.mall::frontend.created_at' | trans }}</th>
-        <th>{{ 'offline.mall::frontend.order.order_state' | trans }}</th>
-        <th>{{ 'offline.mall::frontend.order.payment_state' | trans }}</th>
-        <th class="text-right">{{ 'offline.mall::frontend.total' | trans }}</th>
-    </tr>
-    {% for order in orders %}
-        <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }}">
-            <td>{{ order.order_number }}</td>
-            <td>{{ order.created_at }}</td>
-            <td>{{ order.order_state_label }}</td>
-            <td>
-                {% if order.isPaid %}
-                    {{ order.payment_state_label }}
-                {% else %}
-                    <a href="{{ __SELF__.paymentLink }}?order={{ order.hashId }}">
-                        {{ order.payment_state_label }}
-                    </a>
-                {% endif %}
-            </td>
-            <td class="text-right">{{ order.totalPostTaxes() | raw }}</td>
+<div class="mall-table-overflow" style="overflow-y: auto;">
+    <table class="mall-orders-list__table mall-table">
+        <tr>
+            <th>#</th>
+            <th>{{ 'offline.mall::frontend.created_at' | trans }}</th>
+            <th>{{ 'offline.mall::frontend.order.order_state' | trans }}</th>
+            <th>{{ 'offline.mall::frontend.order.payment_state' | trans }}</th>
+            <th class="text-right">{{ 'offline.mall::frontend.total' | trans }}</th>
         </tr>
-        {% partial __SELF__ ~ '::details' order=order %}
-    {% endfor %}
-</table>
+        {% for order in orders %}
+            <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }}">
+                <td>{{ order.order_number }}</td>
+                <td>{{ order.created_at }}</td>
+                <td>{{ order.order_state_label }}</td>
+                <td>
+                    {% if order.isPaid %}
+                        {{ order.payment_state_label }}
+                    {% else %}
+                        <a href="{{ __SELF__.paymentLink }}?order={{ order.hashId }}">
+                            {{ order.payment_state_label }}
+                        </a>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ order.totalPostTaxes() | raw }}</td>
+            </tr>
+            {% partial __SELF__ ~ '::details' order=order %}
+        {% endfor %}
+    </table>
+</div>
