@@ -12,14 +12,14 @@
             <div class="mall-payment-method__heading">
                 <div class="mall-payment-method__name">{{ method.name }}</div>
             </div>
+            {% if method.description %}
+                <div class="mall-payment-method__description">
+                    {{ method.description | raw }}
+                </div>
+            {% endif %}
             {% if isActiveMethod %}
                 <div class="mall-payment-method__toggle"
                      style="{% if not isActiveMethod %}display: none{% endif %}">
-                    {% if method.description %}
-                        <div class="mall-payment-method__description">
-                            {{ method.description | raw }}
-                        </div>
-                    {% endif %}
                     <div class="mall-payment-method__data">
                         {% if method.payment_provider %}
                             {% set path = __SELF__ ~ '::gateways/' ~ (method.payment_provider) %}
