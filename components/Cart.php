@@ -121,6 +121,7 @@ class Cart extends MallComponent
         if ($cart->shipping_method_id === null) {
             $cart->setShippingMethod(ShippingMethod::getDefault());
         }
+        $cart->validateShippingMethod();
 
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));

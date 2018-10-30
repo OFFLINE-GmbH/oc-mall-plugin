@@ -114,6 +114,11 @@ class Order extends Model
                 throw new ValidationException(['Your order is empty. Please add a product to the cart.']);
             }
 
+            $cart->validateShippingMethod();
+            if ($cart->shipping_method_id === null) {
+                throw new ValidationException(['Your order has no shipping method set. Please select a shipping method.']);
+            }
+
             $totals = $cart->totals;
 
             $order                                          = new static;

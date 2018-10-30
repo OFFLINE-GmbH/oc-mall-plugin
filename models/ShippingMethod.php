@@ -30,7 +30,7 @@ class ShippingMethod extends Model
     public $table = 'offline_mall_shipping_methods';
     public $appends = ['price_formatted'];
     public $morphMany = [
-        'prices'                => [
+        'prices'                 => [
             Price::class,
             'name'       => 'priceable',
             'conditions' => 'price_category_id is null and field is null',
@@ -38,12 +38,12 @@ class ShippingMethod extends Model
         'available_below_totals' => [
             Price::class,
             'name'       => 'priceable',
-            'conditions' => 'price_category_id is null and field = "available_below_total"',
+            'conditions' => 'price_category_id is null and field = "available_below_totals"',
         ],
         'available_above_totals' => [
             Price::class,
             'name'       => 'priceable',
-            'conditions' => 'price_category_id is null and field = "available_above_total"',
+            'conditions' => 'price_category_id is null and field = "available_above_totals"',
         ],
     ];
     public $hasMany = [

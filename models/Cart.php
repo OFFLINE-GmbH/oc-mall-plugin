@@ -179,7 +179,7 @@ class Cart extends Model
      * Makes sure that the selected shipping method
      * can still be applied to this cart.
      */
-    private function validateShippingMethod()
+    public function validateShippingMethod()
     {
         if ( ! $this->shipping_method_id) {
             return true;

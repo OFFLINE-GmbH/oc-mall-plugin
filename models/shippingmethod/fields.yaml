@@ -48,13 +48,13 @@ tabs:
             span: right
             type: fileupload
             tab: 'offline.mall::lang.common.general'
-        _available_below_total:
+        _available_below_totals:
             label: 'offline.mall::lang.shipping_method.available_below_total'
             oc.commentPosition: ''
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.common.conditions'
-        _available_above_total:
+        _available_above_totals:
             label: 'offline.mall::lang.shipping_method.available_above_total'
             oc.commentPosition: ''
             span: auto
