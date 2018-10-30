@@ -504,7 +504,7 @@ class CartTest extends PluginTestCase
         $availableMethod->available_above_totals()->save(new Price([
             'currency_id' => 1,
             'price'       => 100,
-            'field'       => 'available_above_total',
+            'field'       => 'available_above_totals',
         ]));
 
         $unavailableMethod = $this->getShippingMethod();
@@ -513,7 +513,7 @@ class CartTest extends PluginTestCase
         $unavailableMethod->available_above_totals()->save(new Price([
             'currency_id' => 1,
             'price'       => 200,
-            'field'       => 'available_above_total',
+            'field'       => 'available_above_totals',
         ]));
 
         $cart = new Cart();
@@ -549,7 +549,7 @@ class CartTest extends PluginTestCase
         $availableMethod->available_below_totals()->save(new Price([
             'currency_id' => 1,
             'price'       => 200,
-            'field'       => 'available_below_total',
+            'field'       => 'available_below_totals',
         ]));
 
         $cart = new Cart();
