@@ -57,15 +57,17 @@
             </td>
         </tr>
     {% endfor %}
-    <tr class="mall-cart__payment">
-        <td></td>
-        <td colspan="2">
-            {{ order.payment.method.name }}
-        </td>
-        <td class="text-right">
-            {{ order.payment.total | money }}
-        </td>
-    </tr>
+    {% if order.payment and order.payment.total > 0 %}
+        <tr class="mall-cart__payment">
+            <td></td>
+            <td colspan="2">
+                {{ order.payment_method.fee_label | default(order.payment_method.name) }}
+            </td>
+            <td class="text-right">
+                {{ order.payment.total | money }}
+            </td>
+        </tr>
+    {% endif %}
     <tr class="mall-cart__grand-total">
         <td></td>
         <td colspan="2">

@@ -39,6 +39,12 @@ tabs:
             span: auto
             type: fileupload
             tab: 'offline.mall::lang.product.description'
+        fee_label:
+            label: 'offline.mall::lang.payment_method.fee_label'
+            span: left
+            type: text
+            comment: 'offline.mall::lang.payment_method.fee_label_comment'
+            tab: 'offline.mall::lang.common.fees'
         _prices:
             label: 'offline.mall::lang.payment_method.price'
             span: left

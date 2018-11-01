@@ -393,6 +393,8 @@
         'price_comment'          => 'Der Betrag wird zum Total dazugerechnet',
         'fee_percentage'         => 'Prozentuale Kosten',
         'fee_percentage_comment' => 'Prozent des Gesamttotals, wird zum Total dazugerechnet',
+        'fee_label'              => 'Gebührenbezeichnung',
+        'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
     ],
     'order'                    => [
         'order_number'                        => 'Bestellungsnummer',

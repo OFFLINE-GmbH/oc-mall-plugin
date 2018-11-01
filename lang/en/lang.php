@@ -394,6 +394,8 @@
         'price_comment'          => 'The amount to add to the order\'s total',
         'fee_percentage'         => 'Percentage fee',
         'fee_percentage_comment' => 'The percentage of the total to add to the order\'s total',
+        'fee_label'              => 'Fee label',
+        'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
     ],
     'order'                    => [
         'order_number'                        => 'Order number',
