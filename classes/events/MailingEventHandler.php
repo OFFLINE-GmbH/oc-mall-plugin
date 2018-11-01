@@ -2,10 +2,12 @@
 
 namespace OFFLINE\Mall\Classes\Events;
 
+use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Mail;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\RefundedState;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Notification;
 
 class MailingEventHandler
@@ -81,11 +83,14 @@ class MailingEventHandler
      * A checkout was successful.
      *
      * @param $result
+     *
+     * @throws \Cms\Classes\CmsException
      */
     public function checkoutSucceeded($result)
     {
         $data = [
-            'order' => $result->order->fresh(['products', 'customer']),
+            'order'       => $result->order->fresh(['products', 'customer']),
+            'account_url' => $this->getAccountUrl(),
         ];
 
         Mail::queue($this->template('offline.mall::checkout.succeeded'), $data, function ($message) use ($result) {
@@ -97,11 +102,14 @@ class MailingEventHandler
      * A checkout has failed.
      *
      * @param $result
+     *
+     * @throws \Cms\Classes\CmsException
      */
     public function checkoutFailed($result)
     {
         $data = [
-            'order' => $result->order->fresh(['products', 'customer']),
+            'order'       => $result->order->fresh(['products', 'customer']),
+            'account_url' => $this->getAccountUrl(),
         ];
 
         Mail::queue($this->template('offline.mall::checkout.failed'), $data, function ($message) use ($result) {
@@ -129,6 +137,8 @@ class MailingEventHandler
      * The order has been shipped.
      *
      * @param $order
+     *
+     * @throws \Cms\Classes\CmsException
      */
     public function orderShipped($order)
     {
@@ -137,7 +147,8 @@ class MailingEventHandler
         }
 
         $data = [
-            'order' => $order->load(['order_state']),
+            'order'       => $order->load(['order_state']),
+            'account_url' => $this->getAccountUrl(),
         ];
 
         Mail::queue($this->template('offline.mall::order.shipped'), $data, function ($message) use ($order) {
@@ -150,6 +161,8 @@ class MailingEventHandler
      * Depending on the new order state a different mail template will be used.
      *
      * @param $order
+     *
+     * @throws \Cms\Classes\CmsException
      */
     public function orderPaymentStateChanged($order)
     {
@@ -179,7 +192,8 @@ class MailingEventHandler
         }
 
         $data = [
-            'order' => $order->load(['order_state', 'payment_logs']),
+            'order'       => $order->load(['order_state', 'payment_logs']),
+            'account_url' => $this->getAccountUrl(),
         ];
 
         Mail::queue(
@@ -199,5 +213,18 @@ class MailingEventHandler
     protected function template($code)
     {
         return $this->enabledNotifications->get($code);
+    }
+
+    /**
+     * Return the direct URL to a customer's account page.
+     *
+     * @return string
+     * @throws \Cms\Classes\CmsException
+     */
+    protected function getAccountUrl(): string
+    {
+        return (new Controller())->pageUrl(
+            GeneralSettings::get('account_page'), ['page' => 'orders']
+        );
     }
 }

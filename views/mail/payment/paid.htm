@@ -7,6 +7,6 @@ Hi {{ order.customer.firstname }}
 We just received a payment for your order **#{{ order.order_number }}**. We will now begin to further process the
 order.
 
-{% partial 'button' url=app_url type='primary' body %}
+{% partial 'button' url=account_url type='primary' body %}
     Check the status of your order online
 {% endpartial %}
