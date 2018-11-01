@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Events;
 
+use Backend\Facades\Backend;
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Mail;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
@@ -31,14 +32,6 @@ class MailingEventHandler
                 'event'   => 'mall.customer.afterSignup',
                 'handler' => 'MailingEventHandler@customerCreated',
             ],
-            'offline.mall::checkout.succeeded'  => [
-                'event'   => 'mall.checkout.succeeded',
-                'handler' => 'MailingEventHandler@checkoutSucceeded',
-            ],
-            'offline.mall::checkout.failed'     => [
-                'event'   => 'mall.checkout.failed',
-                'handler' => 'MailingEventHandler@checkoutFailed',
-            ],
             'offline.mall::order.state.changed' => [
                 'event'   => 'mall.order.state.changed',
                 'handler' => 'MailingEventHandler@orderStateChanged',
@@ -56,6 +49,8 @@ class MailingEventHandler
         }
 
         $events->listen('mall.order.payment_state.changed', 'MailingEventHandler@orderPaymentStateChanged');
+        $events->listen('mall.checkout.succeeded', 'MailingEventHandler@checkoutSucceeded');
+        $events->listen('mall.checkout.failed', 'MailingEventHandler@checkoutFailed');
     }
 
     /**
@@ -91,11 +86,27 @@ class MailingEventHandler
         $data = [
             'order'       => $result->order->fresh(['products', 'customer']),
             'account_url' => $this->getAccountUrl(),
+            'order_url'   => $this->getBackendOrderUrl($result->order),
         ];
 
-        Mail::queue($this->template('offline.mall::checkout.succeeded'), $data, function ($message) use ($result) {
-            $message->to($result->order->customer->user->email, $result->order->customer->name);
-        });
+        // Notify the customer
+        if ($this->enabledNotifications->has('offline.mall::checkout.succeeded')) {
+            Mail::queue($this->template('offline.mall::checkout.succeeded'), $data, function ($message) use ($result) {
+                $message->to($result->order->customer->user->email, $result->order->customer->name);
+            });
+        }
+
+        // Notify the admin
+        if (
+            $this->enabledNotifications->has('offline.mall::admin.checkout_succeeded')
+            && $adminMail = GeneralSettings::get('admin_email')
+        ) {
+            Mail::queue(
+                $this->template('offline.mall::admin.checkout_succeeded'), $data,
+                function ($message) use ($adminMail) {
+                    $message->to($adminMail);
+                });
+        }
     }
 
     /**
@@ -110,11 +121,26 @@ class MailingEventHandler
         $data = [
             'order'       => $result->order->fresh(['products', 'customer']),
             'account_url' => $this->getAccountUrl(),
+            'order_url'   => $this->getBackendOrderUrl($result->order),
         ];
 
-        Mail::queue($this->template('offline.mall::checkout.failed'), $data, function ($message) use ($result) {
-            $message->to($result->order->customer->user->email, $result->order->customer->name);
-        });
+        // Notify the customer
+        if ($this->enabledNotifications->has('offline.mall::checkout.failed')) {
+            Mail::queue($this->template('offline.mall::checkout.failed'), $data, function ($message) use ($result) {
+                $message->to($result->order->customer->user->email, $result->order->customer->name);
+            });
+        }
+
+        // Notify the admin
+        if (
+            $this->enabledNotifications->has('offline.mall::admin.checkout_failed')
+            && $adminMail = GeneralSettings::get('admin_email')
+        ) {
+            Mail::queue($this->template('offline.mall::admin.checkout_failed'), $data,
+                function ($message) use ($adminMail) {
+                    $message->to($adminMail);
+                });
+        }
     }
 
     /**
@@ -226,5 +252,17 @@ class MailingEventHandler
         return (new Controller())->pageUrl(
             GeneralSettings::get('account_page'), ['page' => 'orders']
         );
+    }
+
+    /**
+     * Returns the direct URL to the order details.
+     *
+     * @param $order
+     *
+     * @return string
+     */
+    protected function getBackendOrderUrl($order): string
+    {
+        return Backend::url('offline/mall/orders/' . $order->id);
     }
 }
