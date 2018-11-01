@@ -4,23 +4,14 @@ description = "Sent to the shop admin when a checkout has succeeded"
 
 The following order was placed in your store:
 
-### {{ order.shipping_address_same_as_billing ? 'Billing and shipping' : 'Billing' }} address
-{% partial 'mall.customer.address' address=order.billing_address %}
-
-{% if not order.shipping_address_same_as_billing %}
-    ### Shipping address
-    {% partial 'mall.customer.address' address=order.shipping_address %}
-{% endif %}
+{% partial 'mall.order.addresses' order=order %}
 
 ### Order details
+
 {% partial 'mall.order.table' order=order %}
 
 {% partial 'panel' body %}
-    {% if order.payment_state == 'OFFLINE\\Mall\\Classes\\PaymentState\\PaidState' %}
-        The order has been paid on {{ order.payment_log.created_at }}.
-    {% else %}
-        The payment for this order is currently pending.
-    {% endif %}
+    {% partial 'mall.order.payment_state' order=order %}
 {% endpartial %}
 
 {% partial 'button' url=order_url type='primary' body %}
