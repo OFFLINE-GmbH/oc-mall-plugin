@@ -1,9 +1,9 @@
 name = "Addresses"
 ==
-### {{ order.shipping_address_same_as_billing ? 'Billing and shipping' : 'Billing' }} address
+## {{ order.shipping_address_same_as_billing ? 'Billing and shipping' : 'Billing' }} address
 {% partial 'mall.customer.address' address=order.billing_address %}
 
 {% if not order.shipping_address_same_as_billing %}
-    ### Shipping address
+    ## Shipping address
     {% partial 'mall.customer.address' address=order.shipping_address %}
 {% endif %}

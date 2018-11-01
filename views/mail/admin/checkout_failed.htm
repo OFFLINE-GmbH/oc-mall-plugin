@@ -5,14 +5,14 @@ description = "Sent to the shop admin when a checkout has failed"
 The following order could not be processed correctly. It is possible that you have to
 contact the customer.
 
-### Error details
+## Error details
 
 Payment ID: {{ order.payment_log.id }}
 Message: {{ order.payment_log.message }}
 
 {% partial 'mall.order.addresses' order=order %}
 
-### Order details
+## Order details
 {% partial 'mall.order.table' order=order %}
 
 
