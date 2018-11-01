@@ -16,7 +16,7 @@ trait MenuItems
      * @param $theme
      *
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \Cms\Classes\CmsException
      */
     public static function resolveCategoryItem($item, $url, $theme)
     {
@@ -42,7 +42,9 @@ trait MenuItems
         $locale   = $category->getLocale();
 
         if (Cache::has($category->treeCacheKey($locale))) {
-            return Cache::get($category->treeCacheKey($locale));
+            return $category->setActiveMenuItem(
+                Cache::get($category->treeCacheKey($locale)
+            ), $url);
         }
 
         $structure = [];
@@ -63,6 +65,8 @@ trait MenuItems
         $structure['items'] = $iterator($category->getEagerRoot());
 
         Cache::forever($category->treeCacheKey($locale), $structure);
+
+        $structure = $category->setActiveMenuItem($structure, $url);
 
         return $structure;
     }
@@ -87,12 +91,11 @@ trait MenuItems
         $controller = new Controller();
         $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
 
-        $result             = [];
-        $result['url']      = $entryUrl;
-        $result['isActive'] = $entryUrl === $url;
-        $result['mtime']    = $item->updated_at;
-        $result['title']    = $item->name;
-        $result['code']     = $item->code;
+        $result          = [];
+        $result['url']   = $entryUrl;
+        $result['mtime'] = $item->updated_at;
+        $result['title'] = $item->name;
+        $result['code']  = $item->code;
 
         return $result;
     }
@@ -189,5 +192,35 @@ trait MenuItems
         foreach ($this->getLocales() as $locale) {
             $this->getSlugMap($locale);
         }
+    }
+
+
+    /**
+     * Mark the currently active menu item as isActive.
+     *
+     * The active menu item is set manually since the whole tree structure
+     * gets cached. The active menu item will change on a per-page basis though.
+     *
+     * @param $items
+     * @param $url
+     *
+     * @return array
+     */
+    protected function setActiveMenuItem($items, $url)
+    {
+        $iterator = function (&$items, $url) use (&$iterator) {
+            foreach ($items as &$item) {
+                if ($item['url'] === $url) {
+                    $item['isActive'] = true;
+                }
+                if ($item['items']) {
+                    $item['items'] = $iterator($item['items'], $url);
+                }
+            }
+        };
+
+        $iterator($items['items'], $url);
+
+        return $items;
     }
 }
