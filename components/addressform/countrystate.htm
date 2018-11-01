@@ -1,6 +1,11 @@
 {% set countryId = countryId|default(form_value('country_id')) %}
 {% set stateId = stateId|default(form_value('state_id')) %}
 
+{# If only one country is available it can be preselected. #}
+{% if (__SELF__.countries | length) == 1 %}
+    {% set countryId = (__SELF__.countries | keys)[0] %}
+{% endif %}
+
 {% set id = type ~ 'country_id' %}
 <div class="mall-form-control">
     <label for="{{ id }}">{{ 'offline.mall::frontend.form.country' | trans }}</label>
