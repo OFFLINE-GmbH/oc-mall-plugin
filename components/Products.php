@@ -4,14 +4,19 @@ use ArrayAccess;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
+use RainLab\User\Facades\Auth;
+use Redirect;
 
 /**
  * The Products components displays a list of Products.
@@ -180,26 +185,6 @@ class Products extends MallComponent
     }
 
     /**
-     * The component is executed.
-     *
-     * @return string|void
-     */
-    public function onRun()
-    {
-        try {
-            $this->setData();
-        } catch (ModelNotFoundException $e) {
-            return $this->controller->run('404');
-        }
-
-        // If a category is selected and the page title should be set, do so.
-        if ($this->category && $this->setPageTitle) {
-            $this->page->title            = $this->category->meta_title ?: $this->category->name;
-            $this->page->meta_description = $this->category->meta_description;
-        }
-    }
-
-    /**
      * This method sets all variables needed for this component to work.
      *
      * @return void
@@ -226,6 +211,56 @@ class Products extends MallComponent
         $this->setVar('pageNumber', (int)request('page', 1));
         $this->setVar('perPage', (int)$this->property('perPage'));
         $this->setVar('items', $this->getItems());
+    }
+
+    /**
+     * The component is executed.
+     *
+     * @return string|void
+     */
+    public function onRun()
+    {
+        try {
+            $this->setData();
+        } catch (ModelNotFoundException $e) {
+            return $this->controller->run('404');
+        }
+
+        // If a category is selected and the page title should be set, do so.
+        if ($this->category && $this->setPageTitle) {
+            $this->page->title            = $this->category->meta_title ?: $this->category->name;
+            $this->page->meta_description = $this->category->meta_description;
+        }
+    }
+
+    /**
+     * Add a product to the cart.
+     *
+     * @return mixed
+     * @throws ValidationException
+     */
+    public function onAddToCart()
+    {
+        $product = Product::published()->findOrFail(post('product'));
+        $variant = null;
+        if (post('variant')) {
+            $variant = Variant::published()->where('product_id', $product->id)->findOrFail(post('variant'));
+        }
+
+        $cart     = CartModel::byUser(Auth::getUser());
+        $quantity = (int)post('quantity', $product->quantity_default ?? 1);
+        try {
+            $cart->addProduct($product, $quantity, $variant);
+        } catch (OutOfStockException $e) {
+            throw new ValidationException(['stock' => trans('offline.mall::lang.common.stock_limit_reached')]);
+        }
+
+        // If the redirect_to_cart option is set to true the user is redirected to the cart.
+        if ((bool)GeneralSettings::get('redirect_to_cart', false) === true) {
+            $cartPage = GeneralSettings::get('cart_page');
+
+            return Redirect::to($this->controller->pageUrl($cartPage));
+        }
     }
 
     /**

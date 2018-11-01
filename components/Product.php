@@ -207,18 +207,9 @@ class Product extends MallComponent
         $variant = null;
         $values  = $this->validateCustomFields(post('fields', []));
 
-        // If no variantId is available we can safely use the Product model for stock checks.
-        if ($this->variantId === null) {
-            $hasStock = $product->allow_out_of_stock_purchases || $product->stock > 0;
-        } else {
-            // In case a Variant is added we have to retrieve the model first by the selected props
-            // and then check the available stock on this model instead.
+        if ($this->variantId !== null) {
+            // In case a Variant is added we have to retrieve the model first by the selected props.
             $variant  = $this->getVariantByPropertyValues(post('props'));
-            $hasStock = $variant !== null && ($variant->allow_out_of_stock_purchases || $variant->stock > 0);
-        }
-
-        if ( ! $hasStock) {
-            throw new ValidationException(['stock' => trans('offline.mall::lang.common.out_of_stock_short')]);
         }
 
         $cart     = Cart::byUser(Auth::getUser());
