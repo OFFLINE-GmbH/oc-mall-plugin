@@ -46,7 +46,9 @@
     </div>
 
     <div class="mall-signup__billing-address">
-        <h3 class="mall-signup__subheading">{{ 'offline.mall::frontend.billing_address' | trans }}</h3>
+        <h3 class="mall-signup__subheading">
+            {{ 'offline.mall::frontend.address' | trans }}
+        </h3>
 
         {% partial __SELF__ ~ '::addressform' type='billing' %}
 
@@ -63,7 +65,9 @@
     </div>
 
     <div class="mall-shipping-address" style="display: none">
-        <h3 class="mall-signup__subheading">{{ 'offline.mall::frontend.shipping_address' | trans }}</h3>
+        <h3 class="mall-signup__subheading">
+            {{ 'offline.mall::frontend.shipping_address' | trans }}
+        </h3>
         {% partial __SELF__ ~ '::addressform' type='shipping' %}
     </div>
 

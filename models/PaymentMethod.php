@@ -88,7 +88,7 @@ class PaymentMethod extends Model
 
     public static function getDefault()
     {
-        return static::first();
+        return static::orderBy('sort_order', 'ASC')->first();
     }
 
     public function getSettingsAttribute()

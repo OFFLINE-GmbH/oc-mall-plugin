@@ -52,6 +52,7 @@ return [
     'form.city'                                => 'Ort',
     'form.state'                               => 'Kanton/Bundesstaat',
     'form.country'                             => 'Land',
+    'address'                                  => 'Adresse',
     'billing_address'                          => 'Rechnungsadresse',
     'shipping_address'                         => 'Versandadresse',
     'no_additional_charges'                    => 'Keine zusätzlichen Kosten',
