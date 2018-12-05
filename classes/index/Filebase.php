@@ -76,6 +76,8 @@ class Filebase implements Index
 
     public function fetch(string $index, Collection $filters, SortOrder $order, int $perPage, int $forPage): IndexResult
     {
+        $order->setFilters(clone $filters);
+
         $skip  = $perPage * ($forPage - 1);
         $items = $this->search($index, $filters, $order);
 

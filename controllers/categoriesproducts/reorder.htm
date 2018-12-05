@@ -1,0 +1,17 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li>
+            <a href="<?= Backend::url('offline/mall/categories/') ?>">
+                <?= e(trans('offline.mall::lang.common.categories')) ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?= Backend::url('offline/mall/categories/update/' . e($this->params[0])) ?>">
+                <?= e($this->vars['category']->name) ?>
+            </a>
+        </li>
+        <li><?= e(trans('offline.mall::lang.common.products')) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<?= $this->reorderRender() ?>

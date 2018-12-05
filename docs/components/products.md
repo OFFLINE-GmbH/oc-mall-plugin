@@ -14,6 +14,11 @@ Select only items from this [Category](../digging-deeper/categories.md). Possibl
 | `8` | Only show products from the category with the ID `8` (use any integer) |
 | `:slug` | Use the page's `:slug` URL parameter to find the category to filter by |
 
+### `filterComponent` (string)
+
+Alias of the [ProductsFilter](./products-filter.md) component that is used to filter
+this `Products` component. Defaults to `productsFilter`
+
 ### `includeChildren` (bool)
 
 Include all products or variants from child categories as well.
@@ -43,6 +48,7 @@ The sort mode applied to the result set. Possible values are:
 
 | Value        | Description           |
 | ------------ | --------------------- |
+| `manual`     | Order defined via Backend   |
 | `bestseller` | Best selling first    |
 | `latest`     | Latest products first |
 | `oldest`     | Oldest products first | 

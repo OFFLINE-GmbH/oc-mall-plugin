@@ -129,6 +129,12 @@ class ProductsFilter extends MallComponent
      */
     public $sortOptions;
     /**
+     * Sort order of the products component.
+     *
+     * @var string
+     */
+    public $productsComponentSort;
+    /**
      * An instance of the money formatter class.
      *
      * @var Money
@@ -246,10 +252,13 @@ class ProductsFilter extends MallComponent
         }
 
         $this->setVar('propertyGroups', $this->getPropertyGroups());
-        $this->setVar('props', $this->setProps());
+        $this->setProps();
+
+        $nullOption = [null => trans('offline.mall::frontend.select')];
+
         $this->setVar('filter', $this->getFilter());
         $this->setVar('sortOrder', $this->getSortOrder());
-        $this->setVar('sortOptions', SortOrder::options(true));
+        $this->setVar('sortOptions', array_merge($nullOption, SortOrder::options(true)));
     }
 
     /**
@@ -426,7 +435,9 @@ class ProductsFilter extends MallComponent
      */
     protected function getSortOrder(): string
     {
-        return input('sort', SortOrder::default());
+        $fallback = optional($this->productsComponentSort)->key() ?? SortOrder::default();
+
+        return input('sort', $fallback);
     }
 
     /**

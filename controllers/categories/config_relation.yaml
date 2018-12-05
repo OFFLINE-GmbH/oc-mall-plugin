@@ -16,3 +16,11 @@ property_groups:
     manage:
         form: $/offline/mall/models/propertygroup/fields_no_relation.yaml
         list: $/offline/mall/models/propertygroup/columns.yaml
+
+products:
+    label: 'offline.mall::lang.common.product'
+    view:
+        list: $/offline/mall/models/product/columns.yaml
+        recordsPerPage: 10
+        recordUrl: offline/mall/products/update/:id
+        toolbarPartial: products_relation_partial

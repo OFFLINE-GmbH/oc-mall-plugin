@@ -27,6 +27,7 @@ class ProductEntry implements Entry
         $data['index']           = self::INDEX;
         $data['prices']          = $this->mapPrices($product->prices);
         $data['property_values'] = $this->mapProps($product->property_values);
+        $data['sort_orders']     = $product->getSortOrders();
 
         $this->data = $data;
     }

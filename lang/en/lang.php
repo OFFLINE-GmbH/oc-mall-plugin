@@ -521,6 +521,10 @@
             'properties' => [
                 'no_category_filter' => 'Don\'t filter by category',
                 'use_url'            => 'Use category slug from URL',
+                'filter_component'   => [
+                    'title'       => 'Filter component alias',
+                    'description' => 'Alias of the ProductsFilter component that filters this Products component',
+                ],
                 'include_variants'   => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
@@ -571,6 +575,10 @@
                     'title'       => 'Include noUI Slider',
                     'description' => 'Include all dependiencies of noUI Slider via cdnjs',
                 ],
+                'sortOrder'           => [
+                    'title'       => 'Sort order',
+                    'description' => 'Initial sort order',
+                ],
             ],
             'sortOrder'  => [
                 'bestseller' => 'Bestseller',
@@ -578,6 +586,8 @@
                 'priceHigh'  => 'Highest price',
                 'latest'     => 'Latest',
                 'oldest'     => 'Oldest',
+                'random'     => 'Random',
+                'manual'     => 'Manual',
             ],
         ],
         'myAccount'              => [

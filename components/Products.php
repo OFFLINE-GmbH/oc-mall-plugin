@@ -83,6 +83,12 @@ class Products extends MallComponent
      */
     public $sort;
     /**
+     * ProductsFilter Component.
+     *
+     * @var ProductsFilter
+     */
+    public $filterComponent;
+    /**
      * Set the category's name as page title.
      *
      * @var bool
@@ -120,6 +126,12 @@ class Products extends MallComponent
                 'title'   => 'offline.mall::lang.common.category',
                 'default' => null,
                 'type'    => 'dropdown',
+            ],
+            'filterComponent' => [
+                'title'       => 'offline.mall::lang.components.products.properties.filter_component.title',
+                'description' => 'offline.mall::lang.components.products.properties.filter_component.description',
+                'default'     => 'productsFilter',
+                'type'        => 'string',
             ],
             'setPageTitle'    => [
                 'title'       => 'offline.mall::lang.components.products.properties.set_page_title.title',
@@ -191,11 +203,11 @@ class Products extends MallComponent
      */
     protected function setData()
     {
+        $this->setVar('sort', $this->property('sort'));
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
         $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
         $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
         $this->setVar('paginate', (bool)$this->property('paginate'));
-        $this->setVar('sort', $this->property('sort'));
         $this->setVar('category', $this->getCategory());
 
         if ($this->category) {
@@ -220,6 +232,12 @@ class Products extends MallComponent
      */
     public function onRun()
     {
+        $filterComponent = $this->controller->findComponentByName($this->property('filterComponent'));
+        if ($filterComponent) {
+            $filterComponent->productsComponentSort = $this->getSortOrder();
+            $this->filterComponent                  = $filterComponent;
+        }
+
         try {
             $this->setData();
         } catch (ModelNotFoundException $e) {
@@ -410,7 +428,7 @@ class Products extends MallComponent
      */
     protected function getSortOrder(): SortOrder
     {
-        $key = $this->sort ?? input('sort', SortOrder::default());
+        $key = input('sort', $this->property('sort') ?? SortOrder::default());
 
         return SortOrder::fromKey($key);
     }

@@ -520,6 +520,10 @@
             'properties' => [
                 'no_category_filter' => 'Nicht nach Kategorie filtern',
                 'use_url'            => 'Verwende Kategorie-Slug aus URL',
+                'filter_component'   => [
+                    'title'       => 'Alias der Filter-Komponente',
+                    'description' => 'Alias der Filter-Komponente die für diese Produkte-Komponente zuständig ist',
+                ],
                 'include_variants'   => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
@@ -560,7 +564,7 @@
                 ],
                 'includeChildren'     => [
                     'title'       => 'Zeige Filter aus Kinderkategorien auch an',
-                    'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfals',
+                    'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfalls',
                 ],
                 'includeVariants'     => [
                     'title'       => 'Varianten verwenden',
@@ -570,6 +574,10 @@
                     'title'       => 'Binde noUI Slider ein',
                     'description' => 'Lädt die Abhängigkeiten für den noUI Slider via cdnjs',
                 ],
+                'sortOrder'           => [
+                    'title'       => 'Sortierung',
+                    'description' => 'Standard Sortierung',
+                ],
             ],
             'sortOrder'  => [
                 'bestseller' => 'Bestseller',
@@ -577,6 +585,8 @@
                 'priceHigh'  => 'Teuerste',
                 'latest'     => 'Neuste',
                 'oldest'     => 'Älteste',
+                'random'     => 'Zufällig',
+                'manual'     => 'Manuell',
             ],
         ],
         'myAccount'              => [

@@ -54,6 +54,12 @@ tabs:
                 condition: checked
             type: partial
             tab: 'offline.mall::lang.common.property_groups'
+        products:
+            oc.commentPosition: ''
+            span: full
+            path: $/offline/mall/controllers/categories/_products.htm
+            type: partial
+            tab: 'offline.mall::lang.common.products'
         meta_title:
             label: 'offline.mall::lang.common.meta_title'
             oc.commentPosition: ''

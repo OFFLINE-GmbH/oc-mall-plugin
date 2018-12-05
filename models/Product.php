@@ -2,6 +2,7 @@
 
 use DB;
 use Model;
+use Cache;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -210,6 +211,7 @@ class Product extends Model
         DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_category_product_sort_order')->where('product_id', $this->id)->delete();
     }
 
     /**
@@ -280,5 +282,29 @@ class Product extends Model
             + $this->category->properties->filter(function ($q) {
                 return $q->pivot->use_for_variants;
             })->pluck('name', 'id')->toArray();
+    }
+
+    /**
+     * Returns the category specific sort orders of this product.
+     */
+    public function getSortOrders()
+    {
+        return Cache::rememberForever(self::sortOrderCacheKey($this->id), function () {
+            return \DB::table('offline_mall_category_product_sort_order')
+                      ->where('product_id', $this->id)
+                      ->get(['category_id', 'sort_order',])
+                      ->pluck('sort_order', 'category_id')
+                      ->toArray();
+        });
+    }
+
+    /**
+     * Returns the Cache key to store the sort order.
+     *
+     * @return string
+     */
+    public static function sortOrderCacheKey($id)
+    {
+        return 'category.sort.order.' . $id;
     }
 }

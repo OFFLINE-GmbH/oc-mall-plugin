@@ -109,6 +109,10 @@ class Price extends FormWidgetBase
     {
         $relation = ltrim($this->valueFrom, '_');
 
+        if ( ! $this->model->hasRelation($relation)) {
+            return null;
+        }
+
         $this->model->loadMissing($relation);
 
         return $this->model->getRelation($relation);

@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter\SortOrder;
 
+use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 
 abstract class SortOrder
@@ -12,6 +13,11 @@ abstract class SortOrder
      * @var Currency
      */
     public $currency;
+    /**
+     * Any active search filters.
+     * @var Collection
+     */
+    protected $filters;
 
     public function __construct()
     {
@@ -56,6 +62,7 @@ abstract class SortOrder
     public static function options($excludeInternal = false)
     {
         $options = [
+            'manual'     => new Manual(),
             'bestseller' => new Bestseller(),
             'latest'     => new Latest(),
             'price_low'  => new PriceLow(),
@@ -65,7 +72,7 @@ abstract class SortOrder
         ];
 
         if ($excludeInternal) {
-            unset($options['random']);
+            unset($options['manual'], $options['random']);
         }
 
         return $options;
@@ -81,6 +88,7 @@ abstract class SortOrder
     {
         return [
             'bestseller' => (new Bestseller())->label(),
+            'manual'     => (new Manual())->label(),
             'latest'     => (new Latest())->label(),
             'price_low'  => (new PriceLow())->label(),
             'price_high' => (new PriceHigh())->label(),
@@ -115,6 +123,20 @@ abstract class SortOrder
     public function customSortFunction(string $property = '', string $direction = ''): ?callable
     {
         return null;
+    }
+
+    /**
+     * Set any active search filters.
+     *
+     * @param Collection $filters
+     *
+     * @return SortOrder
+     */
+    public function setFilters(Collection $filters)
+    {
+        $this->filters = $filters;
+
+        return $this;
     }
 
     /**
