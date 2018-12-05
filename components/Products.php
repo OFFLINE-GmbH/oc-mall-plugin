@@ -294,6 +294,8 @@ class Products extends MallComponent
         $model    = $this->includeVariants ? new Variant() : new Product();
         $useIndex = $this->includeVariants ? 'variants' : 'products';
 
+        $sortOrder->setFilters(clone $filters);
+
         /** @var Index $index */
         $index  = app(Index::class);
         $result = $index->fetch($useIndex, $filters, $sortOrder, $this->perPage, $this->pageNumber);
