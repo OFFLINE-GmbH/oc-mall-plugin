@@ -28,6 +28,7 @@ class VariantEntry implements Entry
         $data['index']           = self::INDEX;
         $data['prices']          = $this->mapPrices($variant->prices);
         $data['property_values'] = $this->mapProps($variant->all_property_values);
+        $data['sort_orders']     = $variant->product->getSortOrders();
 
         $this->data = $data;
     }
