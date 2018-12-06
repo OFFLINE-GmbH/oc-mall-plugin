@@ -83,7 +83,7 @@ function onInit() {
     
     // Get the user's cart total
     $cart = Cart::byUser(Auth::getUser());
-    $total = $cart->totals->totalPostTaxes();
+    $total = $cart->totals->productPostTaxes();
 
     // Get the free shipping method and check the total
     // it needs to become available.
