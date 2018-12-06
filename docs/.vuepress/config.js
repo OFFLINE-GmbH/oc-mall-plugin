@@ -55,13 +55,8 @@ module.exports = {
                     '/development/product-model',
                     '/development/variant-model',
                     '/development/payment-providers',
-                    '/development/pricing-information'
-                ]
-            },
-            {
-                title: 'Services',
-                children: [
-                    '/services/console'
+                    '/development/pricing-information',
+                    '/development/console-commands',
                 ]
             }
         ],
