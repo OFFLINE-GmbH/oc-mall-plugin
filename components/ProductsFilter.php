@@ -170,13 +170,13 @@ class ProductsFilter extends MallComponent
             'includeChildren'     => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeChildren.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeChildren.description',
-                'default'     => '1',
+                'default'     => null,
                 'type'        => 'checkbox',
             ],
             'includeVariants'     => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeVariants.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeVariants.description',
-                'default'     => '1',
+                'default'     => null,
                 'type'        => 'checkbox',
             ],
             'showPriceFilter'     => [
@@ -233,8 +233,18 @@ class ProductsFilter extends MallComponent
         $this->setVar('currency', Currency::activeCurrency());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
-        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
-        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+
+        // The includeChildren and includeVariants properties are set by the
+        // products component. If the user specifies explicit values via the
+        // component props we can use these instead.
+        $includeChildren = $this->property('includeChildren');
+        if ($includeChildren !== null) {
+            $this->setVar('includeChildren', (bool)$includeChildren);
+        }
+        $includeVariants = $this->property('includeVariants');
+        if ($includeVariants !== null) {
+            $this->setVar('includeVariants', (bool)$includeVariants);
+        }
 
         $this->setVar('category', $this->getCategory());
 

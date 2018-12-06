@@ -203,10 +203,10 @@ class Products extends MallComponent
      */
     protected function setData()
     {
-        $this->setVar('sort', $this->property('sort'));
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
-        $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
         $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+        $this->setVar('sort', $this->property('sort'));
+        $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
         $this->setVar('paginate', (bool)$this->property('paginate'));
         $this->setVar('category', $this->getCategory());
 
@@ -232,9 +232,15 @@ class Products extends MallComponent
      */
     public function onRun()
     {
+        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
+        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+
         $filterComponent = $this->controller->findComponentByName($this->property('filterComponent'));
         if ($filterComponent) {
+            // Set properties on the filter component.
             $filterComponent->productsComponentSort = $this->getSortOrder();
+            $filterComponent->includeChildren       = $this->includeChildren;
+            $filterComponent->includeVariants       = $this->includeVariants;
             $this->filterComponent                  = $filterComponent;
         }
 
