@@ -64,3 +64,42 @@ showTaxes = 0
 [cart]
 showDiscountApplier = 0
 ```
+
+### Display the price difference until the shipping becomes free
+
+```php
+title = "Cart"
+url = "/cart"
+
+[cart]
+==
+<?php
+use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\ShippingMethod;
+
+function onInit() {
+    // Set this to your free shipping method
+    $freeShippingMethod = 2;
+    
+    // Get the user's cart total
+    $cart = Cart::byUser(Auth::getUser());
+    $total = $cart->totals->totalPostTaxes();
+
+    // Get the free shipping method and check the total
+    // it needs to become available.
+    $freeShipping = ShippingMethod::find($freeShippingMethod);
+    $totalNeeded  = $freeShipping->availableAboveTotal()->integer;
+    
+    // costLeft ist the difference the customer needs to add to
+    // her cart until the free shipping becomes available.
+    $this['costLeft'] = $totalNeeded - $total;
+}
+==
+{% component 'cart' %}
+
+{% if costLeft > 0 %}
+    <div class="free-shipping-notice">
+        {{ costLeft | money }} until your shipping becomes free!
+    </div>
+{% endif %}
+```
