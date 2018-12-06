@@ -205,10 +205,20 @@ class Products extends MallComponent
     {
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
         $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+        $this->setVar('category', $this->getCategory());
+
+        $filterComponent = $this->controller->findComponentByName($this->property('filterComponent'));
+        if ($filterComponent) {
+            $filterComponent->productsComponentSort     = $this->getSortOrder();
+            $filterComponent->productsComponentCategory = $this->category;
+            $filterComponent->includeChildren           = $this->includeChildren;
+            $filterComponent->includeVariants           = $this->includeVariants;
+            $this->filterComponent                      = $filterComponent;
+        }
+
         $this->setVar('sort', $this->property('sort'));
         $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
         $this->setVar('paginate', (bool)$this->property('paginate'));
-        $this->setVar('category', $this->getCategory());
 
         if ($this->category) {
             $categories = [$this->category->id];
@@ -232,18 +242,6 @@ class Products extends MallComponent
      */
     public function onRun()
     {
-        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
-        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
-
-        $filterComponent = $this->controller->findComponentByName($this->property('filterComponent'));
-        if ($filterComponent) {
-            // Set properties on the filter component.
-            $filterComponent->productsComponentSort = $this->getSortOrder();
-            $filterComponent->includeChildren       = $this->includeChildren;
-            $filterComponent->includeVariants       = $this->includeVariants;
-            $this->filterComponent                  = $filterComponent;
-        }
-
         try {
             $this->setData();
         } catch (ModelNotFoundException $e) {

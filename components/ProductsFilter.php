@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Queries\PriceRangeQuery;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
@@ -135,6 +136,12 @@ class ProductsFilter extends MallComponent
      */
     public $productsComponentSort;
     /**
+     * Category of the products component.
+     *
+     * @var Category
+     */
+    public $productsComponentCategory;
+    /**
      * An instance of the money formatter class.
      *
      * @var Money
@@ -164,7 +171,7 @@ class ProductsFilter extends MallComponent
         return [
             'category'            => [
                 'title'   => 'offline.mall::lang.common.category',
-                'default' => ':slug',
+                'default' => null,
                 'type'    => 'dropdown',
             ],
             'includeChildren'     => [
@@ -420,6 +427,11 @@ class ProductsFilter extends MallComponent
      */
     protected function getCategory()
     {
+        // Use the category from the products component if nothing else is specified.
+        if ($this->productsComponentCategory && $this->property('category') === null) {
+            return $this->productsComponentCategory;
+        }
+
         return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
