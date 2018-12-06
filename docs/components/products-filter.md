@@ -4,8 +4,11 @@ The `ProductsFilter` displays filters for a category. It's selection will be app
  [Products component](./products.md).
  
 ::: warning
-When implementing this component it is important to specify the same values for the `includeChildren`, 
-`includeVariants` and `category` properties as you defined for the corresponding [Products component](./products.md). 
+You don't have to specify the `includeChildren`, `includeVariants` and `category` properties.
+The values from the corresponding [Products component](./products.md) will be used automatically. 
+
+If you for whatever reason want to specify them anyway, make sure to use the same values as you 
+have used in the Products component.
 :::
 
 ## Properties
@@ -20,14 +23,19 @@ Select only items from this [Category](../digging-deeper/categories.md). Possibl
 | `8` | Only show products from the category with the ID `8` (use any integer) |
 | `:slug` | Use the page's `:slug` URL parameter to find the category to filter by |
 
+If not specified the same value as specified on the [Products component](./products.md) will be used.
+
 ### `includeChildren` (bool)
 
 Include all products or variants from child categories as well.
+
+If not specified the same value as specified on the [Products component](./products.md) will be used.
 
 ### `includeVariants` (bool)
 
 Set this to `true` to filter by all Variant properties, not only Product properties.
 
+If not specified the same value as specified on the [Products component](./products.md) will be used.
 
 ### `showPriceFilter` (bool)
 
@@ -55,11 +63,8 @@ includeChildren = 1
 perPage = 9
 
 [productsFilter]
-category = ":slug"
 showPriceFilter = 1
 showBrandFilter = 1
-includeChildren = 1
-includeVariants = 1
 includeSliderAssets = 1
 ==
 <div class="container">
