@@ -1,32 +1,27 @@
-# Console commands
+# Integration with other Plugins
 
-## `mall:check`
+## OFFLINE.SiteSearch
 
-The `php artisan mall:check` console command runs a set of checks on your October installation and makes sure that 
-everything is configured correctly. It also supports you in fixing any problems that were found.
+Searching for products and variants using [`OFFLINE.SiteSearch`](https://github.com/OFFLINE-GmbH/oc-site-search-plugin) 
+works out of the box.
 
-## `mall:seed-demo`
+## OFFLINE.GDPR
 
-The `php artisan mall:seed-demo` command will populate your installation with demo data.
+Data retention via [OFFLINE.GDPR](https://github.com/OFFLINE-GmbH/oc-gdpr-plugin) for Orders, Customer accounts
+ and abandoned Carts is available out of the box and can be configured via the plugin's backend settings page. 
+ 
+## RainLab.Translate
 
+Support for [`RainLab.Translate`](https://github.com/rainlab/translate-plugin) is available out of the box. All shop data can be translated via the backend form 
+widgets.
 
-::: warning
-This will erase all shop data and reset all settings! Do not run this command if you have already configured your 
-installation. 
-:::
+## RainLab.Sitemap
 
-## `mall:reindex`
+To publish all of your shop data to a [`RainLab.Sitemap`](https://github.com/rainlab/sitemap-plugin) generated
+sitemap simply add the three items `All shop categories`, `All shop products` and `All shop variants`
+to your configuration.
 
-The `php artisan mall:reindex` command re-indexes all your product data and fixes a corrupted product index.
+## RainLab.Location
 
-You will notice a corrupted index if your category listing shows
-outdated data or the product filters are 
-not working as expected. 
-
-::: warning
-During the re-indexing process your frontend will be wiped clean and 
-only show already re-indexed products. A re-indexing of a small 
-installation will only take a few seconds. Be aware that this process 
-might take a few minutes if you re-index a huge catalogue with thousands 
-of products.
-:::
+Support for [`RainLab.Location`](https://github.com/rainlab/location-plugin) is available out of the box. 
+Locations to be available in the shop can be configured via the plugin's backend settings page.

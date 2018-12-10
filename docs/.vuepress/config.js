@@ -56,6 +56,7 @@ module.exports = {
                     '/development/variant-model',
                     '/development/payment-providers',
                     '/development/pricing-information',
+                    '/development/integration',
                     '/development/console-commands',
                 ]
             }
