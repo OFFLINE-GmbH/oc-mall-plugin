@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use DB;
 use Event;
 use Model;
@@ -89,6 +90,15 @@ class Order extends Model
                 Event::fire('mall.order.shipped', [$order]);
             }
         });
+    }
+
+    public function afterDelete()
+    {
+        $this->products->each->delete();
+        $this->payment_logs->each->delete();
+        if ($this->cart) {
+            $this->cart->delete();
+        }
     }
 
     public function getIsShippedAttribute()
@@ -333,5 +343,28 @@ class Order extends Model
         }
 
         return 'default';
+    }
+
+    /**
+     * Cleanup of old data using OFFLINE.GDPR.
+     *
+     * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
+     *
+     * @param Carbon $deadline
+     * @param int    $keepDays
+     */
+    public function gdprCleanup(Carbon $deadline, int $keepDays)
+    {
+        self::where('created_at', '<', $deadline)
+            ->withTrashed()
+            ->whereHas('order_state', function ($q) {
+                $q->where('flag', OrderState::FLAG_COMPLETE);
+            })
+            ->get()
+            ->each(function (Order $order) {
+                DB::transaction(function () use ($order) {
+                    $order->forceDelete();
+                });
+            });
     }
 }

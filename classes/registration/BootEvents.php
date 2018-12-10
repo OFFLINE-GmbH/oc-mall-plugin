@@ -5,8 +5,11 @@ namespace OFFLINE\Mall\Classes\Registration;
 use Illuminate\Support\Facades\Event;
 use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
@@ -19,6 +22,7 @@ trait BootEvents
         $this->registerGenericEvents();
         $this->registerStaticPagesEvents();
         $this->registerSiteSearchEvents();
+        $this->registerGdprEvents();
     }
 
     public function registerObservers()
@@ -73,6 +77,33 @@ trait BootEvents
     {
         Event::listen('offline.sitesearch.extend', function () {
             return new ProductsSearchProvider();
+        });
+    }
+
+    protected function registerGdprEvents()
+    {
+        Event::listen('offline.gdpr::cleanup.register', function () {
+            return [
+                'id'     => 'oc-mall-plugin',
+                'label'  => 'OFFLINE Mall',
+                'models' => [
+                    [
+                        'label'   => 'Customers',
+                        'comment' => 'Delete inactive customer accounts (based on last login date)',
+                        'class'   => Customer::class,
+                    ],
+                    [
+                        'label'   => 'Orders',
+                        'comment' => 'Delete completed orders',
+                        'class'   => Order::class,
+                    ],
+                    [
+                        'label'   => 'Carts',
+                        'comment' => 'Delete abandoned shopping carts',
+                        'class'   => Cart::class,
+                    ],
+                ],
+            ];
         });
     }
 }
