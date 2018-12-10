@@ -42,23 +42,36 @@ trait BootEvents
     {
         Event::listen('pages.menuitem.listTypes', function () {
             return [
-                'mall-category'       => trans('offline.mall::lang.menu_items.single_category'),
-                'all-mall-categories' => trans('offline.mall::lang.menu_items.all_categories'),
+                'mall-category'       => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
+                'all-mall-categories' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_categories'),
+                'all-mall-products'   => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
+                'all-mall-variants'   => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
             ];
         });
 
         Event::listen('pages.menuitem.getTypeInfo', function ($type) {
-            if ($type == 'all-mall-categories' || $type == 'mall-category') {
+            if ($type === 'all-mall-categories' || $type === 'mall-category') {
                 return Category::getMenuTypeInfo($type);
+            }
+            if ($type === 'all-mall-products' || $type === 'all-mall-variants') {
+                return [
+                    'dynamicItems' => true,
+                ];
             }
         });
 
         Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
-            if ($type == 'all-mall-categories') {
+            if ($type === 'all-mall-categories') {
                 return Category::resolveCategoriesItem($item, $url, $theme);
             }
-            if ($type == 'mall-category') {
+            if ($type === 'mall-category') {
                 return Category::resolveCategoryItem($item, $url, $theme);
+            }
+            if ($type === 'all-mall-products') {
+                return Product::resolveItem($item, $url, $theme);
+            }
+            if ($type === 'all-mall-variants') {
+                return Variant::resolveItem($item, $url, $theme);
             }
         });
 

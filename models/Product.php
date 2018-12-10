@@ -1,8 +1,9 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cache;
+use Cms\Classes\Page;
 use DB;
 use Model;
-use Cache;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -306,5 +307,45 @@ class Product extends Model
     public static function sortOrderCacheKey($id)
     {
         return 'category.sort.order.' . $id;
+    }
+
+    /**
+     * Resolve the item for RainLab.Sitemap and RainLab.Pages plugins.
+     *
+     * @param $item
+     * @param $url
+     * @param $theme
+     *
+     * @return array
+     * @throws \Cms\Classes\CmsException
+     */
+    public static function resolveItem($item, $url, $theme)
+    {
+        $page    = GeneralSettings::get('product_page', 'product');
+        $cmsPage = Page::loadCached($theme, 'product');
+
+        if ( ! $cmsPage) {
+            return;
+        }
+
+        $items = self
+            ::published()
+            ->where('inventory_management_method', 'single')
+            ->get()
+            ->map(function (self $product) use ($cmsPage, $page, $url) {
+                $pageUrl = $cmsPage->url($page, ['slug' => $product->slug]);
+
+                return [
+                    'title'    => $product->name,
+                    'url'      => $pageUrl,
+                    'mtime'    => $product->updated_at,
+                    'isActive' => $pageUrl === $url,
+                ];
+            })
+            ->toArray();
+
+        return [
+            'items' => $items,
+        ];
     }
 }

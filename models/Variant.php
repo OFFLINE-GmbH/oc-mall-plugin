@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cms\Classes\Page;
 use DB;
 use Illuminate\Support\Collection;
 use Model;
@@ -249,5 +250,48 @@ class Variant extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Resolve the item for RainLab.Sitemap and RainLab.Pages plugins.
+     *
+     * @param $item
+     * @param $url
+     * @param $theme
+     *
+     * @return array
+     * @throws \Cms\Classes\CmsException
+     */
+    public static function resolveItem($item, $url, $theme)
+    {
+        $page    = GeneralSettings::get('product_page', 'product');
+        $cmsPage = Page::loadCached($theme, 'product');
+
+        if ( ! $cmsPage) {
+            return;
+        }
+
+        $items = self
+            ::published()
+            ->with('product')
+            ->get()
+            ->map(function (self $variant) use ($cmsPage, $page, $url) {
+                $pageUrl = $cmsPage->url($page, [
+                    'slug'    => $variant->product->slug,
+                    'variant' => $variant->variantId,
+                ]);
+
+                return [
+                    'title'    => $variant->name,
+                    'url'      => $pageUrl,
+                    'mtime'    => $variant->updated_at,
+                    'isActive' => $pageUrl === $url,
+                ];
+            })
+            ->toArray();
+
+        return [
+            'items' => $items,
+        ];
     }
 }

@@ -68,6 +68,8 @@
     'menu_items'               => [
         'all_categories'  => 'All shop categories',
         'single_category' => 'Single shop category',
+        'all_products'    => 'All shop products',
+        'all_variants'    => 'All shop variants',
     ],
     'currency_settings'        => [
         'label'             => 'Currencies',

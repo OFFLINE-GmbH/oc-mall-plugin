@@ -68,6 +68,8 @@
     'menu_items'               => [
         'all_categories'  => 'Alle Shop-Kategorien',
         'single_category' => 'Einzelne Shop-Kategorie',
+        'all_products'    => 'Alle Shop-Produkte',
+        'all_variants'    => 'Alle Shop-Varianten',
     ],
     'currency_settings'        => [
         'label'             => 'Währungen',
