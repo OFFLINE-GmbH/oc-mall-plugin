@@ -43,13 +43,13 @@ The table below shows some common `Properties`.
 | Color       | Color         |      |                    |
 | Width       | Number        | mm   |                    |
 | Height      | Number        | mm   |                    |
-| Ingredients | Textarea      |      |                    |
+| Material    | Textarea      |      |                    |
 
 #### Use for Variants
 
 If a `Property` will be used to describe the different [Variants of a Product](./products.md) this option
 should be enabled. A perfect example is the `Size` property where a Product is available as differently
-sized Variants. The `Ingredients` property will be the same for all sizes
+sized Variants. The `Material` property will be the same for all sizes
 so it should *not* be used to describe Variants.
 
 #### Filter type
