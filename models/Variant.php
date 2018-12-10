@@ -265,7 +265,7 @@ class Variant extends Model
     public static function resolveItem($item, $url, $theme)
     {
         $page    = GeneralSettings::get('product_page', 'product');
-        $cmsPage = Page::loadCached($theme, 'product');
+        $cmsPage = Page::loadCached($theme, $page);
 
         if ( ! $cmsPage) {
             return;
