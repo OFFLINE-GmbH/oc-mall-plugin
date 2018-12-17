@@ -23,20 +23,11 @@ The `payment_hash` is presented to the shop admin on the orders backend page.
 
 ### Display offline payment info in checkout mails
 
-You could add the following code to the `offline.mall::mail.checkout.succeeded` mail template:
+Any payment instructions are by default rendered in the confirmation mails
+via the `payment_state` mail partial.
 
-```twig
-{% if not order.isPaid %}
-    {% partial 'panel' body %}
-        The payment for this order is still pending.
-        
-        Please send **{{ order.totalPostTaxes.string }}** to the following bank account:
-        
-        <Your bank connection>
-        Payment reason: {{ order.payment_hash }}
-    {% endpartial %}
-{% endif %}
-```   
+See [Payment methods](./../digging-deeper/payment-methods.md#specifying-payment-instructions)
+ for further information on how to use payment instructions.
 
 ## Access pricing information
 
