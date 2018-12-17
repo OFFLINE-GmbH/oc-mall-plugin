@@ -78,11 +78,15 @@ class PaymentMethod extends Model
      *
      * @param Order|null $order
      *
-     * @return mixed
+     * @return string|null
      */
     public function renderInstructions(?Order $order = null)
     {
-        return (new Twig)->parse($this->instructions, [
+        if ( ! $this->instructions) {
+            return null;
+        }
+
+        return Twig::parse($this->instructions, [
             'order' => $order,
         ]);
     }
