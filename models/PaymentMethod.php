@@ -6,6 +6,7 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Parse\Twig;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use System\Models\File;
@@ -81,7 +82,7 @@ class PaymentMethod extends Model
      */
     public function renderInstructions(?Order $order = null)
     {
-        return \Twig::parse($this->instructions, [
+        return (new Twig)->parse($this->instructions, [
             'order' => $order,
         ]);
     }
