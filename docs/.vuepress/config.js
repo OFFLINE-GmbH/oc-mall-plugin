@@ -54,6 +54,7 @@ module.exports = {
                 children: [
                     '/development/product-model',
                     '/development/variant-model',
+                    '/development/order-model',
                     '/development/payment-providers',
                     '/development/pricing-information',
                     '/development/integration',
