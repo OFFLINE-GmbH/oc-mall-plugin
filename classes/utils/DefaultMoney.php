@@ -23,7 +23,7 @@ class DefaultMoney implements Money
 
         $value    = app(Money::class)->round($value, $currency['decimals']);
         $integers = floor($value);
-        $decimals = ($value - $integers) * 100;
+        $decimals = round(($value - $integers) * 100, 0);
 
         return $this->render($currency['format'], [
             'price'    => $value,

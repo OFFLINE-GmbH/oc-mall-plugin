@@ -64,7 +64,7 @@ class Price extends Model
         if ($value === null || $value === "") {
             return $this->attributes['price'] = null;
         }
-        $this->attributes['price'] = (int)($value * 100);
+        $this->attributes['price'] = round($value * 100, 0);
     }
 
     public function getFloatAttribute()
