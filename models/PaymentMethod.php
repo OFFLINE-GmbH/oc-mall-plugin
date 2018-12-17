@@ -72,6 +72,20 @@ class PaymentMethod extends Model
            ->delete();
     }
 
+    /**
+     * Renders the payment instructions.
+     *
+     * @param Order|null $order
+     *
+     * @return mixed
+     */
+    public function renderInstructions(?Order $order = null)
+    {
+        return \Twig::parse($this->instructions, [
+            'order' => $order,
+        ]);
+    }
+
     public function getPaymentProviderOptions(): array
     {
         /** @var PaymentGateway $gateway */

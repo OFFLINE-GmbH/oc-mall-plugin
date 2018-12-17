@@ -401,6 +401,8 @@
         'fee_percentage_comment' => 'The percentage of the total to add to the order\'s total',
         'fee_label'              => 'Fee label',
         'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
+        'instructions'           => 'Payment instructions',
+        'instructions_comment'   => 'Twig syntax supported. Use {{ order }} to access corresponding order information if available',
     ],
     'order'                    => [
         'order_number'                        => '# Order',

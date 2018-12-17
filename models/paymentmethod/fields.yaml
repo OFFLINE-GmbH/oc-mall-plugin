@@ -22,9 +22,17 @@ tabs:
     fields:
         description:
             label: 'offline.mall::lang.product.description'
-            size: huge
+            size: large
             span: auto
             type: richeditor
+            tab: 'offline.mall::lang.product.description'
+        instructions:
+            label: 'offline.mall::lang.payment_method.instructions'
+            comment: 'offline.mall::lang.payment_method.instructions_comment'
+            size: large
+            span: auto
+            type: codeeditor
+            language: twig
             tab: 'offline.mall::lang.product.description'
         logo:
             label: 'offline.mall::lang.common.logo'

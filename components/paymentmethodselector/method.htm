@@ -18,6 +18,9 @@
                 </div>
             {% endif %}
             {% if isActiveMethod %}
+                <div class="mall-payment-method__instructions">
+                    {{ method.renderInstructions(order) | raw }}
+                </div>
                 <div class="mall-payment-method__toggle"
                      style="{% if not isActiveMethod %}display: none{% endif %}">
                     <div class="mall-payment-method__data">
