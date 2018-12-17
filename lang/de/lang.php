@@ -402,8 +402,9 @@
         'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
     ],
     'order'                    => [
-        'order_number'                        => 'Bestellungsnummer',
-        'invoice_number'                      => 'Rechnungsnummer',
+        'order_number'                        => '# Bestl.',
+        'invoice_number'                      => '# Rechn.',
+        'payment_hash'                        => 'Bezahl-ID',
         'customer'                            => 'Kunde',
         'creation_date'                       => 'Erstellt am',
         'modification_date'                   => 'Bearbeitet am',

@@ -403,8 +403,9 @@
         'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
     ],
     'order'                    => [
-        'order_number'                        => 'Order number',
-        'invoice_number'                      => 'Invoice number',
+        'order_number'                        => '# Order',
+        'invoice_number'                      => '# Invoice',
+        'payment_hash'                        => 'Payment hash',
         'customer'                            => 'Customer',
         'creation_date'                       => 'Created at',
         'modification_date'                   => 'Modified at',

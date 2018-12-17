@@ -27,6 +27,7 @@ class CreateOfflineMallOrders extends Migration
             $table->integer('payment_method_id')->nullable();
             $table->text('payment_data')->nullable();
             $table->text('payment_id')->nullable();
+            $table->string('payment_hash')->nullable();
             $table->integer('total_shipping_pre_taxes')->nullable();
             $table->integer('total_shipping_taxes')->nullable();
             $table->integer('total_shipping_post_taxes')->nullable();

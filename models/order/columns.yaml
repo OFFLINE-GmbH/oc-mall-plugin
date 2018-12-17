@@ -9,6 +9,11 @@ columns:
         type: text
         searchable: true
         sortable: true
+    payment_hash:
+        label: 'offline.mall::lang.order.payment_hash'
+        type: text
+        searchable: true
+        sortable: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
@@ -18,26 +23,26 @@ columns:
         type: partial
         path: $/offline/mall/models/order/_order_state.htm
         sortable: true
-        searchable: true
+        searchable: false
     payment_state:
         label: 'offline.mall::lang.order.payment_status'
         type: partial
         path: $/offline/mall/models/order/_payment_state.htm
         sortable: true
-        searchable: true
+        searchable: false
     shipped:
         label: 'offline.mall::lang.order.shipped'
         type: partial
         path: $/offline/mall/models/order/_shipped.htm
         sortable: true
-        searchable: true
+        searchable: false
     customer:
         label: 'offline.mall::lang.order.customer'
         path: $/offline/mall/models/order/_customer.htm
         relation: customer
         type: partial
         searchable: true
-        sortable: true
+        sortable: false
     total_post_taxes:
         label: 'offline.mall::lang.order.grand_total'
         path: $/offline/mall/models/order/_total.htm

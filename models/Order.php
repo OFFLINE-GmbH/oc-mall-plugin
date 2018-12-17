@@ -75,6 +75,7 @@ class Order extends Model
             if ( ! $order->order_number) {
                 $order->setOrderNumber();
             }
+            $order->payment_hash = str_random(10);
         });
         static::updated(function (self $order) {
             if ($order->isDirty('order_state_id')) {
