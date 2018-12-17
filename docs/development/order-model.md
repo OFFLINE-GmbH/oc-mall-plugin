@@ -26,7 +26,7 @@ The `payment_hash` is presented to the shop admin on the orders backend page.
 You could add the following code to the `offline.mall::mail.checkout.succeeded` mail template:
 
 ```twig
-{% if not order.payment_state == 'OFFLINE\\Mall\\Classes\\PaymentState\\PaidState' %}
+{% if not order.isPaid %}
     {% partial 'panel' body %}
         The payment for this order is still pending.
         
