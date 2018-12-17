@@ -86,7 +86,7 @@ class PaymentMethod extends Model
             return null;
         }
 
-        return Twig::parse($this->instructions, [
+        return (new Twig)->parse($this->instructions, [
             'order' => $order,
         ]);
     }
