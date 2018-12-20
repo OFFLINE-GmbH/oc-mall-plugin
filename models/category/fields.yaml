@@ -60,6 +60,7 @@ tabs:
             path: $/offline/mall/controllers/categories/_products.htm
             type: partial
             tab: 'offline.mall::lang.common.products'
+            context: update
         meta_title:
             label: 'offline.mall::lang.common.meta_title'
             oc.commentPosition: ''
