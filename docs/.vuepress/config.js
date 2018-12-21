@@ -23,7 +23,7 @@ module.exports = {
                     '/digging-deeper/products',
                     '/digging-deeper/currencies',
                     '/digging-deeper/shipping-methods',
-                    '/digging-deeper/payment-methods',
+                    '/digging-deeper/payments',
                     '/digging-deeper/taxes',
                 ]
             },

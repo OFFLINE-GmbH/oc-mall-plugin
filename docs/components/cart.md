@@ -38,15 +38,15 @@ automatically when a product is added or removed from the cart.
 
 ```js
 $(function () {
-    var baseCount = '{{ cartButton.cart.products.count }}';
+    var nbItems = '{{ cartButton.cart.products.count }}';
     var $count = $('.js-count');
     $.subscribe('mall.cart.productAdded', function () {
-        $count.text(++ baseCount);
+        $count.text(++nbItems);
     });
     $.subscribe('mall.cart.productRemoved', function () {
-        baseCount --;
-        if (baseCount < 0) baseCount = 0;
-        $count.text(baseCount);
+        nbItems--;
+        if (nbItems < 0) nbItems = 0;
+        $count.text(nbItems);
     });
 });
 ```

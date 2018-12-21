@@ -45,7 +45,7 @@ tabs:
             thumbOptions:
                 mode: crop
                 extension: auto
-            span: right
+            span: auto
             type: fileupload
             tab: 'offline.mall::lang.common.general'
         _available_below_totals:

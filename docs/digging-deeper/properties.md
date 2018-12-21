@@ -26,7 +26,7 @@ given by the currently viewed category).
 
 ::: tip
 Make sure to name your groups only as specific as needed. Giving then generic names will
-make it easier to reuse among different products.
+make it easier to re-use them among different products.
 :::
 
 ### Properties

@@ -22,7 +22,7 @@ $model->property_values;
 
 ::: warning CAUTION
 If you are working with Variants make sure to call the `all_property_values` relation instead.
-This incldes all property values of the `Product` and the `Variant` together.
+This includes all property values of the `Product` and the `Variant` combined.
 :::
 
 To get the value of a specific property the `getPropertyValue` method can be used.

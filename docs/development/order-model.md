@@ -26,7 +26,7 @@ The `payment_hash` is presented to the shop admin on the orders backend page.
 Any payment instructions are by default rendered in the confirmation mails
 via the `payment_state` mail partial.
 
-See [Payment methods](./../digging-deeper/payment-methods.md#specifying-payment-instructions)
+See [Payment methods](./../digging-deeper/payments.md#specifying-payment-instructions)
  for further information on how to use payment instructions.
 
 ## Access pricing information
