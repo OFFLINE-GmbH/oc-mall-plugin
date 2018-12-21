@@ -53,16 +53,16 @@ tabs:
             type: text
             comment: 'offline.mall::lang.payment_method.fee_label_comment'
             tab: 'offline.mall::lang.common.fees'
+        taxes:
+            span: right
+            path: taxes
+            type: partial
+            tab: 'offline.mall::lang.common.fees'
         _prices:
             label: 'offline.mall::lang.payment_method.price'
             span: left
             type: mall.price
             comment: 'offline.mall::lang.payment_method.price_comment'
-            tab: 'offline.mall::lang.common.fees'
-        taxes:
-            span: right
-            path: taxes
-            type: partial
             tab: 'offline.mall::lang.common.fees'
         fee_percentage:
             label: 'offline.mall::lang.payment_method.fee_percentage'

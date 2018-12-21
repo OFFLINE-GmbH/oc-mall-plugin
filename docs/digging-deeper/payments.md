@@ -1,5 +1,8 @@
 # Payment methods
 
+`Payment methods` are presented to a customer during checkout. The customer
+can select  
+
 ## Specifying payment instructions
 
 You can specify special payment instructions using Twig syntax in the `Instructions` field of 
