@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Registration\BootServiceContainer;
 use OFFLINE\Mall\Classes\Registration\BootSettings;
 use OFFLINE\Mall\Classes\Registration\BootTwig;
 use OFFLINE\Mall\Classes\Registration\BootValidation;
+use OFFLINE\Mall\Console\Initialize;
 use OFFLINE\Mall\Console\ReindexProducts;
 use OFFLINE\Mall\Console\SeedDemoData;
 use OFFLINE\Mall\Console\SystemCheck;
@@ -41,6 +42,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('offline.mall.seed-demo', SeedDemoData::class);
         $this->registerConsoleCommand('offline.mall.reindex', ReindexProducts::class);
         $this->registerConsoleCommand('offline.mall.system-check', SystemCheck::class);
+        $this->registerConsoleCommand('offline.mall.initialize', Initialize::class);
 
         $this->registerRelations();
 
