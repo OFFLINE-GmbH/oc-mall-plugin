@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Customer;
 use DB;
 use Event;
 use Flash;
-use Illuminate\Validation\Rule;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;

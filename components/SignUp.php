@@ -1,6 +1,5 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use RainLab\Location\Models\Country;
