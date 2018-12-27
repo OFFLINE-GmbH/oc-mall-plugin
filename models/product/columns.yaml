@@ -25,7 +25,7 @@ columns:
         type: partial
         path: $/offline/mall/models/product/_price.htm
         searchable: false
-        sortable: true
+        sortable: false
         align: right
     stock:
         label: 'offline.mall::lang.product.stock'
