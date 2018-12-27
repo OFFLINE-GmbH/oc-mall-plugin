@@ -122,15 +122,12 @@ class Currency extends Model
      *
      * @param $currency
      *
-     * @return mixed|string
+     * @return Currency
      */
     protected static function resolve($currency = null)
     {
         if ($currency === null) {
             $currency = Currency::activeCurrency();
-        }
-        if ($currency instanceof Currency) {
-            $currency = $currency;
         }
         if (is_string($currency)) {
             $currency = Currency::whereCode($currency)->firstOrFail();
