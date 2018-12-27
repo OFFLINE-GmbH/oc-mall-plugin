@@ -15,11 +15,13 @@ class CreateOfflineMallPropertyValues extends Migration
             $table->integer('variant_id')->unsigned()->nullable();
             $table->integer('property_id');
             $table->text('value')->nullable();
+            $table->text('index_value')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
 
             if ( ! app()->runningUnitTests()) {
                 $table->index([DB::raw('value(255)')], 'idx_value');
+                $table->index([DB::raw('index_value(255)')], 'idx_index_value');
 
                 $table->index(['product_id', 'variant_id'], 'idx_product_variant');
                 $table->index('product_id', 'idx_product');

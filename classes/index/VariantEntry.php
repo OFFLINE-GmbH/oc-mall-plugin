@@ -63,7 +63,7 @@ class VariantEntry implements Entry
         }
 
         return $input->groupBy('property_id')->map(function ($value) {
-            return $value->pluck('safeValue')->unique()->filter()->values();
+            return $value->pluck('index_value')->unique()->filter()->values();
         })->filter();
     }
 }

@@ -48,10 +48,18 @@ class PropertyValue extends Model
      */
     public $attribute_type = '';
 
+    public function beforeSave()
+    {
+        $value = $this->attributes['value'] ?? '';
+        if ($this->isColor()) {
+            $value = $this->jsonDecodeValue()['name'] ?? '';
+        }
+        $this->index_value = str_slug($value);
+    }
+
     public function setValueAttribute($value)
     {
-        $type = optional($this->property)->type;
-        if ($type === 'color') {
+        if ($this->isColor()) {
             $name = $value['name'] ?? false;
             $hex  = $value['hex'] ?? false;
             // If both keys are empty store this value as null.
@@ -65,6 +73,11 @@ class PropertyValue extends Model
         $this->attributes['value'] = \is_array($value)
             ? json_encode($value)
             : $value;
+    }
+
+    public function isColor()
+    {
+        return optional($this->property)->type === 'color';
     }
 
     public function getValueAttribute()
@@ -87,7 +100,7 @@ class PropertyValue extends Model
         }
 
         if ($type === 'color') {
-            return json_decode($this->getOriginal('value'), true);
+            return $this->jsonDecodeValue();
         }
 
         return $value;
@@ -109,7 +122,7 @@ class PropertyValue extends Model
      */
     public function getDisplayValueAttribute()
     {
-        if ($this->property->type === 'color') {
+        if ($this->isColor()) {
             return sprintf(
                 '<span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: %s" title="%s"></span>',
                 $this->value['hex'],
@@ -118,5 +131,18 @@ class PropertyValue extends Model
         }
 
         return e($this->value);
+    }
+
+    /**
+     * Returns the decoded json value.
+     * @return mixed
+     */
+    private function jsonDecodeValue()
+    {
+        if ( ! $this->attributes['value']) {
+            return null;
+        }
+
+        return json_decode($this->attributes['value'], true);
     }
 }
