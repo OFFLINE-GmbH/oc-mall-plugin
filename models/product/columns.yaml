@@ -9,21 +9,10 @@ columns:
         type: text
         searchable: true
         sortable: true
-    price:
-        label: 'offline.mall::lang.product.price'
-        type: partial
-        path: $/offline/mall/models/product/_price.htm
-        searchable: false
-        sortable: true
     published:
         label: 'offline.mall::lang.product.published'
         type: partial
         path: $/offline/mall/models/product/_published.htm
-        sortable: true
-    taxable:
-        label: 'offline.mall::lang.product.taxable'
-        type: partial
-        path: $/offline/mall/models/product/_taxable.htm
         sortable: true
     category:
         label: 'offline.mall::lang.common.category'
@@ -31,7 +20,20 @@ columns:
         select: name
         sortable: true
         searchable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: partial
+        path: $/offline/mall/models/product/_price.htm
+        searchable: false
+        sortable: true
+        align: right
     stock:
         label: 'offline.mall::lang.product.stock'
         type: number
+        invisible: true
+    price_includes_tax:
+        label: 'offline.mall::lang.product.taxable'
+        type: partial
+        path: $/offline/mall/models/product/_taxable.htm
+        sortable: true
         invisible: true
