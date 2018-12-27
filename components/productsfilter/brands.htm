@@ -8,7 +8,7 @@
             <select name="filter[brand][]" id="mall-brands" class="js-mall-select-filter">
                 <option value="">-- {{ 'offline.mall::frontend.show_all' | trans }}</option>
                 {% for brand in __SELF__.brands %}
-                    <option value="{{ brand.id }}" {{ brand.id in selected ? 'selected' }}>
+                    <option value="{{ brand.slug }}" {{ brand.slug in selected ? 'selected' }}>
                         {{ brand.name }}
                     </option>
                 {% endfor %}

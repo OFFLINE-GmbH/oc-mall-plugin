@@ -144,7 +144,7 @@ class ElasticSearch implements Index
         if ($filters->has('brand')) {
             $filter = $filters->pull('brand');
 
-            $query['query']['bool']['filter']['bool']['must'][]['terms']['brand_id'] = $filter->values();
+            $query['query']['bool']['filter']['bool']['must'][]['terms']['brand.slug'] = $filter->values();
         }
 
         if ($filters->has('price')) {

@@ -115,7 +115,7 @@ class Filebase implements Index
 
         if ($filters->has('brand')) {
             $filter = $filters->pull('brand');
-            $this->jsonq->whereIn('brand_id', $filter->values());
+            $this->jsonq->whereIn('brand.slug', $filter->values());
         }
 
         if ($filters->has('price')) {
