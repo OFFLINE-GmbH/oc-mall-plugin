@@ -25,19 +25,20 @@ class QueryString
                 return [];
             }
 
-            return [$prop => new $type($prop, array_values($query->get($prop)))];
+            $values = $this->getPropValues($query->get($prop));
+
+            return [$prop => new $type($prop, array_values($values))];
         });
 
         $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
         // Map the user defined database properties.
         return $properties->mapWithKeys(function (Property $property) use ($query) {
+            $values = $this->getPropValues($query->get($property->slug));
             if ($property->pivot->filter_type === 'set') {
-                return [$property->slug => new SetFilter($property, $query->get($property->slug))];
+                return [$property->slug => new SetFilter($property, $values)];
             }
             if ($property->pivot->filter_type === 'range') {
-                $values = $query->get($property->slug);
-
                 return [
                     $property->slug => new RangeFilter(
                         $property,
@@ -55,10 +56,23 @@ class QueryString
     {
         $filter = $filter->mapWithKeys(function (Filter $filter, $property) {
             return [
-                $property => $filter->values(),
+                $property => implode('.', $filter->values()),
             ];
         });
 
-        return http_build_query(['filter' => $filter->toArray(), 'sort' => $sortOrder]);
+        return http_build_query(array_merge($filter->toArray(), ['sort' => $sortOrder]));
+    }
+
+    /**
+     * Explode the string version of the property values back
+     * into a proper array.
+     *
+     * @param $values
+     *
+     * @return array
+     */
+    protected function getPropValues($values): array
+    {
+        return explode('.', $values);
     }
 }

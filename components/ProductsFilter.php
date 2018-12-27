@@ -442,10 +442,7 @@ class ProductsFilter extends MallComponent
      */
     protected function getFilter()
     {
-        $filter = request()->get('filter', []);
-        if ( ! is_array($filter)) {
-            $filter = [];
-        }
+        $filter = array_wrap(request()->all() ?? []);
 
         return (new QueryString())->deserialize($filter, $this->category);
     }

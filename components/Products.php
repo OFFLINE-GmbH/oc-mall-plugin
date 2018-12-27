@@ -368,9 +368,7 @@ class Products extends MallComponent
             $this->pageNumber
         );
 
-        $filter = request()->get('filter', []);
-        $sort   = request()->get('sort');
-        $paginator->appends('filter', $filter)->appends('sort', $sort);
+        $paginator->appends(request()->all());
 
         $pageUrl = $this->controller->pageUrl(
             $this->page->fileName,
@@ -415,10 +413,7 @@ class Products extends MallComponent
             return collect([]);
         }
 
-        $filter = request()->get('filter', []);
-        if ( ! is_array($filter)) {
-            $filter = [];
-        }
+        $filter = array_wrap(request()->all());
 
         $filters = (new QueryString())->deserialize($filter, $this->category);
         $filters->put('category_id', new SetFilter('category_id', $this->categories));
