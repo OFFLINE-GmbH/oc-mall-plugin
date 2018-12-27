@@ -21,13 +21,16 @@ class ProductEntry implements Entry
         // Make sure variants inherit product data again.
         session()->forget('mall.variants.disable-inheritance');
 
-        $product->loadMissing(['variants.prices.currency', 'prices.currency', 'property_values.property']);
+        $product->loadMissing(['brand', 'variants.prices.currency', 'prices.currency', 'property_values.property']);
 
         $data                    = $product->attributesToArray();
         $data['index']           = self::INDEX;
         $data['prices']          = $this->mapPrices($product->prices);
         $data['property_values'] = $this->mapProps($product->property_values);
-        $data['sort_orders']     = $product->getSortOrders();
+        if ($product->brand) {
+            $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
+        }
+        $data['sort_orders'] = $product->getSortOrders();
 
         $this->data = $data;
     }
