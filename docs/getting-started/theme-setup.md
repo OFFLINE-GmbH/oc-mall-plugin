@@ -2,6 +2,11 @@
 
 Once the plugin is [installed and configured](./installation.md), follow the steps below to set up your theme.
 
+::: tip
+You can take a look at the [official demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) on how to set
+up a theme. You can even use it as a base for your own custom theme. 
+:::
+
 ## Layout
 
 ### `mallDependencies`

@@ -55,6 +55,21 @@ You can always revert back to a blank installation by running
 php artisan plugin:refresh offline.mall
 ```
 
+## Demo theme
+
+To make getting started with `oc-mall `as easy as possible, you can find a demo implementation of a shop
+theme on GitHub: [https://github.com/OFFLINE-GmbH/oc-mall-theme](https://github.com/OFFLINE-GmbH/oc-mall-theme)
+
+::: warning
+If you use the demo theme you should still apply the configuration steps mentioned below.
+:::
+
+Simply clone the theme to `<your installation>/themes/mall` and select it as your active theme.
+
+If you want to start with a blank slate just follow the instructions on this and the [Theme Setup](./theme-setup.md) 
+page to get everything up and running.
+ 
+
 ## Configuration
 
 Once your installation is complete, follow the configuration steps below.
