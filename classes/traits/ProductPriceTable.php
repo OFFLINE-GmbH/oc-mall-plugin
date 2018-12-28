@@ -58,7 +58,7 @@ trait ProductPriceTable
         }
 
         $this->vars['pricetable']      = $widget;
-        $this->vars['currencies']      = Currency::orderBy('sort_order', 'ASC')->get();
+        $this->vars['currencies']      = Currency::orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
         $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
     }
 
@@ -113,6 +113,10 @@ trait ProductPriceTable
 
     protected function persistPrices($record, $currency, $model)
     {
+        if ($record['price'] === null || $record['price'] === '') {
+            return;
+        }
+
         $type  = $record['type'] === 'product' ? Product::class : Variant::class;
         $price = $model->prices->where('currency_id', $currency->id)->first();
         if ( ! $price) {

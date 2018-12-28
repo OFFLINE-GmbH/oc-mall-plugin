@@ -107,9 +107,9 @@ class Currency extends Model
      */
     public static function getAll()
     {
-        return Cache::rememberForever(static::CURRENCIES_CACHE_KEY, function () {
+        return Currency::hydrate(Cache::rememberForever(static::CURRENCIES_CACHE_KEY, function () {
             return Currency::get(['id', 'rate', 'symbol', 'code'])->keyBy('id')->toArray();
-        });
+        }));
     }
 
     protected static function guardMissingCurrency($currency)

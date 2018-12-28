@@ -22,17 +22,13 @@ class ProductEntry implements Entry
 
         $product->loadMissing(['brand', 'variants.prices.currency', 'prices.currency', 'property_values.property']);
 
-        $basePrice = $product->price(Currency::defaultCurrency());
-
         $data          = $product->attributesToArray();
         $data['index'] = self::INDEX;
 
         $data['property_values'] = $this->mapProps($product->property_values);
+        $data['prices']          = $this->mapPrices($product);
         if ($product->brand) {
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
-        }
-        if ($basePrice) {
-            $data['prices'] = $this->mapPrices($product->prices, $basePrice);
         }
 
         $data['sort_orders'] = $product->getSortOrders();
@@ -52,24 +48,12 @@ class ProductEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices(?Collection $input, $basePrice): Collection
+    protected function mapPrices(Product $product): Collection
     {
-        if ($input === null) {
-            $input = collect();
-        }
-
-        $input = $input->keyBy('currency_id');
-
         $currencies = Currency::getAll();
 
-        return collect($currencies)->mapWithKeys(function ($currency) use ($input, $basePrice) {
-            $price = optional($input->get($currency['id']))->integer;
-            // Calculate missing prices using the currency rate.
-            if ($price === null) {
-                $price = (int)($basePrice->integer * $currency['rate']);
-            }
-
-            return [$currency['code'] => $price];
+        return collect($currencies)->mapWithKeys(function ($currency) use ($product) {
+            return [$currency['code'] => $product->priceWithMissing($currency['id'])->integer];
         });
     }
 

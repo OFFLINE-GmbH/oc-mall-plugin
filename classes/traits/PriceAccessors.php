@@ -25,26 +25,35 @@ trait PriceAccessors
         });
     }
 
-    protected function priceRelation($currency = null, $relation = 'prices', ?Closure $filter = null)
-    {
+    protected function priceRelation(
+        $currency = null,
+        $relation = 'prices',
+        ?Closure $filter = null,
+        $forceMissing = false
+    ) {
         $currency = Currency::resolve($currency);
 
         if (method_exists($this, 'getUserSpecificPrice')) {
             if ($specific = $this->getUserSpecificPrice()) {
                 $query = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
 
-                return $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter);
+                return $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter, $forceMissing);
             }
         }
 
         $query = $this->withFilter($filter, $this->$relation->where('currency_id', $currency->id));
 
-        return $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter);
+        return $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter, $forceMissing);
     }
 
-    public function price($currency = null, $relation = 'prices', ?Closure $filter = null)
+    public function price($currency = null, $relation = 'prices', ?Closure $filter = null, $forceMissing = false)
     {
-        return $this->priceRelation($currency, $relation, $filter);
+        return $this->priceRelation($currency, $relation, $filter, $forceMissing);
+    }
+
+    public function priceWithMissing($currency = null, $relation = 'prices', ?Closure $filter = null)
+    {
+        return $this->priceRelation($currency, $relation, $filter, true);
     }
 
     public function getPriceAttribute()
