@@ -31,6 +31,7 @@ trait BootEvents
         Product::observe(\OFFLINE\Mall\Classes\Observers\ProductObserver::class);
         Variant::observe(\OFFLINE\Mall\Classes\Observers\VariantObserver::class);
         PropertyValue::observe(\OFFLINE\Mall\Classes\Observers\PropertyValueObserver::class);
+        ProductPrice::observe(\OFFLINE\Mall\Classes\Observers\ProductPriceObserver::class);
     }
 
     protected function registerGenericEvents()
