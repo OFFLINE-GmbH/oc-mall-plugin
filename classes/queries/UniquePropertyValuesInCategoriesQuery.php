@@ -48,6 +48,8 @@ class UniquePropertyValuesInCategoriesQuery
             ->whereIn('offline_mall_products.category_id', $this->categories)
             ->whereNull('offline_mall_product_variants.deleted_at')
             ->whereNull('offline_mall_products.deleted_at')
+            ->where('offline_mall_property_values.value', '<>', '')
+            ->whereNotNull('offline_mall_property_values.value')
             ->leftJoin(
                 'offline_mall_product_variants',
                 'offline_mall_products.id',
