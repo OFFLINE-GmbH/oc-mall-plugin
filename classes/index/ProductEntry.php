@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Index;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\ProductPrice;
 
 class ProductEntry implements Entry
 {
@@ -23,13 +22,19 @@ class ProductEntry implements Entry
 
         $product->loadMissing(['brand', 'variants.prices.currency', 'prices.currency', 'property_values.property']);
 
-        $data                    = $product->attributesToArray();
-        $data['index']           = self::INDEX;
-        $data['prices']          = $this->mapPrices($product->prices);
+        $basePrice = $product->price(Currency::defaultCurrency());
+
+        $data          = $product->attributesToArray();
+        $data['index'] = self::INDEX;
+
         $data['property_values'] = $this->mapProps($product->property_values);
         if ($product->brand) {
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
         }
+        if ($basePrice) {
+            $data['prices'] = $this->mapPrices($product->prices, $basePrice);
+        }
+
         $data['sort_orders'] = $product->getSortOrders();
 
         $this->data = $data;
@@ -47,14 +52,24 @@ class ProductEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices(?Collection $input): Collection
+    protected function mapPrices(?Collection $input, $basePrice): Collection
     {
         if ($input === null) {
-            return collect();
+            $input = collect();
         }
 
-        return $input->mapWithKeys(function (ProductPrice $price) {
-            return [$price->currency->code => $price->integer];
+        $input = $input->keyBy('currency_id');
+
+        $currencies = Currency::getAll();
+
+        return collect($currencies)->mapWithKeys(function ($currency) use ($input, $basePrice) {
+            $price = optional($input->get($currency['id']))->integer;
+            // Calculate missing prices using the currency rate.
+            if ($price === null) {
+                $price = (int)($basePrice->integer * $currency['rate']);
+            }
+
+            return [$currency['code'] => $price];
         });
     }
 

@@ -13,7 +13,7 @@ custom_fields:
     deferredBinding: true
 
 variants:
-    label: 'offline.mall::lang.common.variants'
+    label: 'offline.mall::lang.common.variant'
     view:
         list: $/offline/mall/models/variant/columns.yaml
         toolbarPartial: variants_toolbar

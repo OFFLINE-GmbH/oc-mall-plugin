@@ -3,8 +3,8 @@
 namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Variant;
-use OFFLINE\Mall\Models\ProductPrice;
 
 class VariantEntry implements Entry
 {
@@ -21,15 +21,19 @@ class VariantEntry implements Entry
         session()->forget('mall.variants.disable-inheritance');
 
         $variant->loadMissing(['prices.currency', 'property_values.property', 'product.brand']);
-        $product = $variant->product;
+
+        $product   = $variant->product;
+        $basePrice = $variant->price(Currency::defaultCurrency());
 
         $data                = $variant->attributesToArray();
         $data['category_id'] = $product->category_id;
 
         $data['index']           = self::INDEX;
-        $data['prices']          = $this->mapPrices($variant->prices);
         $data['property_values'] = $this->mapProps($variant->all_property_values);
         $data['sort_orders']     = $product->getSortOrders();
+        if ($basePrice) {
+            $data['prices'] = $this->mapPrices($variant->prices, $basePrice);
+        }
 
         if ($product->brand) {
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
@@ -50,14 +54,24 @@ class VariantEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices(?Collection $input): Collection
+    protected function mapPrices(?Collection $input, $basePrice): Collection
     {
         if ($input === null) {
-            return collect();
+            $input = collect();
         }
 
-        return $input->mapWithKeys(function (ProductPrice $price) {
-            return [$price->currency->code => $price->integer];
+        $input = $input->keyBy('currency_id');
+        
+        $currencies = Currency::getAll();
+
+        return collect($currencies)->mapWithKeys(function ($currency) use ($input, $basePrice) {
+            $price = optional($input->get($currency['id']))->integer;
+            // Calculate missing prices using the currency rate.
+            if ($price === null) {
+                $price = (int)($basePrice->integer * $currency['rate']);
+            }
+
+            return [$currency['code'] => $price];
         });
     }
 

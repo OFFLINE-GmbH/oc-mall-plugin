@@ -163,6 +163,7 @@
         'accessory'            => 'Accessory',
         'custom_fields'        => 'Custom fields',
         'variants'             => 'Variants',
+        'variant'              => 'Variant',
         'discounts'            => 'Discounts',
         'discount'             => 'Discount',
         'select_placeholder'   => '-- Please choose',

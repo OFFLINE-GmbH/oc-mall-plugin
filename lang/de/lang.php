@@ -162,6 +162,7 @@
         'accessory'            => 'Zubehör',
         'custom_fields'        => 'Benutzerdefinierte Felder',
         'variants'             => 'Varianten',
+        'variant'              => 'Variante',
         'discounts'            => 'Rabatte',
         'discount'             => 'Rabatt',
         'select_placeholder'   => '-- Bitte wählen',

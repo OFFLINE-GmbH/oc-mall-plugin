@@ -9,7 +9,8 @@ class ProductPrice extends Price
     use Nullable;
 
     public $table = 'offline_mall_product_prices';
-    public $nullable = ['price'];
+    public $nullable = ['price', 'variant_id'];
+    protected $touches = ['product', 'variant'];
     // Remove parent relation
     public $morphTo = [
     ];
@@ -19,8 +20,6 @@ class ProductPrice extends Price
         'customer_group_id',
         'product_id',
         'variant_id',
-    ];
-    public $rules = [
     ];
     public $belongsTo = [
         'product'  => Product::class,

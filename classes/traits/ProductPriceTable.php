@@ -5,6 +5,8 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Backend\Widgets\Table;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\CustomerGroupPrice;
@@ -43,6 +45,7 @@ trait ProductPriceTable
         $widget->bindToController();
 
         $model = Product::with([
+            'prices',
             'additional_prices',
             'customer_group_prices',
             'variants.customer_group_prices',
@@ -66,6 +69,8 @@ trait ProductPriceTable
             $currencies                = Currency::get()->keyBy('code');
             $hasPriceInDefaultCurrency = false;
 
+            $this->removeOldPricingInformation($state, $currencies);
+
             foreach ($state as $currency => $records) {
                 $currency = $currencies->get($currency);
                 foreach ($records as $record) {
@@ -80,6 +85,9 @@ trait ProductPriceTable
                 throw new ValidationException(['prices' => trans('offline.mall::lang.common.price_missing')]);
             }
         });
+
+        // Reindex product and variants.
+        (new ProductObserver(app(Index::class)))->updated(Product::find($this->params[0]));
     }
 
     protected function hasDefaultCurrencyPrice($record, $currency)
@@ -122,11 +130,6 @@ trait ProductPriceTable
     protected function persistCustomerGroupPrices($record, $currency)
     {
         $type = $record['type'] === 'product' ? Product::class : Variant::class;
-        // Delete existing pricing information.
-        CustomerGroupPrice::where('priceable_type', $type::MORPH_KEY)
-                          ->where('priceable_id', $record['original_id'])
-                          ->where('currency_id', $currency->id)
-                          ->delete();
 
         foreach ($this->vars['customerGroups'] as $group) {
             $price = $record['group__' . $group['id']] ?? false;
@@ -146,11 +149,6 @@ trait ProductPriceTable
     protected function persistAdditionalPriceCategories($record, $currency)
     {
         $type = $record['type'] === 'product' ? Product::class : Variant::class;
-        // Delete existing pricing information.
-        Price::where('priceable_type', $type::MORPH_KEY)
-             ->where('priceable_id', $record['original_id'])
-             ->where('currency_id', $currency->id)
-             ->delete();
 
         foreach ($this->vars['additionalPriceCategories'] as $group) {
             $price = $record['additional__' . $group['id']] ?? false;
@@ -189,7 +187,7 @@ trait ProductPriceTable
                     $this->vars['additionalPriceCategories']
                         ->each(function (PriceCategory $category) use (&$data, $currency, $item) {
                             $data['additional__' . $category->id] = $item->additionalPrice(
-                                $category,
+                                $category->id,
                                 $currency
                             )->decimal;
                         });
@@ -198,5 +196,25 @@ trait ProductPriceTable
                 }),
             ];
         });
+    }
+
+    protected function removeOldPricingInformation($state, $currencies)
+    {
+        $groupPrice = CustomerGroupPrice::query();
+        $price      = Price::query();
+        foreach ($state as $currency => $items) {
+            foreach ($items as $record) {
+                $closure = function ($q) use ($record, $currencies, $currency) {
+                    $type = $record['type'] === 'product' ? Product::class : Variant::class;
+                    $q->where('priceable_type', $type::MORPH_KEY)
+                      ->where('priceable_id', $record['original_id'])
+                      ->where('currency_id', $currencies->get($currency)->id);
+                };
+                $price->orWhere($closure);
+                $groupPrice->orWhere($closure);
+            }
+        }
+        $price->delete();
+        $groupPrice->delete();
     }
 }

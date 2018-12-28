@@ -329,7 +329,7 @@ class SeedDemoData extends Command
             'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
             'decimals' => 2,
             'symbol'   => '$',
-            'rate'     => 1,
+            'rate'     => 1.2,
         ]);
         Currency::create([
             'code'     => 'EUR',
@@ -342,7 +342,7 @@ class SeedDemoData extends Command
             'code'     => 'CHF',
             'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
             'decimals' => 2,
-            'rate'     => 1,
+            'rate'     => 1.1,
         ]);
     }
 

@@ -40,6 +40,10 @@ trait ProductPriceAccessors
 
         $prices = $this->additional_prices;
 
+        if ($category instanceof PriceCategory) {
+            $category = $category->id;
+        }
+
         $filter = function ($query) use ($category) {
             return $query->where('price_category_id', $category);
         };

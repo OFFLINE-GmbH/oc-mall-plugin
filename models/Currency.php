@@ -13,6 +13,7 @@ class Currency extends Model
     use Sortable;
 
     public const CURRENCY_SESSION_KEY = 'mall.currency.active';
+    public const CURRENCIES_CACHE_KEY = 'mall.currencies';
     public const DEFAULT_CURRENCY_CACHE_KEY = 'mall.currency.default';
 
     public static $defaultCurrency;
@@ -48,6 +49,7 @@ class Currency extends Model
     public function afterSave()
     {
         Cache::forget(self::DEFAULT_CURRENCY_CACHE_KEY);
+        Cache::forget(self::CURRENCIES_CACHE_KEY);
     }
 
     public function afterDelete()
@@ -55,6 +57,8 @@ class Currency extends Model
         DB::table('offline_mall_prices')->where('currency_id', $this->id)->delete();
         DB::table('offline_mall_product_prices')->where('currency_id', $this->id)->delete();
         DB::table('offline_mall_customer_group_prices')->where('currency_id', $this->id)->delete();
+        Cache::forget(self::CURRENCIES_CACHE_KEY);
+        Cache::forget(self::DEFAULT_CURRENCY_CACHE_KEY);
     }
 
     /**
@@ -94,6 +98,18 @@ class Currency extends Model
         static::$defaultCurrency = (new Currency)->newFromBuilder($currency);
 
         return static::$defaultCurrency;
+    }
+
+    /**
+     * Returns an array of all currency information.
+     *
+     * @return mixed
+     */
+    public static function getAll()
+    {
+        return Cache::rememberForever(static::CURRENCIES_CACHE_KEY, function () {
+            return Currency::get(['id', 'rate', 'symbol', 'code'])->keyBy('id')->toArray();
+        });
     }
 
     protected static function guardMissingCurrency($currency)

@@ -48,7 +48,7 @@ class Variant extends Model
     ];
     public $rules = [
         'name'                         => 'required',
-        'product_id'                   => 'required|exists:offline_mall_products,id',
+        'product_id'                   => 'required',
         'stock'                        => 'required|integer',
         'weight'                       => 'nullable|integer',
         'published'                    => 'boolean',
@@ -121,6 +121,12 @@ class Variant extends Model
 
     protected function createImageSetFromTempImages()
     {
+        // Only run this if a variant relation has been created/updated.
+        if (request('_relation_field') !== 'variants'
+            && ! starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage')) {
+            return;
+        }
+
         $tempImages = $this->temp_images()
                            ->withDeferred(post('_session_key'))
                            ->count();
