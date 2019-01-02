@@ -117,4 +117,15 @@ class OrderProduct extends Model
             'price'       => $this->getOriginal($key) / 100,
         ]);
     }
+
+    public function getCustomFieldValueDescriptionAttribute()
+    {
+        return collect($this->custom_field_values)->map(function (array $value) {
+            return sprintf(
+                '%s: %s',
+                e($value['custom_field']['name']),
+                e($value['custom_field_option']['name'])
+            );
+        })->implode('<br />');
+    }
 }
