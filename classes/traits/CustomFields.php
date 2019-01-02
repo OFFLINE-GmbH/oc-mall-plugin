@@ -62,9 +62,9 @@ trait CustomFields
                              ->get()
                              ->mapWithKeys(function (CustomField $field) use ($values) {
                                  $value = $values->get($field->id);
-                                if (\in_array($field->type, ['dropdown', 'image'], true)) {
-                                    $value = $this->decode($value);
-                                }
+                                 if (\in_array($field->type, ['dropdown', 'image', 'color'], true)) {
+                                     $value = $this->decode($value);
+                                 }
 
                                  return [$field->id => ['field' => $field, 'value' => $value]];
                              });
@@ -76,16 +76,8 @@ trait CustomFields
             if ($field->required) {
                 $rules->push('required');
             }
-            if (\in_array($field->type, ['dropdown', 'image'], true)) {
+            if (\in_array($field->type, ['dropdown', 'image', 'color'], true)) {
                 $rules->push('in:' . $field->custom_field_options->pluck('id')->implode(','));
-            }
-            if ($field->type === 'color') {
-                if ($field->custom_field_options->count() < 1) {
-                    $rules->push('size:7');
-                    $rules->push('regex:/^\#[0-9A-Fa-f]{6}$/');
-                } else {
-                    $rules->push('in:' . $field->custom_field_options->map->value->pluck('color')->implode(','));
-                }
             }
 
             return [$field->name => $rules];
@@ -100,11 +92,9 @@ trait CustomFields
             throw new ValidationException($v);
         }
 
-        $values = $fields->map(function (array $data) {
-            if ( ! $data['value']) {
-                return;
-            }
-
+        $values = $fields->filter(function ($data) {
+            return $data['value'];
+        })->map(function (array $data) {
             $option = $data['field']->custom_field_options->find($data['value']);
 
             $value                         = new CustomFieldValue();

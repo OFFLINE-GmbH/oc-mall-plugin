@@ -19,12 +19,11 @@ class CustomFieldOption extends Model
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = ['name'];
     public $with = ['prices'];
-    public $jsonable = ['values'];
     public $fillable = [
         'id',
         'name',
-        'values',
         'sort_order',
+        'option_value',
         'custom_field_id',
     ];
     public $rules = [
@@ -55,13 +54,4 @@ class CustomFieldOption extends Model
     public $field_type = '';
 
     public $table = 'offline_mall_custom_field_options';
-
-    /**
-     * Make it easier to access the first "values" option since
-     * this often is the only value we need.
-     */
-    public function getValueAttribute()
-    {
-        return $this->values[0] ?? null;
-    }
 }
