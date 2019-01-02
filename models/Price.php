@@ -61,7 +61,7 @@ class Price extends Model
 
     public function setPriceAttribute($value)
     {
-        if ($value === null || $value === "") {
+        if ($value === null || $value === '') {
             return $this->attributes['price'] = null;
         }
         $this->attributes['price'] = round($value * 100, 0);

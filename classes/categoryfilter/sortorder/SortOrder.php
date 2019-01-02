@@ -14,6 +14,11 @@ abstract class SortOrder
      */
     public $currency;
     /**
+     * The default currency.
+     * @var Currency
+     */
+    public $defaultCurrency;
+    /**
      * Any active search filters.
      * @var Collection
      */
@@ -21,7 +26,8 @@ abstract class SortOrder
 
     public function __construct()
     {
-        $this->currency = Currency::activeCurrency();
+        $this->currency        = Currency::activeCurrency();
+        $this->defaultCurrency = Currency::defaultCurrency();
     }
 
     /**

@@ -350,8 +350,8 @@ class ProductsFilter extends MallComponent
 
             $currencyRange = (new PriceRangeQuery($this->categories, $this->currency))->query()->first();
 
-            $range->min = $this->smaller($currencyRange->min, $calculatedMin);
-            $range->max = $this->bigger($currencyRange->max, $calculatedMax);
+            $range->min = $this->higher($currencyRange->min, $calculatedMin);
+            $range->max = $this->lower($currencyRange->max, $calculatedMax);
         }
 
 
@@ -505,27 +505,27 @@ class ProductsFilter extends MallComponent
     }
 
     /**
-     * Return the smaller of two values.
+     * Return the higher of two values.
      *
      * @param $a
      * @param $b
      *
      * @return mixed
      */
-    protected function smaller($a, $b)
+    protected function higher($a, $b)
     {
         return $a > $b ? $b : $a;
     }
 
     /**
-     * Return the bigger of two values.
+     * Return the lower of two values.
      *
      * @param $a
      * @param $b
      *
      * @return mixed
      */
-    protected function bigger($a, $b)
+    protected function lower($a, $b)
     {
         return $a > $b ? $a : $b;
     }

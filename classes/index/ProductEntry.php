@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;
-use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Product;
 
 class ProductEntry implements Entry
@@ -50,10 +49,8 @@ class ProductEntry implements Entry
 
     protected function mapPrices(Product $product): Collection
     {
-        $currencies = Currency::getAll();
-
-        return collect($currencies)->mapWithKeys(function ($currency) use ($product) {
-            return [$currency['code'] => $product->priceWithMissing($currency['id'])->integer];
+        return $product->prices->mapWithKeys(function($price)  {
+            return [$price->currency->code => $price->integer];
         });
     }
 

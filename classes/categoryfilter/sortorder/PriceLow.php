@@ -2,7 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter\SortOrder;
 
-class PriceLow extends SortOrder
+class PriceLow extends Price
 {
     public function key(): string
     {

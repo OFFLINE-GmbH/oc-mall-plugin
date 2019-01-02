@@ -4,7 +4,6 @@ namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
-use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 
 class VariantEntry implements Entry
@@ -13,6 +12,7 @@ class VariantEntry implements Entry
 
     protected $variant;
     protected $data;
+    protected $defaultCurrency;
 
     public function __construct(Variant $variant)
     {
@@ -25,6 +25,8 @@ class VariantEntry implements Entry
 
         $product = $variant->product;
 
+        $this->defaultCurrency = Currency::defaultCurrency();
+
         $data                = $variant->attributesToArray();
         $data['category_id'] = $product->category_id;
 
@@ -32,6 +34,7 @@ class VariantEntry implements Entry
         $data['property_values'] = $this->mapProps($variant->all_property_values);
         $data['sort_orders']     = $product->getSortOrders();
         $data['prices']          = $this->mapPrices($variant);
+        $data['parent_prices']   = $this->mapPrices($product);
 
         if ($product->brand) {
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
@@ -52,12 +55,10 @@ class VariantEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices(Variant $variant): Collection
+    protected function mapPrices($model): Collection
     {
-        $currencies = Currency::getAll();
-
-        return collect($currencies)->mapWithKeys(function ($currency) use ($variant) {
-            return [$currency['code'] => $variant->priceWithMissing($currency)->integer];
+        return $model->prices->mapWithKeys(function ($price) {
+            return [$price->currency->code => $price->integer];
         });
     }
 

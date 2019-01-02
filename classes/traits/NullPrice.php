@@ -15,8 +15,7 @@ trait NullPrice
         $currency,
         $related,
         string $relation = 'prices',
-        ?Closure $filter = null,
-        $forceMissing = false
+        ?Closure $filter = null
     ) {
         $price   = null;
         $default = $this->getDefaultCurrency();
@@ -24,7 +23,7 @@ trait NullPrice
         $model = new Price();
 
         // Add missing prices only when running the frontend.
-        if ( ! $forceMissing === true || app()->runningInBackend()) {
+        if (! app()->runningInBackend()) {
             $base = $related->where('currency_id', $default->id)->first();
             if ($base !== null) {
                 $price                = (int)($base->price * $currency->rate);
