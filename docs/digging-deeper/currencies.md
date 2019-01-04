@@ -19,4 +19,6 @@ If the base currency is Euro, a rate of 1.15 could be defined for USD.
 
 You can use the Twig filter ` | money` to format any number in the currently active currency.
 
+::: v-pre
 `{{ 2000 | money }}` results in `$ 20.00`.
+:::
