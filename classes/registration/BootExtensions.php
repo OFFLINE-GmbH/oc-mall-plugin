@@ -32,6 +32,7 @@ trait BootExtensions
     {
         // Add customer_group Relation
         \RainLab\User\Models\User::extend(function ($model) {
+            $model->with = 'customer_group';
             $model->belongsTo = [
                 'customer_group' => [CustomerGroup::class, 'key' => 'offline_mall_customer_group_id'],
             ];

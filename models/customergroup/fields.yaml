@@ -11,6 +11,11 @@ fields:
             type: slug
         type: text
         comment: 'offline.mall::lang.customer_group.code_comment'
+    discount:
+        label: 'offline.mall::lang.common.discount'
+        span: auto
+        type: number
+        comment: 'offline.mall::lang.customer_group.discount_comment'
 tabs:
     fields:
         customers:

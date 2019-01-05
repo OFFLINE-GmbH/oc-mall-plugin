@@ -39,10 +39,14 @@ trait PriceAccessors
         // If a user specific price is available for this model use it instead.
         // The official price is passed along as the "official" property on the specific price model.
         if (method_exists($this, 'getUserSpecificPrice')) {
-            if ($specific = $this->getUserSpecificPrice()) {
-                $query = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
+            if ($specific = $this->getUserSpecificPrice($price)) {
+                // If a Collection is returned, the price in the current currency has to be filtered out first.
+                if ( ! $specific instanceof Price) {
+                    $query    = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
+                    $specific = $query->first();
+                }
 
-                $specific = $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter);
+                $specific = $specific ?? $this->nullPrice($currency, $specific, $relation, $filter);
 
                 $specific->official = $price;
 

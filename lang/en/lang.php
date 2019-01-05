@@ -166,6 +166,7 @@
         'variant'              => 'Variant',
         'discounts'            => 'Discounts',
         'discount'             => 'Discount',
+        'discount_percentage'  => 'Discount (%)',
         'select_placeholder'   => '-- Please choose',
         'main_image'           => 'Main image',
         'images'               => 'Images',
@@ -882,7 +883,8 @@
         ],
     ],
     'customer_group'           => [
-        'code_comment' => 'This code can be used to identify this group programmatically',
+        'code_comment'     => 'This code can be used to identify this group programmatically',
+        'discount_comment' => 'Give this customer group a specific discount in % on your whole catalogue',
     ],
     'order_status'             => [
         'processed' => 'Processed',

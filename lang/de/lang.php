@@ -165,6 +165,7 @@
         'variant'              => 'Variante',
         'discounts'            => 'Rabatte',
         'discount'             => 'Rabatt',
+        'discount_percentage'  => 'Rabatt (in %)',
         'select_placeholder'   => '-- Bitte wählen',
         'main_image'           => 'Hauptbild',
         'images'               => 'Bilder',
@@ -878,6 +879,18 @@
             'new'      => 'Status für neue Bestellungen setzen',
             'complete' => 'Bestellung gilt als abgeschlossen',
         ],
+    ],
+    'customer_group'           => [
+        'code_comment'     => 'Dieser Code kann verwendet werden, um diese Gruppe programmtechnisch anzusteuern',
+        'discount_comment' => 'Dieser Benutzergruppe wird dieser Rabatt in % auf das komplette Sortiment gewährt',
+    ],
+    'order_status'             => [
+        'processed' => 'Verarbeitet',
+        'disputed'  => 'Beanstandet',
+        'shipped'   => 'Versendet',
+        'delivered' => 'Zugestellt',
+        'pending'   => 'Pendent',
+        'cancelled' => 'Storniert',
     ],
     'notifications'            => [
         'enabled'         => 'Aktiviert',
