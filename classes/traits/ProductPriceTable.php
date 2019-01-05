@@ -114,7 +114,11 @@ trait ProductPriceTable
     protected function persistPrices($record, $currency, $model)
     {
         $type  = $record['type'] === 'product' ? Product::class : Variant::class;
-        $price = $model->prices->where('currency_id', $currency->id)->first();
+        $price = $model->prices->where('currency_id', $currency->id);
+        $price = $type === Variant::class
+            ? $price->firstWhere('variant_id', $record['original_id'])
+            : $price->firstWhere('variant_id', null);
+
         if ( ! $price) {
             $productId = $type === Variant::class ? Variant::find($record['original_id'])->product->id : null;
             $price     = ProductPrice::make([
