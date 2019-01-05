@@ -313,6 +313,12 @@ class Products extends MallComponent
         $models = $model->with($this->productIncludes())->find($itemIds);
         $ghosts = $this->getGhosts($ghostIds);
 
+        // Preload all pricing information for related products. This is used in case a Variant
+        // is inheriting it's parent product's pricing information.
+        if ($model instanceof Variant) {
+            $models->load(['product.customer_group_prices', 'product.prices', 'product.additional_prices']);
+        }
+
         // Insert the Ghost models back at their old position so the sort order remains.
         $resultSet = collect($result->ids)->map(function ($id) use ($models, $ghosts) {
             return is_int($id)
@@ -441,6 +447,6 @@ class Products extends MallComponent
      */
     protected function productIncludes(): array
     {
-        return ['image_sets.images'];
+        return ['image_sets.images', 'customer_group_prices', 'additional_prices'];
     }
 }
