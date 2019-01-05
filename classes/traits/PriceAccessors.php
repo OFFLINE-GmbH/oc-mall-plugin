@@ -32,17 +32,25 @@ trait PriceAccessors
     ) {
         $currency = Currency::resolve($currency);
 
+        $query = $this->withFilter($filter, $this->$relation->where('currency_id', $currency->id));
+
+        $price = $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter);
+
+        // If a user specific price is available for this model use it instead.
+        // The official price is passed along as the "official" property on the specific price model.
         if (method_exists($this, 'getUserSpecificPrice')) {
             if ($specific = $this->getUserSpecificPrice()) {
                 $query = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
 
-                return $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter);
+                $specific = $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter);
+
+                $specific->official = $price;
+
+                return $specific;
             }
         }
 
-        $query = $this->withFilter($filter, $this->$relation->where('currency_id', $currency->id));
-
-        return $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter);
+        return $price;
     }
 
     public function price($currency = null, $relation = 'prices', ?Closure $filter = null)

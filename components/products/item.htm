@@ -8,8 +8,10 @@
                 <div class="mall-products-item__name">
                     {{ item.name }}
                 </div>
-                <div class="mall-products-item__price">
-                    {{ item.price() | raw }}
+                {% set price = item.price() %}
+                <div class="mall-products-item__price
+                    {{ price.isCustomerSpecific ? 'mall-products-item__price--special' }}">
+                    {{ price.string }}
                 </div>
             </div>
             <div class="mall-products-item__info-secondary">
@@ -17,7 +19,11 @@
                     {{ item.description_short }}
                 </div>
                 <div class="mall-products-item__old-price">
-                    {{ item.oldPrice.count > 0 ? (item.oldPrice() | raw) : '' }}
+                    {% if price.official %}
+                        {{ price.official.string }}
+                    {% else %}
+                        {{ item.oldPrice.count > 0 ? (item.oldPrice() | raw) : '' }}
+                    {% endif %}
                 </div>
             </div>
         </div>
