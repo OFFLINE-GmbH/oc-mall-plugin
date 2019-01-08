@@ -58,7 +58,7 @@ class MailingEventHandler
      *
      * @param $user
      */
-    public function customerCreated($user)
+    public function customerCreated($handler, $user)
     {
         // Don't mail guest accounts.
         if ($user->customer->is_guest) {
