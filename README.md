@@ -26,6 +26,16 @@ A live demo of the plugin can be found here:
 
 For support and development requests please file an issue on GitHub.
 
+## Installation
+
+The easiest way to get you started is by using the command line:
+
+```bash
+php artisan plugin:install rainlab.user
+php artisan plugin:install rainlab.location
+php artisan plugin:install offline.mall
+``` 
+
 ## Contributing
 
 ### Documentation
