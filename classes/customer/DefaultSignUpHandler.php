@@ -84,7 +84,7 @@ class DefaultSignUpHandler implements SignUpHandler
         // the email of all existing guest accounts registered to the same email.
         $this->renameExistingGuestAccounts($data, $user);
 
-        Event::fire('mall.customer.afterSignup', [$user, $this]);
+        Event::fire('mall.customer.afterSignup', [$this, $user]);
 
         $credentials = [
             'login'    => array_get($data, 'email'),
