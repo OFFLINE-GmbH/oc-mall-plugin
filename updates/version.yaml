@@ -1,5 +1,5 @@
 1.0.0:
-    - 'Initial release'
+    - 'First public release'
     - create_offline_mall_products.php
     - create_offline_mall_product_variants.php
     - create_offline_mall_product_accessory.php
