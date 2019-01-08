@@ -92,7 +92,7 @@
             'publishable_key_comment' => 'You can find this key in your Stripe Dashboard',
         ],
         'paypal'      => [
-            'client_id'         => 'PayPal Client I',
+            'client_id'         => 'PayPal Client ID',
             'secret'            => 'PayPal Secret',
             'test_mode'         => 'Test mode',
             'test_mode_comment' => 'Run all payments in the PayPal Sandbox.',
