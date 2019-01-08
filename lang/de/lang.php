@@ -468,6 +468,7 @@
         'delete_confirm'                      => 'Möchtest du diese Bestellung wirklich löschen?',
         'update_invoice_number'               => 'Rechnungsnummer ändern',
         'shipped'                             => 'Versendet',
+        'shipping_pending'                    => 'Versand pendent',
         'not_shipped'                         => 'Versand ausstehend',
         'modal'                               => [
             'cancel' => 'Abbrechen',

@@ -469,6 +469,7 @@
         'delete_confirm'                      => 'Do you really want to delete this order?',
         'update_invoice_number'               => 'Set invoice number',
         'shipped'                             => 'Shipped',
+        'shipping_pending'                    => 'Shipping pending',
         'not_shipped'                         => 'Pending',
         'modal'                               => [
             'cancel' => 'Cancel',

@@ -7,10 +7,10 @@ recordsPerPage: 20
 showSetup: true
 showCheckboxes: false
 defaultSort:
-    column: creation_date
+    column: created_at
     direction: desc
 toolbar:
-    buttons: list_toolbar
+#    buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
 filter: config_filter.yaml

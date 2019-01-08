@@ -3,41 +3,26 @@
 # ===================================
 
 scopes:
-#    status:
-#        label: offline.mall::lang.order.status
-#        type: group
-#        conditions: status in (:filtered)
-#        options:
-#            processed: offline.mall::lang.order_status.processed
-#            disputed: offline.mall::lang.order_status.disputed
-#            shipped: offline.mall::lang.order_status.shipped
-#            delivered: offline.mall::lang.order_status.delivered
-#            pending: offline.mall::lang.order_status.pending
-#            cancelled: offline.mall::lang.order_status.cancelled
-#
-#    payment_status:
-#        label: offline.mall::lang.order.payment_status
-#        type: group
-#        conditions: payment_status in (:filtered)
-#        options:
-#            paid: offline.mall::lang.payment_status.paid
-#            deferred: offline.mall::lang.payment_status.deferred
-#            paid_deferred: offline.mall::lang.payment_status.paid_deferred
-#            charged_back: offline.mall::lang.payment_status.charged_back
-#            refunded: offline.mall::lang.payment_status.refunded
-#            paidout: offline.mall::lang.payment_status.paidout
-#            failed: offline.mall::lang.payment_status.failed
-#            pending: offline.mall::lang.payment_status.pending
-#            expired: offline.mall::lang.payment_status.expired
-#            cancelled: offline.mall::lang.payment_status.cancelled
-#            open: offline.mall::lang.payment_status.open
-
-    creation_date:
+    status:
+        label: offline.mall::lang.order.status
+        type: group
+        modelClass: OFFLINE\Mall\Models\OrderState
+        conditions: order_state_id in (:filtered)
+        nameFrom: name
+    payment_state:
+        label: offline.mall::lang.order.payment_status
+        type: group
+        conditions: payment_state in (:filtered)
+        options:
+            OFFLINE\Mall\Classes\PaymentState\PaidState: offline.mall::lang.payment_status.paid
+            OFFLINE\Mall\Classes\PaymentState\RefundedState: offline.mall::lang.payment_status.refunded
+            OFFLINE\Mall\Classes\PaymentState\FailedState: offline.mall::lang.payment_status.failed
+            OFFLINE\Mall\Classes\PaymentState\PendingState: offline.mall::lang.payment_status.pending
+    shipping_pending:
+        label: offline.mall::lang.order.shipping_pending
+        type: checkbox
+        conditions: shipped_at is null
+    created_at:
         label: offline.mall::lang.order.creation_date
         type: daterange
-        conditions: creation_date >= ':after' AND creation_date <= ':before'
-
-    completion_date:
-        label: offline.mall::lang.order.completion_date
-        type: daterange
-        conditions: completion_date >= ':after' AND completion_date <= ':before'
+        conditions: created_at >= ':after' AND created_at <= ':before'
