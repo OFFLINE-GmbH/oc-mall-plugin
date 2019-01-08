@@ -11,4 +11,9 @@ class FailedState extends PaymentState
             PaidState::class,
         ];
     }
+
+    public static function color(): string
+    {
+        return '#d30000';
+    }
 }

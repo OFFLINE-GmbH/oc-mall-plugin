@@ -13,4 +13,9 @@ abstract class PaymentState
 
         return trans('offline.mall::lang.order.payment_states.' . $state);
     }
+
+    public static function color(): string
+    {
+        return '#333';
+    }
 }

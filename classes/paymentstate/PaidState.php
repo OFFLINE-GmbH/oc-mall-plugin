@@ -11,4 +11,9 @@ class PaidState extends PaymentState
             RefundedState::class,
         ];
     }
+
+    public static function color(): string
+    {
+        return '#189e51';
+    }
 }

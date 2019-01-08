@@ -15,9 +15,22 @@ columns:
         type: text
         searchable: true
         sortable: true
+    customer:
+        label: 'offline.mall::lang.order.customer'
+        path: $/offline/mall/models/order/_customer.htm
+        relation: customer
+        type: partial
+        searchable: true
+        sortable: false
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
+        sortable: true
+    total_post_taxes:
+        label: 'offline.mall::lang.order.grand_total'
+        path: $/offline/mall/models/order/_total.htm
+        type: partial
+        align: right
         sortable: true
     order_state:
         label: 'offline.mall::lang.order.status'
@@ -37,16 +50,3 @@ columns:
         path: $/offline/mall/models/order/_shipped.htm
         sortable: true
         searchable: false
-    customer:
-        label: 'offline.mall::lang.order.customer'
-        path: $/offline/mall/models/order/_customer.htm
-        relation: customer
-        type: partial
-        searchable: true
-        sortable: false
-    total_post_taxes:
-        label: 'offline.mall::lang.order.grand_total'
-        path: $/offline/mall/models/order/_total.htm
-        type: partial
-        align: center
-        sortable: true
