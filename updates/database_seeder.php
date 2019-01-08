@@ -55,6 +55,14 @@ class DatabaseSeeder extends Seeder
             'symbol'     => '€',
             'rate'       => 1.14,
         ]);
+        Currency::create([
+            'is_default' => ! app()->runningUnitTests(),
+            'code'       => 'USD',
+            'format'     => '{{ currency.symbol }} {{ price|number_format(2, ".", "\'") }}',
+            'decimals'   => 2,
+            'symbol'     => '$',
+            'rate'       => 1.02,
+        ]);
 
         $this->call(CategoryTableSeeder::class);
         $this->call(TaxTableSeeder::class);
