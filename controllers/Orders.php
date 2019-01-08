@@ -98,11 +98,9 @@ class Orders extends Controller
             }
         }
 
-        $order = $this->updateOrder($data);
+        $order = $this->updateOrder($data, false);
 
         $order->shippingNotification = $notification;
-        // When updating the shipping information we don't care about the state change notification.
-        $order->stateNotification = false;
 
         Event::fire('mall.order.shipped', [$order]);
 
@@ -131,10 +129,13 @@ class Orders extends Controller
         return Backend::redirect('offline/mall/orders');
     }
 
-    protected function updateOrder(array $attributes)
+    protected function updateOrder(array $attributes, bool $stateNotification = true)
     {
         $order = Order::findOrFail(input('id'));
         $order->forceFill($attributes);
+
+        // When updating the shipping information we don't care about the state change notification.
+        $order->stateNotification = $stateNotification;
 
         $order->save();
         Flash::success(trans('offline.mall::lang.order.updated'));
