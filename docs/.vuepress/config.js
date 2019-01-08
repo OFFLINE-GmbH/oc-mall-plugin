@@ -58,6 +58,7 @@ module.exports = {
                     '/development/order-model',
                     '/development/payment-providers',
                     '/development/pricing-information',
+                    '/development/events',
                     '/development/integration',
                     '/development/console-commands',
                 ]
