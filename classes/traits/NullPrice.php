@@ -23,7 +23,7 @@ trait NullPrice
         $model = new Price();
 
         // Add missing prices only when running the frontend.
-        if (! app()->runningInBackend()) {
+        if (! app()->runningInBackend() && ! app()->runningInConsole()) {
             $base = $related->where('currency_id', $default->id)->first();
             if ($base !== null) {
                 $price                = (int)($base->price * $currency->rate);

@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Variant;
 
 class VariantEntry implements Entry
@@ -21,7 +22,13 @@ class VariantEntry implements Entry
         // Make sure variants inherit variant data again.
         session()->forget('mall.variants.disable-inheritance');
 
-        $variant->loadMissing(['prices.currency', 'property_values.property', 'product.brand']);
+        $variant->loadMissing([
+            'prices.currency',
+            'property_values.property',
+            'product.brand',
+            'customer_group_prices',
+            'product.customer_group_prices',
+        ]);
 
         $product = $variant->product;
 
@@ -30,11 +37,12 @@ class VariantEntry implements Entry
         $data                = $variant->attributesToArray();
         $data['category_id'] = $product->category_id;
 
-        $data['index']           = self::INDEX;
-        $data['property_values'] = $this->mapProps($variant->all_property_values);
-        $data['sort_orders']     = $product->getSortOrders();
-        $data['prices']          = $this->mapPrices($variant);
-        $data['parent_prices']   = $this->mapPrices($product);
+        $data['index']                 = self::INDEX;
+        $data['property_values']       = $this->mapProps($variant->all_property_values);
+        $data['sort_orders']           = $product->getSortOrders();
+        $data['prices']                = $this->mapPrices($variant);
+        $data['parent_prices']         = $this->mapPrices($product);
+        $data['customer_group_prices'] = $this->mapCustomerGroupPrices($variant);
 
         if ($product->brand) {
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
@@ -59,6 +67,22 @@ class VariantEntry implements Entry
     {
         return $model->prices->mapWithKeys(function ($price) {
             return [$price->currency->code => $price->integer];
+        });
+    }
+
+    protected function mapCustomerGroupPrices($model): Collection
+    {
+        return CustomerGroup::get()->mapWithKeys(function ($group) use ($model) {
+            return [
+                $group->id => Currency::getAll()->mapWithKeys(function ($currency) use ($model, $group) {
+                    $price = $model->groupPrice($group, $currency);
+                    if ($price) {
+                        return [$price->currency->code => $price->integer];
+                    }
+
+                    return null;
+                })->filter(),
+            ];
         });
     }
 
