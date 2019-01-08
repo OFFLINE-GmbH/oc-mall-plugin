@@ -45,3 +45,6 @@
     - add_customer_group_id_to_rainlab_users.php
     - create_offline_mall_notifications.php
     - database_seeder.php
+1.0.2:
+    - Fixed event handler for welcome email
+
