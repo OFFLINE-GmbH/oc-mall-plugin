@@ -23,7 +23,7 @@ trait NullPrice
         $model = new Price();
 
         // Add missing prices only when running the frontend.
-        if (! app()->runningInBackend() && ! app()->runningInConsole()) {
+        if ($this->shouldInherit()) {
             $base = $related->where('currency_id', $default->id)->first();
             if ($base !== null) {
                 $price                = (int)($base->price * $currency->rate);
@@ -47,5 +47,25 @@ trait NullPrice
         }
 
         return $this->defaultCurrency;
+    }
+
+    /**
+     * Prices should not be inherited when the code in run in the backend.
+     * We also don't want to inherit prices when running in the console
+     * (for seeding and indexing) except when unit tests are running.
+     *
+     * @return bool
+     */
+    protected function shouldInherit()
+    {
+        if (app()->runningInBackend()) {
+            return false;
+        }
+
+        if (app()->runningInConsole() && ! app()->runningUnitTests()) {
+            return false;
+        }
+
+        return true;
     }
 }
