@@ -1,10 +1,6 @@
 # oc-mall
 > E-commerce solution for October CMS
 
-
-**This plugin is under heavy development**. Don't use it in production yet. A first production ready version is  
-planned to be released towards the end of 2018.
-
 [![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
 
 `oc-mall` is a fully featured online shop solution for October CMS.
