@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
@@ -8,6 +9,7 @@ class Discount extends Model
 {
     use Validation;
     use PriceAccessors;
+    use Nullable;
 
     const MORPH_KEY = 'mall.discount';
 
@@ -28,9 +30,9 @@ class Discount extends Model
     public $with = ['shipping_prices', 'alternate_prices', 'amounts', 'totals_to_reach'];
     public $table = 'offline_mall_discounts';
     public $dates = ['expires'];
+    public $nullable = ['max_number_of_usages'];
     public $casts = [
         'number_of_usages'     => 'integer',
-        'max_number_of_usages' => 'integer',
     ];
     public $morphMany = [
         'shipping_prices'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
