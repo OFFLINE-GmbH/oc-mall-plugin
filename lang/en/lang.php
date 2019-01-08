@@ -701,6 +701,7 @@
                 'name'        => 'Promo code input',
                 'description' => 'Displays a promo code input field',
             ],
+            'discount_applied' => 'Discount applied successfully!'
         ],
         'shippingMethodSelector' => [
             'details' => [

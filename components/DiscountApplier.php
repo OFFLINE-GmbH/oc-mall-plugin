@@ -2,6 +2,7 @@
 
 use Auth;
 use October\Rain\Exception\ValidationException;
+use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Cart;
 
 /**
@@ -51,5 +52,7 @@ class DiscountApplier extends MallComponent
                 'code' => $e->getMessage(),
             ]);
         }
+
+        Flash::success(trans('offline.mall::lang.components.discountApplier.discount_applied'));
     }
 }
