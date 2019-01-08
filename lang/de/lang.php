@@ -428,6 +428,8 @@
         'tracking_url'                        => 'Tracking-URL',
         'tracking_shipped'                    => 'Bestellung als versendet markieren',
         'tracking_shipped_comment'            => 'Die Bestellung wird nach dem Speichern als versendet markiert',
+        'tracking_completed'                  => 'Bestellung als abgeschlossen markieren',
+        'tracking_completed_comment'          => 'Die Bestellung wird als abgeschlossen markiert',
         'tracking_notification'               => 'Benachrichtigung versenden',
         'tracking_notification_comment'       => 'Eine Benachrichtigung mit den Trackinginformationen wird an den Kunden gesendet',
         'shipping_fees'                       => 'Versandkosten',
@@ -877,8 +879,9 @@
         'color'       => 'Farbe',
         'flag'        => 'Spezielle Funktion',
         'flags'       => [
-            'new'      => 'Status für neue Bestellungen setzen',
-            'complete' => 'Bestellung gilt als abgeschlossen',
+            'new'       => 'Status für neue Bestellungen setzen',
+            'complete'  => 'Bestellung gilt als abgeschlossen',
+            'cancelled' => 'Bestellung wurde storniert',
         ],
     ],
     'customer_group'           => [

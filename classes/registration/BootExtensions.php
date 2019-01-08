@@ -30,14 +30,6 @@ trait BootExtensions
 
     protected function extendRainLabUser()
     {
-        // Add customer_group Relation
-        \RainLab\User\Models\User::extend(function ($model) {
-            $model->with = 'customer_group';
-            $model->belongsTo = [
-                'customer_group' => [CustomerGroup::class, 'key' => 'offline_mall_customer_group_id'],
-            ];
-        });
-
         // Add Customer Groups menu entry to RainLab.User
         Event::listen('backend.menu.extendItems', function ($manager) {
             $manager->addSideMenuItems('RainLab.User', 'user', [

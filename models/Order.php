@@ -67,6 +67,11 @@ class Order extends Model
      * @var bool
      */
     public $shippingNotification = false;
+    /**
+     * Use to define if the state change notification should be sent.
+     * @var bool
+     */
+    public $stateNotification = true;
 
     public static function boot()
     {

@@ -17,10 +17,17 @@
 <div class="scoreboard-item title-value">
     <h4><?= e(trans('offline.mall::lang.order.status')) ?></h4>
     <p id="order_state">
-        <?php echo $order->order_state->name ?>
+        <?php echo e($order->order_state->name) ?>
     </p>
     <p class="description" id="payment-state">
         <?= e($order['payment_state']::label()) ?>
+    </p>
+</div>
+
+<div class="scoreboard-item title-value">
+    <h4><?= e(trans('offline.mall::lang.order.shipped')) ?></h4>
+    <p id="shipped_at">
+        <?php echo $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-'  ?>
     </p>
 </div>
 

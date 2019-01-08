@@ -17,7 +17,7 @@ class OrderStateTableSeeder extends Seeder
             ['name' => 'Disputed', 'color' => '#e74c3c', 'german_name' => 'Reklamiert'],
             [
                 'name'        => 'Cancelled',
-                'flag'        => OrderState::FLAG_COMPLETE,
+                'flag'        => OrderState::FLAG_CANCELLED,
                 'color'       => '#95a5a6',
                 'german_name' => 'Storniert',
             ],

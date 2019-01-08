@@ -124,7 +124,7 @@ class OrderProduct extends Model
             return sprintf(
                 '%s: %s',
                 e($value['custom_field']['name']),
-                e($value['custom_field_option']['name'])
+                e($value['custom_field_option']['name'] ?? $value['display_value'])
             );
         })->implode('<br />');
     }

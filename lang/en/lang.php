@@ -429,6 +429,8 @@
         'tracking_url'                        => 'Tracking url',
         'tracking_shipped'                    => 'Mark order as shipped',
         'tracking_shipped_comment'            => 'The order will be marked as shipped',
+        'tracking_completed'                  => 'Mark order as complete',
+        'tracking_completed_comment'          => 'The order will be marked as complete',
         'tracking_notification'               => 'Send notification',
         'tracking_notification_comment'       => 'A notification containing the tracking information will be sent to the customer',
         'shipping_fees'                       => 'Shipping fees',
@@ -879,8 +881,9 @@
         'color'       => 'Color',
         'flag'        => 'Special flag',
         'flags'       => [
-            'new'      => 'Set the state of the order as "new"',
-            'complete' => 'Set the state of the order as "done"',
+            'new'       => 'Set the state of the order as "new"',
+            'complete'  => 'Set the state of the order as "done"',
+            'cancelled' => 'Set the state of the order as "cancelled"',
         ],
     ],
     'customer_group'           => [

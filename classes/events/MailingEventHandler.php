@@ -150,11 +150,15 @@ class MailingEventHandler
      */
     public function orderStateChanged($order)
     {
+        if ( ! $order->stateNotification) {
+            return;
+        }
+
         $data = [
             'order' => $order->load(['order_state']),
         ];
 
-        Mail::queue($this->template('offline.mall::order.changed'), $data, function ($message) use ($order) {
+        Mail::queue($this->template('offline.mall::order.state.changed'), $data, function ($message) use ($order) {
             $message->to($order->customer->user->email, $order->customer->name);
         });
     }
