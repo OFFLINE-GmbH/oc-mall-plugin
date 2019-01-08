@@ -697,11 +697,11 @@
             ],
         ],
         'discountApplier'        => [
-            'details' => [
+            'details'          => [
                 'name'        => 'Gutschein-Code Eingabe',
                 'description' => 'Zeigt eine Eingabemöglichkeit für Gutscheincodes an',
             ],
-            'discount_applied' => 'Gutschein zum Warenkorb hinzugefügt!'
+            'discount_applied' => 'Gutschein zum Warenkorb hinzugefügt!',
         ],
         'shippingMethodSelector' => [
             'details' => [
