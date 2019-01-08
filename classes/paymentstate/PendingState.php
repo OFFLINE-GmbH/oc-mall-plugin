@@ -12,4 +12,9 @@ class PendingState extends PaymentState
             PaidState::class,
         ];
     }
+
+    public static function color(): string
+    {
+        return '#3498db';
+    }
 }

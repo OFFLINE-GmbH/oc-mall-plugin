@@ -437,7 +437,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->name    = 'Test discount';
         $discount->type    = 'fixed_amount';
         $discount->save();
-        $discount->amount()->save(new Price([
+        $discount->amounts()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
             'field'       => 'amount',
@@ -511,7 +511,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger = 'code';
         $discount->type    = 'alternate_price';
         $discount->save();
-        $discount->alternate_price()->save(new Price([
+        $discount->alternate_prices()->save(new Price([
             'price'       => 250,
             'currency_id' => 1,
             'field'       => 'alternate_price',
@@ -555,7 +555,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->shipping_description = 'Test shipping';
         $discount->save();
 
-        $discount->shipping_price()->save(new Price([
+        $discount->shipping_prices()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
             'field'       => 'shipping_price',
@@ -583,12 +583,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger = 'total';
         $discount->save();
 
-        $discount->alternate_price()->save(new Price([
+        $discount->alternate_prices()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
             'field'       => 'alternate_price',
         ]));
-        $discount->total_to_reach()->save(new Price([
+        $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
             'field'       => 'total_to_reach',
@@ -620,12 +620,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger = 'total';
         $discount->save();
 
-        $discount->total_to_reach()->save(new Price([
+        $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
             'field'       => 'total_to_reach',
         ]));
-        $discount->amount()->save(new Price([
+        $discount->amounts()->save(new Price([
             'price'       => 150,
             'currency_id' => 1,
             'field'       => 'amount',
@@ -658,7 +658,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger = 'total';
         $discount->save();
 
-        $discount->total_to_reach()->save(new Price([
+        $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
             'field'       => 'total_to_reach',
@@ -697,12 +697,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->trigger              = 'total';
         $discount->save();
 
-        $discount->total_to_reach()->save(new Price([
+        $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
             'field'       => 'total_to_reach',
         ]));
-        $discount->shipping_price()->save(new Price([
+        $discount->shipping_prices()->save(new Price([
             'price'       => 0,
             'currency_id' => 1,
             'field'       => 'shipping_price',
@@ -737,7 +737,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->product_id = $productB->id;
         $discount->save();
 
-        $discount->alternate_price()->save(new Price([
+        $discount->alternate_prices()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
             'field'       => 'alternate_price',
@@ -772,7 +772,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->product_id = $productB->id;
         $discount->save();
 
-        $discount->amount()->save(new Price([
+        $discount->amounts()->save(new Price([
             'price'       => 150,
             'currency_id' => 1,
             'field'       => 'amount',
@@ -844,7 +844,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->product_id           = $productB->id;
         $discount->save();
 
-        $discount->shipping_price()->save(new Price([
+        $discount->shipping_prices()->save(new Price([
             'price'       => 0,
             'currency_id' => 1,
             'field'       => 'shipping_price',

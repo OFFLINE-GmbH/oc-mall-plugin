@@ -3,8 +3,9 @@
 namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Variant;
-use OFFLINE\Mall\Models\ProductPrice;
 
 class VariantEntry implements Entry
 {
@@ -12,6 +13,7 @@ class VariantEntry implements Entry
 
     protected $variant;
     protected $data;
+    protected $defaultCurrency;
 
     public function __construct(Variant $variant)
     {
@@ -20,14 +22,31 @@ class VariantEntry implements Entry
         // Make sure variants inherit variant data again.
         session()->forget('mall.variants.disable-inheritance');
 
-        $variant->loadMissing(['prices.currency', 'property_values.property']);
+        $variant->loadMissing([
+            'prices.currency',
+            'property_values.property',
+            'product.brand',
+            'customer_group_prices',
+            'product.customer_group_prices',
+        ]);
 
-        $data                    = $variant->attributesToArray();
-        $data['category_id']     = $variant->product->category_id;
-        $data['brand_id']        = $variant->product->brand_id;
-        $data['index']           = self::INDEX;
-        $data['prices']          = $this->mapPrices($variant->prices);
-        $data['property_values'] = $this->mapProps($variant->all_property_values);
+        $product = $variant->product;
+
+        $this->defaultCurrency = Currency::defaultCurrency();
+
+        $data                = $variant->attributesToArray();
+        $data['category_id'] = $product->category_id;
+
+        $data['index']                 = self::INDEX;
+        $data['property_values']       = $this->mapProps($variant->all_property_values);
+        $data['sort_orders']           = $product->getSortOrders();
+        $data['prices']                = $this->mapPrices($variant);
+        $data['parent_prices']         = $this->mapPrices($product);
+        $data['customer_group_prices'] = $this->mapCustomerGroupPrices($variant);
+
+        if ($product->brand) {
+            $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
+        }
 
         $this->data = $data;
     }
@@ -44,14 +63,26 @@ class VariantEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices(?Collection $input): Collection
+    protected function mapPrices($model): Collection
     {
-        if ($input === null) {
-            return collect();
-        }
-
-        return $input->mapWithKeys(function (ProductPrice $price) {
+        return $model->prices->mapWithKeys(function ($price) {
             return [$price->currency->code => $price->integer];
+        });
+    }
+
+    protected function mapCustomerGroupPrices($model): Collection
+    {
+        return CustomerGroup::get()->mapWithKeys(function ($group) use ($model) {
+            return [
+                $group->id => Currency::getAll()->mapWithKeys(function ($currency) use ($model, $group) {
+                    $price = $model->groupPrice($group, $currency);
+                    if ($price) {
+                        return [$price->currency->code => $price->integer];
+                    }
+
+                    return null;
+                })->filter(),
+            ];
         });
     }
 
@@ -62,7 +93,7 @@ class VariantEntry implements Entry
         }
 
         return $input->groupBy('property_id')->map(function ($value) {
-            return $value->pluck('safeValue')->unique()->filter()->values();
+            return $value->pluck('index_value')->unique()->filter()->values();
         })->filter();
     }
 }

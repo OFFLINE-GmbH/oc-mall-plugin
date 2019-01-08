@@ -9,23 +9,19 @@ use OFFLINE\Mall\Models\PriceCategory;
 
 trait ProductPriceAccessors
 {
-    public function groupPrice($group, $currency)
+    public function groupPrice(CustomerGroup $group, $currency)
     {
-        if ($group instanceof CustomerGroup) {
-            $group = $group->id;
-        }
-
         $currency = Currency::resolve($currency);
 
         $prices = $this->customer_group_prices;
 
         $filter = function ($query) use ($group) {
-            return $query->where('customer_group_id', $group);
+            return $query->where('customer_group_id', $group->id);
         };
 
-        $query = $this->withFilter($filter, $prices->where('currency_id', $currency->id));
+        $price = $this->withFilter($filter, $prices->where('currency_id', $currency->id))->first();
 
-        return $query->first()
+        return $price
             ?? $this->nullPrice(
                 $currency,
                 $this->withFilter($filter, $prices),
@@ -39,6 +35,10 @@ trait ProductPriceAccessors
         $currency = Currency::resolve($currency);
 
         $prices = $this->additional_prices;
+
+        if ($category instanceof PriceCategory) {
+            $category = $category->id;
+        }
 
         $filter = function ($query) use ($category) {
             return $query->where('price_category_id', $category);

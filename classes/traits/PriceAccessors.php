@@ -25,24 +25,44 @@ trait PriceAccessors
         });
     }
 
-    protected function priceRelation($currency = null, $relation = 'prices', ?Closure $filter = null)
-    {
+    protected function priceRelation(
+        $currency = null,
+        $relation = 'prices',
+        ?Closure $filter = null
+    ) {
         $currency = Currency::resolve($currency);
-
-        if (method_exists($this, 'getUserSpecificPrice')) {
-            if ($specific = $this->getUserSpecificPrice()) {
-                $query = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
-
-                return $query->first() ?? $this->nullPrice($currency, $specific, $relation, $filter);
-            }
-        }
 
         $query = $this->withFilter($filter, $this->$relation->where('currency_id', $currency->id));
 
-        return $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter);
+        $price = $query->first() ?? $this->nullPrice($currency, $this->$relation, $relation, $filter);
+
+        // If a user specific price is available for this model use it instead.
+        // The official price is passed along as the "official" property on the specific price model.
+        if (method_exists($this, 'getUserSpecificPrice')) {
+            if ($specific = $this->getUserSpecificPrice($price)) {
+                // If a Collection is returned, the price in the current currency has to be filtered out first.
+                if ( ! $specific instanceof Price) {
+                    $query    = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
+                    $specific = $query->first();
+                }
+
+                $specific = $specific ?? $this->nullPrice($currency, $specific, $relation, $filter);
+
+                $specific->official = $price;
+
+                return $specific;
+            }
+        }
+
+        return $price;
     }
 
     public function price($currency = null, $relation = 'prices', ?Closure $filter = null)
+    {
+        return $this->priceRelation($currency, $relation, $filter);
+    }
+
+    public function priceWithMissing($currency = null, $relation = 'prices', ?Closure $filter = null)
     {
         return $this->priceRelation($currency, $relation, $filter);
     }

@@ -12,6 +12,7 @@ class OrderState extends Model
     use Sortable;
 
     public const FLAG_NEW = 'NEW';
+    public const FLAG_CANCELLED = 'CANCELLED';
     public const FLAG_COMPLETE = 'COMPLETE';
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
@@ -34,8 +35,9 @@ class OrderState extends Model
     public function getFlagOptions()
     {
         return [
-            self::FLAG_COMPLETE => trans('offline.mall::lang.order_states.flags.complete'),
-            self::FLAG_NEW      => trans('offline.mall::lang.order_states.flags.new'),
+            self::FLAG_CANCELLED => trans('offline.mall::lang.order_states.flags.cancelled'),
+            self::FLAG_COMPLETE  => trans('offline.mall::lang.order_states.flags.complete'),
+            self::FLAG_NEW       => trans('offline.mall::lang.order_states.flags.new'),
         ];
     }
 }

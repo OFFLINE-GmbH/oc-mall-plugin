@@ -17,6 +17,7 @@ use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
 use Request;
 use Session;
+use System\Classes\PluginManager;
 use Validator;
 
 /**
@@ -71,6 +72,11 @@ class Product extends MallComponent
      * @var integer
      */
     protected $variantId;
+    /**
+     * Indicate's that the requested product has not been found.
+     * @var bool
+     */
+    protected $isNotFound;
 
     /**
      * Component details.
@@ -141,9 +147,7 @@ class Product extends MallComponent
      */
     public function onRun()
     {
-        try {
-            $this->setData();
-        } catch (ModelNotFoundException $e) {
+        if ($this->isNotFound) {
             return $this->controller->run('404');
         }
 
@@ -169,17 +173,24 @@ class Product extends MallComponent
     }
 
     /**
-     * This method sets all variables needed for this component to work.
+     * The component is initialized.
      *
      * @return void
      */
-    public function setData()
+    public function init()
     {
         $variantId = $this->decode($this->param('variant'));
-
         $this->setVar('variantId', $variantId);
-        $this->setVar('item', $this->getItem());
-        $this->setVar('variants', $this->getVariants());
+
+        try {
+            $this->setVar('item', $this->getItem());
+            $this->setVar('variants', $this->getVariants());
+        } catch (ModelNotFoundException $e) {
+            $this->isNotFound = true;
+
+            return;
+        }
+
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
     }
@@ -192,24 +203,13 @@ class Product extends MallComponent
      */
     public function onAddToCart()
     {
-        $this->setData();
-
         $product = $this->getProduct();
         $variant = null;
         $values  = $this->validateCustomFields(post('fields', []));
 
-        // If no variantId is available we can safely use the Product model for stock checks.
-        if ($this->variantId === null) {
-            $hasStock = $product->allow_out_of_stock_purchases || $product->stock > 0;
-        } else {
-            // In case a Variant is added we have to retrieve the model first by the selected props
-            // and then check the available stock on this model instead.
+        if ($this->variantId !== null) {
+            // In case a Variant is added we have to retrieve the model first by the selected props.
             $variant  = $this->getVariantByPropertyValues(post('props'));
-            $hasStock = $variant !== null && ($variant->allow_out_of_stock_purchases || $variant->stock > 0);
-        }
-
-        if ( ! $hasStock) {
-            throw new ValidationException(['stock' => trans('offline.mall::lang.common.out_of_stock_short')]);
         }
 
         $cart     = Cart::byUser(Auth::getUser());
@@ -255,8 +255,6 @@ class Product extends MallComponent
      */
     public function onCheckProductStock()
     {
-        $this->setData();
-
         $slug = post('slug');
         if ( ! $slug) {
             throw new ValidationException(['Missing input data']);
@@ -326,7 +324,9 @@ class Product extends MallComponent
         $model   = ProductModel::published()->with($with);
 
         if ($product === ':slug') {
-            return $model->transWhere('slug', $this->param('slug'))->firstOrFail();
+            $method = $this->rainlabTranslateInstalled() ? 'transWhere' : 'where';
+
+            return $model->$method('slug', $this->param('slug'))->firstOrFail();
         }
 
         return $model->findOrFail($product);
@@ -500,5 +500,15 @@ class Product extends MallComponent
             '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),
             '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
         ];
+    }
+
+    /**
+     * Check if RainLab.Translate is available.
+     *
+     * @return bool
+     */
+    protected function rainlabTranslateInstalled(): bool
+    {
+        return PluginManager::instance()->exists('RainLab.Translate');
     }
 }

@@ -20,17 +20,17 @@ class ShippingMethodTest extends PluginTestCase
         $cart->addProduct($product, 1);
 
         $availableMethod = $this->getMethod();
-        $availableMethod->available_below_total()->save(new Price([
+        $availableMethod->available_below_totals()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
-            'field'       => 'available_below_total',
+            'field'       => 'available_below_totals',
         ]));
 
         $unavailableMethod = $this->getMethod();
-        $unavailableMethod->available_below_total()->save(new Price([
+        $unavailableMethod->available_below_totals()->save(new Price([
             'price'       => 50,
             'currency_id' => 1,
-            'field'       => 'available_below_total',
+            'field'       => 'available_below_totals',
         ]));
 
         $available = ShippingMethod::getAvailableByCart($cart);
@@ -47,17 +47,17 @@ class ShippingMethodTest extends PluginTestCase
         $cart->addProduct($product, 1);
 
         $availableMethod = $this->getMethod();
-        $availableMethod->available_above_total()->save(new Price([
+        $availableMethod->available_above_totals()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
-            'field'       => 'available_above_total',
+            'field'       => 'available_above_totals',
         ]));
 
         $unavailableMethod = $this->getMethod();
-        $unavailableMethod->available_above_total()->save(new Price([
+        $unavailableMethod->available_above_totals()->save(new Price([
             'price'       => 200,
             'currency_id' => 1,
-            'field'       => 'available_above_total',
+            'field'       => 'available_above_totals',
         ]));
 
         $available = ShippingMethod::getAvailableByCart($cart);
@@ -74,27 +74,27 @@ class ShippingMethodTest extends PluginTestCase
         $cart->addProduct($product, 1);
 
         $availableMethod = $this->getMethod();
-        $availableMethod->available_below_total()->save(new Price([
+        $availableMethod->available_below_totals()->save(new Price([
             'price'       => 200,
             'currency_id' => 1,
-            'field'       => 'available_below_total',
+            'field'       => 'available_below_totals',
         ]));
-        $availableMethod->available_above_total()->save(new Price([
+        $availableMethod->available_above_totals()->save(new Price([
             'price'       => 50,
             'currency_id' => 1,
-            'field'       => 'available_above_total',
+            'field'       => 'available_above_totals',
         ]));
 
         $unavailableMethod = $this->getMethod();
-        $unavailableMethod->available_below_total()->save(new Price([
+        $unavailableMethod->available_below_totals()->save(new Price([
             'price'       => 120,
             'currency_id' => 1,
-            'field'       => 'available_below_total',
+            'field'       => 'available_below_totals',
         ]));
-        $unavailableMethod->available_above_total()->save(new Price([
+        $unavailableMethod->available_above_totals()->save(new Price([
             'price'       => 110,
             'currency_id' => 1,
-            'field'       => 'available_above_total',
+            'field'       => 'available_above_totals',
         ]));
 
         $available = ShippingMethod::getAvailableByCart($cart);

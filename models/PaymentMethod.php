@@ -6,6 +6,7 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Parse\Twig;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use System\Models\File;
@@ -72,6 +73,24 @@ class PaymentMethod extends Model
            ->delete();
     }
 
+    /**
+     * Renders the payment instructions.
+     *
+     * @param Order|null $order
+     *
+     * @return string|null
+     */
+    public function renderInstructions(?Order $order = null)
+    {
+        if ( ! $this->instructions) {
+            return null;
+        }
+
+        return (new Twig)->parse($this->instructions, [
+            'order' => $order,
+        ]);
+    }
+
     public function getPaymentProviderOptions(): array
     {
         /** @var PaymentGateway $gateway */
@@ -88,7 +107,7 @@ class PaymentMethod extends Model
 
     public static function getDefault()
     {
-        return static::first();
+        return static::orderBy('sort_order', 'ASC')->first();
     }
 
     public function getSettingsAttribute()

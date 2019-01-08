@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cms\Classes\Page;
 use DB;
 use Illuminate\Support\Collection;
 use Model;
@@ -11,6 +12,7 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
+use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
@@ -26,6 +28,7 @@ class Variant extends Model
     use Nullable;
     use PriceAccessors;
     use ProductPriceAccessors;
+    use PropertyValues;
     use StockAndQuantity;
 
     const MORPH_KEY = 'mall.variant';
@@ -45,7 +48,7 @@ class Variant extends Model
     ];
     public $rules = [
         'name'                         => 'required',
-        'product_id'                   => 'required|exists:offline_mall_products,id',
+        'product_id'                   => 'required',
         'stock'                        => 'required|integer',
         'weight'                       => 'nullable|integer',
         'published'                    => 'boolean',
@@ -118,6 +121,12 @@ class Variant extends Model
 
     protected function createImageSetFromTempImages()
     {
+        // Only run this if a variant relation has been created/updated.
+        if (request('_relation_field') !== 'variants'
+            && ! starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage')) {
+            return;
+        }
+
         $tempImages = $this->temp_images()
                            ->withDeferred(post('_session_key'))
                            ->count();
@@ -236,23 +245,6 @@ class Variant extends Model
         return $this->hashId;
     }
 
-    public function getPropertiesDescriptionAttribute()
-    {
-        return $this->propertyValuesAsString();
-    }
-
-    public function propertyValuesAsString()
-    {
-        return $this->property_values
-            ->reject(function (PropertyValue $value) {
-                return $value->value === '' || $value->value === null || $value->property === null;
-            })
-            ->map(function (PropertyValue $value) {
-                // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
-                return sprintf('%s: %s', e($value->property->name), $value->display_value);
-            })->implode('<br />');
-    }
-
     protected function isEmptyCollection($originalValue): bool
     {
         if ($originalValue instanceof Collection) {
@@ -264,5 +256,48 @@ class Variant extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Resolve the item for RainLab.Sitemap and RainLab.Pages plugins.
+     *
+     * @param $item
+     * @param $url
+     * @param $theme
+     *
+     * @return array
+     * @throws \Cms\Classes\CmsException
+     */
+    public static function resolveItem($item, $url, $theme)
+    {
+        $page    = GeneralSettings::get('product_page', 'product');
+        $cmsPage = Page::loadCached($theme, $page);
+
+        if ( ! $cmsPage) {
+            return;
+        }
+
+        $items = self
+            ::published()
+            ->with('product')
+            ->get()
+            ->map(function (self $variant) use ($cmsPage, $page, $url) {
+                $pageUrl = $cmsPage->url($page, [
+                    'slug'    => $variant->product->slug,
+                    'variant' => $variant->variantId,
+                ]);
+
+                return [
+                    'title'    => $variant->name,
+                    'url'      => $pageUrl,
+                    'mtime'    => $variant->updated_at,
+                    'isActive' => $pageUrl === $url,
+                ];
+            })
+            ->toArray();
+
+        return [
+            'items' => $items,
+        ];
     }
 }

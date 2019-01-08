@@ -13,8 +13,10 @@ class CreateOfflineMallPaymentMethods extends Migration
             $table->string('name');
             $table->string('code');
             $table->text('description')->nullable();
+            $table->text('instructions')->nullable();
             $table->text('payment_provider');
             $table->integer('sort_order')->unsigned()->nullable();
+            $table->string('fee_label')->nullable();
             $table->decimal('fee_percentage', 5, 2)->unsigned()->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

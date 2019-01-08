@@ -11,6 +11,17 @@ use OFFLINE\Mall\Models\Property;
  */
 class QueryString
 {
+    /**
+     * Delimiter for range filter values.
+     * @var string
+     */
+    const DELIMITER_RANGE = '-';
+    /**
+     * Delimiter for set filter values.
+     * @var string
+     */
+    const DELIMITER_SET = '.';
+
     public function deserialize(array $query, Category $category): Collection
     {
         $query = collect($query);
@@ -25,18 +36,24 @@ class QueryString
                 return [];
             }
 
-            return [$prop => new $type($prop, array_values($query->get($prop)))];
+            $values = $this->getPropValues($query->get($prop), $this->getDelimiter($type));
+
+            return [$prop => new $type($prop, array_values($values))];
         });
 
         $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
         // Map the user defined database properties.
         return $properties->mapWithKeys(function (Property $property) use ($query) {
+            $delimiter = $this->getDelimiter($property->pivot->filter_type);
+            $values    = $query->get($property->slug);
             if ($property->pivot->filter_type === 'set') {
-                return [$property->slug => new SetFilter($property, $query->get($property->slug))];
+                $values = $this->getPropValues($values, $delimiter);
+
+                return [$property->slug => new SetFilter($property, $values)];
             }
             if ($property->pivot->filter_type === 'range') {
-                $values = $query->get($property->slug);
+                $values = $this->getPropValues($values, $delimiter);
 
                 return [
                     $property->slug => new RangeFilter(
@@ -54,11 +71,49 @@ class QueryString
     public function serialize(Collection $filter, string $sortOrder)
     {
         $filter = $filter->mapWithKeys(function (Filter $filter, $property) {
+            $delimiter = $this->getDelimiter(get_class($filter));
+
             return [
-                $property => $filter->values(),
+                $property => implode($delimiter, $filter->values()),
             ];
         });
 
-        return http_build_query(['filter' => $filter->toArray(), 'sort' => $sortOrder]);
+        return http_build_query(array_merge($filter->toArray(), ['sort' => $sortOrder]));
+    }
+
+    /**
+     * Explode the string version of the property values back
+     * into a proper array.
+     *
+     * @param        $values
+     *
+     * @param string $delimiter
+     *
+     * @return array
+     */
+    protected function getPropValues($values, string $delimiter): array
+    {
+        $values = explode($delimiter, $values);
+        if ($delimiter === '-') {
+            return ['min' => $values[0] ?? null, 'max' => $values[1] ?? null];
+        }
+
+        return $values;
+    }
+
+    /**
+     * Delimiter for query string serialisation.
+     *
+     * @param string $type
+     *
+     * @return string
+     */
+    protected function getDelimiter(string $type): string
+    {
+        if ($type === 'range' || $type === RangeFilter::class) {
+            return self::DELIMITER_RANGE;
+        }
+
+        return self::DELIMITER_SET;
     }
 }

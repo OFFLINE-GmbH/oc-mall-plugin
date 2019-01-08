@@ -6,7 +6,9 @@
         <div class="mall-form-control">
             <select name="sort" id="mall-sorter" class="js-mall-select-filter">
                 {% for key, option in __SELF__.sortOptions %}
-                    <option value="{{ key }}" {{ key == __SELF__.sortOrder ? 'selected' }}>{{ option.label }}</option>
+                    <option value="{{ key }}" {{ key == __SELF__.sortOrder ? 'selected' }}>
+                        {{ option.label | default(option) }}
+                    </option>
                 {% endfor %}
             </select>
         </div>

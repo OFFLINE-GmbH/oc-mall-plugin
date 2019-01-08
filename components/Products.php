@@ -4,14 +4,19 @@ use ArrayAccess;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
+use RainLab\User\Facades\Auth;
+use Redirect;
 
 /**
  * The Products components displays a list of Products.
@@ -78,6 +83,12 @@ class Products extends MallComponent
      */
     public $sort;
     /**
+     * ProductsFilter Component.
+     *
+     * @var ProductsFilter
+     */
+    public $filterComponent;
+    /**
      * Set the category's name as page title.
      *
      * @var bool
@@ -116,13 +127,19 @@ class Products extends MallComponent
                 'default' => null,
                 'type'    => 'dropdown',
             ],
+            'filterComponent' => [
+                'title'       => 'offline.mall::lang.components.products.properties.filter_component.title',
+                'description' => 'offline.mall::lang.components.products.properties.filter_component.description',
+                'default'     => 'productsFilter',
+                'type'        => 'string',
+            ],
             'setPageTitle'    => [
                 'title'       => 'offline.mall::lang.components.products.properties.set_page_title.title',
                 'description' => 'offline.mall::lang.components.products.properties.set_page_title.description',
                 'default'     => '0',
                 'type'        => 'checkbox',
             ],
-            'includeVariants'    => [
+            'includeVariants' => [
                 'title'       => 'offline.mall::lang.components.products.properties.include_variants.title',
                 'description' => 'offline.mall::lang.components.products.properties.include_variants.description',
                 'default'     => '1',
@@ -180,6 +197,45 @@ class Products extends MallComponent
     }
 
     /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return void
+     */
+    protected function setData()
+    {
+        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
+        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+        $this->setVar('category', $this->getCategory());
+
+        $filterComponent = $this->controller->findComponentByName($this->property('filterComponent'));
+        if ($filterComponent) {
+            $filterComponent->productsComponentSort     = $this->getSortOrder();
+            $filterComponent->productsComponentCategory = $this->category;
+            $filterComponent->includeChildren           = $this->includeChildren;
+            $filterComponent->includeVariants           = $this->includeVariants;
+            $this->filterComponent                      = $filterComponent;
+        }
+
+        $this->setVar('sort', $this->property('sort'));
+        $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
+        $this->setVar('paginate', (bool)$this->property('paginate'));
+
+        if ($this->category) {
+            $categories = [$this->category->id];
+            if ($this->includeChildren) {
+                $categories = $this->category->getChildrenIds();
+            }
+
+            $this->setVar('categories', $categories);
+        }
+
+        $this->setVar('productPage', GeneralSettings::get('product_page'));
+        $this->setVar('pageNumber', (int)request('page', 1));
+        $this->setVar('perPage', (int)$this->property('perPage'));
+        $this->setVar('items', $this->getItems());
+    }
+
+    /**
      * The component is executed.
      *
      * @return string|void
@@ -200,32 +256,33 @@ class Products extends MallComponent
     }
 
     /**
-     * This method sets all variables needed for this component to work.
+     * Add a product to the cart.
      *
-     * @return void
+     * @return mixed
+     * @throws ValidationException
      */
-    protected function setData()
+    public function onAddToCart()
     {
-        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
-        $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
-        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
-        $this->setVar('paginate', (bool)$this->property('paginate'));
-        $this->setVar('sort', $this->property('sort'));
-        $this->setVar('category', $this->getCategory());
-
-        if ($this->category) {
-            $categories = [$this->category->id];
-            if ($this->includeChildren) {
-                $categories = $this->category->getChildrenIds();
-            }
-
-            $this->setVar('categories', $categories);
+        $product = Product::published()->findOrFail(post('product'));
+        $variant = null;
+        if (post('variant')) {
+            $variant = Variant::published()->where('product_id', $product->id)->findOrFail(post('variant'));
         }
 
-        $this->setVar('productPage', GeneralSettings::get('product_page'));
-        $this->setVar('pageNumber', (int)request('page', 1));
-        $this->setVar('perPage', (int)$this->property('perPage'));
-        $this->setVar('items', $this->getItems());
+        $cart     = CartModel::byUser(Auth::getUser());
+        $quantity = (int)post('quantity', $product->quantity_default ?? 1);
+        try {
+            $cart->addProduct($product, $quantity, $variant);
+        } catch (OutOfStockException $e) {
+            throw new ValidationException(['stock' => trans('offline.mall::lang.common.stock_limit_reached')]);
+        }
+
+        // If the redirect_to_cart option is set to true the user is redirected to the cart.
+        if ((bool)GeneralSettings::get('redirect_to_cart', false) === true) {
+            $cartPage = GeneralSettings::get('cart_page');
+
+            return Redirect::to($this->controller->pageUrl($cartPage));
+        }
     }
 
     /**
@@ -241,6 +298,8 @@ class Products extends MallComponent
         $model    = $this->includeVariants ? new Variant() : new Product();
         $useIndex = $this->includeVariants ? 'variants' : 'products';
 
+        $sortOrder->setFilters(clone $filters);
+
         /** @var Index $index */
         $index  = app(Index::class);
         $result = $index->fetch($useIndex, $filters, $sortOrder, $this->perPage, $this->pageNumber);
@@ -254,8 +313,21 @@ class Products extends MallComponent
         $models = $model->with($this->productIncludes())->find($itemIds);
         $ghosts = $this->getGhosts($ghostIds);
 
+        // Preload all pricing information for related products. This is used in case a Variant
+        // is inheriting it's parent product's pricing information.
+        if ($model instanceof Variant) {
+            $models->load(['product.customer_group_prices', 'product.prices', 'product.additional_prices']);
+        }
+
+        // Insert the Ghost models back at their old position so the sort order remains.
+        $resultSet = collect($result->ids)->map(function ($id) use ($models, $ghosts) {
+            return is_int($id)
+                ? $models->find($id)
+                : $ghosts->find(str_replace('product-', '', $id));
+        });
+
         return $this->paginate(
-            $models->concat($ghosts),
+            $resultSet,
             $result->totalCount
         );
     }
@@ -302,8 +374,7 @@ class Products extends MallComponent
             $this->pageNumber
         );
 
-        $filter = request()->get('filter', []);
-        $paginator->appends('filter', $filter);
+        $paginator->appends(request()->all());
 
         $pageUrl = $this->controller->pageUrl(
             $this->page->fileName,
@@ -316,10 +387,14 @@ class Products extends MallComponent
     /**
      * Retrieve the Category by ID or from the page's :slug parameter.
      *
-     * @return Collection|null
+     * @return CategoryModel|null
      */
     protected function getCategory()
     {
+        if ($this->category) {
+            return $this->category;
+        }
+
         if ($this->property('category') === null) {
             return null;
         }
@@ -344,10 +419,7 @@ class Products extends MallComponent
             return collect([]);
         }
 
-        $filter = request()->get('filter', []);
-        if ( ! is_array($filter)) {
-            $filter = [];
-        }
+        $filter = array_wrap(request()->all());
 
         $filters = (new QueryString())->deserialize($filter, $this->category);
         $filters->put('category_id', new SetFilter('category_id', $this->categories));
@@ -363,7 +435,7 @@ class Products extends MallComponent
      */
     protected function getSortOrder(): SortOrder
     {
-        $key = $this->sort ?? input('sort', SortOrder::default());
+        $key = input('sort', $this->property('sort') ?? SortOrder::default());
 
         return SortOrder::fromKey($key);
     }
@@ -375,6 +447,6 @@ class Products extends MallComponent
      */
     protected function productIncludes(): array
     {
-        return ['image_sets.images'];
+        return ['image_sets.images', 'customer_group_prices', 'additional_prices'];
     }
 }

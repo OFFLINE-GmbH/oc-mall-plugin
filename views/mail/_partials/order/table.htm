@@ -73,8 +73,7 @@ name = "Order table"
         {% if order.payment and order.payment.total > 0 %}
             <tr class="orderfooter separator">
                 <td colspan="3">
-                    {{ 'offline.mall::lang.common.payment' | trans }}:
-                    {{ order.payment.method.name }}
+                    {{ order.payment_method.fee_label | default(order.payment_method.name) }}
                 </td>
                 <td style="text-align: right">
                     {{ order.payment.total | money | raw  }}

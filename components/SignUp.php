@@ -1,8 +1,8 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use RainLab\Location\Models\Country;
 
 /**
  * The SignUp component displays a signup and login form
@@ -13,7 +13,7 @@ class SignUp extends MallComponent
     /**
      * All available countries.
      *
-     * @var Collection
+     * @var array
      */
     public $countries;
 
@@ -43,6 +43,16 @@ class SignUp extends MallComponent
                 'name' => 'offline.mall::lang.components.signup.properties.redirect.name',
             ],
         ];
+    }
+
+    /**
+     * The component is executed.
+     *
+     * @return void
+     */
+    public function onRun()
+    {
+        $this->countries = Country::getNameList();
     }
 
     /**

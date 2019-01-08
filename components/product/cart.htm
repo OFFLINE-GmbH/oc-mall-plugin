@@ -13,13 +13,17 @@
     </div>
 {% endif %}
 
-<div class="mall-product__variant-properties">
-    {% partial __SELF__ ~ '::properties' props=props %}
-</div>
+{% if props.count > 0 %}
+    <div class="mall-product__variant-properties">
+        {% partial __SELF__ ~ '::properties' props=props %}
+    </div>
+{% endif %}
 
-<div class="mall-product__custom-fields">
-    {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
-</div>
+{% if item.custom_fields.count > 0 %}
+    <div class="mall-product__custom-fields">
+        {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
+    </div>
+{% endif %}
 
 <div class="mall-product__price">
     {% partial __SELF__ ~ '::price' item=item %}

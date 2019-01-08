@@ -1,7 +1,7 @@
 # Currencies
 
-Currencies can be managed via `Backend settings > Mall: General > Currencies`. The are used for all pricing 
-information in the plugin.
+Currencies can be managed via `Backend settings > Mall: General > Currencies`.
+They are used for all pricing information in the plugin.
 
 ## Format
 
@@ -14,3 +14,11 @@ not defined, it will be automatically calculated by multiplying the price from t
 rate.  
 
 If the base currency is Euro, a rate of 1.15 could be defined for USD.
+
+## Twig-Filter
+
+You can use the Twig filter ` | money` to format any number in the currently active currency.
+
+::: v-pre
+`{{ 2000 | money }}` results in `$ 20.00`.
+:::

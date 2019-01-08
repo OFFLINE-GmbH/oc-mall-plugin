@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use Cookie;
 use DB;
 use Illuminate\Support\Collection;
@@ -179,7 +180,7 @@ class Cart extends Model
      * Makes sure that the selected shipping method
      * can still be applied to this cart.
      */
-    private function validateShippingMethod()
+    public function validateShippingMethod()
     {
         if ( ! $this->shipping_method_id) {
             return true;
@@ -195,5 +196,25 @@ class Cart extends Model
         }
 
         return $this->setShippingMethod(null);
+    }
+
+    /**
+     * Cleanup of old data using OFFLINE.GDPR.
+     *
+     * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
+     *
+     * @param Carbon $deadline
+     * @param int    $keepDays
+     */
+    public function gdprCleanup(Carbon $deadline, int $keepDays)
+    {
+        self::withTrashed()
+            ->where('updated_at', '<', $deadline)
+            ->get()
+            ->each(function (Cart $cart) {
+                DB::transaction(function () use ($cart) {
+                    $cart->forceDelete();
+                });
+            });
     }
 }

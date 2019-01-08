@@ -38,15 +38,15 @@ class ShippingMethods extends Controller
     public function formAfterCreate(ShippingMethod $model)
     {
         $this->updatePrices($model);
-        $this->updatePrices($model, 'available_below_total', '_available_below_total');
-        $this->updatePrices($model, 'available_above_total', '_available_above_total');
+        $this->updatePrices($model, 'available_below_totals', '_available_below_totals');
+        $this->updatePrices($model, 'available_above_totals', '_available_above_totals');
     }
 
     public function formAfterUpdate(ShippingMethod $model)
     {
         $this->updatePrices($model);
-        $this->updatePrices($model, 'available_below_total', '_available_below_total');
-        $this->updatePrices($model, 'available_above_total', '_available_above_total');
+        $this->updatePrices($model, 'available_below_totals', '_available_below_totals');
+        $this->updatePrices($model, 'available_above_totals', '_available_above_totals');
     }
 
     public function onRelationManageUpdate()
@@ -80,7 +80,7 @@ class ShippingMethods extends Controller
         $data = post('MallPrice');
         foreach ($data as $currency => $_data) {
             $value = array_get($_data, $key);
-            if ($value === "") {
+            if ($value === '') {
                 $value = null;
             }
             Price::updateOrCreate([

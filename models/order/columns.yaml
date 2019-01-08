@@ -4,43 +4,49 @@ columns:
         type: number
         searchable: true
         sortable: true
+        invisible: true
     order_number:
         label: 'offline.mall::lang.order.order_number'
         type: text
         searchable: true
         sortable: true
-    created_at:
-        label: 'offline.mall::lang.common.created_at'
-        type: datetime
-        sortable: true
-    order_state:
-        label: 'offline.mall::lang.order.status'
-        type: partial
-        path: $/offline/mall/models/order/_order_state.htm
-        sortable: true
+    payment_hash:
+        label: 'offline.mall::lang.order.payment_hash'
+        type: text
         searchable: true
-    payment_state:
-        label: 'offline.mall::lang.order.payment_status'
-        type: partial
-        path: $/offline/mall/models/order/_payment_state.htm
         sortable: true
-        searchable: true
-    shipped:
-        label: 'offline.mall::lang.order.shipped'
-        type: partial
-        path: $/offline/mall/models/order/_shipped.htm
-        sortable: true
-        searchable: true
     customer:
         label: 'offline.mall::lang.order.customer'
         path: $/offline/mall/models/order/_customer.htm
         relation: customer
         type: partial
         searchable: true
+        sortable: false
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
         sortable: true
     total_post_taxes:
         label: 'offline.mall::lang.order.grand_total'
         path: $/offline/mall/models/order/_total.htm
         type: partial
-        align: center
+        align: right
         sortable: true
+    order_state:
+        label: 'offline.mall::lang.order.status'
+        type: partial
+        path: $/offline/mall/models/order/_order_state.htm
+        sortable: true
+        searchable: false
+    payment_state:
+        label: 'offline.mall::lang.order.payment_status'
+        type: partial
+        path: $/offline/mall/models/order/_payment_state.htm
+        sortable: true
+        searchable: false
+    shipped:
+        label: 'offline.mall::lang.order.shipped'
+        type: partial
+        path: $/offline/mall/models/order/_shipped.htm
+        sortable: true
+        searchable: false

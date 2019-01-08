@@ -2,8 +2,8 @@
     <h3 class="mall-signup__heading">{{ 'offline.mall::frontend.signup.signup' | trans }}</h3>
 
     <div class="mall-form-control">
-        <label for="email">{{ 'offline.mall::frontend.form.email' | trans }}</label>
-        <input id="email" type="email" placeholder="email@email.com" name="email">
+        <label for="signup_email">{{ 'offline.mall::frontend.form.email' | trans }}</label>
+        <input id="signup_email" type="email" placeholder="email@email.com" name="email">
         <div data-validate-for="email"></div>
     </div>
     <div class="mall-two-fields">
@@ -33,8 +33,8 @@
     <div class="mall-signup__password-inputs">
         <div class="mall-two-fields">
             <div class="mall-form-control">
-                <label for="password">{{ 'offline.mall::frontend.form.password' | trans }}</label>
-                <input id="password" type="password" name="password">
+                <label for="signup_password">{{ 'offline.mall::frontend.form.password' | trans }}</label>
+                <input id="signup_password" type="password" name="password">
                 <div data-validate-for="password"></div>
             </div>
             <div class="mall-form-control">
@@ -46,7 +46,9 @@
     </div>
 
     <div class="mall-signup__billing-address">
-        <h3 class="mall-signup__subheading">{{ 'offline.mall::frontend.billing_address' | trans }}</h3>
+        <h3 class="mall-signup__subheading">
+            {{ 'offline.mall::frontend.address' | trans }}
+        </h3>
 
         {% partial __SELF__ ~ '::addressform' type='billing' %}
 
@@ -63,7 +65,9 @@
     </div>
 
     <div class="mall-shipping-address" style="display: none">
-        <h3 class="mall-signup__subheading">{{ 'offline.mall::frontend.shipping_address' | trans }}</h3>
+        <h3 class="mall-signup__subheading">
+            {{ 'offline.mall::frontend.shipping_address' | trans }}
+        </h3>
         {% partial __SELF__ ~ '::addressform' type='shipping' %}
     </div>
 

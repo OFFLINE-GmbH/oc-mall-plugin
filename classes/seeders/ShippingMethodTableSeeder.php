@@ -16,15 +16,22 @@ class ShippingMethodTableSeeder extends Seeder
         $method->save();
 
         (new Price([
-            'price'          => 20,
+            'price'          => 10,
             'currency_id'    => 1,
             'priceable_type' => ShippingMethod::MORPH_KEY,
             'priceable_id'   => $method->id,
         ]))->save();
 
         (new Price([
-            'price'          => 30,
+            'price'          => 12,
             'currency_id'    => 2,
+            'priceable_type' => ShippingMethod::MORPH_KEY,
+            'priceable_id'   => $method->id,
+        ]))->save();
+
+        (new Price([
+            'price'          => 15,
+            'currency_id'    => 3,
             'priceable_type' => ShippingMethod::MORPH_KEY,
             'priceable_id'   => $method->id,
         ]))->save();

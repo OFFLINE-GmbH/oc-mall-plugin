@@ -25,25 +25,15 @@ fields:
             action: show
             field: field_type
             condition: value[image]
-    values:
-        label: 'offline.mall::lang.product.property_value'
+    option_value:
+        label: 'offline.mall::lang.common.color'
         oc.commentPosition: ''
-        prompt: 'Add new item'
         span: full
-        type: repeater
+        type: colorpicker
         trigger:
             action: show
             field: field_type
             condition: value[color]
-        form:
-            fields:
-                color:
-                    label: 'offline.mall::lang.common.color'
-                    oc.commentPosition: ''
-                    span: full
-                    type: colorpicker
-
-
     field_type:
         oc.commentPosition: ''
         span: right

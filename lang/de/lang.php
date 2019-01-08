@@ -68,6 +68,8 @@
     'menu_items'               => [
         'all_categories'  => 'Alle Shop-Kategorien',
         'single_category' => 'Einzelne Shop-Kategorie',
+        'all_products'    => 'Alle Shop-Produkte',
+        'all_variants'    => 'Alle Shop-Varianten',
     ],
     'currency_settings'        => [
         'label'             => 'Währungen',
@@ -135,6 +137,9 @@
         'category_page'              => 'Kategorie-Seite für Produkte-Übersicht',
         'redirect_to_cart'           => 'Warenkorb nach Hinzufügen anzeigen',
         'redirect_to_cart_comment'   => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
+        'admin_email'                => 'E-Mail des Admins',
+        'admin_email_comment'        => 'Benachrichtigungen werden an diese E-Mail versendet',
+        'base'                       => 'Allgemein',
         'links'                      => 'Verlinkungen',
         'links_comment'              => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
         'customizations'             => 'Optionen',
@@ -157,8 +162,10 @@
         'accessory'            => 'Zubehör',
         'custom_fields'        => 'Benutzerdefinierte Felder',
         'variants'             => 'Varianten',
+        'variant'              => 'Variante',
         'discounts'            => 'Rabatte',
         'discount'             => 'Rabatt',
+        'discount_percentage'  => 'Rabatt (in %)',
         'select_placeholder'   => '-- Bitte wählen',
         'main_image'           => 'Hauptbild',
         'images'               => 'Bilder',
@@ -237,6 +244,7 @@
         'price_missing'        => 'Gib mindestens ein Preis in der Hauptwährung an',
         'slug_unique'          => 'Die URL existiert bereits',
         'fees'                 => 'Gebühren',
+        'value'                => 'Wert',
     ],
     'variant'                  => [
         'method' => [
@@ -309,9 +317,12 @@
         'link_target'                          => 'Link-Ziel',
         'properties'                           => 'Eigenschaften',
         'links'                                => 'Links',
+        'details'                              => 'Details',
         'price_includes_tax'                   => 'Preis ist inkl. Steuern',
         'price_includes_tax_comment'           => 'Der angegebene Preis enthält bereits alle Steuern',
         'group_by_property'                    => 'Attribut für Varianten-Gruppierung',
+        'additional_descriptions'              => 'Zusätzliche Beschreibungen',
+        'additional_properties'                => 'Zusätzliche Eigenschaften',
         'price_table_modal'                    => [
             'trigger'           => 'Preise und Lagerbestand bearbeiten',
             'label'             => 'Preise und Lagerbestand',
@@ -389,10 +400,15 @@
         'price_comment'          => 'Der Betrag wird zum Total dazugerechnet',
         'fee_percentage'         => 'Prozentuale Kosten',
         'fee_percentage_comment' => 'Prozent des Gesamttotals, wird zum Total dazugerechnet',
+        'fee_label'              => 'Gebührenbezeichnung',
+        'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
+        'instructions'           => 'Zahlungsanweisung',
+        'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} um Infos zur Bestellung abzurufen (falls vorhanden)',
     ],
     'order'                    => [
-        'order_number'                        => 'Bestellungsnummer',
-        'invoice_number'                      => 'Rechnungsnummer',
+        'order_number'                        => '# Bestl.',
+        'invoice_number'                      => '# Rechn.',
+        'payment_hash'                        => 'Bezahl-ID',
         'customer'                            => 'Kunde',
         'creation_date'                       => 'Erstellt am',
         'modification_date'                   => 'Bearbeitet am',
@@ -412,6 +428,8 @@
         'tracking_url'                        => 'Tracking-URL',
         'tracking_shipped'                    => 'Bestellung als versendet markieren',
         'tracking_shipped_comment'            => 'Die Bestellung wird nach dem Speichern als versendet markiert',
+        'tracking_completed'                  => 'Bestellung als abgeschlossen markieren',
+        'tracking_completed_comment'          => 'Die Bestellung wird als abgeschlossen markiert',
         'tracking_notification'               => 'Benachrichtigung versenden',
         'tracking_notification_comment'       => 'Eine Benachrichtigung mit den Trackinginformationen wird an den Kunden gesendet',
         'shipping_fees'                       => 'Versandkosten',
@@ -450,6 +468,7 @@
         'delete_confirm'                      => 'Möchtest du diese Bestellung wirklich löschen?',
         'update_invoice_number'               => 'Rechnungsnummer ändern',
         'shipped'                             => 'Versendet',
+        'shipping_pending'                    => 'Versand pendent',
         'not_shipped'                         => 'Versand ausstehend',
         'modal'                               => [
             'cancel' => 'Abbrechen',
@@ -503,7 +522,7 @@
         'manage_taxes'            => 'Kann Steuern verwalten',
     ],
     'components'               => [
-        'products'              => [
+        'products'               => [
             'details'    => [
                 'name'        => 'Produkte',
                 'description' => 'Zeigt eine Liste von Produkten an',
@@ -511,6 +530,10 @@
             'properties' => [
                 'no_category_filter' => 'Nicht nach Kategorie filtern',
                 'use_url'            => 'Verwende Kategorie-Slug aus URL',
+                'filter_component'   => [
+                    'title'       => 'Alias der Filter-Komponente',
+                    'description' => 'Alias der Filter-Komponente die für diese Produkte-Komponente zuständig ist',
+                ],
                 'include_variants'   => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',
@@ -537,7 +560,7 @@
                 ],
             ],
         ],
-        'productsFilter'        => [
+        'productsFilter'         => [
             'details'    => [
                 'name'        => 'Produkte-Filter',
                 'description' => 'Filtert die Produkte einer Kategorie',
@@ -551,7 +574,7 @@
                 ],
                 'includeChildren'     => [
                     'title'       => 'Zeige Filter aus Kinderkategorien auch an',
-                    'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfals',
+                    'description' => 'Verwende die Filter und Eigenschaften von Produkten aus Kinderkategorien ebenfalls',
                 ],
                 'includeVariants'     => [
                     'title'       => 'Varianten verwenden',
@@ -561,6 +584,10 @@
                     'title'       => 'Binde noUI Slider ein',
                     'description' => 'Lädt die Abhängigkeiten für den noUI Slider via cdnjs',
                 ],
+                'sortOrder'           => [
+                    'title'       => 'Sortierung',
+                    'description' => 'Standard Sortierung',
+                ],
             ],
             'sortOrder'  => [
                 'bestseller' => 'Bestseller',
@@ -568,9 +595,11 @@
                 'priceHigh'  => 'Teuerste',
                 'latest'     => 'Neuste',
                 'oldest'     => 'Älteste',
+                'random'     => 'Zufällig',
+                'manual'     => 'Manuell',
             ],
         ],
-        'myAccount'             => [
+        'myAccount'              => [
             'details'    => [
                 'name'        => 'Benutzeraccount',
                 'description' => 'Zeigt dem Kunden alle Informationen zu seinem Bentzerkonto an',
@@ -586,7 +615,7 @@
                 'addresses' => 'Adressliste',
             ],
         ],
-        'customerProfile'       => [
+        'customerProfile'        => [
             'details'    => [
                 'name'        => 'Kundenprofil',
                 'description' => 'Zeigt ein Formular zur Bearbeitung der Kundendaten an.',
@@ -594,7 +623,7 @@
             'properties' => [
             ],
         ],
-        'currencyPicker'        => [
+        'currencyPicker'         => [
             'details'    => [
                 'name'        => 'Währungsauswahl',
                 'description' => 'Zeigt eine Auswahl für die aktive Währung an',
@@ -602,7 +631,15 @@
             'properties' => [
             ],
         ],
-        'addressList'           => [
+        'dependencies'           => [
+            'details'    => [
+                'name'        => 'Frontend-Abhängigkeiten',
+                'description' => 'Bindet alle benötigten Frontend-Abhängigkeiten ein',
+            ],
+            'properties' => [
+            ],
+        ],
+        'addressList'            => [
             'details'    => [
                 'name'        => 'Adressliste',
                 'description' => 'Zeigt alle erfassten Adressen eines Kunden an',
@@ -617,7 +654,7 @@
                 'address_deleted' => 'Adresse gelöscht',
             ],
         ],
-        'ordersList'            => [
+        'ordersList'             => [
             'details'    => [
                 'name'        => 'Bestellungsliste',
                 'description' => 'Zeigt alle Bestellungen eines Kunden an',
@@ -625,7 +662,7 @@
             'properties' => [
             ],
         ],
-        'product'               => [
+        'product'                => [
             'details'    => [
                 'name'        => 'Produkt-Details',
                 'description' => 'Zeigt die Details zu einem Produkt an',
@@ -637,7 +674,7 @@
                 ],
             ],
         ],
-        'cart'                  => [
+        'cart'                   => [
             'details'    => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt den Warenkorb an',
@@ -651,7 +688,7 @@
                 ],
             ],
         ],
-        'checkout'              => [
+        'checkout'               => [
             'details' => [
                 'name'        => 'Checkout',
                 'description' => 'Komponente für den Bestellvorgang',
@@ -660,13 +697,14 @@
                 'missing_settings' => 'Bitte wählen Sie eine Zahlungs- und Versandmethode aus.',
             ],
         ],
-        'discountApplier'       => [
-            'details' => [
+        'discountApplier'        => [
+            'details'          => [
                 'name'        => 'Gutschein-Code Eingabe',
                 'description' => 'Zeigt eine Eingabemöglichkeit für Gutscheincodes an',
             ],
+            'discount_applied' => 'Gutschein zum Warenkorb hinzugefügt!',
         ],
-        'shippingMethodSelector'      => [
+        'shippingMethodSelector' => [
             'details' => [
                 'name'        => 'Auswahl für Versandmethode',
                 'description' => 'Zeige eine Auflistung aller Versandmethoden an',
@@ -675,7 +713,7 @@
                 'unavailable' => 'Die ausgewählte Versandmethode ist für Ihre Bestellung nicht verfügbar.',
             ],
         ],
-        'paymentMethodSelector' => [
+        'paymentMethodSelector'  => [
             'details' => [
                 'name'        => 'Auswahl für Zahlungsmethode',
                 'description' => 'Zeige eine Auflistung aller Zahlungsmethoden an',
@@ -684,7 +722,7 @@
                 'unavailable' => 'Die ausgewählte Zahlungsmethode ist für Ihre Bestellung nicht verfügbar.',
             ],
         ],
-        'addressSelector'       => [
+        'addressSelector'        => [
             'details' => [
                 'name'        => 'Auswahl für Adressen',
                 'description' => 'Zeige eine Auflistung aller Adressen eines Kunden an',
@@ -692,7 +730,7 @@
             'errors'  => [
             ],
         ],
-        'addressForm'           => [
+        'addressForm'            => [
             'details'    => [
                 'name'        => 'Bearbeitungsformular für Adressen',
                 'description' => 'Zeigt ein Formular an um Adressen zu bearbeiten',
@@ -716,7 +754,7 @@
                 'shipping' => 'Versandadresse',
             ],
         ],
-        'signup'                => [
+        'signup'                 => [
             'details'    => [
                 'name'        => 'Anmeldung',
                 'description' => 'Zeigt ein Formular für die Registrierung oder das Login an',
@@ -774,7 +812,7 @@
                 ],
             ],
         ],
-        'categories'            => [
+        'categories'             => [
             'details'    => [
                 'name'        => 'Kategorien',
                 'description' => 'Listet vorhandene Kategorien auf',
@@ -796,7 +834,7 @@
             'no_parent'  => 'Zeige alle Kategorien',
             'by_slug'    => 'Verwende Kategorie aus URL als Startkategorie',
         ],
-        'cartSummary'           => [
+        'cartSummary'            => [
             'details'    => [
                 'name'        => 'Warenkorb',
                 'description' => 'Zeigt die Anzahl Produkte und den Gesamtwert des Warenkorbes an',
@@ -812,7 +850,7 @@
                 ],
             ],
         ],
-        'customerDashboard'     => [
+        'customerDashboard'      => [
             'details'    => [
                 'name'        => 'Kundenkonto',
                 'description' => 'Zeigt den Link zum Öffnen des Kundenkontos an',
@@ -842,9 +880,22 @@
         'color'       => 'Farbe',
         'flag'        => 'Spezielle Funktion',
         'flags'       => [
-            'new'      => 'Status für neue Bestellungen setzen',
-            'complete' => 'Bestellung gilt als abgeschlossen',
+            'new'       => 'Status für neue Bestellungen setzen',
+            'complete'  => 'Bestellung gilt als abgeschlossen',
+            'cancelled' => 'Bestellung wurde storniert',
         ],
+    ],
+    'customer_group'           => [
+        'code_comment'     => 'Dieser Code kann verwendet werden, um diese Gruppe programmtechnisch anzusteuern',
+        'discount_comment' => 'Dieser Benutzergruppe wird dieser Rabatt in % auf das komplette Sortiment gewährt',
+    ],
+    'order_status'             => [
+        'processed' => 'Verarbeitet',
+        'disputed'  => 'Beanstandet',
+        'shipped'   => 'Versendet',
+        'delivered' => 'Zugestellt',
+        'pending'   => 'Pendent',
+        'cancelled' => 'Storniert',
     ],
     'notifications'            => [
         'enabled'         => 'Aktiviert',

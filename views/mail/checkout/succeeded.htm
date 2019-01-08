@@ -9,15 +9,11 @@ Thank you very much for your order. We received the following information:
 {% partial 'mall.order.table' order=order %}
 
 {% partial 'panel' body %}
-    {% if order.payment_state == 'OFFLINE\\Mall\\Classes\\PaymentState\\PaidState' %}
-        The order has been paid on {{ order.payment_log.created_at }}.
-    {% else %}
-        The payment for this order is currently pending.
-    {% endif %}
+    {% partial 'mall.order.payment_state' order=order %}
 {% endpartial %}
 
 You can check the status of your order by visiting the account section of our store.
 
-{% partial 'button' url=app_url type='primary' body %}
+{% partial 'button' url=account_url type='primary' body %}
     View order status online
 {% endpartial %}

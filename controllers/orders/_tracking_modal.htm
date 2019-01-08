@@ -35,6 +35,18 @@
                             </p>
                         </div>
                         <div class="checkbox custom-checkbox">
+                            <input id="mark-as-completed" name="completed" value="1"
+                                   type="checkbox"
+                                   checked
+                            >
+                            <label class="choice" for="mark-as-shipped">
+                                <?= e(trans('offline.mall::lang.order.tracking_completed'))?>
+                            </label>
+                            <p class="help-block">
+                                <?= e(trans('offline.mall::lang.order.tracking_completed_comment')) ?>
+                            </p>
+                        </div>
+                        <div class="checkbox custom-checkbox">
                             <input id="send-notification" name="notification" value="1"
                                    type="checkbox"
                                    <?= $order->is_shipped ? '' : 'checked' ?>

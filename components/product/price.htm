@@ -1,8 +1,14 @@
-{% if item.oldPrice().integer %}
+{% set price = item.price() %}
+
+{% if price.official or item.oldPrice.integer %}
     <div class="mall-product__old-price">
-        {{ item.oldPrice() | raw }}
+        {% if price.official %}
+            {{ price.official.string }}
+        {% else %}
+            {{ item.oldPrice().string }}
+        {% endif %}
     </div>
 {% endif %}
 <div class="mall-product__current-price">
-    {{ item.price() | raw }}
+    {{ item.price().string }}
 </div>

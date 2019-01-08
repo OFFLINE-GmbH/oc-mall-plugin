@@ -61,10 +61,10 @@ class Price extends Model
 
     public function setPriceAttribute($value)
     {
-        if ($value === null || $value === "") {
+        if ($value === null || $value === '') {
             return $this->attributes['price'] = null;
         }
-        $this->attributes['price'] = (int)($value * 100);
+        $this->attributes['price'] = round($value * 100, 0);
     }
 
     public function getFloatAttribute()
@@ -103,10 +103,29 @@ class Price extends Model
         return (string)$this;
     }
 
+    /**
+     * Return a new instance of this model with a modified price value.
+     */
+    public function withPrice($price): Price
+    {
+        $new        = $this->replicate();
+        $new->price = $price;
+
+        return $new;
+    }
+
+    /**
+     * Return a new instance of this model with a reduced price value.
+     */
+    public function withDiscountPercentage($percentage): Price
+    {
+        return $this->withPrice($this->price * (100 - $percentage) / 10000);
+    }
+
     public function __toString()
     {
         $model = $this instanceof Product || $this instanceof Variant ? $this : null;
 
-        return $this->money->format($this->integer, $model);
+        return $this->money->format($this->integer, $model, $this->currency);
     }
 }

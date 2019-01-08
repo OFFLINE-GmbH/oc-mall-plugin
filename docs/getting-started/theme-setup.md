@@ -1,6 +1,69 @@
-# Pages setup
+# Theme setup
 
-On this page you can find a minimal demo implementation of each CMS page `oc-mall` provides.
+Once the plugin is [installed and configured](./installation.md), follow the steps below to set up your theme.
+
+::: tip
+You can take a look at the [official demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) on how to set
+up a theme. You can even use it as a base for your own custom theme. 
+:::
+
+## Layout
+
+### `mallDependencies`
+
+The [`mallDependencies` component](../components/mall-dependencies.md) includes all required frontend assets.
+
+The component should be placed on each layout that provides shop functionality.  
+
+```ini{3}
+description = "Default Layout"
+
+[mallDependencies]
+==
+<!DOCTYPE html>
+...
+```
+
+### `session`
+
+RainLab.Users's `session` component should be placed on every layout that
+provides shop functionality. This makes sure the user remains logged in while browsing your store.
+
+```ini{3}
+description = "Default Layout"
+
+[session]
+[mallDependencies]
+==
+<!DOCTYPE html>
+...
+```
+
+### Framework extras
+
+`oc-mall`'s components require October's [AJAX framework](https://octobercms.com/docs/ajax/introduction)
+ to work. Make sure to include the framework either by using one of the
+[Combiner aliases](./https://octobercms.com/docs/markup/filter-theme#combiner-aliases) or
+the `{% framework extras %}` tag.
+
+```twig
+...
+{% framework extras %}
+</body>
+</html>
+``` 
+
+
+### Static pages menu
+
+If you are using the `RainLab.Pages` plugin, you can add the `All mall shop categories` entry to your navigation. 
+
+This will render a tree of all available categories in your theme. 
+
+
+## Pages
+
+In this section you can find a minimal demo implementation of each CMS page `oc-mall` needs.
 
 You are free to change them as you wish. Just make sure to keep the required `url` parameters.
 
@@ -8,7 +71,7 @@ You are free to change them as you wish. Just make sure to keep the required `ur
 To get started quickly simply copy and paste the markup to the respective cms page file.
 :::
 
-## product.htm
+### product.htm
 
 The product page displays a single product using the [Product component](../components/product.md).
 
@@ -25,7 +88,7 @@ variant = ":slug"
 {% component 'product' %}
 ``` 
 
-## category.htm
+### category.htm
 
 The category page displays all products in a category using the [Products component](../components/products.md). The 
 products can be filtered using the [ProductsFilter component](../components/products-filter.md).
@@ -60,7 +123,7 @@ showPriceFilter = 1
 </div>
 ``` 
 
-## cart.htm
+### cart.htm
 
 The cart displays the cart to the user using the [Cart component](../components/cart.md). 
 
@@ -82,7 +145,7 @@ showTaxes = 0
 {% endif %}
 ``` 
 
-## checkout.htm
+### checkout.htm
 
 The checkout page hosts the complete checkout process. 
 
@@ -103,7 +166,7 @@ step = "{{ :step }}"
 {% endif %}
 ``` 
 
-## myaccount.htm
+### myaccount.htm
 
 The my account page displays an account overview to the user using the
 [myAccount component](../components/my-account.md). 
@@ -124,7 +187,7 @@ page = "{{ :page }}"
 {% component 'myAccount' %}
 ``` 
 
-## address.htm
+### address.htm
 
 The address page displays an edit form for a user's address using the
 [AddressForm component](../components/address-form.md). 
@@ -146,7 +209,7 @@ step = "{{ :step }}"
 {% endif %}
 ``` 
 
-## login.htm
+### login.htm
 
 The login form displays a signup form for unregistered users using the
 [signUp component](../components/sign-up.md). 
@@ -162,3 +225,31 @@ redirect = "/account"
 ==
 {% component 'signUp' %}
 ``` 
+
+## Take a look around
+
+At this point your shop is configured and set up correctly. 
+
+::: tip
+Run `php artisan mall:check` again to make sure there are no problems left.
+:::
+
+::: tip
+In case you missed it: You can seed the shop with demo data.
+Visit the [Installation Page](./installation.md) to find out more.
+::: 
+
+If you don't have a navigation in your theme yet, simply visit some of
+these URLs to get a first impression of your new online store.
+
+
+::: tip INFO
+The following URLs only work if you copied the default URL structure.
+Adapt the links to your custom URLs if you made any changes.
+::: 
+
+* http://example.test/category/bikes
+* http://example.test/product/cruiser-1500
+* http://example.test/login
+* http://example.test/cart
+

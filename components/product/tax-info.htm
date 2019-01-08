@@ -1,4 +1,4 @@
-{% if item.taxes %}
+{% if item.taxes.count > 0 %}
     {% if item.price_includes_tax %}
         {{ 'offline.mall::frontend.tax.inclusive' | trans }}
     {% else %}

@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Customer;
 use DB;
 use Event;
 use Flash;
-use Illuminate\Validation\Rule;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
@@ -85,7 +84,7 @@ class DefaultSignUpHandler implements SignUpHandler
         // the email of all existing guest accounts registered to the same email.
         $this->renameExistingGuestAccounts($data, $user);
 
-        Event::fire('mall.customer.afterSignup', [$user, $this]);
+        Event::fire('mall.customer.afterSignup', [$this, $user]);
 
         $credentials = [
             'login'    => array_get($data, 'email'),

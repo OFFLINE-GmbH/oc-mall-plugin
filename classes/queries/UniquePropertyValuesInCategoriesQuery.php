@@ -34,8 +34,11 @@ class UniquePropertyValuesInCategoriesQuery
     {
         return DB
             ::table('offline_mall_products')
-            ->selectRaw(\DB::raw('distinct offline_mall_property_values.value,
-  offline_mall_property_values.property_id'))
+            ->selectRaw(\DB::raw('distinct
+                offline_mall_property_values.value,
+                offline_mall_property_values.index_value,
+                offline_mall_property_values.property_id'
+            ))
             ->where(function ($q) {
                 $q->where(function ($q) {
                     $q->where('offline_mall_products.published', true)
@@ -45,6 +48,8 @@ class UniquePropertyValuesInCategoriesQuery
             ->whereIn('offline_mall_products.category_id', $this->categories)
             ->whereNull('offline_mall_product_variants.deleted_at')
             ->whereNull('offline_mall_products.deleted_at')
+            ->where('offline_mall_property_values.value', '<>', '')
+            ->whereNotNull('offline_mall_property_values.value')
             ->leftJoin(
                 'offline_mall_product_variants',
                 'offline_mall_products.id',

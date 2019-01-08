@@ -83,11 +83,28 @@ class PaymentResult
     {
         $this->successful = true;
 
-        $payment                    = $this->logSuccessfulPayment($data, $response);
-        $this->order->payment_id    = $payment->id;
-        $this->order->payment_data  = $data;
-        $this->order->payment_state = PaidState::class;
-        $this->order->save();
+        try {
+            $payment = $this->logSuccessfulPayment($data, $response);
+        } catch (\Throwable $e) {
+            // Even if the log failed we *have* to mark this order as paid since the payment went already through.
+            logger()->error(
+                'OFFLINE.Mall: Could not log successful payment.',
+                ['data' => $data, 'response' => $response, 'order' => $this->order]
+            );
+        }
+
+        try {
+            $this->order->payment_id    = $payment->id;
+            $this->order->payment_data  = $data;
+            $this->order->payment_state = PaidState::class;
+            $this->order->save();
+        } catch (\Throwable $e) {
+            // If the order could not be marked as paid the shop admin will have to do this manually.
+            logger()->critical(
+                'OFFLINE.Mall: Could not mark paid order as paid.',
+                ['data' => $data, 'response' => $response, 'order' => $this->order]
+            );
+        }
 
         return $this;
     }
@@ -104,8 +121,16 @@ class PaymentResult
     {
         $this->successful = true;
 
-        $this->order->payment_state = PendingState::class;
-        $this->order->save();
+        try {
+            $this->order->payment_state = PendingState::class;
+            $this->order->save();
+        } catch (\Throwable $e) {
+            // If the order could not be marked as pending the shop admin will have to do this manually.
+            logger()->critical(
+                'OFFLINE.Mall: Could not mark pending order as pending.',
+                ['order' => $this->order]
+            );
+        }
 
         return $this;
     }
@@ -125,10 +150,25 @@ class PaymentResult
     {
         $this->successful = false;
 
-        $this->failedPayment = $this->logFailedPayment($data, $response);
+        try {
+            $this->failedPayment = $this->logFailedPayment($data, $response);
+        } catch (\Throwable $e) {
+            logger()->error(
+                'OFFLINE.Mall: Could not log failed payment.',
+                ['data' => $data, 'response' => $response, 'order' => $this->order]
+            );
+        }
 
-        $this->order->payment_state = FailedState::class;
-        $this->order->save();
+        try {
+            $this->order->payment_state = FailedState::class;
+            $this->order->save();
+        } catch (\Throwable $e) {
+            // If the order could not be marked as failed the shop admin will have to do this manually.
+            logger()->critical(
+                'OFFLINE.Mall: Could not mark failed order as failed.',
+                ['data' => $data, 'response' => $response, 'order' => $this->order]
+            );
+        }
 
         return $this;
     }

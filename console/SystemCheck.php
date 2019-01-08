@@ -26,7 +26,17 @@ class SystemCheck extends Command
                 'title' => 'A base currency is set',
                 'check' => function () {
                     if (Currency::where('is_default', 1)->count() < 1) {
-                        return 'Choose one currency to be your default via the backend settings.';
+                        return 'You can set this via Backend Settings -> Mall: General -> Currencies';
+                    }
+
+                    return true;
+                },
+            ],
+            [
+                'title' => 'A admin e-mail is set',
+                'check' => function () {
+                    if ( ! GeneralSettings::get('admin_email')) {
+                        return 'You can set this via Backend Settings -> Mall: General -> Configuration';
                     }
 
                     return true;

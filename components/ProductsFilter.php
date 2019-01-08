@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Queries\PriceRangeQuery;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
@@ -129,6 +130,18 @@ class ProductsFilter extends MallComponent
      */
     public $sortOptions;
     /**
+     * Sort order of the products component.
+     *
+     * @var string
+     */
+    public $productsComponentSort;
+    /**
+     * Category of the products component.
+     *
+     * @var Category
+     */
+    public $productsComponentCategory;
+    /**
      * An instance of the money formatter class.
      *
      * @var Money
@@ -158,19 +171,19 @@ class ProductsFilter extends MallComponent
         return [
             'category'            => [
                 'title'   => 'offline.mall::lang.common.category',
-                'default' => ':slug',
+                'default' => null,
                 'type'    => 'dropdown',
             ],
             'includeChildren'     => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeChildren.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeChildren.description',
-                'default'     => '1',
+                'default'     => null,
                 'type'        => 'checkbox',
             ],
             'includeVariants'     => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeVariants.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeVariants.description',
-                'default'     => '1',
+                'default'     => null,
                 'type'        => 'checkbox',
             ],
             'showPriceFilter'     => [
@@ -227,8 +240,18 @@ class ProductsFilter extends MallComponent
         $this->setVar('currency', Currency::activeCurrency());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
-        $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
-        $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+
+        // The includeChildren and includeVariants properties are set by the
+        // products component. If the user specifies explicit values via the
+        // component props we can use these instead.
+        $includeChildren = $this->property('includeChildren');
+        if ($includeChildren !== null) {
+            $this->setVar('includeChildren', (bool)$includeChildren);
+        }
+        $includeVariants = $this->property('includeVariants');
+        if ($includeVariants !== null) {
+            $this->setVar('includeVariants', (bool)$includeVariants);
+        }
 
         $this->setVar('category', $this->getCategory());
 
@@ -246,10 +269,13 @@ class ProductsFilter extends MallComponent
         }
 
         $this->setVar('propertyGroups', $this->getPropertyGroups());
-        $this->setVar('props', $this->setProps());
+        $this->setProps();
+
+        $nullOption = [null => trans('offline.mall::frontend.select')];
+
         $this->setVar('filter', $this->getFilter());
         $this->setVar('sortOrder', $this->getSortOrder());
-        $this->setVar('sortOptions', SortOrder::options());
+        $this->setVar('sortOptions', array_merge($nullOption, SortOrder::options(true)));
     }
 
     /**
@@ -324,8 +350,8 @@ class ProductsFilter extends MallComponent
 
             $currencyRange = (new PriceRangeQuery($this->categories, $this->currency))->query()->first();
 
-            $range->min = $this->smaller($currencyRange->min, $calculatedMin);
-            $range->max = $this->bigger($currencyRange->max, $calculatedMax);
+            $range->min = $this->higher($currencyRange->min, $calculatedMin);
+            $range->max = $this->lower($currencyRange->max, $calculatedMax);
         }
 
 
@@ -401,6 +427,11 @@ class ProductsFilter extends MallComponent
      */
     protected function getCategory()
     {
+        // Use the category from the products component if nothing else is specified.
+        if ($this->productsComponentCategory && $this->property('category') === null) {
+            return $this->productsComponentCategory;
+        }
+
         return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
@@ -411,10 +442,7 @@ class ProductsFilter extends MallComponent
      */
     protected function getFilter()
     {
-        $filter = request()->get('filter', []);
-        if ( ! is_array($filter)) {
-            $filter = [];
-        }
+        $filter = array_wrap(request()->all() ?? []);
 
         return (new QueryString())->deserialize($filter, $this->category);
     }
@@ -426,7 +454,9 @@ class ProductsFilter extends MallComponent
      */
     protected function getSortOrder(): string
     {
-        return input('sort', SortOrder::default());
+        $fallback = optional($this->productsComponentSort)->key() ?? SortOrder::default();
+
+        return input('sort', $fallback);
     }
 
     /**
@@ -475,27 +505,27 @@ class ProductsFilter extends MallComponent
     }
 
     /**
-     * Return the smaller of two values.
+     * Return the higher of two values.
      *
      * @param $a
      * @param $b
      *
      * @return mixed
      */
-    protected function smaller($a, $b)
+    protected function higher($a, $b)
     {
         return $a > $b ? $b : $a;
     }
 
     /**
-     * Return the bigger of two values.
+     * Return the lower of two values.
      *
      * @param $a
      * @param $b
      *
      * @return mixed
      */
-    protected function bigger($a, $b)
+    protected function lower($a, $b)
     {
         return $a > $b ? $a : $b;
     }

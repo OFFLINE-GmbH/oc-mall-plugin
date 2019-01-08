@@ -12,7 +12,7 @@ module.exports = {
                 title: 'Installation',
                 children: [
                     '/getting-started/installation',
-                    '/getting-started/pages-setup'
+                    '/getting-started/theme-setup',
                 ]
             },
             {
@@ -23,13 +23,15 @@ module.exports = {
                     '/digging-deeper/products',
                     '/digging-deeper/currencies',
                     '/digging-deeper/shipping-methods',
-                    '/digging-deeper/payment-methods',
+                    '/digging-deeper/payments',
                     '/digging-deeper/taxes',
+                    '/digging-deeper/going-live',
                 ]
             },
             {
                 title: 'Components',
                 children: [
+                    '/components/mall-dependencies',
                     '/components/product',
                     '/components/products',
                     '/components/products-filter',
@@ -49,15 +51,16 @@ module.exports = {
                 ]
             },
             {
-                title: 'Extending',
+                title: 'Development',
                 children: [
-                    '/extending/payment-providers'
-                ]
-            },
-            {
-                title: 'Services',
-                children: [
-                    '/services/console'
+                    '/development/product-model',
+                    '/development/variant-model',
+                    '/development/order-model',
+                    '/development/payment-providers',
+                    '/development/pricing-information',
+                    '/development/events',
+                    '/development/integration',
+                    '/development/console-commands',
                 ]
             }
         ],

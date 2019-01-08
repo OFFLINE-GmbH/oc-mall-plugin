@@ -68,7 +68,7 @@ class DiscountApplier
         }
 
         if ($discount->type === 'fixed_amount') {
-            $savings            = $discount->amountInCurrency()->integer;
+            $savings            = $discount->amount()->integer;
             $this->reducedTotal -= $savings;
         }
 
@@ -110,7 +110,7 @@ class DiscountApplier
             return false;
         }
 
-        if ($discount->trigger === 'total' && (int)$discount->totalToReachInCurrency()->integer <= $this->total) {
+        if ($discount->trigger === 'total' && (int)$discount->totalToReach()->integer <= $this->total) {
             return true;
         }
 

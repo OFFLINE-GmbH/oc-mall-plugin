@@ -14,17 +14,17 @@ class OrderStateTableSeeder extends Seeder
         $states         = [
             ['name' => 'New', 'flag' => OrderState::FLAG_NEW, 'color' => '#3498db', 'german_name' => 'Neu'],
             ['name' => 'In Progress', 'color' => '#f1c40f', 'german_name' => 'Wird bearbeitet'],
-            ['name' => 'Disputed', 'color' => '#e74c3c', 'german_name' => 'Reklamiert'],
+            ['name' => 'Disputed', 'color' => '#d30000', 'german_name' => 'Reklamiert'],
             [
                 'name'        => 'Cancelled',
-                'flag'        => OrderState::FLAG_COMPLETE,
-                'color'       => '#95a5a6',
+                'flag'        => OrderState::FLAG_CANCELLED,
+                'color'       => '#5e667f',
                 'german_name' => 'Storniert',
             ],
             [
                 'name'        => 'Complete',
                 'flag'        => OrderState::FLAG_COMPLETE,
-                'color'       => '#34495e',
+                'color'       => '#189e51',
                 'german_name' => 'Abgeschlossen',
             ],
         ];

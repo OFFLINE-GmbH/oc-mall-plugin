@@ -26,6 +26,7 @@ class ProductObserver
         if ($product->inventory_management_method === 'single') {
             $this->index->insert(VariantEntry::INDEX, $this->ghostVariant($product, $productEntry));
         } else {
+            $product->variants->load(['prices.currency', 'property_values.property', 'product.brand']);
             foreach ($product->variants as $variant) {
                 $this->index->insert(VariantEntry::INDEX, new VariantEntry($variant));
             }

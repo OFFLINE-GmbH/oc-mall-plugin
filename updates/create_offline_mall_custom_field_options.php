@@ -12,7 +12,7 @@ class CreateOfflineMallProductCustomFieldOptions extends Migration
             $table->increments('id')->unsigned();
             $table->integer('custom_field_id')->unsigned()->nullable();
             $table->string('name');
-            $table->text('values')->nullable();
+            $table->string('option_value')->nullable();
             $table->integer('sort_order')->unsigned()->nullable();
             $table->timestamps();
         });

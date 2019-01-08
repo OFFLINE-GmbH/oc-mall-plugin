@@ -1,4 +1,14 @@
 fields:
+    base:
+        label: offline.mall::lang.general_settings.base
+        type: section
+
+    admin_email:
+        label: offline.mall::lang.general_settings.admin_email
+        span: left
+        type: text
+        comment: offline.mall::lang.general_settings.admin_email_comment
+
     links:
         label: offline.mall::lang.general_settings.links
         comment: offline.mall::lang.general_settings.links_comment

@@ -52,6 +52,7 @@ return [
     'form.city'                                => 'City',
     'form.state'                               => 'State/County/Province',
     'form.country'                             => 'Country',
+    'address'                                  => 'Address',
     'billing_address'                          => 'Billing address',
     'shipping_address'                         => 'Shipping address',
     'no_additional_charges'                    => 'No additional charges',

@@ -12,14 +12,17 @@
             <div class="mall-payment-method__heading">
                 <div class="mall-payment-method__name">{{ method.name }}</div>
             </div>
+            {% if method.description %}
+                <div class="mall-payment-method__description">
+                    {{ method.description | raw }}
+                </div>
+            {% endif %}
             {% if isActiveMethod %}
+                <div class="mall-payment-method__instructions">
+                    {{ method.renderInstructions(order) | raw }}
+                </div>
                 <div class="mall-payment-method__toggle"
                      style="{% if not isActiveMethod %}display: none{% endif %}">
-                    {% if method.description %}
-                        <div class="mall-payment-method__description">
-                            {{ method.description | raw }}
-                        </div>
-                    {% endif %}
                     <div class="mall-payment-method__data">
                         {% if method.payment_provider %}
                             {% set path = __SELF__ ~ '::gateways/' ~ (method.payment_provider) %}
@@ -29,9 +32,11 @@
                         {% endif %}
                     </div>
                     <div class="mall-payment-method__submit">
-                        {% set label = __SELF__.order ? 'mall.payment_method.pay_now' : 'mall.payment_method.proceed' %}
+                        {% set label = __SELF__.order
+                            ? 'offline.mall::frontend.payment_method.pay_now'
+                            : 'offline.mall::frontend.payment_method.proceed' %}
                         <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
-                            {{ label | _ }}
+                            {{ label | trans }}
                         </button>
                     </div>
                 </div>

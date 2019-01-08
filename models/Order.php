@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use DB;
 use Event;
 use Model;
@@ -11,8 +12,8 @@ use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use OFFLINE\Mall\Classes\Utils\Money;
-use RainLab\Translate\Classes\Translator;
 use RuntimeException;
+use System\Classes\PluginManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -66,6 +67,11 @@ class Order extends Model
      * @var bool
      */
     public $shippingNotification = false;
+    /**
+     * Use to define if the state change notification should be sent.
+     * @var bool
+     */
+    public $stateNotification = true;
 
     public static function boot()
     {
@@ -74,6 +80,7 @@ class Order extends Model
             if ( ! $order->order_number) {
                 $order->setOrderNumber();
             }
+            $order->payment_hash = str_random(10);
         });
         static::updated(function (self $order) {
             if ($order->isDirty('order_state_id')) {
@@ -89,6 +96,15 @@ class Order extends Model
                 Event::fire('mall.order.shipped', [$order]);
             }
         });
+    }
+
+    public function afterDelete()
+    {
+        $this->products->each->delete();
+        $this->payment_logs->each->delete();
+        if ($this->cart) {
+            $this->cart->delete();
+        }
     }
 
     public function getIsShippedAttribute()
@@ -114,12 +130,17 @@ class Order extends Model
                 throw new ValidationException(['Your order is empty. Please add a product to the cart.']);
             }
 
+            $cart->validateShippingMethod();
+            if ($cart->shipping_method_id === null) {
+                throw new ValidationException(['Your order has no shipping method set. Please select a shipping method.']);
+            }
+
             $totals = $cart->totals;
 
             $order                                          = new static;
             $order->session_id                              = session()->getId();
             $order->currency                                = Currency::activeCurrency();
-            $order->lang                                    = Translator::instance()->getLocale();
+            $order->lang                                    = $order->getLocale();
             $order->shipping_address_same_as_billing        = $cart->shipping_address_same_as_billing;
             $order->billing_address                         = $cart->billing_address;
             $order->shipping_address                        = $cart->shipping_address;
@@ -319,5 +340,37 @@ class Order extends Model
             'currency_id' => $this->useCurrency()->id,
             'price'       => $this->getOriginal($key) / 100,
         ]);
+    }
+
+    protected function getLocale()
+    {
+        if (PluginManager::instance()->exists('RainLab.Translate')) {
+            return \RainLab\Translate\Classes\Translator::instance()->getLocale();
+        }
+
+        return 'default';
+    }
+
+    /**
+     * Cleanup of old data using OFFLINE.GDPR.
+     *
+     * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
+     *
+     * @param Carbon $deadline
+     * @param int    $keepDays
+     */
+    public function gdprCleanup(Carbon $deadline, int $keepDays)
+    {
+        self::where('created_at', '<', $deadline)
+            ->withTrashed()
+            ->whereHas('order_state', function ($q) {
+                $q->where('flag', OrderState::FLAG_COMPLETE);
+            })
+            ->get()
+            ->each(function (Order $order) {
+                DB::transaction(function () use ($order) {
+                    $order->forceDelete();
+                });
+            });
     }
 }

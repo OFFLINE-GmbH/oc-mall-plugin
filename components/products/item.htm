@@ -1,23 +1,29 @@
 <div class="mall-products-item">
     <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}">
         <div class="mall-products-item__image">
-            <img src="{{ item.image.thumb('auto', 240) }}" alt="{{ item.name }}"/>
+            {% partial __SELF__ ~ '::image' image=item.image %}
         </div>
         <div class="mall-products-item__info">
-            <div class="row flex">
+            <div class="mall-products-item__info-primary">
                 <div class="mall-products-item__name">
                     {{ item.name }}
                 </div>
-                <div class="mall-products-item__price">
-                    {{ item.price() | raw }}
+                {% set price = item.price() %}
+                <div class="mall-products-item__price
+                    {{ price.isCustomerSpecific ? 'mall-products-item__price--special' }}">
+                    {{ price.string }}
                 </div>
             </div>
-            <div class="row flex">
+            <div class="mall-products-item__info-secondary">
                 <div class="mall-products-item__short-description">
                     {{ item.description_short }}
                 </div>
                 <div class="mall-products-item__old-price">
-                    {{ item.oldPrice.count > 0 ? (item.oldPrice() | raw) : '' }}
+                    {% if price.official %}
+                        {{ price.official.string }}
+                    {% else %}
+                        {{ item.oldPrice.count > 0 ? item.oldPrice.string }}
+                    {% endif %}
                 </div>
             </div>
         </div>

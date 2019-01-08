@@ -325,16 +325,17 @@ class SeedDemoData extends Command
         $this->output->writeln('Creating currencies...');
         DB::table('offline_mall_currencies')->truncate();
         Currency::create([
-            'code'     => 'USD',
-            'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
-            'decimals' => 2,
-            'symbol'   => '$',
-            'rate'     => 1,
+            'code'       => 'USD',
+            'format'     => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
+            'decimals'   => 2,
+            'symbol'     => '$',
+            'rate'       => 1.1,
         ]);
         Currency::create([
             'code'     => 'EUR',
             'format'   => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
             'decimals' => 2,
+            'is_default' => true,
             'symbol'   => '€',
             'rate'     => 1,
         ]);
@@ -342,7 +343,7 @@ class SeedDemoData extends Command
             'code'     => 'CHF',
             'format'   => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
             'decimals' => 2,
-            'rate'     => 1,
+            'rate'     => 1.2,
         ]);
     }
 

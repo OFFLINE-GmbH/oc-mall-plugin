@@ -1,7 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Cache;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\NestedTree;
@@ -9,9 +8,9 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
+use OFFLINE\Mall\Classes\Traits\Category\Properties;
 use OFFLINE\Mall\Classes\Traits\Category\Slug;
 use OFFLINE\Mall\Classes\Traits\Category\Translation;
-use OFFLINE\Mall\Classes\Traits\Category\Properties;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Models\File;
 

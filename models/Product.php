@@ -1,5 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cache;
+use Cms\Classes\Page;
 use DB;
 use Model;
 use October\Rain\Database\Traits\Nullable;
@@ -11,6 +13,7 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
+use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
@@ -26,6 +29,7 @@ class Product extends Model
     use UserSpecificPrice;
     use Images;
     use CustomFields;
+    use PropertyValues;
     use HashIds;
     use Nullable;
     use PriceAccessors;
@@ -35,7 +39,7 @@ class Product extends Model
     const MORPH_KEY = 'mall.product';
 
     protected $dates = ['deleted_at'];
-    public $jsonable = ['links'];
+    public $jsonable = ['links', 'additional_descriptions', 'additional_properties'];
     public $nullable = ['group_by_property_id'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
@@ -96,7 +100,7 @@ class Product extends Model
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
     public $attachMany = [
-        'downloads' => File::class,
+        'downloads'      => File::class,
         'initial_images' => File::class,
     ];
     public $belongsTo = [
@@ -208,7 +212,31 @@ class Product extends Model
         DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_category_product_sort_order')->where('product_id', $this->id)->delete();
     }
+
+    /**
+     * Alias for property_values relationship.
+     *
+     * This can be useful if a shop uses Products and Variants together.
+     * With this alias the all_property_values relation becomes available
+     * on Products as it is on Variants.
+     */
+    public function all_property_values()
+    {
+        return $this->property_values();
+    }
+
+    /**
+     * Alias for property_values.
+     *
+     * @see $this->all_property_values()
+     */
+    public function getAllPropertyValuesAttribute()
+    {
+        return $this->property_values;
+    }
+
 
     /**
      * This setter makes it easier to set price values
@@ -255,5 +283,69 @@ class Product extends Model
             + $this->category->properties->filter(function ($q) {
                 return $q->pivot->use_for_variants;
             })->pluck('name', 'id')->toArray();
+    }
+
+    /**
+     * Returns the category specific sort orders of this product.
+     */
+    public function getSortOrders()
+    {
+        return Cache::rememberForever(self::sortOrderCacheKey($this->id), function () {
+            return \DB::table('offline_mall_category_product_sort_order')
+                      ->where('product_id', $this->id)
+                      ->get(['category_id', 'sort_order',])
+                      ->pluck('sort_order', 'category_id')
+                      ->toArray();
+        });
+    }
+
+    /**
+     * Returns the Cache key to store the sort order.
+     *
+     * @return string
+     */
+    public static function sortOrderCacheKey($id)
+    {
+        return 'category.sort.order.' . $id;
+    }
+
+    /**
+     * Resolve the item for RainLab.Sitemap and RainLab.Pages plugins.
+     *
+     * @param $item
+     * @param $url
+     * @param $theme
+     *
+     * @return array
+     * @throws \Cms\Classes\CmsException
+     */
+    public static function resolveItem($item, $url, $theme)
+    {
+        $page    = GeneralSettings::get('product_page', 'product');
+        $cmsPage = Page::loadCached($theme, $page);
+
+        if ( ! $cmsPage) {
+            return;
+        }
+
+        $items = self
+            ::published()
+            ->where('inventory_management_method', 'single')
+            ->get()
+            ->map(function (self $product) use ($cmsPage, $page, $url) {
+                $pageUrl = $cmsPage->url($page, ['slug' => $product->slug]);
+
+                return [
+                    'title'    => $product->name,
+                    'url'      => $pageUrl,
+                    'mtime'    => $product->updated_at,
+                    'isActive' => $pageUrl === $url,
+                ];
+            })
+            ->toArray();
+
+        return [
+            'items' => $items,
+        ];
     }
 }

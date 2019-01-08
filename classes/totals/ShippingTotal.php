@@ -141,11 +141,11 @@ class ShippingTotal implements \JsonSerializable
             return $this->method;
         }
 
-        $method = $this->method->replicate(['id', 'name', 'price']);
+        $method = $this->method->replicate(['id', 'name']);
 
         $discount     = $this->appliedDiscount['discount'];
         $method->name = $discount->shipping_description;
-        $method->setRelation('prices', $discount->shipping_price);
+        $method->setRelation('prices', $discount->shipping_prices);
 
         return $method;
     }

@@ -19,13 +19,13 @@ class CustomFieldTableSeeder extends Seeder
 
             $option             = new CustomFieldOption();
             $option->name       = 'Test';
-            $option->values     = 'test';
+            $option->option_value     = 'test';
             $option->sort_order = 1;
             $field->custom_field_options()->save($option);
 
             $option             = new CustomFieldOption();
             $option->name       = 'Test2';
-            $option->values     = 'test2';
+            $option->option_value     = 'test2';
             $option->sort_order = 2;
             $field->custom_field_options()->save($option);
             $field->products()->attach(Product::first()->id);

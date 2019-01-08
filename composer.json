@@ -1,15 +1,34 @@
 {
+  "name": "offline/oc-mall-plugin",
+  "type": "october-plugin",
+  "description": "E-commerce solution for October CMS",
+  "keywords": [
+    "october",
+    "cms",
+    "e-commerce",
+    "shop",
+    "plugin"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tobias Kündig",
+      "email": "tobias@offline.ch"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "composer/installers": "~1.0",
+    "league/omnipay": "^2.3",
+    "hashids/hashids": "^2.0",
+    "filebase/filebase": "^1.0",
+    "offline/jsonq": "^5.2.4",
+    "elasticsearch/elasticsearch": "^6.0"
+  },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
     "phpmd/phpmd": "^2.6",
     "mockery/mockery": "^1.0",
     "phpunit/phpunit": "^7.2"
-  },
-  "require": {
-    "league/omnipay": "^2.3",
-    "hashids/hashids": "^2.0",
-    "filebase/filebase": "^1.0",
-    "nahid/jsonq": "5.2.3",
-    "elasticsearch/elasticsearch": "^6.0"
   }
 }

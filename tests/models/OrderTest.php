@@ -204,7 +204,7 @@ class OrderTest extends PluginTestCase
         $discount->shipping_description = 'Reduced shipping';
         $discount->save();
 
-        $discount->shipping_price()->save(new Price([
+        $discount->shipping_prices()->save(new Price([
             'currency_id' => 1,
             'price'       => 10,
             'field'       => 'shipping_price',
@@ -232,12 +232,12 @@ class OrderTest extends PluginTestCase
         $discount1->number_of_usages     = 10;
         $discount1->save();
 
-        $discount1->shipping_price()->save(new Price([
+        $discount1->shipping_prices()->save(new Price([
             'currency_id' => 1,
             'price'       => 10,
             'field'       => 'shipping_price',
         ]));
-        $discount1->total_to_reach()->save(new Price([
+        $discount1->totals_to_reach()->save(new Price([
             'currency_id' => 1,
             'price'       => 0,
             'field'       => 'total_to_reach',
@@ -251,7 +251,7 @@ class OrderTest extends PluginTestCase
         $discount2->number_of_usages = 12;
         $discount2->save();
 
-        $discount2->amount()->save(new Price([
+        $discount2->amounts()->save(new Price([
             'currency_id' => 1,
             'price'       => 20,
             'field'       => 'amount',

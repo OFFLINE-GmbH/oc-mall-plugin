@@ -22,9 +22,17 @@ tabs:
     fields:
         description:
             label: 'offline.mall::lang.product.description'
-            size: huge
+            size: large
             span: auto
             type: richeditor
+            tab: 'offline.mall::lang.product.description'
+        instructions:
+            label: 'offline.mall::lang.payment_method.instructions'
+            comment: 'offline.mall::lang.payment_method.instructions_comment'
+            size: large
+            span: auto
+            type: codeeditor
+            language: twig
             tab: 'offline.mall::lang.product.description'
         logo:
             label: 'offline.mall::lang.common.logo'
@@ -39,16 +47,22 @@ tabs:
             span: auto
             type: fileupload
             tab: 'offline.mall::lang.product.description'
-        _prices:
-            label: 'offline.mall::lang.payment_method.price'
+        fee_label:
+            label: 'offline.mall::lang.payment_method.fee_label'
             span: left
-            type: mall.price
-            comment: 'offline.mall::lang.payment_method.price_comment'
+            type: text
+            comment: 'offline.mall::lang.payment_method.fee_label_comment'
             tab: 'offline.mall::lang.common.fees'
         taxes:
             span: right
             path: taxes
             type: partial
+            tab: 'offline.mall::lang.common.fees'
+        _prices:
+            label: 'offline.mall::lang.payment_method.price'
+            span: left
+            type: mall.price
+            comment: 'offline.mall::lang.payment_method.price_comment'
             tab: 'offline.mall::lang.common.fees'
         fee_percentage:
             label: 'offline.mall::lang.payment_method.fee_percentage'

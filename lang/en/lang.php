@@ -68,6 +68,8 @@
     'menu_items'               => [
         'all_categories'  => 'All shop categories',
         'single_category' => 'Single shop category',
+        'all_products'    => 'All shop products',
+        'all_variants'    => 'All shop variants',
     ],
     'currency_settings'        => [
         'label'             => 'Currencies',
@@ -90,7 +92,7 @@
             'publishable_key_comment' => 'You can find this key in your Stripe Dashboard',
         ],
         'paypal'      => [
-            'client_id'         => 'PayPal Client I',
+            'client_id'         => 'PayPal Client ID',
             'secret'            => 'PayPal Secret',
             'test_mode'         => 'Test mode',
             'test_mode_comment' => 'Run all payments in the PayPal Sandbox.',
@@ -135,6 +137,9 @@
         'category_page'              => 'Category page for products listing',
         'redirect_to_cart'           => 'Redirect to cart',
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
+        'admin_email'                => 'Admin email',
+        'admin_email_comment'        => 'Admin notifications will be sent to this addres',
+        'base'                       => 'Base settings',
         'links'                      => 'CMS pages',
         'links_comment'              => 'Choose which pages are used to display your products',
         'customizations'             => 'Customizations',
@@ -158,8 +163,10 @@
         'accessory'            => 'Accessory',
         'custom_fields'        => 'Custom fields',
         'variants'             => 'Variants',
+        'variant'              => 'Variant',
         'discounts'            => 'Discounts',
         'discount'             => 'Discount',
+        'discount_percentage'  => 'Discount (%)',
         'select_placeholder'   => '-- Please choose',
         'main_image'           => 'Main image',
         'images'               => 'Images',
@@ -237,7 +244,8 @@
         'notification'         => 'Notification',
         'price_missing'        => 'Enter at least a price for the default currency',
         'slug_unique'          => 'The URL has to be unique',
-        'fees'                 => 'Gebühren',
+        'fees'                 => 'Fees',
+        'value'                => 'Value',
     ],
     'variant'                  => [
         'method' => [
@@ -310,9 +318,12 @@
         'link_target'                          => 'Target URL',
         'properties'                           => 'Properties',
         'links'                                => 'Links',
+        'details'                              => 'Details',
         'price_includes_tax'                   => 'Price includes taxes',
         'price_includes_tax_comment'           => 'The defined price includes all taxes',
         'group_by_property'                    => 'Attribute for variant grouping',
+        'additional_descriptions'              => 'Additional descriptions',
+        'additional_properties'                => 'Additional properties',
         'price_table_modal'                    => [
             'trigger'           => 'Edit stock and price values',
             'label'             => 'Price and stock',
@@ -390,10 +401,15 @@
         'price_comment'          => 'The amount to add to the order\'s total',
         'fee_percentage'         => 'Percentage fee',
         'fee_percentage_comment' => 'The percentage of the total to add to the order\'s total',
+        'fee_label'              => 'Fee label',
+        'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
+        'instructions'           => 'Payment instructions',
+        'instructions_comment'   => 'Twig syntax supported. Use {{ order }} to access corresponding order information if available',
     ],
     'order'                    => [
-        'order_number'                        => 'Order number',
-        'invoice_number'                      => 'Invoice number',
+        'order_number'                        => '# Order',
+        'invoice_number'                      => '# Invoice',
+        'payment_hash'                        => 'Payment hash',
         'customer'                            => 'Customer',
         'creation_date'                       => 'Created at',
         'modification_date'                   => 'Modified at',
@@ -413,6 +429,8 @@
         'tracking_url'                        => 'Tracking url',
         'tracking_shipped'                    => 'Mark order as shipped',
         'tracking_shipped_comment'            => 'The order will be marked as shipped',
+        'tracking_completed'                  => 'Mark order as complete',
+        'tracking_completed_comment'          => 'The order will be marked as complete',
         'tracking_notification'               => 'Send notification',
         'tracking_notification_comment'       => 'A notification containing the tracking information will be sent to the customer',
         'shipping_fees'                       => 'Shipping fees',
@@ -451,6 +469,7 @@
         'delete_confirm'                      => 'Do you really want to delete this order?',
         'update_invoice_number'               => 'Set invoice number',
         'shipped'                             => 'Shipped',
+        'shipping_pending'                    => 'Shipping pending',
         'not_shipped'                         => 'Pending',
         'modal'                               => [
             'cancel' => 'Cancel',
@@ -504,7 +523,7 @@
         'manage_taxes'            => 'Can manage taxes',
     ],
     'components'               => [
-        'products'              => [
+        'products'               => [
             'details'    => [
                 'name'        => 'Products',
                 'description' => 'Displays a list of products',
@@ -512,6 +531,10 @@
             'properties' => [
                 'no_category_filter' => 'Don\'t filter by category',
                 'use_url'            => 'Use category slug from URL',
+                'filter_component'   => [
+                    'title'       => 'Filter component alias',
+                    'description' => 'Alias of the ProductsFilter component that filters this Products component',
+                ],
                 'include_variants'   => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
@@ -538,7 +561,7 @@
                 ],
             ],
         ],
-        'productsFilter'        => [
+        'productsFilter'         => [
             'details'    => [
                 'name'        => 'Products filter',
                 'description' => 'Filters the products from a category',
@@ -562,6 +585,10 @@
                     'title'       => 'Include noUI Slider',
                     'description' => 'Include all dependiencies of noUI Slider via cdnjs',
                 ],
+                'sortOrder'           => [
+                    'title'       => 'Sort order',
+                    'description' => 'Initial sort order',
+                ],
             ],
             'sortOrder'  => [
                 'bestseller' => 'Bestseller',
@@ -569,9 +596,11 @@
                 'priceHigh'  => 'Highest price',
                 'latest'     => 'Latest',
                 'oldest'     => 'Oldest',
+                'random'     => 'Random',
+                'manual'     => 'Manual',
             ],
         ],
-        'myAccount'             => [
+        'myAccount'              => [
             'details'    => [
                 'name'        => 'User account',
                 'description' => 'Displays different forms where a user can view and edit his profile',
@@ -587,7 +616,7 @@
                 'addresses' => 'Addresses',
             ],
         ],
-        'customerProfile'       => [
+        'customerProfile'        => [
             'details'    => [
                 'name'        => 'Customer profile',
                 'description' => 'Displays a customer profile edit form.',
@@ -595,7 +624,7 @@
             'properties' => [
             ],
         ],
-        'currencyPicker'        => [
+        'currencyPicker'         => [
             'details'    => [
                 'name'        => 'Currency picker',
                 'description' => 'Shows a picker to select the currently active shop currency',
@@ -603,7 +632,15 @@
             'properties' => [
             ],
         ],
-        'addressList'           => [
+        'dependencies'           => [
+            'details'    => [
+                'name'        => 'Frontend dependencies',
+                'description' => 'Includes all needed frontend dependencies',
+            ],
+            'properties' => [
+            ],
+        ],
+        'addressList'            => [
             'details'    => [
                 'name'        => 'Address list',
                 'description' => 'Displays a list of all registered user addresses',
@@ -618,7 +655,7 @@
                 'address_deleted' => 'Address deleted',
             ],
         ],
-        'ordersList'            => [
+        'ordersList'             => [
             'details'    => [
                 'name'        => 'Orders list',
                 'description' => 'Displays a list of all customer orders',
@@ -626,7 +663,7 @@
             'properties' => [
             ],
         ],
-        'product'               => [
+        'product'                => [
             'details'       => [
                 'name'        => 'Product details',
                 'description' => 'Displays details of a product',
@@ -639,7 +676,7 @@
             ],
             'added_to_cart' => 'Added product successfully',
         ],
-        'cart'                  => [
+        'cart'                   => [
             'details'    => [
                 'name'        => 'Cart',
                 'description' => 'Displays the shopping cart',
@@ -653,7 +690,7 @@
                 ],
             ],
         ],
-        'checkout'              => [
+        'checkout'               => [
             'details' => [
                 'name'        => 'Checkout',
                 'description' => 'Handles the checkout process',
@@ -662,13 +699,14 @@
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
         ],
-        'discountApplier'       => [
-            'details' => [
+        'discountApplier'        => [
+            'details'          => [
                 'name'        => 'Promo code input',
                 'description' => 'Displays a promo code input field',
             ],
+            'discount_applied' => 'Discount applied successfully!',
         ],
-        'shippingMethodSelector'      => [
+        'shippingMethodSelector' => [
             'details' => [
                 'name'        => 'Shipping selector',
                 'description' => 'Displays a list of all available shipping methods',
@@ -677,7 +715,7 @@
                 'unavailable' => 'The selected shipping method is not available for your order.',
             ],
         ],
-        'paymentMethodSelector' => [
+        'paymentMethodSelector'  => [
             'details' => [
                 'name'        => 'Payment method selector',
                 'description' => 'Displays a list of all available payment methods',
@@ -686,7 +724,7 @@
                 'unavailable' => 'The selected payment method is not available for your order.',
             ],
         ],
-        'addressSelector'       => [
+        'addressSelector'        => [
             'details' => [
                 'name'        => 'Address selector',
                 'description' => 'Displays a list of all existing user addresses',
@@ -694,7 +732,7 @@
             'errors'  => [
             ],
         ],
-        'addressForm'           => [
+        'addressForm'            => [
             'details'    => [
                 'name'        => 'Address form',
                 'description' => 'Displays a form to edit a user\'s address',
@@ -718,7 +756,7 @@
                 'shipping' => 'Shipping address',
             ],
         ],
-        'signup'                => [
+        'signup'                 => [
             'details'    => [
                 'name'        => 'Signup',
                 'description' => 'Displays a signup and signin form',
@@ -776,7 +814,7 @@
                 ],
             ],
         ],
-        'categories'            => [
+        'categories'             => [
             'details'    => [
                 'name'        => 'Categories',
                 'description' => 'Lists available categories',
@@ -798,7 +836,7 @@
             'no_parent'  => 'Show all categories',
             'by_slug'    => 'Use category in url as parent',
         ],
-        'cartSummary'           => [
+        'cartSummary'            => [
             'details'    => [
                 'name'        => 'Cart summary',
                 'description' => 'Displays the number of products in and total value of the cart',
@@ -814,7 +852,7 @@
                 ],
             ],
         ],
-        'customerDashboard'     => [
+        'customerDashboard'      => [
             'details'    => [
                 'name'        => 'Customer dashboard',
                 'description' => 'Displays a link for the customer to login and change her account settings',
@@ -844,12 +882,14 @@
         'color'       => 'Color',
         'flag'        => 'Special flag',
         'flags'       => [
-            'new'      => 'Set the state of the order as "new"',
-            'complete' => 'Set the state of the order as "done"',
+            'new'       => 'Set the state of the order as "new"',
+            'complete'  => 'Set the state of the order as "done"',
+            'cancelled' => 'Set the state of the order as "cancelled"',
         ],
     ],
     'customer_group'           => [
-        'code_comment' => 'This code can be used to identify this group programmatically',
+        'code_comment'     => 'This code can be used to identify this group programmatically',
+        'discount_comment' => 'Give this customer group a specific discount in % on your whole catalogue',
     ],
     'order_status'             => [
         'processed' => 'Processed',

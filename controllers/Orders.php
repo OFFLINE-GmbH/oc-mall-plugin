@@ -84,18 +84,30 @@ class Orders extends Controller
         $trackingUrl    = input('trackingUrl');
         $notification   = (bool)input('notification', false);
         $shipped        = (bool)input('shipped', false);
+        $completed      = (bool)input('completed', false);
 
         $data = ['tracking_url' => $trackingUrl, 'tracking_number' => $trackingNumber];
 
         if ($shipped) {
             $data['shipped_at'] = now();
         }
+        if ($completed) {
+            $state = OrderState::where('flag', OrderState::FLAG_COMPLETE)->first();
+            if ($state) {
+                $data['order_state_id'] = $state->id;
+            }
+        }
 
-        $order = $this->updateOrder($data);
+        $order = $this->updateOrder($data, false);
 
         $order->shippingNotification = $notification;
 
         Event::fire('mall.order.shipped', [$order]);
+
+        return [
+            '#shipped_at'  => $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-',
+            '#order_state' => e($order->order_state->name),
+        ];
     }
 
     public function onUpdateInvoiceNumber()
@@ -117,10 +129,13 @@ class Orders extends Controller
         return Backend::redirect('offline/mall/orders');
     }
 
-    protected function updateOrder(array $attributes)
+    protected function updateOrder(array $attributes, bool $stateNotification = true)
     {
         $order = Order::findOrFail(input('id'));
         $order->forceFill($attributes);
+
+        // When updating the shipping information we don't care about the state change notification.
+        $order->stateNotification = $stateNotification;
 
         $order->save();
         Flash::success(trans('offline.mall::lang.order.updated'));

@@ -10,4 +10,9 @@ class RefundedState extends PaymentState
             PendingState::class,
         ];
     }
+
+    public static function color(): string
+    {
+        return '#5e667f';
+    }
 }

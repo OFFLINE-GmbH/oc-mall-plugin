@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Updates;
 
+use Cache;
 use October\Rain\Database\Model;
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Classes\Registration\BootServiceContainer;
@@ -33,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->registerServices();
 
         Model::unguard();
+        Cache::clear();
 
         PriceCategory::create([
             'code' => 'old_price',
@@ -52,6 +54,14 @@ class DatabaseSeeder extends Seeder
             'decimals'   => 2,
             'symbol'     => '€',
             'rate'       => 1.14,
+        ]);
+        Currency::create([
+            'is_default' => ! app()->runningUnitTests(),
+            'code'       => 'USD',
+            'format'     => '{{ currency.symbol }} {{ price|number_format(2, ".", "\'") }}',
+            'decimals'   => 2,
+            'symbol'     => '$',
+            'rate'       => 1.02,
         ]);
 
         $this->call(CategoryTableSeeder::class);

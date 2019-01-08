@@ -11,6 +11,20 @@ class NotificationTableSeeder extends Seeder
     {
         (new Notification())->create([
             'enabled'     => true,
+            'code'        => 'offline.mall::admin.checkout_succeeded',
+            'name'        => 'Admin notification: Checkout succeeded',
+            'description' => 'Sent to the shop admin when a checkout succeeded',
+            'template'    => 'offline.mall::mail.admin.checkout_succeeded',
+        ]);
+        (new Notification())->create([
+            'enabled'     => true,
+            'code'        => 'offline.mall::admin.checkout_failed',
+            'name'        => 'Admin notification: Checkout failed',
+            'description' => 'Sent to the shop admin when a checkout failed',
+            'template'    => 'offline.mall::mail.admin.checkout_failed',
+        ]);
+        (new Notification())->create([
+            'enabled'     => true,
             'code'        => 'offline.mall::customer.created',
             'name'        => 'Customer signed up',
             'description' => 'Sent when a customer has signed up',

@@ -5,9 +5,13 @@ namespace OFFLINE\Mall\Classes\Registration;
 use Illuminate\Support\Facades\Event;
 use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
 
@@ -19,6 +23,7 @@ trait BootEvents
         $this->registerGenericEvents();
         $this->registerStaticPagesEvents();
         $this->registerSiteSearchEvents();
+        $this->registerGdprEvents();
     }
 
     public function registerObservers()
@@ -26,6 +31,7 @@ trait BootEvents
         Product::observe(\OFFLINE\Mall\Classes\Observers\ProductObserver::class);
         Variant::observe(\OFFLINE\Mall\Classes\Observers\VariantObserver::class);
         PropertyValue::observe(\OFFLINE\Mall\Classes\Observers\PropertyValueObserver::class);
+        ProductPrice::observe(\OFFLINE\Mall\Classes\Observers\ProductPriceObserver::class);
     }
 
     protected function registerGenericEvents()
@@ -38,23 +44,36 @@ trait BootEvents
     {
         Event::listen('pages.menuitem.listTypes', function () {
             return [
-                'mall-category'       => trans('offline.mall::lang.menu_items.single_category'),
-                'all-mall-categories' => trans('offline.mall::lang.menu_items.all_categories'),
+                'mall-category'       => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
+                'all-mall-categories' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_categories'),
+                'all-mall-products'   => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
+                'all-mall-variants'   => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
             ];
         });
 
         Event::listen('pages.menuitem.getTypeInfo', function ($type) {
-            if ($type == 'all-mall-categories' || $type == 'mall-category') {
+            if ($type === 'all-mall-categories' || $type === 'mall-category') {
                 return Category::getMenuTypeInfo($type);
+            }
+            if ($type === 'all-mall-products' || $type === 'all-mall-variants') {
+                return [
+                    'dynamicItems' => true,
+                ];
             }
         });
 
         Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
-            if ($type == 'all-mall-categories') {
+            if ($type === 'all-mall-categories') {
                 return Category::resolveCategoriesItem($item, $url, $theme);
             }
-            if ($type == 'mall-category') {
+            if ($type === 'mall-category') {
                 return Category::resolveCategoryItem($item, $url, $theme);
+            }
+            if ($type === 'all-mall-products') {
+                return Product::resolveItem($item, $url, $theme);
+            }
+            if ($type === 'all-mall-variants') {
+                return Variant::resolveItem($item, $url, $theme);
             }
         });
 
@@ -73,6 +92,33 @@ trait BootEvents
     {
         Event::listen('offline.sitesearch.extend', function () {
             return new ProductsSearchProvider();
+        });
+    }
+
+    protected function registerGdprEvents()
+    {
+        Event::listen('offline.gdpr::cleanup.register', function () {
+            return [
+                'id'     => 'oc-mall-plugin',
+                'label'  => 'OFFLINE Mall',
+                'models' => [
+                    [
+                        'label'   => 'Customers',
+                        'comment' => 'Delete inactive customer accounts (based on last login date)',
+                        'class'   => Customer::class,
+                    ],
+                    [
+                        'label'   => 'Orders',
+                        'comment' => 'Delete completed orders',
+                        'class'   => Order::class,
+                    ],
+                    [
+                        'label'   => 'Carts',
+                        'comment' => 'Delete abandoned shopping carts',
+                        'class'   => Cart::class,
+                    ],
+                ],
+            ];
         });
     }
 }

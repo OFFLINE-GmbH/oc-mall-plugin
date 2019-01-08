@@ -20,6 +20,8 @@ class CreateOfflineMallProducts extends Migration
             $table->string('meta_title', 255)->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keywords')->nullable();
+            $table->longText('additional_descriptions')->nullable();
+            $table->text('additional_properties')->nullable();
             $table->integer('weight')->nullable()->unsigned();
             $table->integer('quantity_default')->nullable()->unsigned();
             $table->integer('quantity_min')->nullable()->unsigned();

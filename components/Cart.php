@@ -106,7 +106,6 @@ class Cart extends MallComponent
      */
     public function onRun()
     {
-        $this->addJs('assets/pubsub.js');
         $this->setData();
     }
 
@@ -122,6 +121,7 @@ class Cart extends MallComponent
         if ($cart->shipping_method_id === null) {
             $cart->setShippingMethod(ShippingMethod::getDefault());
         }
+        $cart->validateShippingMethod();
 
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));

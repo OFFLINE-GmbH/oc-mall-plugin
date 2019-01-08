@@ -14,6 +14,11 @@ Select only items from this [Category](../digging-deeper/categories.md). Possibl
 | `8` | Only show products from the category with the ID `8` (use any integer) |
 | `:slug` | Use the page's `:slug` URL parameter to find the category to filter by |
 
+### `filterComponent` (string)
+
+Alias of the [ProductsFilter](./products-filter.md) component that is used to filter
+this `Products` component. Defaults to `productsFilter`
+
 ### `includeChildren` (bool)
 
 Include all products or variants from child categories as well.
@@ -43,6 +48,7 @@ The sort mode applied to the result set. Possible values are:
 
 | Value        | Description           |
 | ------------ | --------------------- |
+| `manual`     | Order defined via Backend   |
 | `bestseller` | Best selling first    |
 | `latest`     | Latest products first |
 | `oldest`     | Oldest products first | 
@@ -80,4 +86,40 @@ perPage = 4
 paginate = 0
 includeVariants = 1
 sort = "latest"
+```
+
+### Display four random items from the same category of the currently viewed product
+
+```ini
+title = "Product"
+url = "/product/:slug/:variant?"
+layout = "default"
+is_hidden = 0
+
+[product]
+product = ":slug"
+variant = ":slug"
+
+[products relatedProducts]
+setPageTitle = 0
+includeVariants = 1
+includeChildren = 0
+perPage = 4
+paginate = 0
+sort = "random"
+==
+use OFFLINE\Mall\Models\Category;
+function onStart() {
+    // Fetch the category from the product component.
+    $category = Category::find(optional($this->page->components['product']->item)->category_id);
+    if ($category) {
+        // If a category is available, use it for the products component.
+        $this->page->components['products']->category = $category;
+    }
+}
+==
+{% component 'product' %}
+
+<h2>Other products from this category</h2>
+{% component 'relatedProducts' %}
 ```

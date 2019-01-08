@@ -108,6 +108,48 @@ tabs:
             path: brand
             type: partial
             tab: 'offline.mall::lang.product.description'
+        additional_descriptions:
+            label: 'offline.mall::lang.product.additional_descriptions'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: auto
+            type: repeater
+            tab: 'offline.mall::lang.product.details'
+            form:
+                fields:
+                    name:
+                        label: 'offline.mall::lang.common.name'
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                        required: true
+                    value:
+                        label: 'offline.mall::lang.common.value'
+                        oc.commentPosition: ''
+                        span: full
+                        type: richeditor
+                        required: true
+        additional_properties:
+            label: 'offline.mall::lang.product.additional_properties'
+            oc.commentPosition: ''
+            prompt: 'offline.mall::lang.common.add_value'
+            span: auto
+            type: repeater
+            tab: 'offline.mall::lang.product.details'
+            form:
+                fields:
+                    name:
+                        label: 'offline.mall::lang.common.name'
+                        oc.commentPosition: ''
+                        span: left
+                        type: text
+                        required: true
+                    value:
+                        label: 'offline.mall::lang.common.value'
+                        oc.commentPosition: ''
+                        span: right
+                        type: text
+                        required: true
         _properties:
             oc.commentPosition: ''
             prompt: 'offline.mall::lang.common.add_value'

@@ -1,0 +1,19 @@
+subject = "New order #{{ order.order_number }}"
+description = "Sent to the shop admin when a checkout has succeeded"
+==
+
+The following order was placed in your store:
+
+{% partial 'mall.order.addresses' order=order %}
+
+## Order details
+
+{% partial 'mall.order.table' order=order %}
+
+{% partial 'panel' body %}
+    {% partial 'mall.order.payment_state' order=order %}
+{% endpartial %}
+
+{% partial 'button' url=order_url type='primary' body %}
+    View order in store backend
+{% endpartial %}
