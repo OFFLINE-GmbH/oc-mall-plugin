@@ -47,4 +47,6 @@
     - database_seeder.php
 1.0.2:
     - Fixed event handler for welcome email
+1.0.3:
+    - Fixed build problems
 
