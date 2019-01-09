@@ -49,4 +49,6 @@
     - Fixed event handler for welcome email
 1.0.3:
     - Fixed build problems
+1.0.4:
+    - Added russian translations (thanks to @HomaEEE)
 

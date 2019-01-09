@@ -18,11 +18,16 @@
 * Flexible e-mail notifications
 * Easily extendable with custom features
 
+#### Documentation
 The documentation of this plugin can be found here:
 [https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
 
+#### Demo
+
 A live demo of the plugin can be found here:
 [https://mall.offline.swiss](https://mall.offline.swiss)
+
+#### Support
 
 For support and development requests please file an issue on GitHub.
 
@@ -35,6 +40,10 @@ php artisan plugin:install rainlab.user
 php artisan plugin:install rainlab.location
 php artisan plugin:install offline.mall
 ``` 
+
+Once the plugin is installed take a look at
+[the official documentation](https://offline-gmbh.github.io/oc-mall-plugin/)
+to get everything up and running.
 
 ## Contributing
 

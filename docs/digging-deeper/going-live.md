@@ -5,7 +5,7 @@ use the checklist on this page to make sure everything is running smoothly.
 
 ::: tip
 If you want to reset your installation back to a clean slate after verifying it in production, simply
-run [`php artisan mall:init`](../development/console-commands.md#mall-check) to remove your test accounts and 
+run [`php artisan mall:init`](../development/console-commands.md#mall-init) to remove your test accounts and 
 test orders. 
 :::
 
