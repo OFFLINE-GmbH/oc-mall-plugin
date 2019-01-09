@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9dd54d5c5ad9d8411c8cc58c383bef0b",
+    "content-hash": "066a88cd53eb7fb732d7c11da12d6f33",
     "packages": [
         {
             "name": "composer/installers",
@@ -125,6 +125,59 @@
                 "zikula"
             ],
             "time": "2018-08-27T06:10:37+00:00"
+        },
+        {
+            "name": "filebase/filebase",
+            "version": "v1.0.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/filebase/Filebase.git",
+                "reference": "433190a2474a715ad3e23c8d3d74e39990cc9f77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/filebase/Filebase/zipball/433190a2474a715ad3e23c8d3d74e39990cc9f77",
+                "reference": "433190a2474a715ad3e23c8d3d74e39990cc9f77",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "5.*",
+                "symfony/yaml": "^3.4"
+            },
+            "suggest": {
+                "symfony/yaml": "Allows Yaml format"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Filebase\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Timothy Marois",
+                    "email": "timothymarois@gmail.com"
+                }
+            ],
+            "description": "A Simple but Powerful Flat File Database Storage.",
+            "homepage": "https://github.com/filebase/Filebase",
+            "keywords": [
+                "database",
+                "document",
+                "file",
+                "file-files",
+                "filebase",
+                "flat",
+                "flat-file",
+                "key-value",
+                "serverless"
+            ],
+            "time": "2018-12-27T00:27:21+00:00"
         },
         {
             "name": "guzzle/guzzle",
@@ -441,6 +494,53 @@
                 "worldpay"
             ],
             "time": "2014-12-10T13:55:00+00:00"
+        },
+        {
+            "name": "offline/jsonq",
+            "version": "v5.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OFFLINE-GmbH/jsonq.git",
+                "reference": "748ae6e1e55d84dbf004cb44614c5659d503f087"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OFFLINE-GmbH/jsonq/zipball/748ae6e1e55d84dbf004cb44614c5659d503f087",
+                "reference": "748ae6e1e55d84dbf004cb44614c5659d503f087",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "graham-campbell/testbench": "^3.1",
+                "phpunit/phpunit": "^4.8 || ^5.0",
+                "symfony/var-dumper": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nahid\\JsonQ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC0-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "Nahid Bin Azhar",
+                    "email": "nahid.dns@gmail.com"
+                }
+            ],
+            "description": "JsonQ is a PHP based json data query library",
+            "homepage": "https://github.com/nahid/jsonq",
+            "keywords": [
+                "json",
+                "jsonq",
+                "query"
+            ],
+            "time": "2019-01-02T13:07:30+00:00"
         },
         {
             "name": "omnipay/2checkout",
