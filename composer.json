@@ -17,6 +17,8 @@
     }
   ],
   "require": {
-    "composer/installers": "~1.0"
+    "composer/installers": "~1.0",
+    "league/omnipay": "^2.3",
+    "hashids/hashids": "^2.0"
   }
 }
