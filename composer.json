@@ -26,6 +26,7 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
-    "phpmd/phpmd": "^2.6"
+    "phpmd/phpmd": "^2.6",
+    "mockery/mockery": "^1.0"
   }
 }
