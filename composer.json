@@ -17,17 +17,6 @@
     }
   ],
   "require": {
-    "composer/installers": "~1.0",
-    "league/omnipay": "^2.3",
-    "hashids/hashids": "^2.0",
-    "filebase/filebase": "^1.0",
-    "offline/jsonq": "^5.2.4",
-    "elasticsearch/elasticsearch": "^6.0"
-  },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "*",
-    "phpmd/phpmd": "^2.6",
-    "mockery/mockery": "^1.0",
-    "phpunit/phpunit": "^7.2"
+    "composer/installers": "~1.0"
   }
 }
