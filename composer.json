@@ -23,5 +23,11 @@
     "filebase/filebase": "^1.0",
     "offline/jsonq": "^5.2.4",
     "elasticsearch/elasticsearch": "^6.0"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "*",
+    "phpmd/phpmd": "^2.6",
+    "mockery/mockery": "^1.0",
+    "phpunit/phpunit": "^7.2"
   }
 }
