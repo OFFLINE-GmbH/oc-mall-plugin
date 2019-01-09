@@ -41,9 +41,9 @@ php artisan plugin:install rainlab.location
 php artisan plugin:install offline.mall
 ``` 
 
-Once the plugin is installed take a look at the official docs to get everything up and running:
-
-[https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
+Once the plugin is installed take a look at
+[the official documentation](https://offline-gmbh.github.io/oc-mall-plugin/)
+to get everything up and running.
 
 ## Contributing
 
