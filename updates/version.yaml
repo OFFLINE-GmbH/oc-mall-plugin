@@ -53,4 +53,6 @@
     - Added russian translations (thanks to @HomaEEE)
 1.0.5:
     - Optimized SQLite support
+1.0.6:
+    - Minor bugfixes 
 
