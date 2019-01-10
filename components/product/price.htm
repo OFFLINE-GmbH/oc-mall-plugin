@@ -1,6 +1,6 @@
 {% set price = item.price() %}
 
-{% if price.official or item.oldPrice.integer %}
+{% if price.official or item.oldPrice().integer %}
     <div class="mall-product__old-price">
         {% if price.official %}
             {{ price.official.string }}
