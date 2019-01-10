@@ -119,4 +119,5 @@ return [
     'search.heading'                           => 'Your search results for «:query»',
     'search.visit'                             => 'Visit',
     'search.no_results'                        => 'Your search returned no results',
+    'onsale_label'                             => 'On sale',
 ];

@@ -119,4 +119,5 @@ return [
     'search.heading'                           => 'Suchresultate für «:query»',
     'search.visit'                             => 'Ansehen',
     'search.no_results'                        => 'Ihre Suche lieferte keine Treffer',
+    'onsale_label'                             => 'Reduzierte Artikel',
 ];

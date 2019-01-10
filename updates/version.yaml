@@ -55,4 +55,6 @@
     - Optimized SQLite support
 1.0.6:
     - Minor bugfixes 
+1.0.7:
+    - Added "on sale" filter option to products filter component
 

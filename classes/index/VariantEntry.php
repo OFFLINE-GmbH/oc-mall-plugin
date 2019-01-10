@@ -34,8 +34,10 @@ class VariantEntry implements Entry
 
         $this->defaultCurrency = Currency::defaultCurrency();
 
-        $data                = $variant->attributesToArray();
-        $data['published']   = $variant->published && $product->published;
+        $data              = $variant->attributesToArray();
+        $data['published'] = $variant->published && $product->published;
+        $data['on_sale']   = $variant->on_sale;
+
         $data['category_id'] = $product->category_id;
 
         $data['index']                 = self::INDEX;

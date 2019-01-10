@@ -23,11 +23,12 @@ class ProductEntry implements Entry
 
         $product->loadMissing(['brand', 'variants.prices.currency', 'prices.currency', 'property_values.property']);
 
-        $data          = $product->attributesToArray();
-        $data['index'] = self::INDEX;
+        $data            = $product->attributesToArray();
+        $data['index']   = self::INDEX;
+        $data['on_sale'] = $product->on_sale;
 
-        $data['property_values'] = $this->mapProps($product->property_values);
-        $data['prices']          = $this->mapPrices($product);
+        $data['property_values']       = $this->mapProps($product->property_values);
+        $data['prices']                = $this->mapPrices($product);
         $data['customer_group_prices'] = $this->mapCustomerGroupPrices($product);
         if ($product->brand) {
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
@@ -52,7 +53,7 @@ class ProductEntry implements Entry
 
     protected function mapPrices(Product $product): Collection
     {
-        return $product->prices->mapWithKeys(function($price)  {
+        return $product->prices->mapWithKeys(function ($price) {
             return [$price->currency->code => $price->integer];
         });
     }

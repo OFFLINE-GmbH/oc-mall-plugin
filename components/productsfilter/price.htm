@@ -1,15 +1,20 @@
-{% if not __SELF__.priceRange == false %}
+{% if not __SELF__.priceRange == false or __SELF__.showOnSaleFilter == true %}
     <div class="mall-property-group">
         <div class="mall-property-group__name mall-property-group__name--price">
             <div>{{ 'offline.mall::frontend.price' | trans }}</div>
             {% partial __SELF__ ~ '::clearfilter' id='price' %}
         </div>
-        <div class="mall-property">
-            {% partial __SELF__ ~ '::range'
-                id  = 'price'
-                slug  = 'price'
-                min = __SELF__.priceRange[0]
-                max = __SELF__.priceRange[1] %}
-        </div>
+        {% if not __SELF__.priceRange == false %}
+            <div class="mall-property">
+                {% partial __SELF__ ~ '::range'
+                    id  = 'price'
+                    slug  = 'price'
+                    min = __SELF__.priceRange[0]
+                    max = __SELF__.priceRange[1] %}
+            </div>
+        {% endif %}
+        {% if __SELF__.showOnSaleFilter == true %}
+            {% partial __SELF__ ~ '::onsale' %}
+        {% endif %}
     </div>
 {% endif %}
