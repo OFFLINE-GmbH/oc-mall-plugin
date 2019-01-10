@@ -20,7 +20,7 @@ class CreateOfflineMallProperties extends Migration
             $table->timestamp('deleted_at')->nullable();
 
             if ( ! app()->runningUnitTests()) {
-                $table->index('deleted_at', 'idx_deleted_at');
+                $table->index('deleted_at', 'idx_property_deleted_at');
             }
         });
     }

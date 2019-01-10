@@ -20,12 +20,15 @@ class CreateOfflineMallPropertyValues extends Migration
             $table->timestamp('updated_at')->nullable();
 
             if ( ! app()->runningUnitTests()) {
-                $table->index([DB::raw('value(255)')], 'idx_value');
-                $table->index([DB::raw('index_value(255)')], 'idx_index_value');
+                // SQlite does not support value and index_value functions.
+                if (DB::connection()->getDriverName() !== 'sqlite') {
+                    $table->index([DB::raw('value(255)')], 'idx_property_value_value');
+                    $table->index([DB::raw('index_value(255)')], 'idx_property_value_index_value');
+                }
 
-                $table->index(['product_id', 'variant_id'], 'idx_product_variant');
-                $table->index('product_id', 'idx_product');
-                $table->index('variant_id', 'idx_variant');
+                $table->index(['product_id', 'variant_id'], 'idx_property_value_product_variant');
+                $table->index('product_id', 'idx_property_value_product');
+                $table->index('variant_id', 'idx_property_value_variant');
             }
         });
     }

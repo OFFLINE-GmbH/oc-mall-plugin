@@ -51,4 +51,6 @@
     - Fixed build problems
 1.0.4:
     - Added russian translations (thanks to @HomaEEE)
+1.0.5:
+    - Optimized SQLite support
 
