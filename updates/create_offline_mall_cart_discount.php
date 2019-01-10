@@ -14,7 +14,7 @@ class CreateOfflineMallCartDiscount extends Migration
             $table->integer('discount_id')->unsigned();
 
             if ( ! app()->runningUnitTests()) {
-                $table->index(['cart_id', 'discount_id'], 'idx_pivot');
+                $table->index(['cart_id', 'discount_id'], 'idx_cart_discount_pivot');
             }
         });
     }

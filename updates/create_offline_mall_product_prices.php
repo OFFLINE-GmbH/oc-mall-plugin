@@ -17,10 +17,10 @@ class CreateOfflineMallProductPrices extends Migration
             $table->timestamps();
 
             if ( ! app()->runningUnitTests()) {
-                $table->unique(['product_id', 'currency_id', 'variant_id'], 'unique_price');
-                $table->index('product_id', 'idx_product');
-                $table->index('variant_id', 'idx_variant');
-                $table->index('currency_id', 'idx_currency');
+                $table->unique(['product_id', 'currency_id', 'variant_id'], 'product_price_unique_price');
+                $table->index('product_id', 'idx_product_price_product');
+                $table->index('variant_id', 'idx_product_price_variant');
+                $table->index('currency_id', 'idx_product_price_currency');
             }
         });
     }

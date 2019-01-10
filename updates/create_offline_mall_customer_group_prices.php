@@ -18,8 +18,11 @@ class CreateOfflineMallCustomerGroupPrices extends Migration
             $table->timestamps();
 
             if ( ! app()->runningUnitTests()) {
-                $table->unique(['customer_group_id', 'priceable_id', 'priceable_type', 'currency_id'], 'unique_price');
-                $table->index('currency_id', 'idx_currency');
+                $table->unique(
+                    ['customer_group_id', 'priceable_id', 'priceable_type', 'currency_id'],
+                    'customer_group_unique_price'
+                );
+                $table->index('currency_id', 'idx_group_price_currency');
             }
         });
     }

@@ -17,7 +17,7 @@ class CreateOfflineMallCategoryPropertyGroup extends Migration
             $table->timestamp('updated_at')->nullable();
 
             if ( ! app()->runningUnitTests()) {
-                $table->index(['category_id', 'property_group_id'], 'idx_pivot');
+                $table->index(['category_id', 'property_group_id'], 'idx_property_group_pivot');
             }
         });
     }
