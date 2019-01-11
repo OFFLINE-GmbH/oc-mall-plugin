@@ -27,10 +27,10 @@ The expected value is a encoded query string. You can tweak your filter
 using the [ProductsFilter](./products-filter.md) component and simply copy and paste
 the query string:
 
-https://mall.offline.swiss/en/category/bikes[?material=carbon&color=think-pink&on_sale=true](https://mall.offline.swiss/en/category/bikes?material=carbon&color=think-pink&on_sale=true)
+https://mall.offline.swiss/en/category/bikes[?on_sale=true&material=aluminium.carbon&color=dark-grey](https://mall.offline.swiss/en/category/bikes?on_sale=true&material=aluminium.carbon&color=dark-grey)
 
 ```
-filter = "material=carbon&color=think-pink&on_sale=true"
+filter = "on_sale=true&material=aluminium.carbon&color=dark-grey"
 ```
 
 ### `includeChildren` (bool)
