@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\ProductPrice;
 
 class Cruiser1000 extends DemoProduct
@@ -55,6 +56,15 @@ class Cruiser1000 extends DemoProduct
             new ProductPrice(['currency_id' => 1, 'price' => 895]),
             new ProductPrice(['currency_id' => 2, 'price' => 795]),
             new ProductPrice(['currency_id' => 3, 'price' => 899]),
+        ];
+    }
+
+    protected function additionalPrices(): array
+    {
+        return [
+            new Price(['currency_id' => 1, 'price' => 999, 'price_category_id' => 1]),
+            new Price(['currency_id' => 2, 'price' => 999, 'price_category_id' => 1]),
+            new Price(['currency_id' => 3, 'price' => 999, 'price_category_id' => 1]),
         ];
     }
 
