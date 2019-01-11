@@ -19,6 +19,18 @@ Select only items from this [Category](../digging-deeper/categories.md). Possibl
 Alias of the [ProductsFilter](./products-filter.md) component that is used to filter
 this `Products` component. Defaults to `productsFilter`
 
+### `filter` (string)
+
+Use this property to force a filter for this component instance.
+
+The expected value is a encoded query string. You can tweak your filter
+using the [ProductsFilter](./products-filter.md) component and simply copy and paste
+the query string: https://mall.offline.swiss/en/category/bikes[material=carbon&color=think-pink](https://mall.offline.swiss/en/category/bikes?material=carbon&color=think-pink&on_sale=true)
+
+```
+filter = "material=carbon&color=think-pink&on_sale=true"
+```
+
 ### `includeChildren` (bool)
 
 Include all products or variants from child categories as well.
@@ -86,6 +98,17 @@ perPage = 4
 paginate = 0
 includeVariants = 1
 sort = "latest"
+```
+
+### Display eight random products that are currently on sale
+
+```ini
+[products]
+perPage = 8
+paginate = 0
+includeVariants = 1
+sort = "random"
+filter = "on_sale=true"
 ```
 
 ### Display four random items from the same category of the currently viewed product

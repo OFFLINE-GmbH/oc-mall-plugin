@@ -22,7 +22,7 @@ class QueryString
      */
     const DELIMITER_SET = '.';
 
-    public function deserialize(array $query, Category $category): Collection
+    public function deserialize(array $query, ?Category $category = null): Collection
     {
         $query = collect($query);
 
@@ -40,6 +40,10 @@ class QueryString
 
             return [$prop => new $type($prop, array_values($values))];
         });
+
+        if ( ! $category) {
+            return $specialProperties;
+        }
 
         $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 

@@ -534,6 +534,10 @@
                     'title'       => 'Alias der Filter-Komponente',
                     'description' => 'Alias der Filter-Komponente die für diese Produkte-Komponente zuständig ist',
                 ],
+                'filter'   => [
+                    'title'       => 'Filter-String',
+                    'description' => 'Forcierter Filter für diese Komponente',
+                ],
                 'include_variants'   => [
                     'title'       => 'Zeige einzelne Varianten an',
                     'description' => 'Zeige nicht nur alle Produkte, sondern auch deren Varianten direkt in der Übersicht an',

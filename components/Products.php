@@ -100,6 +100,12 @@ class Products extends MallComponent
      * @var array
      */
     protected $categories;
+    /**
+     * Forced filter string
+     *
+     * @var string
+     */
+    protected $filter;
 
     /**
      * Component details.
@@ -131,6 +137,12 @@ class Products extends MallComponent
                 'title'       => 'offline.mall::lang.components.products.properties.filter_component.title',
                 'description' => 'offline.mall::lang.components.products.properties.filter_component.description',
                 'default'     => 'productsFilter',
+                'type'        => 'string',
+            ],
+            'filter'          => [
+                'title'       => 'offline.mall::lang.components.products.properties.filter.title',
+                'description' => 'offline.mall::lang.components.products.properties.filter.description',
+                'default'     => null,
                 'type'        => 'string',
             ],
             'setPageTitle'    => [
@@ -205,6 +217,7 @@ class Products extends MallComponent
     {
         $this->setVar('includeChildren', (bool)$this->property('includeChildren'));
         $this->setVar('includeVariants', (bool)$this->property('includeVariants'));
+        $this->setVar('filter', $this->property('filter'));
         $this->setVar('category', $this->getCategory());
 
         $filterComponent = $this->controller->findComponentByName($this->property('filterComponent'));
@@ -415,11 +428,12 @@ class Products extends MallComponent
      */
     protected function getFilters(): Collection
     {
-        if ( ! $this->category) {
-            return collect([]);
+        $filter = request()->all();
+        if ($this->filter) {
+            parse_str($this->filter, $filter);
         }
 
-        $filter = array_wrap(request()->all());
+        $filter = array_wrap($filter);
 
         $filters = (new QueryString())->deserialize($filter, $this->category);
         $filters->put('category_id', new SetFilter('category_id', $this->categories));
