@@ -290,6 +290,8 @@ class VariantTest extends PluginTestCase
             'price_category_id' => 1,
             'currency_id'       => 2,
         ]));
+        
+        $variant->load('additional_prices');
 
         $this->assertEquals($priceFormatted, $variant->old_price->toArray());
         $this->assertEquals(80.50, $variant->oldPrice('EUR')->decimal);
