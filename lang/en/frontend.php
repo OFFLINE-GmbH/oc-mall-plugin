@@ -120,4 +120,5 @@ return [
     'search.visit'                             => 'Visit',
     'search.no_results'                        => 'Your search returned no results',
     'onsale_label'                             => 'On sale',
+    'flash.missing_address'                    => 'Please enter your address to continue checkout.',
 ];

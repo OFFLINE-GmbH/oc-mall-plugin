@@ -120,4 +120,5 @@ return [
     'search.visit'                             => 'Ansehen',
     'search.no_results'                        => 'Ihre Suche lieferte keine Treffer',
     'onsale_label'                             => 'Reduzierte Artikel',
+    'flash.missing_address'                    => 'Bitte erfassen Sie eine Adresse um fortzufahren.',
 ];

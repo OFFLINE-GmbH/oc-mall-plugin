@@ -2,11 +2,15 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
+use App;
 use Backend\Widgets\Form;
 use Illuminate\Support\Facades\Event;
+use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Tax;
+use OFFLINE\Mall\Models\User;
 use RainLab\Location\Models\Country as RainLabCountry;
+use RainLab\User\Models\User as RainLabUser;
 
 trait BootExtensions
 {
@@ -30,6 +34,22 @@ trait BootExtensions
 
     protected function extendRainLabUser()
     {
+        // Use custom user model
+        App::singleton('user.auth', function () {
+            return \OFFLINE\Mall\Classes\Customer\AuthManager::instance();
+        });
+
+        RainLabUser::extend(function ($model) {
+            $model->hasOne['customer']          = Customer::class;
+            $model->belongsTo['customer_group'] = [CustomerGroup::class, 'key' => 'offline_mall_customer_group_id'];
+            $model->rules['surname'] = 'required';
+            $model->rules['name'] = 'required';
+        });
+        User::extend(function ($model) {
+            $model->rules['surname'] = 'required';
+            $model->rules['name'] = 'required';
+        });
+
         // Add Customer Groups menu entry to RainLab.User
         Event::listen('backend.menu.extendItems', function ($manager) {
             $manager->addSideMenuItems('RainLab.User', 'user', [

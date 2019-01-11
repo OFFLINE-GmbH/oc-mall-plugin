@@ -1,8 +1,10 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use October\Rain\Exception\ValidationException;
+use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -108,11 +110,23 @@ class AddressSelector extends MallComponent
     /**
      * The component is executed.
      *
-     * @return string|void
+     * @return RedirectResponse
      */
     public function onRun()
     {
         $this->setData();
+
+        if (Auth::getUser() && $this->addresses->count() < 1) {
+            Flash::warning(trans('offline.mall::frontend.flash.missing_address'));
+
+            $url = $this->controller->pageUrl($this->addressPage, [
+                'address'  => 'new',
+                'redirect' => 'payment',
+                'set'      => 'both',
+            ]);
+
+            return response()->redirectTo($url);
+        }
     }
 
     /**

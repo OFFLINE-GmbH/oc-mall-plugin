@@ -174,12 +174,25 @@ class AddressForm extends MallComponent
         $this->address->name = $data['address_name'];
         $this->address->save();
 
-        if (in_array($this->setAddressAs, ['billing', 'shipping'])) {
-            $this->cart->{$this->setAddressAs . '_address_id'} = $this->address->id;
+        if (in_array($this->setAddressAs, ['billing', 'shipping', 'both'])) {
+            if ($this->setAddressAs === 'both') {
+                $this->cart->billing_address_id  = $this->address->id;
+                $this->cart->shipping_address_id = $this->address->id;
+            } else {
+                $this->cart->{$this->setAddressAs . '_address_id'} = $this->address->id;
+            }
             $this->cart->save();
         }
 
-        Flash::success(trans('offline.mall::lang.common.changes_saved'));
+        if ($user->customer->default_shipping_address_id === null) {
+            $user->customer->default_shipping_address_id = $this->address->id;
+        }
+        if ($user->customer->default_billing_address_id === null) {
+            $user->customer->default_billing_address_id = $this->address->id;
+        }
+        $user->customer->save();
+
+        Flash::success(trans('offline.mall::lang.common.saved_changes'));
 
         if ($url = $this->getRedirectUrl()) {
             return redirect()->to(url($url));
@@ -207,6 +220,11 @@ class AddressForm extends MallComponent
             $url = $this->controller->pageUrl(
                 GeneralSettings::get('account_page'),
                 ['page' => 'addresses']
+            );
+        } elseif ($redirect === 'payment') {
+            $url = $this->controller->pageUrl(
+                GeneralSettings::get('checkout_page'),
+                ['page' => 'payment']
             );
         }
 
