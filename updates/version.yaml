@@ -61,4 +61,6 @@
     - Optimized handling of manually created customer accounts
 1.0.9:
     - Added option to force filter string for Products component (https://offline-gmbh.github.io/oc-mall-plugin/components/products.html#filter-string)
+1.0.10:
+    - Fixed usage of single Category as menu item (thanks to @PrestaSafe)
 
