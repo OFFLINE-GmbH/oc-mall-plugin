@@ -64,6 +64,11 @@ class Price extends Model
         if ($value === null || $value === '') {
             return $this->attributes['price'] = null;
         }
+
+        if ($value === 0 || $value === '0') {
+            return $this->attributes['price'] = 0;
+        }
+
         $this->attributes['price'] = round($value * 100, 0);
     }
 
