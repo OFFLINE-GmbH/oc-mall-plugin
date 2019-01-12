@@ -44,7 +44,7 @@ trait MenuItems
         if (Cache::has($category->treeCacheKey($locale))) {
             return $category->setActiveMenuItem(
                 Cache::get($category->treeCacheKey($locale)
-            ), $url);
+                ), $url);
         }
 
         $structure = [];
@@ -91,11 +91,12 @@ trait MenuItems
         $controller = new Controller();
         $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
 
-        $result          = [];
-        $result['url']   = $entryUrl;
-        $result['mtime'] = $item->updated_at;
-        $result['title'] = $item->name;
-        $result['code']  = $item->code;
+        $result             = [];
+        $result['url']      = $entryUrl;
+        $result['mtime']    = $item->updated_at;
+        $result['title']    = $item->name;
+        $result['code']     = $item->code;
+        $result['isActive'] = $url === $entryUrl;
 
         return $result;
     }

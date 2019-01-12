@@ -69,4 +69,9 @@ trait ProductPriceAccessors
     {
         return $this->mapCurrencyPrices($this->oldPriceRelations());
     }
+
+    public function getOnSaleAttribute()
+    {
+        return $this->old_price->count() > 0;
+    }
 }

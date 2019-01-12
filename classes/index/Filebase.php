@@ -118,6 +118,11 @@ class Filebase implements Index
             $this->jsonq->whereIn('brand.slug', $filter->values());
         }
 
+        if ($filters->has('on_sale')) {
+            $filters->pull('on_sale');
+            $this->jsonq->where('on_sale', true);
+        }
+
         if ($filters->has('price')) {
             $price    = $filters->pull('price');
             $currency = Currency::activeCurrency()->code;
@@ -154,11 +159,9 @@ class Filebase implements Index
     protected function addMacros()
     {
         $this->jsonq::macro('includes', function ($val, $comp) {
-            if (is_array($val)) {
+            if (is_array($val) && count($val) > 0) {
                 if (is_array($val[0])) {
-                    $val = array_map(function ($val) {
-                        return json_encode($val);
-                    }, $val);
+                    $val = array_map('json_encode', $val);
                 }
 
                 return count(array_intersect($val, $comp)) > 0;

@@ -55,4 +55,14 @@
     - Optimized SQLite support
 1.0.6:
     - Minor bugfixes 
+1.0.7:
+    - Added "on sale" filter option to products filter component (run php artisan mall:reindex to get this feature)
+1.0.8:
+    - Optimized handling of manually created customer accounts
+1.0.9:
+    - Added option to force filter string for Products component (https://offline-gmbh.github.io/oc-mall-plugin/components/products.html#filter-string)
+1.0.10:
+    - Fixed usage of single Category as menu item (thanks to @PrestaSafe)
+1.0.11:
+    - Fixed handling of 0 as price value (thanks to @ajsaces)
 

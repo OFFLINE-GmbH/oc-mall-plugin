@@ -12,7 +12,7 @@ class AuthManager extends \RainLab\User\Classes\AuthManager
     public function findUserByCredentials(array $credentials)
     {
         $user = parent::findUserByCredentials($credentials);
-        if ($user->customer->is_guest === 1) {
+        if (optional($user->customer)->is_guest === 1) {
             throw new AuthException('A user was not found with the given credentials.');
         }
 

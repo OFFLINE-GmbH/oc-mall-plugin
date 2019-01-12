@@ -1,9 +1,10 @@
 {% if __SELF__.showBrandFilter %}
     {% partial __SELF__ ~ '::brands' %}
 {% endif %}
-{% if __SELF__.showPriceFilter %}
+{% if __SELF__.showPriceFilter or __SELF__.showOnSaleFilter %}
     {% partial __SELF__ ~ '::price' %}
 {% endif %}
+{% partial __SELF__ ~ '::labels' %}
 {% for group in groups %}
     <div class="mall-property-group">
         <div class="mall-property-group__name">{{ group.display_name }}</div>

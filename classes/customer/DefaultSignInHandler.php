@@ -8,6 +8,7 @@ use Flash;
 use October\Rain\Auth\AuthException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\User;
 use Auth;
 use Redirect;
@@ -51,6 +52,19 @@ class DefaultSignInHandler implements SignInHandler
         if ($user->isBanned()) {
             Auth::logout();
             throw new AuthException('rainlab.user::lang.account.banned');
+        }
+
+        // If the user doesn't have a Customer model it was created via the backend.
+        // Make sure to add the Customer model now
+        if ( ! $user->customer && ! $user->is_guest) {
+            $customer            = new Customer();
+            $customer->firstname = $user->name;
+            $customer->lastname  = $user->surname;
+            $customer->user_id   = $user->id;
+            $customer->is_guest  = false;
+            $customer->save();
+
+            $user->customer = $customer;
         }
 
         if ($user->customer->is_guest) {

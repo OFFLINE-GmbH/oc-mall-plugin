@@ -8,6 +8,7 @@ abstract class Filter
         'price'       => RangeFilter::class,
         'category_id' => SetFilter::class,
         'brand'       => SetFilter::class,
+        'on_sale'     => SetFilter::class,
     ];
 
     public $property;

@@ -45,6 +45,10 @@ Display a price range filter.
 
 Display a brands dropdown.
 
+### `showOnSaleFilter` (bool)
+
+Display a checkbox to only display products that are on sale.
+
 ### `includeSliderAssets` (bool)
 
 Enable this property to automatically include [noUiSlider](https://github.com/leongersen/noUiSlider) assets via CDN.

@@ -1,0 +1,9 @@
+{% if __SELF__.showOnSaleFilter %}
+    <div class="mall-property-group">
+        <div class="mall-property-group__name">{{ 'offline.mall::frontend.labels' | trans }}</div>
+
+        {% if __SELF__.showOnSaleFilter %}
+            {% partial __SELF__ ~ '::onsale' %}
+        {% endif %}
+    </div>
+{% endif %}

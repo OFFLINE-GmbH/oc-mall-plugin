@@ -95,7 +95,7 @@ class ShippingTotal implements \JsonSerializable
             return 0;
         }
 
-        $price  = $this->getPrice();
+        $price = $this->getPrice();
 
         if ($this->method->price_includes_tax === false) {
             $price += $this->taxes;
@@ -205,7 +205,9 @@ class ShippingTotal implements \JsonSerializable
             }
         }
 
-        $price = $this->applyDiscounts($price);
+        if ($price) {
+            $price = $this->applyDiscounts($price);
+        }
 
         $this->price = $price;
 

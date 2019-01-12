@@ -535,6 +535,10 @@
                     'title'       => 'Filter component alias',
                     'description' => 'Alias of the ProductsFilter component that filters this Products component',
                 ],
+                'filter'   => [
+                    'title'       => 'Filter string',
+                    'description' => 'Forced filter for this component',
+                ],
                 'include_variants'   => [
                     'title'       => 'Show article variants',
                     'description' => 'Don\'t show single products but all available product variants',
@@ -572,6 +576,9 @@
                 ],
                 'showBrandFilter'     => [
                     'title' => 'Show brand filter',
+                ],
+                'showOnSaleFilter'    => [
+                    'title' => 'Show on sale filter',
                 ],
                 'includeChildren'     => [
                     'title'       => 'Include children',

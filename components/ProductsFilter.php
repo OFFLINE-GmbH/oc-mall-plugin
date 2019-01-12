@@ -88,6 +88,12 @@ class ProductsFilter extends MallComponent
      */
     public $showBrandFilter;
     /**
+     * Show the on sale filter.
+     *
+     * @var boolean
+     */
+    public $showOnSaleFilter;
+    /**
      * All available brands.
      *
      * @var Collection<Brand>
@@ -196,6 +202,11 @@ class ProductsFilter extends MallComponent
                 'default' => '1',
                 'type'    => 'checkbox',
             ],
+            'showOnSaleFilter'     => [
+                'title'   => 'offline.mall::lang.components.productsFilter.properties.showOnSaleFilter.title',
+                'default' => '0',
+                'type'    => 'checkbox',
+            ],
             'includeSliderAssets' => [
                 'title'       => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.description',
@@ -240,6 +251,7 @@ class ProductsFilter extends MallComponent
         $this->setVar('currency', Currency::activeCurrency());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
+        $this->setVar('showOnSaleFilter', (bool)$this->property('showOnSaleFilter'));
 
         // The includeChildren and includeVariants properties are set by the
         // products component. If the user specifies explicit values via the
@@ -303,10 +315,11 @@ class ProductsFilter extends MallComponent
         }
 
         $properties = Property::whereIn('slug', $data->keys())->get();
-
         $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
             $property = Filter::isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
-            if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
+            if (is_array($values)
+                && array_key_exists('min', $values)
+                && array_key_exists('max', $values)) {
                 if ($values['min'] === '' && $values['max'] === '') {
                     return [];
                 }
@@ -322,7 +335,7 @@ class ProductsFilter extends MallComponent
             }
 
             // Remove empty set values
-            $values = array_filter($values);
+            $values = array_filter(array_wrap($values));
 
             return count($values) ? [$id => new SetFilter($property, $values)] : [];
         });
