@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Model;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use RuntimeException;
 use Session;
 
 class Currency extends Model
