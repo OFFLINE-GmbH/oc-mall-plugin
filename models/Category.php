@@ -49,6 +49,7 @@ class Category extends Model
         ['slug', 'index' => true],
         'meta_description',
         'meta_title',
+        'description',
     ];
     public $implement = [
         '@RainLab.Translate.Behaviors.TranslatableModel',
@@ -61,6 +62,7 @@ class Category extends Model
         'name',
         'slug',
         'code',
+        'description',
         'meta_title',
         'meta_description',
         'parent_id',
