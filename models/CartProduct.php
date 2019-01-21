@@ -62,7 +62,7 @@ class CartProduct extends Model
             $entry->variant_id = optional($this->variant)->id ?? null;
 
             $entry->item         = $this->item_data;
-            $entry->name         = $this->data->name;
+            $entry->name         = $this->variant ? $this->variant->name : $this->data->name;
             $entry->variant_name = optional($this->variant)->properties_description;
             $entry->description  = $this->item->description;
             $entry->quantity     = $this->quantity;
