@@ -157,7 +157,7 @@ class Product extends MallComponent
 
             $variant = $this->product->variants->first();
             if ( ! $variant) {
-                $this->controller->run('404');
+                return $this->controller->run('404');
             }
 
             $url = $this->controller->pageUrl($this->page->fileName, [

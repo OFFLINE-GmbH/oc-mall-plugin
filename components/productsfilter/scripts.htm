@@ -53,7 +53,7 @@
                     },
                     error: function () {
                         $.oc.stripeLoadIndicator.hide()
-                        $.oc.flashMsg({text: 'Fehler beim Ausführen der Suche.', class: 'error'})
+                        $.oc.flashMsg({text: '{{ 'offline.mall::frontend.search_error' | trans }}', class: 'error'})
                         $.publish('mall.products.load.error')
                     }
                 });
