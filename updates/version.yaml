@@ -71,5 +71,5 @@
     - Fixed signup for guest accounts
     - allow_non_unique_emails_for_rainlab_user.php
 1.0.14:
-    - Minor improvements to cart table display
+    - Minor improvements to Cart and Products components 
 
