@@ -122,4 +122,5 @@ return [
     'onsale_label'                             => 'On sale',
     'flash.missing_address'                    => 'Please enter your address to continue checkout.',
     'labels'                                   => 'Labels',
+    'search_error'                             => 'Failed to perform search.',
 ];

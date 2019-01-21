@@ -122,4 +122,5 @@ return [
     'onsale_label'                             => 'Reduzierte Artikel',
     'flash.missing_address'                    => 'Bitte erfassen Sie eine Adresse um fortzufahren.',
     'labels'                                   => 'Allgemein',
+    'search_error'                             => 'Fehler beim Ausführen der Suche.',
 ];
