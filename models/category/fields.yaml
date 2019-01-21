@@ -61,16 +61,23 @@ tabs:
             type: partial
             tab: 'offline.mall::lang.common.products'
             context: update
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: huge
+            oc.commentPosition: ''
+            span: left
+            type: richeditor
+            tab: 'offline.mall::lang.product.description'
         meta_title:
             label: 'offline.mall::lang.common.meta_title'
             oc.commentPosition: ''
-            span: auto
+            span: right
             type: text
-            tab: 'offline.mall::lang.common.seo'
+            tab: 'offline.mall::lang.product.description'
         meta_description:
             label: 'offline.mall::lang.common.meta_description'
             size: large
             oc.commentPosition: ''
-            span: left
+            span: right
             type: textarea
-            tab: 'offline.mall::lang.common.seo'
+            tab: 'offline.mall::lang.product.description'

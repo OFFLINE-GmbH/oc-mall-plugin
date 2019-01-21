@@ -71,5 +71,8 @@
     - Fixed signup for guest accounts
     - allow_non_unique_emails_for_rainlab_user.php
 1.0.14:
-    - Minor improvements to Cart and Products components 
+    - Minor improvements to Cart and Products components
+1.0.15:
+    - Added description field to Category model
+    - add_description_field_to_category.php
 
