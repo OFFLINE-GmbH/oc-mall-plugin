@@ -18,7 +18,7 @@ class AllowNonUniqueEmailsForRainlabUser extends Migration
 
             $indexesToDelete = ['users_email_unique', 'users_login_unique'];
             foreach ($indexesToDelete as $index) {
-                if (array_key_exists($index, $existingIndexes)) {
+                if (in_array($index, $existingIndexes)) {
                     $table->dropUnique($index);
                 }
             }
