@@ -25,7 +25,7 @@ class ShippingMethods extends Controller
     public $relationConfig = 'config_relation.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.settings.manage_shipping_methods',
+        'offline.mall.manage_shipping_methods',
     ];
 
     public function __construct()
