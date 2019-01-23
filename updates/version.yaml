@@ -75,4 +75,6 @@
 1.0.15:
     - Added description field to Category model
     - add_description_field_to_category.php
+1.0.16:
+    - Fixed manage shipping methods permissions
 
