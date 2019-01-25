@@ -22,6 +22,11 @@
 The documentation of this plugin can be found here:
 [https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
 
+#### Requirements
+* PHP7.1+
+* October Build 444+
+
+
 #### Demo
 
 A live demo of the plugin can be found here:
