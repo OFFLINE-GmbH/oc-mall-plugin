@@ -220,6 +220,18 @@ class Products extends Controller
         ];
     }
 
+    public function onRelationManageCreate()
+    {
+        $parent = parent::onRelationManageCreate();
+
+        // Store the pricing information with the custom fields.
+        if ($this->relationName === 'custom_fields') {
+            $this->updatePrices($this->relationModel, '_prices');
+        }
+
+        return $parent;
+    }
+
     public function onRelationManageUpdate()
     {
         $parent = parent::onRelationManageUpdate();
