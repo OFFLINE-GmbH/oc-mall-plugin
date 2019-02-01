@@ -10,6 +10,9 @@
             </a>
         {% endfor %}
     {% else %}
-        <input type="color" id="{{ fieldId }}" name="fields[{{ field.hashId }}]" data-id="{{ item.property.hashId }}">
+        <input type="color" id="{{ fieldId }}" name="fields[{{ field.hashId }}]"
+               data-id="{{ item.property.hashId }}"
+               data-mall-custom-field
+        >
     {% endif %}
 </div>

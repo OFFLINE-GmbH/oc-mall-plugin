@@ -10,7 +10,9 @@ use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Queries\VariantByPropertyValuesQuery;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -209,7 +211,7 @@ class Product extends MallComponent
 
         if ($this->variantId !== null) {
             // In case a Variant is added we have to retrieve the model first by the selected props.
-            $variant  = $this->getVariantByPropertyValues(post('props'));
+            $variant = $this->getVariantByPropertyValues(post('props'));
         }
 
         $cart     = Cart::byUser(Auth::getUser());
@@ -266,6 +268,31 @@ class Product extends MallComponent
         $this->page['item']  = $item;
 
         return $this->stockCheckResponse();
+    }
+
+
+    /**
+     * Return the product's new price.
+     *
+     * @return array
+     */
+    public function onChangeConfiguration()
+    {
+        $fields = $this->mapToCustomFields(post('fields', []));
+        if ($fields->count() < 1) {
+            return [];
+        }
+
+        $values = $this->mapToCustomFieldValues($fields);
+
+        $priceData = $this->getItem()->priceIncludingCustomFieldValues($values);
+        $price     = Price::fromArray($priceData);
+
+        $partial = $this->renderPartial($this->alias . '::currentprice', ['price' => $price->string]);
+
+        return [
+            '.mall-product__current-price' => $partial,
+        ];
     }
 
     /**

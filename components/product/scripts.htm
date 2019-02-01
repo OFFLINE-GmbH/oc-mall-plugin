@@ -2,6 +2,7 @@
     <script>
         $(function () {
             var $body = $('body');
+            var $form = $('#mall-add-to-cart');
             var $addToCart = $('.mall-product__add-to-cart');
 
             {% if not item.allow_out_of_stock_purchases %}
@@ -38,6 +39,14 @@
 
                 $(this).parent().find('.is-active').removeClass('is-active');
                 $(this).addClass('is-active');
+            });
+
+            {# Reload pricing information when a custom field is changed #}
+            $body.on('change', '[data-mall-custom-field]', function () {
+                $.request('onChangeConfiguration', {
+                    form: $form,
+                    loading: $.oc.stripeLoadIndicator
+                })
             });
         })
     </script>
