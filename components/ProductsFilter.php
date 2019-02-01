@@ -311,7 +311,7 @@ class ProductsFilter extends MallComponent
 
         $data = collect(post('filter', []));
         if ($data->count() < 1) {
-            return $this->replaceFilter([], $sortOrder);
+            return $this->replaceFilter(collect([]), $sortOrder);
         }
 
         $properties = Property::whereIn('slug', $data->keys())->get();
@@ -475,12 +475,12 @@ class ProductsFilter extends MallComponent
     /**
      * Replace the currently active filter query string.
      *
-     * @param $filter
+     * @param Collection $filter
      * @param $sortOrder
      *
      * @return array
      */
-    protected function replaceFilter($filter, $sortOrder)
+    protected function replaceFilter(Collection $filter, $sortOrder)
     {
         $this->setData();
         $this->setVar('filter', $filter);
