@@ -10,7 +10,6 @@ use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Queries\VariantByPropertyValuesQuery;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
-use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product as ProductModel;
@@ -193,7 +192,7 @@ class Product extends MallComponent
             return;
         }
 
-        if ( ! $this->item->category) {
+        if ( ! $this->product->category) {
             $this->isNotFound = true;
             logger()->error(
                 'A product without an existing category has been found.',
@@ -353,6 +352,7 @@ class Product extends MallComponent
                 'variants.image_sets',
                 'image_sets',
                 'downloads',
+                'category',
                 'taxes',
             ];
         }
