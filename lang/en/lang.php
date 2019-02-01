@@ -246,6 +246,7 @@
         'slug_unique'          => 'The URL has to be unique',
         'fees'                 => 'Fees',
         'value'                => 'Value',
+        'action_required'      => 'Action required!',
     ],
     'variant'                  => [
         'method' => [
@@ -330,6 +331,8 @@
             'title'             => 'Price and stock overview',
             'currency_dropdown' => 'Currency: ',
         ],
+        'missing_category' => 'The product does not have a category associated with it. Please select a category below to edit this
+                    product.'
     ],
     'image_sets'               => [
         'is_main_set'         => 'Is main set',
@@ -535,7 +538,7 @@
                     'title'       => 'Filter component alias',
                     'description' => 'Alias of the ProductsFilter component that filters this Products component',
                 ],
-                'filter'   => [
+                'filter'             => [
                     'title'       => 'Filter string',
                     'description' => 'Forced filter for this component',
                 ],

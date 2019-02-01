@@ -245,6 +245,7 @@
         'slug_unique'          => 'Die URL existiert bereits',
         'fees'                 => 'Gebühren',
         'value'                => 'Wert',
+        'action_required'      => 'Aktion wird benötigt!',
     ],
     'variant'                  => [
         'method' => [
@@ -329,6 +330,7 @@
             'title'             => 'Übersicht für Preise und Lagerbestand',
             'currency_dropdown' => 'Währung: ',
         ],
+        'missing_category' => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.'
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',
@@ -534,7 +536,7 @@
                     'title'       => 'Alias der Filter-Komponente',
                     'description' => 'Alias der Filter-Komponente die für diese Produkte-Komponente zuständig ist',
                 ],
-                'filter'   => [
+                'filter'             => [
                     'title'       => 'Filter-String',
                     'description' => 'Forcierter Filter für diese Komponente',
                 ],
@@ -576,7 +578,7 @@
                 'showBrandFilter'     => [
                     'title' => 'Zeige Marken-Filter an',
                 ],
-                'showOnSaleFilter'     => [
+                'showOnSaleFilter'    => [
                     'title' => 'Zeige «Reduziert» Filter an',
                 ],
                 'includeChildren'     => [
