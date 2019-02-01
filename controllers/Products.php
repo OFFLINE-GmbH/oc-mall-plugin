@@ -1,10 +1,12 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use BackendMenu;
+use Flash;
 use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
 use OFFLINE\Mall\Models\CustomField;
@@ -53,6 +55,49 @@ class Products extends Controller
                 $this->preparePriceTable();
             }
         }
+    }
+
+    public function update($id)
+    {
+        parent::update($id);
+        // If the product has no category something is wrong and needs fixing!
+        if ( ! $this->vars['formModel']->category) {
+            Flash::error(trans('offline.mall::lang.common.action_required'));
+
+            return redirect(Backend::url('offline/mall/products/change_category/' . $id));
+        }
+    }
+
+    public function change_category($id)
+    {
+        $this->pageTitle   = trans('offline.mall::lang.common.action_required');
+        $config            = $this->makeConfigFromArray([
+            'fields' => [
+                'category' => [
+                    'label'           => 'offline.mall::lang.common.category',
+                    'nameFrom'        => 'name',
+                    'descriptionFrom' => 'description',
+                    'span'            => 'auto',
+                    'type'            => 'relation',
+                ],
+            ],
+        ]);
+        $config->model     = Product::findOrFail($id);
+        $config->arrayName = class_basename($config->model);
+
+        $formWidget         = $this->makeWidget('Backend\Widgets\Form', $config);
+        $this->vars['form'] = $formWidget;
+    }
+
+    public function change_category_onSave()
+    {
+        $product              = Product::findOrFail($this->params[0]);
+        $product->category_id = post('Product.category');
+        $product->save();
+
+        Flash::success(trans('offline.mall::lang.common.saved_changes'));
+
+        return redirect(Backend::url('offline/mall/products/update/' . $this->params[0]));
     }
 
     /**

@@ -193,6 +193,16 @@ class Product extends MallComponent
             return;
         }
 
+        if ( ! $this->item->category) {
+            $this->isNotFound = true;
+            logger()->error(
+                'A product without an existing category has been found.',
+                ['id' => $this->item->id, 'name' => $this->item->name]
+            );
+
+            return;
+        }
+
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
     }

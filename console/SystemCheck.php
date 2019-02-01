@@ -49,6 +49,12 @@ class SystemCheck extends Command
                 },
             ],
             [
+                'title' => 'All products have a category',
+                'check' => function () {
+                    return $this->checkProductCategories();
+                },
+            ],
+            [
                 'title' => 'All shipping methods have a price in the default currency',
                 'check' => function () {
                     return $this->checkShippingMethods();
@@ -114,8 +120,29 @@ class SystemCheck extends Command
             $basePrice = $product->prices->where('currency_id', Currency::defaultCurrency()->id)->first();
             if ( ! $basePrice) {
                 $errors[] = sprintf(
-                    'The product "%s" has no price set for your default currency.',
-                    $product->name
+                    'The product "%s (%s)" has no price set for your default currency.',
+                    $product->name,
+                    $product->id
+                );
+            }
+        }
+
+        return count($errors) > 0 ? implode("\n", $errors) : true;
+    }
+
+    /**
+     * Validate all products have a category.
+     */
+    private function checkProductCategories()
+    {
+        $products = Product::with('category')->get();
+        $errors   = [];
+        foreach ($products as $product) {
+            if ( ! $product->category) {
+                $errors[] = sprintf(
+                    'The product "%s (%s)" has no category set.',
+                    $product->name,
+                    $product->id
                 );
             }
         }
