@@ -127,6 +127,20 @@ class Price extends Model
         return $this->withPrice($this->price * (100 - $percentage) / 10000);
     }
 
+    /**
+     * Returns a new price model from a price array.
+     *
+     * @param array $input
+     *
+     * @return Price
+     */
+    public static function fromArray(array $input): Price
+    {
+        $value = array_get($input, Currency::activeCurrency()->code);
+
+        return new self(['price' => $value / 100]);
+    }
+
     public function __toString()
     {
         $model = $this instanceof Product || $this instanceof Variant ? $this : null;

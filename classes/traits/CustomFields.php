@@ -53,21 +53,7 @@ trait CustomFields
      */
     protected function validateCustomFields(array $values)
     {
-        $values = collect($values)->mapWithKeys(function ($value, $id) {
-            return [$this->decode($id) => $value];
-        });
-
-        $fields = CustomField::with('custom_field_options')
-                             ->whereIn('id', $values->keys())
-                             ->get()
-                             ->mapWithKeys(function (CustomField $field) use ($values) {
-                                 $value = $values->get($field->id);
-                                 if (\in_array($field->type, ['dropdown', 'image', 'color'], true)) {
-                                     $value = $this->decode($value);
-                                 }
-
-                                 return [$field->id => ['field' => $field, 'value' => $value]];
-                             });
+        $fields = $this->mapToCustomFields($values);
 
         $rules = $fields->mapWithKeys(function (array $data) {
             $field = $data['field'];
@@ -92,7 +78,45 @@ trait CustomFields
             throw new ValidationException($v);
         }
 
-        $values = $fields->filter(function ($data) {
+        return $this->mapToCustomFieldValues($fields);
+    }
+
+    /**
+     * Map input data to CustomField models.
+     *
+     * @param array $values
+     *
+     * @return Collection<CustomField>
+     */
+    protected function mapToCustomFields(array $values)
+    {
+        $values = collect($values)->mapWithKeys(function ($value, $id) {
+            return [$this->decode($id) => $value];
+        });
+
+        return CustomField::with('custom_field_options')
+                          ->whereIn('id', $values->keys())
+                          ->get()
+                          ->mapWithKeys(function (CustomField $field) use ($values) {
+                              $value = $values->get($field->id);
+                              if (\in_array($field->type, ['dropdown', 'image', 'color'], true)) {
+                                  $value = $this->decode($value);
+                              }
+
+                              return [$field->id => ['field' => $field, 'value' => $value]];
+                          });
+    }
+
+    /**
+     * Map CustomField input collection to CustomFieldValue models.
+     *
+     * @param Collection $fields
+     *
+     * @return Collection<CustomFieldValue>
+     */
+    protected function mapToCustomFieldValues(Collection $fields)
+    {
+        return $fields->filter(function ($data) {
             return $data['value'];
         })->map(function (array $data) {
             $option = $data['field']->custom_field_options->find($data['value']);
@@ -105,7 +129,5 @@ trait CustomFields
 
             return $value;
         });
-
-        return $values;
     }
 }
