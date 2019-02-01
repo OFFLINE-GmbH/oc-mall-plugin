@@ -77,4 +77,6 @@
     - add_description_field_to_category.php
 1.0.16:
     - Fixed manage shipping methods permissions
+1.0.17:
+    - Auto update price display when custom field options are changed
 
