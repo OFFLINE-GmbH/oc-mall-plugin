@@ -247,6 +247,7 @@
         'fees'                 => 'Fees',
         'value'                => 'Value',
         'action_required'      => 'Action required!',
+        'invalid_quantity'     => 'The specified quantity is not valid',
     ],
     'variant'                  => [
         'method' => [
@@ -331,8 +332,8 @@
             'title'             => 'Price and stock overview',
             'currency_dropdown' => 'Currency: ',
         ],
-        'missing_category' => 'The product does not have a category associated with it. Please select a category below to edit this
-                    product.'
+        'missing_category'                     => 'The product does not have a category associated with it. Please select a category below to edit this
+                    product.',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Is main set',

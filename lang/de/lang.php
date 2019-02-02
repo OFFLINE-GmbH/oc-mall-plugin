@@ -246,6 +246,7 @@
         'fees'                 => 'Gebühren',
         'value'                => 'Wert',
         'action_required'      => 'Aktion wird benötigt!',
+        'invalid_quantity'     => 'Die eingetragene Anzahl ist ungültig.',
     ],
     'variant'                  => [
         'method' => [
@@ -330,7 +331,7 @@
             'title'             => 'Übersicht für Preise und Lagerbestand',
             'currency_dropdown' => 'Währung: ',
         ],
-        'missing_category' => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.'
+        'missing_category'                     => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',
