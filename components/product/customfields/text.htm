@@ -1,5 +1,8 @@
-<label for="field-{{ field.hashId }}" class="mall-label">{{ field.name }}</label>
-<input type="text" class="mall-input" id="field-{{ field.hashId }}"
-       name="fields[{{ field.hashId }}]"
-       data-id="{{ item.property.hashId }}"
-       data-mall-custom-field>
+<div class="mall-form-control">
+    <label for="field-{{ field.hashId }}" class="mall-label">{{ field.name }}</label>
+    <input type="text" class="mall-input" id="field-{{ field.hashId }}"
+           name="fields[{{ field.hashId }}]"
+           data-id="{{ item.property.hashId }}"
+           data-mall-custom-field>
+    <div data-validate-for="{{ field.hashId }}"></div>
+</div>

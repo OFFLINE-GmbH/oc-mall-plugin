@@ -66,14 +66,19 @@ trait CustomFields
                 $rules->push('in:' . $field->custom_field_options->pluck('id')->implode(','));
             }
 
-            return [$field->name => $rules];
+            return [$field->hashId => $rules];
         })->filter();
 
         $data = $fields->mapWithKeys(function (array $data) {
-            return [$data['field']->name => $data['value']];
+            return [$data['field']->hashId => $data['value']];
         });
+        $names = $fields->mapWithKeys(function (array $data) {
+            return [$data['field']->hashId => $data['field']->name];
+        })->toArray();
 
-        $v = Validator::make($data->toArray(), $rules->toArray());
+
+
+        $v = Validator::make($data->toArray(), $rules->toArray(), [], $names);
         if ($v->fails()) {
             throw new ValidationException($v);
         }

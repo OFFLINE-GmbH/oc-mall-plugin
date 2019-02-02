@@ -1,7 +1,10 @@
-<label for="field-{{ field.hashId }}" class="mall-label">
-    <input type="checkbox" class="mall-input-checkbox" id="field-{{ field.hashId }}"
-           name="fields[{{ field.hashId }}]"
-           data-mall-custom-field
-           data-id="{{ item.property.hashId }}">
-    {{ field.name }}
-</label>
+<div class="mall-form-checkbox">
+    <label for="field-{{ field.hashId }}" class="mall-label">
+        <input type="checkbox" class="mall-input-checkbox" id="field-{{ field.hashId }}"
+               name="fields[{{ field.hashId }}]"
+               data-mall-custom-field
+               data-id="{{ item.property.hashId }}">
+        {{ field.name }}
+    </label>
+    <div data-validate-for="{{ field.hashId }}"></div>
+</div>

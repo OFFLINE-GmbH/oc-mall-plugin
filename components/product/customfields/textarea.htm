@@ -1,6 +1,8 @@
-<label for="field-{{ field.hashId }}" class="mall-label">{{ field.name }}</label>
-<textarea rows="6" class="mall-input" name="fields[{{ field.hashId }}]"
-          id="field-{{ field.hashId }}"
-          data-id="{{ item.property.hashId }}"
-          data-mall-custom-field>
-</textarea>
+<div class="mall-form-control">
+    <label for="field-{{ field.hashId }}" class="mall-label">{{ field.name }}</label>
+    <textarea rows="6" class="mall-input" name="fields[{{ field.hashId }}]"
+              id="field-{{ field.hashId }}"
+              data-id="{{ item.property.hashId }}"
+              data-mall-custom-field></textarea>
+    <div data-validate-for="{{ field.hashId }}"></div>
+</div>
