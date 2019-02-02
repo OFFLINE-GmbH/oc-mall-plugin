@@ -225,6 +225,10 @@ class Product extends MallComponent
 
         $cart     = Cart::byUser(Auth::getUser());
         $quantity = (int)input('quantity', $product->quantity_default ?? 1);
+        if ($quantity < 1) {
+            throw new ValidationException(['quantity' => trans('offline.mall::lang.common.invalid_quantity')]);
+        }
+        
         try {
             $cart->addProduct($product, $quantity, $variant, $values);
         } catch (OutOfStockException $e) {

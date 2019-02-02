@@ -1,18 +1,22 @@
 {% set fieldId = 'field-' ~ field.hashId %}
-<label for="{{ fieldId }}" class="mall-label">{{ field.name }}</label>
-<div class="mall-field-color-selector">
-    {% if field.custom_field_options.count > 0 %}
-        <input type="hidden" id="{{ fieldId }}" name="fields[{{ field.hashId }}]" data-id="{{ item.property.hashId }}">
-        {% for option in field.custom_field_options %}
-            <a class="mall-option-selector" data-target="#{{ fieldId }}" data-value="{{ option.hashId }}">
+<div class="mall-form-control">
+    <label for="{{ fieldId }}" class="mall-label">{{ field.name }}</label>
+    <div class="mall-field-color-selector">
+        {% if field.custom_field_options.count > 0 %}
+            <input type="hidden" id="{{ fieldId }}" name="fields[{{ field.hashId }}]"
+                   data-id="{{ item.property.hashId }}">
+            {% for option in field.custom_field_options %}
+                <a class="mall-option-selector" data-target="#{{ fieldId }}" data-value="{{ option.hashId }}">
                 <span style="background: {{ option.option_value }}; width: 20px; height: 20px; display: inline-block;
-                    "></span>
-            </a>
-        {% endfor %}
-    {% else %}
-        <input type="color" id="{{ fieldId }}" name="fields[{{ field.hashId }}]"
-               data-id="{{ item.property.hashId }}"
-               data-mall-custom-field
-        >
-    {% endif %}
+                        "></span>
+                </a>
+            {% endfor %}
+        {% else %}
+            <input type="color" id="{{ fieldId }}" name="fields[{{ field.hashId }}]"
+                   data-id="{{ item.property.hashId }}"
+                   data-mall-custom-field
+            >
+        {% endif %}
+    </div>
+    <div data-validate-for="{{ field.hashId }}"></div>
 </div>

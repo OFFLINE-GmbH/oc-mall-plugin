@@ -65,7 +65,7 @@ class Price extends Model
             return $this->attributes['price'] = null;
         }
 
-        if ($value === 0 || $value === '0') {
+        if ($value === 0 || $value === '0' || $value === '0.00') {
             return $this->attributes['price'] = 0;
         }
 

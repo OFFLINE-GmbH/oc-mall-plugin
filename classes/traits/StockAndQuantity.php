@@ -14,7 +14,7 @@ trait StockAndQuantity
             throw new OutOfStockException($this);
         }
 
-        if ( $updateSalesCount) {
+        if ($updateSalesCount) {
             $this->sales_count += $quantity;
             if ($this instanceof Variant) {
                 $this->product->sales_count += $quantity;
@@ -32,6 +32,9 @@ trait StockAndQuantity
      */
     public function normalizeQuantity($quantity): int
     {
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
         if ($this->quantity_min && $quantity < $this->quantity_min) {
             return $this->quantity_min;
         }

@@ -348,4 +348,27 @@ class Product extends Model
             'items' => $items,
         ];
     }
+
+    public function filterFields($fields, $context = null)
+    {
+        if ($context !== 'update') {
+            return;
+        }
+
+        // If less than properties are available (1 is the null property)
+        // we can remove everything that has to do with variants.
+        if (count($this->getGroupByPropertyIdOptions()) < 2) {
+            $fields->variants->path = 'variants_unavailable';
+            $fields->group_by_property_id->hidden = true;
+            $fields->_properties->hidden = true;
+        }
+    }
+
+    public function getInventoryManagementMethodOptions()
+    {
+        return [
+            'single'  => 'offline.mall::lang.variant.method.single',
+            'variant' => 'offline.mall::lang.variant.method.variant',
+        ];
+    }
 }

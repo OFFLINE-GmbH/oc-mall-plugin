@@ -1,4 +1,5 @@
-<form data-request="onAddToCart" data-request-success="$.publish('mall.cart.productAdded')" id="mall-add-to-cart">
+<form data-request="onAddToCart" data-request-success="$.publish('mall.cart.productAdded')"
+      data-request-validate id="mall-add-to-cart">
     <div class="mall-product">
         <div class="mall-product__info">
             {% partial __SELF__ ~ '::info' %}
