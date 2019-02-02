@@ -1,6 +1,6 @@
-<div style="text-align: center;">
+<p align="center"> 
 	<img style="max-width: 100%; margin: 2rem auto; display: block;" src="https://user-images.githubusercontent.com/8600029/52163618-c3bf3d80-26e4-11e9-870c-427401a27937.jpeg">
-</div>
+</p>
 
 
 # oc-mall
