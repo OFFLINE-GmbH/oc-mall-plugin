@@ -79,4 +79,6 @@
     - Fixed manage shipping methods permissions
 1.0.17:
     - Auto update price display when custom field options are changed
+1.0.18:
+    - Minor bugfixes and improvements
 
