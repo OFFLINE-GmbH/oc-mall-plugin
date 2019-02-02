@@ -21,7 +21,7 @@
                     </a>
                 </td>
                 <td>
-                    <?= $item->price()->integer ? e((string)$item->price()) : '' ?>
+                    <?= $item->price()->integer !== null ? e((string)$item->price()) : '' ?>
                 </td>
                 <td class="nolink text-right">
                     <a
