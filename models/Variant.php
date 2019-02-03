@@ -38,6 +38,10 @@ class Variant extends Model
     public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
     public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name'
+    ];
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
