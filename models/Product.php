@@ -360,7 +360,6 @@ class Product extends Model
         if (count($this->getGroupByPropertyIdOptions()) < 2) {
             $fields->variants->path = 'variants_unavailable';
             $fields->group_by_property_id->hidden = true;
-            $fields->_properties->hidden = true;
         }
     }
 
