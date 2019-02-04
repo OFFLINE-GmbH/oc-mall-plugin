@@ -11,7 +11,7 @@
                 {% set price = item.price() %}
                 <div class="mall-products-item__price
                     {{ price.isCustomerSpecific ? 'mall-products-item__price--special' }}">
-                    {{ price.string }}
+                    {{ price.string | raw }}
                 </div>
             </div>
             <div class="mall-products-item__info-secondary">
@@ -20,9 +20,9 @@
                 </div>
                 <div class="mall-products-item__old-price">
                     {% if price.official %}
-                        {{ price.official.string }}
+                        {{ price.official.string | raw }}
                     {% else %}
-                        {{ item.oldPrice.count > 0 ? item.oldPrice().string }}
+                        {{ item.oldPrice.count > 0 ? item.oldPrice().string | raw }}
                     {% endif %}
                 </div>
             </div>

@@ -4,6 +4,7 @@
 namespace OFFLINE\Mall\Classes\Traits;
 
 use Closure;
+use October\Rain\Database\Collection;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
@@ -39,14 +40,16 @@ trait PriceAccessors
         // If a user specific price is available for this model use it instead.
         // The official price is passed along as the "official" property on the specific price model.
         if (method_exists($this, 'getUserSpecificPrice')) {
-            if ($specific = $this->getUserSpecificPrice($price)) {
+            if ($specificPrices = $this->getUserSpecificPrice($price)) {
                 // If a Collection is returned, the price in the current currency has to be filtered out first.
-                if ( ! $specific instanceof Price) {
-                    $query    = $this->withFilter($filter, $specific->where('currency_id', $currency->id));
+                if ($specificPrices instanceof Collection) {
+                    $query    = $this->withFilter($filter, $specificPrices->where('currency_id', $currency->id));
                     $specific = $query->first();
+                } else {
+                    $specific = $specificPrices;
                 }
 
-                $specific = $specific ?? $this->nullPrice($currency, $specific, $relation, $filter);
+                $specific = $specific ?? $this->nullPrice($currency, $specificPrices, $relation, $filter);
 
                 $specific->official = $price;
 

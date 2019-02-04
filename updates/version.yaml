@@ -83,4 +83,5 @@
     - Minor bugfixes and improvements
 1.0.19:
     - Minor bugfixes and improvements
-
+1.0.20:
+    - Optimized handling of customer group specific prices
