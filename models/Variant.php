@@ -14,6 +14,7 @@ use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
+use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -30,6 +31,7 @@ class Variant extends Model
     use ProductPriceAccessors;
     use PropertyValues;
     use StockAndQuantity;
+    use TranslatableRelation;
 
     const MORPH_KEY = 'mall.variant';
 
