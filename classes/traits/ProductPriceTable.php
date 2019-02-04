@@ -137,7 +137,7 @@ trait ProductPriceTable
 
         foreach ($this->vars['customerGroups'] as $group) {
             $price = $record['group__' . $group['id']] ?? false;
-            if ( ! $price) {
+            if ($price === false || $price === null) {
                 continue;
             }
             CustomerGroupPrice::create([
@@ -156,7 +156,7 @@ trait ProductPriceTable
 
         foreach ($this->vars['additionalPriceCategories'] as $group) {
             $price = $record['additional__' . $group['id']] ?? false;
-            if ( ! $price) {
+            if ($price === false || $price === null) {
                 continue;
             }
             Price::create([

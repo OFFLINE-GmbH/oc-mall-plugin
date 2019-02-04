@@ -18,7 +18,6 @@ class CustomerGroupPrice extends Price
     public $official;
 
     public $rules = [
-        'price' => 'required',
     ];
     public $table = 'offline_mall_customer_group_prices';
     public $morphTo = [
