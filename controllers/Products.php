@@ -60,6 +60,10 @@ class Products extends Controller
     public function update($id)
     {
         parent::update($id);
+        // Something went wront if no formModel is available. Proceed with default behaviour.
+        if ( ! isset($this->vars['formModel'])) {
+            return;
+        }
         // If the product has no category something is wrong and needs fixing!
         if ( ! $this->vars['formModel']->category) {
             Flash::error(trans('offline.mall::lang.common.action_required'));
