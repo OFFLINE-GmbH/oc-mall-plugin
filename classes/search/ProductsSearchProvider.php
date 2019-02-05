@@ -3,6 +3,8 @@
 namespace OFFLINE\Mall\Classes\Search;
 
 use Cms\Classes\Controller;
+use DB;
+use Illuminate\Database\Eloquent\Collection;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
@@ -54,17 +56,36 @@ class ProductsSearchProvider extends ResultsProvider
 
     protected function searchProducts()
     {
-        return Product::where('inventory_management_method', 'single')
-                      ->where($this->productQuery())
-                      ->get();
+        return $this->isDefaultLocale()
+            ? $this->searchProductsFromDefaultLocale()
+            : $this->searchProductsFromCurrentLocale();
     }
 
     protected function searchVariants()
     {
-        return Variant::where(function ($q) {
+        return $this->isDefaultLocale()
+            ? $this->searchVariantsFromDefaultLocale()
+            : $this->searchVariantsFromCurrentLocale();
+    }
+
+    protected function searchProductsFromDefaultLocale()
+    {
+        return Product::where('inventory_management_method', 'single')
+                      ->published()
+                      ->where($this->productQuery())
+                      ->get();
+    }
+
+    protected function searchVariantsFromDefaultLocale()
+    {
+        $variantQuery = function ($q) {
             $q->where('name', 'like', "%{$this->query}%")
               ->orWhereHas('product', $this->productQuery());
-        })->get();
+        };
+
+        return Variant::where($variantQuery)
+                      ->published()
+                      ->get();
     }
 
     protected function productQuery()
@@ -84,5 +105,77 @@ class ProductsSearchProvider extends ResultsProvider
                     });
               });
         };
+    }
+
+    /**
+     * Returns all matching products with translated contents.
+     *
+     * @return Collection
+     */
+    protected function searchProductsFromCurrentLocale()
+    {
+        // First fetch all model ids with matching contents.
+        $ids = $this->getModelIdsForQuery(Product::class);
+
+        // Then return all matching models via Eloquent.
+        return Product::where('inventory_management_method', 'single')
+                      ->published()
+                      ->whereIn('id', $ids)
+                      ->get();
+    }
+
+    /**
+     * Returns all matching variants with translated contents.
+     *
+     * @return Collection
+     */
+    protected function searchVariantsFromCurrentLocale()
+    {
+        // First fetch all model ids with matching contents.
+        $variantIds = $this->getModelIdsForQuery(Variant::class);
+        $productIds = $this->getModelIdsForQuery(Product::class); // @TODO This query runs twice
+
+        // Then return all matching models via Eloquent.
+        return Variant::published()
+                      ->whereIn('id', $variantIds)
+                      ->orWhereHas('product', function ($q) use ($productIds) {
+                          $q->where('published', true)
+                            ->whereIn('id', $productIds);
+                      })
+                      ->get();
+    }
+
+    /**
+     * Returns the model IDs for the `modelClass` that match the search query
+     *
+     * @param string $modelClass
+     *
+     * @return \Illuminate\Support\Collection|\October\Rain\Support\Collection
+     */
+    protected function getModelIdsForQuery($modelClass)
+    {
+        $results = DB::table('rainlab_translate_attributes')
+                     ->where('model_type', $modelClass)
+                     ->where('attribute_data', 'LIKE', "%{$this->query}%")
+                     ->get(['model_id']);
+
+        return collect($results)->pluck('model_id');
+    }
+
+    /**
+     * Check if a translator is available and if the
+     * current locale is the default locale.
+     *
+     * @return bool
+     */
+    protected function isDefaultLocale(): bool
+    {
+        $translator = $this->translator();
+
+        if ( ! $translator) {
+            return true;
+        }
+
+        return $translator->getLocale() === $translator->getDefaultLocale();
     }
 }

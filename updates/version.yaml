@@ -85,3 +85,5 @@
     - Minor bugfixes and improvements
 1.0.20:
     - Optimized handling of customer group specific prices
+1.0.21:
+    - Optimized RainLab.Translate integration (thanks to @alxy)
