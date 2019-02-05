@@ -14,6 +14,7 @@ use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
+use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -30,6 +31,7 @@ class Variant extends Model
     use ProductPriceAccessors;
     use PropertyValues;
     use StockAndQuantity;
+    use TranslatableRelation;
 
     const MORPH_KEY = 'mall.variant';
 
@@ -38,6 +40,10 @@ class Variant extends Model
     public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
     public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name'
+    ];
     public $casts = [
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
