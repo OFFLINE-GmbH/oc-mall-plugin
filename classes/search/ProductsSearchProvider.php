@@ -56,18 +56,14 @@ class ProductsSearchProvider extends ResultsProvider
 
     protected function searchProducts()
     {
-        $translator = $this->translator();
-
-        return ( ! $translator || $translator->getDefaultLocale() === $translator->getLocale())
+        return $this->isDefaultLocale()
             ? $this->searchProductsFromDefaultLocale()
             : $this->searchProductsFromCurrentLocale();
     }
 
     protected function searchVariants()
     {
-        $translator = $this->translator();
-
-        return ( ! $translator || $translator->getDefaultLocale() === $translator->getLocale())
+        return $this->isDefaultLocale()
             ? $this->searchVariantsFromDefaultLocale()
             : $this->searchVariantsFromCurrentLocale();
     }
@@ -75,9 +71,9 @@ class ProductsSearchProvider extends ResultsProvider
     protected function searchProductsFromDefaultLocale()
     {
         return Product::where('inventory_management_method', 'single')
-                        ->published()
-                        ->where($this->productQuery())
-                        ->get();
+                      ->published()
+                      ->where($this->productQuery())
+                      ->get();
     }
 
     protected function searchVariantsFromDefaultLocale()
@@ -88,8 +84,8 @@ class ProductsSearchProvider extends ResultsProvider
         };
 
         return Variant::where($variantQuery)
-                        ->published()
-                        ->get();
+                      ->published()
+                      ->get();
     }
 
     protected function productQuery()
@@ -123,9 +119,9 @@ class ProductsSearchProvider extends ResultsProvider
 
         // Then return all matching models via Eloquent.
         return Product::where('inventory_management_method', 'single')
-                ->published()
-                ->whereIn('id', $ids)
-                ->get();
+                      ->published()
+                      ->whereIn('id', $ids)
+                      ->get();
     }
 
     /**
@@ -141,27 +137,45 @@ class ProductsSearchProvider extends ResultsProvider
 
         // Then return all matching models via Eloquent.
         return Variant::published()
-            ->whereIn('id', $variantIds)
-            ->orWhereHas('product', function ($q) use($productIds) {
-                $q->where('published', true)
-                  ->whereIn('id', $productIds);
-            })
-            ->get();
+                      ->whereIn('id', $variantIds)
+                      ->orWhereHas('product', function ($q) use ($productIds) {
+                          $q->where('published', true)
+                            ->whereIn('id', $productIds);
+                      })
+                      ->get();
     }
 
     /**
      * Returns the model IDs for the `modelClass` that match the search query
      *
      * @param string $modelClass
+     *
      * @return \Illuminate\Support\Collection|\October\Rain\Support\Collection
      */
     protected function getModelIdsForQuery($modelClass)
     {
         $results = DB::table('rainlab_translate_attributes')
-            ->where('model_type', $modelClass)
-            ->where('attribute_data', 'LIKE', "%{$this->query}%")
-            ->get(['model_id']);
+                     ->where('model_type', $modelClass)
+                     ->where('attribute_data', 'LIKE', "%{$this->query}%")
+                     ->get(['model_id']);
 
         return collect($results)->pluck('model_id');
+    }
+
+    /**
+     * Check if a translator is available and if the
+     * current locale is the default locale.
+     *
+     * @return bool
+     */
+    protected function isDefaultLocale(): bool
+    {
+        $translator = $this->translator();
+
+        if ( ! $translator) {
+            return true;
+        }
+
+        return $translator->getLocale() === $translator->getDefaultLocale();
     }
 }
