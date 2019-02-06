@@ -206,6 +206,7 @@
         'payment_provider'     => 'Zahlungsanbieter',
         'payment_methods'      => 'Zahlungsmethoden',
         'payment'              => 'Zahlung',
+        'payments'             => 'Zahlungen',
         'image'                => 'Bild',
         'color'                => 'Farbe',
         'unit'                 => 'Einheit',
@@ -249,6 +250,13 @@
         'invalid_quantity'     => 'Die eingetragene Anzahl ist ungültig.',
         'addresses'            => 'Adressen',
         'address'              => 'Adresse',
+        'reference'            => 'Referenz',
+        'session_id'           => 'Session-ID',
+        'message'              => 'Nachricht',
+        'payment_method'       => 'Zahlungsmethode',
+        'data'                 => 'Data',
+        'successful'           => 'Erfolgreich',
+        'failed'               => 'Fehlgeschlagen',
     ],
     'variant'                  => [
         'method' => [
@@ -477,6 +485,7 @@
         'shipped'                             => 'Versendet',
         'shipping_pending'                    => 'Versand pendent',
         'not_shipped'                         => 'Versand ausstehend',
+        'data'                                => 'Bestellungsdaten',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
@@ -528,6 +537,7 @@
         'manage_order_states'       => 'Kann Bestellstatus verwalten',
         'manage_shipping_methods'   => 'Kann Versandmethoden verwalten',
         'manage_taxes'              => 'Kann Steuern verwalten',
+        'manage_payment_log'        => 'Kann Zahlungslog verwalten',
     ],
     'components'               => [
         'products'               => [
@@ -916,5 +926,13 @@
         'enabled'         => 'Aktiviert',
         'enabled_comment' => 'Diese Benachrichtigung versenden',
         'template'        => 'Mail-Template',
+    ],
+    'payment_log'              => [
+        'payment_data'       => 'Zahlungsdaten',
+        'data_comment'       => 'Diese Daten wurden vom Zahlungsanbieter zurückgegeben',
+        'order_data_comment' => 'Diese Bestellungsdaten gehören zu der Zahlung',
+        'message_comment'    => 'Diese Nachricht wurde vom Zahlungsanbieter zurückgegeben',
+        'code_comment'       => 'Dieser Code wurde vom Zahlungsanbieter zurückgegeben',
+        'failed_only'        => 'Nur fehlgeschlagene',
     ],
 ];

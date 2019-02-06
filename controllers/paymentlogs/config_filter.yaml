@@ -1,0 +1,10 @@
+scopes:
+    failed:
+        label: 'offline.mall::lang.payment_log.failed_only'
+        type: checkbox
+        default: 0
+        conditions: failed = 1
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'

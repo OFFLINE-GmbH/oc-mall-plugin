@@ -1,0 +1,9 @@
+<?php
+$data = $record->order_data;
+?>
+<?= app(\OFFLINE\Mall\Classes\Utils\Money::class)->format(
+    $data['total_post_taxes'],
+    null,
+    \OFFLINE\Mall\Models\Currency::resolve($data['currency']['id'])
+);
+?>

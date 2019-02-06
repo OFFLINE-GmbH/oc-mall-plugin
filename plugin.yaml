@@ -25,6 +25,12 @@ navigation:
                 icon: icon-gift
                 permissions:
                     - offline.mall.manage_discounts
+            mall-payment-log:
+                label: 'offline.mall::lang.common.payments'
+                url: offline/mall/paymentlogs
+                icon: icon-money
+                permissions:
+                    - offline.mall.manage_payment_log
     mall-catalogue:
         label: 'offline.mall::lang.common.catalogue'
         url: offline/mall/products
@@ -103,3 +109,6 @@ permissions:
     offline.mall.manage_customer_addresses:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_customer_addresses'
+    offline.mall.manage_payment_log:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_payment_log'

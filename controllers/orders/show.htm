@@ -32,9 +32,32 @@
                             <?= $this->makePartial('tracking_modal') ?>
                             <?= $this->makePartial('invoice_number_modal') ?>
 
-                            <div style="margin-left: -20px; margin-right: -20px">
-                                <div class="control-list">
-                                    <?= $this->makePartial('items') ?>
+                            <div class="control-tabs primary-tabs" data-control="tab">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#order">
+                                            <?= e(trans('offline.mall::lang.common.products')) ?>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#payments">
+                                            <?= e(trans('offline.mall::lang.common.payments')) ?>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <div style="margin-left: -20px; margin-right: -20px; margin-top: -21px;">
+                                            <div class="control-list">
+                                                <?= $this->makePartial('items') ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane">
+                                        <div class="form-group">
+                                            <?= $this->relationRender('payment_logs', ['readOnly' => true]); ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

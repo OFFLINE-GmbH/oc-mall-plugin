@@ -207,6 +207,7 @@
         'payment_provider'     => 'Payment provider',
         'payment_methods'      => 'Payment methods',
         'payment'              => 'Payment',
+        'payments'             => 'Payments',
         'image'                => 'Image',
         'color'                => 'Color',
         'unit'                 => 'Unit',
@@ -250,6 +251,13 @@
         'invalid_quantity'     => 'The specified quantity is not valid',
         'addresses'            => 'Addresses',
         'address'              => 'Address',
+        'reference'            => 'Reference',
+        'session_id'           => 'Session ID',
+        'message'              => 'Message',
+        'payment_method'       => 'Payment method',
+        'data'                 => 'Data',
+        'successful'           => 'Successful',
+        'failed'               => 'Failed',
     ],
     'variant'                  => [
         'method' => [
@@ -480,6 +488,7 @@
         'shipped'                             => 'Shipped',
         'shipping_pending'                    => 'Shipping pending',
         'not_shipped'                         => 'Pending',
+        'data'                                => 'Order data',
         'modal'                               => [
             'cancel' => 'Cancel',
             'update' => 'Update information',
@@ -531,6 +540,7 @@
         'manage_order_states'       => 'Can manage order states',
         'manage_shipping_methods'   => 'Can manage shipping methods',
         'manage_taxes'              => 'Can manage taxes',
+        'manage_payment_log'        => 'Can manage payment log',
     ],
     'components'               => [
         'products'               => [
@@ -920,5 +930,13 @@
         'enabled'         => 'Enabled',
         'enabled_comment' => 'This notification is enabled',
         'template'        => 'Mail template',
+    ],
+    'payment_log'              => [
+        'payment_data'       => 'Payment data',
+        'data_comment'       => 'This data has been returned by the payment provider',
+        'order_data_comment' => 'This is all the order data for this payment',
+        'message_comment'    => 'This message has been returned by the payment provider',
+        'code_comment'       => 'This code has been returned by the payment provider',
+        'failed_only'        => 'Failed only',
     ],
 ];

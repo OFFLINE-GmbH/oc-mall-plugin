@@ -1,0 +1,63 @@
+fields:
+    failed:
+        label: 'offline.mall::lang.order.status'
+        span: auto
+        path: $/offline/mall/controllers/paymentlogs/_failed_callout.htm
+        type: partial
+    payment_method:
+        label: 'offline.mall::lang.common.payment_method'
+        span: auto
+        cssClass: ''
+        path: $/offline/mall/controllers/paymentlogs/_payment_method_callout.htm
+        type: partial
+    reference:
+        label: 'offline.mall::lang.common.reference'
+        span: auto
+        readonly: 1
+        type: text
+    payment_provider:
+        label: 'offline.mall::lang.common.payment_provider'
+        span: auto
+        readonly: 1
+        type: text
+    ip:
+        label: IP
+        span: auto
+        readonly: 1
+        type: text
+    session_id:
+        label: 'offline.mall::lang.common.session_id'
+        span: auto
+        type: text
+        readonly: 1
+tabs:
+    fields:
+        code:
+            label: 'offline.mall::lang.common.code'
+            span: auto
+            readonly: 1
+            type: text
+            commentAbove: 'offline.mall::lang.payment_log.message_comment'
+            tab: 'offline.mall::lang.payment_log.payment_data'
+        message:
+            label: 'offline.mall::lang.common.message'
+            span: auto
+            readonly: 1
+            type: text
+            commentAbove: 'offline.mall::lang.payment_log.message_comment'
+            tab: 'offline.mall::lang.payment_log.payment_data'
+        data:
+            label: 'offline.mall::lang.common.data'
+            span: auto
+            type: partial
+            path: $/offline/mall/controllers/paymentlogs/_data.htm
+            commentAbove: 'offline.mall::lang.payment_log.data_comment'
+            tab: 'offline.mall::lang.payment_log.payment_data'
+        order_data:
+            label: 'offline.mall::lang.order.data'
+            span: auto
+            cssClass: ''
+            path: $/offline/mall/controllers/paymentlogs/_order_data.htm
+            type: partial
+            commentAbove: 'offline.mall::lang.payment_log.order_data_comment'
+            tab: 'offline.mall::lang.payment_log.payment_data'

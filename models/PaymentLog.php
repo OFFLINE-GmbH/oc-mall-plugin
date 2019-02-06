@@ -7,7 +7,7 @@ class PaymentLog extends Model
 {
     use Validation;
 
-    public $jsonable = ['data', 'order_data'];
+    public $jsonable = ['data', 'order_data', 'payment_method'];
     public $table = 'offline_mall_payments_log';
     public $casts = [
         'failed' => 'boolean',
