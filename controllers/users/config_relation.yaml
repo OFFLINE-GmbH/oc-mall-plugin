@@ -1,0 +1,12 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+addresses:
+    label: 'offline.mall::lang.common.address'
+    manage:
+        form: $/offline/mall/models/address/fields.yaml
+        list: $/offline/mall/models/address/columns.yaml
+    view:
+        list: $/offline/mall/models/address/columns.yaml
+        toolbarButtons: create|delete

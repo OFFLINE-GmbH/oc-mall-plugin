@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Customer;
 use DB;
 use Event;
 use Flash;
+use Illuminate\Support\Facades\Validator;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
@@ -13,7 +14,6 @@ use OFFLINE\Mall\Models\User;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\UserGroup;
 use Redirect;
-use Validator;
 
 class DefaultSignUpHandler implements SignUpHandler
 {

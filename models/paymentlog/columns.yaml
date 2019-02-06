@@ -1,0 +1,85 @@
+columns:
+    id:
+        label: 'offline.mall::lang.common.id'
+        type: number
+        sortable: true
+        invisible: true
+    order_id:
+        label: 'offline.mall::lang.order.order_number'
+        type: number
+        searchable: true
+        sortable: true
+    failed:
+        label: 'offline.mall::lang.order.status'
+        type: partial
+        searchable: true
+        sortable: true
+        path: $/offline/mall/controllers/paymentlogs/_failed.htm
+    total:
+        label: 'offline.mall::lang.order.total'
+        type: partial
+        searchable: true
+        sortable: false
+        path: $/offline/mall/controllers/paymentlogs/_total.htm
+    order_data:
+        label: 'offline.mall::lang.order.data'
+        type: text
+        searchable: true
+        invisible: true
+        sortable: true
+    reference:
+        label: 'offline.mall::lang.common.reference'
+        type: text
+        searchable: true
+        sortable: true
+    payment_method:
+        label: 'offline.mall::lang.common.payment_method'
+        type: partial
+        searchable: true
+        sortable: true
+        path: $/offline/mall/controllers/paymentlogs/_payment_method.htm
+    payment_provider:
+        label: 'offline.mall::lang.common.payment_provider'
+        type: text
+        searchable: true
+        sortable: true
+        invisible: true
+    ip:
+        label: IP
+        type: text
+        searchable: true
+        sortable: true
+        invisible: true
+    session_id:
+        label: 'offline.mall::lang.common.session_id'
+        type: text
+        searchable: true
+        sortable: true
+        invisible: true
+    data:
+        label: 'offline.mall::lang.common.data'
+        type: text
+        searchable: true
+        invisible: true
+        sortable: true
+    message:
+        label: 'offline.mall::lang.common.message'
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: 'offline.mall::lang.common.code'
+        type: text
+        searchable: true
+        sortable: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        searchable: true
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        searchable: true
+        invisible: true
+        sortable: true

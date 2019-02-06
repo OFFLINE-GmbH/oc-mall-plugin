@@ -1,0 +1,12 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+payment_logs:
+    label: 'offline.mall::lang.common.payment'
+    view:
+        list: $/offline/mall/models/paymentlog/columns.yaml
+        toolbarButtons: delete
+    manage:
+        form: $/offline/mall/models/paymentlog/fields.yaml
+        recordsPerPage: 10

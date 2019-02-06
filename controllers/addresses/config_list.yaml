@@ -1,0 +1,15 @@
+title: 'offline.mall::lang.common.addresses'
+modelClass: OFFLINE\Mall\Models\Address
+list: $/offline/mall/models/address/columns.yaml
+recordUrl: 'offline/mall/addresses/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: created_at
+    direction: desc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

@@ -1,0 +1,9 @@
+<?php if($value): ?>
+<span class="oc-icon-circle text-danger">
+    <?= e(trans('offline.mall::lang.common.failed')) ?>
+</span>
+<?php else: ?>
+<span class="oc-icon-circle text-success">
+    <?= e(trans('offline.mall::lang.common.successful')) ?>
+</span>
+<?php endif; ?>

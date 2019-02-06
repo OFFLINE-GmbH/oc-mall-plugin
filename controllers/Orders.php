@@ -13,11 +13,13 @@ use OFFLINE\Mall\Models\OrderState;
 class Orders extends Controller
 {
     public $implement = [
-        'Backend.Behaviors.ListController',
-        'Backend.Behaviors.ImportExportController',
+        Backend\Behaviors\ListController::class,
+        Backend\Behaviors\ImportExportController::class,
+        Backend\Behaviors\RelationController::class,
     ];
 
     public $listConfig = 'config_list.yaml';
+    public $relationConfig = 'config_relation.yaml';
     public $importExportConfig = 'config_import_export.yaml';
 
     public $requiredPermissions = ['offline.mall.manage_orders'];
@@ -40,7 +42,11 @@ class Orders extends Controller
         $this->pageTitle = trans('offline.mall::lang.titles.orders.show');
         $this->addCss('/plugins/offline/mall/assets/backend.css');
 
+
         $order                      = Order::with('products', 'order_state')->findOrFail($this->params[0]);
+
+        $this->initRelation($order, 'payment_logs');
+
         $this->vars['order']        = $order;
         $this->vars['money']        = app(Money::class);
         $this->vars['orderStates']  = OrderState::orderBy('sort_order', 'ASC')->get();

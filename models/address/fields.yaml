@@ -1,0 +1,42 @@
+fields:
+    customer:
+        label: 'offline.mall::lang.order.customer'
+        span: auto
+        type: dropdown
+    company:
+        label: 'offline.mall::frontend.form.company'
+        span: auto
+        type: text
+    lines:
+        label: 'offline.mall::frontend.form.address_lines'
+        size: ''
+        span: auto
+        type: textarea
+    name:
+        label: 'offline.mall::frontend.form.recipient'
+        span: auto
+        type: text
+    zip:
+        label: 'offline.mall::frontend.form.zip'
+        span: left
+        type: text
+    city:
+        label: 'offline.mall::frontend.form.city'
+        span: right
+        type: text
+    country:
+        label: 'offline.mall::frontend.form.country'
+        type: dropdown
+        span: left
+        placeholder: rainlab.location::lang.country.select
+    state:
+        label: 'offline.mall::frontend.form.state'
+        type: dropdown
+        span: right
+        dependsOn: country
+        placeholder: rainlab.location::lang.state.select
+    details:
+        label: 'offline.mall::lang.product.details'
+        size: ''
+        span: auto
+        type: textarea

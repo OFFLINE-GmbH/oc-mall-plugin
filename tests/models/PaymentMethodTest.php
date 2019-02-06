@@ -80,12 +80,13 @@ class PaymentMethodTest extends PluginTestCase
 
         $cart->addProduct($product, 1);
 
-        $address             = new Address();
-        $address->name       = 'Mr. Miller';
-        $address->lines      = 'Street 12';
-        $address->zip        = '6003';
-        $address->city       = 'Lucerne';
-        $address->country_id = Country::where('code', 'CH')->first()->id;
+        $address              = new Address();
+        $address->name        = 'Mr. Miller';
+        $address->lines       = 'Street 12';
+        $address->zip         = '6003';
+        $address->city        = 'Lucerne';
+        $address->customer_id = 1;
+        $address->country_id  = Country::where('code', 'CH')->first()->id;
         $address->save();
 
         $cart->setShippingAddress($address);

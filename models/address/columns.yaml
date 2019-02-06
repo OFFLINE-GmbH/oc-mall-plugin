@@ -1,0 +1,70 @@
+columns:
+    id:
+        label: 'offline.mall::lang.common.id'
+        type: number
+        invisible: true
+        sortable: true
+    company:
+        label: 'offline.mall::frontend.form.company'
+        type: text
+        searchable: true
+        sortable: true
+    name:
+        label: 'offline.mall::frontend.form.recipient'
+        type: text
+        searchable: true
+        sortable: true
+    lines:
+        label: 'offline.mall::frontend.form.address_lines'
+        type: text
+        searchable: true
+        sortable: true
+    zip:
+        label: 'offline.mall::frontend.form.zip'
+        type: text
+        searchable: true
+        sortable: true
+    city:
+        label: 'offline.mall::frontend.form.city'
+        type: text
+        searchable: true
+        sortable: true
+    state_id:
+        label: 'offline.mall::frontend.form.state'
+        type: number
+        sortable: true
+        select: name
+        relation: state
+    country_id:
+        label: 'offline.mall::frontend.form.country'
+        type: number
+        sortable: true
+        select: name
+        relation: country
+    details:
+        label: 'offline.mall::lang.product.details'
+        type: text
+        searchable: true
+        invisible: true
+        sortable: true
+    customer_id:
+        label: 'offline.mall::lang.order.customer'
+        type: text
+        sortable: true
+        select: name
+        relation: customer
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        invisible: true
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        invisible: true
+        sortable: true
+    deleted_at:
+        label: 'offline.mall::lang.common.deleted_at'
+        type: datetime
+        invisible: true
+        sortable: true

@@ -18,11 +18,13 @@
   ],
   "require": {
     "composer/installers": "~1.0",
-    "league/omnipay": "^2.3",
     "hashids/hashids": "^2.0",
     "filebase/filebase": "^1.0",
     "offline/jsonq": "^5.2.4",
-    "elasticsearch/elasticsearch": "^6.0"
+    "elasticsearch/elasticsearch": "^6.0",
+    "league/omnipay": "^3",
+    "omnipay/paypal": "^3.0",
+    "omnipay/stripe": "^3.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",

@@ -1,0 +1,11 @@
+name: 'offline.mall::lang.common.payment'
+modelClass: OFFLINE\Mall\Models\PaymentLog
+form: $/offline/mall/models/paymentlog/fields.yaml
+defaultRedirect: offline/mall/paymentlogs
+create:
+    redirect: 'offline/mall/paymentlogs/update/:id'
+    redirectClose: offline/mall/paymentlogs
+update:
+    redirect: offline/mall/paymentlogs
+    redirectClose: offline/mall/paymentlogs
+preview: {  }

@@ -1,0 +1,17 @@
+<?php if($value): ?>
+<div class="callout callout-danger no-icon">
+    <div class="header">
+        <p>
+            <strong><?= e(trans('offline.mall::lang.common.failed')) ?></strong>
+        </p>
+    </div>
+</div>
+<?php else: ?>
+<div class="callout callout-success no-icon">
+    <div class="header">
+        <p>
+            <strong><?= e(trans('offline.mall::lang.common.successful')) ?></strong>
+        </p>
+    </div>
+</div>
+<?php endif; ?>

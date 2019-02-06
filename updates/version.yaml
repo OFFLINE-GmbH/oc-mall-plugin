@@ -87,3 +87,5 @@
     - Optimized handling of customer group specific prices
 1.0.21:
     - Optimized RainLab.Translate integration (thanks to @alxy)
+1.0.22:
+    - Updated Omnipay to v3, added list views for payment logs and customer addresses. If you have custom payment providers that use Omnipay make sure that they are compatible with v3 before updating
