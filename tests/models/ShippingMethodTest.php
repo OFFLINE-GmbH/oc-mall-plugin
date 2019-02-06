@@ -3,7 +3,6 @@
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Price;
-use OFFLINE\Mall\Models\PriceCategory;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
@@ -107,12 +106,13 @@ class ShippingMethodTest extends PluginTestCase
     {
         $product = $this->getProduct(100);
 
-        $address             = new Address();
-        $address->name       = 'Mr. Miller';
-        $address->lines      = 'Street 12';
-        $address->zip        = '6003';
-        $address->city       = 'Lucerne';
-        $address->country_id = Country::where('code', 'CH')->first()->id;
+        $address              = new Address();
+        $address->name        = 'Mr. Miller';
+        $address->lines       = 'Street 12';
+        $address->zip         = '6003';
+        $address->city        = 'Lucerne';
+        $address->customer_id = 1;
+        $address->country_id  = Country::where('code', 'CH')->first()->id;
         $address->save();
 
         $cart = new Cart();
@@ -137,12 +137,13 @@ class ShippingMethodTest extends PluginTestCase
     {
         $product = $this->getProduct(100);
 
-        $address             = new Address();
-        $address->name       = 'Mr. Miller';
-        $address->lines      = 'Street 12';
-        $address->zip        = '6003';
-        $address->city       = 'Lucerne';
-        $address->country_id = Country::where('code', 'CH')->first()->id;
+        $address              = new Address();
+        $address->name        = 'Mr. Miller';
+        $address->lines       = 'Street 12';
+        $address->zip         = '6003';
+        $address->city        = 'Lucerne';
+        $address->customer_id = 1;
+        $address->country_id  = Country::where('code', 'CH')->first()->id;
         $address->save();
 
         $cart = new Cart();
@@ -181,12 +182,13 @@ class ShippingMethodTest extends PluginTestCase
     {
         $product = $this->getProduct(100);
 
-        $address             = new Address();
-        $address->name       = 'Mr. Miller';
-        $address->lines      = 'Street 12';
-        $address->zip        = '6003';
-        $address->city       = 'Lucerne';
-        $address->country_id = Country::where('code', 'CH')->first()->id;
+        $address              = new Address();
+        $address->name        = 'Mr. Miller';
+        $address->lines       = 'Street 12';
+        $address->zip         = '6003';
+        $address->city        = 'Lucerne';
+        $address->customer_id = 1;
+        $address->country_id  = Country::where('code', 'CH')->first()->id;
         $address->save();
 
         $cart = new Cart();
