@@ -1,0 +1,11 @@
+name: 'offline.mall::lang.common.address'
+modelClass: OFFLINE\Mall\Models\Address
+form: $/offline/mall/models/address/fields.yaml
+defaultRedirect: offline/mall/addresses
+create:
+    redirect: 'offline/mall/addresses/update/:id'
+    redirectClose: offline/mall/addresses
+update:
+    redirect: offline/mall/addresses
+    redirectClose: offline/mall/addresses
+preview: {  }

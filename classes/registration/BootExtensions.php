@@ -5,11 +5,13 @@ namespace OFFLINE\Mall\Classes\Registration;
 use App;
 use Backend\Widgets\Form;
 use Illuminate\Support\Facades\Event;
+use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\User;
+use OFFLINE\Mall\Models\User as MallUser;
 use RainLab\Location\Models\Country as RainLabCountry;
+use RainLab\User\Controllers\Users as RainLabUsersController;
 use RainLab\User\Models\User as RainLabUser;
 
 trait BootExtensions
@@ -42,12 +44,26 @@ trait BootExtensions
         RainLabUser::extend(function ($model) {
             $model->hasOne['customer']          = Customer::class;
             $model->belongsTo['customer_group'] = [CustomerGroup::class, 'key' => 'offline_mall_customer_group_id'];
-            $model->rules['surname'] = 'required';
-            $model->rules['name'] = 'required';
+            $model->hasManyThrough['addresses']        = [
+                Address::class,
+                'key'        => 'user_id',
+                'through'    => Customer::class,
+                'throughKey' => 'id',
+            ];
+            $model->rules['surname']            = 'required';
+            $model->rules['name']               = 'required';
         });
-        User::extend(function ($model) {
+
+        RainLabUsersController::extend(function (RainLabUsersController $users) {
+            // Extend the Users controller with the Relation behaviour that is needed
+            // to display the addresses relation widget below.
+            $users->implement[]    = \Backend\Behaviors\RelationController::class;
+            $users->relationConfig = '$/offline/mall/controllers/customers/config_relation.yaml';
+        });
+
+        MallUser::extend(function ($model) {
             $model->rules['surname'] = 'required';
-            $model->rules['name'] = 'required';
+            $model->rules['name']    = 'required';
         });
 
         // Add Customer Groups menu entry to RainLab.User
@@ -60,13 +76,20 @@ trait BootExtensions
                     'permissions' => ['rainlab.users.*'],
                 ],
             ]);
-
             $manager->addSideMenuItems('RainLab.User', 'user', [
                 'customer_groups' => [
                     'label'       => 'offline.mall::lang.common.customer_groups',
                     'url'         => \Backend::url('offline/mall/customergroups'),
                     'icon'        => 'icon-users',
                     'permissions' => ['rainlab.users.*', 'offline.mall.manage_customer_groups'],
+                ],
+            ]);
+            $manager->addSideMenuItems('RainLab.User', 'user', [
+                'customer_addresses' => [
+                    'label'       => 'offline.mall::lang.common.addresses',
+                    'url'         => \Backend::url('offline/mall/addresses'),
+                    'icon'        => 'icon-home',
+                    'permissions' => ['rainlab.users.*', 'offline.mall.manage_customer_addresses'],
                 ],
             ]);
         });
@@ -87,8 +110,17 @@ trait BootExtensions
                     'type'        => 'relation',
                     'nameFrom'    => 'name',
                     'emptyOption' => trans('offline.mall::lang.common.none'),
-                    'tab'         => 'rainlab.user::lang.user.account',
+                    'tab'         => 'offline.mall::lang.plugin.name',
                 ],
+                //
+                // This feature is blocked by https://github.com/octobercms/october/issues/2508
+                //
+                // 'addresses'      => [
+                //     'label' => trans('offline.mall::lang.common.addresses'),
+                //     'type'  => 'partial',
+                //     'path'  => '$/offline/mall/controllers/customers/_addresses.htm',
+                //     'tab'   => 'offline.mall::lang.plugin.name',
+                // ],
             ]);
         });
     }

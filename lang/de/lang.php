@@ -247,6 +247,8 @@
         'value'                => 'Wert',
         'action_required'      => 'Aktion wird benötigt!',
         'invalid_quantity'     => 'Die eingetragene Anzahl ist ungültig.',
+        'addresses'            => 'Adressen',
+        'address'              => 'Adresse',
     ],
     'variant'                  => [
         'method' => [
@@ -331,9 +333,9 @@
             'title'             => 'Übersicht für Preise und Lagerbestand',
             'currency_dropdown' => 'Währung: ',
         ],
-        'missing_category' => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
-        'variant_support_header' => 'Varianten nicht unterstützt',
-        'variant_support_text' => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel".',
+        'missing_category'                     => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
+        'variant_support_header'               => 'Varianten nicht unterstützt',
+        'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel".',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',
@@ -508,23 +510,24 @@
         'open'          => 'Zahlung ausstehend',
     ],
     'permissions'              => [
-        'manage_products'         => 'Kann Produkte verwalten',
-        'manage_categories'       => 'Kann Kategorien verwalten',
-        'manage_orders'           => 'Kann Bestellungen verwalten',
-        'manage_discounts'        => 'Kann Rabatte verwalten',
-        'settings'                => [
+        'manage_products'           => 'Kann Produkte verwalten',
+        'manage_categories'         => 'Kann Kategorien verwalten',
+        'manage_orders'             => 'Kann Bestellungen verwalten',
+        'manage_discounts'          => 'Kann Rabatte verwalten',
+        'settings'                  => [
             'manage_general'         => 'Kann die Grundeinstellungen des Shops verändern',
             'manage_api'             => 'Kann die API-Konfiguration des Shops verändern',
             'manage_currency'        => 'Kann die Währungs-Einstellungen des Shops verändern',
             'manage_payment_methods' => 'Zahlungsmethoden verwalten',
         ],
-        'manage_properties'       => 'Kann Produkt-Eigenschaften verwalten',
-        'manage_customer_groups'  => 'Kann Kundengruppen verwalten',
-        'manage_notifications'    => 'Kann Benachrichtigungen verwalten',
-        'manage_price_categories' => 'Kann Preiskategorien verwalten',
-        'manage_order_states'     => 'Kann Bestellstatus verwalten',
-        'manage_shipping_methods' => 'Kann Versandmethoden verwalten',
-        'manage_taxes'            => 'Kann Steuern verwalten',
+        'manage_properties'         => 'Kann Produkt-Eigenschaften verwalten',
+        'manage_customer_groups'    => 'Kann Kundengruppen verwalten',
+        'manage_customer_addresses' => 'Kann Kundenadressen verwalten',
+        'manage_notifications'      => 'Kann Benachrichtigungen verwalten',
+        'manage_price_categories'   => 'Kann Preiskategorien verwalten',
+        'manage_order_states'       => 'Kann Bestellstatus verwalten',
+        'manage_shipping_methods'   => 'Kann Versandmethoden verwalten',
+        'manage_taxes'              => 'Kann Steuern verwalten',
     ],
     'components'               => [
         'products'               => [

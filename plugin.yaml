@@ -100,3 +100,6 @@ permissions:
     offline.mall.manage_shipping_methods:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_shipping_methods'
+    offline.mall.manage_customer_addresses:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_customer_addresses'

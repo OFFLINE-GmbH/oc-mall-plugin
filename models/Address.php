@@ -17,10 +17,11 @@ class Address extends Model
     protected $dates = ['deleted_at'];
 
     public $rules = [
-        'lines'      => 'required',
-        'zip'        => 'required',
-        'country_id' => 'required|exists:rainlab_location_countries,id',
-        'city'       => 'required',
+        'lines'       => 'required',
+        'zip'         => 'required',
+        'country_id'  => 'required|exists:rainlab_location_countries,id',
+        'customer_id' => 'required|exists:offline_mall_customers,id',
+        'city'        => 'required',
     ];
 
     public $fillable = [
@@ -42,7 +43,7 @@ class Address extends Model
 
     public function getNameAttribute()
     {
-        return $this->getOriginal('name') ?: $this->customer->name;
+        return $this->getOriginal('name') ?: optional($this->customer)->name;
     }
 
     public function getOneLinerAttribute(): string
@@ -61,6 +62,15 @@ class Address extends Model
     public static function byCustomer(Customer $customer)
     {
         return self::where('customer_id', $customer->id);
+    }
+
+    public function getCustomerOptions()
+    {
+        return Customer::with('user')->get()->mapWithKeys(function (Customer $customer) {
+            return [
+                $customer->id => sprintf('%s (%s)', $customer->name, optional($customer->user)->email),
+            ];
+        })->toArray();
     }
 
     public function toArray()
