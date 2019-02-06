@@ -56,6 +56,7 @@ class OrderProduct extends Model
 
     public $belongsTo = [
         'variant' => Variant::class,
+        'product' => Product::class,
         'order'   => Order::class,
     ];
 
