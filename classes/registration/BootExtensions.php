@@ -58,7 +58,7 @@ trait BootExtensions
             // Extend the Users controller with the Relation behaviour that is needed
             // to display the addresses relation widget below.
             $users->implement[]    = \Backend\Behaviors\RelationController::class;
-            $users->relationConfig = '$/offline/mall/controllers/customers/config_relation.yaml';
+            $users->relationConfig = '$/offline/mall/controllers/users/config_relation.yaml';
         });
 
         MallUser::extend(function ($model) {
@@ -118,7 +118,7 @@ trait BootExtensions
                 // 'addresses'      => [
                 //     'label' => trans('offline.mall::lang.common.addresses'),
                 //     'type'  => 'partial',
-                //     'path'  => '$/offline/mall/controllers/customers/_addresses.htm',
+                //     'path'  => '$/offline/mall/controllers/users/_addresses.htm',
                 //     'tab'   => 'offline.mall::lang.plugin.name',
                 // ],
             ]);
