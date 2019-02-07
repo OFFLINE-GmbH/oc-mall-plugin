@@ -110,7 +110,7 @@ class Filebase implements Index
     {
         if ($filters->has('category_id')) {
             $filter = $filters->pull('category_id');
-            $this->jsonq->whereIn($filter->property, $filter->values());
+            $this->jsonq->where($filter->property, 'includes', $filter->values());
         }
 
         if ($filters->has('brand')) {

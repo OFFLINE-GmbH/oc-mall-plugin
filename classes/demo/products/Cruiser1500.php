@@ -9,7 +9,6 @@ class Cruiser1500 extends DemoProduct
     protected function attributes(): array
     {
         return [
-            'category_id'                  => $this->category('citybikes')->id,
             'brand_id'                     => $this->brand('cruiser-bikes')->id,
             'user_defined_id'              => 'CITY002',
             'name'                         => 'Cruiser 1500',
@@ -58,6 +57,12 @@ class Cruiser1500 extends DemoProduct
         ];
     }
 
+    protected function categories(): array
+    {
+        return [
+            $this->category('citybikes')->id,
+        ];
+    }
 
     protected function variants(): array
     {

@@ -46,7 +46,13 @@ class PriceRangeQuery
                 '=',
                 'offline_mall_products.id'
             )
-            ->whereIn('offline_mall_products.category_id', $this->categories)
+            ->join(
+                'offline_mall_category_product',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_category_product.product_id'
+            )
+            ->whereIn('offline_mall_category_product.category_id', $this->categories)
             ->where('offline_mall_product_prices.currency_id', $this->currency->id);
     }
 }

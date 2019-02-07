@@ -65,7 +65,7 @@ class Products extends Controller
             return;
         }
         // If the product has no category something is wrong and needs fixing!
-        if ( ! $this->vars['formModel']->category) {
+        if ( ! $this->vars['formModel']->categories) {
             Flash::error(trans('offline.mall::lang.common.action_required'));
 
             return redirect(Backend::url('offline/mall/products/change_category/' . $id));
@@ -77,7 +77,7 @@ class Products extends Controller
         $this->pageTitle   = trans('offline.mall::lang.common.action_required');
         $config            = $this->makeConfigFromArray([
             'fields' => [
-                'category' => [
+                'categories' => [
                     'label'           => 'offline.mall::lang.common.category',
                     'nameFrom'        => 'name',
                     'descriptionFrom' => 'description',
@@ -96,7 +96,7 @@ class Products extends Controller
     public function change_category_onSave()
     {
         $product              = Product::findOrFail($this->params[0]);
-        $product->category_id = post('Product.category');
+        $product->categories()->attach(post('Product.categories'));
         $product->save();
 
         Flash::success(trans('offline.mall::lang.common.saved_changes'));

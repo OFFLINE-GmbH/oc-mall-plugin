@@ -14,9 +14,9 @@ columns:
         type: partial
         path: $/offline/mall/models/product/_published.htm
         sortable: true
-    category:
+    categories:
         label: 'offline.mall::lang.common.category'
-        relation: category
+        relation: categories
         select: name
         sortable: true
         searchable: true

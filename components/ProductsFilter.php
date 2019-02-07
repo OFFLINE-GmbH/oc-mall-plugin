@@ -202,7 +202,7 @@ class ProductsFilter extends MallComponent
                 'default' => '1',
                 'type'    => 'checkbox',
             ],
-            'showOnSaleFilter'     => [
+            'showOnSaleFilter'    => [
                 'title'   => 'offline.mall::lang.components.productsFilter.properties.showOnSaleFilter.title',
                 'default' => '0',
                 'type'    => 'checkbox',
@@ -315,7 +315,7 @@ class ProductsFilter extends MallComponent
         }
 
         $properties = Property::whereIn('slug', $data->keys())->get();
-        $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
+        $filter     = $data->mapWithKeys(function ($values, $id) use ($properties) {
             $property = Filter::isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
             if (is_array($values)
                 && array_key_exists('min', $values)
@@ -382,10 +382,14 @@ class ProductsFilter extends MallComponent
     protected function setBrands()
     {
         $brands = \DB::table('offline_mall_products')
-                     ->whereIn('offline_mall_products.category_id', $this->categories)
+                     ->whereIn('offline_mall_category_product.category_id', $this->categories)
                      ->select('offline_mall_brands.*')
                      ->distinct()
                      ->join('offline_mall_brands', 'offline_mall_products.brand_id', '=', 'offline_mall_brands.id')
+                     ->join(
+                         'offline_mall_category_product',
+                         'offline_mall_products.id', '=', 'offline_mall_category_product.product_id'
+                     )
                      ->get()
                      ->toArray();
 
@@ -476,7 +480,7 @@ class ProductsFilter extends MallComponent
      * Replace the currently active filter query string.
      *
      * @param Collection $filter
-     * @param $sortOrder
+     * @param            $sortOrder
      *
      * @return array
      */
