@@ -9,7 +9,6 @@ class Cruiser5000 extends DemoProduct
     protected function attributes(): array
     {
         return [
-            'category_id'                  => $this->category('mountainbikes')->id,
             'brand_id'                     => $this->brand('cruiser-bikes')->id,
             'user_defined_id'              => 'MTB001',
             'name'                         => 'Cruiser 5000',
@@ -55,6 +54,13 @@ class Cruiser5000 extends DemoProduct
             'fork-travel' => '160',
             'material'    => 'Carbon',
             'gender'      => 'Unisex',
+        ];
+    }
+
+    protected function categories(): array
+    {
+        return [
+            $this->category('mountainbikes')->id,
         ];
     }
 

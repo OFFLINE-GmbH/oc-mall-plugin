@@ -7,7 +7,6 @@ use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
@@ -31,6 +30,8 @@ abstract class DemoProduct
 
     abstract protected function prices(): array;
 
+    abstract protected function categories(): array;
+
     protected function additionalPrices(): array
     {
         return [];
@@ -42,6 +43,7 @@ abstract class DemoProduct
         $this->product->taxes()->attach($this->taxes());
 
         $this->product->prices()->saveMany($this->prices());
+        $this->product->categories()->attach($this->categories());
         $this->product->additional_prices()->saveMany($this->additionalPrices());
 
         foreach ($this->properties() as $slug => $value) {

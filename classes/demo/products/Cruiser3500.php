@@ -9,7 +9,6 @@ class Cruiser3500 extends DemoProduct
     protected function attributes(): array
     {
         return [
-            'category_id'                  => $this->category('mountainbikes')->id,
             'brand_id'                     => $this->brand('cruiser-bikes')->id,
             'user_defined_id'              => 'MTB003',
             'name'                         => 'Cruiser 3500',
@@ -55,6 +54,13 @@ class Cruiser3500 extends DemoProduct
             'fork-travel' => '130',
             'material'    => 'Aluminium',
             'gender'      => 'Unisex',
+        ];
+    }
+
+    protected function categories(): array
+    {
+        return [
+            $this->category('mountainbikes')->id,
         ];
     }
 

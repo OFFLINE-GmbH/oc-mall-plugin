@@ -89,3 +89,11 @@
     - Optimized RainLab.Translate integration (thanks to @alxy)
 1.0.22:
     - Updated Omnipay to v3, added list views for payment logs and customer addresses. If you have custom payment providers that use Omnipay make sure that they are compatible with v3 before updating
+1.1.0:
+    - |
+        !!! A product can now belong to multiple categories. If you are using the `$product->category`
+        relationship directly make sure to update it to use the new `$product->categories` relationship.
+        Existing products will be migrated and re-indexed during this update. If you have many products
+        (more than a few hundred) you should run `php artisan october:update` from the command line to
+        get more feedback on this update.
+    - migrate_categories_to_belongs_to_many_relation.php

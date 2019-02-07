@@ -10,7 +10,6 @@ class Cruiser1000 extends DemoProduct
     protected function attributes(): array
     {
         return [
-            'category_id'                  => $this->category('citybikes')->id,
             'brand_id'                     => $this->brand('cruiser-bikes')->id,
             'user_defined_id'              => 'CITY001',
             'name'                         => 'Cruiser 1000',
@@ -47,6 +46,13 @@ class Cruiser1000 extends DemoProduct
             'fork-travel' => '110',
             'material'    => 'Aluminium',
             'gender'      => 'Unisex',
+        ];
+    }
+
+    protected function categories(): array
+    {
+        return [
+            $this->category('citybikes')->id,
         ];
     }
 

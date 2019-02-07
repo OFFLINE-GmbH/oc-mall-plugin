@@ -343,7 +343,7 @@
         ],
         'missing_category'                     => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
         'variant_support_header'               => 'Varianten nicht unterstützt',
-        'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel".',
+        'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel" oder wählen Sie eine andere Kategorie aus.',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',

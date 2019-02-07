@@ -22,9 +22,17 @@ tabs:
             type: switch
             comment: 'offline.mall::lang.product.published_comment'
             tab: 'offline.mall::lang.product.general'
+        categories:
+            label: 'offline.mall::lang.common.categories'
+            oc.commentPosition: ''
+            nameFrom: name
+            descriptionFrom: description
+            span: right
+            type: relation
+            tab: 'offline.mall::lang.product.general'
         allow_out_of_stock_purchases:
             label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
-            span: right
+            span: left
             type: switch
             comment: 'offline.mall::lang.product.allow_out_of_stock_purchases_comment'
             tab: 'offline.mall::lang.product.general'
@@ -32,34 +40,26 @@ tabs:
                 action: hide
                 field: inventory_management_method
                 condition: 'value[variant]'
-        category:
-            label: 'offline.mall::lang.common.category'
-            oc.commentPosition: ''
-            nameFrom: name
-            descriptionFrom: description
-            span: auto
-            type: relation
-            tab: 'offline.mall::lang.product.general'
         inventory_management_method:
             label: 'offline.mall::lang.product.inventory_management_method'
             oc.commentPosition: ''
-            span: auto
+            span: left
             type: dropdown
             tab: 'offline.mall::lang.product.general'
         group_by_property_id:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
-            span: right
+            span: left
             trigger:
                 action: show
                 field: inventory_management_method
                 condition: 'value[variant]'
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-            dependsOn: category
+            dependsOn: categories
         _table_trigger:
             oc.commentPosition: ''
-            span: auto
+            span: left
             type: partial
             path: price_table_trigger
             tab: 'offline.mall::lang.product.general'
@@ -82,7 +82,7 @@ tabs:
                 condition: 'value[single]'
             type: partial
             tab: 'offline.mall::lang.product.general'
-            dependsOn: category
+            dependsOn: categories
         description_short:
             label: 'offline.mall::lang.product.description_short'
             oc.commentPosition: ''
@@ -154,7 +154,7 @@ tabs:
             span: full
             type: mall.propertyfields
             tab: 'offline.mall::lang.common.properties'
-            dependsOn: category
+            dependsOn: categories
         price_includes_tax:
             label: 'offline.mall::lang.product.price_includes_tax'
             span: auto

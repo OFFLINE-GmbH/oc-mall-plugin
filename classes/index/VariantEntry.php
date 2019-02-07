@@ -26,6 +26,7 @@ class VariantEntry implements Entry
             'prices.currency',
             'property_values.property',
             'product.brand',
+            'product.categories',
             'customer_group_prices',
             'product.customer_group_prices',
         ]);
@@ -38,7 +39,7 @@ class VariantEntry implements Entry
         $data['published'] = $variant->published && $product->published;
         $data['on_sale']   = $variant->on_sale;
 
-        $data['category_id'] = $product->category_id;
+        $data['category_id'] = $product->categories->pluck('id');
 
         $data['index']                 = self::INDEX;
         $data['property_values']       = $this->mapProps($variant->all_property_values);
