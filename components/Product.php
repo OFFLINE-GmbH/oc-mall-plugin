@@ -192,7 +192,7 @@ class Product extends MallComponent
             return;
         }
 
-        if ( ! $this->product->category) {
+        if ( ! $this->product->categories) {
             $this->isNotFound = true;
             logger()->error(
                 'A product without an existing category has been found.',
@@ -356,7 +356,7 @@ class Product extends MallComponent
                 'variants.image_sets',
                 'image_sets',
                 'downloads',
-                'category',
+                'categories',
                 'taxes',
             ];
         }
@@ -444,7 +444,7 @@ class Product extends MallComponent
             return $valueMap;
         }
 
-        return $this->product->category->properties->map(function (Property $property) use ($valueMap) {
+        return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
             $values = $valueMap->get($property->id);
 
             return (object)[
