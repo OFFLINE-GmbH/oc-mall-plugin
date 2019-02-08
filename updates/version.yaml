@@ -54,7 +54,7 @@
 1.0.5:
     - Optimized SQLite support
 1.0.6:
-    - Minor bugfixes 
+    - Minor bugfixes
 1.0.7:
     - Added "on sale" filter option to products filter component (run php artisan mall:reindex to get this feature)
 1.0.8:
@@ -93,7 +93,12 @@
     - |
         !!! A product can now belong to multiple categories. If you are using the `$product->category`
         relationship directly make sure to update it to use the new `$product->categories` relationship.
-        Existing products will be migrated and re-indexed during this update. If you have many products
-        (more than a few hundred) you should run `php artisan october:update` from the command line to
-        get more feedback on this update.
+        Existing products will be migrated to the new database structure during this update.
     - migrate_categories_to_belongs_to_many_relation.php
+1.1.1:
+    - |
+        !!! New database-backed index. To increase the performance of this plugin the product index can now be
+        stored in the database if you use MySQL 5.7+ or MariaDB 10.2+ (support will be auto-detected).
+        After this update your index will have to be rebuilt by running "php artisan mall:reindex" from the terminal.
+        Between the completition of the update and the re-indexing your store will be empty!
+        Make sure to consider this downtime when deploying to a production system.

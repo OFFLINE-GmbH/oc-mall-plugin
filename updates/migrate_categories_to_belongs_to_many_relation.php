@@ -3,39 +3,19 @@
 use Artisan;
 use DB;
 use October\Rain\Database\Updates\Migration;
-use OFFLINE\Mall\Classes\Registration\BootServiceContainer;
-use OFFLINE\Mall\Classes\Registration\BootTwig;
-use OFFLINE\Mall\Console\ReindexProducts;
 use Schema;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 
 class MigrateCategoriesToBelongstoManyRelation extends Migration
 {
-    use BootServiceContainer;
-    use BootTwig;
-
-    public $app;
-
-    public function __construct()
-    {
-        $this->app = app();
-    }
-
     public function up()
     {
-        // Since the Plugin itself is not loaded during the migration we need to make
-        // sure the required services and commands are registered in the app container.
-        $this->registerServices();
-        $this->registerTwigEnvironment();
-
         Schema::create('offline_mall_category_product', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->integer('category_id')->unsigned();
-            $table->integer('sort_order')->unsigned();
+            $table->integer('sort_order')->unsigned()->nullable();
         });
 
         // Migrate products to new structure. Migrate the category sort order as well.
@@ -64,14 +44,6 @@ class MigrateCategoriesToBelongstoManyRelation extends Migration
         });
 
         Schema::drop('offline_mall_category_product_sort_order');
-
-        // Rebuild the index with the new category structure if there were
-        // any products present before this migration.
-        if (app()->environment() !== 'testing' && $products->count() > 0) {
-            $command = new ReindexProducts();
-            $command->setLaravel($this->app);
-            $command->run(new StringInput('--force'), new ConsoleOutput());
-        }
     }
 
     public function down()
