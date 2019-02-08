@@ -146,6 +146,11 @@
         'customizations_comment'     => 'Globale Konfigurationseinstellungen für deinen Shop',
         'order_number_start'         => 'Beginn Bestellungsnummerierung',
         'order_number_start_comment' => 'Die erste Bestellung erhält diese Nummer',
+        'index_driver'               => 'Index-Treiber',
+        'index_driver_comment'       => 'Wenn deine Datenbank JSON unterstützt wird der Datenbank-Treiber empfohlen.',
+        'index_driver_filesystem'    => 'Dateisystem',
+        'index_driver_database'      => 'Datenbank (nur für MySQL 5.7+ oder MariaDB 10.2+)',
+        'index_driver_hint'          => 'Nachdem diese Option geändert wurde muss "php artisan mall:reindex" auf der Konsole ausgeführt werden!',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -257,6 +262,7 @@
         'data'                 => 'Data',
         'successful'           => 'Erfolgreich',
         'failed'               => 'Fehlgeschlagen',
+        'caution'              => 'Achtung',
     ],
     'variant'                  => [
         'method' => [

@@ -147,6 +147,11 @@
         'category_page_comment'      => 'Add the "products" component to this page.',
         'order_number_start'         => 'First order number',
         'order_number_start_comment' => 'Initial id of the first order',
+        'index_driver'               => 'Index driver',
+        'index_driver_comment'       => 'If your database supports JSON use the database driver.',
+        'index_driver_filesystem'    => 'Filesystem',
+        'index_driver_database'      => 'Database (only for MySQL 5.7+ or MariaDB 10.2+)',
+        'index_driver_hint'          => 'If you change this option make sure to run "php artisan mall:reindex" on the command line to re-index your products!'
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -258,6 +263,7 @@
         'data'                 => 'Data',
         'successful'           => 'Successful',
         'failed'               => 'Failed',
+        'caution'              => 'Caution',
     ],
     'variant'                  => [
         'method' => [

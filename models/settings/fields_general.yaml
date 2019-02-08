@@ -5,9 +5,23 @@ fields:
 
     admin_email:
         label: offline.mall::lang.general_settings.admin_email
-        span: left
+        span: auto
         type: text
         comment: offline.mall::lang.general_settings.admin_email_comment
+
+    index_driver:
+        label: offline.mall::lang.general_settings.index_driver
+        span: auto
+        type: dropdown
+        comment: offline.mall::lang.general_settings.index_driver_comment
+        options:
+            database: offline.mall::lang.general_settings.index_driver_database
+            filesystem: offline.mall::lang.general_settings.index_driver_filesystem
+
+    index_hint:
+        span: right
+        type: partial
+        path: $/offline/mall/models/settings/_index_hint.htm
 
     links:
         label: offline.mall::lang.general_settings.links
