@@ -84,7 +84,7 @@ will be filtered by their category, their color and their material. The paginati
 will be built based on the returned number of results.
 
 | Index size | Category page load | Filtered page load |
-|    ------: |            ------ :|            ------ :|
+| ---------: | -----------------: | -----------------: |
 |      1'000 |             281 ms |             290 ms |
 |      5'000 |             295 ms |             301 ms |
 |     10'000 |             318 ms |             324 ms |
