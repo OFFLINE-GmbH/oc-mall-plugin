@@ -84,14 +84,14 @@ will be filtered by their category, their color and their material. The paginati
 will be built based on the returned number of results.
 
 | Index size | Category page load | Filtered page load |
-| ---------: | -----------------: | ----------------- :|
-|      1'000 |            281 ms |              290 ms |
-|      5'000 |            295 ms |              301 ms |
-|     10'000 |            318 ms |              324 ms |
-|     50'000 |            448 ms |              433 ms |
-|    100'000 |            586 ms |              570 ms |
-|    200'000 |            912 ms |              865 ms |
-|    300'000 |           1300 ms |             1240 ms |
+|    ------: |            ------ :|            ------ :|
+|      1'000 |             281 ms |             290 ms |
+|      5'000 |             295 ms |             301 ms |
+|     10'000 |             318 ms |             324 ms |
+|     50'000 |             448 ms |             433 ms |
+|    100'000 |             586 ms |             570 ms |
+|    200'000 |             912 ms |             865 ms |
+|    300'000 |            1300 ms |            1240 ms |
 
 Please be aware that these benchmarks are only here to show you how this plugin
 behaves under different loads and the times will vary depending on the
