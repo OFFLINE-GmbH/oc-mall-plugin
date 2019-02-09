@@ -217,7 +217,7 @@ class Product extends Model
         DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
-        DB::table('offline_mall_category_product_sort_order')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_category_product')->where('product_id', $this->id)->delete();
     }
 
     /**

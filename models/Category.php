@@ -123,7 +123,7 @@ class Category extends Model
             // might be affected by this change.
             Product::published()
                    ->orderBy('id')
-                   ->whereHas('categories', function($q) use ($categories) {
+                   ->whereHas('categories', function ($q) use ($categories) {
                        $q->whereIn('category_id', $categories->pluck('id'));
                    })
                    ->with('variants')
@@ -164,6 +164,7 @@ class Category extends Model
             $model->warmCache();
         });
         static::deleted(function (self $model) {
+            DB::table('offline_mall_category_product')->where('category_id', $this->id)->delete();
             $model->purgeCache();
             $model->warmCache();
         });
