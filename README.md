@@ -71,14 +71,12 @@ information about all Products and Variants. An index size of 1000 means there a
 individual Variants and Products stored. The demo data used was built using the 
  `php artisan mall:seed-demo` command run in an infinite loop.
 
-`Category page load` is the page load time measured
-[when a category page is loaded](https://mall.offline.swiss/en/category/bikes/mountainbikes?sort=bestseller). 
+`Category page load` is the page load time measured when a category page is loaded. 
 All stored products will be filtered, sorted (by sales count) and counted by the currently viewed `category_id`.
 Nine of these products will be displayed and the pagination will be built based on the returned number
 of results.
 
-`Filtered page load` is the page load time measured
-[when two filters are being enabled](https://mall.offline.swiss/en/category/bikes/mountainbikes?material=carbon&color=darker-red&sort=bestseller)
+`Filtered page load` is the page load time measured when two filters are being enabled
  (filter by the color `Red` and the material `Carbon`). In this case all products
 will be filtered by their category, their color and their material. The pagination
 will be built based on the returned number of results.
