@@ -98,9 +98,9 @@ class MySQL implements Index
                 $table->increments('id');
                 $table->integer('product_id');
                 $table->integer('variant_id')->nullable();
-                $table->string('index')->index();
-                $table->string('brand')->index();
-                $table->boolean('published')->index();
+                $table->string('index');
+                $table->string('brand');
+                $table->boolean('published');
                 $table->integer('stock');
                 $table->integer('sales_count')->default(0);
                 $table->boolean('on_sale')->default(0);
