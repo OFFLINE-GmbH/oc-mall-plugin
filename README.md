@@ -83,9 +83,9 @@ will be built based on the returned number of results.
 
 | Index size | Category page load | Filtered page load |
 | ---------: | -----------------: | -----------------: |
-|      1'000 |             281 ms |             290 ms |
-|      5'000 |             295 ms |             301 ms |
-|     10'000 |             318 ms |             324 ms |
+|      1'000 |             290 ms |             281 ms |
+|      5'000 |             301 ms |             295 ms |
+|     10'000 |             324 ms |             318 ms |
 |     50'000 |             448 ms |             433 ms |
 |    100'000 |             586 ms |             570 ms |
 |    200'000 |             912 ms |             865 ms |
