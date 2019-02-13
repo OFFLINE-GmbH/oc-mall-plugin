@@ -95,7 +95,7 @@ class Products extends Controller
 
     public function change_category_onSave()
     {
-        $product              = Product::findOrFail($this->params[0]);
+        $product = Product::findOrFail($this->params[0]);
         $product->categories()->attach(post('Product.categories'));
         $product->save();
 
@@ -134,23 +134,26 @@ class Products extends Controller
 
     public function formAfterUpdate(Product $model)
     {
-        $values = post('PropertyValues');
-        if ($values === null) {
-            return;
+        $values = array_wrap(post('PropertyValues', []));
+        if (count($values) < 1) {
+            PropertyValue::where('product_id', $model->id)->whereNull('variant_id')->delete();
         }
 
         $properties = Property::whereIn('id', array_keys($values))->get();
 
+        $propertyValues = PropertyValue::where('product_id', $model->id)->whereNull('variant_id')->get();
+
         foreach ($values as $id => $value) {
-            $pv = PropertyValue::firstOrNew([
-                'product_id'  => $model->id,
-                'property_id' => $id,
-            ]);
+            $pv = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'product_id'  => $model->id,
+                    'property_id' => $id,
+                ]);
 
             $pv->value = $value;
 
             // If the value became empty delete it.
-            if ($pv->value === null && $pv->exists) {
+            if (($value === null || $value === '') && $pv->exists) {
                 $pv->delete();
             } else {
                 $pv->save();

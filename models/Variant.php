@@ -42,7 +42,7 @@ class Variant extends Model
     public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
-        'name'
+        'name',
     ];
     public $casts = [
         'published'                    => 'boolean',
@@ -115,7 +115,12 @@ class Variant extends Model
                 ]);
 
                 $pv->value = $value;
-                $pv->save();
+
+                if (($pv->value === null || $pv->value === '') && $pv->exists) {
+                    $pv->delete();
+                } else {
+                    $pv->save();
+                }
             }
         });
     }

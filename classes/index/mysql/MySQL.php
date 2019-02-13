@@ -49,18 +49,19 @@ class MySQL implements Index
 
         $productId = $index === 'products' ? $data['id'] : $data['product_id'];
         $variantId = $index === 'products' ? null : $data['id'];
+
         $isGhost   = false;
         if (starts_with($variantId, 'product-')) {
             $isGhost   = true;
-            $variantId = str_replace('product-', '', $variantId);
+            $productId = str_replace('product-', '', $variantId);
         }
 
         $this->db()->updateOrCreate([
             'index'      => $index,
             'product_id' => $productId,
-            'variant_id' => $variantId,
+            'variant_id' => $isGhost ? null : $variantId,
+            'is_ghost'   => $isGhost,
         ], [
-            'is_ghost'              => $isGhost,
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
             'sales_count'           => $data['sales_count'] ?? 0,
@@ -113,7 +114,10 @@ class MySQL implements Index
                 $table->json('customer_group_prices');
                 $table->timestamp('created_at');
 
-                $table->index(['product_id', 'variant_id', 'index'], 'idx_product_variant_index');
+                $table->index(
+                    ['product_id', 'variant_id', 'index', 'is_ghost'],
+                    'idx_product_variant_index_is_ghost'
+                );
                 $table->index(['index', 'published'], 'idx_published_index');
             });
         } catch (Throwable $e) {
