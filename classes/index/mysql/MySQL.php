@@ -50,7 +50,7 @@ class MySQL implements Index
         $productId = $index === 'products' ? $data['id'] : $data['product_id'];
         $variantId = $index === 'products' ? null : $data['id'];
 
-        $isGhost   = false;
+        $isGhost = false;
         if (starts_with($variantId, 'product-')) {
             $isGhost   = true;
             $productId = str_replace('product-', '', $variantId);
@@ -65,8 +65,8 @@ class MySQL implements Index
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
             'sales_count'           => $data['sales_count'] ?? 0,
-            'on_sale'               => $data['on_sale'],
-            'published'             => $data['published'] ?? false,
+            'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
+            'published'             => $data['published'] ? 1 : 0, // update only because of the true/1 conversion
             'category_id'           => $data['category_id'],
             'property_values'       => $data['property_values'],
             'sort_orders'           => $data['sort_orders'],

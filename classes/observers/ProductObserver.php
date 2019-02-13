@@ -35,6 +35,13 @@ class ProductObserver
 
     public function updated(Product $product)
     {
+        // If a re-index is forced skip this run, it will be triggered manually later on
+        if ($product->forceReindex) {
+            return;
+        }
+
+        $product->load('variants.all_property_values');
+
         $productEntry = new ProductEntry($product);
         $this->index->update(ProductEntry::INDEX, $product->id, $productEntry);
 
@@ -47,6 +54,7 @@ class ProductObserver
             );
         } else {
             $this->index->delete(VariantEntry::INDEX, $this->ghostId($product));
+            $product->variants->load('all_property_values');
             foreach ($product->variants as $variant) {
                 $this->index->update(VariantEntry::INDEX, $variant->id, new VariantEntry($variant));
             }
@@ -113,5 +121,20 @@ class ProductObserver
         foreach ($product->variants as $variant) {
             $this->index->delete(VariantEntry::INDEX, $variant->id);
         }
+    }
+
+    /**
+     * Default product relations.
+     */
+    protected function with(): array
+    {
+        return [
+            'categories',
+            'brand',
+            'variants.prices.currency',
+            'variants.property_values.property',
+            'prices.currency',
+            'property_values.property',
+        ];
     }
 }

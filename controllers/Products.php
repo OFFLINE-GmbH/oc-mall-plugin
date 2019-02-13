@@ -272,6 +272,18 @@ class Products extends Controller
         ];
     }
 
+    public function relationExtendViewWidget($widget, $field, $model)
+    {
+        if ($field !== 'variants') {
+            return;
+        }
+
+        $widget->bindEvent('list.extendQueryBefore', function($query) {
+            return $query->with('property_values');
+        });
+
+    }
+
     public function onRelationManageCreate()
     {
         $parent = parent::onRelationManageCreate();

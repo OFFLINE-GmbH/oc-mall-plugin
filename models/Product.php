@@ -8,6 +8,8 @@ use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
@@ -173,6 +175,23 @@ class Product extends Model
         ],
     ];
 
+    /**
+     * Force a re-indexing of this product after save.
+     * @var bool
+     */
+    public $forceReindex = true;
+
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->bindEvent('model.relation.beforeAttach',
+            function (string $relationName, array $attachedIdList, array $insertData) {
+                $this->forceReindex = true;
+            });
+        $this->bindEvent('model.relation.beforeDetach', function (string $relationName, array $attachedIdList) {
+            $this->forceReindex = true;
+        });
+    }
 
     /**
      * Translate url parameters when the user switches the active locale.
@@ -205,6 +224,12 @@ class Product extends Model
         if ($this->inventory_management_method === 'variant' && $this->stock === null) {
             $this->stock = 0;
         }
+    }
+
+    public function afterSave()
+    {
+        $this->forceReindex = false;
+        (new ProductObserver(app(Index::class)))->updated($this);
     }
 
     public function afterDelete()
