@@ -247,7 +247,7 @@ class MySQL implements Index
             array_shift($parts);
             $nested = implode('.', $parts);
             $db->orderByRaw('JSON_EXTRACT(' . \DB::raw($field) . ', ?) ' . $order->direction(),
-                ['$.' . $nested]
+                ['$.' . '"' . $nested. '"']
             );
         } else {
             $db->orderBy($order->property(), $order->direction());

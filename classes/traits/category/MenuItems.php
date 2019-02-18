@@ -211,9 +211,7 @@ trait MenuItems
     {
         $iterator = function (&$items, $url) use (&$iterator) {
             foreach ($items as &$item) {
-                if ($item['url'] === $url) {
-                    $item['isActive'] = true;
-                }
+                $item['isActive'] = $item['url'] === $url;
                 if ($item['items']) {
                     $item['items'] = $iterator($item['items'], $url);
                 }
