@@ -103,3 +103,5 @@
         Between the completition of the update and the re-indexing your store will be empty!
         Make sure to consider this downtime when deploying to a production system.
     - handle_index_table.php
+1.1.2:
+    - Fixed manual sort orders when using new table-backed index
