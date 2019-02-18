@@ -8,6 +8,8 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
 use October\Rain\Database\Models\DeferredBinding;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
@@ -65,7 +67,7 @@ class Products extends Controller
             return;
         }
         // If the product has no category something is wrong and needs fixing!
-        if ( ! $this->vars['formModel']->category) {
+        if ( ! $this->vars['formModel']->categories) {
             Flash::error(trans('offline.mall::lang.common.action_required'));
 
             return redirect(Backend::url('offline/mall/products/change_category/' . $id));
@@ -77,7 +79,7 @@ class Products extends Controller
         $this->pageTitle   = trans('offline.mall::lang.common.action_required');
         $config            = $this->makeConfigFromArray([
             'fields' => [
-                'category' => [
+                'categories' => [
                     'label'           => 'offline.mall::lang.common.category',
                     'nameFrom'        => 'name',
                     'descriptionFrom' => 'description',
@@ -95,8 +97,8 @@ class Products extends Controller
 
     public function change_category_onSave()
     {
-        $product              = Product::findOrFail($this->params[0]);
-        $product->category_id = post('Product.category');
+        $product = Product::findOrFail($this->params[0]);
+        $product->categories()->attach(post('Product.categories'));
         $product->save();
 
         Flash::success(trans('offline.mall::lang.common.saved_changes'));
@@ -134,23 +136,26 @@ class Products extends Controller
 
     public function formAfterUpdate(Product $model)
     {
-        $values = post('PropertyValues');
-        if ($values === null) {
-            return;
+        $values = array_wrap(post('PropertyValues', []));
+        if (count($values) < 1) {
+            PropertyValue::where('product_id', $model->id)->whereNull('variant_id')->delete();
         }
 
         $properties = Property::whereIn('id', array_keys($values))->get();
 
+        $propertyValues = PropertyValue::where('product_id', $model->id)->whereNull('variant_id')->get();
+
         foreach ($values as $id => $value) {
-            $pv = PropertyValue::firstOrNew([
-                'product_id'  => $model->id,
-                'property_id' => $id,
-            ]);
+            $pv = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'product_id'  => $model->id,
+                    'property_id' => $id,
+                ]);
 
             $pv->value = $value;
 
             // If the value became empty delete it.
-            if ($pv->value === null && $pv->exists) {
+            if (($value === null || $value === '') && $pv->exists) {
                 $pv->delete();
             } else {
                 $pv->save();
@@ -269,6 +274,18 @@ class Products extends Controller
         ];
     }
 
+    public function relationExtendViewWidget($widget, $field, $model)
+    {
+        if ($field !== 'variants') {
+            return;
+        }
+
+        $widget->bindEvent('list.extendQueryBefore', function ($query) {
+            return $query->with('property_values');
+        });
+
+    }
+
     public function onRelationManageCreate()
     {
         $parent = parent::onRelationManageCreate();
@@ -292,6 +309,9 @@ class Products extends Controller
         } elseif ($this->relationName === 'variants') {
             $variant = $this->relationModel->find($this->vars['relationManageId']);
             $this->updateProductPrices($this->vars['formModel'], $variant);
+
+            // Force a re-index of the product
+            (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }
 
         return $parent;

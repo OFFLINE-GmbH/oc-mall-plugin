@@ -9,7 +9,6 @@ class RedShirt extends DemoProduct
     protected function attributes(): array
     {
         return [
-            'category_id'                  => $this->category('clothing')->id,
             'brand_id'                     => null,
             'user_defined_id'              => 'SHIRT001',
             'name'                         => 'Red Shirt',
@@ -53,6 +52,13 @@ class RedShirt extends DemoProduct
         return [
             'material' => 'Cotton',
             'gender'   => 'Unisex',
+        ];
+    }
+
+    protected function categories(): array
+    {
+        return [
+            $this->category('clothing')->id,
         ];
     }
 

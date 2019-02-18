@@ -79,6 +79,7 @@ class ReindexProducts extends Command
             'variants.prices.currency',
             'prices.currency',
             'property_values.property',
+            'categories',
             'variants.prices.currency',
             'variants.property_values.property',
         ])->chunk(200, function (Collection $products) use ($bar) {

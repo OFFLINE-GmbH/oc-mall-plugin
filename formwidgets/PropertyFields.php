@@ -8,6 +8,7 @@ use Backend\FormWidgets\RichEditor;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
+use Svg\Tag\Group;
 
 /**
  * PropertyFields Form Widget
@@ -38,7 +39,11 @@ class PropertyFields extends FormWidgetBase
         $this->vars['values'] = $this->model->property_values ?? collect([]);
         $this->vars['model']  = $this->model;
 
-        $groups = optional($this->controller->vars['formModel']->category)->inherited_property_groups;
+        $groups = optional(
+            $this->controller->vars['formModel']
+                ->categories
+                ->flatMap->inherited_property_groups
+        )->unique('id');
 
         if ($this->controller->vars['formModel']->inventory_management_method !== 'single') {
             $useForVariants = $this->useVariantSpecificPropertiesOnly();
@@ -48,6 +53,22 @@ class PropertyFields extends FormWidgetBase
                 },
             ])->whereIn('id', $groups->pluck('id'))->get();
         }
+
+        // Make sure every property is only displayed once even if it is
+        // assigned to more than one property group.
+        $knownIds = collect([]);
+        $groups = $groups->map(function (PropertyGroup $group) use (&$knownIds) {
+            $unknownIds = $group->properties->pluck('id')->diff($knownIds);
+            $knownIds = $knownIds->concat($unknownIds);
+
+            $properties = $group->properties->filter(function ($property) use ($unknownIds) {
+                return $unknownIds->contains($property->id);
+            });
+
+            $group->setRelation('properties', $properties);
+
+            return $group;
+        });
 
         $this->vars['groups'] = $groups->sortBy('pivot.sort_order');
     }

@@ -54,12 +54,14 @@ tabs:
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.common.conditions'
+            context: update
         _available_above_totals:
             label: 'offline.mall::lang.shipping_method.available_above_total'
             oc.commentPosition: ''
             span: auto
             type: mall.price
             tab: 'offline.mall::lang.common.conditions'
+            context: update
         countries:
             label: 'offline.mall::lang.shipping_method.countries'
             nameFrom: name
@@ -68,8 +70,10 @@ tabs:
             type: relation
             comment: 'offline.mall::lang.shipping_method.countries_comment'
             tab: 'offline.mall::lang.common.conditions'
+            context: update
         rates:
             span: auto
             path: $/offline/mall/controllers/shippingmethods/_rates.htm
             type: partial
             tab: 'offline.mall::lang.common.conditions'
+            context: update

@@ -15,7 +15,7 @@ fields:
         tab: 'offline.mall::lang.product.general'
 tabs:
     fields:
-        category:
+        categories:
             label: 'offline.mall::lang.common.category'
             oc.commentPosition: ''
             nameFrom: name

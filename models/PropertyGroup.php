@@ -19,7 +19,7 @@ class PropertyGroup extends Model
     public $translatable = [
         'name',
         'display_name',
-        'description'
+        'description',
     ];
 
     public $slugs = [
@@ -79,7 +79,9 @@ class PropertyGroup extends Model
             // might be affected by this change.
             Product::published()
                    ->orderBy('id')
-                   ->whereIn('category_id', $categories->pluck('id'))
+                   ->whereHas('categories', function ($q) use ($categories) {
+                       $q->whereIn('category_id', $categories->pluck('id'));
+                   })
                    ->with('variants')
                    ->chunk(25, function ($products) use ($properties) {
                        $data = [

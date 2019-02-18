@@ -42,7 +42,7 @@ class Variant extends Model
     public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
-        'name'
+        'name',
     ];
     public $casts = [
         'published'                    => 'boolean',
@@ -102,20 +102,28 @@ class Variant extends Model
                 $variant->createImageSetFromTempImages();
             }
 
-            $values = post('VariantPropertyValues');
-            if ( ! $values) {
-                return;
+            $values = array_wrap(post('VariantPropertyValues', []));
+            if (count($values) < 1) {
+                PropertyValue::where('variant_id', $variant->id)->delete();
             }
 
+            $propertyValues = PropertyValue::where('variant_id', $variant->id)->get();
+
             foreach ($values as $id => $value) {
-                $pv = PropertyValue::firstOrNew([
-                    'variant_id'  => $variant->id,
-                    'product_id'  => $variant->product_id,
-                    'property_id' => $id,
-                ]);
+                $pv = $propertyValues->where('property_id', $id)->first()
+                    ?? new PropertyValue([
+                        'variant_id'  => $variant->id,
+                        'product_id'  => $variant->product_id,
+                        'property_id' => $id,
+                    ]);
 
                 $pv->value = $value;
-                $pv->save();
+
+                if (($pv->value === null || $pv->value === '') && $pv->exists) {
+                    $pv->delete();
+                } else {
+                    $pv->save();
+                }
             }
         });
     }

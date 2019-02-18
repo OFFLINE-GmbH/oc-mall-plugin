@@ -73,17 +73,23 @@ class Category extends Model
         'inherit_property_groups' => 'boolean',
     ];
     public $table = 'offline_mall_categories';
-    public $hasMany = [
+    public $belongsToMany = [
         'products'          => [
             Product::class,
+            'table'    => 'offline_mall_category_product',
+            'key'      => 'category_id',
+            'otherKey' => 'product_id',
+            'pivot'    => ['sort_order'],
         ],
         'publishedProducts' => [
             Product::class,
-            'scope' => 'published',
+            'table'    => 'offline_mall_category_product',
+            'key'      => 'category_id',
+            'otherKey' => 'product_id',
+            'scope'    => 'published',
+            'pivot'    => ['sort_order'],
         ],
-    ];
-    public $belongsToMany = [
-        'property_groups' => [
+        'property_groups'   => [
             PropertyGroup::class,
             'table'    => 'offline_mall_category_property_group',
             'key'      => 'category_id',
@@ -117,7 +123,9 @@ class Category extends Model
             // might be affected by this change.
             Product::published()
                    ->orderBy('id')
-                   ->whereIn('category_id', $categories->pluck('id'))
+                   ->whereHas('categories', function ($q) use ($categories) {
+                       $q->whereIn('category_id', $categories->pluck('id'));
+                   })
                    ->with('variants')
                    ->chunk(25, function ($products) use ($properties) {
                        $data = [
@@ -156,6 +164,7 @@ class Category extends Model
             $model->warmCache();
         });
         static::deleted(function (self $model) {
+            DB::table('offline_mall_category_product')->where('category_id', $this->id)->delete();
             $model->purgeCache();
             $model->warmCache();
         });

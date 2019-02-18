@@ -146,6 +146,11 @@
         'customizations_comment'     => 'Globale Konfigurationseinstellungen für deinen Shop',
         'order_number_start'         => 'Beginn Bestellungsnummerierung',
         'order_number_start_comment' => 'Die erste Bestellung erhält diese Nummer',
+        'index_driver'               => 'Index-Treiber',
+        'index_driver_comment'       => 'Wenn deine Datenbank JSON unterstützt wird der Datenbank-Treiber empfohlen.',
+        'index_driver_filesystem'    => 'Dateisystem',
+        'index_driver_database'      => 'Datenbank (nur für MySQL 5.7+ oder MariaDB 10.2+)',
+        'index_driver_hint'          => 'Nachdem diese Option geändert wurde muss "php artisan mall:reindex" auf der Konsole ausgeführt werden!',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -257,6 +262,7 @@
         'data'                 => 'Data',
         'successful'           => 'Erfolgreich',
         'failed'               => 'Fehlgeschlagen',
+        'caution'              => 'Achtung',
     ],
     'variant'                  => [
         'method' => [
@@ -343,7 +349,7 @@
         ],
         'missing_category'                     => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
         'variant_support_header'               => 'Varianten nicht unterstützt',
-        'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel".',
+        'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel" oder wählen Sie eine andere Kategorie aus.',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',

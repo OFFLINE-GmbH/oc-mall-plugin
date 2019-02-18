@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Demo\Products\Cruiser5000;
 use OFFLINE\Mall\Classes\Demo\Products\Jersey;
 use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
 use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Index\Noop;
 use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\Brand;
@@ -36,6 +37,13 @@ class SeedDemoData extends Command
             return 0;
         }
 
+        // Use a Noop-Indexer so no unnecessary queries are run during seeding.
+        // the index will be re-built once everything is done.
+        $originalIndex = app(Index::class);
+        app()->bind(Index::class, function () {
+            return new Noop();
+        });
+
         $this->cleanup();
         $this->createCurrencies();
         $this->createBrands();
@@ -43,6 +51,13 @@ class SeedDemoData extends Command
         $this->createCategories();
         $this->createTaxes();
         $this->createProducts();
+
+
+        app()->bind(Index::class, function () use ($originalIndex) {
+            return $originalIndex;
+        });
+
+        Artisan::call('mall:reindex', ['--force' => true]);
 
         $this->output->success('All done!');
     }
@@ -325,19 +340,19 @@ class SeedDemoData extends Command
         $this->output->writeln('Creating currencies...');
         DB::table('offline_mall_currencies')->truncate();
         Currency::create([
-            'code'       => 'USD',
-            'format'     => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
-            'decimals'   => 2,
-            'symbol'     => '$',
-            'rate'       => 1.1,
+            'code'     => 'USD',
+            'format'   => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
+            'decimals' => 2,
+            'symbol'   => '$',
+            'rate'     => 1.1,
         ]);
         Currency::create([
-            'code'     => 'EUR',
-            'format'   => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
-            'decimals' => 2,
+            'code'       => 'EUR',
+            'format'     => '{{ price|number_format(2, " ", ",") }}{{ currency.symbol }}',
+            'decimals'   => 2,
             'is_default' => true,
-            'symbol'   => '€',
-            'rate'     => 1,
+            'symbol'     => '€',
+            'rate'       => 1,
         ]);
         Currency::create([
             'code'     => 'CHF',

@@ -8,6 +8,8 @@ use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
@@ -73,7 +75,6 @@ class Product extends Model
         'shippable'                    => 'boolean',
     ];
     public $fillable = [
-        'category_id',
         'brand_id',
         'user_defined_id',
         'name',
@@ -104,7 +105,6 @@ class Product extends Model
         'initial_images' => File::class,
     ];
     public $belongsTo = [
-        'category'          => Category::class,
         'brand'             => Brand::class,
         'group_by_property' => [
             Property::class,
@@ -131,6 +131,13 @@ class Product extends Model
         'property_values' => PropertyValue::class,
     ];
     public $belongsToMany = [
+        'categories'      => [
+            Category::class,
+            'table'    => 'offline_mall_category_product',
+            'key'      => 'product_id',
+            'otherKey' => 'category_id',
+            'pivot'    => ['sort_order'],
+        ],
         'custom_fields'   => [
             CustomField::class,
             'table'    => 'offline_mall_product_custom_field',
@@ -168,6 +175,23 @@ class Product extends Model
         ],
     ];
 
+    /**
+     * Force a re-indexing of this product after save.
+     * @var bool
+     */
+    public $forceReindex = false;
+
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->bindEvent('model.relation.beforeAttach',
+            function (string $relationName, array $attachedIdList, array $insertData) {
+                $this->forceReindex = true;
+            });
+        $this->bindEvent('model.relation.beforeDetach', function (string $relationName, array $attachedIdList) {
+            $this->forceReindex = true;
+        });
+    }
 
     /**
      * Translate url parameters when the user switches the active locale.
@@ -202,6 +226,14 @@ class Product extends Model
         }
     }
 
+    public function afterSave()
+    {
+        if ($this->forceReindex) {
+            $this->forceReindex = false;
+            (new ProductObserver(app(Index::class)))->updated($this);
+        }
+    }
+
     public function afterDelete()
     {
         $this->prices()->delete();
@@ -212,7 +244,7 @@ class Product extends Model
         DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
-        DB::table('offline_mall_category_product_sort_order')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_category_product')->where('product_id', $this->id)->delete();
     }
 
     /**
@@ -267,6 +299,17 @@ class Product extends Model
         return $query->where('published', true);
     }
 
+    public function scopeInCategories($query, $ids)
+    {
+        if ( ! count($ids)) {
+            return $query;
+        }
+
+        return $query->whereHas('categories', function ($q) use ($ids) {
+            $q->whereIn('category_id', $ids);
+        });
+    }
+
     public function getVariantOptionsAttribute()
     {
         return $this->custom_fields()->whereIn('type', ['dropdown', 'color', 'image'])->get();
@@ -280,7 +323,7 @@ class Product extends Model
     public function getGroupByPropertyIdOptions()
     {
         return ['' => trans('offline.mall::lang.common.none')]
-            + $this->category->properties->filter(function ($q) {
+            + $this->categories->flatMap->properties->filter(function ($q) {
                 return $q->pivot->use_for_variants;
             })->pluck('name', 'id')->toArray();
     }
@@ -291,7 +334,7 @@ class Product extends Model
     public function getSortOrders()
     {
         return Cache::rememberForever(self::sortOrderCacheKey($this->id), function () {
-            return \DB::table('offline_mall_category_product_sort_order')
+            return \DB::table('offline_mall_category_product')
                       ->where('product_id', $this->id)
                       ->get(['category_id', 'sort_order',])
                       ->pluck('sort_order', 'category_id')
@@ -358,7 +401,7 @@ class Product extends Model
         // If less than properties are available (1 is the null property)
         // we can remove everything that has to do with variants.
         if (count($this->getGroupByPropertyIdOptions()) < 2) {
-            $fields->variants->path = 'variants_unavailable';
+            $fields->variants->path               = 'variants_unavailable';
             $fields->group_by_property_id->hidden = true;
         }
     }

@@ -19,7 +19,10 @@ class ProductObserver
     public function created(Product $product)
     {
         $productEntry = new ProductEntry($product);
-        $this->index->insert(ProductEntry::INDEX, $productEntry);
+
+        if ($product->inventory_management_method === 'single' || $product->variants->count() > 0) {
+            $this->index->insert(ProductEntry::INDEX, $productEntry);
+        }
 
         // If a product has no variants we still want it in the variant index
         // so we can easily search all products/variants at once.
@@ -35,8 +38,19 @@ class ProductObserver
 
     public function updated(Product $product)
     {
+        // If a re-index is forced skip this run, it will be triggered manually later on
+        if ($product->forceReindex) {
+            return;
+        }
+
+        $product->load('property_values', 'variants.all_property_values');
+
         $productEntry = new ProductEntry($product);
-        $this->index->update(ProductEntry::INDEX, $product->id, $productEntry);
+        if ($product->inventory_management_method === 'single' || $product->variants->count() > 0) {
+            $this->index->update(ProductEntry::INDEX, $product->id, $productEntry);
+        } else {
+            $this->index->delete(ProductEntry::INDEX, $product->id, $productEntry);
+        }
 
         if ($product->inventory_management_method === 'single') {
             $this->handleInventoryManagementMethodChange($product);
@@ -47,6 +61,8 @@ class ProductObserver
             );
         } else {
             $this->index->delete(VariantEntry::INDEX, $this->ghostId($product));
+            $product->variants->load('all_property_values');
+
             foreach ($product->variants as $variant) {
                 $this->index->update(VariantEntry::INDEX, $variant->id, new VariantEntry($variant));
             }
@@ -113,5 +129,20 @@ class ProductObserver
         foreach ($product->variants as $variant) {
             $this->index->delete(VariantEntry::INDEX, $variant->id);
         }
+    }
+
+    /**
+     * Default product relations.
+     */
+    protected function with(): array
+    {
+        return [
+            'categories',
+            'brand',
+            'variants.prices.currency',
+            'variants.property_values.property',
+            'prices.currency',
+            'property_values.property',
+        ];
     }
 }

@@ -867,7 +867,7 @@ class TotalsCalculatorTest extends PluginTestCase
             $price = ['CHF' => $price, 'EUR' => $price];
         }
 
-        $product = Product::first()->replicate();
+        $product = Product::first()->replicate(['category_id']);
         $product->save();
         $product->price = $price;
 

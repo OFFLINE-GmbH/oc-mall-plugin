@@ -1,9 +1,11 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Jobs\BrandChangeUpdate;
 use System\Models\File;
 
 class Brand extends Model
@@ -39,4 +41,16 @@ class Brand extends Model
     public $hasMany = [
         'products' => Product::class,
     ];
+
+    public function afterDelete()
+    {
+        Product::orderBy('id')
+               ->where('brand_id', $this->id)
+               ->chunk(100, function ($products) {
+                   $data = [
+                       'ids' => $products->pluck('id'),
+                   ];
+                   Queue::push(BrandChangeUpdate::class, $data);
+               });
+    }
 }

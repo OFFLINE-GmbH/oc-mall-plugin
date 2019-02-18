@@ -22,14 +22,6 @@ class VariantEntry implements Entry
         // Make sure variants inherit variant data again.
         session()->forget('mall.variants.disable-inheritance');
 
-        $variant->loadMissing([
-            'prices.currency',
-            'property_values.property',
-            'product.brand',
-            'customer_group_prices',
-            'product.customer_group_prices',
-        ]);
-
         $product = $variant->product;
 
         $this->defaultCurrency = Currency::defaultCurrency();
@@ -38,7 +30,7 @@ class VariantEntry implements Entry
         $data['published'] = $variant->published && $product->published;
         $data['on_sale']   = $variant->on_sale;
 
-        $data['category_id'] = $product->category_id;
+        $data['category_id'] = $product->categories->pluck('id');
 
         $data['index']                 = self::INDEX;
         $data['property_values']       = $this->mapProps($variant->all_property_values);

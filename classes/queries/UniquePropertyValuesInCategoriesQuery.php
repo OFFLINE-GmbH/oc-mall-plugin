@@ -45,7 +45,7 @@ class UniquePropertyValuesInCategoriesQuery
                       ->whereNull('offline_mall_product_variants.id');
                 })->orWhere('offline_mall_product_variants.published', true);
             })
-            ->whereIn('offline_mall_products.category_id', $this->categories)
+            ->whereIn('offline_mall_category_product.category_id', $this->categories)
             ->whereNull('offline_mall_product_variants.deleted_at')
             ->whereNull('offline_mall_products.deleted_at')
             ->where('offline_mall_property_values.value', '<>', '')
@@ -55,6 +55,12 @@ class UniquePropertyValuesInCategoriesQuery
                 'offline_mall_products.id',
                 '=',
                 'offline_mall_product_variants.product_id'
+            )
+            ->leftJoin(
+                'offline_mall_category_product',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_category_product.product_id'
             )
             ->join(
                 'offline_mall_property_values',

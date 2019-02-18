@@ -61,14 +61,13 @@ class CategoriesProducts extends Controller
             return;
         }
 
-        DB::table('offline_mall_category_product_sort_order')->where('category_id', $this->category->id)->delete();
-
         foreach ($ids as $order => $id) {
-            DB::table('offline_mall_category_product_sort_order')->insert([
-                'category_id' => $this->category->id,
-                'product_id'  => $id,
-                'sort_order'  => $order,
-            ]);
+            DB::table('offline_mall_category_product')
+              ->where('category_id', $this->category->id)
+              ->where('product_id', $id)
+              ->update([
+                  'sort_order' => $order,
+              ]);
 
             // Flush the cached sort order information.
             Cache::forget(Product::sortOrderCacheKey($id));
@@ -91,17 +90,23 @@ class CategoriesProducts extends Controller
 
     protected function getRecords()
     {
-        $orders = DB::table('offline_mall_category_product_sort_order')
+        $orders = DB::table('offline_mall_category_product')
                     ->where('category_id', $this->category->id)
                     ->get(['product_id', 'sort_order'])
                     ->pluck('sort_order', 'product_id');
 
         $categories = $this->category->getChildrenIds();
 
-        return Product::whereIn('category_id', $categories)->get()->map(function ($product) use ($orders) {
-            $product->sort_order = (int)$orders->get($product->id, PHP_INT_MAX);
+        return Product
+            ::whereHas('categories', function ($q) use ($categories) {
+                $q->whereIn('category_id', $categories);
+            })
+            ->get()
+            ->map(function ($product) use ($orders) {
+                $product->sort_order = (int)$orders->get($product->id, PHP_INT_MAX);
 
-            return $product;
-        })->sortBy('sort_order');
+                return $product;
+            })
+            ->sortBy('sort_order');
     }
 }

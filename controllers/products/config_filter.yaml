@@ -6,8 +6,7 @@ scopes:
     category:
         label: offline.mall::lang.common.category
         modelClass: OFFLINE\Mall\Models\Category
-        conditions: category_id in (:filtered)
-        nameFrom: name
+        scope: inCategories
 
     created_at:
         label: offline.mall::lang.common.created_at

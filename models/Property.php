@@ -6,9 +6,9 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
-use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategories;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 
 class Property extends Model
 {
@@ -16,6 +16,7 @@ class Property extends Model
     use SoftDelete;
     use HashIds;
     use Sluggable;
+    use TranslatableRelation;
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['options'];
@@ -55,12 +56,17 @@ class Property extends Model
 
     public function afterSave()
     {
+        $this->setTranslatableFields();
+
         if ($this->pivot && ! $this->pivot->use_for_variants) {
             $categories = $this->property_groups->flatMap->getRelatedCategories();
 
-            Product::whereIn('category_id', $categories->pluck('id'))
-                   ->where('group_by_property_id', $this->id)
-                   ->update(['group_by_property_id' => null]);
+            Product
+                ::whereHas('categories', function ($q) use ($categories) {
+                    $q->whereIn('offline_mall_category_product.category_id', $categories->pluck('id'));
+                })
+                ->where('group_by_property_id', $this->id)
+                ->update(['group_by_property_id' => null]);
         }
     }
 
@@ -113,14 +119,14 @@ class Property extends Model
     public function getTypeOptions()
     {
         return [
-            'text'     => trans('offline.mall::lang.custom_field_options.text'),
-            'integer'  => trans('offline.mall::lang.custom_field_options.integer'),
-            'float'    => trans('offline.mall::lang.custom_field_options.float'),
-            'textarea' => trans('offline.mall::lang.custom_field_options.textarea'),
+            'text'       => trans('offline.mall::lang.custom_field_options.text'),
+            'integer'    => trans('offline.mall::lang.custom_field_options.integer'),
+            'float'      => trans('offline.mall::lang.custom_field_options.float'),
+            'textarea'   => trans('offline.mall::lang.custom_field_options.textarea'),
             'richeditor' => trans('offline.mall::lang.custom_field_options.richeditor'),
-            'dropdown' => trans('offline.mall::lang.custom_field_options.dropdown'),
+            'dropdown'   => trans('offline.mall::lang.custom_field_options.dropdown'),
 //            'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),
-            'color'    => trans('offline.mall::lang.custom_field_options.color'),
+            'color'      => trans('offline.mall::lang.custom_field_options.color'),
 //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
         ];
     }

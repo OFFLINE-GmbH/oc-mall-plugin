@@ -9,7 +9,6 @@ class Jersey extends DemoProduct
     protected function attributes(): array
     {
         return [
-            'category_id'                  => $this->category('clothing')->id,
             'brand_id'                     => null,
             'user_defined_id'              => 'SHIRT002',
             'name'                         => 'Stormrider Jersey Men',
@@ -53,6 +52,13 @@ class Jersey extends DemoProduct
         return [
             'material' => 'Polyester',
             'gender'   => 'Male',
+        ];
+    }
+
+    protected function categories(): array
+    {
+        return [
+            $this->category('clothing')->id,
         ];
     }
 

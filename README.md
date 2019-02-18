@@ -29,9 +29,10 @@ The documentation of this plugin can be found here:
 [https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
 
 #### Requirements
+
 * PHP7.1+
 * October Build 444+
-
+* For best performance use MySQL 5.7+ or MariaDB 10.2+
 
 #### Demo
 
@@ -55,6 +56,46 @@ php artisan plugin:install offline.mall
 Once the plugin is installed take a look at
 [the official documentation](https://offline-gmbh.github.io/oc-mall-plugin/)
 to get everything up and running.
+
+## Benchmarks
+
+Below are some totally unscientific benchmarks created on a lazy Saturday afternoon. 
+These tests were run on a DigitalOcean CPU optimized Droplet with 2 vCPU and 4GB RAM.
+October was run on Ubuntu 18.04, PHP 7.2.10, Apache 2.4.19 and MySQL 5.7.24.
+
+All measurements were done using the [Bedard.Debugbar](https://octobercms.com/plugin/bedard-debugbar) 
+plugin and are the average load time over 10 page loads (I told you they were unscientific!).
+ 
+`Index size` defines the size of the `offline_mall_index` table. This table includes de-normalized 
+information about all Products and Variants. An index size of 1000 means there are 1000 
+individual Variants and Products stored. The demo data used was built using the 
+ `php artisan mall:seed-demo` command run in an infinite loop.
+
+`Category page load` is the page load time measured when a category page is loaded. 
+All stored products will be filtered, sorted (by sales count) and counted by the currently viewed `category_id`.
+Nine of these products will be displayed and the pagination will be built based on the returned number
+of results.
+
+`Filtered page load` is the page load time measured when two filters are being enabled
+ (filter by the color `Red` and the material `Carbon`). In this case all products
+will be filtered by their category, their color and their material. The pagination
+will be built based on the returned number of results.
+
+| Index size | Category page load | Filtered page load |
+| ---------: | -----------------: | -----------------: |
+|      1'000 |             290 ms |             281 ms |
+|      5'000 |             301 ms |             295 ms |
+|     10'000 |             324 ms |             318 ms |
+|     50'000 |             448 ms |             433 ms |
+|    100'000 |             586 ms |             570 ms |
+|    200'000 |             912 ms |             865 ms |
+|    300'000 |            1300 ms |            1240 ms |
+
+Please be aware that these benchmarks are only here to show you how this plugin
+behaves under different loads and the times will vary depending on the
+hardware, configuration and setup of your installation. If you really want to know how well
+the plugin performs install it yourself and give it a go!
+
 
 ## Contributing
 
