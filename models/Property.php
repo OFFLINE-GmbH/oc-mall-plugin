@@ -6,9 +6,9 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
-use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategories;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 
 class Property extends Model
 {
@@ -16,6 +16,7 @@ class Property extends Model
     use SoftDelete;
     use HashIds;
     use Sluggable;
+    use TranslatableRelation;
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['options'];
@@ -55,6 +56,8 @@ class Property extends Model
 
     public function afterSave()
     {
+        $this->setTranslatableFields();
+
         if ($this->pivot && ! $this->pivot->use_for_variants) {
             $categories = $this->property_groups->flatMap->getRelatedCategories();
 
