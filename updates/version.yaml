@@ -105,3 +105,5 @@
     - handle_index_table.php
 1.1.2:
     - Fixed manual sort orders when using new table-backed index
+1.1.3:
+    - Further improved MySQL 5.7 compatibility
