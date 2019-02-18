@@ -23,6 +23,11 @@ class VariantObserver
 
     public function updated(Variant $variant)
     {
+        // Skip the re-index for the backend relation updates. The re-index will
+        // be triggered manually for performance reasons.
+        if ($this->isBackendRelationUpdate()) {
+            return;
+        }
         (new ProductObserver($this->index))->updated($variant->product);
     }
 
@@ -30,5 +35,15 @@ class VariantObserver
     {
         (new ProductObserver($this->index))->updated($variant->product);
         $this->index->delete(VariantEntry::INDEX, $variant->id);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isBackendRelationUpdate(): bool
+    {
+        return app()->runningInBackend()
+            && post('_relation_field') === 'variants'
+            && post('_relation_mode') === 'form';
     }
 }

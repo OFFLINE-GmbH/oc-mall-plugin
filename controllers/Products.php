@@ -8,6 +8,8 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
 use October\Rain\Database\Models\DeferredBinding;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
@@ -278,7 +280,7 @@ class Products extends Controller
             return;
         }
 
-        $widget->bindEvent('list.extendQueryBefore', function($query) {
+        $widget->bindEvent('list.extendQueryBefore', function ($query) {
             return $query->with('property_values');
         });
 
@@ -307,6 +309,9 @@ class Products extends Controller
         } elseif ($this->relationName === 'variants') {
             $variant = $this->relationModel->find($this->vars['relationManageId']);
             $this->updateProductPrices($this->vars['formModel'], $variant);
+
+            // Force a re-index of the product
+            (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }
 
         return $parent;

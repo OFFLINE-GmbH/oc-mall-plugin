@@ -31,11 +31,26 @@ class PropertyValueObserver
 
     protected function handle(PropertyValue $value)
     {
-        if ($value->product) {
+        // Skip the re-index for the backend relation updates. The re-index will
+        // be triggered manually for performance reasons.
+        if ($this->isBackendRelationUpdate()) {
+            return;
+        }
+        if ($value->product && $value->product->skipReindex !== true) {
             (new ProductObserver($this->index))->updated($value->product);
         }
-        if ($value->variant) {
+        if ($value->variant && $value->variant->skipReindex !== true) {
             (new VariantObserver($this->index))->updated($value->variant);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isBackendRelationUpdate(): bool
+    {
+        return app()->runningInBackend()
+            && post('_relation_field') === 'variants'
+            && post('_relation_mode') === 'form';
     }
 }

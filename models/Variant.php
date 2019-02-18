@@ -102,17 +102,20 @@ class Variant extends Model
                 $variant->createImageSetFromTempImages();
             }
 
-            $values = post('VariantPropertyValues');
-            if ( ! $values) {
-                return;
+            $values = array_wrap(post('VariantPropertyValues', []));
+            if (count($values) < 1) {
+                PropertyValue::where('variant_id', $variant->id)->delete();
             }
 
+            $propertyValues = PropertyValue::where('variant_id', $variant->id)->get();
+
             foreach ($values as $id => $value) {
-                $pv = PropertyValue::firstOrNew([
-                    'variant_id'  => $variant->id,
-                    'product_id'  => $variant->product_id,
-                    'property_id' => $id,
-                ]);
+                $pv = $propertyValues->where('property_id', $id)->first()
+                    ?? new PropertyValue([
+                        'variant_id'  => $variant->id,
+                        'product_id'  => $variant->product_id,
+                        'property_id' => $id,
+                    ]);
 
                 $pv->value = $value;
 

@@ -56,6 +56,8 @@ class MySQL implements Index
             $productId = str_replace('product-', '', $variantId);
         }
 
+        $published = $data['published'] ?? false;
+
         $this->db()->updateOrCreate([
             'index'      => $index,
             'product_id' => $productId,
@@ -66,7 +68,7 @@ class MySQL implements Index
             'stock'                 => $data['stock'],
             'sales_count'           => $data['sales_count'] ?? 0,
             'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
-            'published'             => $data['published'] ? 1 : 0, // update only because of the true/1 conversion
+            'published'             => $published ? 1 : 0,        // update only because of the true/1 conversion
             'category_id'           => $data['category_id'],
             'property_values'       => $data['property_values'],
             'sort_orders'           => $data['sort_orders'],
@@ -79,7 +81,13 @@ class MySQL implements Index
 
     public function delete(string $index, $id)
     {
-        $col = $index === 'product' ? 'product_id' : 'variant_id';
+        $col = $index === 'products' ? 'product_id' : 'variant_id';
+        // Remove a ghost variant
+        if (starts_with($id, 'product-')) {
+            $index = 'variants';
+            $col   = 'product_id';
+            $id    = str_replace('product-', '', $id);
+        }
         $this->db()->where('index', $index)->where($col, $id)->delete();
     }
 
@@ -141,7 +149,7 @@ class MySQL implements Index
         $items = $this->search($index, $filters, $order);
 
         $slice = array_map(function ($item) {
-            return $item->is_ghost ? 'product-' . $item->id : $item->id;
+            return $item->is_ghost ? 'product-' . $item->other_id : $item->id;
         }, array_slice($items, $skip, $perPage));
 
         return new IndexResult($slice, count($items));
@@ -149,9 +157,14 @@ class MySQL implements Index
 
     protected function search(string $index, Collection $filters, SortOrder $order)
     {
-        $column = $index === 'products' ? 'product_id' : 'variant_id';
+        $idCol      = $index === 'products' ? 'product_id' : 'variant_id';
+        $otherIdCol = $idCol === 'product_id' ? 'variant_id' : 'product_id';
 
-        $db = DB::table($this->db()->table)->select([$column . ' as id', 'is_ghost']);
+        $db = DB::table($this->db()->table)->select([
+            $idCol . ' as id',
+            $otherIdCol . ' as other_id',
+            'is_ghost',
+        ]);
 
         $db->where('index', $index)->where('published', true);
 

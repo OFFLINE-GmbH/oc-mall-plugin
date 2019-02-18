@@ -179,7 +179,7 @@ class Product extends Model
      * Force a re-indexing of this product after save.
      * @var bool
      */
-    public $forceReindex = true;
+    public $forceReindex = false;
 
     public function __construct($attributes = [])
     {
@@ -228,8 +228,10 @@ class Product extends Model
 
     public function afterSave()
     {
-        $this->forceReindex = false;
-        (new ProductObserver(app(Index::class)))->updated($this);
+        if ($this->forceReindex) {
+            $this->forceReindex = false;
+            (new ProductObserver(app(Index::class)))->updated($this);
+        }
     }
 
     public function afterDelete()

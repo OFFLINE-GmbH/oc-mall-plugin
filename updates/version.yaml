@@ -102,3 +102,4 @@
         After this update your index will have to be rebuilt by running "php artisan mall:reindex" from the terminal.
         Between the completition of the update and the re-indexing your store will be empty!
         Make sure to consider this downtime when deploying to a production system.
+    - handle_index_table.php
