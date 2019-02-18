@@ -156,6 +156,7 @@ class ProductsSearchProvider extends ResultsProvider
     {
         $results = DB::table('rainlab_translate_attributes')
                      ->where('model_type', $modelClass)
+                     ->where('locale', $this->currentLocale())
                      ->where('attribute_data', 'LIKE', "%{$this->query}%")
                      ->get(['model_id']);
 
@@ -177,5 +178,21 @@ class ProductsSearchProvider extends ResultsProvider
         }
 
         return $translator->getLocale() === $translator->getDefaultLocale();
+    }
+
+    /**
+     * Return the current locale
+     *
+     * @return string|null
+     */
+    protected function currentLocale(): ?string
+    {
+        $translator = $this->translator();
+
+        if ( ! $translator) {
+            return null;
+        }
+
+        return $translator->getLocale();
     }
 }
