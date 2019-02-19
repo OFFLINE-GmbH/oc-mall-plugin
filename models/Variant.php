@@ -98,6 +98,12 @@ class Variant extends Model
     {
         parent::boot();
         static::saved(function (Variant $variant) {
+            // The below code handles updates for backend pages and therefore
+            // can be ignored when the app is not currently running in the backend.
+            if ( ! app()->runningInBackend()) {
+                return;
+            }
+
             if ($variant->image_set_id === null) {
                 $variant->createImageSetFromTempImages();
             }

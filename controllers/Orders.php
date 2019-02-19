@@ -6,6 +6,7 @@ use BackendMenu;
 use Event;
 use Flash;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Stats\OrdersStats;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderState;
@@ -34,6 +35,8 @@ class Orders extends Controller
     {
         parent::index();
         $this->addCss('/plugins/offline/mall/assets/backend.css');
+        $this->vars['stats'] = new OrdersStats();
+        $this->vars['money'] = app(Money::class);
     }
 
     public function show()
@@ -43,7 +46,7 @@ class Orders extends Controller
         $this->addCss('/plugins/offline/mall/assets/backend.css');
 
 
-        $order                      = Order::with('products', 'order_state')->findOrFail($this->params[0]);
+        $order = Order::with('products', 'order_state')->findOrFail($this->params[0]);
 
         $this->initRelation($order, 'payment_logs');
 

@@ -3,13 +3,9 @@
 use DB;
 use Illuminate\Console\Command;
 use OFFLINE\Mall\Models\Discount;
-use OFFLINE\Mall\Models\Order;
-use OFFLINE\Mall\Models\OrderProduct;
-use OFFLINE\Mall\Models\PaymentLog;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 class Initialize extends Command
 {

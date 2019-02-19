@@ -96,3 +96,8 @@ table.table.data tbody tr.orderfooter-taxes td {
 .price-table-currency-selector .btn-link {
     padding-left: 0;
 }
+
+.scoreboard.scoreboard--fix-until-toolbar-buttons-are-added {
+    margin: 0 0 -24px;
+    padding: 0 !important;
+}
