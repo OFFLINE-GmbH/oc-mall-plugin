@@ -263,6 +263,8 @@
         'successful'           => 'Erfolgreich',
         'failed'               => 'Fehlgeschlagen',
         'caution'              => 'Achtung',
+        'since_begin'          => 'Seit Beginn',
+        'weekly'               => 'Wöchentlich',
     ],
     'variant'                  => [
         'method' => [
@@ -492,6 +494,7 @@
         'shipping_pending'                    => 'Versand pendent',
         'not_shipped'                         => 'Versand ausstehend',
         'data'                                => 'Bestellungsdaten',
+        'total_revenue'                       => 'Gesamteinnahmen',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
