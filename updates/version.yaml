@@ -107,3 +107,5 @@
     - Fixed manual sort orders when using new table-backed index
 1.1.3:
     - Further improved MySQL 5.7 compatibility
+1.1.4:
+    - "Fixed bug in mall:check command"

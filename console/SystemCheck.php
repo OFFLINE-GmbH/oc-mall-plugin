@@ -135,10 +135,10 @@ class SystemCheck extends Command
      */
     private function checkProductCategories()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('categories')->get();
         $errors   = [];
         foreach ($products as $product) {
-            if ( ! $product->category) {
+            if ($product->categories->count() < 1) {
                 $errors[] = sprintf(
                     'The product "%s (%s)" has no category set.',
                     $product->name,
