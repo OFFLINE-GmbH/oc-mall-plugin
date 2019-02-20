@@ -5,6 +5,7 @@
 
             $.subscribe('mall.discount.applied', refreshCart);
             $.subscribe('mall.shipping.update', refreshCart);
+            $.subscribe('mall.address.update', refreshCart);
 
             function refreshCart () {
                 $.request('{{ __SELF__ }}::onRun', {
