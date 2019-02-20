@@ -114,3 +114,5 @@
     - use_text_columns_for_variant_names.php
 1.1.6:
     - Fixed display of subcategories in Rainlab.Pages menus
+1.1.7:
+    - Fixed calculation of country specific product taxes
