@@ -53,7 +53,7 @@ trait MenuItems
             foreach ($items as $item) {
                 $branchItem = self::getMenuItem($item, $url);
                 $item->setTranslateContext($locale);
-                if ($item->children) {
+                if ($item->children->count() > 0) {
                     $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
                 $branch[] = $branchItem;
@@ -209,16 +209,18 @@ trait MenuItems
      */
     protected function setActiveMenuItem($items, $url)
     {
-        $iterator = function (&$items, $url) use (&$iterator) {
+        $iterator = function ($items, $url) use (&$iterator) {
             foreach ($items as &$item) {
                 $item['isActive'] = $item['url'] === $url;
-                if ($item['items']) {
+                if (isset($item['items']) && count($item['items']) > 0) {
                     $item['items'] = $iterator($item['items'], $url);
                 }
             }
+
+            return $items;
         };
 
-        $iterator($items['items'], $url);
+        $items['items'] = $iterator($items['items'], $url);
 
         return $items;
     }

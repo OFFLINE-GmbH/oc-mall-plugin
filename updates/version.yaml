@@ -112,3 +112,5 @@
 1.1.5:
     - Added simple scoreboard to Orders page, fixed problem with very long variant names
     - use_text_columns_for_variant_names.php
+1.1.6:
+    - Fixed display of subcategories in Rainlab.Pages menus
