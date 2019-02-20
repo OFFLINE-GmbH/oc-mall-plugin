@@ -152,7 +152,7 @@ class TotalsCalculator
         }
 
         $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {
-            return $product->data->taxes->map(function (Tax $tax) use ($product) {
+            return $product->filtered_taxes->map(function (Tax $tax) use ($product) {
                 return new TaxTotal($product->totalPreTaxes, $tax);
             });
         });

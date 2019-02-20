@@ -17,7 +17,7 @@
     </div>
 
     <div class="mall-form-actions">
-        <button class="mall-btn mall-btn--primary mall-btn--sm" type="submit">
+        <button class="mall-btn mall-btn--primary mall-btn--sm js-change-address-apply" type="submit">
             {{ 'offline.mall::frontend.apply' | trans }}
         </button>
         <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: 'checkout'}) }}"
