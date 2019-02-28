@@ -118,3 +118,6 @@
     - Fixed calculation of country specific product taxes
 1.1.8:
     - Optimized logging of failed payments
+1.1.9:
+    - Fixed payment logging issue
+    - use_text_columns_for_payment_log.php

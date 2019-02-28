@@ -7,7 +7,6 @@ use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
-use OFFLINE\Mall\Models\PaymentMethod;
 
 /**
  * The PaymentResult contains the result of a payment attempt.

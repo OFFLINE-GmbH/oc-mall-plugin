@@ -5,12 +5,13 @@ use DB;
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class UseTextColumnsForVariantNames extends Migration
+class UseTextColumnsForPaymentLog extends Migration
 {
     public function up()
     {
-        Schema::table('offline_mall_order_products', function ($table) {
-            $table->text('variant_name')->change();
+        Schema::table('offline_mall_payments_log', function ($table) {
+            $table->text('payment_method')->change();
+            $table->text('message')->change();
         });
     }
 
