@@ -116,3 +116,5 @@
     - Fixed display of subcategories in Rainlab.Pages menus
 1.1.7:
     - Fixed calculation of country specific product taxes
+1.1.8:
+    - Optimized logging of failed payments

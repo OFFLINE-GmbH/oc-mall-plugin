@@ -89,7 +89,7 @@ class PaymentResult
             // Even if the log failed we *have* to mark this order as paid since the payment went already through.
             logger()->error(
                 'OFFLINE.Mall: Could not log successful payment.',
-                ['data' => $data, 'response' => $response, 'order' => $this->order]
+                ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
             );
         }
 
@@ -102,7 +102,7 @@ class PaymentResult
             // If the order could not be marked as paid the shop admin will have to do this manually.
             logger()->critical(
                 'OFFLINE.Mall: Could not mark paid order as paid.',
-                ['data' => $data, 'response' => $response, 'order' => $this->order]
+                ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
             );
         }
 
@@ -128,7 +128,7 @@ class PaymentResult
             // If the order could not be marked as pending the shop admin will have to do this manually.
             logger()->critical(
                 'OFFLINE.Mall: Could not mark pending order as pending.',
-                ['order' => $this->order]
+                ['order' => $this->order, 'exception' => $e]
             );
         }
 
@@ -155,7 +155,7 @@ class PaymentResult
         } catch (\Throwable $e) {
             logger()->error(
                 'OFFLINE.Mall: Could not log failed payment.',
-                ['data' => $data, 'response' => $response, 'order' => $this->order]
+                ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
             );
         }
 
@@ -166,7 +166,7 @@ class PaymentResult
             // If the order could not be marked as failed the shop admin will have to do this manually.
             logger()->critical(
                 'OFFLINE.Mall: Could not mark failed order as failed.',
-                ['data' => $data, 'response' => $response, 'order' => $this->order]
+                ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
             );
         }
 
