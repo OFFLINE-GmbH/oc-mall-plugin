@@ -502,7 +502,7 @@
             'update' => 'Update information',
         ],
         'payment_states'                      => [
-            'pending_state'  => 'Payment peding',
+            'pending_state'  => 'Payment pending',
             'failed_state'   => 'Payment failed',
             'refunded_state' => 'Payment refunded',
             'paid_state'     => 'Paid',
