@@ -98,9 +98,7 @@ class Variant extends Model
     {
         parent::boot();
         static::saved(function (Variant $variant) {
-            // The below code handles updates for backend pages and therefore
-            // can be ignored when the app is not currently running in the backend.
-            if ( ! app()->runningInBackend()) {
+            if ( ! $variant->isBackendRelationUpdate()) {
                 return;
             }
 
@@ -142,8 +140,7 @@ class Variant extends Model
     protected function createImageSetFromTempImages()
     {
         // Only run this if a variant relation has been created/updated.
-        if (request('_relation_field') !== 'variants'
-            && ! starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage')) {
+        if ( ! $this->isBackendRelationUpdate()) {
             return;
         }
 
@@ -319,5 +316,14 @@ class Variant extends Model
         return [
             'items' => $items,
         ];
+    }
+
+    protected function isBackendRelationUpdate(): bool
+    {
+        return app()->runningInBackend()
+            && request('Variant')
+            && request('MallPrice')
+            && request('_relation_field') === 'variants'
+            && starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage');
     }
 }
