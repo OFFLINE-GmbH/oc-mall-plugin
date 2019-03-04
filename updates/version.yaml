@@ -123,3 +123,5 @@
     - use_text_columns_for_payment_log.php
 1.1.10:
     - Optimized saving of pricing and stock information
+1.1.11:
+    - Minor changes to payment log display
