@@ -125,3 +125,6 @@
     - Optimized saving of pricing and stock information
 1.1.11:
     - Minor changes to payment log display
+1.1.12:
+    - Update jsonable columns to mediumtext type
+    - update_jsonable_columns_to_mediumtext.php
