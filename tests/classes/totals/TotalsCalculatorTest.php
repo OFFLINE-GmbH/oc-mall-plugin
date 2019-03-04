@@ -826,8 +826,15 @@ class TotalsCalculatorTest extends PluginTestCase
         $productB = $this->getProduct(100);
         $productB->save();
 
+        $variant             = new Variant();
+        $variant->name       = 'Variant';
+        $variant->product_id = $productA->id;
+        $variant->price      = ['CHF' => 100, 'EUR' => 150];
+        $variant->stock      = 20;
+        $variant->save();
+
         $cart = $this->getCart();
-        $cart->addProduct($productA, 2);
+        $cart->addProduct($productA, 2, $variant);
 
         $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
