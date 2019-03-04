@@ -95,6 +95,6 @@ class Discount extends Model
 
     public function getProductIdOptions()
     {
-        return collect([null => '--'])->merge(Product::get()->pluck('name', 'id'));
+        return [null => trans('offline.mall::lang.common.none')] + Product::get()->pluck('name', 'id')->toArray();
     }
 }
