@@ -9,20 +9,21 @@ trait StockAndQuantity
 {
     public function reduceStock(int $quantity, bool $updateSalesCount = true)
     {
-        $this->stock -= $quantity;
-        if ($this->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
-            throw new OutOfStockException($this);
+        $this->decrement('stock', $quantity);
+
+        $fresh = $this->fresh();
+        if ($fresh->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
+            throw new OutOfStockException($fresh);
         }
 
         if ($updateSalesCount) {
-            $this->sales_count += $quantity;
+            $this->increment('sales_count', $quantity);
             if ($this instanceof Variant) {
-                $this->product->sales_count += $quantity;
-                $this->product->save();
+                $this->product->increment('sales_count', $quantity);
             }
         }
 
-        return tap($this)->save();
+        return $this;
     }
 
     /**
