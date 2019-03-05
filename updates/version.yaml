@@ -128,3 +128,5 @@
 1.1.12:
     - Update jsonable columns to mediumtext type / fixed product dropdown in discount form
     - update_jsonable_columns_to_mediumtext.php
+1.1.13:
+    - Optimized handling of race conditions during order creation

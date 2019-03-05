@@ -203,8 +203,12 @@ class Order extends Model
      */
     protected function setOrderNumber()
     {
-        $numbers = DB::table($this->getTable())->selectRaw('max(cast(order_number as unsigned)) as max')->first();
-        $start   = $numbers->max;
+        $numbers = DB::table($this->getTable())
+                     ->sharedLock()
+                     ->selectRaw('max(cast(order_number as unsigned)) as max')
+                     ->first();
+
+        $start = $numbers->max;
 
         if ($start === 0) {
             $start = (int)GeneralSettings::get('order_start');

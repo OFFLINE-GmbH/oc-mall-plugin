@@ -9,6 +9,9 @@ class OutOfStockException extends \RuntimeException
     public function __construct($product)
     {
         $this->product = $product;
-        parent::__construct('This product is currently not in stock.', 422);
+        parent::__construct(
+            sprintf('The product %s is currently not in stock.', $this->product->name),
+            422
+        );
     }
 }
