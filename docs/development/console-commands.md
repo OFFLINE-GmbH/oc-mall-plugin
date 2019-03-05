@@ -18,7 +18,7 @@ installation.
 ## `mall:init`
 
 The `php artisan mall:init` command will remove all order and customer data from 
-your installation. Products, Variants your Settings will remain untouched.
+your installation. Products, Variants and your Settings will remain untouched.
 This command essentially brings the installation back to the 
 state it had before the first customer created an account.
 
