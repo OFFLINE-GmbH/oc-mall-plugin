@@ -438,7 +438,7 @@
         'creation_date'                       => 'Created at',
         'modification_date'                   => 'Modified at',
         'completion_date'                     => 'Completed at',
-        'credit_card'                         => 'Credit cart',
+        'credit_card'                         => 'Credit card',
         'payment_status'                      => 'Payment status',
         'grand_total'                         => 'Grand total',
         'billing_address'                     => 'Billing address',

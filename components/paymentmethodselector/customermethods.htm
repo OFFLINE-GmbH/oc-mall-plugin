@@ -1,0 +1,7 @@
+<label class="mall-label">{{ 'offline.mall::frontend.customer_payment_method.use' | trans }}</label>
+<div class="mall-payment-customer-methods">
+    {% for customerMethod in methods %}
+        {% partial __SELF__ ~ '::customermethod' method=customerMethod %}
+    {% endfor %}
+    <div data-validate-for="customer_method"></div>
+</div>

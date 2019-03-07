@@ -123,4 +123,6 @@ return [
     'flash.missing_address'                    => 'Bitte erfassen Sie eine Adresse um fortzufahren.',
     'labels'                                   => 'Allgemein',
     'search_error'                             => 'Fehler beim Ausführen der Suche.',
+    'customer_payment_method.use'              => 'Oder verwenden Sie ein gespeichertes Zahlungsmittel',
+    'customer_payment_method.does_not_exist'   => 'Die ausgewhälte Zahlungsmethode existiert nicht',
 ];

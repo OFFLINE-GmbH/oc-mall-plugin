@@ -149,6 +149,11 @@ class PaymentResult
     {
         $this->successful = false;
 
+        logger()->error(
+            'OFFLINE.Mall: A payment failed.',
+            ['data' => $data, 'response' => $response, 'order' => $this->order]
+        );
+
         try {
             $this->failedPayment = $this->logFailedPayment($data, $response);
         } catch (\Throwable $e) {

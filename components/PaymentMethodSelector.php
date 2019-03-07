@@ -2,11 +2,15 @@
 
 use Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\CustomerPaymentMethod;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Validator;
@@ -17,6 +21,8 @@ use Validator;
  */
 class PaymentMethodSelector extends MallComponent
 {
+    use HashIds;
+
     /**
      * The user's cart.
      *
@@ -40,6 +46,11 @@ class PaymentMethodSelector extends MallComponent
      * @var Collection
      */
     public $methods;
+    /**
+     * All available CustomerPaymentMethods
+     * @var Collection
+     */
+    public $customerMethods;
     /**
      * The current order.
      *
@@ -101,6 +112,7 @@ class PaymentMethodSelector extends MallComponent
         $method = PaymentMethod::find($this->order->payment_method_id ?? $this->cart->payment_method_id);
 
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
+        $this->setVar('customerMethods', $this->getCustomerMethods());
         $this->setVar('activeMethod', $method);
 
         try {
@@ -127,7 +139,7 @@ class PaymentMethodSelector extends MallComponent
      *
      * Any specified payment data is stored in the session.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      * @throws \Cms\Classes\CmsException
      */
     public function onSubmit()
@@ -137,29 +149,10 @@ class PaymentMethodSelector extends MallComponent
 
         // Create the payment gateway to trigger the validation.
         // If not all specified data is valid an exception is thrown here.
-        $paymentMethod = PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
-        $gateway       = app(PaymentGateway::class);
-        $gateway->init($paymentMethod, $data);
+        $gateway = app(PaymentGateway::class);
+        $gateway->init($this->getPaymentMethod(), $data);
 
-        // If an order is already available, this is not the normal checkout flow but a
-        // subsequent try to pay for an existing order for which the payment failed.
-        if ($this->order) {
-            // In case the order already exists the payment can be executed directly.
-            $paymentService = new PaymentService(
-                $gateway,
-                $this->order,
-                $this->page->page->fileName
-            );
-
-            return $paymentService->process();
-        }
-
-        // Just to prevent any data leakage we store credit card information encrypted to the session.
-        session()->put('mall.payment_method.data', encrypt(json_encode($data)));
-
-        $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
-
-        return redirect()->to($this->getStepUrl($nextStep, 'payment'));
+        return $this->doRedirect($gateway, $data);
     }
 
     /**
@@ -194,6 +187,36 @@ class PaymentMethodSelector extends MallComponent
     }
 
     /**
+     * The customer proceeds with a saved payment method.
+     *
+     */
+    public function onUseCustomerPaymentMethod()
+    {
+        $this->setData();
+        $id = $this->decode(post('id'));
+
+        $method = CustomerPaymentMethod::where('customer_id', $this->workingOnModel->customer->id)
+                                       ->find($id);
+
+        if ( ! $method) {
+            throw new ValidationException([
+                'customer_method' => trans('customer_payment_method.does_not_exist'),
+            ]);
+        }
+
+        $this->workingOnModel->payment_method_id          = $method->payment_method_id;
+        $this->workingOnModel->customer_payment_method_id = $method->id;
+        $this->workingOnModel->save();
+
+        $data = ['use_customer_payment_method' => true];
+
+        $gateway = app(PaymentGateway::class);
+        $gateway->init($this->getPaymentMethod(), $data);
+
+        return $this->doRedirect($gateway, $data);
+    }
+
+    /**
      * Get the URL to a specific checkout step.
      *
      * @param      $step
@@ -209,5 +232,60 @@ class PaymentMethodSelector extends MallComponent
         }
 
         return $url . '?' . http_build_query(['via' => $via]);
+    }
+
+    /**
+     * Return all CustomerPaymentMethods grouped
+     * by the payment method.
+     *
+     * @return Collection
+     */
+    protected function getCustomerMethods()
+    {
+        if ( ! $this->workingOnModel->customer) {
+            return collect([]);
+        }
+
+        return optional($this->workingOnModel->customer->payment_methods)->groupBy('payment_method_id');
+    }
+
+    /**
+     * @param \Illuminate\Foundation\Application $gateway
+     * @param                                    $data
+     *
+     * @return RedirectResponse
+     * @throws \Cms\Classes\CmsException
+     */
+    protected function doRedirect(PaymentGateway $gateway, $data): RedirectResponse
+    {
+        // If an order is already available, this is not the normal checkout flow but a
+        // subsequent try to pay for an existing order for which the payment failed.
+        if ($this->order) {
+            // In case the order already exists the payment can be executed directly.
+            $paymentService = new PaymentService(
+                $gateway,
+                $this->order,
+                $this->page->page->fileName
+            );
+
+            return $paymentService->process();
+        }
+
+        // Just to prevent any data leakage we store payment information encrypted to the session.
+        session()->put('mall.payment_method.data', encrypt(json_encode($data)));
+
+        $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
+
+        return redirect()->to($this->getStepUrl($nextStep, 'payment'));
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getPaymentMethod()
+    {
+        $paymentMethod = PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
+
+        return $paymentMethod;
     }
 }

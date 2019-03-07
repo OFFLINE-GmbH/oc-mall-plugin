@@ -123,4 +123,6 @@ return [
     'flash.missing_address'                    => 'Please enter your address to continue checkout.',
     'labels'                                   => 'Labels',
     'search_error'                             => 'Failed to perform search.',
+    'customer_payment_method.use'              => 'Or use one of your existing payment methods',
+    'customer_payment_method.does_not_exist'   => 'The selected payment method does not exist',
 ];
