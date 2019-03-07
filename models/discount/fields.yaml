@@ -69,15 +69,6 @@ fields:
             field: trigger
             condition: value[code]
         type: text
-    _alternate_price:
-        label: 'offline.mall::lang.discounts.alternate_price'
-        oc.commentPosition: ''
-        span: left
-        trigger:
-            action: show
-            field: type
-            condition: value[alternate_price]
-        type: mall.price
     shipping_description:
         label: 'offline.mall::lang.discounts.shipping_description'
         oc.commentPosition: ''

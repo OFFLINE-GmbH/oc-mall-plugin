@@ -19,7 +19,7 @@ trait Discounts
      */
     public function applyDiscount(Discount $discount)
     {
-        $uniqueDiscountTypes = ['alternate_price', 'shipping'];
+        $uniqueDiscountTypes = ['shipping'];
 
         if (in_array($discount->type, $uniqueDiscountTypes)
             && $this->discounts->where('type', $discount->type)->count() > 0) {

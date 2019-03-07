@@ -391,7 +391,6 @@
         'trigger'                              => 'Valid if',
         'rate'                                 => 'Rate (%)',
         'amount'                               => 'Fixed amount',
-        'alternate_price'                      => 'Alternate price',
         'max_number_of_usages'                 => 'Max number of usages',
         'expires'                              => 'Expires',
         'number_of_usages'                     => 'Numer of usages',
@@ -403,7 +402,6 @@
         'types'                                => [
             'fixed_amount'    => 'Fixed amount',
             'rate'            => 'Rate',
-            'alternate_price' => 'Alternate price',
             'shipping'        => 'Alternate shipping',
         ],
         'triggers'                             => [
