@@ -43,7 +43,7 @@ class Discount extends Model
         'product' => [Product::class],
     ];
     public $belongsToMany = [
-        'carts' => [Cart::class],
+        'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
     ];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
