@@ -389,7 +389,6 @@
         'trigger'                              => 'Gültig wenn',
         'rate'                                 => 'Rabatt (%)',
         'amount'                               => 'Rabatt-Betrag',
-        'alternate_price'                      => 'Alternativer Preis',
         'max_number_of_usages'                 => 'Maximale Anzahl Anwendungen',
         'expires'                              => 'Gültig bis',
         'number_of_usages'                     => 'Anzahl Anwendungen',
@@ -401,7 +400,6 @@
         'types'                                => [
             'fixed_amount'    => 'Fixer-Rabatt',
             'rate'            => 'Prozentualer-Rabatt',
-            'alternate_price' => 'Alternativer Preis',
             'shipping'        => 'Alternativer Versand-Preis',
         ],
         'triggers'                             => [

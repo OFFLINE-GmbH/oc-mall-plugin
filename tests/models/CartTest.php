@@ -413,46 +413,6 @@ class CartTest extends PluginTestCase
         $this->assertEquals(1, $cart->discounts->count());
     }
 
-    public function test_only_one_alternate_price_discount_is_applied()
-    {
-        $this->expectException(ValidationException::class);
-
-        $product = Product::first();
-        $product->save();
-
-        $cart = new Cart();
-        $cart->addProduct($product);
-
-        $discountA       = new Discount();
-        $discountA->code = 'Test';
-        $discountA->name = 'Test discount';
-        $discountA->type = 'alternate_price';
-        $discountA->save();
-
-        $discountA->alternate_prices()->save(new Price([
-            'currency_id' => 1,
-            'price'       => 25,
-            'field'       => 'alternate_price',
-        ]));
-
-        $discountB                   = new Discount();
-        $discountB->code             = 'Test';
-        $discountB->name             = 'Test discount';
-        $discountB->type             = 'alternate_price';
-        $discountB->save();
-
-        $discountB->alternate_prices()->save(new Price([
-            'currency_id' => 1,
-            'price'       => 25,
-            'field'       => 'alternate_price',
-        ]));
-
-        $cart->applyDiscount($discountA);
-        $cart->applyDiscount($discountB);
-
-        $this->assertEquals(1, $cart->discounts->count());
-    }
-
     public function test_only_one_shipping_discount_is_applied()
     {
         $this->expectException(ValidationException::class);
