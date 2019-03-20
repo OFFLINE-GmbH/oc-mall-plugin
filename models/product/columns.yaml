@@ -9,6 +9,11 @@ columns:
         type: text
         searchable: true
         sortable: true
+    description:
+        label: 'offline.mall::lang.product.description'
+        searchable: true
+        sortable: true
+        invisible: true
     published:
         label: 'offline.mall::lang.product.published'
         type: partial
@@ -37,3 +42,4 @@ columns:
         path: $/offline/mall/models/product/_taxable.htm
         sortable: true
         invisible: true
+
