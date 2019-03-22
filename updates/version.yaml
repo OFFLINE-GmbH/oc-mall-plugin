@@ -132,3 +132,5 @@
     - Optimized handling of race conditions during order creation
 1.1.14:
     - Fixed deletion of discounts
+1.1.15:
+    - Added italian translations (thanks to @marcomessa)
