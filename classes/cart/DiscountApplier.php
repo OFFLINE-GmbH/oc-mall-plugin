@@ -54,11 +54,6 @@ class DiscountApplier
         }
 
         $savings = 0;
-        if ($discount->type === 'alternate_price') {
-            $this->reducedTotal        = $discount->alternatePrice()->integer;
-            $this->reducedTotalIsFixed = true;
-            $savings                   = $this->total - $this->reducedTotal;
-        }
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;

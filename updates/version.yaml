@@ -130,6 +130,10 @@
     - update_jsonable_columns_to_mediumtext.php
 1.1.13:
     - Optimized handling of race conditions during order creation
+1.1.14:
+    - Fixed deletion of discounts
+1.1.15:
+    - Added italian translations (thanks to @marcomessa)
 1.2.0:
     - Customers can now re-use payment methods (like Credit cards)
     - create_offline_mall_customer_payment_methods.php

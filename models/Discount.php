@@ -19,15 +19,15 @@ class Discount extends Model
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
-        'types'                                => 'in:fixed_amount,rate,alternate_price,shipping',
+        'types'                                => 'in:fixed_amount,rate,shipping',
         'code'                                 => 'required_if:trigger,code',
         'product'                              => 'required_if:trigger,product',
-        'type'                                 => 'in:fixed_amount,rate,alternate_price,shipping',
+        'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
         'shipping_description'                 => 'required_if:type,shipping',
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
-    public $with = ['shipping_prices', 'alternate_prices', 'amounts', 'totals_to_reach'];
+    public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
     public $table = 'offline_mall_discounts';
     public $dates = ['expires'];
     public $nullable = ['max_number_of_usages'];
@@ -36,7 +36,6 @@ class Discount extends Model
     ];
     public $morphMany = [
         'shipping_prices'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
-        'alternate_prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "alternate_price"'],
         'amounts'          => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amount"'],
         'totals_to_reach'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "total_to_reach"'],
     ];
@@ -44,7 +43,7 @@ class Discount extends Model
         'product' => [Product::class],
     ];
     public $belongsToMany = [
-        'carts' => [Cart::class],
+        'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
     ];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
@@ -81,11 +80,6 @@ class Discount extends Model
     public function totalToReach($currency = null)
     {
         return $this->price($currency, 'totals_to_reach');
-    }
-
-    public function alternatePrice($currency = null)
-    {
-        return $this->price($currency, 'alternate_prices');
     }
 
     public function shippingPrice($currency = null)

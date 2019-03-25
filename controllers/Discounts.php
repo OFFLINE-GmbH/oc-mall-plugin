@@ -40,7 +40,6 @@ class Discounts extends Controller
     public function handleUpdates(Discount $model)
     {
         $this->updatePrices($model, 'shipping_price', '_shipping_price');
-        $this->updatePrices($model, 'alternate_price', '_alternate_price');
         $this->updatePrices($model, 'total_to_reach', '_total_to_reach');
         $this->updatePrices($model, 'amount', '_amount');
     }
@@ -50,7 +49,7 @@ class Discounts extends Controller
         $data = post('MallPrice');
         foreach ($data as $currency => $_data) {
             $value = array_get($_data, $key);
-            if ($value === "") {
+            if ($value === '') {
                 $value = null;
             }
             Price::updateOrCreate([

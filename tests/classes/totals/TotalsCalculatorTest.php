@@ -497,32 +497,6 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(($quantity * $price['CHF'] * 100) / 2, $calc->totalPostTaxes());
     }
 
-    public function test_it_applies_alternate_price_discounts()
-    {
-        $quantity = 5;
-        $price    = ['CHF' => 200, 'EUR' => 240];
-
-        $cart = $this->getCart();
-        $cart->addProduct($this->getProduct($price), $quantity);
-
-        $discount          = new Discount();
-        $discount->code    = 'Test';
-        $discount->name    = 'Test discount';
-        $discount->trigger = 'code';
-        $discount->type    = 'alternate_price';
-        $discount->save();
-        $discount->alternate_prices()->save(new Price([
-            'price'       => 250,
-            'currency_id' => 1,
-            'field'       => 'alternate_price',
-        ]));
-
-        $cart->applyDiscount($discount);
-
-        $calc = new TotalsCalculator($cart);
-        $this->assertEquals(250 * 100, $calc->totalPostTaxes());
-    }
-
     public function test_it_applies_alternate_shipping_price_discounts()
     {
         $tax1 = $this->getTax('Test 1', 10);
@@ -566,43 +540,6 @@ class TotalsCalculatorTest extends PluginTestCase
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(30000, $calc->totalPostTaxes());
         $this->assertEquals(5524, round($calc->totalTaxes()));
-    }
-
-    public function test_it_applies_alternate_price_discount_only_when_given_total_is_reached()
-    {
-        $product = $this->getProduct(100);
-        $product->save();
-
-        $cart = $this->getCart();
-        $cart->addProduct($product, 2);
-
-        $discount          = new Discount();
-        $discount->code    = 'Test';
-        $discount->name    = 'Test discount';
-        $discount->type    = 'alternate_price';
-        $discount->trigger = 'total';
-        $discount->save();
-
-        $discount->alternate_prices()->save(new Price([
-            'price'       => 100,
-            'currency_id' => 1,
-            'field'       => 'alternate_price',
-        ]));
-        $discount->totals_to_reach()->save(new Price([
-            'price'       => 300,
-            'currency_id' => 1,
-            'field'       => 'total_to_reach',
-        ]));
-
-        $cart->applyDiscount($discount);
-
-        $calc = new TotalsCalculator($cart);
-        $this->assertEquals(20000, $calc->totalPostTaxes());
-
-        $cart->addProduct($product);
-
-        $calc = new TotalsCalculator($cart);
-        $this->assertEquals(10000, $calc->totalPostTaxes());
     }
 
     public function test_it_applies_fixed_amount_discount_only_when_given_total_is_reached()
@@ -717,41 +654,6 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator($cart);
         $this->assertEquals(30000, $calc->totalPostTaxes());
-    }
-
-    public function test_it_applies_alternate_price_discount_only_when_needed_product_is_in_cart()
-    {
-        $productA = $this->getProduct(100);
-        $productA->save();
-        $productB = $this->getProduct(100);
-        $productB->save();
-
-        $cart = $this->getCart();
-        $cart->addProduct($productA, 2);
-
-        $discount             = new Discount();
-        $discount->code       = 'Test';
-        $discount->name       = 'Test discount';
-        $discount->type       = 'alternate_price';
-        $discount->trigger    = 'product';
-        $discount->product_id = $productB->id;
-        $discount->save();
-
-        $discount->alternate_prices()->save(new Price([
-            'price'       => 100,
-            'currency_id' => 1,
-            'field'       => 'alternate_price',
-        ]));
-
-        $cart->applyDiscount($discount);
-
-        $calc = new TotalsCalculator($cart);
-        $this->assertEquals(20000, $calc->totalPostTaxes());
-
-        $cart->addProduct($productB);
-
-        $calc = new TotalsCalculator($cart);
-        $this->assertEquals(10000, $calc->totalPostTaxes());
     }
 
     public function test_it_applies_fixed_amount_discount_only_when_needed_product_is_in_cart()
