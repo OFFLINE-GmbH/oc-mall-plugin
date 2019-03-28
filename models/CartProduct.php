@@ -74,7 +74,7 @@ class CartProduct extends Model
             // Set the attribute directly to prevent the price mutator from being triggered
             $entry->attributes['price_post_taxes'] = $this->price()->integer;
             $entry->attributes['price_taxes']      = $this->getTotalTaxesAttribute() / $this->quantity;
-            $entry->attributes['price_pre_taxes']  = $this->pricePreTaxes();
+            $entry->attributes['price_pre_taxes']  = $this->getPricePreTaxesAttribute();
 
             $entry->attributes['total_pre_taxes']  = $this->total_pre_taxes;
             $entry->attributes['total_taxes']      = $this->total_taxes;
@@ -145,6 +145,10 @@ class CartProduct extends Model
         return $data;
     }
 
+    /**
+     * The total item price * quantity pre taxes.
+     * @return float
+     */
     public function getTotalPreTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
@@ -154,10 +158,14 @@ class CartProduct extends Model
         return $this->price()->integer * $this->quantity;
     }
 
+    /**
+     * The total quantity for this cart entry.
+     * @return float
+     */
     public function getTotalTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
-            $withoutTax = $this->pricePreTaxes();
+            $withoutTax = 1 / (1 + $this->taxFactor()) * $this->price()->integer * $this->quantity;
 
             return $this->price()->integer * $this->quantity - $withoutTax;
         }
@@ -165,6 +173,10 @@ class CartProduct extends Model
         return $this->taxFactor() * $this->price()->integer * $this->quantity;
     }
 
+    /**
+     * The total item price * quantity post taxes.
+     * @return float
+     */
     public function getTotalPostTaxesAttribute(): float
     {
         if ($this->data->price_includes_tax) {
@@ -179,18 +191,27 @@ class CartProduct extends Model
         return $this->weight * $this->quantity;
     }
 
-    protected function pricePreTaxes()
+    public function getPricePreTaxesAttribute()
     {
         if ($this->data->price_includes_tax) {
-            return 1 / (1 + $this->taxFactor()) * $this->price()->integer * $this->quantity;
+            return 1 / (1 + $this->taxFactor()) * $this->price()->integer;
         }
 
-        return $this->price()->integer * $this->quantity;
+        return $this->price()->integer;
+    }
+
+    public function getPricePostTaxesAttribute()
+    {
+        if ($this->data->price_includes_tax) {
+            return $this->price()->integer;
+        }
+
+        return $this->price()->integer + $this->price()->integer * $this->taxFactor();
     }
 
     public function totalForTax(Tax $tax)
     {
-        return $tax->percentageDecimal * $this->pricePreTaxes();
+        return $tax->percentageDecimal * $this->getTotalPreTaxesAttribute();
     }
 
     public function getCustomFieldValueDescriptionAttribute()
