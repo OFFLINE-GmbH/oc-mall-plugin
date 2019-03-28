@@ -49,11 +49,12 @@ class Datatrans extends PaymentProvider
 
         try {
             $response = $gateway->purchase([
-                'amount'        => $this->order->total_in_currency,
-                'currency'      => $this->order->currency['code'],
-                'transactionId' => $this->order->id,
-                'returnUrl'     => $this->returnUrl(),
-                'cancelUrl'     => $this->cancelUrl(),
+                'amount'         => $this->order->total_in_currency,
+                'currency'       => $this->order->currency['code'],
+                'transactionId'  => $this->order->id,
+                'returnUrl'      => $this->returnUrl(),
+                'cancelUrl'      => $this->cancelUrl(),
+                'redirectMethod' => 'GET',
             ])->send();
         } catch (Throwable $e) {
             return $result->fail([], $e);
@@ -66,23 +67,44 @@ class Datatrans extends PaymentProvider
         }
 
         Session::put('mall.payment.callback', self::class);
-        Session::put('mall.datatrans.transactionReference', $response->getTransactionReference());
 
-        return dd($response->getRedirectResponse());
-
-        return $result->redirect($response->getRedirectResponse()->getTargetUrl());
+        return $result->redirect($response->getRedirectUrl());
     }
 
     /**
-     * Build the Omnipay Gateway for PayPal.
+     * Datatrans has processed the payment and redirected the user back.
+     *
+     * @param PaymentResult $result
+     *
+     * @return PaymentResult
+     */
+    public function complete(PaymentResult $result): PaymentResult
+    {
+        $this->setOrder($result->order);
+
+        try {
+            $response = $this->getGateway()->completeAuthorize()->send();
+        } catch (Throwable $e) {
+            return $result->fail([], $e);
+        }
+
+        $data = (array)$response->getData();
+
+        if ( ! $response->isSuccessful()) {
+            return $result->fail($data, $response);
+        }
+
+        return $result->success($data, $response);
+    }
+
+    /**
+     * Build the Omnipay Gateway for Datatrans.
      *
      * @return \Omnipay\Common\GatewayInterface
      */
     protected function getGateway()
     {
         $gateway = Omnipay::create('Datatrans');
-//        $gateway->setMerchantId(decrypt(PaymentGatewaySettings::get('datatrans_merchant_id')));
-//        $gateway->setSign(decrypt(PaymentGatewaySettings::get('datatrans_sign')));
 
         $gateway->initialize([
             'merchantId' => decrypt(PaymentGatewaySettings::get('datatrans_merchant_id')),
