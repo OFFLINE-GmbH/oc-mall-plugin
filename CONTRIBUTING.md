@@ -15,3 +15,4 @@ If you found a bug or want to request a feature please file a GitHub issue.
 
 PRs are always welcome! Open them against the `develop` branch.
 If you plan a time consuming contribution please open an issue first and describe what changes you have in mind. 
+
