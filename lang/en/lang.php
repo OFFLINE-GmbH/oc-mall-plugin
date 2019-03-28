@@ -289,6 +289,8 @@
         'float'      => 'Float',
         'textarea'   => 'Multi-line textfield',
         'richeditor' => 'Richtext',
+        'date'       => 'Date',
+        'datetime'   => 'Date Time',
         'dropdown'   => 'Dropdown',
         'checkbox'   => 'Checkbox',
         'color'      => 'Color',

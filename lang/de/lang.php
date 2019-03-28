@@ -288,6 +288,8 @@
         'float'      => 'Gleitkommazahl',
         'textarea'   => 'Mehrzeiliges Textfeld',
         'richeditor' => 'Richtext',
+        'date'       => 'Datum',
+        'datetime'   => 'Datetime',
         'dropdown'   => 'Auswahlliste',
         'checkbox'   => 'Checkbox',
         'color'      => 'Farbe',

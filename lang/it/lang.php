@@ -292,6 +292,8 @@
         'float'      => 'Numero con virgola',
         'textarea'   => 'Campo di testo multilinea',
         'richeditor' => 'Editor WYSIWYG',
+        'date'       => 'Date',
+        'datetime'   => 'Date Time',
         'dropdown'   => 'Dropdown',
         'checkbox'   => 'Checkbox',
         'color'      => 'Colore',
