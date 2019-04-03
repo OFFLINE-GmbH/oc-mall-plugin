@@ -104,7 +104,7 @@ return [
     'session.logged_out'                       => 'Nem vagy bejelentkezve',
     'session.account_page'                     => 'Fiók kezelése',
     'session.logout'                           => 'Kilépés',
-    'session.login_signup'                     => 'Bejelentkezés vagy bejelentkezés',
+    'session.login_signup'                     => 'Bejelentkezés',
     'account'                                  => 'Fiókod',
     'guest_upgrade.callout'                    => 'Jelenleg vendégként jelentkeztél be. Adj meg egy jelszót a fiókod frissítéséhez.',
     'empty'                                    => 'Nincs itt semmi látnivaló.',
