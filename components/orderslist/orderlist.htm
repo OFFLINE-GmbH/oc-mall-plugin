@@ -10,7 +10,7 @@
         {% for order in orders %}
             <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }}">
                 <td>{{ order.order_number }}</td>
-                <td>{{ order.created_at }}</td>
+                <td>{% partial __SELF__ ~ '::created_at' order=order %}</td>
                 <td>{{ order.order_state_label }}</td>
                 <td>
                     {% if order.isPaid %}
