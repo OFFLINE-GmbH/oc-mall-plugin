@@ -10,9 +10,11 @@
                     <h5>{{ 'offline.mall::frontend.order.payment_state' | trans }}</h5>
                     {{ order.payment_state_label }}
                     {% if not order.isPaid %}
-                        <div class="mall-order-details__instructions">
-                            {{ order.payment_method.renderInstructions(order) | raw }}
-                        </div>
+                        {% if order.payment_method.instructions %}
+                            <div class="mall-order-details__instructions">
+                                {{ order.payment_method.renderInstructions(order) | raw }}
+                            </div>
+                        {% endif %}
                         <br/>
                         <a href="{{ __SELF__.paymentLink }}?order={{ order.hashId }}">
                             {{ 'offline.mall::frontend.payment_method.pay_now' | trans }}
