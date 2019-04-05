@@ -137,3 +137,6 @@
 1.2.0:
     - Customers can now re-use payment methods (like Credit cards)
     - create_offline_mall_customer_payment_methods.php
+1.2.1:
+    - Minor bug fixes and optimizations
+    - remove_description_column_from_order_products.php
