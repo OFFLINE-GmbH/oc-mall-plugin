@@ -5,17 +5,21 @@ use DB;
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class UseTextColumnsForVariantNames extends Migration
+class RemovePaymentDataColumnFromOrdersTable extends Migration
 {
     public function up()
     {
-        Schema::table('offline_mall_order_products', function ($table) {
-            $table->text('variant_name')->change();
+        Schema::table('offline_mall_orders', function ($table) {
+            if (Schema::hasColumn('offline_mall_orders', 'payment_data')) {
+                $table->dropColumn(['payment_data']);
+            }
         });
     }
 
     public function down()
     {
-        // Leave the columns. The migration might fail if data gets truncated.
+        Schema::table('offline_mall_orders', function ($table) {
+            $table->mediumText('payment_data');
+        });
     }
 }
