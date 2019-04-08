@@ -52,6 +52,7 @@ return [
     'form.city'                                => 'Ort',
     'form.state'                               => 'Kanton/Bundesstaat',
     'form.country'                             => 'Land',
+    'proceed_to_checkout'                      => 'Weiter zur Kasse',
     'address'                                  => 'Adresse',
     'billing_address'                          => 'Rechnungsadresse',
     'shipping_address'                         => 'Versandadresse',
@@ -59,7 +60,7 @@ return [
     'payment_method'                           => 'Zahlungsart',
     'payment_method.choose'                    => 'Bitte wählen Sie eine Zahlungsart.',
     'payment_method.button_label'              => 'Diese Methode verwenden',
-    'payment_method.proceed'                   => 'Zahlungsinformationen speichern',
+    'payment_method.proceed'                   => 'Mit dieser Methode forfahren',
     'payment_method.pay_now'                   => 'Bestellung bezahlen',
     'payment_method.card_info'                 => 'Kreditkarteninformationen',
     'shipping_method'                          => 'Versandmethode',
@@ -123,4 +124,6 @@ return [
     'flash.missing_address'                    => 'Bitte erfassen Sie eine Adresse um fortzufahren.',
     'labels'                                   => 'Allgemein',
     'search_error'                             => 'Fehler beim Ausführen der Suche.',
+    'customer_payment_method.use'              => 'Oder verwenden Sie ein gespeichertes Zahlungsmittel',
+    'customer_payment_method.does_not_exist'   => 'Die ausgewhälte Zahlungsmethode existiert nicht',
 ];

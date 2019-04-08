@@ -42,7 +42,7 @@ class OrdersStats
 
     public function grandTotal(): int
     {
-        return DB::table($this->ordersTable)->sum('total_post_taxes');
+        return DB::table($this->ordersTable)->sum('total_pre_payment');
     }
 
     public function byState(): array

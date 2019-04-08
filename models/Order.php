@@ -45,7 +45,6 @@ class Order extends Model
         'currency',
         'discounts',
         'shipping',
-        'payment_data',
     ];
     public $table = 'offline_mall_orders';
     public $hasOne = ['payment_log' => PaymentLog::class];
@@ -54,10 +53,11 @@ class Order extends Model
         'payment_logs' => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
     public $belongsTo = [
-        'payment_method' => [PaymentMethod::class, 'deleted' => true],
-        'order_state'    => [OrderState::class, 'deleted' => true],
-        'customer'       => [Customer::class, 'deleted' => true],
-        'cart'           => [Cart::class, 'deleted' => true],
+        'payment_method'          => [PaymentMethod::class, 'deleted' => true],
+        'customer_payment_method' => [CustomerPaymentMethod::class, 'deleted' => true],
+        'order_state'             => [OrderState::class, 'deleted' => true],
+        'customer'                => [Customer::class, 'deleted' => true],
+        'cart'                    => [Cart::class, 'deleted' => true],
     ];
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
@@ -151,6 +151,7 @@ class Order extends Model
             $order->ip_address                              = request()->ip();
             $order->customer_id                             = $cart->customer->id;
             $order->payment_method_id                       = $cart->payment_method_id;
+            $order->customer_payment_method_id              = $cart->customer_payment_method_id;
             $order->payment_state                           = PendingState::class;
             $order->order_state_id                          = $initialOrderStatus->id;
             $order->attributes['total_shipping_pre_taxes']  = $order->round($totals->shippingTotal()->totalPreTaxes());

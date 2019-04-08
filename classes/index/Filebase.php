@@ -167,7 +167,7 @@ class Filebase implements Index
                 return count(array_intersect($val, $comp)) > 0;
             }
 
-            return in_array($comp, $val);
+            return in_array($val, $comp);
         });
 
         $this->jsonq::macro('includes between', function ($val, $comp) {

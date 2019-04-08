@@ -52,6 +52,7 @@ return [
     'form.city'                                => 'City',
     'form.state'                               => 'State/County/Province',
     'form.country'                             => 'Country',
+    'proceed_to_checkout'                      => 'Proceed to checkout',
     'address'                                  => 'Address',
     'billing_address'                          => 'Billing address',
     'shipping_address'                         => 'Shipping address',
@@ -59,7 +60,7 @@ return [
     'payment_method'                           => 'Payment method',
     'payment_method.choose'                    => 'Please select a payment method.',
     'payment_method.button_label'              => 'Use this method',
-    'payment_method.proceed'                   => 'Save payment information',
+    'payment_method.proceed'                   => 'Proceed with this method',
     'payment_method.pay_now'                   => 'Pay this order now',
     'payment_method.card_info'                 => 'Card information',
     'shipping_method'                          => 'Shipping method',
@@ -123,4 +124,6 @@ return [
     'flash.missing_address'                    => 'Please enter your address to continue checkout.',
     'labels'                                   => 'Labels',
     'search_error'                             => 'Failed to perform search.',
+    'customer_payment_method.use'              => 'Or use one of your existing payment methods',
+    'customer_payment_method.does_not_exist'   => 'The selected payment method does not exist',
 ];

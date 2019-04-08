@@ -1,0 +1,14 @@
+<a href="javascript:;" class="mall-payment-customer-method"
+   data-request="onUseCustomerPaymentMethod"
+   data-request-data="id: '{{ method.hashId }}'"
+   data-request-error="$('.mall-overlay').remove()"
+>
+    <div class="mall-payment-customer-method__text">
+        {% if method.payment_method %}
+            {% set path = __SELF__ ~ '::customermethods/' ~ (method.payment_method.code) %}
+            {% if partial(path) %}
+                {% partial path %}
+            {% endif %}
+        {% endif %}
+    </div>
+</a>

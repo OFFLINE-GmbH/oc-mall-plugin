@@ -3,6 +3,7 @@
 use Cache;
 use Illuminate\Support\Facades\Queue;
 use Model;
+use DB;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;

@@ -59,6 +59,21 @@ class Address extends Model
         return implode(', ', $parts);
     }
 
+    public function getLinesArrayAttribute(): array
+    {
+        return explode("\n", $this->lines);
+    }
+
+    public function getNamesArrayAttribute(): array
+    {
+        $names = explode("\n", $this->name);
+        if (count($names)) {
+            return $names;
+        }
+
+        return [$this->customer->firstname, $this->customer->lastname];
+    }
+
     public static function byCustomer(Customer $customer)
     {
         return self::where('customer_id', $customer->id);

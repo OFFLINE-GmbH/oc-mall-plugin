@@ -141,6 +141,12 @@ class AddressSelector extends MallComponent
             return;
         }
 
+        if ( ! $user->customer) {
+            logger()->warning('User account without customer relation found.', ['user' => $user]);
+            Auth::logout();
+            return;
+        }
+
         $this->setVar('type', $this->property('type'));
 
         if ($this->type === 'billing') {

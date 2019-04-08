@@ -17,7 +17,9 @@ class AddCustomerGroupIdToRainlabUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['offline_mall_customer_group_id']);
+            if (Schema::hasColumn('users', 'offline_mall_customer_group_id')) {
+                $table->dropColumn(['offline_mall_customer_group_id']);
+            }
         });
     }
 }

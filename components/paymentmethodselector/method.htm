@@ -31,6 +31,12 @@
                             {% endif %}
                         {% endif %}
                     </div>
+                    {% set customerMethods = __SELF__.customerMethods[method.id] %}
+                    {% if customerMethods %}
+                        <div class="mall-payment-method__customer-methods">
+                            {% partial __SELF__ ~ '::customermethods' methods=customerMethods %}
+                        </div>
+                    {% endif %}
                     <div class="mall-payment-method__submit">
                         {% set label = __SELF__.order
                             ? 'offline.mall::frontend.payment_method.pay_now'

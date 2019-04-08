@@ -66,7 +66,12 @@ trait CustomFields
                 if ( ! $field->required) {
                     $rules->push('nullable');
                 }
-                $rules->push('in:' . $field->custom_field_options->pluck('id')->implode(','));
+                // If this is a color field without any predefined options we accept any hex value.
+                if ($field->type === 'color' && $field->custom_field_options->count() === 0) {
+                    $rules->push('regex:/\#[0-9a-f]{6}/i');
+                } else {
+                    $rules->push('in:' . $field->custom_field_options->pluck('id')->implode(','));
+                }
             }
 
             return [$field->hashId => $rules];
@@ -78,7 +83,6 @@ trait CustomFields
         $names = $fields->mapWithKeys(function (array $data) {
             return [$data['field']->hashId => $data['field']->name];
         })->toArray();
-
 
         $v = Validator::make($data->toArray(), $rules->toArray(), [], $names);
         if ($v->fails()) {
@@ -107,7 +111,9 @@ trait CustomFields
                           ->mapWithKeys(function (CustomField $field) use ($values) {
                               $value = $values->get($field->id);
                               if (\in_array($field->type, ['dropdown', 'image', 'color'], true)) {
-                                  $value = $this->decode($value);
+                                  if ($field->type !== 'color' || $field->custom_field_options->count() > 0) {
+                                      $value = $this->decode($value);
+                                  }
                               }
 
                               return [$field->id => ['field' => $field, 'value' => $value]];

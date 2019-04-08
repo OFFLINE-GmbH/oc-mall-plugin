@@ -94,7 +94,6 @@ class PaymentResult
 
         try {
             $this->order->payment_id    = $payment->id;
-            $this->order->payment_data  = $data;
             $this->order->payment_state = PaidState::class;
             $this->order->save();
         } catch (\Throwable $e) {
@@ -148,6 +147,11 @@ class PaymentResult
     public function fail(array $data, $response): self
     {
         $this->successful = false;
+
+        logger()->error(
+            'OFFLINE.Mall: A payment failed.',
+            ['data' => $data, 'response' => $response, 'order' => $this->order]
+        );
 
         try {
             $this->failedPayment = $this->logFailedPayment($data, $response);

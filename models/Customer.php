@@ -27,13 +27,24 @@ class Customer extends Model
         'user' => User::class,
     ];
     public $hasMany = [
-        'addresses' => Address::class,
-        'orders'    => Order::class,
+        'addresses'       => Address::class,
+        'orders'          => Order::class,
+        'payment_methods' => CustomerPaymentMethod::class,
     ];
 
     public function getNameAttribute()
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getShippingAddressAttribute()
+    {
+        return $this->addresses->where('id', $this->default_shipping_address_id)->first();
+    }
+
+    public function getBillingAddressAttribute()
+    {
+        return $this->addresses->where('id', $this->default_billing_address_id)->first();
     }
 
     public function afterDelete()
