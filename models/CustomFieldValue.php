@@ -63,9 +63,14 @@ class CustomFieldValue extends Model
     {
         $value = e($this->value);
         if ($this->custom_field->type === 'color') {
+
+            $value = $this->custom_field->custom_field_options->count() === 0
+                ? $this->value
+                : $this->custom_field_option->option_value;
+
             return sprintf(
-                '<span class="mall-color-swatch" style="display: inline-block; width: 10px; height: 10px; background: %s"></span>',
-                e($this->custom_field_option->option_value)
+                '<span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: %s"></span>',
+                e($value)
             );
         }
         if ($this->custom_field->type === 'checkbox') {
