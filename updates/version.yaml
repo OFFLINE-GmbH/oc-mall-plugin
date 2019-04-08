@@ -141,3 +141,5 @@
     - Minor bug fixes and optimizations
     - remove_description_column_from_order_products.php
     - remove_payment_data_column_from_orders_table.php
+1.2.2:
+    - Fixed handling of custom field color values, allow single category menu item to be replaced by its products    
