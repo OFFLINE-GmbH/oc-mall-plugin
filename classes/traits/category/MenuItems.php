@@ -27,7 +27,7 @@ trait MenuItems
             return;
         }
 
-        // Replace this menu item with it's products.
+        // Replace this menu item with its products.
         if ($item->replace) {
             $page    = GeneralSettings::get('product_page', 'product');
             $cmsPage = Page::loadCached($theme, $page);
