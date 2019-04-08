@@ -17,6 +17,7 @@ return [
     'cart'                                     => 'Warenkorb',
     'cart.add'                                 => 'In den Warenkorb',
     'cart.empty'                               => 'Ihr Warenkorb ist leer!',
+    'cart.added'                               => 'Artikel zum Warenkorb hinzugefügt',
     'quantity'                                 => 'Anzahl',
     'product'                                  => 'Produkt',
     'price'                                    => 'Preis',

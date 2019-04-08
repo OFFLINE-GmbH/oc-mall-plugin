@@ -17,6 +17,7 @@ return [
     'cart'                                     => 'Cart',
     'cart.add'                                 => 'Add to cart',
     'cart.empty'                               => 'Your cart is empty!',
+    'cart.added'                               => 'Added product to cart',
     'quantity'                                 => 'Quantity',
     'product'                                  => 'Product',
     'price'                                    => 'Price',
