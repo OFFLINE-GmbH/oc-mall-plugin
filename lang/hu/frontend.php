@@ -100,7 +100,7 @@ return [
     'addresses'                                => 'Címek',
     'address_list'                             => 'Cím lista',
     'are_you_sure'                             => 'Biztos vagy benne?',
-    'session.logged_in'                        => 'bejelentkezve mint :email',
+    'session.logged_in'                        => ':email',
     'session.logged_out'                       => 'Nem vagy bejelentkezve',
     'session.account_page'                     => 'Fiók kezelése',
     'session.logout'                           => 'Kilépés',
