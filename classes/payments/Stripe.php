@@ -64,7 +64,8 @@ class Stripe extends PaymentProvider
             $gateway = Omnipay::create('Stripe');
             $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
 
-            $customer = $this->order->customer;
+            $customer        = $this->order->customer;
+            $isFirstCheckout = false;
 
             // The checkout uses an existing payment method. The customer and
             // card references can be fetched from there.
@@ -72,8 +73,8 @@ class Stripe extends PaymentProvider
                 $customerReference = $this->order->customer_payment_method->data['stripe_customer_id'];
                 $cardReference     = $this->order->customer_payment_method->data['stripe_card_id'];
             } elseif ($customer->stripe_customer_id) {
-                // If the customer uses a new payment method but already is registered
-                // on Stripe create the new card.
+                // If the customer uses a new payment method but is already registered
+                // on Stripe, just create the new card.
                 $response = $this->createCard($customer, $gateway);
                 if ( ! $response->isSuccessful()) {
                     return $result->fail((array)$response->getData(), $response);
@@ -91,12 +92,16 @@ class Stripe extends PaymentProvider
 
                 $customerReference = $response->getCustomerReference();
                 $cardReference     = $response->getCardReference();
+
+                $isFirstCheckout = true;
             }
 
-            // Update the customer's card data to reflect the order's data.
-            $response = $this->updateCard($gateway, $cardReference, $customerReference, $customer);
-            if ( ! $response->isSuccessful()) {
-                return $result->fail((array)$response->getData(), $response);
+            if ($isFirstCheckout === false) {
+                // Update the customer's data to reflect the order's data.
+                $response = $this->updateCustomer($gateway, $customerReference, $customer);
+                if ( ! $response->isSuccessful()) {
+                    return $result->fail((array)$response->getData(), $response);
+                }
             }
 
             $response = $this->charge($gateway, $customerReference, $cardReference);
@@ -172,6 +177,34 @@ class Stripe extends PaymentProvider
             'description' => $description,
             'source'      => $this->data['token'] ?? false,
             'email'       => $this->order->customer->user->email,
+            'shipping'    => $this->getShippingInformation($customer),
+            'metadata'    => [
+                'name' => $customer->name,
+            ],
+        ])->send();
+    }
+
+    /**
+     * Update the customer.
+     *
+     * @param GatewayInterface $gateway
+     * @param                  $customerReference
+     * @param                  $customer
+     *
+     * @return ResponseInterface
+     */
+    protected function updateCustomer(
+        GatewayInterface $gateway,
+        $customerReference,
+        $customer
+    ): ResponseInterface {
+        return $gateway->updateCustomer([
+            'customerReference' => $customerReference,
+            'email'             => $this->order->customer->user->email,
+            'shipping'          => $this->getShippingInformation($customer),
+            'metadata'          => [
+                'name' => $customer->name,
+            ],
         ])->send();
     }
 
@@ -188,50 +221,39 @@ class Stripe extends PaymentProvider
         return $gateway->createCard([
             'customerReference' => $customer->stripe_customer_id,
             'source'            => $this->data['token'] ?? false,
+            'name'              => $customer->name,
         ])->send();
     }
 
     /**
-     * Update the customer's card.
+     * Get all available shipping information.
      *
-     * @param GatewayInterface $gateway
-     * @param                  $cardReference
-     * @param                  $customerReference
-     * @param                  $customer
+     * @param $customer
      *
-     * @return ResponseInterface
+     * @return array
      */
-    protected function updateCard(
-        GatewayInterface $gateway,
-        $cardReference,
-        $customerReference,
-        $customer
-    ): ResponseInterface {
-        return $gateway->updateCard([
-            'cardReference'     => $cardReference,
-            'customerReference' => $customerReference,
-            'card'              => [
-                'name'              => $customer->name,
-                'billingCompany'    => $customer->billing_address->company,
-                'billingFirstName'  => $customer->billing_address->names_array[0] ?? '',
-                'billingLastName'   => $customer->billing_address->names_array[1] ?? '',
-                'billingAddress1'   => $customer->billing_address->lines_array[0] ?? '',
-                'billingAddress2'   => $customer->billing_address->lines_array[1] ?? '',
-                'billingCountry'    => $customer->billing_address->country->name,
-                'billingCity'       => $customer->billing_address->city,
-                'billingState'      => $customer->billing_address->state->name,
-                'billingPostcode'   => $customer->billing_address->zip,
-                'shippingCompany'   => $customer->shipping_address->company,
-                'shippingFirstName' => $customer->shipping_address->names_array[0] ?? '',
-                'shippingLastName'  => $customer->shipping_address->names_array[1] ?? '',
-                'shippingAddress1'  => $customer->shipping_address->lines_array[0] ?? '',
-                'shippingAddress2'  => $customer->shipping_address->lines_array[1] ?? '',
-                'shippingCountry'   => $customer->shipping_address->country->name,
-                'shippingCity'      => $customer->shipping_address->city,
-                'shippingState'     => $customer->shipping_address->state->name,
-                'shippingPostcode'  => $customer->shipping_address->zip,
+    protected function getShippingInformation($customer): array
+    {
+        $name = $customer->shipping_address->name;
+        if ($customer->shipping_address->company) {
+            $name = sprintf(
+                '%s (%s)',
+                $customer->shipping_address->company,
+                $customer->shipping_address->name
+            );
+        }
+
+        return [
+            'name'    => $name,
+            'address' => [
+                'line1'       => $customer->shipping_address->lines_array[0] ?? '',
+                'line2'       => $customer->shipping_address->lines_array[1] ?? '',
+                'city'        => $customer->shipping_address->city,
+                'country'     => $customer->shipping_address->country->name,
+                'postal_code' => $customer->shipping_address->zip,
+                'state'       => $customer->shipping_address->state->name,
             ],
-        ])->send();
+        ];
     }
 
     /**

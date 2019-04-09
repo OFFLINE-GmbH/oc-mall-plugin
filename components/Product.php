@@ -2,6 +2,7 @@
 
 use Auth;
 use DB;
+use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
@@ -228,7 +229,7 @@ class Product extends MallComponent
         if ($quantity < 1) {
             throw new ValidationException(['quantity' => trans('offline.mall::lang.common.invalid_quantity')]);
         }
-        
+
         try {
             $cart->addProduct($product, $quantity, $variant, $values);
         } catch (OutOfStockException $e) {
@@ -241,6 +242,8 @@ class Product extends MallComponent
 
             return Redirect::to($this->controller->pageUrl($cartPage));
         }
+
+        Flash::success(trans('offline.mall::lang.frontend.cart.added'));
     }
 
     /**

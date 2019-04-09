@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use ArrayAccess;
+use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -276,10 +277,13 @@ class Products extends MallComponent
      */
     public function onAddToCart()
     {
-        $product = Product::published()->findOrFail(post('product'));
+        $productId = $this->decode(post('product'));
+        $variantId = $this->decode(post('variant'));
+
+        $product = Product::published()->findOrFail($productId);
         $variant = null;
-        if (post('variant')) {
-            $variant = Variant::published()->where('product_id', $product->id)->findOrFail(post('variant'));
+        if ($variantId) {
+            $variant = Variant::published()->where('product_id', $product->id)->findOrFail($variantId);
         }
 
         $cart     = CartModel::byUser(Auth::getUser());
@@ -296,6 +300,8 @@ class Products extends MallComponent
 
             return Redirect::to($this->controller->pageUrl($cartPage));
         }
+
+        Flash::success(trans('offline.mall::lang.frontend.cart.added'));
     }
 
     /**

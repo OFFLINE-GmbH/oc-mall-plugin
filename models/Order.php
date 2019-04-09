@@ -45,7 +45,6 @@ class Order extends Model
         'currency',
         'discounts',
         'shipping',
-        'payment_data',
     ];
     public $table = 'offline_mall_orders';
     public $hasOne = ['payment_log' => PaymentLog::class];

@@ -65,7 +65,6 @@ class CartProduct extends Model
             $entry->item         = $this->item_data;
             $entry->name         = $this->variant ? $this->variant->name : $this->data->name;
             $entry->variant_name = optional($this->variant)->properties_description;
-            $entry->description  = $this->item->description;
             $entry->quantity     = $this->quantity;
 
             $entry->taxes      = $this->filtered_Taxes;
@@ -141,6 +140,7 @@ class CartProduct extends Model
 
         $data          = $model->attributesToArray();
         $data['price'] = $model->price;
+        unset($data['description']);
 
         return $data;
     }

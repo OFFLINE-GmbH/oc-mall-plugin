@@ -4,9 +4,11 @@ namespace OFFLINE\Mall\Classes\Traits\Category;
 
 use Cache;
 use Cms\Classes\Controller;
+use Cms\Classes\Page;
 use InvalidArgumentException;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Product;
 
 trait MenuItems
 {
@@ -23,6 +25,33 @@ trait MenuItems
         $category = self::find($item->reference);
         if ( ! $category) {
             return;
+        }
+
+        // Replace this menu item with its products.
+        if ($item->replace) {
+            $page    = GeneralSettings::get('product_page', 'product');
+            $cmsPage = Page::loadCached($theme, $page);
+
+            if ( ! $cmsPage) {
+                return;
+            }
+
+            $items = $category->products
+                ->map(function (Product $product) use ($cmsPage, $page, $url) {
+
+                    $pageUrl = $cmsPage->url($page, ['slug' => $product->slug]);
+
+                    return [
+                        'title'    => $product->name,
+                        'url'      => $pageUrl,
+                        'mtime'    => $product->updated_at,
+                        'isActive' => starts_with($url, $pageUrl),
+                    ];
+                })->toArray();
+
+            return [
+                'items' => $items,
+            ];
         }
 
         return self::getMenuItem($category, $url);
@@ -106,7 +135,8 @@ trait MenuItems
         $result = [];
         if ($type === 'mall-category') {
             $result = [
-                'references' => Category::listSubCategoryOptions(),
+                'references'   => Category::listSubCategoryOptions(),
+                'dynamicItems' => true,
             ];
         }
 

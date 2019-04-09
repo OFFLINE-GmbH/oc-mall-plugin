@@ -94,7 +94,6 @@ class PaymentResult
 
         try {
             $this->order->payment_id    = $payment->id;
-            $this->order->payment_data  = $data;
             $this->order->payment_state = PaidState::class;
             $this->order->save();
         } catch (\Throwable $e) {

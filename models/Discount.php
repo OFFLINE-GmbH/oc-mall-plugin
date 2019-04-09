@@ -32,12 +32,12 @@ class Discount extends Model
     public $dates = ['expires'];
     public $nullable = ['max_number_of_usages'];
     public $casts = [
-        'number_of_usages'     => 'integer',
+        'number_of_usages' => 'integer',
     ];
     public $morphMany = [
-        'shipping_prices'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
-        'amounts'          => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amount"'],
-        'totals_to_reach'  => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "total_to_reach"'],
+        'shipping_prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
+        'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amount"'],
+        'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "total_to_reach"'],
     ];
     public $belongsTo = [
         'product' => [Product::class],
@@ -58,6 +58,9 @@ class Discount extends Model
             $discount->code = strtoupper($discount->code);
             if ($discount->trigger !== 'product') {
                 $discount->product_id = null;
+            }
+            if ($discount->trigger !== 'code') {
+                $discount->code = null;
             }
         });
     }

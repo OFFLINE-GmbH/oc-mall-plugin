@@ -152,6 +152,12 @@ class PaymentMethodSelector extends MallComponent
         $gateway = app(PaymentGateway::class);
         $gateway->init($this->getPaymentMethod(), $data);
 
+        // When the user hits "submit" no customer payment method was selected
+        // so make sure to remove the information for the cart or order
+        // in case it sits there from a previous payment attempt.
+        $this->workingOnModel->customer_payment_method_id = null;
+        $this->workingOnModel->save();
+
         return $this->doRedirect($gateway, $data);
     }
 

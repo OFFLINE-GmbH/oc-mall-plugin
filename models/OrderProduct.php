@@ -122,10 +122,18 @@ class OrderProduct extends Model
     public function getCustomFieldValueDescriptionAttribute()
     {
         return collect($this->custom_field_values)->map(function (array $value) {
+            $display = e($value['custom_field_option']['name'] ?? $value['display_value']);
+
+            // Color values that were user picked don't have to be escaped. They contain html that
+            // was already escaped during the creation of the order.
+            if ($value['custom_field_option_id'] === null && $value['custom_field']['type'] === 'color') {
+                $display = $value['display_value'];
+            }
+
             return sprintf(
                 '%s: %s',
                 e($value['custom_field']['name']),
-                e($value['custom_field_option']['name'] ?? $value['display_value'])
+                $display
             );
         })->implode('<br />');
     }
