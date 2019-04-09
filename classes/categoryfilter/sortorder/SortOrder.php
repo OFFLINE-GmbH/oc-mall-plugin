@@ -79,6 +79,10 @@ abstract class SortOrder
 
         if ($excludeInternal) {
             unset($options['manual'], $options['random']);
+        } else {
+            $options = collect($options)->merge(collect(Property::dynamicOptions())->mapWithKeys(function (Property $data) {
+                return [$data->key() => $data];
+            }))->toArray();
         }
 
         return $options;
@@ -92,7 +96,7 @@ abstract class SortOrder
      */
     public static function dropdownOptions()
     {
-        return [
+        $options = [
             'bestseller' => (new Bestseller())->label(),
             'manual'     => (new Manual())->label(),
             'latest'     => (new Latest())->label(),
@@ -101,6 +105,10 @@ abstract class SortOrder
             'oldest'     => (new Oldest())->label(),
             'random'     => (new Random())->label(),
         ];
+
+        return collect($options)->merge(collect(Property::dynamicOptions())->mapWithKeys(function (Property $data) {
+            return [$data->key() => $data->label()];
+        }))->toArray();
     }
 
     /**
