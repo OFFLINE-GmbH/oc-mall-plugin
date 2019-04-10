@@ -53,7 +53,7 @@ return [
     'form.city'                                => 'City',
     'form.state'                               => 'State/County/Province',
     'form.country'                             => 'Country',
-    'proceed_to_checkout'                      => 'Proceed to checkout',
+    'proceed_to_checkout'                      => 'Proceed',
     'address'                                  => 'Address',
     'billing_address'                          => 'Billing address',
     'shipping_address'                         => 'Shipping address',

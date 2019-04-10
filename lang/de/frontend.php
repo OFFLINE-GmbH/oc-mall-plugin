@@ -53,7 +53,7 @@ return [
     'form.city'                                => 'Ort',
     'form.state'                               => 'Kanton/Bundesstaat',
     'form.country'                             => 'Land',
-    'proceed_to_checkout'                      => 'Weiter zur Kasse',
+    'proceed_to_checkout'                      => 'Fortfahren',
     'address'                                  => 'Adresse',
     'billing_address'                          => 'Rechnungsadresse',
     'shipping_address'                         => 'Versandadresse',
