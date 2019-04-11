@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
@@ -297,7 +298,11 @@ class ProductsFilter extends MallComponent
      */
     public function onRun()
     {
-        $this->setData();
+        try {
+            $this->setData();
+        } catch (ModelNotFoundException $e) {
+            return $this->controller->run('404');
+        }
     }
 
     /**
