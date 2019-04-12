@@ -52,6 +52,7 @@ return [
     'form.city'                                => 'Város',
     'form.state'                               => 'Megye',
     'form.country'                             => 'Ország',
+    'proceed_to_checkout'                      => 'Folytasd a fizetéssel',
     'address'                                  => 'Cím',
     'billing_address'                          => 'Számlázási cím',
     'shipping_address'                         => 'Szállítási cím',
@@ -123,4 +124,6 @@ return [
     'flash.missing_address'                    => 'Kérlek, add meg a címéd a fizetés folytatásához.',
     'labels'                                   => 'Címkék',
     'search_error'                             => 'A keresés nem sikerült.',
+    'customer_payment_method.use'              => 'Or use one of your existing payment methods',
+    'customer_payment_method.does_not_exist'   => 'The selected payment method does not exist',
 ];
