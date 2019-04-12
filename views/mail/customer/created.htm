@@ -4,11 +4,15 @@ description = "Sent after a customer signs up"
 
 Hi {{ user.customer.firstname }}
 
-Welcome to our store! You can log in using your e-mail address {{ user.email }}
-and start shopping immediately.
+{% if confirm %}
+    Welcome to our store! Please click on the button below to confirm your e-mail address.
+{% else %}
+    Welcome to our store! You can log in using your e-mail address {{ user.email }}
+    and start shopping immediately.
+{% endif %}
 
 Your user account enables you to keep track of open and past orders.
 
-{% partial 'button' url=app_url type='primary' body %}
-    Visit our store
+{% partial 'button' url=(confirm ? confirm_url : app_url) type='primary' body %}
+    {{ confirm ? 'Confirm your e-mail address' : 'Visit our store' }}
 {% endpartial %}

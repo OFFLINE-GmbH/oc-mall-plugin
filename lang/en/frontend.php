@@ -127,4 +127,7 @@ return [
     'search_error'                             => 'Failed to perform search.',
     'customer_payment_method.use'              => 'Or use one of your existing payment methods',
     'customer_payment_method.does_not_exist'   => 'The selected payment method does not exist',
+    'account.confirmation.heading'             => 'You need to confirm your e-mail address before you can continue.',
+    'account.confirmation.line'                => 'A confirmation link has been sent to you.',
+    'account.confirmation.error'               => 'The specified activation code is invalid.',
 ];

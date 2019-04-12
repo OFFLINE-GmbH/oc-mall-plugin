@@ -145,3 +145,5 @@
     - Fixed handling of custom field color values, allow single category menu item to be replaced by its products    
 1.2.3:
     - Added flash messages to add to cart events
+1.2.4:
+    - Added support for RainLab.User account activation links ("user" mode only, "admin" mode is unsupported)
