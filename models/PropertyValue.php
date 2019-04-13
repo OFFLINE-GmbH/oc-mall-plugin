@@ -35,6 +35,9 @@ class PropertyValue extends Model
      */
     public function scopeWithInherited($query, Variant $model)
     {
+        if ( ! $model->exists) {
+            return;
+        }
         $query->orWhere(function ($q) use ($model) {
             $q->where('product_id', $model->product->id)->where('variant_id', null);
         });
