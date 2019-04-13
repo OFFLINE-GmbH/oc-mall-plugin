@@ -246,8 +246,11 @@ class MySQL implements Index
             $field = $parts[0];
             array_shift($parts);
             $nested = implode('.', $parts);
+            $match = [];
+            preg_match('((\[\d+\]))',$nested, $match);
+            $nested = preg_replace('((\[\d+\]))', '', $nested);
             $db->orderByRaw('JSON_EXTRACT(' . \DB::raw($field) . ', ?) ' . $order->direction(),
-                ['$.' . '"' . $nested. '"']
+                ['$.' . '"' . $nested. '"' . ($match[1] ?? '')]
             );
         } else {
             $db->orderBy($order->property(), $order->direction());

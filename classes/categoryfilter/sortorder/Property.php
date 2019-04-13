@@ -24,7 +24,7 @@ class Property extends SortOrder
 
     public function property(): string
     {
-        return 'property_values.' . $this->property->id;
+        return 'property_values.' . $this->property->id.'[0]';
     }
 
     public function direction(): string
