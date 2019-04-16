@@ -17,7 +17,11 @@ class VariantObserver
 
     public function created(Variant $variant)
     {
-        $this->index->insert(VariantEntry::INDEX, new VariantEntry($variant));
+        // Make sure deferred bindings are persisted
+        if (post('_session_key')) {
+            $variant->save(null, post('_session_key'));
+        }
+
         (new ProductObserver($this->index))->updated($variant->product);
     }
 

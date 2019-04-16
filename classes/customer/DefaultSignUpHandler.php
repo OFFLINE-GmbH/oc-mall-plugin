@@ -12,6 +12,7 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\User;
 use RainLab\User\Facades\Auth;
+use RainLab\User\Models\Settings as UserSettings;
 use RainLab\User\Models\UserGroup;
 use Redirect;
 
@@ -37,11 +38,13 @@ class DefaultSignUpHandler implements SignUpHandler
 
         $this->validate($data);
 
+        $requiresConfirmation = ($data['requires_confirmation'] ?? false);
+
         Event::fire('mall.customer.beforeSignup', [$this, $data]);
 
-        $user = DB::transaction(function () use ($data) {
+        $user = DB::transaction(function () use ($data, $requiresConfirmation) {
 
-            $user = $this->createUser($data);
+            $user = $this->createUser($data, $requiresConfirmation);
 
             $customer            = new Customer();
             $customer->firstname = $data['firstname'];
@@ -86,6 +89,10 @@ class DefaultSignUpHandler implements SignUpHandler
 
         Event::fire('mall.customer.afterSignup', [$this, $user]);
 
+        if ($requiresConfirmation === true) {
+            return $user;
+        }
+
         $credentials = [
             'login'    => array_get($data, 'email'),
             'password' => array_get($data, 'password'),
@@ -113,7 +120,7 @@ class DefaultSignUpHandler implements SignUpHandler
         }
     }
 
-    protected function createUser($data): User
+    protected function createUser($data, $requiresConfirmation): User
     {
         $data = [
             'name'                  => $data['firstname'],
@@ -123,7 +130,7 @@ class DefaultSignUpHandler implements SignUpHandler
             'password_confirmation' => $data['password_repeat'],
         ];
 
-        $user = Auth::register($data, true);
+        $user = Auth::register($data, ! $requiresConfirmation);
         if ($this->asGuest && $user && $group = UserGroup::getGuestGroup()) {
             $user->groups()->sync($group);
         } else {

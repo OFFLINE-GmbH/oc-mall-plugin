@@ -53,7 +53,7 @@ return [
     'form.city'                                => 'Ort',
     'form.state'                               => 'Kanton/Bundesstaat',
     'form.country'                             => 'Land',
-    'proceed_to_checkout'                      => 'Weiter zur Kasse',
+    'proceed_to_checkout'                      => 'Fortfahren',
     'address'                                  => 'Adresse',
     'billing_address'                          => 'Rechnungsadresse',
     'shipping_address'                         => 'Versandadresse',
@@ -127,4 +127,7 @@ return [
     'search_error'                             => 'Fehler beim Ausführen der Suche.',
     'customer_payment_method.use'              => 'Oder verwenden Sie ein gespeichertes Zahlungsmittel',
     'customer_payment_method.does_not_exist'   => 'Die ausgewhälte Zahlungsmethode existiert nicht',
+    'account.confirmation.heading'             => 'Sie müssen Ihre E-Mail-Adresse bestätigen um fortzufahren.',
+    'account.confirmation.line'                => 'Ein Bestätigungslink wurde ihnen zugesendet.',
+    'account.confirmation.error'               => 'Der Bestätigungscode ist ungültig.',
 ];
