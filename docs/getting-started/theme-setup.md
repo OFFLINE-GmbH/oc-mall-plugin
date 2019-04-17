@@ -193,20 +193,21 @@ The address page displays an edit form for a user's address using the
 [AddressForm component](../components/address-form.md). 
 
 ```twig
-title = "Checkout"
-url = "/checkout/:step?"
+title = "Address"
+url = "/address/:address?/:redirect?/:set?"
 layout = "default"
 is_hidden = 0
 
-[signUp]
-[checkout]
-step = "{{ :step }}"
+[session]
+security = "user"
+redirect = "home"
+
+[addressForm]
+address = "{{ :address }}"
+redirect = "{{ :redirect }}"
+set = "{{ :set }}"
 ==
-{% if not user %}
-    {% component 'signUp' %}
-{% else %}
-    {% component 'checkout' %}
-{% endif %}
+{% component 'addressForm' %}
 ``` 
 
 ### login.htm
