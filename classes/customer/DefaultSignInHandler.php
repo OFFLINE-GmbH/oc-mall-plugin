@@ -23,7 +23,11 @@ class DefaultSignInHandler implements SignInHandler
         } catch (ValidationException $ex) {
             throw $ex;
         } catch (AuthException $ex) {
-            Flash::error(trans('offline.mall::lang.components.signup.errors.unknown_user'));
+            $error = str_contains($ex->getMessage(), 'not activated')
+                ? 'not_activated'
+                : 'unknown_user';
+
+            Flash::error(trans('offline.mall::lang.components.signup.errors.' . $error));
         } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }

@@ -398,9 +398,9 @@
         'section_type'                         => 'Was bewirkt der Gutschein?',
         'section_trigger'                      => 'Wann ist der Gutschein gültig?',
         'types'                                => [
-            'fixed_amount'    => 'Fixer-Rabatt',
-            'rate'            => 'Prozentualer-Rabatt',
-            'shipping'        => 'Alternativer Versand-Preis',
+            'fixed_amount' => 'Fixer-Rabatt',
+            'rate'         => 'Prozentualer-Rabatt',
+            'shipping'     => 'Alternativer Versand-Preis',
         ],
         'triggers'                             => [
             'total'   => 'Bestimmter Bestellwert erreicht wird',
@@ -799,6 +799,7 @@
             'errors'     => [
                 'user_is_guest'   => 'Sie versuchen sich mit einem Gast-Konto einzuloggen.',
                 'unknown_user'    => 'Die eingegebenen Login-Daten sind ungültig.',
+                'not_activated'   => 'Ihr Konto ist noch nicht bestätigt worden.',
                 'login'           => [
                     'required' => 'Geben Sie eine Email-Adresse ein.',
                     'email'    => 'Geben Sie eine gültige Email-Adresse ein.',

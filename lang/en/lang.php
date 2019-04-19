@@ -400,9 +400,9 @@
         'section_type'                         => 'What does this discount do?',
         'section_trigger'                      => 'When is this discount applicable?',
         'types'                                => [
-            'fixed_amount'    => 'Fixed amount',
-            'rate'            => 'Rate',
-            'shipping'        => 'Alternate shipping',
+            'fixed_amount' => 'Fixed amount',
+            'rate'         => 'Rate',
+            'shipping'     => 'Alternate shipping',
         ],
         'triggers'                             => [
             'total'   => 'Order total is reached',
@@ -802,6 +802,7 @@
             'errors'     => [
                 'user_is_guest'   => 'You are trying to sign in with a guest account.',
                 'unknown_user'    => 'The credentials you have entered are invalid.',
+                'not_activated'   => 'Your account needs to be activated before you can login.',
                 'login'           => [
                     'required' => 'Please enter an email address.',
                     'email'    => 'Please enter a valid email address.',
