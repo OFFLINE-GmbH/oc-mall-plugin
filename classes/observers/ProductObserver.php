@@ -43,7 +43,7 @@ class ProductObserver
             return;
         }
 
-        $product->load('property_values', 'variants.all_property_values');
+        $product->load('property_values', 'variants.product_property_values', 'variants.property_values');
 
         $productEntry = new ProductEntry($product);
         if ($product->inventory_management_method === 'single' || $product->variants->count() > 0) {
@@ -61,7 +61,6 @@ class ProductObserver
             );
         } else {
             $this->index->delete(VariantEntry::INDEX, $this->ghostId($product));
-            $product->variants->load('all_property_values');
 
             foreach ($product->variants as $variant) {
                 $this->index->update(VariantEntry::INDEX, $variant->id, new VariantEntry($variant));
