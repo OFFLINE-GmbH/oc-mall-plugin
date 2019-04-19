@@ -3,6 +3,7 @@
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use RainLab\Location\Models\Country;
+use RainLab\User\Models\Settings as UserSettings;
 
 /**
  * The SignUp component displays a signup and login form
@@ -10,6 +11,12 @@ use RainLab\Location\Models\Country;
  */
 class SignUp extends MallComponent
 {
+    /**
+     * The user has to confirm the email address.
+     *
+     * @var bool
+     */
+    public $requiresConfirmation;
     /**
      * All available countries.
      *
@@ -46,13 +53,15 @@ class SignUp extends MallComponent
     }
 
     /**
-     * The component is executed.
+     * The component is initialized.
      *
      * @return void
      */
-    public function onRun()
+    public function init()
     {
         $this->countries = Country::getNameList();
+
+        $this->requiresConfirmation = UserSettings::get('activate_mode') === UserSettings::ACTIVATE_USER;
     }
 
     /**
@@ -71,12 +80,19 @@ class SignUp extends MallComponent
     /**
      * The user signs up for a new account.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      * @throws \Exception
      */
     public function onSignUp()
     {
-        if (app(SignUpHandler::class)->handle(post(), (bool)post('as_guest'))) {
+        $data                          = post();
+        $data['requires_confirmation'] = $this->requiresConfirmation;
+
+        if (app(SignUpHandler::class)->handle($data, (bool)post('as_guest'))) {
+            if ($this->requiresConfirmation) {
+                return ['.mall-signup-form' => $this->renderPartial($this->alias . '::confirm.htm')];
+            }
+
             return $this->redirect();
         }
     }

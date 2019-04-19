@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\RefundedState;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Notification;
+use RainLab\User\Models\Settings as UserSettings;
 
 class MailingEventHandler
 {
@@ -57,6 +58,8 @@ class MailingEventHandler
      * A customer has signed up.
      *
      * @param $user
+     *
+     * @throws \Cms\Classes\CmsException
      */
     public function customerCreated($handler, $user)
     {
@@ -65,8 +68,15 @@ class MailingEventHandler
             return;
         }
 
+        $needsConfirmation = UserSettings::get('activate_mode') === UserSettings::ACTIVATE_USER;
+        $confirmCode       = implode('!', [$user->id, $user->getActivationCode()]);
+        $confirmUrl        = $this->getAccountUrl('confirmation') . '?code=' . $confirmCode;
+
         $data = [
-            'user' => $user,
+            'user'         => $user,
+            'confirm'      => $needsConfirmation,
+            'confirm_url'  => $confirmUrl,
+            'confirm_code' => $confirmCode,
         ];
 
         Mail::queue($this->template('offline.mall::customer.created'), $data, function ($message) use ($user) {
@@ -248,13 +258,15 @@ class MailingEventHandler
     /**
      * Return the direct URL to a customer's account page.
      *
+     * @param string $page
+     *
      * @return string
      * @throws \Cms\Classes\CmsException
      */
-    protected function getAccountUrl(): string
+    protected function getAccountUrl($page = 'orders'): string
     {
         return (new Controller())->pageUrl(
-            GeneralSettings::get('account_page'), ['page' => 'orders']
+            GeneralSettings::get('account_page'), ['page' => $page]
         );
     }
 
