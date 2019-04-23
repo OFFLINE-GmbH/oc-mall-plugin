@@ -29,7 +29,7 @@ accessories:
         recordUrl: offline/mall/products/update/:id
         toolbarButtons: add|remove
     manage:
-        form: $/offline/mall/models/product/fields.yaml
+        form: $/offline/mall/models/product/fields_create.yaml
         recordsPerPage: 10
     deferredBinding: true
 
