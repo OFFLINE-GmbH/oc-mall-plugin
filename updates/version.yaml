@@ -149,3 +149,5 @@
     - Added support for RainLab.User account activation links ("user" mode only, "admin" mode is unsupported)
 1.2.5:
     - Fixed index entry creation of newly created variants
+1.2.6:
+    - Updated italian translations (thanks to @Cryhex), fixed Variant indexing bug

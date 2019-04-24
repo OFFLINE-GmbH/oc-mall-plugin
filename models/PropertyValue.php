@@ -30,17 +30,12 @@ class PropertyValue extends Model
     ];
 
     /**
-     * Scope that includes all inherited product property values
-     * if applied on a Variant model.
+     * Scope that selects only property values that are assigned
+     * to a Product, not to a Variant.
      */
-    public function scopeWithInherited($query, Variant $model)
+    public function scopeProductOnly($query)
     {
-        if ( ! $model->exists) {
-            return;
-        }
-        $query->orWhere(function ($q) use ($model) {
-            $q->where('product_id', $model->product->id)->where('variant_id', null);
-        });
+        $query->whereNull('variant_id');
     }
 
     /**

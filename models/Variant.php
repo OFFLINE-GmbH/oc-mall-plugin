@@ -70,13 +70,13 @@ class Variant extends Model
         'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $hasMany = [
-        'prices'              => ProductPrice::class,
-        'property_values'     => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
-        'all_property_values' => [
+        'prices'                  => ProductPrice::class,
+        'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
+        'product_property_values' => [
             PropertyValue::class,
-            'key'      => 'variant_id',
-            'otherKey' => 'id',
-            'scope'    => 'withInherited',
+            'key'      => 'product_id',
+            'otherKey' => 'product_id',
+            'scope'    => 'productOnly',
         ],
     ];
     public $morphMany = [
@@ -197,6 +197,11 @@ class Variant extends Model
     public function scopePublished($query)
     {
         return $query->where('published', true);
+    }
+
+    public function getAllPropertyValuesAttribute()
+    {
+        return $this->product_property_values->concat($this->property_values);
     }
 
     public function getAttribute($attribute)
