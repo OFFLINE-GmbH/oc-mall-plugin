@@ -243,7 +243,7 @@ class Product extends MallComponent
             return Redirect::to($this->controller->pageUrl($cartPage));
         }
 
-        Flash::success(trans('offline.mall::lang.frontend.cart.added'));
+        Flash::success(trans('offline.mall::frontend.cart.added'));
     }
 
     /**
