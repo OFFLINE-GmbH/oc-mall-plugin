@@ -151,3 +151,5 @@
     - Fixed index entry creation of newly created variants
 1.2.6:
     - Updated italian translations (thanks to @Cryhex), fixed Variant indexing bug
+1.2.7:
+    - Fixed some minor bugs
