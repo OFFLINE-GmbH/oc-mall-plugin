@@ -157,7 +157,8 @@ class Product extends MallComponent
         // should be redirected to the first Variant of this Product.
         if ($this->product->inventory_management_method === 'variant' && ! $this->param('variant')) {
 
-            $variant = $this->product->variants->first();
+            $variants = optional($this->product->variants);
+            $variant  = optional($variants->where('published', true))->first();
             if ( ! $variant) {
                 return $this->controller->run('404');
             }
@@ -243,7 +244,7 @@ class Product extends MallComponent
             return Redirect::to($this->controller->pageUrl($cartPage));
         }
 
-        Flash::success(trans('offline.mall::lang.frontend.cart.added'));
+        Flash::success(trans('offline.mall::frontend.cart.added'));
     }
 
     /**

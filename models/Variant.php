@@ -201,7 +201,9 @@ class Variant extends Model
 
     public function getAllPropertyValuesAttribute()
     {
-        return $this->product_property_values->concat($this->property_values);
+        return $this->product_property_values
+            ? $this->product_property_values->concat($this->property_values)
+            : $this->property_values;
     }
 
     public function getAttribute($attribute)
