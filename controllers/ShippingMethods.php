@@ -70,7 +70,15 @@ class ShippingMethods extends Controller
     protected function checkRelationPriceUpdate()
     {
         if ($this->relationName === 'rates') {
-            $model = $this->relationModel->find($this->vars['relationManageId']);
+            if (isset($this->vars['relationManageId'])) {
+                $model = $this->relationModel->find($this->vars['relationManageId']);
+            } else {
+                // In "create" mode, get the latest shipping method rate to update the prices.
+                $model = $this->relationModel->newQuery()
+                                             ->where('shipping_method_id', $this->params[0])
+                                             ->orderByDesc('id')
+                                             ->first();
+            }
             $this->updatePrices($model);
         }
     }
