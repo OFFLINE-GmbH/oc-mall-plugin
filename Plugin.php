@@ -31,10 +31,15 @@ class Plugin extends PluginBase
     use BootTwig;
     use BootRelations;
 
-    public function boot()
+
+    public function register()
     {
         $this->registerServices();
         $this->registerTwigEnvironment();
+    }
+
+    public function boot()
+    {
         $this->registerExtensions();
         $this->registerEvents();
         $this->registerValidationRules();
