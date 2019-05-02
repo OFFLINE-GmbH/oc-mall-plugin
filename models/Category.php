@@ -146,15 +146,15 @@ class Category extends Model
     public static function boot()
     {
         parent::boot();
-        static::saving(function (self $category) {
-            if ($category->parent_id === null) {
-                $category->inherit_property_groups = false;
+        static::saving(function (self $model) {
+            if ($model->parent_id === null) {
+                $model->inherit_property_groups = false;
             }
-            if ($category->inherit_property_groups === true && $category->property_groups()->count() > 0) {
-                $category->property_groups()->detach();
+            if ($model->inherit_property_groups === true && $model->property_groups()->count() > 0) {
+                $model->property_groups()->detach();
             }
-            if ( ! $category->slug) {
-                $category->slug = str_slug($category->name);
+            if ( ! $model->slug) {
+                $model->slug = str_slug($model->name);
             }
         });
         static::saving(function (self $model) {
@@ -165,7 +165,7 @@ class Category extends Model
             $model->warmCache();
         });
         static::deleted(function (self $model) {
-            DB::table('offline_mall_category_product')->where('category_id', $this->id)->delete();
+            DB::table('offline_mall_category_product')->where('category_id', $model->id)->delete();
             $model->purgeCache();
             $model->warmCache();
         });

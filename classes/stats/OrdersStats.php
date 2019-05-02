@@ -27,7 +27,10 @@ class OrdersStats
 
     public function perWeekCount(): float
     {
-        $firstOrder = DB::table($this->ordersTable)->orderBy('created_at', 'ASC')->first(['created_at']);
+        $firstOrder = DB::table($this->ordersTable)
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at', 'ASC')
+                        ->first(['created_at']);
         if ( ! $firstOrder) {
             return 0;
         }
@@ -42,12 +45,15 @@ class OrdersStats
 
     public function grandTotal(): int
     {
-        return DB::table($this->ordersTable)->sum('total_pre_payment');
+        return DB::table($this->ordersTable)
+                 ->whereNull('deleted_at')
+                 ->sum('total_pre_payment');
     }
 
     public function byState(): array
     {
         return DB::table($this->ordersTable)
+                 ->whereNull($this->ordersTable . '.deleted_at')
                  ->leftJoin($this->statesTable, "{$this->ordersTable}.order_state_id", '=', "{$this->statesTable}.id")
                  ->select(
                      "{$this->statesTable}.name as label",
@@ -63,6 +69,7 @@ class OrdersStats
     public function byPaymentState(): array
     {
         return DB::table($this->ordersTable)
+                 ->whereNull($this->ordersTable . '.deleted_at')
                  ->select('payment_state', DB::raw('count(payment_state) as value'))
                  ->groupBy('payment_state')
                  ->get()

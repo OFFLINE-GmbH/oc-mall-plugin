@@ -18,7 +18,16 @@ The easiest way to get you started is by using the command line:
 php artisan plugin:install rainlab.user
 php artisan plugin:install rainlab.location
 php artisan plugin:install offline.mall
-``` 
+```
+
+If you plan to use our [demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) make sure to also
+ install `RainLab.Translate` and `RainLab.Pages`. These are dependencies of the demo theme, not the plugin itself.
+
+```bash
+# For the demo theme only!
+php artisan plugin:install rainlab.translate
+php artisan plugin:install rainlab.pages
+```   
 
 ### Check your installation
 
@@ -61,10 +70,13 @@ To make getting started with `oc-mall `as easy as possible, you can find a demo 
 theme on GitHub: [https://github.com/OFFLINE-GmbH/oc-mall-theme](https://github.com/OFFLINE-GmbH/oc-mall-theme)
 
 ::: warning
-If you use the demo theme you should still apply the configuration steps mentioned below.
+If you use the demo theme you should still apply the steps mentioned in the "Configuration" section.
 :::
 
-Simply clone the theme to `<your installation>/themes/mall` and select it as your active theme.
+* <input type="checkbox"> Simply clone the theme to `<your installation>/themes/mall` and select it as your active theme.
+
+* <input type="checkbox"> The demo theme requires `RainLab.Translate` and `RainLab.Pages` to be installed. Make sure 
+these plugins are available as well.
 
 If you want to start with a blank slate just follow the instructions on this and the [Theme Setup](./theme-setup.md) 
 page to get everything up and running.

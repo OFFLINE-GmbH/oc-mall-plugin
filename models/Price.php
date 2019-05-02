@@ -69,7 +69,7 @@ class Price extends Model
             return $this->attributes['price'] = 0;
         }
 
-        $this->attributes['price'] = round($value * 100, 0);
+        $this->attributes['price'] = round(((float)$value) * 100, 0);
     }
 
     public function getFloatAttribute()
