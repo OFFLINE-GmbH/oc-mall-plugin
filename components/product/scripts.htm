@@ -11,10 +11,18 @@
                     return this.value;
                 }).toArray();
 
+                var props = {}
+                $('[data-mall-custom-field]').map(function () {
+                    if (this.type === 'checkbox' && !this.checked) {
+                        return
+                    }
+                    return props[this.dataset.id] = this.value
+                });
+
                 $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'offline.mall::frontend.stock.checking' | trans }}</div>');
 
                 $.request('onChangeProperty', {
-                    data: {values: values},
+                    data: {values: values, props: props},
                     loading: isInitial ? null : $.oc.stripeLoadIndicator
                 })
             })
