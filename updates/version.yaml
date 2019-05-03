@@ -142,7 +142,7 @@
     - remove_description_column_from_order_products.php
     - remove_payment_data_column_from_orders_table.php
 1.2.2:
-    - Fixed handling of custom field color values, allow single category menu item to be replaced by its products    
+    - Fixed handling of custom field color values, allow single category menu item to be replaced by its products
 1.2.3:
     - Added flash messages to add to cart events
 1.2.4:
@@ -157,3 +157,5 @@
     - Added Google Merchant Center integration
     - add_identifier_columns_for_products_and_variants.php
     - add_description_columns_to_variants.php
+    - add_brand_column_to_order_products_table.php
+    - add_name_column_to_index_table.php

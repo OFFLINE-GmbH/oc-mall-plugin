@@ -156,10 +156,6 @@
         'description'                      => 'Feeds konfigurieren',
         'google_merchant_enabled'          => 'Verwende Google Merchant Center Feed',
         'google_merchant_enabled_comment'  => 'Ein Produktfeed wird über eine URL zugänglich gemacht',
-        'google_merchant_use_auth'         => 'Passwortschutz',
-        'google_merchant_use_auth_comment' => 'Der Feed ist nur mit Benutzername und Passwort zugänglich',
-        'google_merchant_auth_username'    => 'Benutzername',
-        'google_merchant_auth_password'    => 'Passwort',
         'google_merchant_url'              => 'Deine Google Merchant Feed URL',
         'google_merchant_url_locale'       => 'Füge ?locale=xy zur URL hinzu um einen übersetzten Feed zu erhalten.',
     ],
@@ -914,6 +910,12 @@
                 ],
             ],
         ],
+        'enhancedEcommerceAnalytics' => [
+            'details' => [
+                'name' => 'Enhanced Ecommerce (UA) Component',
+                'description' => 'Implements a Google Tag Manager Data Layer',
+            ]
+        ]
     ],
     'shipping_method_rates'    => [
         'from_weight' => 'Von (Gewicht in Gramm)',

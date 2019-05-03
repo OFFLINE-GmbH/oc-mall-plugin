@@ -273,6 +273,22 @@ class Variant extends Model
         return $this->hashId;
     }
 
+    /**
+     * Return the hashId with a 'variant-' prefix.
+     */
+    public function getPrefixedHashIdAttribute()
+    {
+        return 'variant-' . $this->getHashIdAttribute();
+    }
+
+    /**
+     * Return the id with a 'variant-' prefix.
+     */
+    public function getPrefixedIdAttribute()
+    {
+        return 'variant-' . $this->id;
+    }
+
     protected function isEmptyCollection($originalValue): bool
     {
         if ($originalValue instanceof Collection) {

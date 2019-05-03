@@ -271,6 +271,21 @@ class Product extends Model
         return $this->property_values;
     }
 
+    /**
+     * Return the hashId with a 'product-' prefix.
+     */
+    public function getPrefixedHashIdAttribute()
+    {
+        return 'product-' . $this->getHashIdAttribute();
+    }
+
+    /**
+     * Return the id with a 'product-' prefix.
+     */
+    public function getPrefixedIdAttribute()
+    {
+        return 'product-' . $this->id;
+    }
 
     /**
      * This setter makes it easier to set price values

@@ -71,8 +71,7 @@ class GoogleMerchantFeed
             'variant' => $item->variantId,
         ]);
 
-        $prefix = $item instanceof ProductModel ? 'product' : 'variant';
-        $entry->setId($prefix . '-' . $item->hashId);
+        $entry->setId($item->prefixedId);
         $entry->setTitle($item->name);
         $entry->setDescription($item->description ?: $item->description_short);
         $entry->setLink($url);

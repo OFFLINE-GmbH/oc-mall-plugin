@@ -1,5 +1,7 @@
 <div class="mall-products-item">
-    <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}">
+    <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}"
+       data-mall-item-id="{{ item.prefixedId }}"
+    >
         <div class="mall-products-item__image">
             {% partial __SELF__ ~ '::image' image=item.image %}
         </div>

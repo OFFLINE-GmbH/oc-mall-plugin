@@ -5,3 +5,7 @@
 {% else %}
     {% partial __SELF__ ~ '::empty' %}
 {% endif %}
+
+{% if __SELF__.dataLayer %}
+    {% partial __SELF__ ~ '::datalayer' %}
+{% endif %}

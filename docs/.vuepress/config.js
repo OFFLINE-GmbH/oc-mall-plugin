@@ -25,6 +25,7 @@ module.exports = {
                     '/digging-deeper/shipping-methods',
                     '/digging-deeper/payments',
                     '/digging-deeper/taxes',
+                    '/digging-deeper/analytics',
                     '/digging-deeper/going-live',
                 ]
             },
