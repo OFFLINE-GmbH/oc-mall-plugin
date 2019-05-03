@@ -46,7 +46,7 @@ class SignUp extends MallComponent
     {
         return [
             'redirect' => [
-                'type' => 'checkbox',
+                'type' => 'string',
                 'name' => 'offline.mall::lang.components.signup.properties.redirect.name',
             ],
         ];
