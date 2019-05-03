@@ -153,3 +153,7 @@
     - Updated italian translations (thanks to @Cryhex), fixed Variant indexing bug
 1.2.7:
     - Fixed some minor bugs
+1.3.0:
+    - Added Google Merchant Center integration
+    - add_identifier_columns_for_products_and_variants.php
+    - add_description_columns_to_variants.php

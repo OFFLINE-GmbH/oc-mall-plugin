@@ -1,0 +1,49 @@
+fields:
+    base:
+        label: Google Merchant Center Feed
+        type: section
+
+    google_merchant_enabled:
+        type: switch
+        label: offline.mall::lang.feed_settings.google_merchant_enabled
+        comment: offline.mall::lang.feed_settings.google_merchant_enabled_comment
+        span: auto
+
+    google_merchant_auth_username:
+        type: text
+        label: offline.mall::lang.feed_settings.google_merchant_auth_username
+        span: auto
+        required: true
+        trigger:
+            action: show
+            field: google_merchant_use_auth
+            condition: checked
+
+    google_merchant_use_auth:
+        type: switch
+        label: offline.mall::lang.feed_settings.google_merchant_use_auth
+        comment: offline.mall::lang.feed_settings.google_merchant_use_auth_comment
+        span: auto
+        trigger:
+            action: show
+            field: google_merchant_enabled
+            condition: checked
+
+    google_merchant_auth_password:
+        type: password
+        label: offline.mall::lang.feed_settings.google_merchant_auth_password
+        span: auto
+        required: true
+        trigger:
+            action: show
+            field: google_merchant_use_auth
+            condition: checked
+
+    google_merchant_url:
+        type: partial
+        span: auto
+        path: $/offline/mall/models/settings/_google_merchant_url.htm
+        trigger:
+            action: show
+            field: google_merchant_enabled
+            condition: checked

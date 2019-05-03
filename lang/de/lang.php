@@ -152,6 +152,17 @@
         'index_driver_database'      => 'Datenbank (nur für MySQL 5.7+ oder MariaDB 10.2+)',
         'index_driver_hint'          => 'Nachdem diese Option geändert wurde muss "php artisan mall:reindex" auf der Konsole ausgeführt werden!',
     ],
+    'feed_settings'            => [
+        'description'                      => 'Feeds konfigurieren',
+        'google_merchant_enabled'          => 'Verwende Google Merchant Center Feed',
+        'google_merchant_enabled_comment'  => 'Ein Produktfeed wird über eine URL zugänglich gemacht',
+        'google_merchant_use_auth'         => 'Passwortschutz',
+        'google_merchant_use_auth_comment' => 'Der Feed ist nur mit Benutzername und Passwort zugänglich',
+        'google_merchant_auth_username'    => 'Benutzername',
+        'google_merchant_auth_password'    => 'Passwort',
+        'google_merchant_url'              => 'Deine Google Merchant Feed URL',
+        'google_merchant_url_locale'       => 'Füge ?locale=xy zur URL hinzu um einen übersetzten Feed zu erhalten.',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Produkte',
@@ -265,6 +276,7 @@
         'caution'              => 'Achtung',
         'since_begin'          => 'Seit Beginn',
         'weekly'               => 'Wöchentlich',
+        'feeds'                => 'Feeds',
     ],
     'variant'                  => [
         'method' => [
@@ -343,6 +355,8 @@
         'group_by_property'                    => 'Attribut für Varianten-Gruppierung',
         'additional_descriptions'              => 'Zusätzliche Beschreibungen',
         'additional_properties'                => 'Zusätzliche Eigenschaften',
+        'gtin'                                 => 'Global Trade Item Number (GTIN)',
+        'mpn'                                  => 'Manufacturer Part Number (MPN)',
         'price_table_modal'                    => [
             'trigger'           => 'Preise und Lagerbestand bearbeiten',
             'label'             => 'Preise und Lagerbestand',
@@ -545,6 +559,7 @@
         'manage_shipping_methods'   => 'Kann Versandmethoden verwalten',
         'manage_taxes'              => 'Kann Steuern verwalten',
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
+        'manage_feeds'              => 'Kann Feeds verwalten',
     ],
     'components'               => [
         'products'               => [

@@ -101,8 +101,20 @@ tabs:
             span: left
             type: richeditor
             tab: 'offline.mall::lang.product.description'
-        brand:
+        gtin:
+            label: 'offline.mall::lang.product.gtin'
+            oc.commentPosition: ''
             span: auto
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        mpn:
+            label: 'offline.mall::lang.product.mpn'
+            oc.commentPosition: ''
+            span: right
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        brand:
+            span: right
             path: brand
             type: partial
             tab: 'offline.mall::lang.product.description'

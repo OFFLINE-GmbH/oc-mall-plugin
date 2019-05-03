@@ -92,6 +92,8 @@ class Variant extends Model
         'published',
         'weight',
         'allow_out_of_stock_purchases',
+        'mpn',
+        'gtin',
     ];
 
     public static function boot()
