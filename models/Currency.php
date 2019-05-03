@@ -51,6 +51,7 @@ class Currency extends Model
     {
         Cache::forget(self::DEFAULT_CURRENCY_CACHE_KEY);
         Cache::forget(self::CURRENCIES_CACHE_KEY);
+        Session::forget(static::CURRENCY_SESSION_KEY);
     }
 
     public function afterDelete()
@@ -60,6 +61,7 @@ class Currency extends Model
         DB::table('offline_mall_customer_group_prices')->where('currency_id', $this->id)->delete();
         Cache::forget(self::CURRENCIES_CACHE_KEY);
         Cache::forget(self::DEFAULT_CURRENCY_CACHE_KEY);
+        Session::forget(static::CURRENCY_SESSION_KEY);
     }
 
     /**
