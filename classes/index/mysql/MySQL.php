@@ -64,6 +64,7 @@ class MySQL implements Index
             'variant_id' => $isGhost ? null : $variantId,
             'is_ghost'   => $isGhost,
         ], [
+            'name'                  => $data['name'] ?? '',
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
             'sales_count'           => $data['sales_count'] ?? 0,
@@ -108,6 +109,7 @@ class MySQL implements Index
                 $table->integer('product_id');
                 $table->integer('variant_id')->nullable();
                 $table->string('index');
+                $table->string('name');
                 $table->string('brand');
                 $table->boolean('published');
                 $table->integer('stock');
@@ -247,7 +249,7 @@ class MySQL implements Index
             array_shift($parts);
             $nested = implode('.', $parts);
             $db->orderByRaw('JSON_EXTRACT(' . \DB::raw($field) . ', ?) ' . $order->direction(),
-                ['$.' . '"' . $nested. '"']
+                ['$.' . '"' . $nested . '"']
             );
         } else {
             $db->orderBy($order->property(), $order->direction());

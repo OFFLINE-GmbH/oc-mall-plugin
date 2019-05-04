@@ -75,10 +75,11 @@ abstract class SortOrder
             'price_high' => new PriceHigh(),
             'oldest'     => new Oldest(),
             'random'     => new Random(),
+            'name'       => new Name(),
         ];
 
         if ($excludeInternal) {
-            unset($options['manual'], $options['random']);
+            unset($options['manual'], $options['random'], $options['name']);
         }
 
         return $options;
@@ -100,6 +101,7 @@ abstract class SortOrder
             'price_high' => (new PriceHigh())->label(),
             'oldest'     => (new Oldest())->label(),
             'random'     => (new Random())->label(),
+            'name'       => (new Name())->label(),
         ];
     }
 
