@@ -296,20 +296,31 @@ class Product extends MallComponent
     public function onChangeConfiguration()
     {
         $fields = $this->mapToCustomFields(post('fields', []));
-        if ($fields->count() < 1) {
-            return [];
-        }
-
         $values = $this->mapToCustomFieldValues($fields);
 
-        $priceData = $this->getItem()->priceIncludingCustomFieldValues($values);
-        $price     = Price::fromArray($priceData);
+        // If we are on a Variant screen make sure to get the
+        // Variant by the current property value selection, not
+        // by the url parameter.
+        if ($this->param('variant')) {
+            $propertyValues = post('props', []);
+            $item           = $this->getVariantByPropertyValues($propertyValues);
+        } else {
+            $item = $this->getItem();
+        }
 
-        $partial = $this->renderPartial($this->alias . '::currentprice', ['price' => $price->string]);
+        // Remove the add to cart button in case the current configuration
+        // does not return a product or variant.
+        $return = ['.mall-product__add-to-cart' => ''];
+        if ($item) {
+            $priceData = $item->priceIncludingCustomFieldValues($values);
+            $price     = Price::fromArray($priceData);
 
-        return [
-            '.mall-product__current-price' => $partial,
-        ];
+            $partial = $this->renderPartial($this->alias . '::currentprice', ['price' => $price->string]);
+
+            $return = ['.mall-product__current-price' => $partial];
+        }
+
+        return $return;
     }
 
     /**
@@ -540,6 +551,12 @@ class Product extends MallComponent
             'stock' => $this->page['stock'],
             'item'  => $this->page['item'],
         ];
+
+        // Factor in currently selected custom field values in the displayed price
+        $fields        = $this->mapToCustomFields(post('props', []));
+        $values        = $this->mapToCustomFieldValues($fields);
+        $priceData     = $data['item']->priceIncludingCustomFieldValues($values);
+        $data['price'] = Price::fromArray($priceData);
 
         return [
             '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),

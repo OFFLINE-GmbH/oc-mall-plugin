@@ -68,6 +68,8 @@ The sort mode applied to the result set. Possible values are:
 | `oldest`     | Oldest products first | 
 | `price_low`  | Lowest price first    |
 | `price_high` | Highest price first   |
+| `random`     | Sort randomly         |
+| `name`       | Sort by name          |
 
 ## Example implementations
 
