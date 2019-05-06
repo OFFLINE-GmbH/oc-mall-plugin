@@ -11,16 +11,14 @@ columns:
     name:
         type: text
         label: 'offline.mall::lang.common.name'
-        type: text
         searchable: true
         sortable: true
     properties_description:
         type: partial
         path: $/offline/mall/models/variant/_description.htm
         label: 'offline.mall::lang.common.properties'
-        type: text
         searchable: true
-        sortable: true
+        sortable: false
     stock:
         label: 'offline.mall::lang.product.stock'
         type: number
@@ -29,10 +27,12 @@ columns:
         type: partial
         invisible: true
         path: $/offline/mall/models/variant/_price.htm
+        sortable: false
     old_price:
         label: 'offline.mall::lang.common.old_price'
         type: text
         invisible: true
+        sortable: false
     allow_out_of_stock_purchases:
         label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
         type: partial
@@ -43,8 +43,10 @@ columns:
         type: date
         invisible: true
         format: 'd.m.Y H:i'
+        sortable: true
     updated_at:
         label: 'offline.mall::lang.common.updated_at'
         type: date
         invisible: true
         format: 'd.m.Y H:i'
+        sortable: true
