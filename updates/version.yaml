@@ -153,3 +153,5 @@
     - Updated italian translations (thanks to @Cryhex), fixed Variant indexing bug
 1.2.7:
     - Fixed some minor bugs
+1.2.8:
+    - Added sort by name option to Products component (requires `php artisan mall:reindex` to work)

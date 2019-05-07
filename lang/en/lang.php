@@ -633,6 +633,7 @@
                 'oldest'     => 'Oldest',
                 'random'     => 'Random',
                 'manual'     => 'Manual',
+                'name'       => 'Name',
             ],
         ],
         'myAccount'              => [

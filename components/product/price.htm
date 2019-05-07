@@ -1,4 +1,4 @@
-{% set price = item.price() %}
+{% set price = price|default(item.price()) %}
 
 {% if price.official or item.oldPrice().integer %}
     <div class="mall-product__old-price">
@@ -10,5 +10,5 @@
     </div>
 {% endif %}
 <div class="mall-product__current-price">
-    {% partial __SELF__ ~ '::currentprice' price=item.price().string %}
+    {% partial __SELF__ ~ '::currentprice' price=price.string %}
 </div>
