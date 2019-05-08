@@ -155,3 +155,9 @@
     - Fixed some minor bugs
 1.2.8:
     - Added sort by name option to Products component (requires `php artisan mall:reindex` to work)
+1.3.0:
+    - Added Google Merchant Center integration
+    - add_identifier_columns_for_products_and_variants.php
+    - add_description_columns_to_variants.php
+    - add_brand_column_to_order_products_table.php
+    - add_name_column_to_index_table.php

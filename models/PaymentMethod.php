@@ -32,7 +32,7 @@ class PaymentMethod extends Model
     public $appends = ['settings'];
     public $with = ['prices'];
     public $nullable = ['fee_percentage'];
-    public $hidden = ['settings', 'prices'];
+    public $hidden = ['settings', 'prices', 'created_at', 'updated_at', 'deleted_at'];
     public $slugs = [
         'code' => 'name',
     ];

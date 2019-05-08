@@ -153,6 +153,13 @@
         'index_driver_database'      => 'Database (only for MySQL 5.7+ or MariaDB 10.2+)',
         'index_driver_hint'          => 'If you change this option make sure to run "php artisan mall:reindex" on the command line to re-index your products!',
     ],
+    'feed_settings'            => [
+        'description'                      => 'Configure mall feeds',
+        'google_merchant_enabled'          => 'Enable Google Merchant Center Feed',
+        'google_merchant_enabled_comment'  => 'A product feed will be generated',
+        'google_merchant_url'              => 'Your Google Merchant Feed URL',
+        'google_merchant_url_locale'       => 'Add ?locale=xy to get a localized feed.',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Products',
@@ -266,6 +273,7 @@
         'caution'              => 'Caution',
         'since_begin'          => 'Since begin',
         'weekly'               => 'Weekly',
+        'feeds'                => 'Feeds',
     ],
     'variant'                  => [
         'method' => [
@@ -344,6 +352,8 @@
         'group_by_property'                    => 'Attribute for variant grouping',
         'additional_descriptions'              => 'Additional descriptions',
         'additional_properties'                => 'Additional properties',
+        'gtin'                                 => 'Global Trade Item Number (GTIN)',
+        'mpn'                                  => 'Manufacturer Part Number (MPN)',
         'price_table_modal'                    => [
             'trigger'           => 'Edit stock and price values',
             'label'             => 'Price and stock',
@@ -547,6 +557,7 @@
         'manage_shipping_methods'   => 'Can manage shipping methods',
         'manage_taxes'              => 'Can manage taxes',
         'manage_payment_log'        => 'Can manage payment log',
+        'manage_feeds'              => 'Can manage feeds',
     ],
     'components'               => [
         'products'               => [

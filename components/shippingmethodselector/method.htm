@@ -48,6 +48,7 @@
             <button class="mall-shipping-method__select-button"
                     data-attach-loading
                     data-request="{{ __SELF__ }}::onChangeMethod"
+                    data-request-success="$.publish('mall.cart.shippingMethodChanged', data)"
                     data-request-data="id: '{{ method.id }}'">
                 {{ 'offline.mall::frontend.shipping_method.button_label' | trans }}
             </button>

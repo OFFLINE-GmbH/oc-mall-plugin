@@ -2,7 +2,6 @@
 
 use Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
@@ -97,6 +96,10 @@ class PaymentMethodSelector extends MallComponent
     protected function setData()
     {
         $user = Auth::getUser();
+        if ( ! $user) {
+            return;
+        }
+
         $this->setVar('cart', Cart::byUser($user));
         $this->workingOnModel = $this->cart;
 
@@ -189,6 +192,7 @@ class PaymentMethodSelector extends MallComponent
 
         return [
             '.mall-payment-method-selector' => $this->renderPartial($this->alias . '::selector'),
+            'method'                        => PaymentMethod::find($id),
         ];
     }
 
@@ -259,10 +263,10 @@ class PaymentMethodSelector extends MallComponent
      * @param \Illuminate\Foundation\Application $gateway
      * @param                                    $data
      *
-     * @return RedirectResponse
+     * @return RedirectResponse|array
      * @throws \Cms\Classes\CmsException
      */
-    protected function doRedirect(PaymentGateway $gateway, $data): RedirectResponse
+    protected function doRedirect(PaymentGateway $gateway, $data)
     {
         // If an order is already available, this is not the normal checkout flow but a
         // subsequent try to pay for an existing order for which the payment failed.
@@ -274,7 +278,7 @@ class PaymentMethodSelector extends MallComponent
                 $this->page->page->fileName
             );
 
-            return $paymentService->process();
+            return $paymentService->process('payment');
         }
 
         // Just to prevent any data leakage we store payment information encrypted to the session.
@@ -282,7 +286,16 @@ class PaymentMethodSelector extends MallComponent
 
         $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
 
-        return redirect()->to($this->getStepUrl($nextStep, 'payment'));
+        $url = $this->getStepUrl($nextStep, 'payment');
+
+        // If the analytics component is present return the datalayer partial that handles the redirect.
+        if ($this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+            return [
+                '#mall-datalayer' => $this->renderPartial($this->alias . '::datalayer', ['url' => $url]),
+            ];
+        }
+
+        return redirect()->to($url);
     }
 
     /**

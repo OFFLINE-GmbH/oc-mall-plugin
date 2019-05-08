@@ -11,8 +11,9 @@ use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Index\Index;
-use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Cart as CartModel;
+use OFFLINE\Mall\Models\Category as CategoryModel;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
@@ -95,6 +96,12 @@ class Products extends MallComponent
      * @var bool
      */
     public $setPageTitle;
+    /**
+     * Google Tag Manager dataLayer code.
+     *
+     * @var string
+     */
+    public $dataLayer;
     /**
      * This category and all child category ids as array.
      *
@@ -247,6 +254,8 @@ class Products extends MallComponent
         $this->setVar('pageNumber', (int)request('page', 1));
         $this->setVar('perPage', (int)$this->property('perPage'));
         $this->setVar('items', $this->getItems());
+
+        $this->setVar('dataLayer', $this->handleDataLayer());
     }
 
     /**
@@ -470,5 +479,38 @@ class Products extends MallComponent
     protected function productIncludes(): array
     {
         return ['image_sets.images', 'customer_group_prices', 'additional_prices'];
+    }
+
+    /**
+     * Generate Google Tag Manager dataLayer code.
+     */
+    private function handleDataLayer()
+    {
+        if ( ! $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+            return;
+        }
+
+        $dataLayer = [
+            'ecommerce' => [
+                'currencyCode' => Currency::activeCurrency()->code,
+                'impressions'  => $this->items->map(function ($item, $index) {
+                    $name    = $item instanceof Product ? $item->product : $item->product->name;
+                    $variant = $item instanceof Product ? null : $item->name;
+
+                    return [
+                        'id'       => $item->prefixedId,
+                        'name'     => $name,
+                        'price'    => $item->price()->float,
+                        'brand'    => optional($item->brand)->name,
+                        'category' => $this->category->name,
+                        'variant'  => $variant,
+                        'list'     => 'Category ' . $this->category->name,
+                        'position' => $index * $this->pageNumber,
+                    ];
+                }),
+            ],
+        ];
+
+        return json_encode($dataLayer);
     }
 }

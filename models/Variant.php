@@ -92,6 +92,8 @@ class Variant extends Model
         'published',
         'weight',
         'allow_out_of_stock_purchases',
+        'mpn',
+        'gtin',
     ];
 
     public static function boot()
@@ -269,6 +271,22 @@ class Variant extends Model
     public function getVariantIdAttribute()
     {
         return $this->hashId;
+    }
+
+    /**
+     * Return the hashId with a 'variant-' prefix.
+     */
+    public function getPrefixedHashIdAttribute()
+    {
+        return 'variant-' . $this->getHashIdAttribute();
+    }
+
+    /**
+     * Return the id with a 'variant-' prefix.
+     */
+    public function getPrefixedIdAttribute()
+    {
+        return 'variant-' . $this->id;
     }
 
     protected function isEmptyCollection($originalValue): bool

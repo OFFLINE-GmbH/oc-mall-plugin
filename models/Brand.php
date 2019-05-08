@@ -53,4 +53,13 @@ class Brand extends Model
                    Queue::push(BrandChangeUpdate::class, $data);
                });
     }
+
+    public function toArray()
+    {
+        return [
+            'id'   => $this->id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+        ];
+    }
 }

@@ -8,3 +8,7 @@
     {% endif %}
     {% partial __SELF__ ~ '::resultactions' %}
 </div>
+
+{% if __SELF__.dataLayer %}
+        {% partial __SELF__ ~ '::datalayer' %}
+{% endif %}

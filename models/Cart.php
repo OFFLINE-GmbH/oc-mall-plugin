@@ -115,6 +115,9 @@ class Cart extends Model
 
     public function totals(): TotalsCalculator
     {
+        if ($this->totalsCached) {
+            return $this->totalsCached;
+        }
         return $this->totalsCached = new TotalsCalculator($this);
     }
 

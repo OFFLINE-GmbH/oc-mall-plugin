@@ -50,10 +50,11 @@ class PaymentRedirector
         ];
 
         $orderId = session()->pull('mall.processing_order.id');
+        $flow    = session()->pull('mall.processing_order.flow');
 
         $url = $states[$state];
         if ($orderId) {
-            $url .= '?order=' . $orderId;
+            $url .= '?' . http_build_query(['order' => $orderId, 'flow' => $flow]);
         }
 
         return redirect()->to($url);
