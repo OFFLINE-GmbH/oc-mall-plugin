@@ -27,6 +27,7 @@ class Cruiser5000 extends DemoProduct
             'stackable'                    => true,
             'shippable'                    => true,
             'price_includes_tax'           => true,
+            'mpn'                          => 'CRUISER5000',
             'group_by_property_id'         => $this->property('wheel-size')->id,
             'published'                    => true,
         ];
