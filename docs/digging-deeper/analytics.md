@@ -131,7 +131,7 @@ Category | `Ecommerce`
 Action | `Checkout`
 Enable Enhanced Ecommerce Features | `true`
 Use Data Layer | `true`
-Trigger Type | `Page View - DOM Ready`
+Trigger Type | `Custom Event`
 Trigger | `Event` equals `checkout`
 
 
