@@ -132,7 +132,7 @@ Action | `Checkout`
 Enable Enhanced Ecommerce Features | `true`
 Use Data Layer | `true`
 Trigger Type | `Page View - DOM Ready`
-Trigger | `Event` equals `Checkout`
+Trigger | `Event` equals `checkout`
 
 
 **Measuring Checkout Options:** Checkout options can currently not be measured segmented.
