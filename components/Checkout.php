@@ -293,6 +293,10 @@ class Checkout extends MallComponent
             ],
         ];
 
+        if ($this->step === 'confirm') {
+            $data['ecommerce']['checkout']['actionField'] = ['step' => 3];
+        }
+
         if ($this->step === 'done') {
             // The "done" step should only count for the initial Checkout flow, not
             // later payments that are also redirected to this page.
@@ -301,8 +305,9 @@ class Checkout extends MallComponent
             }
 
             unset($data['event'], $data['ecommerce']['checkout']);
+
             $coupon           = $this->getDataLayerCoupon();
-            $data['purchase'] = [
+            $data['ecommerce']['purchase'] = [
                 'actionField' => [
                     'id'          => $this->order->hash_id,
                     'affiliation' => 'OFFLINE Mall',
