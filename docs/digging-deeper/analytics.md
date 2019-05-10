@@ -101,7 +101,6 @@ Tag type | `Universal Analytics`
 Track type | `Event`
 Category | `Ecommerce`
 Action | `Remove from Cart`
-Non-Interaction Hit | `true`
 Enable Enhanced Ecommerce Features | `true`
 Use Data Layer | `true`
 Trigger Type | `Custom Event`
@@ -116,7 +115,6 @@ Tag type | `Universal Analytics`
 Track type | `Event`
 Category | `Ecommerce`
 Action | `Add to Cart`
-Non-Interaction Hit | `true`
 Enable Enhanced Ecommerce Features | `true`
 Use Data Layer | `true`
 Trigger Type | `Custom Event`
