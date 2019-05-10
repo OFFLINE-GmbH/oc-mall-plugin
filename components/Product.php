@@ -628,7 +628,7 @@ class Product extends MallComponent
             'name'     => $product->name,
             'price'    => $item->price()->float,
             'brand'    => optional($item->brand)->name,
-            'category' => $item->categories->first()->name,
+            'category' => optional(optional($item->categories)->first())->name,
             'variant'  => optional($variant)->name,
         ];
     }
