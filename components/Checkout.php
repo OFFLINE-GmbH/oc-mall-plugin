@@ -326,7 +326,7 @@ class Checkout extends MallComponent
             'id'       => $item->prefixedId,
             'name'     => $name,
             'price'    => $item->total_post_taxes ?? $item->price()->float,
-            'brand'    => optional($item->brand)->name ?? array_get($item->brand, 'name'),
+            'brand'    => optional($item->product->brand)->name ?? array_get($item->brand, 'name'),
             'category' => $item->product->categories->first()->name,
             'variant'  => $variant,
             'quantity' => $item->quantity,

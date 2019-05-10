@@ -135,6 +135,15 @@ class CartProduct extends Model
         return $this->variant ?? $this->product;
     }
 
+    public function getPrefixedIdAttribute()
+    {
+        if ($this->variant) {
+            return 'variant-' . $this->variant->id;
+        }
+
+        return 'product-' . $this->product->id;
+    }
+
     public function getItemDataAttribute()
     {
         $model = $this->variant ?? $this->product;
