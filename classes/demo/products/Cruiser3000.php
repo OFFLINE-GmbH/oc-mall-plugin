@@ -71,7 +71,7 @@ class Cruiser3000 extends DemoProduct
             [
                 'name'       => 'Cruiser 3000 27.5" S',
                 'stock'      => 4,
-                'price'      => $this->prices(),
+                'prices'     => $this->prices(),
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
                     'wheel-size' => '27.5"',

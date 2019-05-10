@@ -71,7 +71,7 @@ class Cruiser1500 extends DemoProduct
             [
                 'name'       => 'Cruiser 1500 27.5" S',
                 'stock'      => 4,
-                'price'      => $this->prices(),
+                'prices'     => $this->prices(),
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
                     'wheel-size' => '27.5"',
