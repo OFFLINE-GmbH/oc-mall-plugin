@@ -165,3 +165,5 @@
     - Added Google Tag Manager integration (see https://tinyurl.com/mall-analytics-docs)
 1.3.2:
     - Minor bug fix release
+1.3.3:
+    - Fixed inheritance of Variant descriptions
