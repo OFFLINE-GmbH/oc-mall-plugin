@@ -17,6 +17,7 @@ class ShippingMethod extends Model
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $with = ['prices'];
+    public $hidden = ['created_at', 'updated_at', 'deleted_at'];
     public $translatable = [
         'name',
         'description',

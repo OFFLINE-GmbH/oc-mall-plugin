@@ -170,9 +170,12 @@ class Order extends Model
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
 
-            $cart->products->each(function (CartProduct $entry) use ($order) {
-                $entry->moveToOrder($order);
-            });
+            $cart
+                ->loadMissing(['products.product.brand'])
+                ->products
+                ->each(function (CartProduct $entry) use ($order) {
+                    $entry->moveToOrder($order);
+                });
 
             $cart->updateDiscountUsageCount();
 

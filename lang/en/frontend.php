@@ -45,7 +45,7 @@ return [
     'form.firstname'                           => 'First name',
     'form.lastname'                            => 'Last name',
     'form.company'                             => 'Company',
-    'form.company_placeholder'                 => 'Leave plank if private person',
+    'form.company_placeholder'                 => 'Leave blank if private person',
     'form.recipient'                           => "Recipient's name",
     'form.recipient_placeholder'               => "Leave empty if it's you",
     'form.address_lines'                       => 'Address lines',

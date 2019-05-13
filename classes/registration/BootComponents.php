@@ -9,8 +9,9 @@ use OFFLINE\Mall\Components\Cart;
 use OFFLINE\Mall\Components\Checkout;
 use OFFLINE\Mall\Components\CurrencyPicker;
 use OFFLINE\Mall\Components\CustomerProfile;
-use OFFLINE\Mall\Components\MallDependencies;
 use OFFLINE\Mall\Components\DiscountApplier;
+use OFFLINE\Mall\Components\EnhancedEcommerceAnalytics;
+use OFFLINE\Mall\Components\MallDependencies;
 use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\OrdersList;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
@@ -27,23 +28,24 @@ trait BootComponents
     public function registerComponents()
     {
         return [
-            Cart::class                   => 'cart',
-            SignUp::class                 => 'signUp',
-            ShippingMethodSelector::class => 'shippingMethodSelector',
-            AddressSelector::class        => 'addressSelector',
-            AddressForm::class            => 'addressForm',
-            PaymentMethodSelector::class  => 'paymentMethodSelector',
-            Checkout::class               => 'checkout',
-            ProductsComponent::class      => 'products',
-            ProductsFilter::class         => 'productsFilter',
-            ProductComponent::class       => 'product',
-            DiscountApplier::class        => 'discountApplier',
-            MyAccount::class              => 'myAccount',
-            OrdersList::class             => 'ordersList',
-            CustomerProfile::class        => 'customerProfile',
-            AddressList::class            => 'addressList',
-            CurrencyPicker::class         => 'currencyPicker',
-            MallDependencies::class       => 'mallDependencies',
+            Cart::class                       => 'cart',
+            SignUp::class                     => 'signUp',
+            ShippingMethodSelector::class     => 'shippingMethodSelector',
+            AddressSelector::class            => 'addressSelector',
+            AddressForm::class                => 'addressForm',
+            PaymentMethodSelector::class      => 'paymentMethodSelector',
+            Checkout::class                   => 'checkout',
+            ProductsComponent::class          => 'products',
+            ProductsFilter::class             => 'productsFilter',
+            ProductComponent::class           => 'product',
+            DiscountApplier::class            => 'discountApplier',
+            MyAccount::class                  => 'myAccount',
+            OrdersList::class                 => 'ordersList',
+            CustomerProfile::class            => 'customerProfile',
+            AddressList::class                => 'addressList',
+            CurrencyPicker::class             => 'currencyPicker',
+            MallDependencies::class           => 'mallDependencies',
+            EnhancedEcommerceAnalytics::class => 'enhancedEcommerceAnalytics',
         ];
     }
 

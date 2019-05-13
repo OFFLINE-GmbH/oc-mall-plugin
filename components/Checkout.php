@@ -54,6 +54,12 @@ class Checkout extends MallComponent
      * @var string
      */
     public $accountPage;
+    /**
+     * Google Tag Manager dataLayer code.
+     *
+     * @var array
+     */
+    public $dataLayer;
 
     /**
      * Component details.
@@ -112,7 +118,8 @@ class Checkout extends MallComponent
         $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
         $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
         $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
-        $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector', ['skipIfOnlyOneAvailable' => true]);
+        $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector',
+            ['skipIfOnlyOneAvailable' => true]);
         $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         $this->setData();
     }
@@ -125,6 +132,10 @@ class Checkout extends MallComponent
     protected function setData()
     {
         $user = Auth::getUser();
+        if ( ! $user) {
+            return;
+        }
+
         $cart = Cart::byUser($user);
         if ( ! $cart->payment_method_id) {
             $cart->setPaymentMethod(PaymentMethod::getDefault());
@@ -138,6 +149,8 @@ class Checkout extends MallComponent
             $orderId = $this->decode($orderId);
             $this->setVar('order', Order::byCustomer($user->customer)->find($orderId));
         }
+
+        $this->setVar('dataLayer', $this->handleDataLayer());
     }
 
     /**
@@ -253,5 +266,89 @@ class Checkout extends MallComponent
         }
 
         return $url . '?' . http_build_query(['via' => $via]);
+    }
+
+    /**
+     * Generate Google Tag Manager dataLayer code.
+     */
+    private function handleDataLayer()
+    {
+        $isCheckout = request()->get('flow') === 'checkout';
+
+        if ( ! $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+            return;
+        }
+
+        $useModel = $this->step === 'done' ? $this->order : $this->cart;
+
+        $data = [
+            'event'     => 'checkout',
+            'ecommerce' => [
+                'products' => $useModel->products->map(function ($item, $index) {
+                    return $this->getDataLayerProductArray($item);
+                }),
+                'checkout' => [
+                    'actionField' => [],
+                ],
+            ],
+        ];
+
+        if ($this->step === 'confirm') {
+            $data['ecommerce']['checkout']['actionField'] = ['step' => 3];
+        }
+
+        if ($this->step === 'done') {
+            // The "done" step should only count for the initial Checkout flow, not
+            // later payments that are also redirected to this page.
+            if ($isCheckout === false) {
+                return [];
+            }
+
+            unset($data['event'], $data['ecommerce']['checkout']);
+
+            $coupon           = $this->getDataLayerCoupon();
+            $data['ecommerce']['purchase'] = [
+                'actionField' => [
+                    'id'          => $this->order->hash_id,
+                    'affiliation' => 'OFFLINE Mall',
+                    'revenue'     => $this->order->total_post_taxes,
+                    'tax'         => $this->order->total_taxes,
+                    'shipping'    => $this->order->total_shipping_post_taxes,
+                    'coupon'      => $coupon,
+                ],
+            ];
+        }
+
+        return $data;
+    }
+
+    protected function getDataLayerProductArray($item)
+    {
+        $name    = $item->product->name;
+        $variant = optional($item->variant)->name;
+
+        return [
+            'id'       => $item->prefixedId,
+            'name'     => $name,
+            'price'    => $item->total_post_taxes ?? $item->price()->float,
+            'brand'    => optional($item->product->brand)->name ?? array_get($item->brand, 'name'),
+            'category' => $item->product->categories->first()->name,
+            'variant'  => $variant,
+            'quantity' => $item->quantity,
+        ];
+    }
+
+    protected function getDataLayerCoupon()
+    {
+        $coupon  = null;
+        $coupons = $this->order->discounts ?? [];
+
+        if (count($coupons)) {
+            $coupon = implode(',', array_map(function ($coupon) {
+                return array_get($coupon, 'code');
+            }, $coupons));
+        }
+
+        return $coupon;
     }
 }

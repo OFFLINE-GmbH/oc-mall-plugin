@@ -50,6 +50,7 @@ class OrderProduct extends Model
         'item',
         'custom_field_values',
         'property_values',
+        'brand',
     ];
 
     public $table = 'offline_mall_order_products';
@@ -109,6 +110,17 @@ class OrderProduct extends Model
     public function totalPostTaxes()
     {
         return $this->toPriceModel('total_post_taxes');
+    }
+
+    /**
+     * Return the id with a 'product/variant' prefix.
+     */
+    public function getPrefixedIdAttribute()
+    {
+        $kind      = $this->variant_id ? 'variant' : 'product';
+        $attribute = $this->variant_id ? 'variant_id' : 'product_id';
+
+        return $kind . '-' . $this->{$attribute};
     }
 
     protected function toPriceModel(string $key): Price

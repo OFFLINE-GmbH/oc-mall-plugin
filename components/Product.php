@@ -11,6 +11,7 @@ use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Queries\VariantByPropertyValuesQuery;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product as ProductModel;
@@ -69,6 +70,12 @@ class Product extends MallComponent
      * @var Variant
      */
     public $variant;
+    /**
+     * Google Tag Manager dataLayer code.
+     *
+     * @var string
+     */
+    public $dataLayer;
     /**
      * The ID of the Variant to display.
      * @var integer
@@ -206,6 +213,7 @@ class Product extends MallComponent
 
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
+        $this->setVar('dataLayer', $this->handleDataLayer());
     }
 
     /**
@@ -245,6 +253,12 @@ class Product extends MallComponent
         }
 
         Flash::success(trans('offline.mall::frontend.cart.added'));
+
+        return [
+            'item'     => $this->dataLayerArray($product, $variant),
+            'currency' => Currency::activeCurrency(),
+            'quantity' => $quantity,
+        ];
     }
 
     /**
@@ -572,5 +586,50 @@ class Product extends MallComponent
     protected function rainlabTranslateInstalled(): bool
     {
         return PluginManager::instance()->exists('RainLab.Translate');
+    }
+
+    /**
+     * Generate Google Tag Manager dataLayer code.
+     */
+    private function handleDataLayer()
+    {
+        if ( ! $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+            return;
+        }
+
+        $dataLayer = [
+            'ecommerce' => [
+                'detail' => [
+                    'products' => [$this->dataLayerArray()],
+                ],
+            ],
+        ];
+
+        return json_encode($dataLayer);
+    }
+
+    /**
+     * Return the dataLayer representation of an item.
+     *
+     * @param null $product
+     * @param null $variant
+     *
+     * @return array
+     */
+    private function dataLayerArray($product = null, $variant = null)
+    {
+        $product = $product ?? $this->product;
+        $variant = $variant ?? $this->variant;
+
+        $item = $variant ?? $product;
+
+        return [
+            'id'       => $item->prefixedId,
+            'name'     => $product->name,
+            'price'    => $item->price()->float,
+            'brand'    => optional($item->brand)->name,
+            'category' => optional(optional($item->categories)->first())->name,
+            'variant'  => optional($variant)->name,
+        ];
     }
 }

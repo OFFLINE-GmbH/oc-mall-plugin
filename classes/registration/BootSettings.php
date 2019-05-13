@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Registration;
 
 use Backend\Facades\Backend;
+use OFFLINE\Mall\Models\FeedSettings;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 
@@ -60,6 +61,16 @@ trait BootSettings
                 'order'       => 40,
                 'permissions' => ['offline.mall.manage_notifications'],
                 'keywords'    => 'shop store mall notifications email mail',
+            ],
+            'feed_settings'             => [
+                'label'       => 'offline.mall::lang.common.feeds',
+                'description' => 'offline.mall::lang.feed_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-rss',
+                'class'       => FeedSettings::class,
+                'order'       => 50,
+                'permissions' => ['offline.mall.manage_feeds'],
+                'keywords'    => 'shop store mall feeds',
             ],
             'payment_gateways_settings' => [
                 'label'       => 'offline.mall::lang.payment_gateway_settings.label',

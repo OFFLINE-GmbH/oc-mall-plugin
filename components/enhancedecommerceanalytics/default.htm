@@ -1,0 +1,44 @@
+<script>
+    window.dataLayer = window.dataLayer || [];
+</script>
+<script async defer>
+    $(function () {
+        $.subscribe('mall.cart.productAdded', function (e, data) {
+            dataLayer.push({
+                'event': 'addToCart',
+                'ecommerce': {
+                    'currencyCode': data.currency.code,
+                    'add': {
+                        'products': [{
+                            'name': data.item.name,
+                            'id': data.item.id,
+                            'price': data.item.price,
+                            'brand': data.item.brand,
+                            'category': data.item.category,
+                            'variant': data.item.variant,
+                            'quantity': data.quantity
+                        }]
+                    }
+                }
+            })
+        })
+        $.subscribe('mall.cart.productRemoved', function (e, data) {
+            dataLayer.push({
+                'event': 'removeFromCart',
+                'ecommerce': {
+                    'remove': {
+                        'products': [{
+                            'name': data.item.name,
+                            'id': data.item.id,
+                            'price': data.item.price,
+                            'brand': data.item.brand,
+                            'category': data.item.category,
+                            'variant': data.item.variant,
+                            'quantity': data.quantity
+                        }]
+                    }
+                }
+            })
+        })
+    })
+</script>
