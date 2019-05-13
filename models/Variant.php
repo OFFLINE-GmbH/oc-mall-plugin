@@ -2,6 +2,7 @@
 
 use Cms\Classes\Page;
 use DB;
+use Html;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\Nullable;
@@ -223,7 +224,7 @@ class Variant extends Model
 
         // In case of an empty Array or Collection we want to
         // return the parent's values.
-        $empty = $this->isEmptyCollection($originalValue);
+        $empty = $this->isEmpty($attribute, $originalValue);
 
         if ($attribute !== 'prices' || $empty) {
             return $originalValue === null || $empty ? $parentValues : $originalValue;
@@ -289,8 +290,14 @@ class Variant extends Model
         return 'variant-' . $this->id;
     }
 
-    protected function isEmptyCollection($originalValue): bool
+    protected function isEmpty($attribute, $originalValue): bool
     {
+        if ($attribute === 'description') {
+            $originalValue = trim(Html::strip($originalValue));
+
+            return $originalValue === '';
+        }
+
         if ($originalValue instanceof Collection) {
             return $originalValue->count() < 1;
         }
