@@ -51,6 +51,8 @@ class Product extends Model
         'description',
         'meta_title',
         'meta_description',
+        'additional_descriptions',
+        'additional_properties',
     ];
     public $slugs = [
         'slug' => 'name',
