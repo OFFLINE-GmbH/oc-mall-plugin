@@ -497,14 +497,17 @@ class Products extends MallComponent
                     $name    = $item instanceof Product ? $item->product : $item->product->name;
                     $variant = $item instanceof Product ? null : $item->name;
 
+                    $category = optional($this->category->name);
+                    $list     = $category ? 'Category ' . $category : '';
+
                     return [
                         'id'       => $item->prefixedId,
                         'name'     => $name,
                         'price'    => $item->price()->float,
                         'brand'    => optional($item->brand)->name,
-                        'category' => $this->category->name,
+                        'category' => $category,
                         'variant'  => $variant,
-                        'list'     => 'Category ' . $this->category->name,
+                        'list'     => $list,
                         'position' => $index * $this->pageNumber,
                     ];
                 }),
