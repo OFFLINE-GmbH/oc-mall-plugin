@@ -279,6 +279,6 @@ class MailingEventHandler
      */
     protected function getBackendOrderUrl($order): string
     {
-        return Backend::url('offline/mall/orders/' . $order->id);
+        return Backend::url('offline/mall/orders/show/' . $order->id);
     }
 }
