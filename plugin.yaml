@@ -112,3 +112,6 @@ permissions:
     offline.mall.manage_payment_log:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_payment_log'
+    offline.mall.manage_feeds:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_feeds'

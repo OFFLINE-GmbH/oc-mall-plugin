@@ -45,4 +45,13 @@ trait StockAndQuantity
 
         return $quantity;
     }
+
+    /**
+     * Check if this model is in stock.
+     * @return bool
+     */
+    public function isInStock()
+    {
+        return $this->allow_out_of_stock_purchases === true || $this->stock > 0;
+    }
 }

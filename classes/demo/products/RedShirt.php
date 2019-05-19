@@ -28,6 +28,7 @@ class RedShirt extends DemoProduct
             'stackable'                    => true,
             'shippable'                    => true,
             'price_includes_tax'           => true,
+            'mpn'                          => 'REDSHIRT',
             'group_by_property_id'         => $this->property('size')->id,
             'published'                    => true,
         ];

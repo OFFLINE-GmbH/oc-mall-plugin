@@ -40,6 +40,30 @@ tabs:
             variantPropertiesOnly: true
             fieldPrefix: VariantPropertyValues
             tab: 'offline.mall::lang.common.properties'
+        gtin:
+            label: 'offline.mall::lang.product.gtin'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        mpn:
+            label: 'offline.mall::lang.product.mpn'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        description_short:
+            label: 'offline.mall::lang.product.description_short'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'offline.mall::lang.product.description'
+        description:
+            label: 'offline.mall::lang.product.description'
+            size: small
+            span: full
+            type: richeditor
+            tab: 'offline.mall::lang.product.description'
         downloads:
             label: 'offline.mall::lang.common.downloads'
             mode: file

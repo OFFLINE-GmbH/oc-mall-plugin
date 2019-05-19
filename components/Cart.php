@@ -155,7 +155,7 @@ class Cart extends MallComponent
     /**
      * The user removed an item from the cart.
      *
-     * @return void
+     * @return array
      */
     public function onRemoveProduct()
     {
@@ -168,6 +168,11 @@ class Cart extends MallComponent
         $cart->removeProduct($product);
 
         $this->setData();
+
+        return [
+            'item'     => $this->dataLayerArray($product->product, $product->variant),
+            'quantity' => $product->quantity,
+        ];
     }
 
     /**
@@ -177,7 +182,7 @@ class Cart extends MallComponent
      * currently logged in user's cart.
      *
      * @param CartModel $cart
-     * @param mixed $id
+     * @param mixed     $id
      *
      * @return mixed
      * @throws ModelNotFoundException
@@ -190,5 +195,27 @@ class Cart extends MallComponent
             })
             ->where('id', $id)
             ->firstOrFail();
+    }
+
+    /**
+     * Return the dataLayer representation of an item.
+     *
+     * @param null $product
+     * @param null $variant
+     *
+     * @return array
+     */
+    private function dataLayerArray($product = null, $variant = null)
+    {
+        $item = $variant ?? $product;
+
+        return [
+            'id'       => $item->prefixedId,
+            'name'     => $product->name,
+            'price'    => $item->price()->float,
+            'brand'    => optional($item->brand)->name,
+            'category' => $item->categories->first()->name,
+            'variant'  => optional($variant)->name,
+        ];
     }
 }

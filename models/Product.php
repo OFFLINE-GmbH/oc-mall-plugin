@@ -51,6 +51,8 @@ class Product extends Model
         'description',
         'meta_title',
         'meta_description',
+        'additional_descriptions',
+        'additional_properties',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -97,6 +99,8 @@ class Product extends Model
         'price_includes_tax',
         'group_by_property_id',
         'published',
+        'mpn',
+        'gtin',
     ];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
@@ -269,15 +273,31 @@ class Product extends Model
         return $this->property_values;
     }
 
+    /**
+     * Return the hashId with a 'product-' prefix.
+     */
+    public function getPrefixedHashIdAttribute()
+    {
+        return 'product-' . $this->getHashIdAttribute();
+    }
+
+    /**
+     * Return the id with a 'product-' prefix.
+     */
+    public function getPrefixedIdAttribute()
+    {
+        return 'product-' . $this->id;
+    }
 
     /**
      * This setter makes it easier to set price values
      * in different currencies by providing an array of
      * prices. It is mostly used for unit testing.
      *
+     * @param $value
+     *
      * @internal
      *
-     * @param $value
      */
     public function setPriceAttribute($value)
     {

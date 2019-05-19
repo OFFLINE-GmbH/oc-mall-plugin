@@ -40,10 +40,16 @@ automatically when a product is added or removed from the cart.
 $(function () {
     var nbItems = '{{ cartButton.cart.products.count }}';
     var $count = $('.js-count');
-    $.subscribe('mall.cart.productAdded', function () {
+    $.subscribe('mall.cart.productAdded', function (e, data) {
+        // You have access to different values here.
+        // console.log(data.item);
+        // console.log(data.quantity);
         $count.text(++nbItems);
     });
-    $.subscribe('mall.cart.productRemoved', function () {
+    $.subscribe('mall.cart.productRemoved', function (e, data) {
+        // You have access to different values here.
+        // console.log(data.item);
+        // console.log(data.quantity);
         nbItems--;
         if (nbItems < 0) nbItems = 0;
         $count.text(nbItems);

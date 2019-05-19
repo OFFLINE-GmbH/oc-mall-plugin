@@ -37,7 +37,7 @@
                     success: function (data) {
                         this.success(data)
                         $.publish('mall.cart.update', data)
-                        $.publish('mall.cart.productRemoved')
+                        $.publish('mall.cart.productRemoved', data)
                     }
                 })
             });

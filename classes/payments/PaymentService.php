@@ -50,11 +50,14 @@ class PaymentService
     /**
      * Processes the payment.
      *
+     * @param string $flow
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function process()
+    public function process($flow = 'checkout')
     {
         session()->put('mall.processing_order.id', $this->order->hashId);
+        session()->put('mall.processing_order.flow', $flow);
 
         try {
             $result = $this->gateway->process($this->order);

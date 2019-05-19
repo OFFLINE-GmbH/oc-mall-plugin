@@ -27,6 +27,7 @@ class Cruiser3500 extends DemoProduct
             'stackable'                    => true,
             'shippable'                    => true,
             'price_includes_tax'           => true,
+            'mpn'                          => 'CRUISER3500',
             'group_by_property_id'         => $this->property('wheel-size')->id,
             'published'                    => true,
         ];
@@ -70,7 +71,7 @@ class Cruiser3500 extends DemoProduct
             [
                 'name'       => 'Cruiser 3500 27.5" S',
                 'stock'      => 4,
-                'price'      => $this->prices(),
+                'prices'     => $this->prices(),
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
                     'wheel-size' => '27.5"',

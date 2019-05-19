@@ -3,3 +3,7 @@
 </div>
 
 {% partial __SELF__ ~ '::scripts' %}
+
+{% if dataLayer %}
+    {% partial __SELF__ ~ '::datalayer' %}
+{% endif %}

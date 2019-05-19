@@ -2,6 +2,7 @@
 
 use Cms\Classes\Page;
 use DB;
+use Html;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\Nullable;
@@ -92,6 +93,8 @@ class Variant extends Model
         'published',
         'weight',
         'allow_out_of_stock_purchases',
+        'mpn',
+        'gtin',
     ];
 
     public static function boot()
@@ -221,7 +224,7 @@ class Variant extends Model
 
         // In case of an empty Array or Collection we want to
         // return the parent's values.
-        $empty = $this->isEmptyCollection($originalValue);
+        $empty = $this->isEmpty($attribute, $originalValue);
 
         if ($attribute !== 'prices' || $empty) {
             return $originalValue === null || $empty ? $parentValues : $originalValue;
@@ -271,8 +274,30 @@ class Variant extends Model
         return $this->hashId;
     }
 
-    protected function isEmptyCollection($originalValue): bool
+    /**
+     * Return the hashId with a 'variant-' prefix.
+     */
+    public function getPrefixedHashIdAttribute()
     {
+        return 'variant-' . $this->getHashIdAttribute();
+    }
+
+    /**
+     * Return the id with a 'variant-' prefix.
+     */
+    public function getPrefixedIdAttribute()
+    {
+        return 'variant-' . $this->id;
+    }
+
+    protected function isEmpty($attribute, $originalValue): bool
+    {
+        if ($attribute === 'description') {
+            $originalValue = trim(Html::strip($originalValue));
+
+            return $originalValue === '';
+        }
+
         if ($originalValue instanceof Collection) {
             return $originalValue->count() < 1;
         }

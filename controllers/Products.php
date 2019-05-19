@@ -319,7 +319,7 @@ class Products extends Controller
 
     protected function updatePrices($model, $key = 'prices')
     {
-        $data = post('MallPrice');
+        $data = post('MallPrice', []);
         \DB::transaction(function () use ($model, $key, $data) {
             foreach ($data as $currency => $_data) {
                 $value = array_get($_data, $key);
@@ -342,7 +342,7 @@ class Products extends Controller
     protected function updateProductPrices($product, $variant, $key = '_prices')
     {
         \DB::transaction(function () use ($product, $variant, $key) {
-            $data = post('MallPrice');
+            $data = post('MallPrice', []);
             foreach ($data as $currency => $_data) {
                 $value = array_get($_data, $key);
                 ProductPrice::updateOrCreate([

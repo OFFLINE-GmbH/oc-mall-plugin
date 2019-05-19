@@ -46,7 +46,7 @@ class Discounts extends Controller
 
     protected function updatePrices($model, $field = null, $key = '_prices')
     {
-        $data = post('MallPrice');
+        $data = post('MallPrice', []);
         foreach ($data as $currency => $_data) {
             $value = array_get($_data, $key);
             if ($value === '') {

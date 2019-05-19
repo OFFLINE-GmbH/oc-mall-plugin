@@ -87,6 +87,7 @@ class CartProduct extends Model
             $entry->height    = $this->item->height;
             $entry->stackable = $this->item->stackable;
             $entry->shippable = $this->item->shippable;
+            $entry->brand     = $this->item->brand ? $this->item->brand->toArray() : null;
 
             if ($this->variant) {
                 $entry->properties_description = $this->variant->propertyValuesAsString();
@@ -132,6 +133,15 @@ class CartProduct extends Model
     public function getItemAttribute()
     {
         return $this->variant ?? $this->product;
+    }
+
+    public function getPrefixedIdAttribute()
+    {
+        if ($this->variant) {
+            return 'variant-' . $this->variant->id;
+        }
+
+        return 'product-' . $this->product->id;
     }
 
     public function getItemDataAttribute()

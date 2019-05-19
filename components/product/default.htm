@@ -1,5 +1,5 @@
 <form data-request="onAddToCart"
-      data-request-success="$.publish('mall.cart.productAdded')"
+      data-request-success="$.publish('mall.cart.productAdded', data)"
       data-request-validate
       data-request-flash
       id="mall-add-to-cart">
@@ -13,3 +13,7 @@
     </div>
 </form>
 {% partial __SELF__ ~ '::scripts' %}
+
+{% if __SELF__.dataLayer %}
+    {% partial __SELF__ ~ '::datalayer' %}
+{% endif %}

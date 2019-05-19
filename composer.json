@@ -24,7 +24,8 @@
     "elasticsearch/elasticsearch": "^6.0",
     "league/omnipay": "^3",
     "omnipay/paypal": "^3.0",
-    "omnipay/stripe": "^3.0"
+    "omnipay/stripe": "^3.0",
+    "vitalybaev/google-merchant-feed": "^1.1"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",

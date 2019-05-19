@@ -94,6 +94,8 @@ class ShippingMethodSelector extends MallComponent
      */
     public function onSubmit()
     {
+        $this->setData();
+
         return $this->redirect();
     }
 
@@ -114,30 +116,40 @@ class ShippingMethodSelector extends MallComponent
             throw new ValidationException($v);
         }
 
-        if ( ! $this->methods || ! $this->methods->pluck('id')->contains(post('id'))) {
+        $id = post('id');
+
+        if ( ! $this->methods || ! $this->methods->pluck('id')->contains($id)) {
             throw new ValidationException([
                 'id' => trans('offline.mall::lang.components.shippingMethodSelector.errors.unavailable'),
             ]);
         }
 
-        $this->cart->shipping_method_id = post('id');
+        $this->cart->shipping_method_id = $id;
         $this->cart->save();
 
         $this->setData();
 
         return [
             '.mall-shipping-selector' => $this->renderPartial($this->alias . '::selector'),
+            'method'                  => ShippingMethod::find($id),
         ];
     }
 
     /**
      * Redirect to the next checkout step.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|array
      */
     protected function redirect()
     {
         $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'confirm']);
+
+        // If the analytics component is present return the datalayer partial that handles the redirect.
+        if ( ! $this->shouldSkipStep() && $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+            return [
+                '#mall-datalayer' => $this->renderPartial($this->alias . '::datalayer', ['url' => $url]),
+            ];
+        }
 
         return redirect()->to($url);
     }

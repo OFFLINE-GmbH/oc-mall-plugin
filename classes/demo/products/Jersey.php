@@ -28,6 +28,7 @@ class Jersey extends DemoProduct
             'stackable'                    => true,
             'shippable'                    => true,
             'price_includes_tax'           => true,
+            'mpn'                          => 'JERSEY',
             'group_by_property_id'         => $this->property('color')->id,
             'published'                    => true,
         ];

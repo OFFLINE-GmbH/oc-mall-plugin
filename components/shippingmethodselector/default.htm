@@ -1,3 +1,7 @@
 <div class="mall-shipping-selector">
     {% partial __SELF__ ~ '::selector' %}
 </div>
+
+{% if dataLayer %}
+    {% partial __SELF__ ~ '::datalayer' %}
+{% endif %}
