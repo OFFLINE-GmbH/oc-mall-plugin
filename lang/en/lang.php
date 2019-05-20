@@ -76,7 +76,7 @@
         'description'       => 'Setup your currencies',
         'currencies'        => 'Only enter official 3-char currency codes.',
         'currency_code'     => 'Currency code',
-        'currency_decimals' => 'Anz. Dezimalstellen',
+        'currency_decimals' => 'Decimal places',
         'currency_format'   => 'Format',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
@@ -403,7 +403,7 @@
         'amount'                               => 'Fixed amount',
         'max_number_of_usages'                 => 'Max number of usages',
         'expires'                              => 'Expires',
-        'number_of_usages'                     => 'Numer of usages',
+        'number_of_usages'                     => 'Number of usages',
         'shipping_description'                 => 'Name of alternative shipping method',
         'shipping_price'                       => 'Price of alternative shipping method',
         'shipping_guaranteed_days_to_delivery' => 'Guaranteed days to delivery',
@@ -545,10 +545,10 @@
         'settings'                  => [
             'manage_general'         => 'Can change general shop settings',
             'manage_api'             => 'Can change api shop settings',
-            'manage_currency'        => 'Can change currecy shop settings',
-            'manage_payment_methods' => 'Zahlungsmethoden verwalten',
+            'manage_currency'        => 'Can change currency shop settings',
+            'manage_payment_methods' => 'Can change payment methods',
         ],
-        'manage_properties'         => 'Can edit product properites',
+        'manage_properties'         => 'Can edit product properties',
         'manage_customer_groups'    => 'Can manage customer groups',
         'manage_customer_addresses' => 'Can manage customer addresses',
         'manage_notifications'      => 'Can manage notifications',
@@ -627,7 +627,7 @@
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Include noUI Slider',
-                    'description' => 'Include all dependiencies of noUI Slider via cdnjs',
+                    'description' => 'Include all dependencies of noUI Slider via cdnjs',
                 ],
                 'sortOrder'           => [
                     'title'       => 'Sort order',
@@ -836,10 +836,10 @@
                     'non_existing_user' => 'A user with this email address is already registered. Use the password reset function.',
                 ],
                 'firstname'       => [
-                    'required' => 'Please enter your lastname.',
+                    'required' => 'Please enter your first name.',
                 ],
                 'lastname'        => [
-                    'required' => 'Please enter your firstname.',
+                    'required' => 'Please enter your last name.',
                 ],
                 'lines'           => [
                     'required' => 'Please enter your address.',
@@ -916,8 +916,8 @@
         ],
     ],
     'shipping_method_rates'    => [
-        'from_weight' => 'From (Weight in gramms)',
-        'to_weight'   => 'To (Weight in gramms)',
+        'from_weight' => 'From (Weight in grams)',
+        'to_weight'   => 'To (Weight in grams)',
     ],
     'products'                 => [
         'variants_comment' => 'Create different variants of the same product',
