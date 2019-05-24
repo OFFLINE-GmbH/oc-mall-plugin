@@ -430,6 +430,20 @@ class Product extends MallComponent
     }
 
     /**
+     * Get the PropertyValue this Variant is grouped by.
+     *
+     * @param Variant $variant
+     *
+     * @return mixed
+     */
+    protected function getGroupedPropertyValue(Variant $variant)
+    {
+        $property = $this->getGroupedProperty($variant);
+
+        return \is_array($property->value) ? json_encode($property->value) : $property->value;
+    }
+
+    /**
      * Get the Property this Variant is grouped by.
      *
      * @param Variant $variant
@@ -445,20 +459,6 @@ class Product extends MallComponent
         return $variant->property_values->first(function (PropertyValue $value) use ($variant) {
             return $value->property_id === $variant->product->group_by_property_id;
         });
-    }
-
-    /**
-     * Get the PropertyValue this Variant is grouped by.
-     *
-     * @param Variant $variant
-     *
-     * @return mixed
-     */
-    protected function getGroupedPropertyValue(Variant $variant)
-    {
-        $property = $this->getGroupedProperty($variant);
-
-        return \is_array($property->value) ? json_encode($property->value) : $property->value;
     }
 
     /**
