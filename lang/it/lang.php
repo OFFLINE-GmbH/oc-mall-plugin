@@ -704,10 +704,6 @@
                 'description' => 'Mostra i dettagli di un prodotto',
             ],
             'properties'    => [
-                'productSlug' => [
-                    'title'       => 'Parametro url del prodotto',
-                    'description' => 'Usa questo parametro per caricare lo slug dall\'url',
-                ],
             ],
             'added_to_cart' => 'Prodotto aggiunto con successo',
         ],

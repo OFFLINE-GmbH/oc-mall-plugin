@@ -10,9 +10,9 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\User;
 use RainLab\User\Facades\Auth;
-use RainLab\User\Models\Settings as UserSettings;
 use RainLab\User\Models\UserGroup;
 use Redirect;
 
@@ -166,7 +166,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
     public static function rules($forSignup = true): array
     {
-        return [
+        $rules = [
             'firstname'           => 'required',
             'lastname'            => 'required',
             'email'               => ['required', 'email', ($forSignup ? 'non_existing_user' : null)],
@@ -183,6 +183,12 @@ class DefaultSignUpHandler implements SignUpHandler
             'password'            => 'required|min:8|max:255',
             'password_repeat'     => 'required|same:password',
         ];
+
+        if ((bool)GeneralSettings::get('use_state', true) !== true) {
+            unset($rules['billing_state_id'], $rules['shipping_state_id']);
+        }
+
+        return $rules;
     }
 
     public static function messages(): array

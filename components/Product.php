@@ -77,6 +77,13 @@ class Product extends MallComponent
      */
     public $dataLayer;
     /**
+     * Redirect to the new Product/Variant detail page when properties
+     * are changed instead of only reloading the add to cart partial.
+     *
+     * @var boolean
+     */
+    public $redirectOnPropertyChange;
+    /**
      * The ID of the Variant to display.
      * @var integer
      */
@@ -107,17 +114,24 @@ class Product extends MallComponent
      */
     public function defineProperties()
     {
+        $langPrefix = 'offline.mall::lang.components.product.properties.redirectOnPropertyChange';
         return [
-            'product' => [
+            'product'                  => [
                 'title'   => 'offline.mall::lang.common.product',
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
-            'variant' => [
+            'variant'                  => [
                 'title'   => 'offline.mall::lang.common.variant',
                 'default' => ':slug',
                 'depends' => ['product'],
                 'type'    => 'dropdown',
+            ],
+            'redirectOnPropertyChange' => [
+                'title'   => $langPrefix . '.title',
+                'description'   => $langPrefix . '.description',
+                'default' => 0,
+                'type'    => 'checkbox',
             ],
         ];
     }
@@ -214,6 +228,7 @@ class Product extends MallComponent
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
         $this->setVar('dataLayer', $this->handleDataLayer());
+        $this->setVar('redirectOnPropertyChange', (bool)$this->property('redirectOnPropertyChange'));
     }
 
     /**
@@ -271,11 +286,19 @@ class Product extends MallComponent
      */
     public function onChangeProperty()
     {
-        $values  = post('values', []);
-        $variant = $this->getVariantByPropertyValues($values);
+        $values    = post('values', []);
+        $isInitial = (bool)post('initial', false);
+        $variant   = $this->getVariantByPropertyValues($values);
 
         $this->page['stock'] = $variant ? $variant->stock : 0;
         $this->page['item']  = $variant ?: $this->getProduct();
+
+        if ($this->redirectOnPropertyChange && $isInitial === false) {
+            $item = $this->page['item'];
+            $slug = $item instanceof Variant ? $item->product->slug : $item->slug;
+
+            return redirect()->to($this->getProductPageUrl($slug, $item));
+        }
 
         return $this->stockCheckResponse();
     }
@@ -576,6 +599,22 @@ class Product extends MallComponent
             '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),
             '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
         ];
+    }
+
+    /**
+     * Generate the page url for a Product/Variant combination.
+     *
+     * @param              $slug
+     * @param Variant|null $item
+     *
+     * @return string
+     */
+    private function getProductPageUrl($slug, ?Variant $item): string
+    {
+        return $this->controller->pageUrl(GeneralSettings::get('product_page'), [
+            'slug'    => $slug,
+            'variant' => optional($item)->variantId,
+        ]);
     }
 
     /**

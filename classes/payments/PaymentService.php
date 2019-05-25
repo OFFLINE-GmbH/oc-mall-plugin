@@ -57,7 +57,7 @@ class PaymentService
     public function process($flow = 'checkout')
     {
         session()->put('mall.processing_order.id', $this->order->hashId);
-        session()->put('mall.processing_order.flow', $flow);
+        session()->put('mall.checkout.flow', $flow);
 
         try {
             $result = $this->gateway->process($this->order);

@@ -137,6 +137,8 @@
         'category_page'              => 'Category page for products listing',
         'redirect_to_cart'           => 'Redirect to cart',
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
+        'use_state'                  => 'Use State/County/Province field',
+        'use_state_comment'          => 'Customers have to select a State/County/Province during signup',
         'admin_email'                => 'Admin email',
         'admin_email_comment'        => 'Admin notifications will be sent to this addres',
         'base'                       => 'Base settings',
@@ -714,9 +716,9 @@
                 'description' => 'Displays details of a product',
             ],
             'properties'    => [
-                'productSlug' => [
-                    'title'       => 'Product url parameter',
-                    'description' => 'Use this parameter to load the slug from the url',
+                'redirectOnPropertyChange' => [
+                    'title'       => 'Redirect on property change',
+                    'description' => 'Redirect the user to the new detail page if a property was changed',
                 ],
             ],
             'added_to_cart' => 'Added product successfully',

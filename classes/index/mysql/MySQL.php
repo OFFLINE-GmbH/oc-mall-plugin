@@ -207,8 +207,14 @@ class MySQL implements Index
             ['min' => $min, 'max' => $max] = $price->values();
 
             $db->where(function ($q) use ($currency, $min, $max) {
-                $q->where("prices->$currency", '>=', (int)($min * 100));
-                $q->where("prices->$currency", '<=', (int)($max * 100));
+                $q->whereRaw('JSON_EXTRACT(`prices`, ?) >= ?', [
+                    "$." . $currency,
+                    (int)($min * 100),
+                ]);
+                $q->whereRaw('JSON_EXTRACT(`prices`, ?) <= ?', [
+                    "$." . $currency,
+                    (int)($max * 100),
+                ]);
             });
         }
 

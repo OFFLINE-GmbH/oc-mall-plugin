@@ -150,3 +150,28 @@ function onStart() {
 <h2>Other products from this category</h2>
 {% component 'relatedProducts' %}
 ```
+
+### Add a add to cart button on the category page
+
+Add the following `a` tag to your item partial `/plugins/offline/components/products/item.htm`
+
+```html
+<div class="mall-products-item">
+
+    <!-- Add this -->
+    <a class="mall-products-item__cart-button"
+       href="javascript:;"
+       data-request="{{ __SELF__ }}::onAddToCart"
+       data-request-success="$.publish('mall.cart.productAdded')"
+       data-request-data="product: '{{ item.productHashId }}', variant: '{{ item.variantHashId }}'"
+       data-request-flash
+    >
+        Add to cart
+    </a>
+    <!-- /Add this -->
+    
+    <a href="{{ productPage|page({slug: item.slug, variant: item.variantId}) }}">
+        <!-- Thumb, Title, etc. -->
+    </a>
+</div>
+```
