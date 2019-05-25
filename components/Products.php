@@ -106,9 +106,9 @@ class Products extends MallComponent
      */
     public $dataLayer;
     /**
-     * This category and all child category ids as array.
+     * Contains the current category and all child categories.
      *
-     * @var array
+     * @var Collection
      */
     protected $categories;
     /**
@@ -245,9 +245,9 @@ class Products extends MallComponent
         $this->setVar('paginate', (bool)$this->property('paginate'));
 
         if ($this->category) {
-            $categories = [$this->category->id];
+            $categories = [$this->category];
             if ($this->includeChildren) {
-                $categories = $this->category->getChildrenIds();
+                $categories = $this->category->getAllChildrenAndSelf();
             }
 
             $this->setVar('categories', $categories);
@@ -460,7 +460,7 @@ class Products extends MallComponent
 
         $filters = (new QueryString())->deserialize($filter, $this->category);
         if ($this->categories) {
-            $filters->put('category_id', new SetFilter('category_id', $this->categories));
+            $filters->put('category_id', new SetFilter('category_id', $this->categories->pluck('id')->toArray()));
         }
 
         return $filters;
