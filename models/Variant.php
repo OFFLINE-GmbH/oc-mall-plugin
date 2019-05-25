@@ -274,6 +274,16 @@ class Variant extends Model
         return $this->hashId;
     }
 
+    public function getVariantHashIdAttribute()
+    {
+        return $this->hashId;
+    }
+
+    public function getProductHashIdAttribute()
+    {
+        return $this->product->hashId;
+    }
+
     /**
      * Return the hashId with a 'variant-' prefix.
      */
