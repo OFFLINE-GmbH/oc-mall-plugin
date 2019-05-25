@@ -714,9 +714,9 @@
                 'description' => 'Zeigt die Details zu einem Produkt an',
             ],
             'properties' => [
-                'productSlug' => [
-                    'title'       => 'Produkt URL-Parameter',
-                    'description' => 'Verwende diesen Parameter um das Produkt aus der URL zu übernehmen',
+                'redirectOnPropertyChange' => [
+                    'title'       => 'Zu neuer Detailseite umleiten',
+                    'description' => 'Leite den Besucher zur neuen Detailseite um wenn eine Eigenschaft geändert wird',
                 ],
             ],
         ],

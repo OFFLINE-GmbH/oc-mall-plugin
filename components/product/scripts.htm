@@ -21,7 +21,7 @@
                 $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'offline.mall::frontend.stock.checking' | trans }}</div>');
 
                 $.request('onChangeProperty', {
-                    data: {values: values, props: props},
+                    data: {values: values, props: props, initial: isInitial},
                     loading: isInitial ? null : $.oc.stripeLoadIndicator
                 })
             })

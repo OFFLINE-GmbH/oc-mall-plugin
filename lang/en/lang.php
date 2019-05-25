@@ -716,9 +716,9 @@
                 'description' => 'Displays details of a product',
             ],
             'properties'    => [
-                'productSlug' => [
-                    'title'       => 'Product url parameter',
-                    'description' => 'Use this parameter to load the slug from the url',
+                'redirectOnPropertyChange' => [
+                    'title'       => 'Redirect on property change',
+                    'description' => 'Redirect the user to the new detail page if a property was changed',
                 ],
             ],
             'added_to_cart' => 'Added product successfully',
