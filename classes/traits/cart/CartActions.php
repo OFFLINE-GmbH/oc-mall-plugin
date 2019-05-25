@@ -37,8 +37,10 @@ trait CartActions
             $quantity = $quantity ?? $product->quantity_default ?? 1;
 
             if ($product->stackable && $this->isInCart($product, $variant, $values)) {
-                $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product) {
-                    return $cartProduct->product_id === $product->id;
+                $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product, $variant) {
+                    return $variant
+                        ? $cartProduct->product_id === $product->id && $cartProduct->variant_id === $variant->id
+                        : $cartProduct->product_id === $product->id;
                 });
 
                 $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
