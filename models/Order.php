@@ -89,7 +89,10 @@ class Order extends Model
             if ($order->isDirty('tracking_url') || $order->isDirty('tracking_number')) {
                 Event::fire('mall.order.tracking.changed', [$order]);
             }
-            if ($order->isDirty('payment_state') && $order->wasRecentlyCreated === false) {
+            // Don't trigger payment changes during the checkout flow. A mall.checkout.succeeded
+            // Event will already be triggered in the PaymentRedirector.
+            $flow = session()->get('mall.checkout.flow');
+            if ($flow !== 'checkout' && $order->isDirty('payment_state')) {
                 Event::fire('mall.order.payment_state.changed', [$order]);
             }
             if ($order->getOriginal('shipped_at') === null && $order->isDirty('shipped_at')) {

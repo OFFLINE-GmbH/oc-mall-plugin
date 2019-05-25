@@ -50,7 +50,7 @@ class PaymentRedirector
         ];
 
         $orderId = session()->pull('mall.processing_order.id');
-        $flow    = session()->pull('mall.processing_order.flow');
+        $flow    = session()->get('mall.checkout.flow');
 
         $url = $states[$state];
         if ($orderId) {
@@ -90,7 +90,9 @@ class PaymentRedirector
         }
 
         if ($result->successful) {
-            if (optional($result->order)->wasRecentlyCreated) {
+            // Only trigger the checkout succeeded event for the checkout flow (not for later payments)
+            $flow = session()->get('mall.checkout.flow');
+            if ($flow === 'checkout') {
                 Event::fire('mall.checkout.succeeded', [$result]);
             }
 
