@@ -155,7 +155,7 @@ function onStart() {
 
 Add the following `a` tag to your item partial `/plugins/offline/components/products/item.htm`
 
-```
+```html
 <div class="mall-products-item">
 
     <!-- Add this -->

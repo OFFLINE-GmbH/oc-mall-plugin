@@ -2,6 +2,7 @@
 
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\Location\Models\Country;
 use RainLab\User\Models\Settings as UserSettings;
 
@@ -23,6 +24,12 @@ class SignUp extends MallComponent
      * @var array
      */
     public $countries;
+    /**
+     * Use state field.
+     *
+     * @var boolean
+     */
+    public $useState = true;
 
     /**
      * Component details.
@@ -62,6 +69,7 @@ class SignUp extends MallComponent
         $this->countries = Country::getNameList();
 
         $this->requiresConfirmation = UserSettings::get('activate_mode') === UserSettings::ACTIVATE_USER;
+        $this->useState             = GeneralSettings::get('use_state', true);
     }
 
     /**

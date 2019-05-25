@@ -36,6 +36,12 @@ class AddressForm extends MallComponent
      * @var Cart
      */
     public $cart;
+    /**
+     * Use state field.
+     *
+     * @var boolean
+     */
+    public $useState = true;
 
     /**
      * Component details.
@@ -125,6 +131,7 @@ class AddressForm extends MallComponent
         $this->setVar('setAddressAs', $this->property('set'));
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
         $this->setVar('countries', Country::getNameList());
+        $this->setVar('useState', GeneralSettings::get('use_state', true));
 
         $hashId = $this->property('address');
         if ($hashId === 'new') {

@@ -20,12 +20,14 @@
     <div data-validate-for="{{ type }}country_id"></div>
 </div>
 
-{% set id = type ~ 'state_id' %}
-<div class="mall-form-control">
-    <label for="{{ id }}">{{ 'offline.mall::frontend.form.state' | trans }}</label>
-    {{ form_select_state(id, countryId, stateId, {
-        emptyOption: ('offline.mall::frontend.select' | trans ),
-        id: id,
-    }) }}
-    <div data-validate-for="{{ id }}"></div>
-</div>
+{% if __SELF__.useState %}
+    {% set id = type ~ 'state_id' %}
+    <div class="mall-form-control">
+        <label for="{{ id }}">{{ 'offline.mall::frontend.form.state' | trans }}</label>
+        {{ form_select_state(id, countryId, stateId, {
+            emptyOption: ('offline.mall::frontend.select' | trans ),
+            id: id,
+        }) }}
+        <div data-validate-for="{{ id }}"></div>
+    </div>
+{% endif %}

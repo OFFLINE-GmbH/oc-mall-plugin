@@ -137,6 +137,8 @@
         'category_page'              => 'Category page for products listing',
         'redirect_to_cart'           => 'Redirect to cart',
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
+        'use_state'                  => 'Use State/County/Province field',
+        'use_state_comment'          => 'Customers have to select a State/County/Province during signup',
         'admin_email'                => 'Admin email',
         'admin_email_comment'        => 'Admin notifications will be sent to this addres',
         'base'                       => 'Base settings',

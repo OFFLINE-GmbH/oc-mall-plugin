@@ -28,6 +28,6 @@
         <div data-validate-for="{{ type }}_city"></div>
     </div>
 </div>
-<div class="mall-two-fields" id="countryState_{{ type }}">
+<div class="{{ __SELF__.useState ? 'mall-two-fields' }}" id="countryState_{{ type }}">
     {% partial __SELF__ ~ '::countrystate' type=type %}
 </div>
