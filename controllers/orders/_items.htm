@@ -27,7 +27,7 @@
     <?php foreach ($order['products'] as $item): ?>
     <tr>
         <td>
-            <a href="<?= e(URL::to('/backend/offline/mall/products/update/' . $item['product_id'])); ?>">
+            <a href="<?= $productUpdate . '/' . e($item['product_id']); ?>">
                 <?= e($item['name']) ?><br/>
             </a>
             <?= $item['variant_name'] ?>

@@ -44,7 +44,8 @@ class Orders extends Controller
         $this->bodyClass = 'compact-container';
         $this->pageTitle = trans('offline.mall::lang.titles.orders.show');
         $this->addCss('/plugins/offline/mall/assets/backend.css');
-
+        $this->vars['ordersList']    = Backend::url('offline/mall/orders');
+        $this->vars['productUpdate'] = Backend::url('offline/mall/products/update');
 
         $order = Order::with('products', 'order_state')->findOrFail($this->params[0]);
 

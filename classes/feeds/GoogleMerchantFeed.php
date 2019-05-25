@@ -71,9 +71,10 @@ class GoogleMerchantFeed
             'variant' => $item->variantId,
         ]);
 
+        $description = \Html::strip($item->description ?: $item->description_short);
         $entry->setId($item->prefixedId);
         $entry->setTitle($item->name);
-        $entry->setDescription($item->description ?: $item->description_short);
+        $entry->setDescription($description);
         $entry->setLink($url);
         $entry->setPrice("{$item->price()->float} {$item->price()->currency->code}");
         $entry->setCondition('new');
