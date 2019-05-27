@@ -268,7 +268,7 @@ class ProductsFilter extends MallComponent
 
         $this->setVar('category', $this->getCategory());
 
-        $categories = [$this->category];
+        $categories = collect([$this->category]);
         if ($this->includeChildren) {
             $categories = $this->category->getAllChildrenAndSelf();
         }

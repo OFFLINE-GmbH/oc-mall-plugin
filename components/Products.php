@@ -245,7 +245,7 @@ class Products extends MallComponent
         $this->setVar('paginate', (bool)$this->property('paginate'));
 
         if ($this->category) {
-            $categories = [$this->category];
+            $categories = collect([$this->category]);
             if ($this->includeChildren) {
                 $categories = $this->category->getAllChildrenAndSelf();
             }

@@ -7,7 +7,7 @@ columns:
         invisible: true
     order_number:
         label: 'offline.mall::lang.order.order_number'
-        type: text
+        type: number
         searchable: true
         sortable: true
     payment_hash:
