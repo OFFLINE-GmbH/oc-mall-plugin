@@ -100,7 +100,7 @@ Option | Value
 Tag type | `Universal Analytics`
 Track type | `Event`
 Category | `Ecommerce`
-Action | `Remove from Cart`
+Action | `Add to Cart`
 Enable Enhanced Ecommerce Features | `true`
 Use Data Layer | `true`
 Trigger Type | `Custom Event`
@@ -114,7 +114,7 @@ Option | Value
 Tag type | `Universal Analytics`
 Track type | `Event`
 Category | `Ecommerce`
-Action | `Add to Cart`
+Action | `Remove from Cart`
 Enable Enhanced Ecommerce Features | `true`
 Use Data Layer | `true`
 Trigger Type | `Custom Event`

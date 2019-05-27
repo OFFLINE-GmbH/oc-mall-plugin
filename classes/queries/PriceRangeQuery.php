@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Queries;
 
 use DB;
+use Illuminate\Support\Collection;
 use October\Rain\Database\QueryBuilder;
 use OFFLINE\Mall\Models\Currency;
 
@@ -20,11 +21,11 @@ class PriceRangeQuery
     /**
      * Categories to filter by.
      *
-     * @var array
+     * @var Collection
      */
     protected $categories;
 
-    public function __construct(array $categories, Currency $currency)
+    public function __construct(Collection $categories, Currency $currency)
     {
         $this->currency   = $currency;
         $this->categories = $categories;
@@ -52,7 +53,7 @@ class PriceRangeQuery
                 '=',
                 'offline_mall_category_product.product_id'
             )
-            ->whereIn('offline_mall_category_product.category_id', $this->categories)
+            ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
             ->where('offline_mall_product_prices.currency_id', $this->currency->id);
     }
 }

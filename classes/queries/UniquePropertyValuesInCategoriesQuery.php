@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Queries;
 
 use DB;
+use Illuminate\Support\Collection;
 use October\Rain\Database\QueryBuilder;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
@@ -16,7 +17,7 @@ class UniquePropertyValuesInCategoriesQuery
 {
     /**
      * An array of category ids.
-     * @var array<int>
+     * @var Collection
      */
     protected $categories;
 
@@ -45,7 +46,7 @@ class UniquePropertyValuesInCategoriesQuery
                       ->whereNull('offline_mall_product_variants.id');
                 })->orWhere('offline_mall_product_variants.published', true);
             })
-            ->whereIn('offline_mall_category_product.category_id', $this->categories)
+            ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
             ->whereNull('offline_mall_product_variants.deleted_at')
             ->whereNull('offline_mall_products.deleted_at')
             ->where('offline_mall_property_values.value', '<>', '')

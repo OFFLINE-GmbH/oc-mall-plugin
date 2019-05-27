@@ -2,16 +2,16 @@
 
 use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
-use OFFLINE\Mall\Classes\Index\Index;
 use BackendMenu;
 use Cache;
-use Queue;
 use DB;
 use Flash;
 use Lang;
+use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Product;
+use Queue;
 
 class CategoriesProducts extends Controller
 {
@@ -95,7 +95,7 @@ class CategoriesProducts extends Controller
                     ->get(['product_id', 'sort_order'])
                     ->pluck('sort_order', 'product_id');
 
-        $categories = $this->category->getChildrenIds();
+        $categories = optional($this->category->getAllChildrenAndSelf())->pluck('id');
 
         return Product
             ::whereHas('categories', function ($q) use ($categories) {

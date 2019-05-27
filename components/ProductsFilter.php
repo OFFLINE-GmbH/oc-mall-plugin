@@ -35,9 +35,9 @@ class ProductsFilter extends MallComponent
      */
     public $category;
     /**
-     * An array of all subcategory ids.
+     * A Collection of all subcategories.
      *
-     * @var array
+     * @var Collection
      */
     public $categories;
     /**
@@ -268,9 +268,9 @@ class ProductsFilter extends MallComponent
 
         $this->setVar('category', $this->getCategory());
 
-        $categories = [$this->category->id];
+        $categories = [$this->category];
         if ($this->includeChildren) {
-            $categories = $this->category->getChildrenIds();
+            $categories = $this->category->getAllChildrenAndSelf();
         }
         $this->setVar('categories', $categories);
 
@@ -387,7 +387,7 @@ class ProductsFilter extends MallComponent
     protected function setBrands()
     {
         $brands = \DB::table('offline_mall_products')
-                     ->whereIn('offline_mall_category_product.category_id', $this->categories)
+                     ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
                      ->select('offline_mall_brands.*')
                      ->distinct()
                      ->join('offline_mall_brands', 'offline_mall_products.brand_id', '=', 'offline_mall_brands.id')

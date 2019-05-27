@@ -1,9 +1,10 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Cache;
+use DB;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Model;
-use DB;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -223,18 +224,5 @@ class Category extends Model
             'created_at asc'  => "${created}, A->Z",
             'created_at desc' => "${created}, Z->A",
         ];
-    }
-
-    /**
-     * Return an array of all child category ids.
-     *
-     * @return array
-     */
-    public function getChildrenIds()
-    {
-        return $this->scopeAllChildren(self::newQuery(), true)
-                    ->get(['id'])
-                    ->pluck('id')
-                    ->toArray();
     }
 }
