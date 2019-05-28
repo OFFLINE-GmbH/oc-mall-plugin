@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Models;
 
 use DB;
+use Event;
 use Model;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -46,6 +47,9 @@ class CartProduct extends Model
         parent::boot();
         static::saving(function (self $cartProduct) {
             $cartProduct->quantity = $cartProduct->data->normalizeQuantity($cartProduct->quantity);
+        });
+        static::updated(function (self $cartProduct) {
+            Event::fire('mall.cart.product.updated', [$cartProduct]);
         });
         static::deleted(function (self $cartProduct) {
             CustomFieldValue::where('cart_product_id', $cartProduct->id)->delete();
