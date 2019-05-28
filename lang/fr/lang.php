@@ -153,6 +153,13 @@
         'index_driver_database'      => 'Database (seulement pour MySQL 5.7+ or MariaDB 10.2+)',
         'index_driver_hint'          => 'Si vous changez cette option, assurez-vous de lancer "php artisan mall: reindex" sur la ligne de commande pour réindexer vos produits.!',
     ],
+    'feed_settings'            => [
+        'description'                      => 'Configurer mall feeds',
+        'google_merchant_enabled'          => 'Activer Google Merchant Center Feed',
+        'google_merchant_enabled_comment'  => 'Un produit feed sera généré',
+        'google_merchant_url'              => 'Votre Google Merchant Feed URL',
+        'google_merchant_url_locale'       => 'ajouter ?locale=xy obtenir un flux (Feed) localisé.',
+    ],
     'common'                   => [
         'shop'                 => 'Boutique',
         'products'             => 'Produits',
@@ -165,7 +172,8 @@
         'inventory'            => 'Inventaire',
         'accessories'          => 'Accessoires',
         'shipping_methods'     => 'Méthodes de livraison',
-        'accessory'            => 'Champs personnalisés',
+        'accessory'            => 'Accessoire',
+        'custom_fields'        => 'Champs personnalisés',
         'variants'             => 'Variantes',
         'variant'              => 'Variante',
         'discounts'            => 'Remises',
@@ -265,6 +273,7 @@
         'caution'              => 'Mise en garde',
         'since_begin'          => 'Depuis début',
         'weekly'               => 'Hebdomadaire',
+        'feeds'                => 'Flux',
     ],
     'variant'                  => [
         'method' => [
@@ -343,6 +352,8 @@
         'group_by_property'                    => 'Attribut pour groupement de variantes',
         'additional_descriptions'              => 'Descriptions supplémentaires',
         'additional_properties'                => 'Propriétés supplémentaires',
+        'gtin'                                 => 'Global Trade Item Number (GTIN)',
+        'mpn'                                  => 'Manufacturer Part Number (MPN)',
         'price_table_modal'                    => [
             'trigger'           => 'Modifier les valeurs de stock et de prix',
             'label'             => 'Prix et stock',
@@ -545,6 +556,7 @@
         'manage_shipping_methods'   => 'Peut gérer des shipping methods',
         'manage_taxes'              => 'Peut gérer des taxes',
         'manage_payment_log'        => 'Peut gérer des payment log',
+        'manage_feeds'              => 'Can manage feeds',
     ],
     'components'               => [
         'products'               => [
@@ -629,6 +641,7 @@
                 'oldest'     => 'Le plus ancien',
                 'random'     => 'Au hasard',
                 'manual'     => 'Manuel',
+                'name'       => 'Name',
             ],
         ],
         'myAccount'              => [
