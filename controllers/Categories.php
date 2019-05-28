@@ -43,4 +43,10 @@ class Categories extends Controller
 
         Flash::success(trans('offline.mall::lang.common.sorting_updated'));
     }
+
+    public function onReorder()
+    {
+        parent::onReorder();
+        (new Category())->purgeCache();
+    }
 }

@@ -57,6 +57,20 @@ This event is emitted when a product has been removed from the cart. It receives
 * `Cart` model
 * `CartProduct` model that was removed from the cart 
 
+### `mall.cart.product.updated`
+
+This event is emitted when a cart product was updated. It receives the following arguments:
+
+* `CartProduct` model that was updated in the cart 
+
+### `mall.cart.product.quantityChanged`
+
+This event is emitted when the quantity of a cart product has changed. It receives the following arguments:
+
+* `CartProduct` model that was updated in the cart 
+* `oldQuantity` the old quantity value 
+* `newQuantity` the new quantity value 
+
 ## Checkout
 
 ### `mall.checkout.succeeded`

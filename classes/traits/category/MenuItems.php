@@ -58,6 +58,18 @@ trait MenuItems
     }
 
     /**
+     * Purge all cached category data.
+     * @return void
+     */
+    public function purgeCache()
+    {
+        foreach ($this->getLocales() as $locale) {
+            Cache::forget($this->treeCacheKey($locale));
+            Cache::forget($this->mapCacheKey($locale));
+        }
+    }
+
+    /**
      * @param $item
      * @param $url
      * @param $theme
@@ -199,19 +211,6 @@ trait MenuItems
     protected function treeCacheKey($locale)
     {
         return Category::TREE_CACHE_KEY . '.' . $locale;
-    }
-
-
-    /**
-     * Purge all cached category data.
-     * @return void
-     */
-    protected function purgeCache()
-    {
-        foreach ($this->getLocales() as $locale) {
-            Cache::forget($this->treeCacheKey($locale));
-            Cache::forget($this->mapCacheKey($locale));
-        }
     }
 
     /**
