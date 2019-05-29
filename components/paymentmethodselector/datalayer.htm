@@ -1,7 +1,8 @@
 {% if not url %}
+    {% set activeMethod = __SELF__.activeMethod.only('code', 'name') %}
     <script>
         $(function () {
-            window.dataLayerData = dataWithMethod({{ __SELF__.activeMethod | json_encode | raw }})
+            window.dataLayerData = dataWithMethod({{ activeMethod | json_encode | raw }})
             $.subscribe('mall.cart.paymentMethodChanged', function (e, data) {
                 window.dataLayerData = dataWithMethod(data.method)
             })
@@ -16,7 +17,7 @@
     <div id="mall-datalayer"></div>
 {% else %}
     <script>
-        var redirect = function() {
+        var redirect = function () {
             document.location = '{{ url }}'
         }
         window.dataLayerData.eventCallback = redirect
