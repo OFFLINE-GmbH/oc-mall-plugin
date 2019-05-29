@@ -271,7 +271,7 @@ class Product extends MallComponent
 
         return [
             'item'     => $this->dataLayerArray($product, $variant),
-            'currency' => Currency::activeCurrency(),
+            'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
         ];
     }

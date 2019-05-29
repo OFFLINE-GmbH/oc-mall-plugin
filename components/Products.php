@@ -319,6 +319,12 @@ class Products extends MallComponent
         }
 
         Flash::success(trans('offline.mall::frontend.cart.added'));
+
+        return [
+            'item'     => $this->dataLayerArray($product, $variant),
+            'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
+            'quantity' => $quantity,
+        ];
     }
 
     /**
@@ -523,5 +529,30 @@ class Products extends MallComponent
         ];
 
         return json_encode($dataLayer);
+    }
+
+    /**
+     * Return the dataLayer representation of an item.
+     *
+     * @param null $product
+     * @param null $variant
+     *
+     * @return array
+     */
+    private function dataLayerArray($product = null, $variant = null)
+    {
+        $product = $product ?? $this->product;
+        $variant = $variant ?? $this->variant;
+
+        $item = $variant ?? $product;
+
+        return [
+            'id'       => $item->prefixedId,
+            'name'     => $product->name,
+            'price'    => $item->price()->decimal,
+            'brand'    => optional($item->brand)->name,
+            'category' => optional(optional($item->categories)->first())->name,
+            'variant'  => optional($variant)->name,
+        ];
     }
 }
