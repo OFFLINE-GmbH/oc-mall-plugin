@@ -511,7 +511,7 @@ class Products extends MallComponent
                     return [
                         'id'       => $item->prefixedId,
                         'name'     => $name,
-                        'price'    => $item->price()->float,
+                        'price'    => $item->price()->decimal,
                         'brand'    => optional($item->brand)->name,
                         'category' => $category,
                         'variant'  => $variant,

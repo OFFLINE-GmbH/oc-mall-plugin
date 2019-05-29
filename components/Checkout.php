@@ -306,7 +306,7 @@ class Checkout extends MallComponent
 
             unset($data['event'], $data['ecommerce']['checkout']);
 
-            $coupon           = $this->getDataLayerCoupon();
+            $coupon                        = $this->getDataLayerCoupon();
             $data['ecommerce']['purchase'] = [
                 'actionField' => [
                     'id'          => $this->order->hash_id,
@@ -326,11 +326,12 @@ class Checkout extends MallComponent
     {
         $name    = $item->product->name;
         $variant = optional($item->variant)->name;
+        $price   = $item->total_post_taxes ?? $item->price()->integer;
 
         return [
             'id'       => $item->prefixedId,
             'name'     => $name,
-            'price'    => $item->total_post_taxes ?? $item->price()->float,
+            'price'    => (string)round($price / 100, 2),
             'brand'    => optional($item->product->brand)->name ?? array_get($item->brand, 'name'),
             'category' => $item->product->categories->first()->name,
             'variant'  => $variant,
