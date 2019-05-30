@@ -76,7 +76,7 @@
         'description'       => 'Setup your currencies',
         'currencies'        => 'Only enter official 3-char currency codes.',
         'currency_code'     => 'Currency code',
-        'currency_decimals' => 'Anz. Dezimalstellen',
+        'currency_decimals' => 'Decimal places',
         'currency_format'   => 'Format',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
@@ -137,6 +137,8 @@
         'category_page'              => 'Category page for products listing',
         'redirect_to_cart'           => 'Redirect to cart',
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
+        'use_state'                  => 'Use State/County/Province field',
+        'use_state_comment'          => 'Customers have to select a State/County/Province during signup',
         'admin_email'                => 'Admin email',
         'admin_email_comment'        => 'Admin notifications will be sent to this addres',
         'base'                       => 'Base settings',
@@ -152,6 +154,13 @@
         'index_driver_filesystem'    => 'Filesystem',
         'index_driver_database'      => 'Database (only for MySQL 5.7+ or MariaDB 10.2+)',
         'index_driver_hint'          => 'If you change this option make sure to run "php artisan mall:reindex" on the command line to re-index your products!',
+    ],
+    'feed_settings'            => [
+        'description'                      => 'Configure mall feeds',
+        'google_merchant_enabled'          => 'Enable Google Merchant Center Feed',
+        'google_merchant_enabled_comment'  => 'A product feed will be generated',
+        'google_merchant_url'              => 'Your Google Merchant Feed URL',
+        'google_merchant_url_locale'       => 'Add ?locale=xy to get a localized feed.',
     ],
     'common'                   => [
         'shop'                 => 'Shop',
@@ -266,6 +275,7 @@
         'caution'              => 'Caution',
         'since_begin'          => 'Since begin',
         'weekly'               => 'Weekly',
+        'feeds'                => 'Feeds',
     ],
     'variant'                  => [
         'method' => [
@@ -346,14 +356,15 @@
         'group_by_property'                    => 'Attribute for variant grouping',
         'additional_descriptions'              => 'Additional descriptions',
         'additional_properties'                => 'Additional properties',
+        'gtin'                                 => 'Global Trade Item Number (GTIN)',
+        'mpn'                                  => 'Manufacturer Part Number (MPN)',
         'price_table_modal'                    => [
             'trigger'           => 'Edit stock and price values',
             'label'             => 'Price and stock',
             'title'             => 'Price and stock overview',
             'currency_dropdown' => 'Currency: ',
         ],
-        'missing_category'                     => 'The product does not have a category associated with it. Please select a category below to edit this
-                    product.',
+        'missing_category'                     => 'The product does not have a category associated with it. Please select a category below to edit this product.',
         'variant_support_header'               => 'Variants not supported',
         'variant_support_text'                 => 'The selected category has no Variant properties defined. Please switch the inventory management method to "Article" or select another category.',
     ],
@@ -395,7 +406,7 @@
         'amount'                               => 'Fixed amount',
         'max_number_of_usages'                 => 'Max number of usages',
         'expires'                              => 'Expires',
-        'number_of_usages'                     => 'Numer of usages',
+        'number_of_usages'                     => 'Number of usages',
         'shipping_description'                 => 'Name of alternative shipping method',
         'shipping_price'                       => 'Price of alternative shipping method',
         'shipping_guaranteed_days_to_delivery' => 'Guaranteed days to delivery',
@@ -537,10 +548,10 @@
         'settings'                  => [
             'manage_general'         => 'Can change general shop settings',
             'manage_api'             => 'Can change api shop settings',
-            'manage_currency'        => 'Can change currecy shop settings',
-            'manage_payment_methods' => 'Zahlungsmethoden verwalten',
+            'manage_currency'        => 'Can change currency shop settings',
+            'manage_payment_methods' => 'Can change payment methods',
         ],
-        'manage_properties'         => 'Can edit product properites',
+        'manage_properties'         => 'Can edit product properties',
         'manage_customer_groups'    => 'Can manage customer groups',
         'manage_customer_addresses' => 'Can manage customer addresses',
         'manage_notifications'      => 'Can manage notifications',
@@ -549,6 +560,7 @@
         'manage_shipping_methods'   => 'Can manage shipping methods',
         'manage_taxes'              => 'Can manage taxes',
         'manage_payment_log'        => 'Can manage payment log',
+        'manage_feeds'              => 'Can manage feeds',
     ],
     'components'               => [
         'products'               => [
@@ -618,7 +630,7 @@
                 ],
                 'includeSliderAssets' => [
                     'title'       => 'Include noUI Slider',
-                    'description' => 'Include all dependiencies of noUI Slider via cdnjs',
+                    'description' => 'Include all dependencies of noUI Slider via cdnjs',
                 ],
                 'sortOrder'           => [
                     'title'       => 'Sort order',
@@ -633,6 +645,7 @@
                 'oldest'     => 'Oldest',
                 'random'     => 'Random',
                 'manual'     => 'Manual',
+                'name'       => 'Name',
             ],
         ],
         'myAccount'              => [
@@ -704,9 +717,9 @@
                 'description' => 'Displays details of a product',
             ],
             'properties'    => [
-                'productSlug' => [
-                    'title'       => 'Product url parameter',
-                    'description' => 'Use this parameter to load the slug from the url',
+                'redirectOnPropertyChange' => [
+                    'title'       => 'Redirect on property change',
+                    'description' => 'Redirect the user to the new detail page if a property was changed',
                 ],
             ],
             'added_to_cart' => 'Added product successfully',
@@ -804,6 +817,7 @@
             'errors'     => [
                 'user_is_guest'   => 'You are trying to sign in with a guest account.',
                 'unknown_user'    => 'The credentials you have entered are invalid.',
+                'not_activated'   => 'Your account needs to be activated before you can login.',
                 'login'           => [
                     'required' => 'Please enter an email address.',
                     'email'    => 'Please enter a valid email address.',
@@ -825,10 +839,10 @@
                     'non_existing_user' => 'A user with this email address is already registered. Use the password reset function.',
                 ],
                 'firstname'       => [
-                    'required' => 'Please enter your lastname.',
+                    'required' => 'Please enter your firstname.',
                 ],
                 'lastname'        => [
-                    'required' => 'Please enter your firstname.',
+                    'required' => 'Please enter your last name.',
                 ],
                 'lines'           => [
                     'required' => 'Please enter your address.',
@@ -905,8 +919,8 @@
         ],
     ],
     'shipping_method_rates'    => [
-        'from_weight' => 'From (Weight in gramms)',
-        'to_weight'   => 'To (Weight in gramms)',
+        'from_weight' => 'From (Weight in grams)',
+        'to_weight'   => 'To (Weight in grams)',
     ],
     'products'                 => [
         'variants_comment' => 'Create different variants of the same product',
