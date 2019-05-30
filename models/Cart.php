@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Cookie;
 use DB;
+use Event;
 use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
@@ -126,8 +127,13 @@ class Cart extends Model
         $product = $this->products->find($cartProductId);
         if ($product) {
             $this->validateStock($product->item, $quantity, $product->id);
+
+            $oldQuantity = $product->quantity;
+
             $product->quantity = $quantity;
             $product->save();
+
+            Event::fire('mall.cart.product.quantityChanged', [$product, (int)$oldQuantity, (int)$quantity]);
         }
         $this->validateShippingMethod();
     }
