@@ -545,7 +545,7 @@
         'manage_discounts'          => 'Can manage discounts',
         'settings'                  => [
             'manage_general'         => 'Can change general shop settings',
-            'manage_api'             => 'Can change api shop settings',
+            'manage_api'             => 'Can change payment gateway settings',
             'manage_currency'        => 'Can change currency shop settings',
             'manage_payment_methods' => 'Can change payment methods',
         ],

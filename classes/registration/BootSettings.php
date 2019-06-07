@@ -79,7 +79,7 @@ trait BootSettings
                 'icon'        => 'icon-credit-card',
                 'class'       => PaymentGatewaySettings::class,
                 'order'       => 30,
-                'permissions' => ['offline.mall.settings.manage_payment_gateways'],
+                'permissions' => ['offline.mall.settings.manage_api'],
                 'keywords'    => 'shop store mall payment gateways',
             ],
             'payment_method_settings'   => [
