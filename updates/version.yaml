@@ -183,3 +183,5 @@
     - Added new mall.cart.product.updated and mall.cart.product.quantityChanged events
 1.3.9:
     - Fixed minor dataLayer bugs
+1.3.10:
+    - Re-use Eloquent model events to trigger `mall.cart.product.*` events. If you added custom event listeners for any of these events make sure to update your function signature to only accept a single CartProduct model (see https://offline-gmbh.github.io/oc-mall-plugin/development/events.html#cart)
