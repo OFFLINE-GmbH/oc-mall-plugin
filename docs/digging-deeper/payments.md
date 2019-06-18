@@ -40,7 +40,8 @@ By default, these instructions will be displayed when using the
 [Payment method selector](../components/payment-method-selector.md) or 
 [Orders list](../components/orders-list.md) components.
 
-You can access a `order` variable (if available) to display additional information.
+You can access a `order` variable (if available) to display additional information. During the checkout
+process you have access to the `cart` model since no order was created yet.
 
 Sample instructions for a "Payment in advance" method could be:
 

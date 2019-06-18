@@ -436,7 +436,7 @@
         'fee_label'              => 'Gebührenbezeichnung',
         'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
         'instructions'           => 'Zahlungsanweisung',
-        'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} um Infos zur Bestellung abzurufen (falls vorhanden)',
+        'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} oder {{ cart }} um Infos zur Bestellung abzurufen (falls vorhanden)',
     ],
     'order'                    => [
         'order_number'                        => '# Bestl.',
