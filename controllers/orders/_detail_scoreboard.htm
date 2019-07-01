@@ -6,7 +6,9 @@
 
 <div class="scoreboard-item title-value">
     <h4><?= e(trans('offline.mall::lang.order.customer')) ?></h4>
-    <p><?= e($order['billing_address']['name']) ?></p>
+    <p><a href="<?= $customerPreview . '/' . e($order['customer_id']); ?>">
+        <?= e($order['billing_address']['name']) ?>
+    </a></p>
     <p class="description">
         <?= e($order['billing_address']['lines']) ?>,
         <?= e($order['billing_address']['zip']) ?>
