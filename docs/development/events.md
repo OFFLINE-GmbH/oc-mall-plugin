@@ -43,18 +43,12 @@ implementation and the provided credentials as arguments.
 
 This event is emitted when a product has been added to the cart. It receives the following arguments:
 
-* `Cart` model
-* `CartProduct` model
-* `Product` model
-* Quantity
-* `Variant` model (if available)
-* Collection of `CustomFieldValues` (if available) 
+* `CartProduct` model that was updated in the cart 
 
 ### `mall.cart.product.removed`
 
 This event is emitted when a product has been removed from the cart. It receives the following arguments:
 
-* `Cart` model
 * `CartProduct` model that was removed from the cart 
 
 ### `mall.cart.product.updated`

@@ -530,13 +530,6 @@
         'manage_categories'         => 'Peut gérer des categories',
         'manage_orders'             => 'Peut gérer des orders',
         'manage_discounts'          => 'Peut gérer des discounts',
-        'settings'                  => [
-            'manage_general'         => 'Can change general shop settings',
-            'manage_api'             => 'Can change api shop settings',
-            'manage_currency'        => 'Can change currecy shop settings',
-            'manage_payment_methods' => 'Zahlungsmethoden verwalten',
-        ],
-        'manage_properties'         => 'Can edit product properites',
         'manage_customer_groups'    => 'Peut gérer des customer groups',
         'manage_customer_addresses' => 'Peut gérer des customer addresses',
         'manage_notifications'      => 'Peut gérer des notifications',

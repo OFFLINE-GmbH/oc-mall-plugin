@@ -436,7 +436,7 @@
         'fee_label'              => 'Gebührenbezeichnung',
         'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
         'instructions'           => 'Zahlungsanweisung',
-        'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} um Infos zur Bestellung abzurufen (falls vorhanden)',
+        'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} oder {{ cart }} um Infos zur Bestellung abzurufen (falls vorhanden)',
     ],
     'order'                    => [
         'order_number'                        => '# Bestl.',
@@ -543,10 +543,10 @@
         'manage_orders'             => 'Kann Bestellungen verwalten',
         'manage_discounts'          => 'Kann Rabatte verwalten',
         'settings'                  => [
-            'manage_general'         => 'Kann die Grundeinstellungen des Shops verändern',
-            'manage_api'             => 'Kann die API-Konfiguration des Shops verändern',
-            'manage_currency'        => 'Kann die Währungs-Einstellungen des Shops verändern',
-            'manage_payment_methods' => 'Zahlungsmethoden verwalten',
+            'manage_general'          => 'Kann die Grundeinstellungen des Shops verändern',
+            'manage_payment_gateways' => 'Kann die Zahlungsanbieter-Einstellungen des Shops verändern',
+            'manage_currency'         => 'Kann die Währungs-Einstellungen des Shops verändern',
+            'manage_payment_methods'  => 'Zahlungsmethoden verwalten',
         ],
         'manage_properties'         => 'Kann Produkt-Eigenschaften verwalten',
         'manage_customer_groups'    => 'Kann Kundengruppen verwalten',

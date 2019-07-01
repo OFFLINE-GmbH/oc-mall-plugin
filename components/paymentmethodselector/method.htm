@@ -19,7 +19,7 @@
             {% endif %}
             {% if isActiveMethod %}
                 <div class="mall-payment-method__instructions">
-                    {{ method.renderInstructions(order) | raw }}
+                    {{ method.renderInstructions(__SELF__.order, __SELF__.cart) | raw }}
                 </div>
                 <div class="mall-payment-method__toggle"
                      style="{% if not isActiveMethod %}display: none{% endif %}">

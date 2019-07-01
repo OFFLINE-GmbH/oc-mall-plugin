@@ -79,9 +79,9 @@ permissions:
     offline.mall.settings.manage_general:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.settings.manage_general'
-    offline.mall.settings.manage_api:
+    offline.mall.settings.manage_payment_gateways:
         tab: 'offline.mall::lang.plugin.name'
-        label: 'offline.mall::lang.permissions.settings.manage_api'
+        label: 'offline.mall::lang.permissions.settings.manage_payment_gateways'
     offline.mall.settings.manage_currency:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.settings.manage_currency'

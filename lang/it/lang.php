@@ -402,9 +402,9 @@
         'section_type'                         => 'Cosa fa questo sconto?',
         'section_trigger'                      => 'Quando è applicabile questo sconto?',
         'types'                                => [
-            'fixed_amount'    => 'Importo fisso',
-            'rate'            => 'Tasso',
-            'shipping'        => 'Spedizione alternativa',
+            'fixed_amount' => 'Importo fisso',
+            'rate'         => 'Tasso',
+            'shipping'     => 'Spedizione alternativa',
         ],
         'triggers'                             => [
             'total'   => 'Il totale dell\'ordine è stato raggiunto',
@@ -535,10 +535,9 @@
         'manage_orders'             => 'Può gestire gli ordini',
         'manage_discounts'          => 'Può gestire gli sconti',
         'settings'                  => [
-            'manage_general'         => 'Può cambiare le impostazioni generali del negozio',
-            'manage_api'             => 'Può cambiare le impostazioni API del negozio',
-            'manage_currency'        => 'Può cambiare le impostazioni di valuta del negozio',
-            'manage_payment_methods' => 'Può gestire i metodi di pagamento',
+            'manage_general'          => 'Può cambiare le impostazioni generali del negozio',
+            'manage_currency'         => 'Può cambiare le impostazioni di valuta del negozio',
+            'manage_payment_methods'  => 'Può gestire i metodi di pagamento',
         ],
         'manage_properties'         => 'Può modificare le proprietà dei prodotti',
         'manage_customer_groups'    => 'Può gestire i gruppi di clienti',
