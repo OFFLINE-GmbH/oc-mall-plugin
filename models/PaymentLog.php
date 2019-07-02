@@ -44,4 +44,18 @@ class PaymentLog extends Model
 
         return $this->attributes['message'];
     }
+
+    /**
+     * Return the raw json encoded message.
+     *
+     * @return string
+     */
+    public function getMessageRawAttribute()
+    {
+        if ( ! isset($this->attributes['message'])) {
+            return '';
+        }
+
+        return $this->attributes['message'];
+    }
 }
