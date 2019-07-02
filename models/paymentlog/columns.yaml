@@ -62,11 +62,11 @@ columns:
         searchable: true
         invisible: true
         sortable: true
-    message:
+    message_raw:
         label: 'offline.mall::lang.common.message'
         type: text
-        searchable: true
-        sortable: true
+        searchable: false
+        sortable: false
     code:
         label: 'offline.mall::lang.common.code'
         type: text
