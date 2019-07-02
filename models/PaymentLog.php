@@ -33,6 +33,10 @@ class PaymentLog extends Model
      */
     public function getMessageAttribute()
     {
+        if ( ! isset($this->attributes['message'])) {
+            return '';
+        }
+
         $result = json_decode($this->attributes['message']);
         if (json_last_error() === JSON_ERROR_NONE) {
             return $result;
