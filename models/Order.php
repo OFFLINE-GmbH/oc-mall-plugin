@@ -122,6 +122,8 @@ class Order extends Model
 
     public static function fromCart(Cart $cart): self
     {
+        Event::fire('mall.order.beforeCreate', [$cart]);
+
         $order = DB::transaction(function () use ($cart) {
 
             $initialOrderStatus = OrderState::where('flag', OrderState::FLAG_NEW)->first();
