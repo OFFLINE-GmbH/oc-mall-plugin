@@ -25,8 +25,8 @@ class CustomerTableSeeder extends Seeder
     {
         $user                                 = new User();
         $user->email                          = $email;
-        $user->password                       = 'abcd';
-        $user->password_confirmation          = 'abcd';
+        $user->password                       = '12345678';
+        $user->password_confirmation          = '12345678';
         $user->is_activated                   = true;
         $user->offline_mall_customer_group_id = $customerGroupId;
         $user->save();
