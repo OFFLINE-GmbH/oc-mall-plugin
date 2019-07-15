@@ -191,3 +191,5 @@
     - Bugfix release
 1.3.13:
     - Fixed payment log display in backend order list
+1.3.14:
+    - !!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website: https://bit.ly/2Y4lUs3
