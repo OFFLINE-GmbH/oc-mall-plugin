@@ -4,6 +4,10 @@ The oc-mall plugin emits the following events:
 
 ## Order
 
+### `mall.order.beforeCreate`
+
+An order is about to be created. This event receives the `$cart` model that is about to be converted into an `Order` model.
+
 ### `mall.order.state.changed`
 
 An order's `OrderState` has changed. This event receives the modified `$order` as a single argument.
@@ -43,18 +47,12 @@ implementation and the provided credentials as arguments.
 
 This event is emitted when a product has been added to the cart. It receives the following arguments:
 
-* `Cart` model
-* `CartProduct` model
-* `Product` model
-* Quantity
-* `Variant` model (if available)
-* Collection of `CustomFieldValues` (if available) 
+* `CartProduct` model that was updated in the cart 
 
 ### `mall.cart.product.removed`
 
 This event is emitted when a product has been removed from the cart. It receives the following arguments:
 
-* `Cart` model
 * `CartProduct` model that was removed from the cart 
 
 ### `mall.cart.product.updated`

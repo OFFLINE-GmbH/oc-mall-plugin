@@ -77,10 +77,11 @@ class PaymentMethod extends Model
      * Renders the payment instructions.
      *
      * @param Order|null $order
+     * @param Cart|null  $cart
      *
      * @return string|null
      */
-    public function renderInstructions(?Order $order = null)
+    public function renderInstructions(?Order $order = null, ?Cart $cart = null)
     {
         if ( ! $this->instructions) {
             return null;
@@ -88,6 +89,7 @@ class PaymentMethod extends Model
 
         return (new Twig)->parse($this->instructions, [
             'order' => $order,
+            'cart'  => $cart,
         ]);
     }
 

@@ -81,16 +81,12 @@ trait CartActions
             return $cartEntry;
         });
 
-        Event::fire('mall.cart.product.added', [$this, $cartEntry, $product, $quantity, $variant, $values]);
-
         return $cartEntry;
     }
 
     public function removeProduct(CartProduct $product)
     {
         $product->delete();
-
-        Event::fire('mall.cart.product.removed', [$this, $product]);
 
         return $this;
     }

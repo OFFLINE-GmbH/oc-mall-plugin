@@ -48,10 +48,14 @@ class CartProduct extends Model
         static::saving(function (self $cartProduct) {
             $cartProduct->quantity = $cartProduct->data->normalizeQuantity($cartProduct->quantity);
         });
+        static::created(function (self $cartProduct) {
+            Event::fire('mall.cart.product.added', [$cartProduct]);
+        });
         static::updated(function (self $cartProduct) {
             Event::fire('mall.cart.product.updated', [$cartProduct]);
         });
         static::deleted(function (self $cartProduct) {
+            Event::fire('mall.cart.product.removed', [$cartProduct]);
             CustomFieldValue::where('cart_product_id', $cartProduct->id)->delete();
         });
     }

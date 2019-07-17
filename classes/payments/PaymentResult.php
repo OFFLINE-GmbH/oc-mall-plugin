@@ -237,8 +237,16 @@ class PaymentResult
         $log->payment_method   = $this->order->payment_method;
         $log->order_data       = $this->order;
         $log->order_id         = $this->order->id;
-        $log->message          = optional($response)->getMessage() ?? json_encode($response);
-        $log->code             = optional($response)->getCode() ?? null;
+
+        if ($response) {
+            $log->message = method_exists($response, 'getMessage')
+                ? $response->getMessage()
+                : json_encode($response);
+
+            $log->code = method_exists($response, 'getCode')
+                ? $response->getCode()
+                : null;
+        }
 
         return tap($log)->save();
     }
