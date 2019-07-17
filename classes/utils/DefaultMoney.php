@@ -42,7 +42,7 @@ class DefaultMoney implements Money
 
     protected function render($contents, array $vars)
     {
-        return number_format($vars['price'],0, ',', ' ').' '.$vars['currency']->symbol;
+        return number_format($vars['price'],$vars['currency']->decimals,  ',', ' ').' '.$vars['currency']->symbol;
 
         return (new Twig)->parse($contents, $vars);
     }
