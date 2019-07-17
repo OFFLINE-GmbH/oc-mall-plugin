@@ -49,6 +49,7 @@ class DefaultSignUpHandler implements SignUpHandler
             $customer            = new Customer();
             $customer->firstname = $data['firstname'];
             $customer->lastname  = $data['lastname'];
+            $customer->telephone  = $data['telephone'];
             $customer->user_id   = $user->id;
             $customer->is_guest  = $this->asGuest;
             $customer->save();
@@ -169,6 +170,7 @@ class DefaultSignUpHandler implements SignUpHandler
         $rules = [
             'firstname'           => 'required',
             'lastname'            => 'required',
+            'telephone'            => 'required',
             'email'               => ['required', 'email', ($forSignup ? 'non_existing_user' : null)],
             'billing_lines'       => 'required',
             'billing_zip'         => 'required',

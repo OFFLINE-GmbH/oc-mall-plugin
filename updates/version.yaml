@@ -46,150 +46,139 @@
     - create_offline_mall_notifications.php
     - database_seeder.php
 1.0.2:
-    - Fixed event handler for welcome email
+    - 'Fixed event handler for welcome email'
 1.0.3:
-    - Fixed build problems
+    - 'Fixed build problems'
 1.0.4:
-    - Added russian translations (thanks to @HomaEEE)
+    - 'Added russian translations (thanks to @HomaEEE)'
 1.0.5:
-    - Optimized SQLite support
+    - 'Optimized SQLite support'
 1.0.6:
-    - Minor bugfixes
+    - 'Minor bugfixes'
 1.0.7:
-    - Added "on sale" filter option to products filter component (run php artisan mall:reindex to get this feature)
+    - 'Added "on sale" filter option to products filter component (run php artisan mall:reindex to get this feature)'
 1.0.8:
-    - Optimized handling of manually created customer accounts
+    - 'Optimized handling of manually created customer accounts'
 1.0.9:
-    - Added option to force filter string for Products component (https://offline-gmbh.github.io/oc-mall-plugin/components/products.html#filter-string)
+    - 'Added option to force filter string for Products component (https://offline-gmbh.github.io/oc-mall-plugin/components/products.html#filter-string)'
 1.0.10:
-    - Fixed usage of single Category as menu item (thanks to @PrestaSafe)
+    - 'Fixed usage of single Category as menu item (thanks to @PrestaSafe)'
 1.0.11:
-    - Fixed handling of 0 as price value (thanks to @ajsaces)
+    - 'Fixed handling of 0 as price value (thanks to @ajsaces)'
 1.0.12:
-    - Allow Products component without category filter (thanks to @amdad)
+    - 'Allow Products component without category filter (thanks to @amdad)'
 1.0.13:
-    - Fixed signup for guest accounts
+    - 'Fixed signup for guest accounts'
     - allow_non_unique_emails_for_rainlab_user.php
 1.0.14:
-    - Minor improvements to Cart and Products components
+    - 'Minor improvements to Cart and Products components'
 1.0.15:
-    - Added description field to Category model
+    - 'Added description field to Category model'
     - add_description_field_to_category.php
 1.0.16:
-    - Fixed manage shipping methods permissions
+    - 'Fixed manage shipping methods permissions'
 1.0.17:
-    - Auto update price display when custom field options are changed
+    - 'Auto update price display when custom field options are changed'
 1.0.18:
-    - Minor bugfixes and improvements
+    - 'Minor bugfixes and improvements'
 1.0.19:
-    - Minor bugfixes and improvements
+    - 'Minor bugfixes and improvements'
 1.0.20:
-    - Optimized handling of customer group specific prices
+    - 'Optimized handling of customer group specific prices'
 1.0.21:
-    - Optimized RainLab.Translate integration (thanks to @alxy)
+    - 'Optimized RainLab.Translate integration (thanks to @alxy)'
 1.0.22:
-    - Updated Omnipay to v3, added list views for payment logs and customer addresses. If you have custom payment providers that use Omnipay make sure that they are compatible with v3 before updating
+    - 'Updated Omnipay to v3, added list views for payment logs and customer addresses. If you have custom payment providers that use Omnipay make sure that they are compatible with v3 before updating'
 1.1.0:
-    - |
-        !!! A product can now belong to multiple categories. If you are using the `$product->category`
-        relationship directly make sure to update it to use the new `$product->categories` relationship.
-        Existing products will be migrated to the new database structure during this update.
+    - "!!! A product can now belong to multiple categories. If you are using the `$product->category`\nrelationship directly make sure to update it to use the new `$product->categories` relationship.\nExisting products will be migrated to the new database structure during this update.\n"
     - migrate_categories_to_belongs_to_many_relation.php
 1.1.1:
-    - |
-        !!! New database-backed index. To increase the performance of this plugin the product index can now be
-        stored in the database if you use MySQL 5.7+ or MariaDB 10.2+ (support will be auto-detected).
-        After this update your index will have to be rebuilt by running "php artisan mall:reindex" from the terminal.
-        Between the completition of the update and the re-indexing your store will be empty!
-        Make sure to consider this downtime when deploying to a production system.
+    - "!!! New database-backed index. To increase the performance of this plugin the product index can now be\nstored in the database if you use MySQL 5.7+ or MariaDB 10.2+ (support will be auto-detected).\nAfter this update your index will have to be rebuilt by running \"php artisan mall:reindex\" from the terminal.\nBetween the completition of the update and the re-indexing your store will be empty!\nMake sure to consider this downtime when deploying to a production system.\n"
     - handle_index_table.php
 1.1.2:
-    - Fixed manual sort orders when using new table-backed index
+    - 'Fixed manual sort orders when using new table-backed index'
 1.1.3:
-    - Further improved MySQL 5.7 compatibility
+    - 'Further improved MySQL 5.7 compatibility'
 1.1.4:
-    - "Fixed bug in mall:check command"
+    - 'Fixed bug in mall:check command'
 1.1.5:
-    - Added simple scoreboard to Orders page, fixed problem with very long variant names
+    - 'Added simple scoreboard to Orders page, fixed problem with very long variant names'
     - use_text_columns_for_variant_names.php
 1.1.6:
-    - Fixed display of subcategories in Rainlab.Pages menus
+    - 'Fixed display of subcategories in Rainlab.Pages menus'
 1.1.7:
-    - Fixed calculation of country specific product taxes
+    - 'Fixed calculation of country specific product taxes'
 1.1.8:
-    - Optimized logging of failed payments
+    - 'Optimized logging of failed payments'
 1.1.9:
-    - Fixed payment logging issue
+    - 'Fixed payment logging issue'
     - use_text_columns_for_payment_log.php
 1.1.10:
-    - Optimized saving of pricing and stock information
+    - 'Optimized saving of pricing and stock information'
 1.1.11:
-    - Minor changes to payment log display
+    - 'Minor changes to payment log display'
 1.1.12:
-    - Update jsonable columns to mediumtext type / fixed product dropdown in discount form
+    - 'Update jsonable columns to mediumtext type / fixed product dropdown in discount form'
     - update_jsonable_columns_to_mediumtext.php
 1.1.13:
-    - Optimized handling of race conditions during order creation
+    - 'Optimized handling of race conditions during order creation'
 1.1.14:
-    - Fixed deletion of discounts
+    - 'Fixed deletion of discounts'
 1.1.15:
-    - Added italian translations (thanks to @marcomessa)
+    - 'Added italian translations (thanks to @marcomessa)'
 1.2.0:
-    - Customers can now re-use payment methods (like Credit cards)
+    - 'Customers can now re-use payment methods (like Credit cards)'
     - create_offline_mall_customer_payment_methods.php
 1.2.1:
-    - Minor bug fixes and optimizations
+    - 'Minor bug fixes and optimizations'
     - remove_description_column_from_order_products.php
     - remove_payment_data_column_from_orders_table.php
 1.2.2:
-    - Fixed handling of custom field color values, allow single category menu item to be replaced by its products    
+    - 'Fixed handling of custom field color values, allow single category menu item to be replaced by its products'
 1.2.3:
-    - Added flash messages to add to cart events
+    - 'Added flash messages to add to cart events'
 1.2.4:
-    - Added support for RainLab.User account activation links ("user" mode only, "admin" mode is unsupported)
+    - 'Added support for RainLab.User account activation links ("user" mode only, "admin" mode is unsupported)'
 1.2.5:
-    - Fixed index entry creation of newly created variants
+    - 'Fixed index entry creation of newly created variants'
 1.2.6:
-    - Updated italian translations (thanks to @Cryhex), fixed Variant indexing bug
+    - 'Updated italian translations (thanks to @Cryhex), fixed Variant indexing bug'
 1.2.7:
-    - Fixed some minor bugs
+    - 'Fixed some minor bugs'
 1.2.8:
-    - Added sort by name option to Products component (requires `php artisan mall:reindex` to work)
+    - 'Added sort by name option to Products component (requires `php artisan mall:reindex` to work)'
 1.3.0:
-    - Added Google Merchant Center integration
+    - 'Added Google Merchant Center integration'
     - add_identifier_columns_for_products_and_variants.php
     - add_description_columns_to_variants.php
     - add_brand_column_to_order_products_table.php
     - add_name_column_to_index_table.php
 1.3.1:
-    - Added Google Tag Manager integration (see https://tinyurl.com/mall-analytics-docs)
+    - 'Added Google Tag Manager integration (see https://tinyurl.com/mall-analytics-docs)'
 1.3.2:
-    - Minor bug fix release
+    - 'Minor bug fix release'
 1.3.3:
-    - Fixed inheritance of Variant descriptions
+    - 'Fixed inheritance of Variant descriptions'
 1.3.4:
-    - Added french translations (thanks to @willouch)
+    - 'Added french translations (thanks to @willouch)'
 1.3.5:
-    - Minor Google Merchant Feed integration fixes
+    - 'Minor Google Merchant Feed integration fixes'
 1.3.6:
-    - |
-        Optimized MySQL/MariaDB Query compatibility,
-        made the use of states/counties in addresses optional (configurable via the backend settings),
-        added redirectOnPropertyChange property to Product component
+    - "Optimized MySQL/MariaDB Query compatibility,\nmade the use of states/counties in addresses optional (configurable via the backend settings),\nadded redirectOnPropertyChange property to Product component\n"
     - set_use_state_default_setting.php
 1.3.7:
-    - Minor bugfix release
+    - 'Minor bugfix release'
 1.3.8:
-    - Added new mall.cart.product.updated and mall.cart.product.quantityChanged events
+    - 'Added new mall.cart.product.updated and mall.cart.product.quantityChanged events'
 1.3.9:
-    - Fixed minor dataLayer bugs
+    - 'Fixed minor dataLayer bugs'
 1.3.10:
-    - Re-use Eloquent model events to trigger `mall.cart.product.*` events. If you added custom event listeners for any of these events make sure to update your function signature to only accept a single CartProduct model (see https://offline-gmbh.github.io/oc-mall-plugin/development/events.html#cart)
+    - 'Re-use Eloquent model events to trigger `mall.cart.product.*` events. If you added custom event listeners for any of these events make sure to update your function signature to only accept a single CartProduct model (see https://offline-gmbh.github.io/oc-mall-plugin/development/events.html#cart)'
 1.3.11:
-    - Added links to edit and preview customer data to orders list (thanks to @Eoler)      
+    - 'Added links to edit and preview customer data to orders list (thanks to @Eoler)'
 1.3.12:
-    - Bugfix release
+    - 'Bugfix release'
 1.3.13:
-    - Fixed payment log display in backend order list
+    - 'Fixed payment log display in backend order list'
 1.3.14:
-    - !!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website: https://bit.ly/2Y4lUs3
+    - '!!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website: https://bit.ly/2Y4lUs3'

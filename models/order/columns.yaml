@@ -4,7 +4,6 @@ columns:
         type: number
         searchable: true
         sortable: true
-        invisible: true
     order_number:
         label: 'offline.mall::lang.order.order_number'
         type: number
