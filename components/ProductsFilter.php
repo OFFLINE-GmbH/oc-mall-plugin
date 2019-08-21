@@ -396,6 +396,7 @@ class ProductsFilter extends MallComponent
                          'offline_mall_products.id', '=', 'offline_mall_category_product.product_id'
                      )
                      ->get()
+                     ->orderBy('name','asc')
                      ->toArray();
 
         $this->setVar('brands', Brand::hydrate($brands));
