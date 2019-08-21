@@ -394,6 +394,7 @@ class ProductsFilter extends MallComponent
                          'offline_mall_category_product',
                          'offline_mall_products.id', '=', 'offline_mall_category_product.product_id'
                      )
+                     ->orderBy('offline_mall_brands.name')
                      ->get()
                      ->toArray();
 
