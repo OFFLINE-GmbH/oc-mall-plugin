@@ -5,6 +5,7 @@ use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\Location\Models\Country;
 use RainLab\User\Models\Settings as UserSettings;
+use Redirect;
 
 /**
  * The SignUp component displays a signup and login form
@@ -112,7 +113,11 @@ class SignUp extends MallComponent
      */
     protected function redirect()
     {
-        if ($url = $this->property('redirect')) {
+        $data = post();
+        if (isset($data['redirect'])) {
+            $redirectUrl = $this->controller->pageUrl($data['redirect']);
+            return Redirect::guest($redirectUrl);
+        } elseif ($url = $this->property('redirect')) {
             return redirect()->to($url);
         }
 
