@@ -220,7 +220,6 @@ tabs:
                         required: true
         embeds:
             label: 'offline.mall::lang.product.embeds'
-            oc.commentPosition: ''
             prompt: 'offline.mall::lang.common.add_value'
             span: right
             type: repeater
@@ -229,16 +228,16 @@ tabs:
                 fields:
                     title:
                         label: 'offline.mall::lang.product.embed_title'
-                        oc.commentPosition: ''
-                        span: left
-                        type: text
+                        span: full
                         required: true
+                        type: text
                     code:
                         label: 'offline.mall::lang.product.embed_code'
-                        oc.commentPosition: ''
-                        span: right
-                        type: text
+                        span: full
                         required: true
+                        type: codeeditor
+                        size: small
+                        language: html
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''
