@@ -9,7 +9,7 @@
                     selected
                 {% endif %}
         >
-            {{ value.value }}
+            {{ value.value }} {{ item.property.unit | default('') }}
         </option>
     {% endfor %}
 </select>
