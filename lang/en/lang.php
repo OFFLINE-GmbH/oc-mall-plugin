@@ -347,7 +347,7 @@
         'link_title'                           => 'Title',
         'link_target'                          => 'Target URL',
         'embed_title'                          => 'Title',
-        'embed_code'                           => 'Embed-Code',
+        'embed_code'                           => 'Embed code',
         'properties'                           => 'Properties',
         'links'                                => 'Links',
         'embeds'                               => 'Embeds',
