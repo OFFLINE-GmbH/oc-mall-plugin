@@ -70,6 +70,9 @@ trait CartSession
             $cart->shipping_address_id = $shippingId;
 
             $cart->save();
+        } else {
+            $sessionCart               = self::bySession();
+            $sessionCart->delete();
         }
 
         return $cart;
