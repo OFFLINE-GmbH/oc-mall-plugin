@@ -58,15 +58,19 @@ trait CartSession
      */
     public static function transferToCustomer(Customer $customer): Cart
     {
-        $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
+        $cart = self::byUser($customer->user);
 
-        $cart                      = self::bySession();
-        $cart->session_id          = null;
-        $cart->customer_id         = $customer->id;
-        $cart->billing_address_id  = $customer->default_billing_address_id;
-        $cart->shipping_address_id = $shippingId;
+        if (!$cart) {
+            $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
 
-        $cart->save();
+            $cart                      = self::bySession();
+            $cart->session_id          = null;
+            $cart->customer_id         = $customer->id;
+            $cart->billing_address_id  = $customer->default_billing_address_id;
+            $cart->shipping_address_id = $shippingId;
+
+            $cart->save();
+        }
 
         return $cart;
     }
