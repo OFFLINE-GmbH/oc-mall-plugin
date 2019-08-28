@@ -218,6 +218,26 @@ tabs:
                         span: right
                         type: text
                         required: true
+        embeds:
+            label: 'offline.mall::lang.product.embeds'
+            prompt: 'offline.mall::lang.common.add_value'
+            span: right
+            type: repeater
+            tab: 'offline.mall::lang.common.attachments'
+            form:
+                fields:
+                    title:
+                        label: 'offline.mall::lang.product.embed_title'
+                        span: full
+                        required: true
+                        type: text
+                    code:
+                        label: 'offline.mall::lang.product.embed_code'
+                        span: full
+                        required: true
+                        type: codeeditor
+                        size: small
+                        language: html
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''
