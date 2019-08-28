@@ -58,9 +58,15 @@ trait CartSession
      */
     public static function transferToCustomer(Customer $customer): Cart
     {
-        $cart = self::byUser($customer->user);
+        $cart = self::where('customer_id', $customer->id)
+                    ->orderBy('created_at', 'DESC')
+                    ->first();
 
-        if (!$cart) {
+        if ($cart) {
+            $sessionCart               = self::bySession();
+            $sessionCart->delete();
+        } else {
+
             $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
 
             $cart                      = self::bySession();
@@ -70,9 +76,6 @@ trait CartSession
             $cart->shipping_address_id = $shippingId;
 
             $cart->save();
-        } else {
-            $sessionCart               = self::bySession();
-            $sessionCart->delete();
         }
 
         return $cart;
