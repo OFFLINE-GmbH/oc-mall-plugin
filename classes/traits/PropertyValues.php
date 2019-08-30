@@ -26,7 +26,7 @@ trait PropertyValues
             })
             ->map(function (PropertyValue $value) {
                 // display_value is already escaped in PropertyValue::getDisplayValueAttribute()
-                return sprintf('%s: %s', e($value->property->name), $value->display_value);
+                return trim(sprintf('%s: %s %s', e($value->property->name), $value->display_value, e($value->property->unit)));
             })->implode('<br />');
     }
 }
