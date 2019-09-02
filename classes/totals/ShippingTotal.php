@@ -159,7 +159,7 @@ class ShippingTotal implements \JsonSerializable
                                    ->orWhere('expires', '>', Carbon::now());
                              })->get();
 
-        $codeDiscount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
+        $codeDiscount = $this->totals->getInput()->discounts->where('type', 'shipping')->first();
         if ($codeDiscount) {
             $discounts->push($codeDiscount);
         }
@@ -169,7 +169,7 @@ class ShippingTotal implements \JsonSerializable
         }
 
         $applier = new DiscountApplier(
-            $this->totals->getCart(),
+            $this->totals->getInput(),
             $this->totals->productPostTaxes(),
             $price
         );

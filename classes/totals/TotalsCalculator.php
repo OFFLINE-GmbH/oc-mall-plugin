@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Totals;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
-use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
@@ -16,9 +15,9 @@ use OFFLINE\Mall\Models\Tax;
 class TotalsCalculator
 {
     /**
-     * @var Cart
+     * @var TotalsCalculatorInput
      */
-    protected $cart;
+    protected $input;
     /**
      * @var Collection<TaxTotal>
      */
@@ -84,16 +83,9 @@ class TotalsCalculator
      */
     public $paymentTaxes;
 
-    public function __construct(Cart $cart)
+    public function __construct(TotalsCalculatorInput $input)
     {
-        $this->cart  = $cart->load(
-            'products',
-            'products.data.taxes',
-            'shipping_method',
-            'shipping_method.taxes.countries',
-            'shipping_method.rates',
-            'discounts'
-        );
+        $this->input = $input;
         $this->taxes = new Collection();
 
         $this->calculate();
@@ -107,14 +99,14 @@ class TotalsCalculator
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
         $this->shippingTaxes = $this->filterShippingTaxes();
-        $this->shippingTotal = new ShippingTotal($this->cart->shipping_method, $this);
+        $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
         $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
 
         $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
 
         $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
-        $this->paymentTaxes = $this->filterPaymentTaxes();
-        $this->paymentTotal  = new PaymentTotal($this->cart->payment_method, $this);
+        $this->paymentTaxes    = $this->filterPaymentTaxes();
+        $this->paymentTotal    = new PaymentTotal($this->input->payment_method, $this);
 
         $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
 
@@ -123,14 +115,14 @@ class TotalsCalculator
 
     protected function calculateProductPreTaxes(): float
     {
-        $total = $this->cart->products->sum('totalPreTaxes');
+        $total = $this->input->products->sum('totalPreTaxes');
 
         return $total > 0 ? $total : 0;
     }
 
     protected function calculateProductTaxes(): float
     {
-        return $this->cart->products->sum('totalTaxes');
+        return $this->input->products->sum('totalTaxes');
     }
 
     protected function getTaxTotals(): Collection
@@ -151,7 +143,7 @@ class TotalsCalculator
             });
         }
 
-        $productTaxes = $this->cart->products->flatMap(function (CartProduct $product) {
+        $productTaxes = $this->input->products->flatMap(function (CartProduct $product) {
             return $product->filtered_taxes->map(function (Tax $tax) use ($product) {
                 return new TaxTotal($product->totalPreTaxes, $tax);
             });
@@ -188,7 +180,7 @@ class TotalsCalculator
 
     protected function calculateWeightTotal(): int
     {
-        return $this->cart->products->sum(function (CartProduct $product) {
+        return $this->input->products->sum(function (CartProduct $product) {
             return $product->weight * $product->quantity;
         });
     }
@@ -253,9 +245,9 @@ class TotalsCalculator
         return $this->taxes(true);
     }
 
-    public function getCart(): Cart
+    public function getInput(): TotalsCalculatorInput
     {
-        return $this->cart;
+        return $this->input;
     }
 
     public function appliedDiscounts(): Collection
@@ -274,11 +266,11 @@ class TotalsCalculator
                                          ->orWhere('expires', '>', Carbon::now());
                                    })->get();
 
-        $discounts = $this->cart->discounts->merge($nonCodeTriggers)->reject(function ($item) {
+        $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
             return $item->type === 'shipping';
         });
 
-        $applier                = new DiscountApplier($this->cart, $total);
+        $applier                = new DiscountApplier($this->input, $total);
         $this->appliedDiscounts = $applier->applyMany($discounts);
 
         return $applier->reducedTotal();
@@ -292,16 +284,16 @@ class TotalsCalculator
      */
     protected function filterShippingTaxes()
     {
-        $taxes = optional($this->cart->shipping_method)->taxes ?? new Collection();
+        $taxes = optional($this->input->shipping_method)->taxes ?? new Collection();
 
         return $taxes->filter(function (Tax $tax) {
             // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->cart->shipping_address === null) {
+            if ($this->input->shipping_country_id === null) {
                 return $tax->countries->count() === 0;
             }
 
             return $tax->countries->count() === 0
-                || $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
+                || $tax->countries->pluck('id')->search($this->input->shipping_country_id) !== false;
         });
     }
 
@@ -313,16 +305,16 @@ class TotalsCalculator
      */
     protected function filterPaymentTaxes()
     {
-        $taxes = optional($this->cart->payment_method)->taxes ?? new Collection();
+        $taxes = optional($this->input->payment_method)->taxes ?? new Collection();
 
         return $taxes->filter(function (Tax $tax) {
             // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->cart->shipping_address === null) {
+            if ($this->input->shipping_country_id === null) {
                 return $tax->countries->count() === 0;
             }
 
             return $tax->countries->count() === 0
-                || $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
+                || $tax->countries->pluck('id')->search($this->input->shipping_country_id) !== false;
         });
     }
 }
