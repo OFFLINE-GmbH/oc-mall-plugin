@@ -501,7 +501,9 @@ class Product extends MallComponent
 
             return (object)[
                 'property' => $property,
-                'values'   => optional($values)->unique('value'),
+                'values'   => optional($values)->reject(function($value) {
+                    return $this->variant && $value->variant_id === null;
+                })->unique('value'),
             ];
         })->filter(function ($collection) {
             if ($this->variant && $collection->property->pivot->use_for_variants != true) {
