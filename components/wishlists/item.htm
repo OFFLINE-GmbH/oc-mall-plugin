@@ -1,16 +1,8 @@
 <a href="javascript:;"
-   class="mall-wishlist-item"
-   data-request="onAdd"
-   data-request-flash
-   data-request-success="
-    $.publish('mall.wishlist.productAdded', data);
-    document.querySelector('.mall-wishlist-button__popup').classList.remove('mall-wishlist-button__popup--visible');
-   "
-   data-request-data="
-         wishlist_id: '{{ list_id }}',
-         product_id: '{{ __SELF__.encode(product_id) }}',
-         variant_id: '{{ __SELF__.encode(variant_id) }}'
-    ">
+   class="mall-wishlist-item {{ list_id == __SELF__.currentItem.hashId ? 'mall-wishlist-item--active' }}"
+   data-request="onSelect"
+   data-request-data="id: '{{ list_id }}'"
+>
     <div class="mall-wishlist-item__data">
         <div class="mall-wishlist-item__name">
             {{ name | default('offline.mall::frontend.wishlist.default_name' | trans) }}

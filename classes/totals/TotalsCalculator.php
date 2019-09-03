@@ -8,6 +8,7 @@ use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
+use OFFLINE\Mall\Models\WishlistItem;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -143,7 +144,8 @@ class TotalsCalculator
             });
         }
 
-        $productTaxes = $this->input->products->flatMap(function (CartProduct $product) {
+        /** @var $product CartProduct|WishlistItem */
+        $productTaxes = $this->input->products->flatMap(function ($product) {
             return $product->filtered_taxes->map(function (Tax $tax) use ($product) {
                 return new TaxTotal($product->totalPreTaxes, $tax);
             });
@@ -180,7 +182,7 @@ class TotalsCalculator
 
     protected function calculateWeightTotal(): int
     {
-        return $this->input->products->sum(function (CartProduct $product) {
+        return $this->input->products->sum(function ($product) {
             return $product->weight * $product->quantity;
         });
     }

@@ -1,21 +1,14 @@
-<a href="javascript:;"
-   class="mall-wishlist-button__item"
-   data-request="onAdd"
-   data-request-flash
-   data-request-data="
-         wishlist_id: '{{ list_id }}',
-         product_id: '{{ __SELF__.encode(product_id) }}',
-         variant_id: '{{ __SELF__.encode(variant_id) }}'
-    ">
-    <div class="mall-wishlist-button__data">
-        <div class="mall-wishlist-button__name">
-            {{ name | default('offline.mall::frontend.wishlist.default_name' | trans) }}
-        </div>
-        <div class="mall-wishlist-button__description">
-            {{ 'offline.mall::frontend.wishlist.count' | transchoice(count | default(0)) }}
-        </div>
-    </div>
-    <div class="mall-wishlist-button__meta">
-        {{ total | default(0 | money) }}
-    </div>
-</a>
+{% for wishlist in items %}
+    {% partial __SELF__ ~ '::item'
+        name=wishlist.name
+        count=wishlist.items.count
+        total=wishlist.totals.totalPostTaxes
+        list_id=wishlist.hash_id
+        product_id=__SELF__.property('product')
+        variant_id=__SELF__.property('variant') %}
+{% else %}
+    {# always include the "default" list if no other lists are available #}
+    {% partial __SELF__ ~ '::item'
+        product_id=__SELF__.property('product')
+        variant_id=__SELF__.property('variant') %}
+{% endfor %}

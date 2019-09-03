@@ -20,6 +20,8 @@ use OFFLINE\Mall\Components\Products as ProductsComponent;
 use OFFLINE\Mall\Components\ProductsFilter;
 use OFFLINE\Mall\Components\ShippingMethodSelector;
 use OFFLINE\Mall\Components\SignUp;
+use OFFLINE\Mall\Components\WishlistButton;
+use OFFLINE\Mall\Components\Wishlists;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
 
@@ -46,6 +48,8 @@ trait BootComponents
             CurrencyPicker::class             => 'currencyPicker',
             MallDependencies::class           => 'mallDependencies',
             EnhancedEcommerceAnalytics::class => 'enhancedEcommerceAnalytics',
+            Wishlists::class                  => 'wishlists',
+            WishlistButton::class             => 'wishlistButton',
         ];
     }
 

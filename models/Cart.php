@@ -120,23 +120,7 @@ class Cart extends Model
 
     public function totals(): TotalsCalculator
     {
-        $this->loadMissing(
-            'products',
-            'products.data.taxes',
-            'shipping_method',
-            'shipping_method.taxes.countries',
-            'shipping_method.rates',
-            'discounts'
-        );
-
-        $input                      = new TotalsCalculatorInput();
-        $input->products            = $this->products;
-        $input->shipping_method     = $this->shipping_method;
-        $input->payment_method      = $this->payment_method;
-        $input->discounts           = $this->discounts;
-        $input->shipping_country_id = optional(optional($this->cart)->shipping_address)->country_id;
-
-        return $this->totalsCached = new TotalsCalculator($input);
+        return $this->totalsCached = new TotalsCalculator(TotalsCalculatorInput::fromCart($this));
     }
 
     /**

@@ -561,6 +561,7 @@
         'manage_taxes'              => 'Kann Steuern verwalten',
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
         'manage_feeds'              => 'Kann Feeds verwalten',
+        'manage_wishlists'          => 'Kann Merklisten verwalten',
     ],
     'components'               => [
         'products'                   => [
@@ -920,6 +921,28 @@
             'details' => [
                 'name'        => 'Enhanced Ecommerce (UA) Component',
                 'description' => 'Implements a Google Tag Manager Data Layer',
+            ],
+        ],
+        'wishlistButton'             => [
+            'details'    => [
+                'name'        => 'Merklisten-Button',
+                'description' => 'Zeigt einen Merklisten-Button an',
+            ],
+            'properties' => [
+                'product' => [
+                    'name'        => 'Produkt',
+                    'description' => 'Die ID des Produkts',
+                ],
+                'variant' => [
+                    'name'        => 'Variante',
+                    'description' => 'Die ID der Variante',
+                ],
+            ],
+        ],
+        'wishlists'                  => [
+            'details' => [
+                'name'        => 'Merklisten-Verwaltung',
+                'description' => 'Zeigt die Merklisten-Verwaltung an',
             ],
         ],
     ],

@@ -296,6 +296,11 @@ class Product extends Model
         return $this->getHashIdAttribute();
     }
 
+    public function getProducIdAttribute()
+    {
+        return $this->id;
+    }
+
     /**
      * This setter makes it easier to set price values
      * in different currencies by providing an array of

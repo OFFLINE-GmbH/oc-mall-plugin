@@ -1,57 +1,66 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Cookie;
-use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\Validation;
-use RainLab\User\Models\User;
+use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Traits\Cart\CartItemPriceAccessors;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use Session;
 
-/**
- * Model
- */
-class Wishlist extends Model
+class WishlistItem extends Model
 {
     use Validation;
+    use CartItemPriceAccessors;
+    use HashIds;
 
-    public $table = 'offline_mall_wishlists';
+    public $table = 'offline_mall_wishlist_items';
     public $rules = [
-        'name'        => 'required',
-        'session_id'  => 'required_without:customer_id',
-        'customer_id' => 'required_without:session_id,exists:offline_mall_customers',
-        'cart_id'     => 'required:exists:offline_mall_carts',
+        'product_id'  => 'required|exists:offline_mall_products,id',
+        'wishlist_id' => 'required|exists:offline_mall_wishlists,id',
+        'variant_id'  => 'nullable|exists:offline_mall_product_variants,id',
     ];
-    public $hasMany = [
-        'items' => WishlistItem::class,
+    public $belongsTo = [
+        'wishlist' => Wishlist::class,
+        'product'  => [Product::class, 'deleted' => true],
+        'variant'  => [Variant::class, 'deleted' => true],
+        'data'     => [Product::class, 'key' => 'product_id'],
+    ];
+    public $casts = [
+        'id'          => 'integer',
+        'product_id'  => 'integer',
+        'variant_id'  => 'integer',
+        'wishlist_id' => 'integer',
+        'quantity'    => 'integer',
+    ];
+    public $fillable = [
+        'product_id',
+        'variant_id',
+        'wishlist_id',
+        'quantity',
     ];
 
-    /**
-     * Return all wishlists for the currently logged in user or
-     * the currently active user session.
-     */
-    public static function byUser(?User $user): Collection
+    public function getItemAttribute()
     {
-        $sessionId = static::getSessionId();
-
-        return self::where('session_id', $sessionId)
-                   ->when($user && $user->customer, function ($q) use ($user) {
-                       $q->orWhere('customer_id', $user->customer->id);
-                   })
-                   ->orderBy('created_at')
-                   ->get();
+        return $this->variant ?? $this->product;
     }
 
     /**
-     * Generate a unique wishlist session id.
+     * Filter out taxes, that have no country restrictions.
      *
-     * @return string
+     * @return Collection
      */
-    public static function getSessionId(): string
+    public function getFilteredTaxesAttribute()
     {
-        $sessionId = Session::get('wishlist_session_id') ?? Cookie::get('wishlist_session_id') ?? str_random(100);
-        Cookie::queue('wishlist_session_id', $sessionId, 9e6);
-        Session::put('wishlist_session_id', $sessionId);
+        $taxes = optional($this->data)->taxes ?? new Collection();
 
-        return $sessionId;
+        return $taxes->filter(function (Tax $tax) {
+            return $tax->countries->count() === 0;
+        });
+    }
+
+    public function price()
+    {
+        return $this->item->price();
     }
 }

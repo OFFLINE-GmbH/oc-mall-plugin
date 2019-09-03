@@ -14,6 +14,7 @@ use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Variant;
+use OFFLINE\Mall\Models\Wishlist;
 
 trait BootEvents
 {
@@ -116,6 +117,11 @@ trait BootEvents
                         'label'   => 'Carts',
                         'comment' => 'Delete abandoned shopping carts',
                         'class'   => Cart::class,
+                    ],
+                    [
+                        'label'   => 'Wishlists',
+                        'comment' => 'Delete old wishlists of unregistered users',
+                        'class'   => Wishlist::class,
                     ],
                 ],
             ];
