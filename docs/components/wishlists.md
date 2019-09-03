@@ -1,0 +1,34 @@
+# Wishlists
+
+The `wishlists` component displays all wishlists of the currently
+logged in customer.
+ 
+## Properties
+
+There are no properties available for this component.
+
+
+## Events
+
+This component emits a `mall.wishlist.productRemoved` JavaScript event when 
+a product was removed from a wishlist. You can subscribe to this event
+and receive the added product's information.
+
+```js
+$(function () {
+    $.subscribe('mall.wishlist.productRemoved', function (data) {
+        console.log('product removed from wishlist', data)
+    });
+});
+``` 
+
+
+## Example implementations
+
+### Display the wishlists manager
+
+```twig
+[wishlists]
+==
+{% component 'wishlists' %}
+```

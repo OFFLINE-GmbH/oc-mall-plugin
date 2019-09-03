@@ -40,6 +40,8 @@ module.exports = {
                     '/components/discount-applier',
                     '/components/checkout',
                     '/components/signup',
+                    '/components/wishlists',
+                    '/components/wishlist-button',
                     '/components/payment-method-selector',
                     '/components/shipping-method-selector',
                     '/components/address-selector',
