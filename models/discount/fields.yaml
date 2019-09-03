@@ -28,7 +28,7 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: dropdown
-    _amount:
+    _amounts:
         label: 'offline.mall::lang.discounts.amount'
         oc.commentPosition: ''
         span: left
@@ -37,7 +37,7 @@ fields:
             field: type
             condition: value[fixed_amount]
         type: mall.price
-    _total_to_reach:
+    _totals_to_reach:
         label: 'offline.mall::lang.discounts.total_to_reach'
         oc.commentPosition: ''
         span: auto
@@ -98,7 +98,7 @@ fields:
             field: type
             condition: value[shipping]
         type: number
-    _shipping_price:
+    _shipping_prices:
         label: 'offline.mall::lang.discounts.shipping_price'
         oc.commentPosition: ''
         span: left

@@ -1,9 +1,9 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use BackendMenu;
-use Backend\Behaviors\ListController;
-use Backend\Behaviors\FormController;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Price;
 
@@ -39,9 +39,9 @@ class Discounts extends Controller
 
     public function handleUpdates(Discount $model)
     {
-        $this->updatePrices($model, 'shipping_price', '_shipping_price');
-        $this->updatePrices($model, 'total_to_reach', '_total_to_reach');
-        $this->updatePrices($model, 'amount', '_amount');
+        $this->updatePrices($model, 'shipping_prices', '_shipping_prices');
+        $this->updatePrices($model, 'totals_to_reach', '_totals_to_reach');
+        $this->updatePrices($model, 'amounts', '_amounts');
     }
 
     protected function updatePrices($model, $field = null, $key = '_prices')
