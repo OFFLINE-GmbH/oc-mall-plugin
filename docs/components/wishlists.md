@@ -7,6 +7,11 @@ logged in customer.
 
 There are no properties available for this component.
 
+## Styling
+
+Take a look
+at [the relevant SCSS files in our demo repository](https://github.com/OFFLINE-GmbH/oc-mall-theme/blob/master/resources/scss/mall/wishlists.scss)
+to get an idea on how to style this component.
 
 ## Events
 

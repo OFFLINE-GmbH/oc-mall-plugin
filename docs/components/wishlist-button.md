@@ -12,6 +12,12 @@ to be added to the wishlist.
 
 The variant id can be `null`. 
 
+## Styling
+
+Take a look
+at [the relevant SCSS files in our demo repository](https://github.com/OFFLINE-GmbH/oc-mall-theme/blob/master/resources/scss/mall/wishlists.scss)
+to get an idea on how to style this component.
+
 ## Events
 
 This component emits a `mall.wishlist.productAdded` JavaScript event when 
