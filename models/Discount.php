@@ -20,7 +20,6 @@ class Discount extends Model
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,shipping',
-        'code'                                 => 'required_if:trigger,code',
         'product'                              => 'required_if:trigger,product',
         'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
@@ -54,6 +53,11 @@ class Discount extends Model
     public static function boot()
     {
         parent::boot();
+        static::saving(function (self $discount) {
+            if ($discount->trigger === 'code' && ! $discount->code) {
+                $discount->code = strtoupper(str_random(10));
+            }
+        });
         static::saving(function (self $discount) {
             $discount->code = strtoupper($discount->code);
             if ($discount->trigger !== 'product') {

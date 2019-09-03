@@ -400,6 +400,7 @@
     'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Discount code',
+        'code_comment'                         => 'Leave empty to generate a random code',
         'total_to_reach'                       => 'Minimal order total for discount to be valid',
         'type'                                 => 'Discount type',
         'trigger'                              => 'Valid if',
@@ -941,8 +942,8 @@
                 ],
             ],
         ],
-        'wishlists'             => [
-            'details'    => [
+        'wishlists'                  => [
+            'details' => [
                 'name'        => 'Wishlists',
                 'description' => 'Displays the wishlist manager',
             ],

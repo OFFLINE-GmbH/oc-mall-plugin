@@ -399,6 +399,7 @@
     'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Gutschein-Code',
+        'code_comment'                         => 'Leer lassen, um automatisch zu generieren',
         'total_to_reach'                       => 'Gültig ab Bestellwert',
         'type'                                 => 'Gutschein-Typ',
         'trigger'                              => 'Gültig wenn',
