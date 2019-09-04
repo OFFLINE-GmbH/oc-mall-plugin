@@ -41,7 +41,7 @@ class Product extends Model
     const MORPH_KEY = 'mall.product';
 
     protected $dates = ['deleted_at'];
-    public $jsonable = ['links', 'additional_descriptions', 'additional_properties'];
+    public $jsonable = ['links', 'additional_descriptions', 'additional_properties', 'embeds'];
     public $nullable = ['group_by_property_id'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
@@ -51,8 +51,10 @@ class Product extends Model
         'description',
         'meta_title',
         'meta_description',
+        'links',
         'additional_descriptions',
         'additional_properties',
+        'embeds'
     ];
     public $slugs = [
         'slug' => 'name',
@@ -292,6 +294,11 @@ class Product extends Model
     public function getProductHashIdAttribute()
     {
         return $this->getHashIdAttribute();
+    }
+
+    public function getProducIdAttribute()
+    {
+        return $this->id;
     }
 
     /**

@@ -20,7 +20,7 @@ trait HashIds
     /**
      * @return mixed
      */
-    protected function decode($value)
+    public function decode($value)
     {
         $value = app(Hasher::class)->decode($value);
 
@@ -30,7 +30,7 @@ trait HashIds
     /**
      * @return mixed
      */
-    protected function encode($value)
+    public function encode($value)
     {
         return app(Hasher::class)->encode($value);
     }

@@ -11,7 +11,6 @@ use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 use OFFLINE\Mall\Classes\Queries\PriceRangeQuery;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Brand;
-use OFFLINE\Mall\Models\Category as CategoryModel;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
@@ -31,7 +30,7 @@ class ProductsFilter extends MallComponent
     /**
      * The active category.
      *
-     * @var CategoryModel
+     * @var Category
      */
     public $category;
     /**
@@ -225,7 +224,7 @@ class ProductsFilter extends MallComponent
     public function getCategoryOptions()
     {
         return [':slug' => trans('offline.mall::lang.components.category.properties.use_url')]
-            + CategoryModel::get()->pluck('name', 'id')->toArray();
+            + Category::get()->pluck('name', 'id')->toArray();
     }
 
     /**
@@ -395,6 +394,7 @@ class ProductsFilter extends MallComponent
                          'offline_mall_category_product',
                          'offline_mall_products.id', '=', 'offline_mall_category_product.product_id'
                      )
+                     ->orderBy('offline_mall_brands.name')
                      ->get()
                      ->toArray();
 
@@ -454,7 +454,7 @@ class ProductsFilter extends MallComponent
             return $this->productsComponentCategory;
         }
 
-        return CategoryModel::bySlugOrId($this->param('slug'), $this->property('category'));
+        return Category::bySlugOrId($this->param('slug'), $this->property('category'));
     }
 
     /**

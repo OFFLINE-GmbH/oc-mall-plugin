@@ -184,7 +184,7 @@
         'main_image'           => 'Hauptbild',
         'images'               => 'Bilder',
         'image_set'            => 'Bilderset',
-        'attachments'          => 'Bilder/Downloads',
+        'attachments'          => 'Bilder/Downloads/Embeds',
         'downloads'            => 'Downloads',
         'select_image'         => 'Bild auswählen',
         'select_file'          => 'Datei auswählen',
@@ -345,8 +345,11 @@
         'property_value'                       => 'Wert',
         'link_title'                           => 'Titel',
         'link_target'                          => 'Link-Ziel',
+        'embed_title'                          => 'Titel',
+        'embed_code'                           => 'Embed-Code',
         'properties'                           => 'Eigenschaften',
         'links'                                => 'Links',
+        'embeds'                               => 'Embeds',
         'details'                              => 'Details',
         'price_includes_tax'                   => 'Preis ist inkl. Steuern',
         'price_includes_tax_comment'           => 'Der angegebene Preis enthält bereits alle Steuern',
@@ -396,6 +399,7 @@
     'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Gutschein-Code',
+        'code_comment'                         => 'Leer lassen, um automatisch zu generieren',
         'total_to_reach'                       => 'Gültig ab Bestellwert',
         'type'                                 => 'Gutschein-Typ',
         'trigger'                              => 'Gültig wenn',
@@ -558,6 +562,7 @@
         'manage_taxes'              => 'Kann Steuern verwalten',
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
         'manage_feeds'              => 'Kann Feeds verwalten',
+        'manage_wishlists'          => 'Kann Merklisten verwalten',
     ],
     'components'               => [
         'products'                   => [
@@ -857,6 +862,9 @@
                     'required' => 'Wählen Sie Ihr Kanton/Bundesstaat',
                     'exists'   => 'Der ausgewählte Wert ist ungültig.',
                 ],
+                'terms_accepted'        => [
+                    'required' => 'Bitte bestätigen Sie unsere AGBs.',
+                ],
             ],
         ],
         'categories'                 => [
@@ -917,6 +925,28 @@
             'details' => [
                 'name'        => 'Enhanced Ecommerce (UA) Component',
                 'description' => 'Implements a Google Tag Manager Data Layer',
+            ],
+        ],
+        'wishlistButton'             => [
+            'details'    => [
+                'name'        => 'Merklisten-Button',
+                'description' => 'Zeigt einen Merklisten-Button an',
+            ],
+            'properties' => [
+                'product' => [
+                    'name'        => 'Produkt',
+                    'description' => 'Die ID des Produkts',
+                ],
+                'variant' => [
+                    'name'        => 'Variante',
+                    'description' => 'Die ID der Variante',
+                ],
+            ],
+        ],
+        'wishlists'                  => [
+            'details' => [
+                'name'        => 'Merklisten-Verwaltung',
+                'description' => 'Zeigt die Merklisten-Verwaltung an',
             ],
         ],
     ],

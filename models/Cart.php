@@ -9,6 +9,7 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
+use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
 use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
 use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
@@ -38,6 +39,9 @@ class Cart extends Model
         'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
         'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
         'customer'         => [Customer::class, 'deleted' => true],
+    ];
+    public $hasOne = [
+        'wishlist' => Wishlist::class,
     ];
     public $belongsToMany = [
         'discounts' => [
@@ -106,7 +110,7 @@ class Cart extends Model
             return $this->totalsCached;
         }
 
-        return $this->totalsCached = new TotalsCalculator($this);
+        return $this->totals();
     }
 
     public function getShippingAddressSameAsBillingAttribute(): bool
@@ -116,7 +120,7 @@ class Cart extends Model
 
     public function totals(): TotalsCalculator
     {
-        return $this->totalsCached = new TotalsCalculator($this);
+        return $this->totalsCached = new TotalsCalculator(TotalsCalculatorInput::fromCart($this));
     }
 
     /**

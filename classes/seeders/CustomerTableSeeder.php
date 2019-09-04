@@ -4,7 +4,6 @@ namespace OFFLINE\Mall\Classes\Seeders;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Address;
-use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomerGroup;
 use RainLab\Location\Models\Country;
@@ -16,6 +15,7 @@ class CustomerTableSeeder extends Seeder
     public function run()
     {
         if (app()->environment() === 'testing') {
+            config()->set('rainlab.user::minPasswordLength', 8);
             $this->createUser('test@test.com', CustomerGroup::first()->id);
             $this->createUser('test2@test2.com');
         }
@@ -25,8 +25,8 @@ class CustomerTableSeeder extends Seeder
     {
         $user                                 = new User();
         $user->email                          = $email;
-        $user->password                       = 'abcd';
-        $user->password_confirmation          = 'abcd';
+        $user->password                       = '12345678';
+        $user->password_confirmation          = '12345678';
         $user->is_activated                   = true;
         $user->offline_mall_customer_group_id = $customerGroupId;
         $user->save();

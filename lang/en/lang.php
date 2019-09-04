@@ -185,7 +185,7 @@
         'main_image'           => 'Main image',
         'images'               => 'Images',
         'image_set'            => 'Image set',
-        'attachments'          => 'Images/Downloads',
+        'attachments'          => 'Images/Downloads/Embeds',
         'downloads'            => 'Downloads',
         'select_image'         => 'Choose image',
         'select_file'          => 'Choose file',
@@ -346,8 +346,11 @@
         'property_value'                       => 'Value',
         'link_title'                           => 'Title',
         'link_target'                          => 'Target URL',
+        'embed_title'                          => 'Title',
+        'embed_code'                           => 'Embed code',
         'properties'                           => 'Properties',
         'links'                                => 'Links',
+        'embeds'                               => 'Embeds',
         'details'                              => 'Details',
         'price_includes_tax'                   => 'Price includes taxes',
         'price_includes_tax_comment'           => 'The defined price includes all taxes',
@@ -397,6 +400,7 @@
     'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Discount code',
+        'code_comment'                         => 'Leave empty to generate a random code',
         'total_to_reach'                       => 'Minimal order total for discount to be valid',
         'type'                                 => 'Discount type',
         'trigger'                              => 'Valid if',
@@ -559,9 +563,10 @@
         'manage_taxes'              => 'Can manage taxes',
         'manage_payment_log'        => 'Can manage payment log',
         'manage_feeds'              => 'Can manage feeds',
+        'manage_wishlists'          => 'Can manage wishlists',
     ],
     'components'               => [
-        'products'               => [
+        'products'                   => [
             'details'    => [
                 'name'        => 'Products',
                 'description' => 'Displays a list of products',
@@ -603,7 +608,7 @@
                 ],
             ],
         ],
-        'productsFilter'         => [
+        'productsFilter'             => [
             'details'    => [
                 'name'        => 'Products filter',
                 'description' => 'Filters the products from a category',
@@ -646,7 +651,7 @@
                 'name'       => 'Name',
             ],
         ],
-        'myAccount'              => [
+        'myAccount'                  => [
             'details'    => [
                 'name'        => 'User account',
                 'description' => 'Displays different forms where a user can view and edit his profile',
@@ -662,7 +667,7 @@
                 'addresses' => 'Addresses',
             ],
         ],
-        'customerProfile'        => [
+        'customerProfile'            => [
             'details'    => [
                 'name'        => 'Customer profile',
                 'description' => 'Displays a customer profile edit form.',
@@ -670,7 +675,7 @@
             'properties' => [
             ],
         ],
-        'currencyPicker'         => [
+        'currencyPicker'             => [
             'details'    => [
                 'name'        => 'Currency picker',
                 'description' => 'Shows a picker to select the currently active shop currency',
@@ -678,7 +683,7 @@
             'properties' => [
             ],
         ],
-        'dependencies'           => [
+        'dependencies'               => [
             'details'    => [
                 'name'        => 'Frontend dependencies',
                 'description' => 'Includes all needed frontend dependencies',
@@ -686,7 +691,7 @@
             'properties' => [
             ],
         ],
-        'addressList'            => [
+        'addressList'                => [
             'details'    => [
                 'name'        => 'Address list',
                 'description' => 'Displays a list of all registered user addresses',
@@ -701,7 +706,7 @@
                 'address_deleted' => 'Address deleted',
             ],
         ],
-        'ordersList'             => [
+        'ordersList'                 => [
             'details'    => [
                 'name'        => 'Orders list',
                 'description' => 'Displays a list of all customer orders',
@@ -709,7 +714,7 @@
             'properties' => [
             ],
         ],
-        'product'                => [
+        'product'                    => [
             'details'       => [
                 'name'        => 'Product details',
                 'description' => 'Displays details of a product',
@@ -722,7 +727,7 @@
             ],
             'added_to_cart' => 'Added product successfully',
         ],
-        'cart'                   => [
+        'cart'                       => [
             'details'    => [
                 'name'        => 'Cart',
                 'description' => 'Displays the shopping cart',
@@ -736,7 +741,7 @@
                 ],
             ],
         ],
-        'checkout'               => [
+        'checkout'                   => [
             'details' => [
                 'name'        => 'Checkout',
                 'description' => 'Handles the checkout process',
@@ -745,14 +750,14 @@
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
         ],
-        'discountApplier'        => [
+        'discountApplier'            => [
             'details'          => [
                 'name'        => 'Promo code input',
                 'description' => 'Displays a promo code input field',
             ],
             'discount_applied' => 'Discount applied successfully!',
         ],
-        'shippingMethodSelector' => [
+        'shippingMethodSelector'     => [
             'details' => [
                 'name'        => 'Shipping selector',
                 'description' => 'Displays a list of all available shipping methods',
@@ -761,7 +766,7 @@
                 'unavailable' => 'The selected shipping method is not available for your order.',
             ],
         ],
-        'paymentMethodSelector'  => [
+        'paymentMethodSelector'      => [
             'details' => [
                 'name'        => 'Payment method selector',
                 'description' => 'Displays a list of all available payment methods',
@@ -770,7 +775,7 @@
                 'unavailable' => 'The selected payment method is not available for your order.',
             ],
         ],
-        'addressSelector'        => [
+        'addressSelector'            => [
             'details' => [
                 'name'        => 'Address selector',
                 'description' => 'Displays a list of all existing user addresses',
@@ -778,7 +783,7 @@
             'errors'  => [
             ],
         ],
-        'addressForm'            => [
+        'addressForm'                => [
             'details'    => [
                 'name'        => 'Address form',
                 'description' => 'Displays a form to edit a user\'s address',
@@ -802,7 +807,7 @@
                 'shipping' => 'Shipping address',
             ],
         ],
-        'signup'                 => [
+        'signup'                     => [
             'details'    => [
                 'name'        => 'Signup',
                 'description' => 'Displays a signup and signin form',
@@ -859,9 +864,12 @@
                     'required' => 'Choose a state',
                     'exists'   => 'The selected value is not valid.',
                 ],
+                'terms_accepted'  => [
+                    'required' => 'Please accept our terms and conditions.',
+                ],
             ],
         ],
-        'categories'             => [
+        'categories'                 => [
             'details'    => [
                 'name'        => 'Categories',
                 'description' => 'Lists available categories',
@@ -883,7 +891,7 @@
             'no_parent'  => 'Show all categories',
             'by_slug'    => 'Use category in url as parent',
         ],
-        'cartSummary'            => [
+        'cartSummary'                => [
             'details'    => [
                 'name'        => 'Cart summary',
                 'description' => 'Displays the number of products in and total value of the cart',
@@ -899,7 +907,7 @@
                 ],
             ],
         ],
-        'customerDashboard'      => [
+        'customerDashboard'          => [
             'details'    => [
                 'name'        => 'Customer dashboard',
                 'description' => 'Displays a link for the customer to login and change her account settings',
@@ -913,6 +921,34 @@
                     'title'       => 'Logout label',
                     'description' => 'Link text for the logout link',
                 ],
+            ],
+        ],
+        'enhancedEcommerceAnalytics' => [
+            'details' => [
+                'name'        => 'Enhanced Ecommerce (UA) Component',
+                'description' => 'Implements a Google Tag Manager Data Layer',
+            ],
+        ],
+        'wishlistButton'             => [
+            'details'    => [
+                'name'        => 'Wishlist button',
+                'description' => 'Displays a wishlist button',
+            ],
+            'properties' => [
+                'product' => [
+                    'name'        => 'Product',
+                    'description' => 'ID of the product',
+                ],
+                'variant' => [
+                    'name'        => 'Variant',
+                    'description' => 'ID of the variant',
+                ],
+            ],
+        ],
+        'wishlists'                  => [
+            'details' => [
+                'name'        => 'Wishlists',
+                'description' => 'Displays the wishlist manager',
             ],
         ],
     ],

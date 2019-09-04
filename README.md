@@ -13,6 +13,7 @@
 
 * Manage Products and Variants
 * Stock management
+* Wishlists
 * Checkout via Stripe and PayPal supported out-of-the-box
 * Custom payment providers 
 * Integrated with RainLab.User

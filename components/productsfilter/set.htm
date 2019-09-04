@@ -12,7 +12,7 @@
                         checked
                     {% endif %}
             >
-            {{ value.display_value | raw }}
+            {{ value.display_value | raw }} {{ property.unit }}
         </div>
     {% endfor %}
 </div>

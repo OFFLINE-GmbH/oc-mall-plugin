@@ -6,6 +6,7 @@ use DB;
 use Event;
 use Model;
 use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Traits\Cart\CartItemPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 
@@ -13,6 +14,7 @@ class CartProduct extends Model
 {
     use HashIds;
     use JsonPrice;
+    use CartItemPriceAccessors;
 
     public $table = 'offline_mall_cart_products';
     public $jsonable = ['price'];
@@ -22,18 +24,15 @@ class CartProduct extends Model
         'product_id' => 'integer',
         'variant_id' => 'integer',
     ];
-
     public $belongsTo = [
         'cart'    => Cart::class,
         'product' => Product::class,
         'variant' => Variant::class,
         'data'    => [Product::class, 'key' => 'product_id'],
     ];
-
     public $hasMany = [
         'custom_field_values' => [CustomFieldValue::class, 'key' => 'cart_product_id', 'otherKey' => 'id'],
     ];
-
     public $with = [
         'product',
         'product.taxes',
@@ -163,108 +162,10 @@ class CartProduct extends Model
         return $data;
     }
 
-    /**
-     * The total item price * quantity pre taxes.
-     * @return float
-     */
-    public function getTotalPreTaxesAttribute(): float
-    {
-        if ($this->data->price_includes_tax) {
-            return $this->price()->integer * $this->quantity - $this->totalTaxes;
-        }
-
-        return $this->price()->integer * $this->quantity;
-    }
-
-    /**
-     * The total quantity for this cart entry.
-     * @return float
-     */
-    public function getTotalTaxesAttribute(): float
-    {
-        if ($this->data->price_includes_tax) {
-            $withoutTax = 1 / (1 + $this->taxFactor()) * $this->price()->integer * $this->quantity;
-
-            return $this->price()->integer * $this->quantity - $withoutTax;
-        }
-
-        return $this->taxFactor() * $this->price()->integer * $this->quantity;
-    }
-
-    /**
-     * The total item price * quantity post taxes.
-     * @return float
-     */
-    public function getTotalPostTaxesAttribute(): float
-    {
-        if ($this->data->price_includes_tax) {
-            return $this->price()->integer * $this->quantity;
-        }
-
-        return $this->totalPreTaxes + $this->totalTaxes;
-    }
-
-    public function getTotalWeightAttribute(): float
-    {
-        return $this->weight * $this->quantity;
-    }
-
-    public function getPricePreTaxesAttribute()
-    {
-        if ($this->data->price_includes_tax) {
-            return 1 / (1 + $this->taxFactor()) * $this->price()->integer;
-        }
-
-        return $this->price()->integer;
-    }
-
-    public function getPricePostTaxesAttribute()
-    {
-        if ($this->data->price_includes_tax) {
-            return $this->price()->integer;
-        }
-
-        return $this->price()->integer + $this->price()->integer * $this->taxFactor();
-    }
-
-    public function totalForTax(Tax $tax)
-    {
-        return $tax->percentageDecimal * $this->getTotalPreTaxesAttribute();
-    }
-
     public function getCustomFieldValueDescriptionAttribute()
     {
         return $this->custom_field_values->map(function (CustomFieldValue $value) {
             return sprintf('%s: %s', e($value->custom_field->name), $value->display_value);
         })->implode('<br />');
-    }
-
-    /**
-     * Filter taxes by shipping destination.
-     *
-     * @return Collection
-     */
-    public function getFilteredTaxesAttribute()
-    {
-        $taxes = optional($this->data)->taxes ?? new Collection();
-
-        return $taxes->filter(function (Tax $tax) {
-            // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->cart->shipping_address === null) {
-                return $tax->countries->count() === 0;
-            }
-
-            return $tax->countries->count() === 0
-                || $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
-        });
-    }
-
-    /**
-     * Sum of all tax factors.
-     * @return mixed
-     */
-    protected function taxFactor()
-    {
-        return $this->filtered_taxes->sum('percentageDecimal');
     }
 }

@@ -32,6 +32,7 @@ class Property extends Model
     public $translatable = [
         'name',
         'unit',
+        'options',
     ];
     public $fillable = [
         'name',

@@ -1,0 +1,195 @@
+<?php namespace OFFLINE\Mall\Components;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
+use October\Rain\Exception\ValidationException;
+use October\Rain\Support\Facades\Flash;
+use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Wishlist;
+use OFFLINE\Mall\Models\WishlistItem;
+use RainLab\User\Facades\Auth;
+
+class Wishlists extends MallComponent
+{
+    use HashIds;
+
+    /**
+     * All wishlists of this user.
+     *
+     * @var Collection<Wishlist>
+     */
+    public $items;
+
+    /**
+     * The currently displayed wishlist.
+     *
+     * @var Wishlist
+     */
+    public $currentItem;
+
+    /**
+     * True if at least one wishlist has at least one item.
+     *
+     * @var bool
+     */
+    public $hasItems = false;
+
+    public function componentDetails()
+    {
+        return [
+            'name'        => 'offline.mall::lang.components.wishlists.details.name',
+            'description' => 'offline.mall::lang.components.wishlists.details.description',
+        ];
+    }
+
+    public function defineProperties()
+    {
+        return [];
+    }
+
+    public function onRun()
+    {
+        $this->items       = $this->getWishlists();
+        $this->currentItem = $this->items->first();
+
+        $this->hasItems = $this->items->contains(function ($item) {
+            return $item->items->count() > 0;
+        });
+    }
+
+    public function onSelect()
+    {
+        $this->setCurrentItem();
+
+        return $this->refreshContent();
+    }
+
+    public function onRename()
+    {
+        $this->setCurrentItem();
+
+        $this->currentItem->name = post('name');
+        $this->currentItem->save();
+
+        Flash::success(trans('offline.mall::frontend.wishlist.renamed'));
+
+        return $this->refreshList();
+    }
+
+    public function onRemove()
+    {
+        $this->setCurrentItem();
+
+        WishlistItem::where('wishlist_id', $this->decode(post('id')))
+                    ->where('id', $this->decode(post('item_id')))
+                    ->delete();
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
+    public function onUpdateQuantity()
+    {
+        $this->setCurrentItem();
+
+        $quantity = post('quantity', 1);
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
+        if ($quantity > 1000) {
+            $quantity = 1000;
+        }
+
+        WishlistItem::where('wishlist_id', $this->decode(post('id')))
+                    ->where('id', $this->decode(post('item_id')))
+                    ->update(['quantity' => $quantity]);
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
+    public function onDelete()
+    {
+        $this->setCurrentItem();
+
+        $this->currentItem->delete();
+
+        Flash::success(trans('offline.mall::frontend.wishlist.deleted'));
+
+        // Set the current item to the next available record.
+        $this->items       = $this->getWishlists();
+        $this->currentItem = $this->items->first();
+
+        return $this->refreshListAndContent();
+    }
+
+    public function onAddToCart()
+    {
+        $this->setCurrentItem();
+
+        $allInStock = $this->currentItem->addToCart(Cart::byUser(Auth::getUser()));
+        if ( ! $allInStock) {
+            Flash::warning(trans('offline.mall::frontend.wishlists.stockmissing'));
+        } else {
+            Flash::success(trans('offline.mall::frontend.wishlists.addedtocart'));
+        }
+
+        // redirect to the cart page.
+        $cartPage = GeneralSettings::get('cart_page');
+
+        return Redirect::to($this->controller->pageUrl($cartPage));
+    }
+
+    /**
+     * Fetches all wishlists of the currently logged in user
+     * or the cart session.
+     */
+    public function getWishlists()
+    {
+        return Wishlist::byUser(Auth::getUser());
+    }
+
+    /**
+     * Set the currently active item.
+     *
+     * @throws ValidationException
+     */
+    protected function setCurrentItem(): void
+    {
+        $this->items       = $this->getWishlists();
+        $this->currentItem = $this->items->find($this->decode(post('id')));
+
+        if ( ! $this->currentItem) {
+            throw new ValidationException(['id' => 'Invalid wishlist ID specified']);
+        }
+    }
+
+    protected function refreshListAndContent(): array
+    {
+        return array_merge($this->refreshList(), $this->refreshContent());
+    }
+
+    protected function refreshContent(): array
+    {
+        return [
+            '.mall-wishlist-content' => $this->renderPartial(
+                $this->alias . '::contents',
+                ['item' => $this->currentItem]
+            ),
+        ];
+    }
+
+    protected function refreshList(): array
+    {
+        return [
+            '.mall-wishlists' => $this->renderPartial(
+                $this->alias . '::list',
+                ['items' => $this->items]
+            ),
+        ];
+    }
+}

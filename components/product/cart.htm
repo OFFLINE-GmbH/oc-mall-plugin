@@ -13,7 +13,7 @@
     </div>
 {% endif %}
 
-{% if props.count > 0 %}
+{% if props.count > 0 and item.inventory_management_method == 'variant' %}
     <div class="mall-product__variant-properties">
         {% partial __SELF__ ~ '::properties' props=props %}
     </div>
@@ -42,3 +42,5 @@
         </div>
     {% endif %}
 </div>
+
+{% partial __SELF__ ~ '::belowcartbutton' %}

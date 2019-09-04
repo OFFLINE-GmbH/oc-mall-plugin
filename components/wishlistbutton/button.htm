@@ -1,0 +1,15 @@
+<button class="mall-btn mall-btn--full mall-add-to-wishlist-button">
+    {{ 'offline.mall::frontend.wishlist.add' | trans }}
+</button>
+<script>
+    var btn = document.querySelector('.mall-add-to-wishlist-button')
+    if (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault()
+            var popup = document.querySelector('.mall-wishlist-button__popup')
+            if (popup) {
+                popup.classList.toggle('mall-wishlist-button__popup--visible')
+            }
+        })
+    }
+</script>

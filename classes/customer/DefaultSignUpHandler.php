@@ -12,6 +12,7 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\User;
+use OFFLINE\Mall\Models\Wishlist;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\UserGroup;
 use Redirect;
@@ -78,7 +79,8 @@ class DefaultSignUpHandler implements SignUpHandler
 
             $customer->save();
 
-            Cart::transferToCustomer($user->customer);
+            Cart::transferSessionCartToCustomer($user->customer);
+            Wishlist::transferToCustomer($user->customer);
 
             return $user;
         });
@@ -182,6 +184,7 @@ class DefaultSignUpHandler implements SignUpHandler
             'shipping_country_id' => 'required_if:use_different_shipping,1|exists:rainlab_location_countries,id',
             'password'            => 'required|min:8|max:255',
             'password_repeat'     => 'required|same:password',
+            'terms_accepted'      => 'required',
         ];
 
         if ((bool)GeneralSettings::get('use_state', true) !== true) {
@@ -220,6 +223,8 @@ class DefaultSignUpHandler implements SignUpHandler
 
             'password_repeat.required' => trans('offline.mall::lang.components.signup.errors.password_repeat.required'),
             'password_repeat.same'     => trans('offline.mall::lang.components.signup.errors.password_repeat.same'),
+
+            'terms_accepted.required' => trans('offline.mall::lang.components.signup.errors.terms_accepted.required'),
         ];
     }
 }

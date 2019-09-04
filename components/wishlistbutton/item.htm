@@ -1,0 +1,25 @@
+<a href="javascript:;"
+   class="mall-wishlist-item"
+   data-request="onAdd"
+   data-request-flash
+   data-request-success="
+    $.publish('mall.wishlist.productAdded', data);
+    document.querySelector('.mall-wishlist-button__popup').classList.remove('mall-wishlist-button__popup--visible');
+   "
+   data-request-data="
+         wishlist_id: '{{ list_id }}',
+         product_id: '{{ __SELF__.encode(product_id) }}',
+         variant_id: '{{ __SELF__.encode(variant_id) }}'
+    ">
+    <div class="mall-wishlist-item__data">
+        <div class="mall-wishlist-item__name">
+            {{ name | default('offline.mall::frontend.wishlist.default_name' | trans) }}
+        </div>
+        <div class="mall-wishlist-item__description">
+            {{ 'offline.mall::frontend.wishlist.count' | transchoice(count | default(0)) }}
+        </div>
+    </div>
+    <div class="mall-wishlist-item__meta">
+        {{ (total | default(0)) | money }}
+    </div>
+</a>

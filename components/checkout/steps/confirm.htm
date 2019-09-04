@@ -2,6 +2,7 @@
 
 {% component 'cart' %}
 
+{% partial __SELF__ ~ '::confirminfo' %}
 {% partial __SELF__ ~ '::actions' %}
 
 {% if __SELF__.dataLayer %}
