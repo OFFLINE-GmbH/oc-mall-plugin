@@ -77,7 +77,7 @@ class DefaultSignInHandler implements SignInHandler
             throw new AuthException('offline.mall::lang.components.signup.errors.user_is_guest');
         }
 
-        Cart::transferToCustomer($user->customer);
+        Cart::transferSessionCartToCustomer($user->customer);
         Wishlist::transferToCustomer($user->customer);
 
         return $user;

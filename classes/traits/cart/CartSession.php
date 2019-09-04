@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits\Cart;
 
 use Cookie;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Customer;
 use RainLab\User\Models\User;
 use Session;
@@ -56,18 +57,39 @@ trait CartSession
      *
      * @return Cart
      */
-    public static function transferToCustomer(Customer $customer): Cart
+    public static function transferSessionCartToCustomer(Customer $customer): Cart
+    {
+        $cart = self::bySession();
+
+        return $cart->transferToCustomer($customer);
+    }
+
+    /**
+     * Transfer a cart to a customer.
+     *
+     * @param $customer
+     *
+     * @return Cart
+     */
+    public function transferToCustomer(Customer $customer): Cart
     {
         $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
 
-        $cart                      = self::bySession();
-        $cart->session_id          = null;
-        $cart->customer_id         = $customer->id;
-        $cart->billing_address_id  = $customer->default_billing_address_id;
-        $cart->shipping_address_id = $shippingId;
+        // If there is an old Cart from this customer, merge the contents of the current
+        // cart with the old contents.
+        $existing = Cart::where('customer_id', $customer->id)->whereNull('session_id')->first();
+        if ($existing) {
+            CartProduct::where('cart_id', $existing->id)->update(['cart_id' => $this->id]);
+            $existing->delete();
+        }
 
-        $cart->save();
+        $this->session_id          = null;
+        $this->customer_id         = $customer->id;
+        $this->billing_address_id  = $customer->default_billing_address_id;
+        $this->shipping_address_id = $shippingId;
 
-        return $cart;
+        $this->save();
+
+        return $this;
     }
 }
