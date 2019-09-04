@@ -207,7 +207,7 @@ class OrderTest extends PluginTestCase
         $discount->shipping_prices()->save(new Price([
             'currency_id' => 1,
             'price'       => 10,
-            'field'       => 'shipping_price',
+            'field'       => 'shipping_prices',
         ]));
 
         $cart->applyDiscount($discount);
