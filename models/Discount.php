@@ -38,6 +38,19 @@ class Discount extends Model
         'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amounts"'],
         'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "totals_to_reach"'],
     ];
+    public $fillable = [
+        'name',
+        'expires',
+        'number_of_usages',
+        'max_number_of_usages',
+        'trigger',
+        'types',
+        'product',
+        'type',
+        'rate',
+        'shipping_description',
+        'shipping_guaranteed_days_to_delivery',
+    ];
     public $belongsTo = [
         'product' => [Product::class],
     ];
