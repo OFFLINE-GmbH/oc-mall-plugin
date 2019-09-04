@@ -112,6 +112,12 @@ class SignUp extends MallComponent
      */
     protected function redirect()
     {
+        // Check for a redirect parameter specified via GET/POST.
+        if ($redirect = input('redirect')) {
+            return redirect()->guest($this->controller->pageUrl($redirect));
+        }
+
+        // Otherwise, use the redirect property of the component.
         if ($url = $this->property('redirect')) {
             return redirect()->to($url);
         }
