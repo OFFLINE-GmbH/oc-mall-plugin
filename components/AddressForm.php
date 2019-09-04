@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
@@ -139,7 +140,11 @@ class AddressForm extends MallComponent
         }
 
         $id = $this->decode($hashId);
-        $this->setVar('address', Address::byCustomer($user->customer)->findOrFail($id));
+        try {
+            $this->setVar('address', Address::byCustomer($user->customer)->findOrFail($id));
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
 
         return true;
     }
