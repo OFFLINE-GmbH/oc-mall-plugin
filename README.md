@@ -23,6 +23,7 @@
 * Custom order states
 * Flexible e-mail notifications
 * Easily extendable with custom features
+* Wishlists
 * [Google Tag Manager and Google Merchant Center integrations](https://offline-gmbh.github.io/oc-mall-plugin/digging-deeper/analytics.html)
 
 #### Documentation
