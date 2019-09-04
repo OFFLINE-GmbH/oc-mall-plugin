@@ -13,8 +13,6 @@ class RedShirt extends DemoProduct
             'user_defined_id'              => 'SHIRT001',
             'name'                         => 'Red Shirt',
             'slug'                         => 'red-shirt',
-            'price'                        => ['USD' => 9.90, 'CHF' => 11.90, 'EUR' => 6.90],
-            'old_price'                    => null,
             'description_short'            => 'Unisex',
             'description'                  => '<p>This is just a generic shirt. Brandless and cheap.</p>',
             'meta_title'                   => 'Red Shirt',
