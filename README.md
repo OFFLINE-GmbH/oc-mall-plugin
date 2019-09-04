@@ -13,6 +13,7 @@
 
 * Manage Products and Variants
 * Stock management
+* Wishlists
 * Checkout via Stripe and PayPal supported out-of-the-box
 * Custom payment providers 
 * Integrated with RainLab.User
@@ -23,7 +24,6 @@
 * Custom order states
 * Flexible e-mail notifications
 * Easily extendable with custom features
-* Wishlists
 * [Google Tag Manager and Google Merchant Center integrations](https://offline-gmbh.github.io/oc-mall-plugin/digging-deeper/analytics.html)
 
 #### Documentation
