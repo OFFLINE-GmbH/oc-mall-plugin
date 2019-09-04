@@ -34,6 +34,7 @@ return [
     'signup.signup'                            => 'Neues Konto eröffnen',
     'signup.signin'                            => 'Mit Konto einloggen',
     'signup.as_guest'                          => 'Als Gast anmelden',
+    'signup.terms_checkbox'                    => 'Ich habe die AGBs gelesen und akzeptiere diese',
     'form.email'                               => 'Email',
     'form.password'                            => 'Passwort',
     'form.new_password'                        => 'Neues Passwort',

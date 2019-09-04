@@ -41,6 +41,7 @@ return [
     'form.signin'                              => 'Sign in',
     'form.signup'                              => 'Sign up',
     'signup.as_guest'                          => 'Signup as guest',
+    'signup.terms_checkbox'                    => 'I accept the terms and conditions of this store',
     'form.forgot_password'                     => 'Forgot password?',
     'form.firstname'                           => 'First name',
     'form.lastname'                            => 'Last name',
