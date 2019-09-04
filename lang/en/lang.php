@@ -864,6 +864,9 @@
                     'required' => 'Choose a state',
                     'exists'   => 'The selected value is not valid.',
                 ],
+                'terms_accepted'  => [
+                    'required' => 'Please accept our terms and conditions.',
+                ],
             ],
         ],
         'categories'                 => [

@@ -862,6 +862,9 @@
                     'required' => 'Wählen Sie Ihr Kanton/Bundesstaat',
                     'exists'   => 'Der ausgewählte Wert ist ungültig.',
                 ],
+                'terms_accepted'        => [
+                    'required' => 'Bitte bestätigen Sie unsere AGBs.',
+                ],
             ],
         ],
         'categories'                 => [
