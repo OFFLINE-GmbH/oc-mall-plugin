@@ -6,7 +6,7 @@
                value="1"
         >
         <span>
-            {{ 'offline.mall::frontend.signup.terms_checkbox' | trans }}
+            {% partial __SELF__ ~ '::termslabel' %}
             <div data-validate-for="terms_accepted"></div>
         </span>
     </label>
