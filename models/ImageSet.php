@@ -11,6 +11,11 @@ class ImageSet extends Model
     const MORPH_KEY = 'mall.imageset';
 
     public $with = ['images'];
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name'
+    ];
+
     protected $fillable = ['name', 'is_main_set', 'product_id'];
     public $table = 'offline_mall_image_sets';
     public $rules = [

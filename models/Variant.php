@@ -44,6 +44,8 @@ class Variant extends Model
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
+        'description_short',
+        'description'
     ];
     public $casts = [
         'published'                    => 'boolean',
