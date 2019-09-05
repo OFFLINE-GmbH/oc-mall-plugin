@@ -10,9 +10,7 @@
         </div>
     {% else %}
         <div class="mall-wishlists-manager__well">
-            <div class="mall-wishlist-empty">
-                {{ 'offline.mall::frontend.wishlists.none' | trans }}
-            </div>
+            {% partial __SELF__ ~ '::empty' %}
         </div>
     {% endif %}
 </div>
