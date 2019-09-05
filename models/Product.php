@@ -51,6 +51,7 @@ class Product extends Model
         'description',
         'meta_title',
         'meta_description',
+        'meta_keywords',
         'links',
         'additional_descriptions',
         'additional_properties',

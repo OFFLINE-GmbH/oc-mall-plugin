@@ -8,6 +8,11 @@ class Tax extends Model
 {
     use Validation;
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'name'
+    ];
+
     public $rules = [
         'name'       => 'required',
         'percentage' => 'numeric|min:0|max:100',
