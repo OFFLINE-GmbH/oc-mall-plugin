@@ -23,3 +23,9 @@ columns:
         type: text
         searchable: true
         sortable: true
+    code:
+        label: 'offline.mall::lang.discounts.code'
+        type: text
+        searchable: true
+        sortable: true
+        clickable: false
