@@ -65,6 +65,13 @@
             <div class="mall-order-details__product-list">
                 {% partial __SELF__ ~ '::productlist' products=order.products %}
             </div>
+            {% if order.isPaid %}
+            <div class="mall-order-details__product-list">
+                {% partial __SELF__ ~ '::securedownloads' products=order.products %}
+            </div>
+            {% endif %}
+
+
         </div>
     </td>
 </tr>

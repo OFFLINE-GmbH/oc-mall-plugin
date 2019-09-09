@@ -1,0 +1,22 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    version: 
+        label: offline.mall::lang.common.version
+        type: text
+    display_name: 
+        label: offline.mall::lang.common.display_name
+        type: text
+        required: true
+    limite_date:
+        label: offline.mall::lang.common.limite_date
+        comment: offline.mall::lang.common.no_limite_date_needed
+        type: number
+        default: 0
+    file:
+        label: offline.mall::lang.common.file
+        required: true
+        type: fileupload
+        mode: file

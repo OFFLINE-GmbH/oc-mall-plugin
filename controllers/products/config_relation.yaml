@@ -60,3 +60,12 @@ image_sets:
     manage:
         list: $/offline/mall/models/imageset/columns.yaml
         form: $/offline/mall/models/imageset/fields.yaml
+
+secure_downloads:
+    label: 'offline.mall::lang.common.secure_download'
+    view:
+        list: $/offline/mall/models/securedownload/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        list: $/offline/mall/models/securedownload/columns.yaml
+        form: $/offline/mall/models/securedownload/fields.yaml

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Secure Download Controller
+
+# Model Form Field configuration
+form: $/offline/mall/models/securedownloadcontroller/fields.yaml
+
+# Model Class name
+modelClass: Offline\Mall\Models\SecureDownloadController
+
+# Default redirect location
+defaultRedirect: offline/mall/securedownloadcontroller
+
+# Create page
+create:
+    title: Create Secure Download Controller
+    redirect: offline/mall/securedownloadcontroller/update/:id
+    redirectClose: offline/mall/securedownloadcontroller
+
+# Update page
+update:
+    title: Edit Secure Download Controller
+    redirect: offline/mall/securedownloadcontroller
+    redirectClose: offline/mall/securedownloadcontroller
+
+# Preview page
+preview:
+    title: Preview Secure Download Controller

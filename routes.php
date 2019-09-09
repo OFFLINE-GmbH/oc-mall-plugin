@@ -21,3 +21,5 @@ Route::get('/feeds/google-merchant/{key}', function ($key) {
 
     return response($feed->build(), 200, ['Content-Type' => 'application/xml']);
 });
+
+Route::get('/download-secure-file/{id_file}/{id_order}', 'Offline\Mall\Controllers\SecureDownloadController@download')->middleware('web');

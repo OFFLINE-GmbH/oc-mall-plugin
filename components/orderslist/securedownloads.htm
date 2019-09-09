@@ -1,0 +1,19 @@
+
+<div class="mall-table-overflow" style="overflow-y: auto;">
+    <table class="mall-orders-list__table mall-table">
+        <tr>
+            <th>{{ 'offline.mall::lang.common.display_name' | trans }}</th>
+            <th>{{ 'offline.mall::lang.common.version' | trans }}</th>
+            <th class="text-right">{{ 'offline.mall::lang.common.download' | trans }}</th>
+        </tr>
+        {% for product in products %}
+            {% for download in product.product.secure_downloads %}
+            <tr class="mall-orders-list__order">
+                <td>{{ download.display_name}}</td>
+                <td>{{ download.version}}</td>
+                <td class="text-right"> <a href="{{'/download-secure-file/'|app}}/{{download.id}}/{{order.id}}">Download</a> </td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+</div>

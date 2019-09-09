@@ -18,6 +18,7 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
+use Offline\Mall\Models\SecureDownload;
 use System\Models\File;
 
 /**
@@ -136,6 +137,7 @@ class Product extends Model
         'cart_products'   => CartProduct::class,
         'image_sets'      => ImageSet::class,
         'property_values' => PropertyValue::class,
+        'secure_downloads' => SecureDownload::class
     ];
     public $belongsToMany = [
         'categories'      => [

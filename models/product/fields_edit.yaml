@@ -181,6 +181,10 @@ tabs:
             type: partial
             path: taxes
             tab: 'offline.mall::lang.common.taxes'
+        _secure_download:
+            tab: 'offline.mall::lang.common.attachments'
+            type: partial
+            path: secure_downloads
         image_sets:
             label: 'offline.mall::lang.common.images'
             oc.commentPosition: ''
@@ -300,3 +304,4 @@ tabs:
             span: left
             type: textarea
             tab: 'offline.mall::lang.common.seo'
+

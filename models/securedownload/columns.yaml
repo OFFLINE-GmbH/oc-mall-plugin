@@ -1,0 +1,20 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    version: 
+        label: offline.mall::lang.common.version
+        type: text
+        searchable: true
+    display_name: 
+        label: offline.mall::lang.common.display_name
+        type: text
+        searchable: true
+    limite_date:
+        label: offline.mall::lang.common.limite_date
+        description: set 0 for autorizing alwyas download
+        type: number
