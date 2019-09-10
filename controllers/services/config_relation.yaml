@@ -1,0 +1,30 @@
+options:
+    label: 'offline.mall::lang.services.option'
+    view:
+        list: $/offline/mall/models/serviceoption/columns.yaml
+        toolbarButtons: create|delete
+        defaultSort: ['sort_order',  'ASC']
+    manage:
+        form: $/offline/mall/models/serviceoption/fields.yaml
+        recordsPerPage: 10
+
+products:
+    label: 'offline.mall::lang.common.products'
+    view:
+        showSearch: true
+        list: $/offline/mall/models/product/columns.yaml
+        toolbarButtons: add|remove
+        recordUrl: 'offline/mall/products/update/:id'
+    pivot:
+        form: $/offline/mall/models/service/fields_pivot.yaml
+
+
+taxes:
+    label: 'offline.mall::lang.common.taxes'
+    view:
+        list: $/offline/mall/models/tax/columns.yaml
+        toolbarButtons: add|create|remove
+    manage:
+        form: $/offline/mall/models/tax/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true

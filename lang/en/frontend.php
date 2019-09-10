@@ -81,6 +81,7 @@ return [
     'save'                                     => 'Save',
     'edit'                                     => 'Edit',
     'delete'                                   => 'Delete',
+    'cancel'                                   => 'Cancel',
     'checkout.payment.cancelled.heading'       => 'You cancelled the payment process',
     'checkout.payment.cancelled.line_1'        => 'Please be aware that your order has been created and a payment is due.',
     'checkout.payment.failed.heading'          => 'Failed to process your payment',
@@ -145,4 +146,7 @@ return [
     'wishlists.addtocart'                      => 'Add all items to your cart',
     'wishlists.addedtocart'                    => 'All items have been added to your cart',
     'wishlists.stockmissing'                   => 'Some items are not in stock and were not added to the cart.',
+    'services.modal_title'                     => 'Choose additional services for this product',
+    'services.none'                            => 'No additional services',
+    'services.required'                        => 'Please select an option for this service',
 ];

@@ -81,6 +81,7 @@ return [
     'save'                                     => 'Speichern',
     'edit'                                     => 'Bearbeiten',
     'delete'                                   => 'Löschen',
+    'cancel'                                   => 'Abbrechen',
     'checkout.payment.cancelled.heading'       => 'Zahlungsvorgang abgebrochen',
     'checkout.payment.cancelled.line_1'        => 'Bitte beachten Sie, dass Ihre Bestellung erstellt wurde und eine Zahlung fällig ist.',
     'checkout.payment.failed.heading'          => 'Ihre Zahlung konnte nicht verarbeitet werden',
@@ -145,4 +146,7 @@ return [
     'wishlists.addtocart'                      => 'Alle Artikel in den aktuellen Warenkorb legen',
     'wishlists.addedtocart'                    => 'Alle Artikel wurden zum Warenkorb hinzugefügt',
     'wishlists.stockmissing'                   => 'Einige Artikel sind nicht mehr an Lager und wurden deshalb nicht zum Warenkorb hinzugefügt',
+    'services.modal_title'                     => 'Wählen Sie Ihre Zusatzleistungen für dieses Produkt aus',
+    'services.none'                            => 'Keine Zusatzleistungen',
+    'services.required'                        => 'Bitte wählen Sie eine Option für diesen Service aus',
 ];

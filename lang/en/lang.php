@@ -23,6 +23,10 @@
             'update'  => 'Edit discount',
             'preview' => 'Preview discount',
         ],
+        'services'             => [
+            'create' => 'Create service',
+            'update' => 'Edit service',
+        ],
         'shipping_methods'     => [
             'create'  => 'Create shipping method',
             'update'  => 'Edit shipping method',
@@ -276,6 +280,8 @@
         'since_begin'          => 'Since begin',
         'weekly'               => 'Weekly',
         'feeds'                => 'Feeds',
+        'services'             => 'Services',
+        'service'              => 'Service',
     ],
     'variant'                  => [
         'method' => [
@@ -994,5 +1000,11 @@
         'message_comment'    => 'This message has been returned by the payment provider',
         'code_comment'       => 'This code has been returned by the payment provider',
         'failed_only'        => 'Failed only',
+    ],
+    'services'                 => [
+        'options'          => 'Options',
+        'option'           => 'Option',
+        'required'         => 'Service is required',
+        'required_comment' => 'One option of this service has to be selected when a product is added to the cart.',
     ],
 ];

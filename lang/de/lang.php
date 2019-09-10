@@ -23,6 +23,10 @@
             'update'  => 'Rabatt bearbeiten',
             'preview' => 'Rabatt-Vorschau',
         ],
+        'services'             => [
+            'create' => 'Service erstellen',
+            'update' => 'Service bearbeiten',
+        ],
         'shipping_methods'     => [
             'create'  => 'Versandmethode erstellen',
             'update'  => 'Versandmethode bearbeiten',
@@ -275,6 +279,8 @@
         'since_begin'          => 'Seit Beginn',
         'weekly'               => 'Wöchentlich',
         'feeds'                => 'Feeds',
+        'services'             => 'Services',
+        'service'              => 'Service',
     ],
     'variant'                  => [
         'method' => [
@@ -563,6 +569,7 @@
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
         'manage_feeds'              => 'Kann Feeds verwalten',
         'manage_wishlists'          => 'Kann Merklisten verwalten',
+        'manage_services'           => 'Can manage services',
     ],
     'components'               => [
         'products'                   => [
@@ -862,7 +869,7 @@
                     'required' => 'Wählen Sie Ihr Kanton/Bundesstaat',
                     'exists'   => 'Der ausgewählte Wert ist ungültig.',
                 ],
-                'terms_accepted'        => [
+                'terms_accepted'  => [
                     'required' => 'Bitte bestätigen Sie unsere AGBs.',
                 ],
             ],
@@ -992,5 +999,11 @@
         'message_comment'    => 'Diese Nachricht wurde vom Zahlungsanbieter zurückgegeben',
         'code_comment'       => 'Dieser Code wurde vom Zahlungsanbieter zurückgegeben',
         'failed_only'        => 'Nur fehlgeschlagene',
+    ],
+    'services'                 => [
+        'options'          => 'Optionen',
+        'option'           => 'Option',
+        'required'         => 'Pflichtservice',
+        'required_comment' => 'Bei der Bestellung muss zwingend eine Service-Option ausgewählt werden',
     ],
 ];

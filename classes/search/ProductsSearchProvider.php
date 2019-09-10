@@ -23,7 +23,7 @@ class ProductsSearchProvider extends ResultsProvider
         foreach ($matchingProducts->concat($matchingVariants) as $match) {
             $url = $controller->pageUrl($productPage, [
                 'slug'    => $match->slug,
-                'variant' => $match->variant_id,
+                'variant' => $match->variant_hash_id,
             ]);
 
             $result = $this->newResult();

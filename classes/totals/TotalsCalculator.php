@@ -94,9 +94,10 @@ class TotalsCalculator
 
     protected function calculate()
     {
-        $this->weightTotal      = $this->calculateWeightTotal();
-        $this->productPreTaxes  = $this->calculateProductPreTaxes();
-        $this->productTaxes     = $this->calculateProductTaxes();
+        $this->weightTotal     = $this->calculateWeightTotal();
+        $this->productPreTaxes = $this->calculateProductPreTaxes();
+        $this->productTaxes    = $this->calculateProductTaxes();
+
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
         $this->shippingTaxes = $this->filterShippingTaxes();
@@ -146,9 +147,11 @@ class TotalsCalculator
 
         /** @var $product CartProduct|WishlistItem */
         $productTaxes = $this->input->products->flatMap(function ($product) {
-            return $product->filtered_taxes->map(function (Tax $tax) use ($product) {
-                return new TaxTotal($product->totalPreTaxes, $tax);
+            $products = $product->filtered_product_taxes->map(function (Tax $tax) use ($product) {
+                return new TaxTotal($product->totalProductPreTaxes, $tax);
             });
+
+            return $products->concat($product->filtered_service_taxes);
         });
 
         $combined = $productTaxes->concat($shippingTaxes)->concat($paymentTaxes);

@@ -17,8 +17,12 @@ use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\Price;
+use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
+use OFFLINE\Mall\Models\Service;
+use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\Tax;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -51,6 +55,7 @@ class SeedDemoData extends Command
         $this->createCategories();
         $this->createTaxes();
         $this->createProducts();
+        $this->createServices();
 
 
         app()->bind(Index::class, function () use ($originalIndex) {
@@ -370,5 +375,54 @@ class SeedDemoData extends Command
             'name'       => 'VAT',
             'percentage' => 10,
         ]);
+    }
+
+    protected function createServices()
+    {
+        $this->output->writeln('Creating services...');
+        DB::table('offline_mall_services')->truncate();
+        DB::table('offline_mall_service_options')->truncate();
+
+        $warranty = Service::create([
+            'name'        => 'Warranty',
+            'description' => 'You can extend the vendor supplied warranty for this product.',
+        ]);
+
+        $option = ServiceOption::create([
+            'name'        => '2 years extended warranty',
+            'description' => 'Get one additional year of warranty',
+            'service_id'  => $warranty->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 49]));
+
+        $option = ServiceOption::create([
+            'name'        => '3 years extended warranty',
+            'description' => 'Get two additional years of warranty',
+            'service_id'  => $warranty->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 69]));
+
+        $option = ServiceOption::create([
+            'name'        => '4 years extended warranty',
+            'description' => 'Get three additional years of warranty',
+            'service_id'  => $warranty->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 99]));
+
+        $assembly = Service::create([
+            'name'        => 'Assembly',
+            'description' => "Don't have the right tools at hand? We can preassemble this product for you.",
+        ]);
+
+        $option = ServiceOption::create([
+            'name'        => 'Preassemble product',
+            'description' => 'The completely assembled product will be shipped to your doorstep.',
+            'service_id'  => $assembly->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 99]));
+
+        Product::where('name', 'LIKE', 'Cruiser%')->get()->each(function (Product $product) use ($warranty, $assembly) {
+            $product->services()->attach([$warranty->id, $assembly->id]);
+        });
     }
 }

@@ -1,0 +1,14 @@
+{% put scripts %}
+    <script>
+        window.Mall = window.Mall || {}
+        $(function () {
+            window.Mall.Modal = $('<div class="mall-modal">')
+            window.Mall.Modal.on('click', function(e) {
+                if (e.target.classList.contains('mall-modal')) {
+                    window.Mall.Modal.removeClass('mall-modal--visible')
+                }
+            })
+            window.Mall.Modal.prependTo(document.body)
+        })
+    </script>
+{% endput %}

@@ -65,11 +65,6 @@ trait PriceAccessors
         return $this->priceRelation($currency, $relation, $filter);
     }
 
-    public function priceWithMissing($currency = null, $relation = 'prices', ?Closure $filter = null)
-    {
-        return $this->priceRelation($currency, $relation, $filter);
-    }
-
     public function getPriceAttribute()
     {
         $this->prices->load('currency');

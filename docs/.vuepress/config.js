@@ -65,6 +65,12 @@ module.exports = {
                     '/development/integration',
                     '/development/console-commands',
                 ]
+            },
+            {
+                title: 'Changelog',
+                children: [
+                    '/changelog/1.5.0',
+                ]
             }
         ],
         repo: 'OFFLINE-GmbH/oc-mall-plugin',

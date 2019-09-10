@@ -51,6 +51,7 @@ class OrderProduct extends Model
         'custom_field_values',
         'property_values',
         'brand',
+        'service_options',
     ];
 
     public $table = 'offline_mall_order_products';

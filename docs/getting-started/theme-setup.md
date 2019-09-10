@@ -13,7 +13,9 @@ up a theme. You can even use it as a base for your own custom theme.
 
 The [`mallDependencies` component](../components/mall-dependencies.md) includes all required frontend assets.
 
-The component should be placed on each layout that provides shop functionality.  
+The component should be placed on each layout that provides shop functionality.
+
+Make sure to include it inside the `<head>` tag.  
 
 ```ini{3}
 description = "Default Layout"
@@ -21,6 +23,10 @@ description = "Default Layout"
 [mallDependencies]
 ==
 <!DOCTYPE html>
+<html>
+<head>    
+    {% component 'mallDependencies' %}
+</head>
 ...
 ```
 
@@ -32,12 +38,23 @@ provides shop functionality. This makes sure the user remains logged in while br
 ```ini{3}
 description = "Default Layout"
 
-[session]
 [mallDependencies]
+[session]
 ==
 <!DOCTYPE html>
-...
 ```
+
+### Scripts
+
+Make sure to include the `scripts` tag in your layout. All JavaScript
+code will be injected where the placeholder is.
+
+```twig
+...
+{% scripts %}
+</body>
+</html>
+``` 
 
 ### Framework extras
 

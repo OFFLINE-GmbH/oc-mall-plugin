@@ -19,4 +19,5 @@ function initializeSorting () {
 
 $(function () {
     initializeSorting();
+    $(window).on('ajaxUpdateComplete', initializeSorting)
 });

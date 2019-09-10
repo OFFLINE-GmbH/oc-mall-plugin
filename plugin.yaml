@@ -45,6 +45,12 @@ navigation:
                 icon: icon-cart-plus
                 permissions:
                     - offline.mall.manage_products
+            mall-services:
+                label: 'offline.mall::lang.common.services'
+                url: offline/mall/services
+                icon: icon-plus-circle
+                permissions:
+                    - offline.mall.manage_services
             mall-categories:
                 label: 'offline.mall::lang.common.categories'
                 url: offline/mall/categories
@@ -118,3 +124,6 @@ permissions:
     offline.mall.manage_wishlists:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_wishlists'
+    offline.mall.manage_services:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_services'
