@@ -44,7 +44,7 @@ class WishlistButton extends MallComponent
         ];
     }
 
-    public function onRun()
+    public function init()
     {
         $this->items = $this->getWishlists();
     }
