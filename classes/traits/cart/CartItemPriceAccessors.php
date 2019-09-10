@@ -150,6 +150,10 @@ trait CartItemPriceAccessors
      */
     public function getServiceTaxesAttribute()
     {
+        if ( ! $this->service_options) {
+            return 0;
+        }
+
         return $this->service_options->sum(function ($option) {
             $taxes     = $option->service->taxes->filter($this->filterTaxes());
             $taxFactor = $taxes->sum('percentageDecimal');
@@ -163,6 +167,10 @@ trait CartItemPriceAccessors
      */
     public function getServicePostTaxesAttribute()
     {
+        if ( ! $this->service_options) {
+            return 0;
+        }
+
         return $this->service_options->sum(function ($option) {
             return $option->price()->integer;
         });
@@ -228,8 +236,12 @@ trait CartItemPriceAccessors
      */
     public function getFilteredServiceTaxesAttribute()
     {
+        if ( ! $this->service_options) {
+            return new Collection();
+        }
+
         return $this->service_options->flatMap(function (ServiceOption $option) {
-            $taxes    = $option->service->taxes->filter($this->filterTaxes());
+            $taxes    = $option->service->taxes->filter($this->filterTaxes()) ?? new Collection();
             $factor   = $taxes->sum('percentageDecimal');
             $preTaxes = $option->price()->integer / (1 + $factor) * $this->quantity;
 
@@ -246,6 +258,10 @@ trait CartItemPriceAccessors
     protected function filterTaxes()
     {
         return function (Tax $tax) {
+            if ( ! $this->cart) {
+                return true;
+            }
+
             // If no shipping address is available only include taxes that have no country restrictions.
             if ($this->cart->shipping_address === null) {
                 return $tax->countries->count() === 0;

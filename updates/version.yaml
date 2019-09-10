@@ -207,3 +207,5 @@
     - create_offline_mall_services.php
 1.5.1:
     - "!!! There is now a changelog documenting breaking changes with every future release. Make sure to check it out: https://bit.ly/2kCk2F9"
+1.5.2:
+    - Various bugfixes
