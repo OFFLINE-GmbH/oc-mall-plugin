@@ -21,6 +21,7 @@ module.exports = {
                     '/digging-deeper/properties',
                     '/digging-deeper/categories',
                     '/digging-deeper/products',
+                    '/digging-deeper/services',
                     '/digging-deeper/currencies',
                     '/digging-deeper/shipping-methods',
                     '/digging-deeper/payments',
