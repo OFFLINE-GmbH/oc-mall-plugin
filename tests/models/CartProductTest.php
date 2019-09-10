@@ -7,6 +7,9 @@ use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Service;
+use OFFLINE\Mall\Models\ServiceOption;
+use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
 
@@ -113,4 +116,128 @@ class CartProductTest extends PluginTestCase
         $this->assertEquals(20000, $variant->price()->integer);
         $this->assertEquals(30000, $cartProduct->price()->integer);
     }
+
+    public function test_service_options_price_calculations_including_tax()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $quantity = 2;
+
+        $service = Service::create(['name' => 'Test']);
+        $service->taxes()->attach($tax1->id);
+
+        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option->prices()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 100,
+        ]));
+
+        $product                     = $this->getProduct(200);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax1->id);
+
+        $cart  = $this->getCart();
+        $entry = $cart->addProduct($product, $quantity, null, null, [$option->id]);
+
+        $this->assertEquals(18181.82, round($entry->productPreTaxes, 2));
+        $this->assertEquals(1818.18, round($entry->productTaxes, 2));
+        $this->assertEquals(20000, $entry->productPostTaxes);
+
+        $this->assertEquals(27272.73, round($entry->pricePreTaxes, 2));
+        $this->assertEquals(12727.27, round($entry->taxes, 2));
+        $this->assertEquals(40000, $entry->pricePostTaxes);
+
+        $this->assertEquals(9090.91, round($entry->servicePreTaxes, 2));
+        $this->assertEquals(909.09, round($entry->serviceTaxes, 2));
+        $this->assertEquals(10000, $entry->servicePostTaxes);
+
+        $this->assertEquals(18181.82, round($entry->totalServicePreTaxes, 2));
+        $this->assertEquals(1818.18, round($entry->totalServiceTaxes, 2));
+        $this->assertEquals(20000, $entry->totalServicePostTaxes);
+
+        $this->assertEquals(54545.45, round($entry->totalPreTaxes, 2));
+        $this->assertEquals(5454.55, round($entry->totalTaxes, 2));
+        $this->assertEquals(60000, $entry->totalPostTaxes);
+    }
+
+    public function test_service_options_price_calculations_excluding_tax()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $quantity = 2;
+
+        $service = Service::create(['name' => 'Test']);
+        $service->taxes()->attach($tax1->id);
+
+        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option->prices()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 100,
+        ]));
+
+        $product                     = $this->getProduct(200);
+        $product->price_includes_tax = false;
+        $product->save();
+        $product->taxes()->attach($tax1->id);
+
+        $cart  = $this->getCart();
+        $entry = $cart->addProduct($product, $quantity, null, null, [$option->id]);
+
+        $this->assertEquals(20000, round($entry->productPreTaxes, 2));
+        $this->assertEquals(2000, round($entry->productTaxes, 2));
+        $this->assertEquals(22000, $entry->productPostTaxes);
+
+        $this->assertEquals(29090.91, round($entry->pricePreTaxes, 2));
+        $this->assertEquals(2909.09, round($entry->taxes, 2));
+        $this->assertEquals(32000, $entry->pricePostTaxes);
+
+        $this->assertEquals(9090.91, round($entry->servicePreTaxes, 2));
+        $this->assertEquals(909.09, round($entry->serviceTaxes, 2));
+        $this->assertEquals(10000, $entry->servicePostTaxes);
+
+        $this->assertEquals(18181.82, round($entry->totalServicePreTaxes, 2));
+        $this->assertEquals(1818.18, round($entry->totalServiceTaxes, 2));
+        $this->assertEquals(20000, $entry->totalServicePostTaxes);
+
+        $this->assertEquals(58181.82, round($entry->totalPreTaxes, 2));
+        $this->assertEquals(5818.18, round($entry->totalTaxes, 2));
+        $this->assertEquals(64000, $entry->totalPostTaxes);
+    }
+
+
+    protected function getTax($name, int $percentage): Tax
+    {
+        $tax1             = new Tax();
+        $tax1->name       = $name;
+        $tax1->percentage = $percentage;
+        $tax1->save();
+
+        return $tax1;
+    }
+
+    protected function getCart()
+    {
+        $cart = new Cart();
+        $cart->save();
+
+        return $cart;
+    }
+
+
+    protected function getProduct($price)
+    {
+        if (is_int($price)) {
+            $price = ['CHF' => $price, 'EUR' => $price];
+        }
+
+        $product = Product::first()->replicate(['category_id']);
+        $product->save();
+        $product->price = $price;
+
+        // Reload everything to prevent stale relationships.
+        return Product::find($product->id);
+    }
+
 }
+

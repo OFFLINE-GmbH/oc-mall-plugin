@@ -24,15 +24,29 @@ name = "Order table"
             <tr>
                 <td style="vertical-align: top">
                     {{ item.name }}<br/>
-                    {{ item.variant_name | raw }}
+                    <div class="services">
+                        {% for option in item.service_options %}
+                            {{ 'offline.mall::lang.common.service' | trans }}:
+                            {{ option.name }}
+                            <br>
+                        {% endfor %}
+                    </div>
+                    <div class="variant">
+                        {{ item.variant_name | raw }}
+                    </div>
                     <div class="attributes">
                         {% for field in item.custom_field_values %}
-                            {{ field.custom_field.name }}: {{ field.display_value }}
+                            {{ field.custom_field.name }}: {{ field.display_value }}<br />
                         {% endfor %}
                     </div>
                 </td>
                 <td style="vertical-align: top; text-align: right">{{ item.quantity }}</td>
-                <td style="vertical-align: top; text-align: right">{{ item.pricePostTaxes() | raw }}</td>
+                <td style="vertical-align: top; text-align: right">
+                    {{ item.pricePostTaxes() | raw }}
+                    {% for option in item.service_options %}
+                        <br> + {{ option.price_formatted }}
+                    {% endfor %}
+                </td>
                 <td style="vertical-align: top; text-align: right">{{ item.totalPostTaxes() | raw }}</td>
             </tr>
         {% endfor %}

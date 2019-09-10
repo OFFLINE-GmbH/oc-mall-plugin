@@ -109,7 +109,7 @@ class MySQL implements Index
                 $table->integer('product_id');
                 $table->integer('variant_id')->nullable();
                 $table->string('index');
-                $table->string('name');
+                $table->string('name', 191);
                 $table->string('brand');
                 $table->boolean('published');
                 $table->integer('stock');

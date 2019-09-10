@@ -12,6 +12,18 @@ custom_fields:
         recordsPerPage: 10
     deferredBinding: true
 
+services:
+    label: 'offline.mall::lang.common.services'
+    view:
+        list: $/offline/mall/models/service/columns.yaml
+        toolbarButtons: add|remove
+    manage:
+        form: $/offline/mall/models/service/fields.yaml
+        recordsPerPage: 10
+    pivot:
+        form: $/offline/mall/models/service/fields_pivot.yaml
+    deferredBinding: true
+
 variants:
     label: 'offline.mall::lang.common.variant'
     view:

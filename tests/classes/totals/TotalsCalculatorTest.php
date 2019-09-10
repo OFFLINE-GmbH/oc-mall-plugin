@@ -12,6 +12,8 @@ use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Service;
+use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
@@ -30,6 +32,71 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals($quantity * $price['CHF'] * 100, $calc->totalPostTaxes());
+    }
+
+    public function test_it_works_for_a_single_product_with_service_options()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $quantity = 2;
+        $price    = ['CHF' => 200, 'EUR' => 240];
+
+        $service = Service::create(['name' => 'Test']);
+        $service->taxes()->attach($tax1->id);
+
+        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option->prices()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 100,
+        ]));
+
+        $product                     = $this->getProduct($price);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax1->id);
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, $quantity, null, null, [$option->id]);
+
+        $cart->reloadRelations('products');
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(54545.45, round($calc->totalPreTaxes(), 2));
+        $this->assertEquals(5454.55, round($calc->totalTaxes(), 2));
+        $this->assertEquals(60000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_works_for_multiple_products_with_service_options()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 50);
+
+        $quantity = 2;
+        $price    = ['CHF' => 200, 'EUR' => 240];
+
+        $service = Service::create(['name' => 'Test']);
+        $service->taxes()->attach([$tax1->id, $tax2->id]);
+
+        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option->prices()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 100,
+        ]));
+
+        $product                     = $this->getProduct($price);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax1->id);
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, $quantity, null, null, [$option->id]);
+
+        $cart->reloadRelations('products');
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(60000, $calc->productPostTaxes());
+        $this->assertEquals(11136.36, round($calc->productTaxes(), 2));
+        $this->assertEquals(48863.64, round($calc->productPreTaxes(), 2));
     }
 
     public function test_it_works_for_multiple_products()
@@ -481,14 +548,14 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($this->getProduct($price), $quantity);
 
         $discountA          = new Discount();
-        $discountA->code    = 'Test';
         $discountA->name    = 'Test discount';
         $discountA->trigger = 'code';
         $discountA->type    = 'rate';
         $discountA->rate    = 25;
         $discountA->save();
 
-        $discountB = $discountA->replicate();
+        $discountB       = $discountA->replicate();
+        $discountB->code = 'xxx';
         $discountB->save();
 
         $cart->applyDiscount($discountA);

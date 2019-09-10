@@ -1,0 +1,6 @@
+fields:
+    pivot[required]:
+        label: 'offline.mall::lang.services.required'
+        span: full
+        type: switch
+        comment: 'offline.mall::lang.services.required_comment'

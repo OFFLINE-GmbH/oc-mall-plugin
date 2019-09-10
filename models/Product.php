@@ -51,10 +51,11 @@ class Product extends Model
         'description',
         'meta_title',
         'meta_description',
+        'meta_keywords',
         'links',
         'additional_descriptions',
         'additional_properties',
-        'embeds'
+        'embeds',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -178,6 +179,13 @@ class Product extends Model
             'deleted'    => true,
             'pivot'      => ['id', 'quantity', 'price'],
             'pivotModel' => CartProduct::class,
+        ],
+        'services'        => [
+            Service::class,
+            'table'    => 'offline_mall_product_service',
+            'key'      => 'product_id',
+            'otherKey' => 'service_id',
+            'pivot'    => ['required'],
         ],
     ];
 

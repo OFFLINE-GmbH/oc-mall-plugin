@@ -3,6 +3,15 @@
         <tr>
             <td>
                 {{ product.name }}
+                {% if product.service_options %}
+                    {% for option in product.service_options %}
+                        <br/>
+                        <span class="text-muted">
+                        <strong>{{ 'offline.mall::lang.common.service' | trans }}</strong>:
+                        {{ option.name }}
+                    </span>
+                    {% endfor %}
+                {% endif %}
                 {% if product.variant %}
                     <br/>
                     <span class="text-muted">
@@ -19,6 +28,13 @@
             <td>{{ product.quantity }}</td>
             <td class="text-right">
                 {{ product.pricePostTaxes() | raw }}
+                {% if product.service_options %}
+                    {% for option in product.service_options %}
+                        <div class="text-muted" title="{{ option.name }}">
+                        + {{ option.price_formatted }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </td>
             <td class="text-right">
                 {{ product.totalPostTaxes() | raw }}

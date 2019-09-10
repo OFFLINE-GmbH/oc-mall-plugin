@@ -1,0 +1,35 @@
+columns:
+    sort_order_handle:
+        label: " "
+        type: partial
+        path: $/offline/mall/models/serviceoption/_reorder_handle.htm
+        sortable: false
+        width: 20px
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: partial
+        path: $/offline/mall/models/serviceoption/_price.htm
+        searchable: false
+        sortable: false
+        align: right
+    sort_order:
+        label: 'offline.mall::lang.common.sort_order'
+        type: number
+        searchable: true
+        sortable: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        searchable: true
+        invisible: true
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        searchable: true
+        invisible: true

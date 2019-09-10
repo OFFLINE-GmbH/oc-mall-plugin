@@ -38,8 +38,26 @@
     </td>
     <td class="text-right">
         {{ product.price() | raw }}
+        {% if product.service_options.count > 0 %}
+            <div class="mall-cart__price-additions">
+                + {{ product.servicePostTaxes | money }}
+            </div>
+        {% endif %}
     </td>
     <td class="text-right">
         {{ product.totalPostTaxes | money }}
     </td>
 </tr>
+
+{% for option in product.service_options %}
+    <tr class="mall-cart__services {{ loop.first ? 'mall-cart__services--first' }} {{ loop.last ? 'mall-cart__services--last' }}">
+        <td></td>
+        <td colspan="2">
+            {{ option.name }}
+        </td>
+        <td class="text-right">
+            {{ option.price().integer | money }}
+        </td>
+        <td></td>
+    </tr>
+{% endfor %}

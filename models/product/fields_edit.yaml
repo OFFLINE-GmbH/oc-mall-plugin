@@ -257,6 +257,13 @@ tabs:
             type: partial
             path: custom_fields
             tab: 'offline.mall::lang.common.cart'
+        services:
+            label: 'offline.mall::lang.common.services'
+            oc.commentPosition: ''
+            span: right
+            type: partial
+            path: services
+            tab: 'offline.mall::lang.common.cart'
         quantity_default:
             label: 'offline.mall::lang.product.quantity_default'
             oc.commentPosition: ''

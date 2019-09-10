@@ -21,6 +21,7 @@ class Discount extends Model
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,shipping',
         'product'                              => 'required_if:trigger,product',
+        'code'                                 => 'nullable|unique:offline_mall_discounts,code',
         'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
         'shipping_description'                 => 'required_if:type,shipping',

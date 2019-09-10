@@ -20,8 +20,8 @@ class CreateOfflineMallPropertyValues extends Migration
             $table->timestamp('updated_at')->nullable();
 
             if ( ! app()->runningUnitTests()) {
-                // SQlite does not support value and index_value functions.
-                if (DB::connection()->getDriverName() !== 'sqlite') {
+                // Use MySQL specific index names only when running on MySQL.
+                if (DB::connection()->getDriverName() === 'mysql') {
                     $table->index([DB::raw('value(191)')], 'idx_property_value_value');
                     $table->index([DB::raw('index_value(191)')], 'idx_property_value_index_value');
                 }

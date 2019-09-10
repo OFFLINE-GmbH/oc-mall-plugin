@@ -4,8 +4,10 @@ namespace OFFLINE\Mall\Classes\Demo\Products;
 
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\ImageSet;
+use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -73,8 +75,6 @@ abstract class DemoProduct
                 'image_set_id' => $variant['image_set_id'] ?? null,
                 'stock'        => $variant['stock'],
                 'name'         => $variant['name'],
-                'price'        => $variant['price'] ?? null,
-                'old_price'    => $variant['old_price'] ?? null,
                 'published'    => true,
             ]);
 
@@ -85,6 +85,18 @@ abstract class DemoProduct
                     return $price;
                 });
                 $v->prices()->saveMany($variant['prices']);
+            }
+
+            if (isset($variant['old_price'])) {
+                foreach ($variant['old_price'] as $currency => $price) {
+                    Price::create([
+                        'currency_id'       => Currency::resolve($currency)->id,
+                        'price'             => $price,
+                        'priceable_id'      => $v->id,
+                        'priceable_type'    => 'mall.variant',
+                        'price_category_id' => 1,
+                    ]);
+                }
             }
 
             foreach ($variant['properties'] as $slug => $value) {
@@ -98,7 +110,18 @@ abstract class DemoProduct
         }
 
         foreach ($this->customFields() as $customField) {
+            $prices = $customField['price'];
+            unset($customField['price']);
+
             $f = CustomField::create($customField);
+            collect($prices)->map(function($price, $currency) use ($f) {
+                return new Price([
+                    'currency_id'       => Currency::resolve($currency)->id,
+                    'price'             => $price,
+                    'priceable_id'      => $f->id,
+                    'priceable_type'    => 'mall.custom_field',
+                ]);
+            });
             $this->product->custom_fields()->attach($f);
         }
     }

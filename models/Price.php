@@ -147,4 +147,20 @@ class Price extends Model
 
         return $this->money->format($this->integer, $model, $this->currency);
     }
+
+    public function toArray()
+    {
+        return [
+            'id'              => $this->id,
+            'price'           => $this->price,
+            'price_formatted' => (string)$this,
+            'currency'        => [
+                'id'       => $this->currency->id,
+                'code'     => $this->currency->code,
+                'symbol'   => $this->currency->symbol,
+                'rate'     => $this->currency->rate,
+                'decimals' => $this->currency->decimals,
+            ],
+        ];
+    }
 }

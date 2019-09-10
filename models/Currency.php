@@ -143,7 +143,7 @@ class Currency extends Model
      *
      * @return Currency
      */
-    protected static function resolve($currency = null)
+    public static function resolve($currency = null)
     {
         if ($currency === null) {
             $currency = Currency::activeCurrency();

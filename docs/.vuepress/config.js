@@ -21,6 +21,7 @@ module.exports = {
                     '/digging-deeper/properties',
                     '/digging-deeper/categories',
                     '/digging-deeper/products',
+                    '/digging-deeper/services',
                     '/digging-deeper/currencies',
                     '/digging-deeper/shipping-methods',
                     '/digging-deeper/payments',
@@ -64,6 +65,12 @@ module.exports = {
                     '/development/events',
                     '/development/integration',
                     '/development/console-commands',
+                ]
+            },
+            {
+                title: 'Changelog',
+                children: [
+                    '/changelog/1.5.0',
                 ]
             }
         ],

@@ -27,16 +27,19 @@ trait CartActions
         Product $product,
         ?int $quantity = null,
         ?Variant $variant = null,
-        ?Collection $values = null
+        ?Collection $values = null,
+        ?array $serviceOptionIds = []
     ) {
-        $cartEntry = DB::transaction(function () use ($product, $quantity, $variant, $values) {
+        $cartEntry = DB::transaction(function () use ($product, $quantity, $variant, $values, $serviceOptionIds) {
             if ( ! $this->exists) {
                 $this->save();
             }
 
             $quantity = $quantity ?? $product->quantity_default ?? 1;
 
-            if ($product->stackable && $this->isInCart($product, $variant, $values)) {
+            $isStackable = $product->stackable && count($serviceOptionIds) === 0 && $this->isInCart($product, $variant, $values);
+
+            if ($isStackable) {
                 $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product, $variant) {
                     return $variant
                         ? $cartProduct->product_id === $product->id && $cartProduct->variant_id === $variant->id
@@ -77,6 +80,8 @@ trait CartActions
             }
 
             $this->validateShippingMethod();
+
+            $cartEntry->service_options()->attach($serviceOptionIds);
 
             return $cartEntry;
         });

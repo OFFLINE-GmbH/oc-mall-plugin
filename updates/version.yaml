@@ -202,3 +202,8 @@
     - create_offline_mall_wishlist_items.php
 1.4.1:
     - !!! Added terms and conditions checkbox to signup form. If you manually modified the signup form partials make sure to add the checkbox as well since it is being validated as required by default. (see https://tinyurl.com/yyanm7eo)
+1.5.0:
+    - Added Services feature (e. g. extended warranty, on-site installation)
+    - create_offline_mall_services.php
+1.5.1:
+    - "!!! There is now a changelog documenting breaking changes with every future release. Make sure to check it out: https://bit.ly/2kCk2F9"
