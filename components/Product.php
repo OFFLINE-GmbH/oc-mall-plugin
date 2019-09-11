@@ -17,7 +17,6 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\Variant;
 use Request;
 use Session;
@@ -497,7 +496,7 @@ class Product extends MallComponent
      * @param                 $quantity
      * @param                 $variant
      * @param                 $values
-     * @param array $serviceOptions
+     * @param array           $serviceOptions
      *
      * @return array
      * @throws ValidationException
@@ -576,13 +575,13 @@ class Product extends MallComponent
         }
 
         return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
-            $values = $valueMap->get($property->id);
+            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
+                return $this->variant && $value->variant_id === null;
+            });
 
             return (object)[
                 'property' => $property,
-                'values'   => optional(optional($values)->reject(function ($value) {
-                    return $this->variant && $value->variant_id === null;
-                }))->unique('value'),
+                'values'   => optional($filteredValues)->unique('value'),
             ];
         })->filter(function ($collection) {
             if ($this->variant && $collection->property->pivot->use_for_variants != true) {
