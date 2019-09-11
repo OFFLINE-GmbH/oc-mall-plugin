@@ -693,7 +693,7 @@ class Product extends MallComponent
     {
         return $this->controller->pageUrl(GeneralSettings::get('product_page'), [
             'slug'    => $slug,
-            'variant' => optional($item)->variantId,
+            'variant' => optional($item)->variantHashId,
         ]);
     }
 
