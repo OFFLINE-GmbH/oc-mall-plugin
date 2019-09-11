@@ -12,12 +12,12 @@ use OFFLINE\Mall\Classes\Queries\VariantByPropertyValuesQuery;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\Variant;
 use Request;
 use Session;
@@ -264,7 +264,7 @@ class Product extends MallComponent
         // Temporarily store the current cart data to the session. We will re-fetch this data
         // when the product is definitely added to the cart.
         Session::put('mall.cart.add.variant', optional($variant)->id);
-        Session::put('mall.cart.add.values', $values);
+        Session::put('mall.cart.add.values', $values->toArray());
         Session::put('mall.cart.add.quantity', $quantity);
 
         // Display the services modal.
@@ -306,8 +306,11 @@ class Product extends MallComponent
 
         // Fetch the original cart data from the session.
         $variant  = Variant::find(Session::pull('mall.cart.add.variant'));
-        $values   = Session::pull('mall.cart.add.values');
         $quantity = Session::pull('mall.cart.add.quantity');
+        $values   = Collection::wrap(Session::pull('mall.cart.add.values', []));
+        $values   = $values->map(function ($attributes) {
+            return CustomFieldValue::make($attributes);
+        });
 
         $serviceOptionIds = collect(post('service', []))->values()->flatten()->toArray();
 
@@ -497,7 +500,7 @@ class Product extends MallComponent
      * @param                 $quantity
      * @param                 $variant
      * @param                 $values
-     * @param array $serviceOptions
+     * @param array           $serviceOptions
      *
      * @return array
      * @throws ValidationException
@@ -576,13 +579,13 @@ class Product extends MallComponent
         }
 
         return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
-            $values = $valueMap->get($property->id);
+            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
+                return $this->variant && $value->variant_id === null;
+            });
 
             return (object)[
                 'property' => $property,
-                'values'   => optional($values)->reject(function ($value) {
-                    return $this->variant && $value->variant_id === null;
-                })->unique('value'),
+                'values'   => optional($filteredValues)->unique('value'),
             ];
         })->filter(function ($collection) {
             if ($this->variant && $collection->property->pivot->use_for_variants != true) {
@@ -694,7 +697,7 @@ class Product extends MallComponent
     {
         return $this->controller->pageUrl(GeneralSettings::get('product_page'), [
             'slug'    => $slug,
-            'variant' => optional($item)->variantId,
+            'variant' => optional($item)->variantHashId,
         ]);
     }
 
