@@ -307,3 +307,8 @@ tabs:
             span: left
             type: textarea
             tab: 'offline.mall::lang.common.seo'
+        reviews:
+            span: full
+            type: partial
+            path: reviews
+            tab: 'offline.mall::lang.common.reviews'

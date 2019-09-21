@@ -1,0 +1,5 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        span: full
+        type: text

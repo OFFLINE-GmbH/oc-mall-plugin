@@ -136,6 +136,7 @@ class Product extends Model
         'cart_products'   => CartProduct::class,
         'image_sets'      => ImageSet::class,
         'property_values' => PropertyValue::class,
+        'reviews'         => Review::class,
     ];
     public $belongsToMany = [
         'categories'      => [

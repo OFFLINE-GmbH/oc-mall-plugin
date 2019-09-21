@@ -2,7 +2,6 @@
 
 use Cache;
 use DB;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\NestedTree;
@@ -72,7 +71,8 @@ class Category extends Model
         'sort_order',
     ];
     public $casts = [
-        'inherit_property_groups' => 'boolean',
+        'inherit_property_groups'   => 'boolean',
+        'inherit_review_categories' => 'boolean',
     ];
     public $table = 'offline_mall_categories';
     public $belongsToMany = [
@@ -97,6 +97,10 @@ class Category extends Model
             'key'      => 'category_id',
             'otherKey' => 'property_group_id',
             'pivot'    => ['relation_sort_order'],
+        ],
+        'review_categories' => [
+            ReviewCategory::class,
+            'table' => 'offline_mall_category_review_category',
         ],
     ];
     public $attachOne = [
@@ -151,8 +155,14 @@ class Category extends Model
             if ($model->parent_id === null) {
                 $model->inherit_property_groups = false;
             }
+            if ($model->parent_id === null) {
+                $model->inherit_review_categories = false;
+            }
             if ($model->inherit_property_groups === true && $model->property_groups()->count() > 0) {
                 $model->property_groups()->detach();
+            }
+            if ($model->inherit_review_categories === true && $model->review_categories()->count() > 0) {
+                $model->review_categories()->detach();
             }
             if ( ! $model->slug) {
                 $model->slug = str_slug($model->name);
@@ -173,13 +183,15 @@ class Category extends Model
     }
 
     /**
-     * Don't show the inherits_property_groups field if this
-     * category i a root node.
+     * Don't show the inherit_* fields if this category i a root node.
      */
     public function filterFields($fields, $context = null)
     {
         if (isset($fields->inherit_property_groups)) {
             $fields->inherit_property_groups->hidden = $this->parent_id === null;
+        }
+        if (isset($fields->inherit_review_categories)) {
+            $fields->inherit_review_categories->hidden = $this->parent_id === null;
         }
     }
 

@@ -54,6 +54,25 @@ tabs:
                 condition: checked
             type: partial
             tab: 'offline.mall::lang.common.property_groups'
+        inherit_review_categories:
+            label: 'offline.mall::lang.category.inherit_review_categories'
+            span: auto
+            context: update
+            dependsOn: parent
+            type: switch
+            comment: 'offline.mall::lang.category.inherit_review_categories_comment'
+            tab: 'offline.mall::lang.common.review_categories'
+        review_categories:
+            oc.commentPosition: ''
+            span: full
+            path: $/offline/mall/controllers/categories/_review_categories.htm
+            type: partial
+            tab: 'offline.mall::lang.common.review_categories'
+            context: update
+            trigger:
+                action: hide
+                field: inherit_review_categories
+                condition: checked
         products:
             oc.commentPosition: ''
             span: full

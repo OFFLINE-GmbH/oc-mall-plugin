@@ -282,6 +282,11 @@
         'feeds'                => 'Feeds',
         'services'             => 'Services',
         'service'              => 'Service',
+        'review'               => 'Review',
+        'reviews'              => 'Reviews',
+        'review_categories'    => 'Review categories',
+        'review_category'      => 'Review category',
+        'title'                => 'Title',
     ],
     'variant'                  => [
         'method' => [
@@ -381,13 +386,15 @@
         'create_new'          => 'Create new set',
     ],
     'category'                 => [
-        'name'                            => 'Name',
-        'code'                            => 'Code',
-        'code_comment'                    => 'This code can be used to identify this category in your frontend partials.',
-        'parent'                          => 'Parent',
-        'no_parent'                       => 'No parent',
-        'inherit_property_groups'         => 'Inherit properties of parent category',
-        'inherit_property_groups_comment' => 'Use the property groups of this category\'s parent category',
+        'name'                              => 'Name',
+        'code'                              => 'Code',
+        'code_comment'                      => 'This code can be used to identify this category in your frontend partials.',
+        'parent'                            => 'Parent',
+        'no_parent'                         => 'No parent',
+        'inherit_property_groups'           => 'Inherit properties of parent category',
+        'inherit_property_groups_comment'   => 'Use the property groups of this category\'s parent category',
+        'inherit_review_categories'         => 'Inherit review categories of parent category',
+        'inherit_review_categories_comment' => 'Use the review categories of this category\'s parent category',
     ],
     'custom_fields'            => [
         'name'             => 'Field name',
@@ -570,6 +577,8 @@
         'manage_payment_log'        => 'Can manage payment log',
         'manage_feeds'              => 'Can manage feeds',
         'manage_wishlists'          => 'Can manage wishlists',
+        'manage_services'           => 'Can manage services',
+        'manage_reviews'            => 'Can manage reviews',
     ],
     'components'               => [
         'products'                   => [
@@ -1006,5 +1015,10 @@
         'option'           => 'Option',
         'required'         => 'Service is required',
         'required_comment' => 'One option of this service has to be selected when a product is added to the cart.',
+    ],
+    'reviews'                  => [
+        'rating' => 'Rating',
+        'pros'   => 'Pros',
+        'cons'   => 'Cons',
     ],
 ];

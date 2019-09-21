@@ -72,3 +72,12 @@ image_sets:
     manage:
         list: $/offline/mall/models/imageset/columns.yaml
         form: $/offline/mall/models/imageset/fields.yaml
+
+reviews:
+    label: 'offline.mall::lang.common.review'
+    view:
+        list: $/offline/mall/models/review/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        list: $/offline/mall/models/review/columns.yaml
+        form: $/offline/mall/models/review/fields.yaml
