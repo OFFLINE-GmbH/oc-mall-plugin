@@ -166,6 +166,15 @@
         'google_merchant_url'             => 'Your Google Merchant Feed URL',
         'google_merchant_url_locale'      => 'Add ?locale=xy to get a localized feed.',
     ],
+    'review_settings'          => [
+        'description'              => 'Configure reviews',
+        'enabled'                  => 'Reviews enabled',
+        'enabled_comment'          => 'Customers can create reviews',
+        'allow_non_buyers'         => 'Allow non buyer reviews',
+        'allow_non_buyers_comment' => 'Allow customers, that did not buy a product, to create a review for it',
+        'allow_anonymous'          => 'Allow anonymous reviews',
+        'allow_anonymous_comment'  => 'Unregistered users can create reviews',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Products',
