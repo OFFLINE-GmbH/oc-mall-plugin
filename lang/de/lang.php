@@ -165,6 +165,15 @@
         'google_merchant_url'             => 'Deine Google Merchant Feed URL',
         'google_merchant_url_locale'      => 'Füge ?locale=xy zur URL hinzu um einen übersetzten Feed zu erhalten.',
     ],
+    'review_settings'          => [
+        'description'              => 'Reviews konfigurieren',
+        'enabled'                  => 'Reviews aktiviert',
+        'enabled_comment'          => 'Kunden können Produkte bewerten',
+        'allow_non_buyers'         => 'Nicht-Käufer-Reviews zulassen',
+        'allow_non_buyers_comment' => 'Kunden, die ein Produkt noch nicht gekauft haben, können es trotzdem bewerten',
+        'allow_anonymous'          => 'Anonyme Reviews zulassen',
+        'allow_anonymous_comment'  => 'Unregistrierte Benutzer dürfen Reviews erstellen',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Produkte',

@@ -1,0 +1,21 @@
+fields:
+    enabled:
+        label: offline.mall::lang.review_settings.enabled
+        comment: offline.mall::lang.review_settings.enabled_comment
+        type: switch
+    allow_non_buyers:
+        label: offline.mall::lang.review_settings.allow_non_buyers
+        comment: offline.mall::lang.review_settings.allow_non_buyers_comment
+        type: switch
+        trigger:
+            action: enable
+            field: enabled
+            condition: checked
+    allow_anonymous:
+        label: offline.mall::lang.review_settings.allow_anonymous
+        comment: offline.mall::lang.review_settings.allow_anonymous_comment
+        type: switch
+        trigger:
+            action: enable
+            field: allow_non_buyers
+            condition: checked
