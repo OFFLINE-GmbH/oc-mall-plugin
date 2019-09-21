@@ -1,0 +1,50 @@
+columns:
+    product_id:
+        label: 'offline.mall::lang.common.product'
+        type: text
+        searchable: false
+        select: name
+        relation: product
+    variant_id:
+        label: 'offline.mall::lang.common.variant'
+        type: text
+        select: name
+        relation: variant
+    customer_id:
+        label: 'offline.mall::lang.order.customer'
+        type: text
+        select: 'concat(firstname, '' '', lastname)'
+        relation: customer
+    rating:
+        label: 'offline.mall::lang.reviews.rating'
+        type: number
+        searchable: true
+        sortable: true
+    title:
+        label: 'offline.mall::lang.common.title'
+        type: text
+        searchable: true
+    description:
+        label: 'offline.mall::lang.product.description'
+        type: text
+        searchable: true
+    pros:
+        label: 'offline.mall::lang.reviews.pros'
+        type: text
+        searchable: true
+        invisible: true
+    cons:
+        label: 'offline.mall::lang.reviews.cons'
+        type: text
+        searchable: true
+        invisible: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        invisible: true
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        invisible: true
+        sortable: true

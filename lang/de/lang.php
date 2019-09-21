@@ -281,6 +281,11 @@
         'feeds'                => 'Feeds',
         'services'             => 'Services',
         'service'              => 'Service',
+        'review'               => 'Review',
+        'reviews'              => 'Reviews',
+        'review_categories'    => 'Review-Kategorien',
+        'review_category'      => 'Review-Kategorie',
+        'title'                => 'Titel',
     ],
     'variant'                  => [
         'method' => [
@@ -380,13 +385,15 @@
         'create_new'          => 'Erstelle neues Set',
     ],
     'category'                 => [
-        'name'                            => 'Name',
-        'code'                            => 'Code',
-        'code_comment'                    => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
-        'parent'                          => 'Elternelement',
-        'no_parent'                       => 'Kein Elternelement',
-        'inherit_property_groups'         => 'Übernehme Eigenschaften von Elternkategorie',
-        'inherit_property_groups_comment' => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
+        'name'                              => 'Name',
+        'code'                              => 'Code',
+        'code_comment'                      => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
+        'parent'                            => 'Elternelement',
+        'no_parent'                         => 'Kein Elternelement',
+        'inherit_property_groups'           => 'Übernehme Eigenschaften von Elternkategorie',
+        'inherit_property_groups_comment'   => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
+        'inherit_review_categories'         => 'Übernehme Review-Kateogiren von Elternkategorie',
+        'inherit_review_categories_comment' => 'Für diese Kategorie werden die gleichen Review-Kategorien wie für die Elternkategorie verwendet',
     ],
     'custom_fields'            => [
         'name'             => 'Feldname',
@@ -569,7 +576,8 @@
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
         'manage_feeds'              => 'Kann Feeds verwalten',
         'manage_wishlists'          => 'Kann Merklisten verwalten',
-        'manage_services'           => 'Can manage services',
+        'manage_services'           => 'Kann Services verwalten',
+        'manage_reviews'            => 'Kann Reviews verwalten',
     ],
     'components'               => [
         'products'                   => [
@@ -1005,5 +1013,10 @@
         'option'           => 'Option',
         'required'         => 'Pflichtservice',
         'required_comment' => 'Bei der Bestellung muss zwingend eine Service-Option ausgewählt werden',
+    ],
+    'reviews'                  => [
+        'rating' => 'Bewertung',
+        'pros'   => 'Vorteile',
+        'cons'   => 'Nachteile',
     ],
 ];
