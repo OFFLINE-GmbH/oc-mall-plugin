@@ -28,6 +28,13 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="mall-products-item__info-teritary">
+                {% if item.reviews_rating > 0 %}
+                    <div class="mall-products-item__stars">
+                        {% partial __SELF__ ~ '::stars' rating=item.reviews_rating %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </a>
 </div>

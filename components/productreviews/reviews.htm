@@ -32,10 +32,10 @@
             <div class="mall-review__category-reviews">
                 <ul class="mall-review__pro-con-list">
                 {% for item in review.pros %}
-                    <li>+ {{ item }}</li>
+                    <li>+ {{ item.value }}</li>
                 {% endfor %}
                 {% for item in review.cons %}
-                    <li>- {{ item }}</li>
+                    <li>- {{ item.value }}</li>
                 {% endfor %}
                 </ul>
             </div>

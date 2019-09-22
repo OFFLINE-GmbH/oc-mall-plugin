@@ -5,9 +5,11 @@ use DB;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\CategoryReview;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\ReviewCategory;
+use OFFLINE\Mall\Models\ReviewSettings;
 use RainLab\User\Facades\Auth;
 
 class ProductReviews extends ComponentBase
@@ -32,6 +34,19 @@ class ProductReviews extends ComponentBase
      * @var Review
      */
     public $customerReview;
+    /**
+     * @var string
+     */
+    public $accountPage;
+    /**
+     * Determines whether the current user can create a new review.
+     * @var bool
+     */
+    public $canReview;
+    /**
+     * @var bool
+     */
+    public $isModerated;
 
     public function componentDetails()
     {
@@ -60,10 +75,19 @@ class ProductReviews extends ComponentBase
     {
         $this->product          = ProductModel::findOrFail($this->property('product'));
         $this->reviewCategories = $this->product->categories->flatMap->inherited_review_categories->unique();
+        $this->accountPage      = GeneralSettings::get('account_page');
+        $this->isModerated      = ReviewSettings::get('moderated');
 
-        $this->allReviews       = Review
+        if (Auth::getUser()) {
+            $this->canReview = true;
+        } else {
+            $this->canReview = ReviewSettings::get('allow_anonymous', false);
+        }
+
+        $this->allReviews = Review
             ::with(['category_reviews.review_category', 'variant'])
             ->where('product_id', $this->product->id)
+            ->whereNotNull('approved_at')
             ->orderBy('created_at', 'DESC')
             ->get();
 
@@ -106,28 +130,33 @@ class ProductReviews extends ComponentBase
     {
         $this->setData();
 
-        $data         = post();
-        $data['pros'] = array_filter(explode("\n", post('pros', '')));
-        $data['cons'] = array_filter(explode("\n", post('cons', '')));
-
-        DB::transaction(function () use ($data) {
+        DB::transaction(function () {
+            $data = $this->getInputData();
             // Create the main review.
             $review = new Review();
             $review->fill($data);
             $review->product_id  = $this->property('product');
             $review->variant_id  = $this->property('variant');
             $review->customer_id = optional(optional(Auth::getUser())->customer)->id;
+            if ( ! $this->isModerated) {
+                $review->approved_at = now();
+            }
             $review->save();
-
             // Store any category reviews that are available.
             $categoryRatings = array_filter(post('category_rating', []));
             if (is_array($categoryRatings) && count($categoryRatings) > 0) {
-                $this->reviewCategories->each(function (ReviewCategory $category) use ($review, $categoryRatings) {
+                $approvedAt = $this->isModerated ? null : now();
+                $this->reviewCategories->each(function (ReviewCategory $category) use (
+                    $review,
+                    $categoryRatings,
+                    $approvedAt
+                ) {
                     if ($value = array_get($categoryRatings, $category->id)) {
                         CategoryReview::create([
                             'review_id'          => $review->id,
                             'review_category_id' => $category->id,
                             'rating'             => $value,
+                            'approved_at'        => $approvedAt,
                         ]);
                     }
                 });
@@ -139,23 +168,19 @@ class ProductReviews extends ComponentBase
         // Refetch latest data.
         $this->setData();
 
-        return $this->refreshFormAndList();
+        return $this->refreshFormAndList(true);
     }
 
     public function onUpdate()
     {
         $this->setData();
 
-        $data         = post();
-        $data['pros'] = array_filter(explode("\n", post('pros', '')));
-        $data['cons'] = array_filter(explode("\n", post('cons', '')));
-
-        DB::transaction(function () use ($data) {
+        DB::transaction(function () {
+            $data = $this->getInputData();
             // Update the main review.
             $review = $this->customerReview;
             $review->fill($data);
             $review->save();
-
             // Update any category reviews that are available.
             $categoryRatings = array_filter(post('category_rating', []));
             if (is_array($categoryRatings) && count($categoryRatings) > 0) {
@@ -180,19 +205,53 @@ class ProductReviews extends ComponentBase
         // Refetch latest data.
         $this->setData();
 
-        return $this->refreshFormAndList();
+        return $this->refreshFormAndList(false);
     }
 
     /**
+     * @param bool $new
+     *
      * @return array
      */
-    protected function refreshFormAndList(): array
+    protected function refreshFormAndList(bool $new): array
     {
         return [
-            '#mall-rating-widget' => $this->renderPartial($this->alias . '::okay'),
+            '#mall-rating-widget' => $this->renderPartial($this->alias . '::okay', ['isNew' => $new]),
             '.mall-reviews'       => $this->renderPartial($this->alias . '::reviews', [
                 'reviews' => $this->reviews,
             ]),
         ];
+    }
+
+    /**
+     * Returns the form input data.
+     * @return array
+     */
+    protected function getInputData(): array
+    {
+        $data = post();
+
+        // Check if input contains something other than whitespace.
+        $hasContent = function ($input) {
+            return $input !== '' && ctype_space($input) === false;
+        };
+        // Since the data is stored in a repeater field, we need to add a value key.
+        $addValueKey = function ($value) {
+            return ['value' => $value];
+        };
+
+        // Split up on new lines.
+        $pros = explode("\n", post('pros', ''));
+        $cons = explode("\n", post('cons', ''));
+
+        // Filter out empty lines.
+        $pros = array_filter($pros, $hasContent);
+        $cons = array_filter($cons, $hasContent);
+
+        // Add the value key.
+        $data['pros'] = array_map($addValueKey, $pros);
+        $data['cons'] = array_map($addValueKey, $cons);
+
+        return $data;
     }
 }

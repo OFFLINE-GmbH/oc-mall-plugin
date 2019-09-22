@@ -13,8 +13,8 @@ class ReviewSettings extends Model
 
     public function initSettingsData()
     {
-        $this->enabled          = true;
-        $this->allow_non_buyers = true;
-        $this->allow_anonymous  = false;
+        $this->enabled         = true;
+        $this->moderated       = false;
+        $this->allow_anonymous = false;
     }
 }

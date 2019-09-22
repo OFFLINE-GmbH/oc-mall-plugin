@@ -41,6 +41,7 @@ class CreateOfflineMallReviews extends Migration
 
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
         });
         Schema::create('offline_mall_category_reviews', function ($table) {
             $table->engine = 'InnoDB';
@@ -50,6 +51,7 @@ class CreateOfflineMallReviews extends Migration
             $table->tinyInteger('rating');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
         });
         Schema::create('offline_mall_category_review_totals', function ($table) {
             $table->engine = 'InnoDB';
@@ -68,6 +70,13 @@ class CreateOfflineMallReviews extends Migration
         Schema::table('offline_mall_product_variants', function ($table) {
             $table->decimal('reviews_rating', 3, 2)->after('stock')->default(0);
         });
+        if (Schema::hasTable('offline_mall_index')) {
+            Schema::table('offline_mall_index', function ($table) {
+                if ( ! Schema::hasColumn('offline_mall_index', 'reviews_rating')) {
+                    $table->decimal('reviews_rating', 3, 2);
+                }
+            });
+        }
     }
 
     public function down()
