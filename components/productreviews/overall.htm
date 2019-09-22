@@ -1,0 +1,21 @@
+<div class="mall-product-reviews__info-name">
+    {{ 'offline.mall::frontend.reviews.overall_rating' | trans }}
+</div>
+<div class="mall-product-reviews__info-content">
+    <div class="mall-product-reviews__overall-ratings">
+        <div>
+            {% set count = __SELF__.allReviews.count %}
+            {% set label = count ~ ' ' ~ ('offline.mall::frontend.reviews.ratings' | transchoice(count | default(0))) %}
+            {% partial __SELF__ ~ '::stars' rating=__SELF__.product.reviews_rating label=label variant="big" %}
+            <div class="mall-product-reviews__summary">
+                {{ 'offline.mall::frontend.reviews.overall_rating_summary' | trans({value: __SELF__.product.reviews_rating}) }}
+            </div>
+        </div>
+        <div>
+            {% for category in __SELF__.reviewCategories %}
+                {% set rating = __SELF__.product.category_review_totals.where('review_category_id', category.id).first().rating %}
+                {% partial __SELF__ ~ '::stars' rating=rating label=category.name variant="big" %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

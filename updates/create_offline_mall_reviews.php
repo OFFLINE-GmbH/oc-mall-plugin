@@ -46,13 +46,27 @@ class CreateOfflineMallReviews extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('review_id')->index();
-            $table->integer('review_category_id');
+            $table->integer('review_category_id')->index();
             $table->tinyInteger('rating');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
+        Schema::create('offline_mall_category_review_totals', function ($table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id')->unsigned();
+            $table->integer('product_id')->nullable()->index();
+            $table->integer('variant_id')->nullable();
+            $table->integer('review_category_id');
+            $table->decimal('rating', 3, 2);
+        });
         Schema::table('offline_mall_categories', function ($table) {
             $table->boolean('inherit_review_categories')->after('inherit_property_groups')->default(0);
+        });
+        Schema::table('offline_mall_products', function ($table) {
+            $table->decimal('reviews_rating', 3, 2)->after('stock')->default(0);
+        });
+        Schema::table('offline_mall_product_variants', function ($table) {
+            $table->decimal('reviews_rating', 3, 2)->after('stock')->default(0);
         });
     }
 
@@ -62,8 +76,15 @@ class CreateOfflineMallReviews extends Migration
         Schema::dropIfExists('offline_mall_category_review_category');
         Schema::dropIfExists('offline_mall_reviews');
         Schema::dropIfExists('offline_mall_category_reviews');
+        Schema::dropIfExists('offline_mall_category_review_totals');
         Schema::table('offline_mall_categories', function ($table) {
             $table->dropColumn(['inherit_review_categories']);
+        });
+        Schema::table('offline_mall_products', function ($table) {
+            $table->dropColumn(['reviews_rating']);
+        });
+        Schema::table('offline_mall_product_variants', function ($table) {
+            $table->dropColumn(['reviews_rating']);
         });
     }
 }

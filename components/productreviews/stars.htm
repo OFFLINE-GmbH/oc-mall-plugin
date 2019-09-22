@@ -1,0 +1,11 @@
+<div class="mall-category-review {{ variant ? ('mall-category-review--' ~ variant) : '' }}">
+    <div class="mall-category-review__rating {{ clickable ? 'mall-category-review__rating--clickable' }}">
+        {% set rating = rating|round %}
+        {% for i in range(1, 5) %}
+            {% partial __SELF__ ~ '::star' active=rating >= i value=i %}
+        {% endfor %}
+    </div>
+    <div class="mall-category-review__name">
+        {{ label }}
+    </div>
+</div>

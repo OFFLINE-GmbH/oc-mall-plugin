@@ -18,6 +18,7 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
+use OFFLINE\Mall\Models\ReviewSettings;
 use OFFLINE\Mall\Models\Variant;
 use Request;
 use Session;
@@ -94,6 +95,11 @@ class Product extends MallComponent
      * @var bool
      */
     protected $isNotFound;
+    /**
+     * Show or hide reviews, defined in ReviewSettings.
+     * @var bool
+     */
+    public $showReviews;
 
     /**
      * Component details.
@@ -226,6 +232,12 @@ class Product extends MallComponent
 
             return;
         }
+
+        $this->showReviews = (bool)ReviewSettings::get('enabled', false);
+        $this->addComponent(ProductReviews::class, 'productReviews', [
+            'product' => $this->product->id,
+            'variant' => optional($this->variant)->id,
+        ]);
 
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
