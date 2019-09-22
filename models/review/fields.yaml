@@ -5,6 +5,7 @@ fields:
         descriptionFrom: description
         span: auto
         type: relation
+        emptyOption: 'offline.mall::lang.reviews.anonymous'
     rating:
         label: 'offline.mall::lang.reviews.rating'
         span: auto
@@ -16,9 +17,10 @@ tabs:
     fields:
         title:
             label: 'offline.mall::lang.common.title'
-            span: auto
+            span: left
             type: text
             tab: 'offline.mall::lang.common.review'
+
         pros:
             label: 'offline.mall::lang.reviews.pros'
             prompt: 'Add new item'
@@ -49,3 +51,8 @@ tabs:
                         label: 'offline.mall::lang.common.value'
                         span: full
                         type: text
+        approve_now:
+            type: partial
+            path: approve_now
+            span: left
+            tab: 'offline.mall::lang.common.review'

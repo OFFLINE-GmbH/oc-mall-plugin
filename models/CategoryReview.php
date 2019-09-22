@@ -17,6 +17,7 @@ class CategoryReview extends Model
         'review_id',
         'review_category_id',
         'rating',
+        'approved_at',
     ];
     public $belongsTo = [
         'review'          => Review::class,
@@ -25,9 +26,13 @@ class CategoryReview extends Model
     public $casts = [
         'rating' => 'integer',
     ];
+    public $dates = ['approved_at'];
 
     public function afterSave()
     {
+        if ( ! $this->approved_at) {
+            return;
+        }
         if ($this->review->product) {
             $this->updateRating($this->review->product);
         }

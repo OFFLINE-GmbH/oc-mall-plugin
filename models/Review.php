@@ -2,6 +2,7 @@
 
 use Model;
 use October\Rain\Database\Traits\Validation;
+use RainLab\User\Facades\Auth;
 
 /**
  * @property Customer $customer
@@ -41,6 +42,15 @@ class Review extends Model
     public $hasMany = [
         'category_reviews' => [CategoryReview::class],
     ];
+    public $dates = ['approved_at'];
+
+    public function approve()
+    {
+        $this->approved_at = now();
+        $this->save();
+
+        $this->category_reviews->each->update(['approved_at' => now()]);
+    }
 
     public function beforeSave()
     {
@@ -49,6 +59,9 @@ class Review extends Model
 
     public function afterSave()
     {
+        if ( ! $this->approved_at) {
+            return;
+        }
         if ($this->product) {
             $this->updateRating($this->product);
         }
@@ -85,7 +98,10 @@ class Review extends Model
      */
     public static function getUserHash()
     {
-        $data = implode('-', [request()->ip(), request()->userAgent()]);
+        $user = Auth::getUser();
+
+        $userId = $user->id ?? 0;
+        $data   = implode('-', [request()->ip(), request()->userAgent(), $userId]);
 
         return hash('sha256', $data);
     }
@@ -102,5 +118,15 @@ class Review extends Model
         }
 
         return $this->customer->name;
+    }
+
+    public function getProsStringAttribute()
+    {
+        return collect($this->pros)->pluck('value')->filter()->implode("\n");
+    }
+
+    public function getConsStringAttribute()
+    {
+        return collect($this->cons)->pluck('value')->filter()->implode("\n");
     }
 }

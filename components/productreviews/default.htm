@@ -3,12 +3,14 @@
         {{ 'offline.mall::frontend.reviews.heading' | trans }}
     </h3>
 
-    <div class="mall-product-reviews__info">
-        {% partial __SELF__ ~ '::overall' %}
-    </div>
+    {% if __SELF__.allReviews.count > 0 %}
+        <div class="mall-product-reviews__info">
+            {% partial __SELF__ ~ '::overall' %}
+        </div>
+    {% endif %}
 
     <div class="mall-product-reviews__info" id="mall-rating-widget">
-        {% partial __SELF__ ~ '::form' %}
+        {% partial __SELF__ ~ '::userreview' %}
     </div>
 
     <div class="mall-reviews">

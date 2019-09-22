@@ -3,9 +3,9 @@ fields:
         label: offline.mall::lang.review_settings.enabled
         comment: offline.mall::lang.review_settings.enabled_comment
         type: switch
-    allow_non_buyers:
-        label: offline.mall::lang.review_settings.allow_non_buyers
-        comment: offline.mall::lang.review_settings.allow_non_buyers_comment
+    moderated:
+        label: offline.mall::lang.review_settings.moderated
+        comment: offline.mall::lang.review_settings.moderated_comment
         type: switch
         trigger:
             action: enable
@@ -17,5 +17,5 @@ fields:
         type: switch
         trigger:
             action: enable
-            field: allow_non_buyers
+            field: enabled
             condition: checked

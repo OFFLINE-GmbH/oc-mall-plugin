@@ -157,7 +157,9 @@ return [
     'reviews.overall_rating_summary'           => 'Ø :value of 5 stars',
     'reviews.your_rating'                      => 'Your rating',
     'reviews.callout'                          => 'Thank you for your review!',
+    'reviews.moderated'                        => 'It will be visible after manual review by the shop administrator.',
     'reviews.none'                             => 'There are no reviews for this product yet.',
     'reviews.ratings'                          => 'rating|ratings',
-    'one_per_line'                             => 'One entry per line',
+    'reviews.optional'                         => 'Optional, but helps to understand your rating better',
+    'reviews.one_per_line'                     => 'Optional, put every entry on its own line',
 ];

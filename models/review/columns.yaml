@@ -1,4 +1,10 @@
 columns:
+    rating:
+        label: 'offline.mall::lang.reviews.rating'
+        type: partial
+        path: rating
+        searchable: true
+        sortable: true
     product_id:
         label: 'offline.mall::lang.common.product'
         type: text
@@ -10,16 +16,10 @@ columns:
         type: text
         select: name
         relation: variant
-    customer_id:
+    customer_name:
         label: 'offline.mall::lang.order.customer'
         type: text
-        select: 'concat(firstname, '' '', lastname)'
-        relation: customer
-    rating:
-        label: 'offline.mall::lang.reviews.rating'
-        type: number
-        searchable: true
-        sortable: true
+        sortable: false
     title:
         label: 'offline.mall::lang.common.title'
         type: text
@@ -28,6 +28,7 @@ columns:
         label: 'offline.mall::lang.product.description'
         type: text
         searchable: true
+        invisible: true
     pros:
         label: 'offline.mall::lang.reviews.pros'
         type: text
@@ -38,6 +39,10 @@ columns:
         type: text
         searchable: true
         invisible: true
+    approved_at:
+        label: 'offline.mall::lang.common.approved_at'
+        type: datetime
+        sortable: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime

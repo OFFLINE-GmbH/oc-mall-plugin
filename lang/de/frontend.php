@@ -157,7 +157,9 @@ return [
     'reviews.overall_rating_summary'           => 'Ø :value von 5 Sternen',
     'reviews.your_rating'                      => 'Deine Bewertung',
     'reviews.callout'                          => 'Vielen Dank für Deine Bewertung!',
+    'reviews.moderated'                        => 'Nach manueller Prüfung wird sie auf der Website sichtbar sein.',
     'reviews.none'                             => 'Für dieses Produkt gibt es noch keine Bewertungen.',
     'reviews.ratings'                          => 'Bewertung|Bewertungen',
-    'one_per_line'                             => 'Ein Punkt pro Zeile',
+    'reviews.optional'                         => 'Optional, hilft aber Deine Bewertung besser zu verstehen',
+    'reviews.one_per_line'                     => 'Optional, ein Punkt pro Zeile',
 ];

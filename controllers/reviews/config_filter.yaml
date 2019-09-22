@@ -1,0 +1,9 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    status:
+        label: offline.mall::lang.reviews.only_unapproved
+        type: checkbox
+        conditions: approved_at is null
