@@ -69,6 +69,7 @@ class Category extends Model
         'meta_description',
         'parent_id',
         'inherit_property_groups',
+        'inherit_review_categories',
         'sort_order',
     ];
     public $casts = [

@@ -38,7 +38,6 @@ class CreateOfflineMallReviews extends Migration
             $table->text('description')->nullable();
             $table->text('pros')->nullable();
             $table->text('cons')->nullable();
-
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('approved_at')->nullable();
@@ -62,7 +61,9 @@ class CreateOfflineMallReviews extends Migration
             $table->decimal('rating', 3, 2);
         });
         Schema::table('offline_mall_categories', function ($table) {
-            $table->boolean('inherit_review_categories')->after('inherit_property_groups')->default(0);
+            if ( ! Schema::hasColumn('offline_mall_categories', 'inherit_review_categories')) {
+                $table->boolean('inherit_review_categories')->after('inherit_property_groups')->default(0);
+            }
         });
         Schema::table('offline_mall_products', function ($table) {
             $table->decimal('reviews_rating', 3, 2)->after('stock')->default(0);

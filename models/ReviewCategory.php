@@ -13,6 +13,9 @@ class ReviewCategory extends Model
     public $translatable = [
         'name',
     ];
+    public $fillable = [
+        'name',
+    ];
     public $table = 'offline_mall_review_categories';
     public $slugs = [
         'slug' => 'name',

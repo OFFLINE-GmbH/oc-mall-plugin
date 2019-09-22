@@ -21,6 +21,7 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
+use OFFLINE\Mall\Models\ReviewCategory;
 use OFFLINE\Mall\Models\Service;
 use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\Tax;
@@ -52,6 +53,7 @@ class SeedDemoData extends Command
         $this->createCurrencies();
         $this->createBrands();
         $this->createProperties();
+        $this->createReviewCategories();
         $this->createCategories();
         $this->createTaxes();
         $this->createProducts();
@@ -152,26 +154,31 @@ class SeedDemoData extends Command
         foreach ($this->bikePropertyGroups as $index => $group) {
             $bikes->property_groups()->attach($group, ['relation_sort_order' => $index]);
         }
+        ReviewCategory::get()->each(function ($c) use ($bikes) {
+            $bikes->review_categories()->attach($c);
+        });
 
         Category::create([
-            'name'                    => 'Mountainbikes',
-            'slug'                    => 'mountainbikes',
-            'code'                    => 'mountainbikes',
-            'meta_title'              => 'Mountainbikes',
-            'sort_order'              => 0,
-            'meta_description'        => 'Take a look at our huge mountainbike range',
-            'inherit_property_groups' => true,
-            'parent_id'               => $bikes->id,
+            'name'                      => 'Mountainbikes',
+            'slug'                      => 'mountainbikes',
+            'code'                      => 'mountainbikes',
+            'meta_title'                => 'Mountainbikes',
+            'sort_order'                => 0,
+            'meta_description'          => 'Take a look at our huge mountainbike range',
+            'inherit_property_groups'   => true,
+            'inherit_review_categories' => true,
+            'parent_id'                 => $bikes->id,
         ]);
         Category::create([
-            'name'                    => 'Citybikes',
-            'slug'                    => 'citybikes',
-            'code'                    => 'citybikes',
-            'meta_title'              => 'Citybikes',
-            'sort_order'              => 1,
-            'meta_description'        => 'Take a look at our huge citybike range',
-            'inherit_property_groups' => true,
-            'parent_id'               => $bikes->id,
+            'name'                      => 'Citybikes',
+            'slug'                      => 'citybikes',
+            'code'                      => 'citybikes',
+            'meta_title'                => 'Citybikes',
+            'sort_order'                => 1,
+            'meta_description'          => 'Take a look at our huge citybike range',
+            'inherit_property_groups'   => true,
+            'inherit_review_categories' => true,
+            'parent_id'                 => $bikes->id,
         ]);
 
         $clothing = Category::create([
@@ -375,6 +382,15 @@ class SeedDemoData extends Command
             'name'       => 'VAT',
             'percentage' => 10,
         ]);
+    }
+
+    protected function createReviewCategories()
+    {
+        $this->output->writeln('Creating review categories...');
+        DB::table('offline_mall_review_categories')->truncate();
+        ReviewCategory::create(['name' => 'Price']);
+        ReviewCategory::create(['name' => 'Design']);
+        ReviewCategory::create(['name' => 'Build quality']);
     }
 
     protected function createServices()
