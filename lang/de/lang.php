@@ -749,6 +749,12 @@
                 ],
             ],
         ],
+        'productReviews'             => [
+            'details' => [
+                'name'        => 'Produkt-Reviews',
+                'description' => 'Zeigt alle Reviews zu einem Produkt an',
+            ],
+        ],
         'cart'                       => [
             'details'    => [
                 'name'        => 'Warenkorb',
@@ -1024,8 +1030,11 @@
         'required_comment' => 'Bei der Bestellung muss zwingend eine Service-Option ausgewählt werden',
     ],
     'reviews'                  => [
-        'rating' => 'Bewertung',
-        'pros'   => 'Vorteile',
-        'cons'   => 'Nachteile',
+        'rating'    => 'Bewertung',
+        'review'    => 'Details zur Bewertung',
+        'title'     => 'Titel der Bewertung',
+        'pros'      => 'Positive Punkte',
+        'cons'      => 'Negative Punkte',
+        'anonymous' => 'Anonym',
     ],
 ];

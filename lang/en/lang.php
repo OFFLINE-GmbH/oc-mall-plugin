@@ -751,6 +751,12 @@
             ],
             'added_to_cart' => 'Added product successfully',
         ],
+        'productReviews'             => [
+            'details' => [
+                'name'        => 'Product reviews',
+                'description' => 'Displays all reviews of a product',
+            ],
+        ],
         'cart'                       => [
             'details'    => [
                 'name'        => 'Cart',
@@ -1026,8 +1032,11 @@
         'required_comment' => 'One option of this service has to be selected when a product is added to the cart.',
     ],
     'reviews'                  => [
-        'rating' => 'Rating',
-        'pros'   => 'Pros',
-        'cons'   => 'Cons',
+        'rating'    => 'Rating',
+        'review'    => 'Review details',
+        'title'     => 'Title of your review',
+        'pros'      => 'Positive aspects',
+        'cons'      => 'Negative aspects',
+        'anonymous' => 'Anonymous',
     ],
 ];

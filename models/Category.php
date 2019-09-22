@@ -7,6 +7,7 @@ use Model;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
 use OFFLINE\Mall\Classes\Traits\Category\Properties;
@@ -236,5 +237,23 @@ class Category extends Model
             'created_at asc'  => "${created}, A->Z",
             'created_at desc' => "${created}, Z->A",
         ];
+    }
+
+    public function getInheritedReviewCategoriesAttribute()
+    {
+        return $this->inherit_review_categories ? $this->getInheritedReviewCategories() : $this->review_categories;
+    }
+
+    /**
+     * Returns the review categories of the first parent
+     * that does not inherit them.
+     */
+    public function getInheritedReviewCategories()
+    {
+        $groups = $this->getParents()->first(function (Category $category) {
+            return ! $category->inherit_review_categories;
+        })->review_categories;
+
+        return $groups ?? new Collection();
     }
 }

@@ -1,0 +1,67 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            {# AJAX pagination for reviews #}
+            $('body').on('click', '.mall-pagination--reviews a', function (e) {
+                e.preventDefault()
+                var matches = this.href.match(/page=(\d+)/)
+                if (matches.length < 2) {
+                    return
+                }
+                var page = matches[1]
+                $('.mall-reviews').css({opacity: .4, cursor: 'wait'})
+                $.request('{{ __SELF__ }}::onPageChange', {
+                    data: {page: page},
+                    complete: function (data) {
+                        this.complete(data)
+                        var $reviews = $('.mall-reviews')
+                        $reviews.css({opacity: 1, cursor: 'initial'})
+                        window.scrollTo({
+                            top: $reviews.offset().top,
+                            behavior: 'smooth'
+                        });
+                    }
+                })
+            })
+            
+            $('.js-mall-rating .mall-star').on('mouseenter', function() {
+                $(this).parent().find('.mall-star--hover').removeClass('mall-star--hover')
+                var highlight = function(el) {
+                    el.classList.add('mall-star--hover')
+                    if (el.previousElementSibling) {
+                        el.classList.add('mall-star--hover')
+                        highlight(el.previousElementSibling)
+                    }
+                }
+                highlight(this)
+            }).on('click', function() {
+                var $parent = $(this).parent()
+                $parent.find('.mall-star--active').removeClass('mall-star--active')
+                $parent.parent().prev().val(this.dataset.value)
+
+                revealForm()
+
+                var highlight = function(el) {
+                    el.classList.add('mall-star--active')
+                    if (el.previousElementSibling) {
+                        el.classList.add('mall-star--active')
+                        highlight(el.previousElementSibling)
+                    }
+                }
+                highlight(this)
+            })
+            $('.mall-category-review__rating--clickable').on('mouseleave', function() {
+                $(this).find('.mall-star--hover').removeClass('mall-star--hover')
+            })
+            $('.js-mall-edit-review').on('click', function(e) {
+                e.preventDefault();
+                revealForm()
+            })
+
+            function revealForm() {
+                $('.mall-product-reviews__form-details').addClass('mall-product-reviews__form-details--visible')
+                $('.mall-product-reviews__user-review').remove();
+            }
+        })
+    </script>
+{% endput %}
