@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
+use October\Rain\Support\Arr;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CategoryReview;
@@ -136,7 +137,7 @@ abstract class DemoProduct
 
             $review->approved_at = now();
             $review->product_id  = $this->product->id;
-            $review->variant_id  = $this->product->fresh('variants')->variants->first()->id;
+            $review->variant_id  = Arr::random($this->product->fresh('variants')->variants->toArray())['id'];
             $review->save();
 
             foreach ($data['category_reviews'] ?? [] as $categoryId => $rating) {
