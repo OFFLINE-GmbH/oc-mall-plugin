@@ -67,7 +67,7 @@ class MySQL implements Index
             'name'                  => $data['name'] ?? '',
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
-            'reviews_rating'        => $data['reviews_rating'],
+            'reviews_rating'        => $data['reviews_rating'] ?? 0,
             'sales_count'           => $data['sales_count'] ?? 0,
             'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
             'published'             => $published ? 1 : 0,        // update only because of the true/1 conversion
