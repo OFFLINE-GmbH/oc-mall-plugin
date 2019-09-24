@@ -14,8 +14,8 @@ class Review extends Model
 
     public $table = 'offline_mall_reviews';
     public $rules = [
-        'title'       => 'required_with:description',
-        'description' => 'required_with:title|max:500',
+        'title'       => 'required_with:description|max:190',
+        'description' => 'max:500',
         'rating'      => 'required|numeric|between:1,5',
         'product_id'  => 'required|exists:offline_mall_products,id',
         'variant_id'  => 'nullable|exists:offline_mall_product_variants,id',
