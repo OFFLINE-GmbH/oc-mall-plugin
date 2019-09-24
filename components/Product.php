@@ -141,6 +141,12 @@ class Product extends MallComponent
                 'default'     => 0,
                 'type'        => 'checkbox',
             ],
+            'currentVariantReviewsOnly' => [
+                'title' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
+                'description' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.description',
+                'type' => 'checkbox',
+                'default' => 0
+            ],
         ];
     }
 
@@ -237,6 +243,7 @@ class Product extends MallComponent
         $this->addComponent(ProductReviews::class, 'productReviews', [
             'product' => $this->product->id,
             'variant' => optional($this->variant)->id,
+            'currentVariantReviewsOnly' => $this->property('currentVariantReviewsOnly'),
         ]);
 
         $this->setVar('variantPropertyValues', $this->getPropertyValues());

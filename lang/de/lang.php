@@ -760,6 +760,15 @@
                 'name'        => 'Produkt-Reviews',
                 'description' => 'Zeigt alle Reviews zu einem Produkt an',
             ],
+            'properties' => [
+                'perPage' => [
+                    'title' => 'Anzahl Reviews pro Seite'
+                ],
+                'currentVariantReviewsOnly' => [
+                    'title' => 'Zeige nur Reviews der Variante',
+                    'description' => 'Zeige keine Reviews von anderen Varianten des Produkts an'
+                ]
+            ]
         ],
         'cart'                       => [
             'details'    => [

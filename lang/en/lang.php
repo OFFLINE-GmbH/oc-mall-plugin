@@ -758,9 +758,18 @@
             'added_to_cart' => 'Added product successfully',
         ],
         'productReviews'             => [
-            'details' => [
+            'details'    => [
                 'name'        => 'Product reviews',
                 'description' => 'Displays all reviews of a product',
+            ],
+            'properties' => [
+                'perPage'            => [
+                    'title' => 'Number of reviews per page',
+                ],
+                'currentVariantReviewsOnly' => [
+                    'title'       => 'Show only ratings of this Variant',
+                    'description' => "Don't show reviews of other Variants of this Product",
+                ],
             ],
         ],
         'cart'                       => [
