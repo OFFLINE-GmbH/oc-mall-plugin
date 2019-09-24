@@ -214,3 +214,5 @@
 1.6.0:
     - Added Reviews. Speaking of reviews, did you already add a review for this plugin ;-)? https://octobercms.com/plugin/offline-mall
     - create_offline_mall_reviews.php
+1.6.1:
+    - "Bugfix release. Don't forget to check out the new changelog for updates to 1.6.0: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.6.0.html"
