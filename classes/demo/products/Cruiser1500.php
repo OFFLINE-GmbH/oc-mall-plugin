@@ -148,7 +148,7 @@ class Cruiser1500 extends DemoProduct
                 'review'           => new Review([
                     'title'       => 'This bike is for girls',
                     'description' => "So I've bought this bike last week and now my friend pointed out, that 
-                    it is actually a girl's bike.",
+                    it is actually a girl's bike. This should be mentioned in the description!",
                     'rating'      => 1,
                 ]),
                 'category_reviews' => [
