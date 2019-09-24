@@ -60,13 +60,24 @@ class ProductReviews extends ComponentBase
     {
         return [
             'product' => [
-                'type' => 'string',
+                'title'       => 'offline.mall::lang.components.wishlistButton.properties.product.title',
+                'description' => 'offline.mall::lang.components.wishlistButton.properties.product.description',
+                'type'        => 'string',
             ],
             'variant' => [
-                'type' => 'string',
+                'title'       => 'offline.mall::lang.components.wishlistButton.properties.variant.title',
+                'description' => 'offline.mall::lang.components.wishlistButton.properties.variant.description',
+                'type'        => 'string',
             ],
             'perPage' => [
+                'title'       => 'offline.mall::lang.components.productReviews.properties.perPage.title',
                 'type' => 'string',
+            ],
+            'currentVariantReviewsOnly' => [
+                'title' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
+                'description' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.description',
+                'type' => 'checkbox',
+                'default' => 0
             ],
         ];
     }
@@ -84,9 +95,14 @@ class ProductReviews extends ComponentBase
             $this->canReview = ReviewSettings::get('allow_anonymous', false);
         }
 
+        $limitToVariant = (bool)$this->property('currentVariantReviewsOnly') && (bool)$this->property('variant');
+
         $this->allReviews = Review
             ::with(['category_reviews.review_category', 'variant'])
             ->where('product_id', $this->product->id)
+            ->when($limitToVariant, function ($q) {
+                $q->where('variant_id', $this->property('variant'));
+            })
             ->whereNotNull('approved_at')
             ->orderBy('created_at', 'DESC')
             ->get();
