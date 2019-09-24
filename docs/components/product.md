@@ -30,6 +30,12 @@ Default behaviour is to only reload the "add to cart" partial where new pricing
 information and stock values are displayed. The title, description and product images
 remain unchanged. Set this property to true if you need the whole page to update.
 
+### `currentVariantReviewsOnly` (boolean)
+
+If Reviews are enabled, display only Reviews for the currently viewed Variant.
+
+By default Reviews from all Variants of the same Product are shown.
+
 ## Example implementations
 
 ### Display the Variant defined in the URL

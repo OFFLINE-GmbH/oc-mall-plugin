@@ -24,3 +24,13 @@ products:
         recordsPerPage: 10
         recordUrl: offline/mall/products/update/:id
         toolbarPartial: products_relation_partial
+
+review_categories:
+    label: 'offline.mall::lang.common.review_category'
+    view:
+        list: $/offline/mall/models/reviewcategory/columns.yaml
+        recordsPerPage: 10
+        toolbarButtons: add|create|remove|delete
+    manage:
+        form: $/offline/mall/models/reviewcategory/fields.yaml
+        list: $/offline/mall/models/reviewcategory/columns.yaml

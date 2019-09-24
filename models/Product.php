@@ -131,11 +131,13 @@ class Product extends Model
         'additional_prices'     => [Price::class, 'name' => 'priceable'],
     ];
     public $hasMany = [
-        'prices'          => [ProductPrice::class, 'conditions' => 'variant_id is null'],
-        'variants'        => Variant::class,
-        'cart_products'   => CartProduct::class,
-        'image_sets'      => ImageSet::class,
-        'property_values' => PropertyValue::class,
+        'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
+        'variants'               => Variant::class,
+        'cart_products'          => CartProduct::class,
+        'image_sets'             => ImageSet::class,
+        'property_values'        => PropertyValue::class,
+        'reviews'                => Review::class,
+        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null'],
     ];
     public $belongsToMany = [
         'categories'      => [

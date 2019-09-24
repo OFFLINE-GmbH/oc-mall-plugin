@@ -18,6 +18,7 @@ use OFFLINE\Mall\Classes\Seeders\ShippingMethodTableSeeder;
 use OFFLINE\Mall\Classes\Seeders\TaxTableSeeder;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\PriceCategory;
+use OFFLINE\Mall\Models\ReviewSettings;
 
 class DatabaseSeeder extends Seeder
 {
@@ -75,5 +76,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PropertyTableSeeder::class);
         $this->call(OrderStateTableSeeder::class);
         $this->call(NotificationTableSeeder::class);
+
+        ReviewSettings::set('enabled', true);
     }
 }

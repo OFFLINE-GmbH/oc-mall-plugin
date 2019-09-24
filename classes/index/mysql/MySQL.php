@@ -67,6 +67,7 @@ class MySQL implements Index
             'name'                  => $data['name'] ?? '',
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
+            'reviews_rating'        => $data['reviews_rating'] ?? 0,
             'sales_count'           => $data['sales_count'] ?? 0,
             'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
             'published'             => $published ? 1 : 0,        // update only because of the true/1 conversion
@@ -113,6 +114,7 @@ class MySQL implements Index
                 $table->string('brand');
                 $table->boolean('published');
                 $table->integer('stock');
+                $table->decimal('reviews_rating', 3, 2);
                 $table->integer('sales_count')->default(0);
                 $table->boolean('on_sale')->default(0);
                 $table->boolean('is_ghost')->default(0);

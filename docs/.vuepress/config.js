@@ -21,6 +21,7 @@ module.exports = {
                     '/digging-deeper/properties',
                     '/digging-deeper/categories',
                     '/digging-deeper/products',
+                    '/digging-deeper/reviews',
                     '/digging-deeper/services',
                     '/digging-deeper/currencies',
                     '/digging-deeper/shipping-methods',
@@ -37,6 +38,7 @@ module.exports = {
                     '/components/product',
                     '/components/products',
                     '/components/products-filter',
+                    '/components/product-reviews',
                     '/components/cart',
                     '/components/discount-applier',
                     '/components/checkout',
@@ -70,6 +72,7 @@ module.exports = {
             {
                 title: 'Changelog',
                 children: [
+                    '/changelog/1.6.0',
                     '/changelog/1.5.0',
                 ]
             }

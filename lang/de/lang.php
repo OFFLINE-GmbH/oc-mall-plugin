@@ -68,6 +68,10 @@
             'create' => 'Steuer erstellen',
             'update' => 'Steuer bearbeiten',
         ],
+        'reviews'              => [
+            'create' => 'Review erstellen',
+            'update' => 'Review bearbeiten',
+        ],
     ],
     'menu_items'               => [
         'all_categories'  => 'Alle Shop-Kategorien',
@@ -165,6 +169,15 @@
         'google_merchant_url'             => 'Deine Google Merchant Feed URL',
         'google_merchant_url_locale'      => 'Füge ?locale=xy zur URL hinzu um einen übersetzten Feed zu erhalten.',
     ],
+    'review_settings'          => [
+        'description'             => 'Reviews konfigurieren',
+        'enabled'                 => 'Reviews aktiviert',
+        'enabled_comment'         => 'Kunden können Produkte bewerten',
+        'moderated'               => 'Reviews moderieren',
+        'moderated_comment'       => 'Reviews werden erst nach manueller Prüfung auf der Website sichtbar',
+        'allow_anonymous'         => 'Anonyme Reviews zulassen',
+        'allow_anonymous_comment' => 'Unregistrierte Benutzer dürfen Reviews erstellen',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Produkte',
@@ -207,6 +220,7 @@
         'id'                   => 'ID',
         'created_at'           => 'Erstellt',
         'updated_at'           => 'Aktualisiert',
+        'approved_at'          => 'Freigegeben am',
         'hide_published'       => 'Verstecke veröffentlichte',
         'slug'                 => 'URL',
         'name'                 => 'Name',
@@ -281,6 +295,11 @@
         'feeds'                => 'Feeds',
         'services'             => 'Services',
         'service'              => 'Service',
+        'review'               => 'Review',
+        'reviews'              => 'Reviews',
+        'review_categories'    => 'Review-Kategorien',
+        'review_category'      => 'Review-Kategorie',
+        'title'                => 'Titel',
     ],
     'variant'                  => [
         'method' => [
@@ -380,13 +399,15 @@
         'create_new'          => 'Erstelle neues Set',
     ],
     'category'                 => [
-        'name'                            => 'Name',
-        'code'                            => 'Code',
-        'code_comment'                    => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
-        'parent'                          => 'Elternelement',
-        'no_parent'                       => 'Kein Elternelement',
-        'inherit_property_groups'         => 'Übernehme Eigenschaften von Elternkategorie',
-        'inherit_property_groups_comment' => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
+        'name'                              => 'Name',
+        'code'                              => 'Code',
+        'code_comment'                      => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
+        'parent'                            => 'Elternelement',
+        'no_parent'                         => 'Kein Elternelement',
+        'inherit_property_groups'           => 'Übernehme Eigenschaften von Elternkategorie',
+        'inherit_property_groups_comment'   => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
+        'inherit_review_categories'         => 'Übernehme Review-Kateogiren von Elternkategorie',
+        'inherit_review_categories_comment' => 'Für diese Kategorie werden die gleichen Review-Kategorien wie für die Elternkategorie verwendet',
     ],
     'custom_fields'            => [
         'name'             => 'Feldname',
@@ -569,7 +590,8 @@
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
         'manage_feeds'              => 'Kann Feeds verwalten',
         'manage_wishlists'          => 'Kann Merklisten verwalten',
-        'manage_services'           => 'Can manage services',
+        'manage_services'           => 'Kann Services verwalten',
+        'manage_reviews'            => 'Kann Reviews verwalten',
     ],
     'components'               => [
         'products'                   => [
@@ -655,6 +677,7 @@
                 'random'     => 'Zufällig',
                 'manual'     => 'Manuell',
                 'name'       => 'Name',
+                'ratings'    => 'Bewertung',
             ],
         ],
         'myAccount'                  => [
@@ -731,6 +754,21 @@
                     'description' => 'Leite den Besucher zur neuen Detailseite um wenn eine Eigenschaft geändert wird',
                 ],
             ],
+        ],
+        'productReviews'             => [
+            'details' => [
+                'name'        => 'Produkt-Reviews',
+                'description' => 'Zeigt alle Reviews zu einem Produkt an',
+            ],
+            'properties' => [
+                'perPage' => [
+                    'title' => 'Anzahl Reviews pro Seite'
+                ],
+                'currentVariantReviewsOnly' => [
+                    'title' => 'Zeige nur Reviews der Variante',
+                    'description' => 'Zeige keine Reviews von anderen Varianten des Produkts an'
+                ]
+            ]
         ],
         'cart'                       => [
             'details'    => [
@@ -1005,5 +1043,16 @@
         'option'           => 'Option',
         'required'         => 'Pflichtservice',
         'required_comment' => 'Bei der Bestellung muss zwingend eine Service-Option ausgewählt werden',
+    ],
+    'reviews'                  => [
+        'rating'          => 'Bewertung',
+        'review'          => 'Details zur Bewertung',
+        'title'           => 'Titel der Bewertung',
+        'pros'            => 'Positive Punkte',
+        'cons'            => 'Negative Punkte',
+        'anonymous'       => 'Anonym',
+        'only_unapproved' => 'Zeige nur zu überprüfende Reviews',
+        'no_more'         => 'Alle Reviews sind freigeschaltet',
+        'approve_next'    => 'Review freigeben und weiter',
     ],
 ];

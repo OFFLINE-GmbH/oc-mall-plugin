@@ -9,3 +9,7 @@
 </div>
 
 {% partial __SELF__ ~ '::images' images=item.all_images %}
+
+{% if __SELF__.showReviews %}
+    {% component 'productReviews' %}
+{% endif %}

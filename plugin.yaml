@@ -45,6 +45,12 @@ navigation:
                 icon: icon-cart-plus
                 permissions:
                     - offline.mall.manage_products
+            mall-reviews:
+                label: 'offline.mall::lang.common.reviews'
+                url: offline/mall/reviews
+                icon: icon-star-half-full
+                permissions:
+                    - offline.mall.manage_reviews
             mall-services:
                 label: 'offline.mall::lang.common.services'
                 url: offline/mall/services
@@ -127,3 +133,6 @@ permissions:
     offline.mall.manage_services:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_services'
+    offline.mall.manage_reviews:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_reviews'

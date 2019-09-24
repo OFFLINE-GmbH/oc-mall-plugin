@@ -2,12 +2,12 @@
 
 use Cache;
 use DB;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
 use OFFLINE\Mall\Classes\Traits\Category\Properties;
@@ -69,10 +69,12 @@ class Category extends Model
         'meta_description',
         'parent_id',
         'inherit_property_groups',
+        'inherit_review_categories',
         'sort_order',
     ];
     public $casts = [
-        'inherit_property_groups' => 'boolean',
+        'inherit_property_groups'   => 'boolean',
+        'inherit_review_categories' => 'boolean',
     ];
     public $table = 'offline_mall_categories';
     public $belongsToMany = [
@@ -97,6 +99,10 @@ class Category extends Model
             'key'      => 'category_id',
             'otherKey' => 'property_group_id',
             'pivot'    => ['relation_sort_order'],
+        ],
+        'review_categories' => [
+            ReviewCategory::class,
+            'table' => 'offline_mall_category_review_category',
         ],
     ];
     public $attachOne = [
@@ -151,8 +157,14 @@ class Category extends Model
             if ($model->parent_id === null) {
                 $model->inherit_property_groups = false;
             }
+            if ($model->parent_id === null) {
+                $model->inherit_review_categories = false;
+            }
             if ($model->inherit_property_groups === true && $model->property_groups()->count() > 0) {
                 $model->property_groups()->detach();
+            }
+            if ($model->inherit_review_categories === true && $model->review_categories()->count() > 0) {
+                $model->review_categories()->detach();
             }
             if ( ! $model->slug) {
                 $model->slug = str_slug($model->name);
@@ -173,13 +185,15 @@ class Category extends Model
     }
 
     /**
-     * Don't show the inherits_property_groups field if this
-     * category i a root node.
+     * Don't show the inherit_* fields if this category i a root node.
      */
     public function filterFields($fields, $context = null)
     {
         if (isset($fields->inherit_property_groups)) {
             $fields->inherit_property_groups->hidden = $this->parent_id === null;
+        }
+        if (isset($fields->inherit_review_categories)) {
+            $fields->inherit_review_categories->hidden = $this->parent_id === null;
         }
     }
 
@@ -224,5 +238,23 @@ class Category extends Model
             'created_at asc'  => "${created}, A->Z",
             'created_at desc' => "${created}, Z->A",
         ];
+    }
+
+    public function getInheritedReviewCategoriesAttribute()
+    {
+        return $this->inherit_review_categories ? $this->getInheritedReviewCategories() : $this->review_categories;
+    }
+
+    /**
+     * Returns the review categories of the first parent
+     * that does not inherit them.
+     */
+    public function getInheritedReviewCategories()
+    {
+        $groups = $this->getParents()->first(function (Category $category) {
+            return ! $category->inherit_review_categories;
+        })->review_categories;
+
+        return $groups ?? new Collection();
     }
 }

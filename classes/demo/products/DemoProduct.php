@@ -2,8 +2,10 @@
 
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
+use October\Rain\Support\Arr;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\CategoryReview;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\ImageSet;
@@ -35,6 +37,11 @@ abstract class DemoProduct
     abstract protected function categories(): array;
 
     protected function additionalPrices(): array
+    {
+        return [];
+    }
+
+    protected function reviews(): array
     {
         return [];
     }
@@ -114,15 +121,34 @@ abstract class DemoProduct
             unset($customField['price']);
 
             $f = CustomField::create($customField);
-            collect($prices)->map(function($price, $currency) use ($f) {
+            collect($prices)->map(function ($price, $currency) use ($f) {
                 return new Price([
-                    'currency_id'       => Currency::resolve($currency)->id,
-                    'price'             => $price,
-                    'priceable_id'      => $f->id,
-                    'priceable_type'    => 'mall.custom_field',
+                    'currency_id'    => Currency::resolve($currency)->id,
+                    'price'          => $price,
+                    'priceable_id'   => $f->id,
+                    'priceable_type' => 'mall.custom_field',
                 ]);
             });
             $this->product->custom_fields()->attach($f);
+        }
+
+        foreach ($this->reviews() as $data) {
+            $review = $data['review'];
+
+            $review->approved_at = now();
+            $review->product_id  = $this->product->id;
+            $review->variant_id  = Arr::random($this->product->fresh('variants')->variants->toArray())['id'];
+            $review->save();
+
+            foreach ($data['category_reviews'] ?? [] as $categoryId => $rating) {
+                $cr = new CategoryReview([
+                    'review_id'          => $review->id,
+                    'review_category_id' => $categoryId + 1,
+                    'rating'             => $rating,
+                    'approved_at'        => now(),
+                ]);
+                $cr->save();
+            }
         }
     }
 

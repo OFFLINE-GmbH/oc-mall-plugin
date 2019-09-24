@@ -1,17 +1,11 @@
-<form data-request="onAddToCart"
-      data-request-success="data.added && $.publish('mall.cart.productAdded', data)"
-      data-request-validate
-      data-request-flash
-      id="mall-add-to-cart">
-    <div class="mall-product">
-        <div class="mall-product__info">
-            {% partial __SELF__ ~ '::info' %}
-        </div>
-        <div class="mall-product__cart">
-            {% partial __SELF__ ~ '::cart' %}
-        </div>
+<div class="mall-product">
+    <div class="mall-product__info">
+        {% partial __SELF__ ~ '::info' %}
     </div>
-</form>
+    <div class="mall-product__cart">
+        {% partial __SELF__ ~ '::cart' %}
+    </div>
+</div>
 
 {% partial __SELF__ ~ '::scripts' %}
 

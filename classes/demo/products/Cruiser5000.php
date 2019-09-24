@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
 use OFFLINE\Mall\Models\ProductPrice;
+use OFFLINE\Mall\Models\Review;
 
 class Cruiser5000 extends DemoProduct
 {
@@ -141,6 +142,44 @@ class Cruiser5000 extends DemoProduct
                 'images'      => [
                     realpath(__DIR__ . '/images/cruiser-5000-1.jpg'),
                     realpath(__DIR__ . '/images/cruiser-5000-2.jpg'),
+                ],
+            ],
+        ];
+    }
+
+    protected function reviews(): array
+    {
+        return [
+            [
+                'review'           => new Review([
+                    'rating' => 3,
+                ]),
+                'category_reviews' => [
+                    3,
+                    3,
+                    2,
+                ],
+            ],
+            [
+                'review'           => new Review([
+                    'title'       => 'Very bad build quality',
+                    'description' => "The bike is okay but after a few rides parts started to fall off!",
+                    'rating'      => 3,
+                ]),
+                'category_reviews' => [
+                    4,
+                    5,
+                    1,
+                ],
+            ],
+            [
+                'review'           => new Review([
+                    'rating' => 2,
+                ]),
+                'category_reviews' => [
+                    2,
+                    2,
+                    5,
                 ],
             ],
         ];

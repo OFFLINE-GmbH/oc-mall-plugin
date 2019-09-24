@@ -45,7 +45,7 @@ class Variant extends Model
     public $translatable = [
         'name',
         'description_short',
-        'description'
+        'description',
     ];
     public $casts = [
         'published'                    => 'boolean',
@@ -75,6 +75,8 @@ class Variant extends Model
     public $hasMany = [
         'prices'                  => ProductPrice::class,
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
+        'reviews'                 => [Review::class],
+        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',

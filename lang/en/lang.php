@@ -68,6 +68,10 @@
             'create' => 'Create tax',
             'update' => 'Edit tax',
         ],
+        'reviews'              => [
+            'create' => 'Create review',
+            'update' => 'Edit review',
+        ],
     ],
     'menu_items'               => [
         'all_categories'  => 'All shop categories',
@@ -166,6 +170,15 @@
         'google_merchant_url'             => 'Your Google Merchant Feed URL',
         'google_merchant_url_locale'      => 'Add ?locale=xy to get a localized feed.',
     ],
+    'review_settings'          => [
+        'description'             => 'Configure reviews',
+        'enabled'                 => 'Reviews enabled',
+        'enabled_comment'         => 'Customers can create reviews',
+        'moderated'               => 'Moderate reviews',
+        'moderated_comment'       => 'New reviews have to be published manually by the site admin',
+        'allow_anonymous'         => 'Allow anonymous reviews',
+        'allow_anonymous_comment' => 'Unregistered users can create reviews',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Products',
@@ -208,6 +221,7 @@
         'id'                   => 'ID',
         'created_at'           => 'Created at',
         'updated_at'           => 'Updated at',
+        'approved_at'          => 'Approved at',
         'hide_published'       => 'Hide published',
         'slug'                 => 'URL',
         'name'                 => 'Name',
@@ -282,6 +296,11 @@
         'feeds'                => 'Feeds',
         'services'             => 'Services',
         'service'              => 'Service',
+        'review'               => 'Review',
+        'reviews'              => 'Reviews',
+        'review_categories'    => 'Review categories',
+        'review_category'      => 'Review category',
+        'title'                => 'Title',
     ],
     'variant'                  => [
         'method' => [
@@ -381,13 +400,15 @@
         'create_new'          => 'Create new set',
     ],
     'category'                 => [
-        'name'                            => 'Name',
-        'code'                            => 'Code',
-        'code_comment'                    => 'This code can be used to identify this category in your frontend partials.',
-        'parent'                          => 'Parent',
-        'no_parent'                       => 'No parent',
-        'inherit_property_groups'         => 'Inherit properties of parent category',
-        'inherit_property_groups_comment' => 'Use the property groups of this category\'s parent category',
+        'name'                              => 'Name',
+        'code'                              => 'Code',
+        'code_comment'                      => 'This code can be used to identify this category in your frontend partials.',
+        'parent'                            => 'Parent',
+        'no_parent'                         => 'No parent',
+        'inherit_property_groups'           => 'Inherit properties of parent category',
+        'inherit_property_groups_comment'   => 'Use the property groups of this category\'s parent category',
+        'inherit_review_categories'         => 'Inherit review categories of parent category',
+        'inherit_review_categories_comment' => 'Use the review categories of this category\'s parent category',
     ],
     'custom_fields'            => [
         'name'             => 'Field name',
@@ -570,6 +591,8 @@
         'manage_payment_log'        => 'Can manage payment log',
         'manage_feeds'              => 'Can manage feeds',
         'manage_wishlists'          => 'Can manage wishlists',
+        'manage_services'           => 'Can manage services',
+        'manage_reviews'            => 'Can manage reviews',
     ],
     'components'               => [
         'products'                   => [
@@ -655,6 +678,7 @@
                 'random'     => 'Random',
                 'manual'     => 'Manual',
                 'name'       => 'Name',
+                'ratings'    => 'Ratings',
             ],
         ],
         'myAccount'                  => [
@@ -732,6 +756,21 @@
                 ],
             ],
             'added_to_cart' => 'Added product successfully',
+        ],
+        'productReviews'             => [
+            'details'    => [
+                'name'        => 'Product reviews',
+                'description' => 'Displays all reviews of a product',
+            ],
+            'properties' => [
+                'perPage'            => [
+                    'title' => 'Number of reviews per page',
+                ],
+                'currentVariantReviewsOnly' => [
+                    'title'       => 'Show only ratings of this Variant',
+                    'description' => "Don't show reviews of other Variants of this Product",
+                ],
+            ],
         ],
         'cart'                       => [
             'details'    => [
@@ -1006,5 +1045,16 @@
         'option'           => 'Option',
         'required'         => 'Service is required',
         'required_comment' => 'One option of this service has to be selected when a product is added to the cart.',
+    ],
+    'reviews'                  => [
+        'rating'          => 'Rating',
+        'review'          => 'Review details',
+        'title'           => 'Title of your review',
+        'pros'            => 'Positive aspects',
+        'cons'            => 'Negative aspects',
+        'anonymous'       => 'Anonymous',
+        'only_unapproved' => 'Show only unapproved',
+        'no_more'         => 'No more unapproved reviews',
+        'approve_next'    => 'Approve and go to next',
     ],
 ];

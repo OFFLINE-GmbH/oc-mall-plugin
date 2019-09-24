@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
 use OFFLINE\Mall\Models\ProductPrice;
+use OFFLINE\Mall\Models\Review;
 
 class Cruiser1500 extends DemoProduct
 {
@@ -135,6 +136,45 @@ class Cruiser1500 extends DemoProduct
                 'is_main_set' => true,
                 'images'      => [
                     realpath(__DIR__ . '/images/cruiser-1500-1.jpg'),
+                ],
+            ],
+        ];
+    }
+
+    protected function reviews(): array
+    {
+        return [
+            [
+                'review'           => new Review([
+                    'title'       => 'This bike is for girls',
+                    'description' => "So I've bought this bike last week and now my friend pointed out, that 
+                    it is actually a girl's bike.",
+                    'rating'      => 1,
+                ]),
+                'category_reviews' => [
+                    1,
+                    1,
+                    1,
+                ],
+            ],
+            [
+                'review'           => new Review([
+                    'rating' => 5,
+                ]),
+                'category_reviews' => [
+                    3,
+                    4,
+                    5,
+                ],
+            ],
+            [
+                'review'           => new Review([
+                    'rating' => 4,
+                ]),
+                'category_reviews' => [
+                    5,
+                    4,
+                    5,
                 ],
             ],
         ];

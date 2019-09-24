@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Demo\Products;
 
 use OFFLINE\Mall\Models\ProductPrice;
+use OFFLINE\Mall\Models\Review;
 
 class Cruiser3000 extends DemoProduct
 {

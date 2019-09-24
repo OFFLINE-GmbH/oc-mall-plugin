@@ -28,6 +28,16 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="mall-products-item__info-teritary">
+                {% set rating = item.reviews_rating %}
+                {# To display the product's rating use: #}
+                {# set rating = item.product.reviews_rating #}
+                {% if rating > 0 %}
+                    <div class="mall-products-item__stars">
+                        {% partial __SELF__ ~ '::stars' rating=rating %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </a>
 </div>

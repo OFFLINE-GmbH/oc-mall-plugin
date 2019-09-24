@@ -1,0 +1,81 @@
+<form data-request="{{ __SELF__ }}::{{ review ? 'onUpdate' : 'onCreate' }}" data-request-validate data-request-flash
+      class="mall-review-form">
+    <div class="mall-product-reviews__overall-ratings">
+        <div class="js-mall-rating">
+            <input id="rating" name="rating" type="hidden" value="{{ review.rating }}">
+            {% partial __SELF__ ~ '::stars' rating=review.rating variant="big" clickable=true %}
+            <div class="mall-product-reviews__summary">
+                {{ 'offline.mall::frontend.reviews.overall_rating' | trans }}
+                <div data-validate-for="rating"></div>
+            </div>
+        </div>
+        <div class="js-mall-rating">
+            {% for category in __SELF__.reviewCategories %}
+                {% set rating = review.category_reviews.where('review_category_id', category.id).first().rating %}
+                <input id="category_rating_{{ category.id }}"
+                       name="category_rating[{{ category.id }}]"
+                       value="{{ rating }}"
+                       type="hidden">
+                {% partial __SELF__ ~ '::stars' rating=rating label=category.name variant="big" clickable=true %}
+            {% endfor %}
+        </div>
+    </div>
+    {% if review %}
+        <div class="mall-product-reviews__user-review">
+            <div class="mall-review">
+                {% if review.title %}
+                    <h4 class="mall-review__title">
+                        {{ review.title }}
+                    </h4>
+                {% endif %}
+                {% if review.description %}
+                    <div class="mall-review__content">
+                        {{ review.description | nl2br }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mall-product-reviews__user-review-actions">
+                <button class="mall-btn mall-btn--text js-mall-edit-review">
+                    {{ 'offline.mall::frontend.reviews.edit' | trans }}
+                </button>
+            </div>
+        </div>
+    {% endif %}
+    <div class="mall-product-reviews__form-details">
+        <div class="mall-form-control">
+            <label for="title">{{ 'offline.mall::lang.reviews.title' | trans }}</label>
+            <div class="mall-form-comment">
+                {{ 'offline.mall::frontend.reviews.optional' | trans }}
+            </div>
+            <input id="title" name="title" type="text" value="{{ review.title }}">
+            <div data-validate-for="title"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="description">{{ 'offline.mall::lang.reviews.review' | trans }}</label>
+            <div class="mall-form-comment">
+                {{ 'offline.mall::frontend.reviews.optional' | trans }}
+            </div>
+            <textarea id="description" name="description">{{ review.description }}</textarea>
+            <div data-validate-for="description"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="pros">{{ 'offline.mall::lang.reviews.pros' | trans }}</label>
+            <div class="mall-form-comment">
+                {{ 'offline.mall::frontend.reviews.one_per_line' | trans }}
+            </div>
+            <textarea id="pros" name="pros">{{ review.pros_string }}</textarea>
+            <div data-validate-for="pros"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="cons">{{ 'offline.mall::lang.reviews.cons' | trans }}</label>
+            <div class="mall-form-comment">
+                {{ 'offline.mall::frontend.reviews.one_per_line' | trans }}
+            </div>
+            <textarea id="cons" name="cons">{{ review.cons_string }}</textarea>
+            <div data-validate-for="cons"></div>
+        </div>
+        <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
+            {{ ('offline.mall::frontend.reviews.' ~ (review ? 'update' : 'create')) | trans }}
+        </button>
+    </div>
+</form>
