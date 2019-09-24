@@ -31,7 +31,7 @@ Unapproved reviews are not visible on the website.
 
 ### Allow anonymous
 
-By default, only logged in customers can create reviews. If this option is enabled
+By default, only logged in customers can create reviews. If this option is enabled,
 everyone can review products.
 
 ## Events
