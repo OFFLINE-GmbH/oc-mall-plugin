@@ -4,6 +4,7 @@ use Auth;
 use DB;
 use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
@@ -521,10 +522,10 @@ class Product extends MallComponent
      * @param                 $values
      * @param array           $serviceOptions
      *
-     * @return array
+     * @return array|RedirectResponse
      * @throws ValidationException
      */
-    protected function addToCart(ProductModel $product, $quantity, $variant, $values, array $serviceOptions = []): array
+    protected function addToCart(ProductModel $product, $quantity, $variant, $values, array $serviceOptions = [])
     {
         $cart = Cart::byUser(Auth::getUser());
 
