@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use Event;
 use October\Rain\Database\Traits\Validation;
 use RainLab\User\Facades\Auth;
 
@@ -50,6 +51,16 @@ class Review extends Model
         $this->save();
 
         $this->category_reviews->each->update(['approved_at' => now()]);
+    }
+
+    public function afterCreate()
+    {
+        Event::fire('mall.review.created', [$this]);
+    }
+
+    public function afterUpdate()
+    {
+        Event::fire('mall.review.updated', [$this]);
     }
 
     public function beforeSave()

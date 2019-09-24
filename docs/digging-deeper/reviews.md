@@ -1,18 +1,39 @@
-# Services
+# Reviews
 
-Services are additional offerings for a product 
-(e. g. extended warranty, on-site installation).
+Reviews can be added for a Product or Variant. 
 
-You can attach any number of services to a product on the 
-edit product form in the backend (cart section). 
+A Review needs at least a star rating (1-5 stars). It can have an
+optional title and description as well as a list of pros and cons.
 
-If a product with attached services is added to the cart, a modal appears
- where service options can or must be selected.
+Reviews can be disabled completely via October's backend settings.
 
-Each service needs at least one option. Each option has a price.
-A service can be specified to be required when a certain product 
-is added to the cart.
+## Review categories
 
-By default, only one of the provided options can be selected.
-By changing the [type of the `radio` inputs to `checkbox`](https://github.com/OFFLINE-GmbH/oc-mall-plugin/blob/317508f6bcbb7d280e96e379d1cec9b0636dc207/components/product/servicemodal.htm#L36), a user
-will be able to select multiple options for a single service. 
+You can create additional review categories like `Price`, `Design` or `Build quality` and
+assign them to specific product categories. 
+
+This allows a customer to rate specific aspects of a product in more detail.
+
+Review categories can be managed via the Product category edit form.
+
+## Settings
+
+The following settings can be configured in the backend:
+
+### Reviews enabled
+
+This option removes the reviews form and list from the Product component if disabled.
+
+### Moderate reviews
+
+If this option is enabled, reviews need to be approved by the site admin manually.
+Unapproved reviews are not visible on the website.
+
+### Allow anonymous
+
+By default, only logged in customers can create reviews. If this option is enabled
+everyone can review products.
+
+## Events
+
+See [Events](../development/events.md#Review).
