@@ -53,6 +53,6 @@ tabs:
                         type: text
         approve_now:
             type: partial
-            path: approve_now
+            path: $/offline/mall/controllers/reviews/_approve_now.htm
             span: left
             tab: 'offline.mall::lang.common.review'
