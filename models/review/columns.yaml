@@ -2,7 +2,7 @@ columns:
     rating:
         label: 'offline.mall::lang.reviews.rating'
         type: partial
-        path: rating
+        path: $/offline/mall/controllers/reviews/_rating.htm
         searchable: true
         sortable: true
     product_id:
