@@ -306,7 +306,7 @@ class Product extends Model
         return $this->getHashIdAttribute();
     }
 
-    public function getProducIdAttribute()
+    public function getProductIdAttribute()
     {
         return $this->id;
     }
