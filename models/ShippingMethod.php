@@ -1,5 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Closure;
+use Illuminate\Support\Facades\Session;
 use Model;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
@@ -11,7 +13,9 @@ class ShippingMethod extends Model
 {
     use Validation;
     use Sortable;
-    use PriceAccessors;
+    use PriceAccessors {
+        priceRelation as priceAccessorPriceRelation;
+    }
 
     const MORPH_KEY = 'mall.shipping_method';
 
@@ -30,6 +34,13 @@ class ShippingMethod extends Model
     ];
     public $table = 'offline_mall_shipping_methods';
     public $appends = ['price_formatted'];
+    public $fillable = [
+        'name',
+        'description',
+        'guaranteed_delivery_days',
+        'price_includes_tax',
+        'sort_order',
+    ];
     public $morphMany = [
         'prices'                 => [
             Price::class,
@@ -87,11 +98,20 @@ class ShippingMethod extends Model
         return $this->price()->string;
     }
 
+    public function getNameAttribute()
+    {
+        if (($enforced = Session::get('mall.shipping.enforced.name')) && app()->runningInBackend() === false) {
+            return $enforced;
+        }
+
+        return $this->attributes['name'];
+    }
+
     public static function getAvailableByCart(Cart $cart)
     {
         $total = $cart->totals()->productPostTaxes();
 
-        return ShippingMethod
+        return self
             ::orderBy('sort_order')
             ->when($cart->shipping_address, function ($q) use ($cart) {
                 $q->whereDoesntHave('countries')
@@ -117,6 +137,25 @@ class ShippingMethod extends Model
     public function availableAboveTotal($currency = null)
     {
         return $this->price($currency, 'available_above_totals');
+    }
+
+    protected function priceRelation(
+        $currency = null,
+        $relation = 'prices',
+        ?Closure $filter = null
+    ) {
+        $checkEnforced = $relation === 'prices' && app()->runningInBackend() === false;
+        if ($checkEnforced && $enforced = Session::get('mall.shipping.enforced.price', [])) {
+            $currency = Currency::resolve($currency);
+            $value = array_get($enforced, $currency->code);
+            $price = new Price([
+                'currency_id' => $currency->id,
+                'price' => $value,
+            ]);
+            return $price;
+        }
+
+        return $this->priceAccessorPriceRelation($currency, $relation, $filter);
     }
 
     public function jsonSerialize()
