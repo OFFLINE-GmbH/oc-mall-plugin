@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use DB;
 use Event;
 use Model;
+use Session;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
@@ -191,7 +192,11 @@ class Order extends Model
 
         // Drop any saved payment information since the order has been
         // created successfully.
-        session()->forget('mall.payment_method.data');
+        Session::forget('mall.payment_method.data');
+
+        // Remove any enforced shipping state.
+        Session::forget('mall.shipping.enforced.price');
+        Session::forget('mall.shipping.enforced.name');
 
         Event::fire('mall.order.created', [$order]);
 

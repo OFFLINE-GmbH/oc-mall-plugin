@@ -189,6 +189,35 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(3077, round($calc->taxes()[1]->total()));
     }
 
+
+    public function test_it_calculates_enforced_shipping_cost()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->taxes()->attach([$tax1->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->save();
+        $shippingMethod->taxes()->attach([$tax1->id]);
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+
+        $shippingMethod->taxes()->attach($tax1);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $cart->forceShippingPrice(['CHF' => 200, 'EUR' => 150], 'Enforced Price');
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(40000, $calc->totalPostTaxes());
+        $this->assertEquals(5152, round($calc->totalTaxes()));
+    }
+
     public function test_it_calculates_taxes()
     {
         $tax1 = $this->getTax('Test 1', 10);
