@@ -1,10 +1,10 @@
 name = "Addresses"
 ==
-## {{ order.shipping_address_same_as_billing ? 'offline.mall::mail.order.partials.billing_and_shipping' | trans :
-'offline.mall::mail.order.partials.billing_address' | trans }}
+## {{ order.shipping_address_same_as_billing ? 'offline.mall::mail.order.partials.billing_and_shipping' | trans() :
+'offline.mall::mail.order.partials.billing_address' | trans() }}
 {% partial 'mall.customer.address' address=order.billing_address %}
 
 {% if not order.shipping_address_same_as_billing %}
-    ## {{ 'offline.mall::mail.order.partials.shipping_address' | trans }}
+    ## {{ 'offline.mall::mail.order.partials.shipping_address' | trans() }}
     {% partial 'mall.customer.address' address=order.shipping_address %}
 {% endif %}

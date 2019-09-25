@@ -1,9 +1,9 @@
 name = "Payment state"
 ==
 {% if order.isPaid %}
-    {{ 'offline.mall::mail.order.partials.has_been_paid_on' | trans }} {{ order.payment_log.created_at }}.
+    {{ 'offline.mall::mail.order.partials.has_been_paid_on' | trans() }} {{ order.payment_log.created_at }}.
 {% else %}
-    {{ 'offline.mall::mail.order.partials.currently_pending' | trans }}
+    {{ 'offline.mall::mail.order.partials.currently_pending' | trans() }}
 
     {{ order.payment_method.renderInstructions(order)  | raw }}
 {% endif %}
