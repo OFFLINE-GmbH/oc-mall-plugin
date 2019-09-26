@@ -62,7 +62,7 @@ return [
     'payment_method'                           => 'Zahlungsart',
     'payment_method.choose'                    => 'Bitte wählen Sie eine Zahlungsart.',
     'payment_method.button_label'              => 'Diese Methode verwenden',
-    'payment_method.proceed'                   => 'Mit dieser Methode forfahren',
+    'payment_method.proceed'                   => 'Mit dieser Methode fortfahren',
     'payment_method.pay_now'                   => 'Bestellung bezahlen',
     'payment_method.card_info'                 => 'Kreditkarteninformationen',
     'shipping_method'                          => 'Versandmethode',
