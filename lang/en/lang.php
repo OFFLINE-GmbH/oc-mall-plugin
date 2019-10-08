@@ -301,6 +301,7 @@
         'review_categories'    => 'Review categories',
         'review_category'      => 'Review category',
         'title'                => 'Title',
+        'version'              => 'Version',
     ],
     'variant'                  => [
         'method' => [
@@ -339,6 +340,11 @@
         'name'                                 => 'Product name',
         'published'                            => 'Published',
         'published_short'                      => 'Publ.',
+        'is_virtual'                           => 'Is virtual',
+        'is_virtual_comment'                   => 'This product is virtual (a file, no shipping)',
+        'product_file'                         => 'Product file',
+        'product_files'                        => 'Product files',
+        'product_files_section_comment'        => 'This is a virtual product. You can upload new file versions below. The latest version will be downloadable by customers.',
         'not_published'                        => 'Not published',
         'published_comment'                    => 'This product is visible on the website',
         'stock'                                => 'Stock',
@@ -393,6 +399,19 @@
         'missing_category'                     => 'The product does not have a category associated with it. Please select a category below to edit this product.',
         'variant_support_header'               => 'Variants not supported',
         'variant_support_text'                 => 'The selected category has no Variant properties defined. Please switch the inventory management method to "Article" or select another category.',
+        'filter_virtual'                       => 'Show only virtual products',
+    ],
+    'product_file'             => [
+        'display_name_comment'       => 'This name will be visible to the customer.',
+        'version_comment'            => 'A unique version helps a customer to recognize updated files.',
+        'expires_after_days'         => 'Download valid for days',
+        'expires_after_days_comment' => 'The file can only be downloaded for this many days after purchase. Leave empty for no limit.',
+        'max_download_count'         => 'Maximum number of downloads',
+        'max_download_count_comment' => 'The file can only be downloaded this many times. Leave empty for no limit.',
+        'session_required'           => 'Login required',
+        'session_required_comment'   => 'The file can only be downloaded when the customer is logged in (download link is not shareable).',
+        'file'                       => 'File',
+        'download_count'             => 'Download count',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Is main set',
@@ -763,7 +782,7 @@
                 'description' => 'Displays all reviews of a product',
             ],
             'properties' => [
-                'perPage'            => [
+                'perPage'                   => [
                     'title' => 'Number of reviews per page',
                 ],
                 'currentVariantReviewsOnly' => [

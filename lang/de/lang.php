@@ -300,6 +300,7 @@
         'review_categories'    => 'Review-Kategorien',
         'review_category'      => 'Review-Kategorie',
         'title'                => 'Titel',
+        'version'              => 'Version',
     ],
     'variant'                  => [
         'method' => [
@@ -338,6 +339,11 @@
         'name'                                 => 'Produktname',
         'published'                            => 'Veröffentlicht',
         'published_short'                      => 'Veröffentl.',
+        'is_virtual'                           => 'Ist virtuell',
+        'is_virtual_comment'                   => 'Dieses Produkt ist virtuell (Datei, kein Versand)',
+        'product_file'                         => 'Produkt-Datei',
+        'product_files'                        => 'Produkt-Dateien',
+        'product_files_section_comment'        => 'Dieses Produkt ist virtuell. Laden Sie hier beliebig viele Dateiversionen hoch. Die neuste Version wird dem Kunden beim Kauf zum Download angeboten.',
         'not_published'                        => 'Nicht veröffentlicht',
         'published_comment'                    => 'Dieser Artikel ist im Shop sichtbar',
         'stock'                                => 'Lagerbestand',
@@ -392,6 +398,19 @@
         'missing_category'                     => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
         'variant_support_header'               => 'Varianten nicht unterstützt',
         'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel" oder wählen Sie eine andere Kategorie aus.',
+        'filter_virtual'                       => 'Zeige nur virtuelle Produkte',
+    ],
+    'product_file'             => [
+        'display_name_comment'       => 'Dieser Name wird dem Kunden angezeigt.',
+        'version_comment'            => 'Die Versionsnummer erleichtert es Kunden neue Datei zu bemerken.',
+        'expires_after_days'         => 'Gültigkeitsdauer in Tagen nach Kauf',
+        'expires_after_days_comment' => 'Die Datei kann für so viele Tage nach dem Kauf heruntergeladen werden. Leer lassen für unbegrenzt.',
+        'max_download_count'         => 'Anzahl erlaubter Downloads',
+        'max_download_count_comment' => 'Die Datei kann nach erreichen dieser Anzahl nicht mehr heruntergeladen werden. Leer lassen für unbegrenzt.',
+        'session_required'           => 'Login benötigt',
+        'session_required_comment'   => 'Die Datei kann nur nach dem Login mit einem Kundenkonto heruntergeladen werden (Link ist nicht teilbar).',
+        'file'                       => 'Datei',
+        'download_count'             => 'Anz. Downloads',
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',
@@ -756,19 +775,19 @@
             ],
         ],
         'productReviews'             => [
-            'details' => [
+            'details'    => [
                 'name'        => 'Produkt-Reviews',
                 'description' => 'Zeigt alle Reviews zu einem Produkt an',
             ],
             'properties' => [
-                'perPage' => [
-                    'title' => 'Anzahl Reviews pro Seite'
+                'perPage'                   => [
+                    'title' => 'Anzahl Reviews pro Seite',
                 ],
                 'currentVariantReviewsOnly' => [
-                    'title' => 'Zeige nur Reviews der Variante',
-                    'description' => 'Zeige keine Reviews von anderen Varianten des Produkts an'
-                ]
-            ]
+                    'title'       => 'Zeige nur Reviews der Variante',
+                    'description' => 'Zeige keine Reviews von anderen Varianten des Produkts an',
+                ],
+            ],
         ],
         'cart'                       => [
             'details'    => [

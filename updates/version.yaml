@@ -220,3 +220,6 @@
     - Added forceShippingPrice method to Cart model
 1.6.3:
     - Bugfix release
+1.7.0:
+    - Added support for virtual products
+    - add_virtual_products_support.php

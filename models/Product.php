@@ -78,6 +78,7 @@ class Product extends Model
         'stock'                        => 'integer',
         'sales_count'                  => 'integer',
         'shippable'                    => 'boolean',
+        'is_virtual'                   => 'boolean',
     ];
     public $fillable = [
         'brand_id',
@@ -138,6 +139,7 @@ class Product extends Model
         'property_values'        => PropertyValue::class,
         'reviews'                => Review::class,
         'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null'],
+        'files'                  => [ProductFile::class],
     ];
     public $belongsToMany = [
         'categories'      => [
@@ -239,6 +241,9 @@ class Product extends Model
     {
         if ($this->inventory_management_method === 'variant' && $this->stock === null) {
             $this->stock = 0;
+        }
+        if ($this->is_virtual) {
+            $this->inventory_management_method = 'single';
         }
     }
 
@@ -438,6 +443,15 @@ class Product extends Model
     {
         if ($context !== 'update') {
             return;
+        }
+
+        if ($this->is_virtual) {
+            $fields->inventory_management_method->hidden = true;
+            $fields->variants->hidden                    = true;
+            $fields->weight->hidden                      = true;
+        } else {
+            $fields->product_files->hidden         = true;
+            $fields->product_files_section->hidden = true;
         }
 
         // If less than properties are available (1 is the null property)
