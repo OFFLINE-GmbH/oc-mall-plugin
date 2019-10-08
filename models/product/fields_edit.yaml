@@ -46,6 +46,10 @@ tabs:
             span: left
             type: dropdown
             tab: 'offline.mall::lang.product.general'
+            trigger:
+                action: hide
+                field: is_virtual
+                condition: 'checked'
         group_by_property_id:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
@@ -62,6 +66,17 @@ tabs:
             span: left
             type: partial
             path: price_table_trigger
+            tab: 'offline.mall::lang.product.general'
+        product_files_section:
+            label: 'offline.mall::lang.product.product_files'
+            span: full
+            type: section
+            comment: 'offline.mall::lang.product.product_files_section_comment'
+            tab: 'offline.mall::lang.product.general'
+        product_files:
+            span: full
+            path: product_files
+            type: partial
             tab: 'offline.mall::lang.product.general'
         variants_section:
             label: 'offline.mall::lang.common.variants'
