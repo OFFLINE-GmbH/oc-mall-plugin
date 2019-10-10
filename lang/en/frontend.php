@@ -109,6 +109,7 @@ return [
     'session.account_page'                     => 'Manage account',
     'session.logout'                           => 'Logout',
     'session.login_signup'                     => 'Login or signup',
+    'session.login_required'                   => 'Please log in to continue',
     'account'                                  => 'Your account',
     'guest_upgrade.callout'                    => 'You are currently signed in as guest. Enter a password to upgrade your account.',
     'empty'                                    => 'There is nothing to see here.',

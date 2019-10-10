@@ -109,6 +109,7 @@ return [
     'session.account_page'                     => 'Kontoverwaltung',
     'session.logout'                           => 'Abmelden',
     'session.login_signup'                     => 'Einloggen oder registrieren',
+    'session.login_required'                   => 'Bitte melden Sie sich an',
     'account'                                  => 'Benutzerkonto',
     'guest_upgrade.callout'                    => 'Sie sind mit einem Gastkonto eingeloggt. Setzen Sie ein neues Passwort um ein vollständiges Konto zu registrieren.',
     'empty'                                    => 'Hier gibt es momentan nichts zu sehen.',
