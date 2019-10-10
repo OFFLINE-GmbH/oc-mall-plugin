@@ -67,6 +67,9 @@ class Product extends Model
         'stock'                        => 'required_unless:inventory_management_method,variant',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
+        'file_max_download_count'      => 'nullable|integer',
+        'file_expires_after_days'      => 'nullable|integer',
+        'file_session_required'        => 'nullable|boolean',
     ];
     public $casts = [
         'price_includes_tax'           => 'boolean',
@@ -79,6 +82,9 @@ class Product extends Model
         'sales_count'                  => 'integer',
         'shippable'                    => 'boolean',
         'is_virtual'                   => 'boolean',
+        'file_max_download_count'      => 'integer',
+        'file_expires_after_days'      => 'integer',
+        'file_session_required'        => 'boolean',
     ];
     public $fillable = [
         'brand_id',
@@ -140,6 +146,9 @@ class Product extends Model
         'reviews'                => Review::class,
         'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null'],
         'files'                  => [ProductFile::class],
+    ];
+    public $hasOne = [
+        'latest_file' => [ProductFile::class, 'order' => 'created_at DESC'],
     ];
     public $belongsToMany = [
         'categories'      => [
@@ -450,8 +459,11 @@ class Product extends Model
             $fields->variants->hidden                    = true;
             $fields->weight->hidden                      = true;
         } else {
-            $fields->product_files->hidden         = true;
-            $fields->product_files_section->hidden = true;
+            $fields->product_files->hidden           = true;
+            $fields->product_files_section->hidden   = true;
+            $fields->file_expires_after_days->hidden = true;
+            $fields->file_max_download_count->hidden = true;
+            $fields->file_session_required->hidden   = true;
         }
 
         // If less than properties are available (1 is the null property)

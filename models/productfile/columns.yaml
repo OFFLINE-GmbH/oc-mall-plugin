@@ -14,22 +14,6 @@ columns:
         type: number
         searchable: true
         sortable: true
-    max_download_count:
-        label: 'offline.mall::lang.product_file.max_download_count'
-        type: number
-        searchable: true
-        sortable: true
-    expires_after_days:
-        label: 'offline.mall::lang.product_file.expires_after_days'
-        type: number
-        searchable: true
-        sortable: true
-    session_required:
-        label: 'offline.mall::lang.product_file.session_required'
-        type: switch
-        searchable: true
-        invisible: true
-        sortable: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime

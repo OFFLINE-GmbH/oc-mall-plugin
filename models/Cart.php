@@ -113,6 +113,17 @@ class Cart extends Model
         return $this->totals();
     }
 
+    /**
+     * Check if this cart has only virtual products in it.
+     * @return bool
+     */
+    public function getIsVirtualAttribute(): bool
+    {
+        return $this->products->every(function(CartProduct $product) {
+            return $product->data->is_virtual;
+        });
+    }
+
     public function getShippingAddressSameAsBillingAttribute(): bool
     {
         return $this->shipping_address_id === $this->billing_address_id;
