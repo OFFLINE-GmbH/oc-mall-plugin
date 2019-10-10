@@ -218,3 +218,5 @@
     - "Bugfix release. Don't forget to check out the new changelog for updates to 1.6.0: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.6.0.html"
 1.6.2:
     - Added forceShippingPrice method to Cart model
+1.6.3:
+    - Bugfix release
