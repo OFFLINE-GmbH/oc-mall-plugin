@@ -113,6 +113,11 @@ class SignUp extends MallComponent
      */
     protected function redirect()
     {
+        // Check for session redirect.
+        if ($redirect = Session::pull('mall.login.redirect')) {
+            return redirect()->to($redirect);
+        }
+
         // Check for a redirect parameter specified via GET/POST.
         if ($redirect = input('redirect')) {
             return redirect()->guest($this->controller->pageUrl($redirect));
