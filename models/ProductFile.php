@@ -9,22 +9,20 @@ class ProductFile extends Model
     use Validation;
 
     public $table = 'offline_mall_product_files';
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        'display_name',
+    ];
     public $rules = [
-        'display_name'       => 'required',
-        'version'            => 'required',
-        'max_download_count' => 'nullable|integer',
-        'expires_after_days' => 'nullable|integer',
-        'session_required'   => 'nullable|boolean',
-        'file'               => 'required',
+        'display_name' => 'required',
+        'version'      => 'required',
+        'file'         => 'required',
     ];
     public $casts = [
-        'max_download_count' => 'integer',
-        'download_count'     => 'integer',
-        'expires_after_days' => 'integer',
-        'session_required'   => 'boolean',
+        'download_count' => 'integer',
     ];
     public $attachOne = [
-        'file' => File::class,
+        'file' => [File::class, 'public' => false],
     ];
     public $belongsTo = [
         'product' => Product::class,

@@ -161,6 +161,12 @@ class ShippingMethodSelector extends MallComponent
      */
     protected function shouldSkipStep()
     {
+        // Skip this step if there are only virtual products in the cart.
+        if ($this->cart->is_virtual) {
+            return true;
+        }
+
+        // Skip if only one method is available.
         return $this->skipIfOnlyOneAvailable
             && $this->methods->count() === 1
             && request()->get('via') === 'payment';

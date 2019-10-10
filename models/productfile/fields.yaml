@@ -14,18 +14,3 @@ fields:
         comment: 'offline.mall::lang.product_file.version_comment'
         span: auto
         type: text
-    expires_after_days:
-        label: 'offline.mall::lang.product_file.expires_after_days'
-        comment: 'offline.mall::lang.product_file.expires_after_days_comment'
-        span: auto
-        type: number
-    max_download_count:
-        label: 'offline.mall::lang.product_file.max_download_count'
-        comment: 'offline.mall::lang.product_file.max_download_count_comment'
-        span: auto
-        type: number
-    session_required:
-        label: 'offline.mall::lang.product_file.session_required'
-        comment: 'offline.mall::lang.product_file.session_required_comment'
-        span: left
-        type: checkbox

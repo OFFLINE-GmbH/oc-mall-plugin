@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Support\Facades\Session;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Models\GeneralSettings;

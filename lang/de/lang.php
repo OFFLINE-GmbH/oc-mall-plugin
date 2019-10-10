@@ -411,6 +411,12 @@
         'session_required_comment'   => 'Die Datei kann nur nach dem Login mit einem Kundenkonto heruntergeladen werden (Link ist nicht teilbar).',
         'file'                       => 'Datei',
         'download_count'             => 'Anz. Downloads',
+        'errors'                     => [
+            'invalid'           => 'Ungültiger Download-Link',
+            'expired'           => 'Download-Link ist nicht mehr gültig',
+            'too_many_attempts' => 'Maximale Anzahl der Download-Versuche erreicht',
+            'not_found'         => 'Die aufgerufene Datei konnte nicht gefunden werden',
+        ],
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',
@@ -438,9 +444,11 @@
         'is_not_required'  => 'Kein Pflichtfeld',
     ],
     'tax'                      => [
-        'percentage'        => 'Prozent',
-        'countries'         => 'Steuer gilt nur für Versand in diese Länder',
-        'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'percentage'               => 'Prozent',
+        'countries'                => 'Steuer gilt nur für Versand in diese Länder',
+        'countries_comment'        => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'not_required_name'        => 'Kein Versand notwendig',
+        'not_required_description' => 'Der Warenkorb benötigt keinen Versand.',
     ],
     'discounts'                => [
         'name'                                 => 'Name',

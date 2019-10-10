@@ -73,6 +73,24 @@ tabs:
             type: section
             comment: 'offline.mall::lang.product.product_files_section_comment'
             tab: 'offline.mall::lang.product.general'
+        file_session_required:
+            label: 'offline.mall::lang.product_file.session_required'
+            comment: 'offline.mall::lang.product_file.session_required_comment'
+            span: full
+            type: checkbox
+            tab: 'offline.mall::lang.product.general'
+        file_expires_after_days:
+            label: 'offline.mall::lang.product_file.expires_after_days'
+            comment: 'offline.mall::lang.product_file.expires_after_days_comment'
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.product.general'
+        file_max_download_count:
+            label: 'offline.mall::lang.product_file.max_download_count'
+            comment: 'offline.mall::lang.product_file.max_download_count_comment'
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.product.general'
         product_files:
             span: full
             path: product_files

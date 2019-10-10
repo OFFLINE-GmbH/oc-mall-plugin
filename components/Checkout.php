@@ -116,11 +116,20 @@ class Checkout extends MallComponent
     public function init()
     {
         $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
-        $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
-        $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
-        $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector',
-            ['skipIfOnlyOneAvailable' => true]);
-        $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
+
+        if ($this->param('step') === 'confirm') {
+            $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
+            $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
+        }
+
+        if ($this->param('step') === 'shipping') {
+            $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector', ['skipIfOnlyOneAvailable' => true]);
+        }
+
+        if ($this->param('step') === 'payment') {
+            $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
+        }
+
         $this->setData();
     }
 
@@ -193,7 +202,7 @@ class Checkout extends MallComponent
     {
         $this->setData();
 
-        if ($this->cart->shipping_method_id === null || $this->cart->payment_method_id === null) {
+        if ($this->cart->payment_method_id === null) {
             throw new ValidationException(
                 [trans('offline.mall::lang.components.checkout.errors.missing_settings')]
             );

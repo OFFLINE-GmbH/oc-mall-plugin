@@ -80,6 +80,20 @@ class ShippingMethod extends Model
         ],
     ];
 
+    /**
+     * This method can be used when no shipping is required
+     * for example when there are only virtual products in a cart.
+     *
+     * @return ShippingMethod
+     */
+    public static function noShippingRequired()
+    {
+        return new self([
+            'name'        => trans('offline.mall::lang.shipping_method.not_required_name'),
+            'description' => trans('offline.mall::lang.shipping_method.not_required_description'),
+        ]);
+    }
+
     public function afterDelete()
     {
         \DB::table('offline_mall_prices')
@@ -109,6 +123,11 @@ class ShippingMethod extends Model
 
     public static function getAvailableByCart(Cart $cart)
     {
+        // Virtual carts cannot be shipped.
+        if ($cart->is_virtual) {
+            return collect([]);
+        }
+
         $total = $cart->totals()->productPostTaxes();
 
         return self
@@ -147,11 +166,12 @@ class ShippingMethod extends Model
         $checkEnforced = $relation === 'prices' && app()->runningInBackend() === false;
         if ($checkEnforced && $enforced = Session::get('mall.shipping.enforced.price', [])) {
             $currency = Currency::resolve($currency);
-            $value = array_get($enforced, $currency->code);
-            $price = new Price([
+            $value    = array_get($enforced, $currency->code);
+            $price    = new Price([
                 'currency_id' => $currency->id,
-                'price' => $value,
+                'price'       => $value,
             ]);
+
             return $price;
         }
 

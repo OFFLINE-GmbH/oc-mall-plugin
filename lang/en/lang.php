@@ -412,6 +412,12 @@
         'session_required_comment'   => 'The file can only be downloaded when the customer is logged in (download link is not shareable).',
         'file'                       => 'File',
         'download_count'             => 'Download count',
+        'errors' => [
+            'invalid'           => 'Invalid download link',
+            'expired'           => 'Download link expired',
+            'too_many_attempts' => 'Too many download attempts',
+            'not_found'         => 'Cannot find requested file',
+        ],
     ],
     'image_sets'               => [
         'is_main_set'         => 'Is main set',
@@ -573,6 +579,8 @@
         'available_below_total'    => 'Available if total is lower than',
         'countries'                => 'Available for shipping to these countries',
         'countries_comment'        => 'If no country is selected this method is available worldwide.',
+        'not_required_name'        => 'No shipping required',
+        'not_required_description' => 'The current cart does not require any shipping.',
     ],
     'payment_status'           => [
         'paid'          => 'Paid',
