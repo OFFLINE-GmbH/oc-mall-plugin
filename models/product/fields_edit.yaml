@@ -91,6 +91,11 @@ tabs:
             span: auto
             type: number
             tab: 'offline.mall::lang.product.general'
+        missing_file_hint:
+            span: full
+            type: partial
+            path: missing_file_hint
+            tab: 'offline.mall::lang.product.general'
         product_files:
             span: full
             path: product_files

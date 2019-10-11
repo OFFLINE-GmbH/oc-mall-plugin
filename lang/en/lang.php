@@ -345,6 +345,7 @@
         'product_file'                         => 'Product file',
         'product_files'                        => 'Product files',
         'product_files_section_comment'        => 'This is a virtual product. You can upload new file versions below. The latest version will be downloadable by customers.',
+        'product_file_version'                 => 'file version',
         'not_published'                        => 'Not published',
         'published_comment'                    => 'This product is visible on the website',
         'stock'                                => 'Stock',

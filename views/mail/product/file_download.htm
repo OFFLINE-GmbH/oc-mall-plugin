@@ -22,10 +22,10 @@ Your downloads are ready! Please use the links below to download your purchases:
                             {{ loop.length > 1 ? ('#' ~ loop.index) }}
                         </a>
                         {% if grant.expires_at %}
-                            <br> valid until {{ grant.expires_at }}
+                            <br>valid until {{ grant.expires_at }}
                         {% endif %}
                         {% if grant.max_download_count %}
-                            <br> max {{ grant.max_download_count }} downloads
+                            <br>max. {{ grant.max_download_count }} downloads
                         {% endif %}
                     </td>
                 </tr>
