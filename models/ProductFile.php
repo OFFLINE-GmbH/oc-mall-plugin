@@ -15,7 +15,6 @@ class ProductFile extends Model
     ];
     public $rules = [
         'display_name' => 'required',
-        'version'      => 'required',
         'file'         => 'required',
     ];
     public $casts = [
@@ -27,4 +26,16 @@ class ProductFile extends Model
     public $belongsTo = [
         'product' => Product::class,
     ];
+
+    /**
+     * Get the current file version first.
+     * This scope is used in the backend relation list
+     * on the products form.
+     *
+     * @param $q
+     */
+    public function scopeSortLatest($q)
+    {
+        $q->orderBy('created_at', 'DESC');
+    }
 }

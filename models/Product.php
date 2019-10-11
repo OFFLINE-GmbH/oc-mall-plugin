@@ -458,8 +458,12 @@ class Product extends Model
             $fields->inventory_management_method->hidden = true;
             $fields->variants->hidden                    = true;
             $fields->weight->hidden                      = true;
+            if ($this->files->count() > 0) {
+                $fields->missing_file_hint->hidden = true;
+            }
         } else {
             $fields->product_files->hidden           = true;
+            $fields->missing_file_hint->hidden       = true;
             $fields->product_files_section->hidden   = true;
             $fields->file_expires_after_days->hidden = true;
             $fields->file_max_download_count->hidden = true;

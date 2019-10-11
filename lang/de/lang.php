@@ -344,6 +344,7 @@
         'product_file'                         => 'Produkt-Datei',
         'product_files'                        => 'Produkt-Dateien',
         'product_files_section_comment'        => 'Dieses Produkt ist virtuell. Laden Sie hier beliebig viele Dateiversionen hoch. Die neuste Version wird dem Kunden beim Kauf zum Download angeboten.',
+        'product_file_version'                 => 'Datei-Version',
         'not_published'                        => 'Nicht veröffentlicht',
         'published_comment'                    => 'Dieser Artikel ist im Shop sichtbar',
         'stock'                                => 'Lagerbestand',

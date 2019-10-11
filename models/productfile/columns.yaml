@@ -19,6 +19,7 @@ columns:
         type: datetime
         searchable: true
         sortable: true
+        invisible: true
     updated_at:
         label: 'offline.mall::lang.common.updated_at'
         type: datetime

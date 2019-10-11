@@ -40,6 +40,7 @@ class VirtualProductFileDownload
 
         // Increase the download counter, then send the file as a response.
         $grant->increment('download_count');
+        $product->latest_file->increment('download_count');
 
         // If the grant has a custom storage path, send this file.
         if ($grant->storage_path) {
