@@ -12,8 +12,8 @@ checkout.
 A virtual product may consist of a file uploaded by the site admin. In this case
 each customer receives the same file (for example an e-book).
 
-There is also the possibility to [listen for an event where an order specific
-file can be attached](#generate-user-specific-product-files) as a virtual product (for example a generated gift card).
+There is also the possibility to [listen for an event where a customer specific
+file can be attached](#generate-user-specific-product-files) to a virtual product (for example a generated gift card).
 
 ## Product files
 
@@ -30,15 +30,15 @@ The user can only ever download the latest file version by default.
 
 When a customer has paid for a virtual product, a 
 product file grant is created. The grant allows the customer to download
-the purchased file for a specified amount of days, a specified number of times. 
+the purchased file for a specified number of days and a specified number of times. 
 
 It is also possible to require the user to be logged in when the download
-link is visited. If this option is not set, any visitor of the download link
+link is visited. If this option is not set, any visitor that knows the download link
 can download the file.
 
 ## Generate user specific product files
 
-You may want to generate a specific file for a user when a virtual product is bought 
+You may want to generate a specific file for a customer when a virtual product is bought 
 (for example a personal concert ticket or a gift card).
 
 To do this, listen for the `mall.product.file_grant.created` event and attach your custom
