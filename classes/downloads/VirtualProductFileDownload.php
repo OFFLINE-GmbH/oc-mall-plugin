@@ -40,22 +40,27 @@ class VirtualProductFileDownload
 
         // Increase the download counter, then send the file as a response.
         $grant->increment('download_count');
-        $product->latest_file->increment('download_count');
-
-        // If the grant has a custom storage path, send this file.
-        if ($grant->storage_path) {
-            if ( ! File::exists($grant->storage_path) || ! File::isFile($grant->storage_path)) {
-                Log::error('[OFFLINE.Mall] Product file could not be found',
-                    ['path' => $grant->storage_path, 'grant' => $grant]);
-
-                return response($this->trans('not_found'), 500);
-            }
-
-            return File::get($grant->storage_path);
+        if ($product->latest_file) {
+            $product->latest_file->increment('download_count');
         }
 
-        // If no custom storage path is specified, return the file uploaded via the backend.
-        return $product->latest_file->file->output();
+        // If the grant has a file attached, send it.
+        if ($grant->file) {
+            return $grant->file->output();
+        }
+
+        // If no grant specific file is available, return the product file.
+        if ($product->latest_file->file) {
+            return $product->latest_file->file->output();
+        }
+
+        // If no file is around, return and log an error. The site admin needs to fix this!
+        Log::error(
+            '[OFFLINE.Mall] A product file without a file attachment has been purchased. You need to fix this!',
+            ['grant' => $grant, 'product' => $product, 'user' => Auth::getUser()]
+        );
+
+        return response($this->trans('not_found'), 500);
     }
 
     /**

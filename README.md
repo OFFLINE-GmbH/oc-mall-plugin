@@ -12,6 +12,7 @@
 `oc-mall` is a fully featured online shop solution for October CMS.
 
 * Manage Products and Variants
+* Virtual products (download only, no shipping)
 * Stock management
 * Wishlists
 * Reviews and ratings

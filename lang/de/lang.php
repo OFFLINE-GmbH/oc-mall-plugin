@@ -416,7 +416,7 @@
             'invalid'           => 'Ungültiger Download-Link',
             'expired'           => 'Download-Link ist nicht mehr gültig',
             'too_many_attempts' => 'Maximale Anzahl der Download-Versuche erreicht',
-            'not_found'         => 'Die aufgerufene Datei konnte nicht gefunden werden',
+            'not_found'         => 'Die aufgerufene Datei konnte nicht gefunden werden. Bitte kontaktieren Sie uns.',
         ],
     ],
     'image_sets'               => [
