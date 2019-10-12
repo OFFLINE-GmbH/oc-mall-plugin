@@ -1,6 +1,6 @@
 # Virtual products
 
-If a product is nothing you can ship (like a file), you can mark it as "virtual".
+If a product is not something physical (like a file), you can mark it as "virtual".
 
 Virtual products are offered to the customer as a download. After a payment
 for an order with virtual products has been processed, a mail with personal download
