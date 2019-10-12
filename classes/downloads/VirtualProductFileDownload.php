@@ -50,7 +50,7 @@ class VirtualProductFileDownload
         }
 
         // If no grant specific file is available, return the product file.
-        if ($product->latest_file->file) {
+        if ($product->latest_file && $product->latest_file->file) {
             return $product->latest_file->file->output();
         }
 
