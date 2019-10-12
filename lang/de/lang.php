@@ -418,6 +418,11 @@
             'too_many_attempts' => 'Maximale Anzahl der Download-Versuche erreicht',
             'not_found'         => 'Die aufgerufene Datei konnte nicht gefunden werden. Bitte kontaktieren Sie uns.',
         ],
+        'hint'                       => [
+            'intro'     => 'Dieses Produkt hat noch keinen Dateianhang. Laden Sie eine Datei hoch oder generieren Sie diese während des Checkouts.',
+            'info_text' => 'Informationen über automatisch generierte Dateien finden Sie',
+            'info_link' => 'in der Online-Dokumentation',
+        ],
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',

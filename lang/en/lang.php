@@ -413,11 +413,16 @@
         'session_required_comment'   => 'The file can only be downloaded when the customer is logged in (download link is not shareable).',
         'file'                       => 'File',
         'download_count'             => 'Download count',
-        'errors' => [
+        'errors'                     => [
             'invalid'           => 'Invalid download link',
             'expired'           => 'Download link expired',
             'too_many_attempts' => 'Too many download attempts',
             'not_found'         => 'Cannot find requested file, please contact us for support.',
+        ],
+        'hint'                       => [
+            'intro'     => 'This product does not have a file attached. Please make sure to add one or programmatically gerenate it during checkout.',
+            'info_text' => 'You can find information on how to do this',
+            'info_link' => 'in the documentation',
         ],
     ],
     'image_sets'               => [
