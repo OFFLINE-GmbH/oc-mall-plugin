@@ -49,6 +49,7 @@ class Discount extends Model
         'product',
         'type',
         'rate',
+        'code',
         'shipping_description',
         'shipping_guaranteed_days_to_delivery',
     ];

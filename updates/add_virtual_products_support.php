@@ -32,7 +32,7 @@ class AddVirtualProductsSupport extends Migration
             $table->integer('download_count')->default(0)->unsigned();
             $table->integer('max_download_count')->unsigned()->nullable();
             $table->string('download_key', 64);
-            $table->string('storage_path')->nullable();
+            $table->string('display_name')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('expires_at')->nullable();

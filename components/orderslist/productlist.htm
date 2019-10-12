@@ -24,6 +24,22 @@
                         {{ product.custom_field_value_description | raw }}
                     </span>
                 {% endif %}
+                {% if product.product_file_grants.count > 0 %}
+                    <br/>
+                    {% for grant in product.product_file_grants %}
+                        <br/>
+                        <a href="{{ grant.download_link }}">
+                            Download {{ grant.display_name }}
+                            {{ loop.length > 1 ? ('#' ~ loop.index) }}
+                        </a>
+                        {% if grant.expires_at %}
+                            <br>valid until {{ grant.expires_at.toDateString() }}
+                        {% endif %}
+                        {% if grant.max_download_count %}
+                            <br>max. {{ grant.max_download_count }} downloads
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </td>
             <td>{{ product.quantity }}</td>
             <td class="text-right">
@@ -31,7 +47,7 @@
                 {% if product.service_options %}
                     {% for option in product.service_options %}
                         <div class="text-muted" title="{{ option.name }}">
-                        + {{ option.price_formatted }}
+                            + {{ option.price_formatted }}
                         </div>
                     {% endfor %}
                 {% endif %}

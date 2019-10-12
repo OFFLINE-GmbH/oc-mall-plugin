@@ -417,7 +417,7 @@
             'invalid'           => 'Invalid download link',
             'expired'           => 'Download link expired',
             'too_many_attempts' => 'Too many download attempts',
-            'not_found'         => 'Cannot find requested file',
+            'not_found'         => 'Cannot find requested file, please contact us for support.',
         ],
     ],
     'image_sets'               => [
