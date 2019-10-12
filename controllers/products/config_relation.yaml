@@ -12,6 +12,19 @@ custom_fields:
         recordsPerPage: 10
     deferredBinding: true
 
+files:
+    label: 'offline.mall::lang.product.product_file_version'
+    view:
+        list: $/offline/mall/models/productfile/columns.yaml
+        toolbarButtons: create|delete
+        showSorting: false
+        defaultSort: 'created_at DESC'
+        scope: sortLatest
+    manage:
+        form: $/offline/mall/models/productfile/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true
+
 services:
     label: 'offline.mall::lang.common.services'
     view:

@@ -12,10 +12,11 @@
 `oc-mall` is a fully featured online shop solution for October CMS.
 
 * Manage Products and Variants
+* Virtual products (download only, no shipping)
+* Product services (e. g. extended warranty, on-site installation)
 * Stock management
 * Wishlists
 * Reviews and ratings
-* Product services (e. g. extended warranty, on-site installation)
 * Checkout via Stripe and PayPal supported out-of-the-box
 * Custom payment providers 
 * Integrated with RainLab.User

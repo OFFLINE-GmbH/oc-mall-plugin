@@ -1,0 +1,46 @@
+subject = "Your downloads are ready"
+description = "Sent when a virtual product order has been paid"
+==
+
+Hi {{ order.customer.firstname }}
+
+Your downloads are ready! Please use the links below to download your purchases:
+
+{% partial 'table' body %}
+    <table>
+        {% for order_product in products %}
+            <tr>
+                <td>
+                    <strong>{{ product.name }}</strong>
+                </td>
+            </tr>
+            {% for grant in order_product.product_file_grants %}
+                <tr>
+                    <td>
+                        <a href="{{ grant.download_link }}">
+                            Download {{ grant.display_name }}
+                            {{ loop.length > 1 ? ('#' ~ loop.index) }}
+                        </a>
+                        {% if grant.expires_at %}
+                            <br>valid until {{ grant.expires_at.toDateString() }}
+                        {% endif %}
+                        {% if grant.max_download_count %}
+                            <br>max. {{ grant.max_download_count }} downloads
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if not loop.last %}
+                <tr>
+                    <td>
+                        <!-- spacer -->
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endpartial %}
+
+{% partial 'button' url=account_url type='primary' body %}
+    Check your order online
+{% endpartial %}

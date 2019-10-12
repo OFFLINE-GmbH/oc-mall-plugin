@@ -17,3 +17,8 @@ scopes:
         label: offline.mall::lang.common.hide_published
         type: checkbox
         conditions: published <> true
+
+    is_virtual:
+        label: offline.mall::lang.product.filter_virtual
+        type: checkbox
+        conditions: is_virtual = true

@@ -19,6 +19,10 @@ columns:
         type: partial
         path: $/offline/mall/models/product/_published.htm
         sortable: true
+    is_virtual:
+        label: 'offline.mall::lang.product.is_virtual'
+        type: switch
+        sortable: true
     categories:
         label: 'offline.mall::lang.common.category'
         relation: categories

@@ -46,6 +46,10 @@ tabs:
             span: left
             type: dropdown
             tab: 'offline.mall::lang.product.general'
+            trigger:
+                action: hide
+                field: is_virtual
+                condition: 'checked'
         group_by_property_id:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
@@ -62,6 +66,40 @@ tabs:
             span: left
             type: partial
             path: price_table_trigger
+            tab: 'offline.mall::lang.product.general'
+        product_files_section:
+            label: 'offline.mall::lang.product.product_files'
+            span: full
+            type: section
+            comment: 'offline.mall::lang.product.product_files_section_comment'
+            tab: 'offline.mall::lang.product.general'
+        file_session_required:
+            label: 'offline.mall::lang.product_file.session_required'
+            comment: 'offline.mall::lang.product_file.session_required_comment'
+            span: full
+            type: checkbox
+            tab: 'offline.mall::lang.product.general'
+        file_expires_after_days:
+            label: 'offline.mall::lang.product_file.expires_after_days'
+            comment: 'offline.mall::lang.product_file.expires_after_days_comment'
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.product.general'
+        file_max_download_count:
+            label: 'offline.mall::lang.product_file.max_download_count'
+            comment: 'offline.mall::lang.product_file.max_download_count_comment'
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.product.general'
+        missing_file_hint:
+            span: full
+            type: partial
+            path: missing_file_hint
+            tab: 'offline.mall::lang.product.general'
+        product_files:
+            span: full
+            path: product_files
+            type: partial
             tab: 'offline.mall::lang.product.general'
         variants_section:
             label: 'offline.mall::lang.common.variants'

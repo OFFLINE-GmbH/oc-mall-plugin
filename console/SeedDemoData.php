@@ -8,6 +8,9 @@ use OFFLINE\Mall\Classes\Demo\Products\Cruiser1500;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser3000;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser3500;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser5000;
+use OFFLINE\Mall\Classes\Demo\Products\GiftCard100;
+use OFFLINE\Mall\Classes\Demo\Products\GiftCard200;
+use OFFLINE\Mall\Classes\Demo\Products\GiftCard50;
 use OFFLINE\Mall\Classes\Demo\Products\Jersey;
 use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
 use OFFLINE\Mall\Classes\Index\Index;
@@ -111,7 +114,7 @@ class SeedDemoData extends Command
         $this->output->writeln('Creating products...');
         $this->output->newLine();
 
-        $this->output->progressStart(7);
+        $this->output->progressStart(10);
 
         // Bikes
         (new Cruiser1000())->create();
@@ -134,6 +137,12 @@ class SeedDemoData extends Command
         $this->output->progressAdvance();
 
         (new Jersey())->create();
+
+        // Gift Cards
+        (new GiftCard50())->create();
+        (new GiftCard100())->create();
+        (new GiftCard200())->create();
+
         $this->output->progressFinish();
     }
 
@@ -192,6 +201,17 @@ class SeedDemoData extends Command
         foreach ($this->clothingPropertyGroups as $index => $group) {
             $clothing->property_groups()->attach($group, ['relation_sort_order' => $index]);
         }
+
+        Category::create([
+            'name'                      => 'Gift cards',
+            'slug'                      => 'gift-cards',
+            'code'                      => 'gift-cards',
+            'meta_title'                => 'Gift cards',
+            'sort_order'                => 4,
+            'meta_description'          => 'Order your Mall gift card online',
+            'inherit_property_groups'   => true,
+            'inherit_review_categories' => true,
+        ]);
     }
 
     protected function createProperties()

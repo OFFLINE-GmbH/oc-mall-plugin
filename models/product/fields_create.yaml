@@ -23,15 +23,25 @@ tabs:
             span: auto
             type: relation
             tab: 'offline.mall::lang.product.general'
+        is_virtual:
+            label: 'offline.mall::lang.product.is_virtual'
+            span: right
+            type: switch
+            comment: 'offline.mall::lang.product.is_virtual_comment'
+            tab: 'offline.mall::lang.product.general'
         inventory_management_method:
             label: 'offline.mall::lang.product.inventory_management_method'
             oc.commentPosition: ''
             options:
                 single: 'offline.mall::lang.variant.method.single'
                 variant: 'offline.mall::lang.variant.method.variant'
-            span: auto
+            span: right
             type: dropdown
             tab: 'offline.mall::lang.product.general'
+            trigger:
+                action: hide
+                field: is_virtual
+                condition: 'checked'
         stock:
             label: 'offline.mall::lang.product.stock'
             oc.commentPosition: ''

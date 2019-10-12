@@ -39,6 +39,11 @@ name = "Order table"
                             {{ field.custom_field.name }}: {{ field.display_value }}<br />
                         {% endfor %}
                     </div>
+                    {% if item.is_virtual %}
+                        <div class="download">
+                            Download links will be sent separately after payment.
+                        </div>
+                    {% endif %}
                 </td>
                 <td style="vertical-align: top; text-align: right">{{ item.quantity }}</td>
                 <td style="vertical-align: top; text-align: right">

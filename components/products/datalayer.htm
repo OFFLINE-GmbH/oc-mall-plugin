@@ -1,53 +1,51 @@
-{% put scripts %}
-    <script>
-        var data = {{ __SELF__.dataLayer | raw }};
+<script>
+    var data = {{ __SELF__.dataLayer | raw }};
 
-        // Send impressions
-        dataLayer.push(data)
+    // Send impressions
+    dataLayer.push(data)
 
-        // Create lookup object for item clicks.
-        var lookup = {}
-        data.ecommerce.impressions.map(function (item) {
-            lookup[item.id] = item
-        })
+    // Create lookup object for item clicks.
+    var lookup = {}
+    data.ecommerce.impressions.map(function (item) {
+        lookup[item.id] = item
+    })
 
-        $(function () {
-            // Handle item clicks
-            $('[data-mall-item-id]').on('click', function (e) {
-                var link = this
-                var item = lookup[this.dataset.mallItemId]
-                if (!item) {
-                    return;
-                }
+    $(function () {
+        // Handle item clicks
+        $('[data-mall-item-id]').on('click', function (e) {
+            var link = this
+            var item = lookup[this.dataset.mallItemId]
+            if (!item) {
+                return;
+            }
 
-                e.preventDefault()
-                $.oc.stripeLoadIndicator.show()
+            e.preventDefault()
+            $.oc.stripeLoadIndicator.show()
 
-                var callback = function () {
-                    document.location = link.href
-                }
-                // Wait for 500ms max
-                setTimeout(callback, 500)
+            var callback = function () {
+                document.location = link.href
+            }
+            // Wait for 500ms max
+            setTimeout(callback, 500)
 
-                dataLayer.push({
-                    'event': 'productClick',
-                    'ecommerce': {
-                        'click': {
-                            'actionField': {'list': 'Category {{ category.name }}'},
-                            'products': [{
-                                'name': item.name,
-                                'id': item.id,
-                                'price': item.price,
-                                'brand': item.brand,
-                                'category': item.cat,
-                                'variant': item.variant,
-                                'position': item.position
-                            }]
-                        }
-                    },
-                    'eventCallback': callback
-                })
+            dataLayer.push({
+                'event': 'productClick',
+                'ecommerce': {
+                    'click': {
+                        'actionField': {'list': 'Category {{ category.name }}'},
+                        'products': [{
+                            'name': item.name,
+                            'id': item.id,
+                            'price': item.price,
+                            'brand': item.brand,
+                            'category': item.cat,
+                            'variant': item.variant,
+                            'position': item.position
+                        }]
+                    }
+                },
+                'eventCallback': callback
             })
         })
-    </script>
-{% endput %}
+    })
+</script>

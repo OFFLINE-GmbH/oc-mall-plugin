@@ -35,8 +35,8 @@ class CartProduct extends Model
     public $belongsToMany = [
         'service_options' => [
             ServiceOption::class,
-            'table' => 'offline_mall_cart_product_service_option',
-            'key' => 'cart_product_id',
+            'table'    => 'offline_mall_cart_product_service_option',
+            'key'      => 'cart_product_id',
             'otherKey' => 'service_option_id',
         ],
     ];
@@ -83,9 +83,10 @@ class CartProduct extends Model
             $entry->name         = $this->variant ? $this->variant->name : $this->data->name;
             $entry->variant_name = optional($this->variant)->properties_description;
             $entry->quantity     = $this->quantity;
+            $entry->is_virtual   = $this->product->is_virtual;
 
-            $entry->taxes      = $this->filtered_product_taxes;
-            $entry->tax_factor = $this->productTaxFactor();
+            $entry->taxes           = $this->filtered_product_taxes;
+            $entry->tax_factor      = $this->productTaxFactor();
             $entry->service_options = $this->service_options->toArray();
 
             // Set the attribute directly to prevent the price mutator from being triggered
