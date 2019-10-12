@@ -1,4 +1,3 @@
-{% put scripts %}
 {% if not url %}
     {% set activeMethod = __SELF__.activeMethod.only('code', 'name') %}
     <script>
@@ -27,4 +26,3 @@
         dataLayer.push(window.dataLayerData)
     </script>
 {% endif %}
-{% endput %}
