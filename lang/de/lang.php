@@ -453,8 +453,6 @@
         'percentage'               => 'Prozent',
         'countries'                => 'Steuer gilt nur für Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
-        'not_required_name'        => 'Kein Versand notwendig',
-        'not_required_description' => 'Der Warenkorb benötigt keinen Versand.',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -586,6 +584,8 @@
         'available_below_total'    => 'Verfügbar wenn Totalbetrag kleiner',
         'countries'                => 'Verfügbar für den Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandmethode weltweit verwendet werden.',
+        'not_required_name'        => 'Kein Versand notwendig',
+        'not_required_description' => 'Der Warenkorb benötigt keinen Versand.',
     ],
     'payment_status'           => [
         'paid'          => 'Bezahlt',

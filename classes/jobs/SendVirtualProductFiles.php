@@ -12,15 +12,30 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderProduct;
 use OFFLINE\Mall\Models\ProductFileGrant;
 
+/**
+ * This Job generates ProductFileGrants for each purchased product.
+ * It also sends the email containing the download links to the customer.
+ */
 class SendVirtualProductFiles
 {
+    /**
+     * All enabled email notifications. This is used to look up
+     * if the product file email should be sent.
+     * @var array
+     */
     public $enabledNotifications = [];
 
+    /**
+     * {@inheritDoc}
+     */
     public function __construct()
     {
         $this->enabledNotifications = Notification::getEnabled();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function fire(Job $job, $data)
     {
         if ($job->attempts() > 5) {
