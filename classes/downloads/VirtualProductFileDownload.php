@@ -46,12 +46,16 @@ class VirtualProductFileDownload
 
         // If the grant has a file attached, send it.
         if ($grant->file) {
-            return $grant->file->output();
+            $filename = sprintf('%s.%s', $grant->display_name, $grant->file->getExtension());
+
+            return response()->download($grant->file->getLocalPath(), $filename);
         }
 
         // If no grant specific file is available, return the product file.
         if ($product->latest_file && $product->latest_file->file) {
-            return $product->latest_file->file->output();
+            $filename = sprintf('%s.%s', $grant->display_name, $product->latest_file->file->getExtension());
+
+            return response()->download($product->latest_file->file->getLocalPath(), $filename);
         }
 
         // If no file is around, return and log an error. The site admin needs to fix this!
