@@ -105,6 +105,7 @@ class Product extends Model
         'allow_out_of_stock_purchases',
         'links',
         'stackable',
+        'is_virtual',
         'shippable',
         'price_includes_tax',
         'group_by_property_id',
