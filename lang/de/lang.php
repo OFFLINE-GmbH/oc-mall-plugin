@@ -826,6 +826,12 @@
                 'missing_settings' => 'Bitte wählen Sie eine Zahlungs- und Versandmethode aus.',
             ],
         ],
+        'quickCheckout'                   => [
+            'details' => [
+                'name'        => 'Schneller Checkout',
+                'description' => 'Checkout auf einer Seite',
+            ]
+        ],
         'discountApplier'            => [
             'details'          => [
                 'name'        => 'Gutschein-Code Eingabe',

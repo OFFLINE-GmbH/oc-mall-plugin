@@ -828,6 +828,12 @@
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
         ],
+        'quickCheckout'              => [
+            'details' => [
+                'name'        => 'Quick Checkout',
+                'description' => 'Single-page checkout process',
+            ],
+        ],
         'discountApplier'            => [
             'details'          => [
                 'name'        => 'Promo code input',
