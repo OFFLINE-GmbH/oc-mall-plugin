@@ -20,7 +20,7 @@
         document.head.appendChild(s)
 
         function initStripe () {
-            var stripe = Stripe('{{ activeMethod.settings.stripe_publishable_key }}');
+            var stripe = Stripe('{{ cart.payment_method.settings.stripe_publishable_key }}');
             var elements = stripe.elements();
 
             var card = elements.create('card');

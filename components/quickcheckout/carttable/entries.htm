@@ -1,0 +1,19 @@
+<div class="mall-cart__wrapper">
+    <div class="mall-table-overflow" style="overflow-y: auto">
+        <table class="mall-cart__table">
+            <tbody>
+                {% for product in __SELF__.cart.products %}
+                    {% partial __SELF__ ~ '::carttable/entry' product=product %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                {% partial __SELF__ ~ '::carttable/total'      totals=__SELF__.cart.totals %}
+                {% partial __SELF__ ~ '::carttable/discounts'  discounts=__SELF__.cart.totals.appliedDiscounts %}
+                {% partial __SELF__ ~ '::carttable/shipping'   shipping=__SELF__.cart.totals.shippingTotal %}
+                {% partial __SELF__ ~ '::carttable/payment'    payment=__SELF__.cart.totals.paymentTotal %}
+                {% partial __SELF__ ~ '::carttable/grandtotal' totals=__SELF__.cart.totals %}
+                {% partial __SELF__ ~ '::carttable/taxes'      taxes=__SELF__.cart.totals.taxes %}
+            </tfoot>
+        </table>
+    </div>
+</div>
