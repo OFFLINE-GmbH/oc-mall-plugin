@@ -223,3 +223,5 @@
 1.7.0:
     - Added support for virtual products
     - add_virtual_products_support.php
+1.7.1: 
+    - Bugfix for parent category dropdown in backend

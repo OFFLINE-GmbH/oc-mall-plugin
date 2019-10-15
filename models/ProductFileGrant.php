@@ -47,7 +47,7 @@ class ProductFileGrant extends Model
             return $this->attributes['display_name'];
         }
 
-        return optional($this->order_product->product->latest_file)->display_name ?? '';
+        return optional($this->order_product->product->latest_file)->display_name ?? 'Download ' . $this->id;
     }
 
     /**
