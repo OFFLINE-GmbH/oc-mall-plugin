@@ -210,10 +210,10 @@ class Category extends Model
     {
         $items = $this->id ? Category::withoutSelf()->get() : Category::getAll();
 
-        return array_merge([
-            // null key for "no parent"
-            null => '(' . trans('offline.mall::lang.category.no_parent') . ')',
-        ], $items->listsNested('name', 'id'));
+        return [
+                // null key for "no parent"
+                null => '(' . trans('offline.mall::lang.category.no_parent') . ')',
+            ] + $items->listsNested('name', 'id');
     }
 
     /**
