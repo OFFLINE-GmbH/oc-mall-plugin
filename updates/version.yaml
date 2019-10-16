@@ -225,3 +225,5 @@
     - add_virtual_products_support.php
 1.7.1: 
     - Bugfix for parent category dropdown in backend
+1.7.2: 
+    - Fixed bug where product entries in RainLab.Pages menus included the wrong variant id
