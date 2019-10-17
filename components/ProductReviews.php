@@ -59,25 +59,25 @@ class ProductReviews extends ComponentBase
     public function defineProperties()
     {
         return [
-            'product' => [
+            'product'                   => [
                 'title'       => 'offline.mall::lang.components.wishlistButton.properties.product.title',
                 'description' => 'offline.mall::lang.components.wishlistButton.properties.product.description',
                 'type'        => 'string',
             ],
-            'variant' => [
+            'variant'                   => [
                 'title'       => 'offline.mall::lang.components.wishlistButton.properties.variant.title',
                 'description' => 'offline.mall::lang.components.wishlistButton.properties.variant.description',
                 'type'        => 'string',
             ],
-            'perPage' => [
-                'title'       => 'offline.mall::lang.components.productReviews.properties.perPage.title',
-                'type' => 'string',
+            'perPage'                   => [
+                'title' => 'offline.mall::lang.components.productReviews.properties.perPage.title',
+                'type'  => 'string',
             ],
             'currentVariantReviewsOnly' => [
-                'title' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
+                'title'       => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
                 'description' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.description',
-                'type' => 'checkbox',
-                'default' => 0
+                'type'        => 'checkbox',
+                'default'     => 0,
             ],
         ];
     }
