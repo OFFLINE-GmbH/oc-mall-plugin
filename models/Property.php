@@ -8,7 +8,6 @@ use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 
 class Property extends Model
 {
@@ -16,7 +15,6 @@ class Property extends Model
     use SoftDelete;
     use HashIds;
     use Sluggable;
-    use TranslatableRelation;
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['options'];
