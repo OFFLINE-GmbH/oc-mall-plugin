@@ -202,15 +202,24 @@ class ProductReviews extends ComponentBase
             if (is_array($categoryRatings) && count($categoryRatings) > 0) {
                 $this->reviewCategories->each(function (ReviewCategory $category) use ($review, $categoryRatings) {
                     if ($value = array_get($categoryRatings, $category->id)) {
-                        // Fetch the review properly so the update event will be triggered.
-                        CategoryReview
-                            ::where([
-                                'review_id'          => $review->id,
-                                'review_category_id' => $category->id,
-                            ])
-                            ->firstOrFail()
-                            ->load(['review.product', 'review.variant'])
-                            ->update(['rating' => $value]);
+                        // Fetch an existing rating and update it.
+                        $categoryReview = CategoryReview::where([
+                            'review_id'          => $review->id,
+                            'review_category_id' => $category->id,
+                        ])->first();
+
+                        if ($categoryReview) {
+                            return $categoryReview->load(['review.product', 'review.variant'])->update(['rating' => $value]);
+                        }
+
+                        // If there is no review for this category, create it now.
+                        $approvedAt = $this->isModerated ? null : now();
+                        CategoryReview::create([
+                            'review_id'          => $review->id,
+                            'review_category_id' => $category->id,
+                            'rating'             => $value,
+                            'approved_at'        => $approvedAt,
+                        ]);
                     }
                 });
             }
