@@ -55,8 +55,6 @@ class Property extends Model
 
     public function afterSave()
     {
-        $this->setTranslatableFields();
-
         if ($this->pivot && ! $this->pivot->use_for_variants) {
             $categories = $this->property_groups->flatMap->getRelatedCategories();
 
