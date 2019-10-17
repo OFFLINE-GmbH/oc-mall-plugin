@@ -227,3 +227,5 @@
     - Bugfix for parent category dropdown in backend
 1.7.2: 
     - Fixed bug where product entries in RainLab.Pages menus included the wrong variant id
+1.7.3: 
+    - Minor Bugfix when editing a Review on the frontend
