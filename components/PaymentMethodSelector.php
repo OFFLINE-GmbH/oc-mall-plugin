@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
+use Event;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
@@ -185,8 +186,12 @@ class PaymentMethodSelector extends MallComponent
 
         $id = post('id');
 
+        Event::fire('mall.cart.payment.before.updated', [$this->workingOnModel, $id]);
+
         $this->workingOnModel->payment_method_id = $id;
         $this->workingOnModel->save();
+
+        Event::fire('mall.cart.payment.after.updated', [$this->workingOnModel, $id]);
 
         $this->setData();
 
