@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\ShippingMethod;
@@ -124,8 +125,12 @@ class ShippingMethodSelector extends MallComponent
             ]);
         }
 
+        Event::fire('mall.cart.shipping.before.updated', [$this->cart, $id]);
+
         $this->cart->shipping_method_id = $id;
         $this->cart->save();
+
+        Event::fire('mall.cart.shipping.after.updated', [$this->cart, $id]);
 
         $this->setData();
 
