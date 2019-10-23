@@ -140,6 +140,7 @@ class Variant extends Model
     public function afterDelete()
     {
         DB::table('offline_mall_property_values')->where('variant_id', $this->id)->delete();
+        DB::table('offline_mall_wishlist_items')->where('variant_id', $this->id)->delete();
     }
 
     protected function createImageSetFromTempImages()
