@@ -96,7 +96,9 @@ class Order extends Model
             }
             // If the order became paid, distribute all virtual products.
             if ($this->payment_state === PaidState::class && $this->paid_at === null) {
-                Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
+                if ($this->virtual_products->count() > 0) {
+                    Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
+                }
                 $this->paid_at = Carbon::today();
                 $this->save();
             }

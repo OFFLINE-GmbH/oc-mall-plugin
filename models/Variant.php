@@ -15,7 +15,6 @@ use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
-use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -32,7 +31,6 @@ class Variant extends Model
     use ProductPriceAccessors;
     use PropertyValues;
     use StockAndQuantity;
-    use TranslatableRelation;
 
     const MORPH_KEY = 'mall.variant';
 
@@ -76,7 +74,7 @@ class Variant extends Model
         'prices'                  => ProductPrice::class,
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
         'reviews'                 => [Review::class],
-        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
+        'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',
@@ -142,6 +140,7 @@ class Variant extends Model
     public function afterDelete()
     {
         DB::table('offline_mall_property_values')->where('variant_id', $this->id)->delete();
+        DB::table('offline_mall_wishlist_items')->where('variant_id', $this->id)->delete();
     }
 
     protected function createImageSetFromTempImages()
@@ -220,7 +219,7 @@ class Variant extends Model
 
         // If any of the product relation columns are called don't override the method's default behaviour.
         $dontInheritAttribute = \in_array($attribute, ['product', 'product_id', 'all_property_values']);
-        if ($dontInheritAttribute || $inheritanceDisabled) {
+        if ($dontInheritAttribute || $inheritanceDisabled || ! $this->product_id) {
             return $originalValue;
         }
 
