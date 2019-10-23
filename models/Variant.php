@@ -74,7 +74,7 @@ class Variant extends Model
         'prices'                  => ProductPrice::class,
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
         'reviews'                 => [Review::class],
-        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
+        'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',
