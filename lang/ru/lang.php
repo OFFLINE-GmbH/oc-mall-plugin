@@ -205,6 +205,7 @@
         'payment_provider'     => 'Провайдера платежей',
         'payment_methods'      => 'Способы оплаты',
         'payment'              => 'Оплата',
+        'payments'             => 'Платежи',
         'image'                => 'Изображение',
         'color'                => 'Цвет',
         'unit'                 => 'Единица',
@@ -244,6 +245,10 @@
         'slug_unique'          => 'URL должен быть уникальным',
         'fees'                 => 'Сборы',
         'value'                => 'Значение',
+        'services'             => 'Услуги',
+        'service'              => 'Услуга',
+        'review'               => 'Отзыв',
+        'reviews'              => 'Отзывы',
     ],
     'variant'                  => [
         'method' => [
@@ -410,7 +415,7 @@
         'credit_card'                         => 'Кредитная карта',
         'payment_status'                      => 'Статус платежа',
         'grand_total'                         => 'Общая сумма',
-        'billing_address'                     => 'Адрес доставки',
+        'billing_address'                     => 'Адрес оплаты',
         'shipping_address'                    => 'Адрес доставки',
         'currency'                            => 'Валюта',
         'status'                              => 'Статус',
@@ -422,6 +427,7 @@
         'tracking_url'                        => 'URL-адрес отслеживания',
         'tracking_shipped'                    => 'Пометить заказ как отправленный',
         'tracking_shipped_comment'            => 'Заказ будет отмечен как отправленный',
+        'tracking_completed'                  => 'Пометить заказ как завершенный',
         'tracking_notification'               => 'Отправить уведомление',
         'tracking_notification_comment'       => 'Уведомление, содержащее информацию об отслеживании будет отправлен заказчику',
         'shipping_fees'                       => 'Стоимость доставки',
@@ -460,6 +466,7 @@
         'delete_confirm'                      => 'Вы действительно хотите удалить этот заказ?',
         'update_invoice_number'               => 'Установить номер счета',
         'shipped'                             => 'Отправлен',
+        'shipping_pending'                    => 'Ожидает отправки',
         'not_shipped'                         => 'В ожидании',
         'modal'                               => [
             'cancel' => 'Отменен',
