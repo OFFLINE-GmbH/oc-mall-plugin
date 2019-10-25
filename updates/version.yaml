@@ -231,3 +231,5 @@
     - Minor Bugfix when editing a Review on the frontend
 1.7.4: 
     - Bugfix release
+1.7.5: 
+    - Updated russian translations (thanks to @igor-tv)
