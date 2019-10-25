@@ -3,7 +3,8 @@
 namespace OFFLINE\Mall\Classes\Index\MySQL;
 
 
-use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\Model;
+use Model;
 
 class IndexEntry extends Model
 {
