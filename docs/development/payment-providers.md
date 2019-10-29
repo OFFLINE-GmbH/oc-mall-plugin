@@ -168,7 +168,7 @@ method.
 
 ```php
 <?php
-namespace Vendor\Plugin\Classes\PaymentProviders;
+namespace Vendor\ExamplePlugin;
 
 use Vendor\Plugin\Classes\PaymentProviders\ExampleProvider;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
