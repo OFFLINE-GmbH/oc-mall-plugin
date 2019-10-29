@@ -235,3 +235,5 @@
     - Updated russian translations (thanks to @igor-tv)
 1.7.6: 
     - Made forceShippingPrice feature to only override the price for a specific shipping method. Make sure to add the new ID parameter in case you use this feature in your custom code.
+1.7.7: 
+    - Bugfix release
