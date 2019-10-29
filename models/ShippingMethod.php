@@ -1,13 +1,11 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Closure;
-use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Session;
 use Model;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
-use OFFLINE\Mall\Components\ShippingMethodSelector;
 use Rainlab\Location\Models\Country as RainLabCountry;
 use System\Models\File;
 
@@ -133,19 +131,12 @@ class ShippingMethod extends Model
      */
     protected function useEnforcedValues()
     {
-        // Never enforce in the backend.
+        // Never use enforced values in the backend.
         if (app()->runningInBackend() === true) {
             return false;
         }
 
-        /** @var Controller $ctrl */
-        $ctrl = Controller::getController();
-        if ( ! $ctrl) {
-            return true;
-        }
-
-        // Ignore enforced values if a the shippingMethodSelector is on the current page.
-        return ! $ctrl->findComponentByName('shippingMethodSelector') instanceof ShippingMethodSelector;
+        return true;
     }
 
     public static function getAvailableByCart(Cart $cart)
@@ -191,7 +182,7 @@ class ShippingMethod extends Model
         ?Closure $filter = null
     ) {
         $checkEnforced = $relation === 'prices' && $this->useEnforcedValues();
-        $enforcedKey = sprintf('mall.shipping.enforced.%s.price', $this->id);
+        $enforcedKey   = sprintf('mall.shipping.enforced.%s.price', $this->id);
 
         if ($checkEnforced && $enforced = Session::get($enforcedKey, [])) {
             $currency = Currency::resolve($currency);
