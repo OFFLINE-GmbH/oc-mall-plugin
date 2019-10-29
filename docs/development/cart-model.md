@@ -32,3 +32,9 @@ shipping method.
 
 This feature comes in handy if you need to set a price depending
 on any given value (like shipping distance where each km means additional shipping cost).
+
+To forget a forced shipping price simply use the following method:
+
+```php
+$cart->forgetForcedShippingPrice();
+```

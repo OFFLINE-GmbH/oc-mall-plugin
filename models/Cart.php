@@ -260,4 +260,13 @@ class Cart extends Model
             Session::put('mall.shipping.enforced.name', $name);
         }
     }
+
+    /**
+     * Undo an enforced shipping price.
+     */
+    public function forgetForcedShippingPrice()
+    {
+        Session::forget('mall.shipping.enforced.name');
+        Session::forget('mall.shipping.enforced.price');
+    }
 }
