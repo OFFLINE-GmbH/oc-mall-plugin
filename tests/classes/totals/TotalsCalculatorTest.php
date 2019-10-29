@@ -211,7 +211,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $cart->forceShippingPrice(['CHF' => 200, 'EUR' => 150], 'Enforced Price');
+        $cart->forceShippingPrice($shippingMethod->id, ['CHF' => 200, 'EUR' => 150], 'Enforced Price');
 
         $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(40000, $calc->totalPostTaxes());

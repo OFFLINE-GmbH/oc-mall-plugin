@@ -141,7 +141,7 @@ class ShippingMethod extends Model
         /** @var Controller $ctrl */
         $ctrl = Controller::getController();
         if ( ! $ctrl) {
-            return false;
+            return true;
         }
 
         // Ignore enforced values if a the shippingMethodSelector is on the current page.
@@ -192,6 +192,7 @@ class ShippingMethod extends Model
     ) {
         $checkEnforced = $relation === 'prices' && $this->useEnforcedValues();
         $enforcedKey = sprintf('mall.shipping.enforced.%s.price', $this->id);
+
         if ($checkEnforced && $enforced = Session::get($enforcedKey, [])) {
             $currency = Currency::resolve($currency);
             $value    = array_get($enforced, $currency->code);
