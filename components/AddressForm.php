@@ -87,7 +87,7 @@ class AddressForm extends MallComponent
      */
     public function getAddressOptions()
     {
-        return Address::get()->pluck('name', 'id');
+        return Address::get()->pluck('name', 'id')->toArray();
     }
 
     /**
