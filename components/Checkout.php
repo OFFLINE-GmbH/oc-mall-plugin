@@ -123,7 +123,11 @@ class Checkout extends MallComponent
         }
 
         if ($this->param('step') === 'shipping') {
-            $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector', ['skipIfOnlyOneAvailable' => true]);
+            $this->addComponent(
+                ShippingMethodSelector::class,
+                'shippingMethodSelector',
+                ['skipIfOnlyOneAvailable' => true]
+            );
         }
 
         if ($this->param('step') === 'payment') {
