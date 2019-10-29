@@ -14,10 +14,11 @@ $cart = Cart::byUser(Auth::getUser());
 ## Enforce shipping price
 
 In case you want to dynamically force a shipping price
-for a Cart, you can use the following method:
+for a Cart for a certain shipping method, you can use the following method:
 
 ```php
-$cart->forceShippingPrice(['EUR' => 400], 'Optional, alternative name');
+// Shipping method 1 will always cost 400 €
+$cart->forceShippingPrice(1, ['EUR' => 400], 'Optional, alternative name');
 ```   
 
 ::: warning
