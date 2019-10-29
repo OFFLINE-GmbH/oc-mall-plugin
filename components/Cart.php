@@ -41,6 +41,12 @@ class Cart extends MallComponent
      */
     public $showDiscountApplier = true;
     /**
+     * Show the shipping information in the cart.
+     *
+     * @var bool
+     */
+    public $showShipping = true;
+    /**
      * Display a tax summary at the end of the cart.
      *
      * @var bool
@@ -82,6 +88,11 @@ class Cart extends MallComponent
             'showTaxes'           => [
                 'type'    => 'checkbox',
                 'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.name',
+                'default' => 1,
+            ],
+            'showShipping' => [
+                'type'    => 'checkbox',
+                'title'   => 'offline.mall::lang.components.cart.properties.showShipping.title',
                 'default' => 1,
             ],
         ];
@@ -126,6 +137,7 @@ class Cart extends MallComponent
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
         $this->setVar('showDiscountApplier', $this->property('showDiscountApplier'));
+        $this->setVar('showShipping', $this->property('showShipping'));
         $this->setVar('showTaxes', $this->property('showTaxes'));
     }
 

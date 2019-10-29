@@ -17,6 +17,11 @@ discount code directly from the cart overview.
 Display a tax summary at the end of the cart. If the user has not yet specified a shipping address this summary may 
 not reflect the effective tax total if there are taxes with country restrictions.
 
+### `showShipping` (bool)
+
+Defaults to `true`. Include the shipping method/cost in the cart. Set this to false
+if you don't want to include any shipping information.
+
 
 ## Example implementations
 
