@@ -162,7 +162,7 @@ Add the following `a` tag to your item partial `/plugins/offline/components/prod
     <a class="mall-products-item__cart-button"
        href="javascript:;"
        data-request="{{ __SELF__ }}::onAddToCart"
-       data-request-success="$.publish('mall.cart.productAdded')"
+       data-request-success="data.added && $.publish('mall.cart.productAdded', data)" 
        data-request-data="product: '{{ item.productHashId }}', variant: '{{ item.variantHashId }}'"
        data-request-flash
     >
