@@ -350,3 +350,4 @@ tabs:
             type: partial
             path: reviews
             tab: 'offline.mall::lang.common.reviews'
+            permissions: 'offline.mall.manage_reviews'
