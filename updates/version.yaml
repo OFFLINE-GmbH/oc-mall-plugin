@@ -241,3 +241,6 @@
     - Another bugfix release
 1.7.9: 
     - Added showShipping property to the Cart component. This allows you to display a cart without including any shipping information.
+1.7.10:
+    - Added a valid from date for discounts
+    - add_valid_from_column_to_discounts_table.php
