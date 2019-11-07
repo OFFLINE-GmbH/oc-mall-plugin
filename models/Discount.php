@@ -15,8 +15,8 @@ class Discount extends Model
 
     public $rules = [
         'name'                                 => 'required',
-        'valid_from'                           => 'nullable|date',
-        'expires'                              => 'nullable|date',
+        'valid_from'                           => 'nullable|date|before_or_equal:expires',
+        'expires'                              => 'nullable|date|after_or_equal:valid_from',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
