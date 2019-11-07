@@ -9,7 +9,7 @@ class AddValidFromColumnToDiscountsTable extends Migration
     public function up()
     {
         Schema::table('offline_mall_discounts', function (Blueprint $table) {
-            $table->dateTime('valid_from')->nullable();
+            $table->dateTime('valid_from')->after('max_number_of_usages')->nullable();
         });
     }
 
