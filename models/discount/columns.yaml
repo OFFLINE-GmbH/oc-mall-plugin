@@ -4,6 +4,10 @@ columns:
         type: text
         searchable: true
         sortable: true
+    valid_from:
+        label: 'offline.mall::lang.discounts.valid_from'
+        type: date
+        sortable: true
     expires:
         label: 'offline.mall::lang.discounts.expires'
         type: date
