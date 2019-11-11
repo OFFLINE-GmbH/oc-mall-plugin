@@ -465,6 +465,7 @@
         'rate'                                 => 'Rate (%)',
         'amount'                               => 'Fixed amount',
         'max_number_of_usages'                 => 'Max number of usages',
+        'valid_from'                           => 'Valid from',
         'expires'                              => 'Expires',
         'number_of_usages'                     => 'Number of usages',
         'shipping_description'                 => 'Name of alternative shipping method',

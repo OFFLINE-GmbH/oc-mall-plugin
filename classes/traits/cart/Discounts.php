@@ -30,6 +30,10 @@ trait Discounts
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
         }
 
+        if ($discount->valid_from && $discount->valid_from->gte(Carbon::now())) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.not_found')]);
+        }
+
         if ($discount->expires && $discount->expires->lt(Carbon::today())) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.expired')]);
         }
