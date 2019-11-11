@@ -298,7 +298,7 @@ class Variant extends Model
 
     protected function isEmpty($attribute, $originalValue): bool
     {
-        if ($attribute === 'description') {
+        if ($attribute === 'description' || $attribute === 'description_short') {
             $originalValue = trim(Html::strip($originalValue));
 
             return $originalValue === '';
