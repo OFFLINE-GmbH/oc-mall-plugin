@@ -244,3 +244,5 @@
 1.7.10:
     - Added a valid from date for discounts
     - add_valid_from_column_to_discounts_table.php
+1.7.11:
+    - Bugfix release
