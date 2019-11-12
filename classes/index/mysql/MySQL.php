@@ -256,7 +256,7 @@ class MySQL implements Index
             $field = $parts[0];
             array_shift($parts);
             $nested = implode('.', $parts);
-            $db->orderByRaw('JSON_EXTRACT(' . \DB::raw($field) . ', ?) ' . $order->direction(),
+            $db->orderByRaw('CAST(JSON_EXTRACT(' . \DB::raw($field) . ', ?) AS Float) ' . $order->direction(),
                 ['$.' . '"' . $nested . '"']
             );
         } else {
