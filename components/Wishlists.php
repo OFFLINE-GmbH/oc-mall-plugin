@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Cms\Classes\Theme;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
@@ -36,6 +37,13 @@ class Wishlists extends MallComponent
      */
     public $hasItems = false;
 
+    /**
+     * PDF download is available.
+     *
+     * @var bool
+     */
+    public $allowPDFDownload = false;
+
     public function componentDetails()
     {
         return [
@@ -51,6 +59,11 @@ class Wishlists extends MallComponent
 
     public function onRun()
     {
+        $this->allowPDFDownload = $this->pdfPartialExists();
+        if ($this->allowPDFDownload && $download = input('download')) {
+            return $this->handlePDFDownload($download);
+        }
+
         $this->items       = $this->getWishlists();
         $this->currentItem = $this->items->first();
 
@@ -154,6 +167,28 @@ class Wishlists extends MallComponent
     }
 
     /**
+     * Return the wishlist as a PDF.
+     *
+     * @param string $download
+     *
+     * @return \Illuminate\Http\Response|string
+     */
+    protected function handlePDFDownload(string $download)
+    {
+        $id        = $this->decode($download);
+        $wishlists = Wishlist::byUser(Auth::getUser());
+
+        /** @var Wishlist $wishlist */
+        $wishlist = $wishlists->find($id);
+
+        if ( ! $wishlist) {
+            return $this->controller->run('404');
+        }
+
+        return $wishlist->getPDF()->stream(sprintf('wishlist-%s.pdf', $download));
+    }
+
+    /**
      * Set the currently active item.
      *
      * @throws ValidationException
@@ -191,5 +226,18 @@ class Wishlists extends MallComponent
                 ['items' => $this->items]
             ),
         ];
+    }
+
+    /**
+     * Check if the required PDF partial exists.
+     * @return bool
+     */
+    private function pdfPartialExists()
+    {
+        return file_exists(
+            themes_path(
+                sprintf('%s/partials/mallPDF/wishlist/default.htm', Theme::getActiveThemeCode())
+            )
+        );
     }
 }

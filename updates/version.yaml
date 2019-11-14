@@ -246,3 +246,6 @@
     - add_valid_from_column_to_discounts_table.php
 1.7.11:
     - Bugfix release
+1.8.0:
+    - Added PDF invoices and "export as PDF" support for wishlists (https://tinyurl.com/t6y2pxn)
+    - add_pdf_partial_to_payment_method.php

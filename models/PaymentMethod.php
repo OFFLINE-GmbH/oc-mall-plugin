@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cms\Classes\Theme;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
@@ -105,6 +106,19 @@ class PaymentMethod extends Model
         }
 
         return $options;
+    }
+
+    public function getPdfPartialOptions(): array
+    {
+
+        $null = [null => '-- ' . trans('offline.mall::lang.payment_method.pdf_partial_none')];
+        $path = themes_path(sprintf('%s/partials/mallPDF/*', Theme::getActiveThemeCode()));
+
+        return $null + collect(glob($path, GLOB_ONLYDIR))->mapWithKeys(function ($dir) {
+                $dir = basename($dir);
+
+                return [$dir => $dir];
+            })->toArray();
     }
 
     public static function getDefault()

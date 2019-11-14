@@ -49,3 +49,19 @@ information on how to use these.
 | totalPaymentPreTaxes     | Payment provider cost before taxes |             
 | totalPaymentTaxes        | Payment provider cost taxes        |             
 | totalPaymentPostTaxes    | Payment provider cost after taxes  |             
+
+## Download PDF invoice
+
+To download a PDF invoice for an Order, use the `getPDFInvoice` method to 
+get a `Barryvdh\DomPDF\PDF` instance.
+
+Beware that only orders that have a [payment method with a
+valid `pdf_partial` assigned](./../digging-deeper/payments.md#pdf-invoices) will support this feature.
+
+```php
+$pdf = $order->getPDFInvoice();
+
+$pdf->save('/path/invoice.pdf'); // Save to disk
+$pdf->stream();                  // Return download response
+$pdf->output();                  // Return string representation
+```

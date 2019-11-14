@@ -2,7 +2,11 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
+use Barryvdh\DomPDF\Facade;
+use Barryvdh\DomPDF\PDF;
+use Dompdf\Dompdf;
 use Hashids\Hashids;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Cache;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
@@ -49,9 +53,7 @@ trait BootServiceContainer
         $this->app->singleton('user.auth', function () {
             return AuthManager::instance();
         });
-
         $this->app->bind(Index::class, function () {
-
             $driver = Cache::rememberForever('offline_mall.mysql.index.driver', function () {
                 $driver = GeneralSettings::get('index_driver');
                 if ($driver === null) {
@@ -60,7 +62,6 @@ trait BootServiceContainer
 
                 return $driver;
             });
-
             try {
                 if ($driver === 'filesystem') {
                     return new Filebase();
@@ -76,6 +77,42 @@ trait BootServiceContainer
 
                 return new Filebase();
             }
+        });
+
+        $this->registerDomPDF();
+    }
+
+    /**
+     * Register barryvdh/laravel-dompdf
+     */
+    protected function registerDomPDF()
+    {
+        AliasLoader::getInstance()->alias('PDF', Facade::class);
+
+        $this->app->bind('dompdf.options', function () {
+            if ($defines = $this->app['config']->get('offline.mall::pdf.defines')) {
+                $options = [];
+                foreach ($defines as $key => $value) {
+                    $key           = strtolower(str_replace('DOMPDF_', '', $key));
+                    $options[$key] = $value;
+                }
+            } else {
+                $options = $this->app['config']->get('offline.mall::pdf.options', []);
+            }
+
+            return $options;
+        });
+
+        $this->app->bind('dompdf', function () {
+            $options = $this->app->make('dompdf.options');
+            $dompdf  = new Dompdf($options);
+            $dompdf->setBasePath(realpath(base_path('public')));
+
+            return $dompdf;
+        });
+        $this->app->alias('dompdf', Dompdf::class);
+        $this->app->bind('dompdf.wrapper', function ($app) {
+            return new PDF($app['dompdf'], $app['config'], $app['files'], $app['view']);
         });
     }
 }

@@ -145,6 +145,7 @@ return [
     'wishlists'                                => 'Wishlists',
     'wishlists.none'                           => 'You don\'t have created any wishlists yet.',
     'wishlists.addtocart'                      => 'Add all items to your cart',
+    'wishlists.pdf_download'                   => 'Download as PDF',
     'wishlists.addedtocart'                    => 'All items have been added to your cart',
     'wishlists.stockmissing'                   => 'Some items are not in stock and were not added to the cart.',
     'services.modal_title'                     => 'Choose additional services for this product',
