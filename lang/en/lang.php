@@ -465,6 +465,7 @@
         'rate'                                 => 'Rate (%)',
         'amount'                               => 'Fixed amount',
         'max_number_of_usages'                 => 'Max number of usages',
+        'valid_from'                           => 'Valid from',
         'expires'                              => 'Expires',
         'number_of_usages'                     => 'Number of usages',
         'shipping_description'                 => 'Name of alternative shipping method',
@@ -500,6 +501,9 @@
         'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
         'instructions'           => 'Payment instructions',
         'instructions_comment'   => 'Twig syntax supported. Use {{ order }} or {{ cart }} to access corresponding information if available',
+        'pdf_partial'            => 'PDF attachment partial',
+        'pdf_partial_comment'    => 'For all orders with this payment method a rendered PDF of the selected partial will be attached to the notification mail',
+        'pdf_partial_none'       => 'No PDF attachment',
     ],
     'order'                    => [
         'order_number'                        => '# Order',
@@ -568,6 +572,7 @@
         'not_shipped'                         => 'Pending',
         'data'                                => 'Order data',
         'total_revenue'                       => 'Total revenue',
+        'download_invoice'                    => 'Download invoice',
         'modal'                               => [
             'cancel' => 'Cancel',
             'update' => 'Update information',

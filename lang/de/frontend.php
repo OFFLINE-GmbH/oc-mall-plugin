@@ -145,6 +145,7 @@ return [
     'wishlists'                                => 'Merklisten',
     'wishlists.none'                           => 'Du hast noch keine Merklisten erstellt',
     'wishlists.addtocart'                      => 'Alle Artikel in den aktuellen Warenkorb legen',
+    'wishlists.pdf_download'                   => 'Als PDF herunterladen',
     'wishlists.addedtocart'                    => 'Alle Artikel wurden zum Warenkorb hinzugefügt',
     'wishlists.stockmissing'                   => 'Einige Artikel sind nicht mehr an Lager und wurden deshalb nicht zum Warenkorb hinzugefügt',
     'services.modal_title'                     => 'Wählen Sie Ihre Zusatzleistungen für dieses Produkt aus',

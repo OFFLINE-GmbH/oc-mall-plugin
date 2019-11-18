@@ -57,3 +57,27 @@ Sample instructions for a "Payment in advance" method could be:
     Payment id: {{ order.payment_hash }}
 {% endif %}
 ```
+
+## PDF invoices
+
+If you wish to send a PDF invoice to your customers during checkout you can 
+do so starting from version 1.8.0. 
+
+When updating a payment method via the backend, you can select a PDF partial 
+from the select box.
+
+PDF partials need to be placed in your theme's partial folder at
+`partials/mallPDF/<custom-name>/default.htm`.
+
+As soon as you have created this partial, it will be selectable in the payment
+method form.
+
+::: v-pre
+Your invoice has to be a complete HTML document. You have access to all order
+data using the `{{ order }}` variable.
+:::
+
+Take a look at the demo theme for an example implementation:
+[https://github.com/OFFLINE-GmbH/oc-mall-theme/tree/master/partials/mallPDF/order](https://github.com/OFFLINE-GmbH/oc-mall-theme/tree/master/partials/mallPDF/order)
+
+Read more about the PDF support [on the PDF page](../development/pdf.md).

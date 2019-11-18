@@ -450,9 +450,9 @@
         'is_not_required'  => 'Kein Pflichtfeld',
     ],
     'tax'                      => [
-        'percentage'               => 'Prozent',
-        'countries'                => 'Steuer gilt nur für Versand in diese Länder',
-        'countries_comment'        => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'percentage'        => 'Prozent',
+        'countries'         => 'Steuer gilt nur für Versand in diese Länder',
+        'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -499,6 +499,9 @@
         'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
         'instructions'           => 'Zahlungsanweisung',
         'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} oder {{ cart }} um Infos zur Bestellung abzurufen (falls vorhanden)',
+        'pdf_partial'            => 'Partial für PDF-Versand',
+        'pdf_partial_comment'    => 'Bei einer Bestellung mit dieser Zahlungsmethode wird das ausgewählte Partial als PDF versendet',
+        'pdf_partial_none'       => 'Kein PDF-Versand',
     ],
     'order'                    => [
         'order_number'                        => '# Bestl.',
@@ -567,6 +570,7 @@
         'not_shipped'                         => 'Versand ausstehend',
         'data'                                => 'Bestellungsdaten',
         'total_revenue'                       => 'Gesamteinnahmen',
+        'download_invoice'                    => 'Rechnung herunterladen',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
@@ -812,7 +816,7 @@
                 'showDiscountApplier' => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
                 ],
-                'showShipping' => [
+                'showShipping'        => [
                     'title' => 'Versandkosten anzeigen',
                 ],
                 'showTaxes'           => [

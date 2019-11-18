@@ -15,7 +15,8 @@ class Discount extends Model
 
     public $rules = [
         'name'                                 => 'required',
-        'expires'                              => 'nullable|date',
+        'valid_from'                           => 'nullable|date|before_or_equal:expires',
+        'expires'                              => 'nullable|date|after_or_equal:valid_from',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
@@ -29,7 +30,7 @@ class Discount extends Model
     ];
     public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
     public $table = 'offline_mall_discounts';
-    public $dates = ['expires'];
+    public $dates = ['valid_from', 'expires'];
     public $nullable = ['max_number_of_usages'];
     public $casts = [
         'number_of_usages' => 'integer',
@@ -41,6 +42,7 @@ class Discount extends Model
     ];
     public $fillable = [
         'name',
+        'valid_from',
         'expires',
         'number_of_usages',
         'max_number_of_usages',

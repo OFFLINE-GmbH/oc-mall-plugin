@@ -66,15 +66,16 @@ class Variant extends Model
         'downloads'   => File::class,
     ];
     public $belongsTo = [
-        'product'      => Product::class,
-        'cart_product' => CartProduct::class,
-        'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
+        'product'    => Product::class,
+        'image_sets' => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $hasMany = [
         'prices'                  => ProductPrice::class,
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
         'reviews'                 => [Review::class],
         'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
+        'cart_products'  => CartProduct::class,
+        'order_products' => OrderProduct::class,
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',
@@ -298,7 +299,7 @@ class Variant extends Model
 
     protected function isEmpty($attribute, $originalValue): bool
     {
-        if ($attribute === 'description') {
+        if ($attribute === 'description' || $attribute === 'description_short') {
             $originalValue = trim(Html::strip($originalValue));
 
             return $originalValue === '';

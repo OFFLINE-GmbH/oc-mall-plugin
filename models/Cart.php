@@ -119,7 +119,7 @@ class Cart extends Model
      */
     public function getIsVirtualAttribute(): bool
     {
-        return $this->products->every(function (CartProduct $product) {
+        return $this->products->count() > 0 && $this->products->every(function (CartProduct $product) {
             return $product->data->is_virtual;
         });
     }

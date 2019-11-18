@@ -7,6 +7,10 @@ You can add your own payment provider by providing an implementation of a `Payme
 To implement a `PaymentProvider` simply extend the abstract `OFFLINE\Mall\Classes\Payments\PaymentProvider` class and
  implement all missing methods. 
  
+You can place your custom `PaymentProvider` inside the `classes` directory of your plugin:
+
+> plugins/yourname/yourplugin/classes/ExampleProvider.php
+ 
 ### PaymentResult
 
 The `process` method receives an instance of a `PaymentResult`. You can call one of the three methods `success`, 
@@ -19,7 +23,7 @@ methods.
  
  ```php
 <?php
-namespace Vendor\Plugin\Classes\PaymentProviders;
+namespace YourName\YourPlugin\Classes;
 
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use OFFLINE\Mall\Classes\Payments\PaymentResult;
@@ -168,9 +172,9 @@ method.
 
 ```php
 <?php
-namespace Vendor\Plugin\Classes\PaymentProviders;
+namespace YourName\YourPlugin;
 
-use Vendor\Plugin\Classes\PaymentProviders\ExampleProvider;
+use YourName\YourPlugin\Classes\ExampleProvider;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use System\Classes\PluginBase;
 

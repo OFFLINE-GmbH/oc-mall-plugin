@@ -11,7 +11,7 @@ class CreateOfflineMallOrders extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('session_id')->nullable();
-            $table->string('order_number')->nullable()->unique();
+            $table->integer('order_number')->nullable()->unique();
             $table->string('invoice_number')->nullable();
             $table->text('currency')->nullable();
             $table->string('payment_state');

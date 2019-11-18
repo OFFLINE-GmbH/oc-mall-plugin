@@ -157,11 +157,14 @@ class ShippingTotal implements \JsonSerializable
     private function applyDiscounts(int $price): ?float
     {
         $discounts = Discount::whereIn('trigger', ['total', 'product'])
-                             ->where('type', 'shipping')
-                             ->where(function ($q) {
-                                 $q->whereNull('expires')
-                                   ->orWhere('expires', '>', Carbon::now());
-                             })->get();
+            ->where('type', 'shipping')
+            ->where(function ($q) {
+                $q->whereNull('valid_from')
+                    ->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
+                $q->whereNull('expires')
+                    ->orWhere('expires', '>', Carbon::now());
+            })->get();
 
         $codeDiscount = $this->totals->getInput()->discounts->where('type', 'shipping')->first();
         if ($codeDiscount) {

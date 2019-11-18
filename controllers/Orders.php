@@ -131,6 +131,19 @@ class Orders extends Controller
         $this->updateOrder($data);
     }
 
+    /**
+     * Download a PDF invoice.
+     *
+     * @return mixed
+     */
+    public function invoice()
+    {
+        $id    = $this->params[0];
+        $order = Order::with(['customer', 'products'])->findOrFail($id);
+
+        return $order->getPDFInvoice()->stream(sprintf('mall-order-%s.pdf', $id));
+    }
+
     public function onDelete($recordId = null)
     {
         $order = Order::findOrFail($recordId);

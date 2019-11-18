@@ -142,6 +142,7 @@ class Product extends Model
         'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
         'variants'               => Variant::class,
         'cart_products'          => CartProduct::class,
+        'order_products'         => OrderProduct::class,
         'image_sets'             => ImageSet::class,
         'property_values'        => PropertyValue::class,
         'reviews'                => Review::class,

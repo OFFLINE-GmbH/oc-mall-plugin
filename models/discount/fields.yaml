@@ -4,6 +4,11 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
+    valid_from:
+        label: 'offline.mall::lang.discounts.valid_from'
+        mode: date
+        span: auto
+        type: datepicker
     expires:
         label: 'offline.mall::lang.discounts.expires'
         oc.commentPosition: ''
