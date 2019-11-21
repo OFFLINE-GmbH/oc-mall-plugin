@@ -1,8 +1,4 @@
 columns:
-    cart_id:
-        label: 'offline.mall::lang.common.cart'
-        type: text
-        sortable: true
     name:
         label: 'offline.mall::lang.common.name'
         type: text
