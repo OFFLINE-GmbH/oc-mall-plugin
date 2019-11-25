@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Event;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
@@ -93,7 +94,32 @@ class Discount extends Model
 
     public function getTriggerOptions()
     {
-        return trans('offline.mall::lang.discounts.triggers');
+        return array_merge(trans('offline.mall::lang.discounts.triggers'), Discount::getCustomTriggerOptions());
+    }
+
+    public static function getCustomTriggerOptions($totalsClass = null)
+    {
+        $triggers = [];
+        $customTriggerLists = Event::fire('offline.mall.discounts.extendTriggerOptions', [$totalsClass]);
+
+        if (is_array($customTriggerLists)) {
+            foreach ($customTriggerLists as $customTriggerList) {
+                if (!is_array($customTriggerList)) {
+                    continue;
+                }
+
+                foreach ($customTriggerList as $triggerCode => $triggerName) {
+                    $triggers[$triggerCode] = $triggerName;
+                }
+            }
+        }
+
+        return $triggers;
+    }
+
+    public function hasCustomTrigger()
+    {
+        return in_array($this->trigger, array_keys($this->getCustomTriggerOptions()));
     }
 
     public function amount($currency = null)

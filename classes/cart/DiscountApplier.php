@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Cart;
 
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
@@ -111,6 +112,10 @@ class DiscountApplier
 
         if ($discount->trigger === 'product' && $this->productIsInCart($discount->product_id)) {
             return true;
+        }
+
+        if ($discount->hasCustomTrigger()) {
+            return in_array(true, Event::fire('offline.mall.discounts.customTrigger', [$this, $discount]));
         }
 
         return $discount->trigger === 'code';

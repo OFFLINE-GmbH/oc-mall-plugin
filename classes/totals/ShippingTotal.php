@@ -156,7 +156,7 @@ class ShippingTotal implements \JsonSerializable
 
     private function applyDiscounts(int $price): ?float
     {
-        $discounts = Discount::whereIn('trigger', ['total', 'product'])
+        $discounts = Discount::whereIn('trigger', array_merge(['total', 'product'], array_keys(Discount::getCustomTriggerOptions(static::class))))
             ->where('type', 'shipping')
             ->where(function ($q) {
                 $q->whereNull('valid_from')
