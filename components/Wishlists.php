@@ -112,6 +112,18 @@ class Wishlists extends MallComponent
         return $this->refreshListAndContent();
     }
 
+    public function onClear()
+    {
+        $this->setCurrentItem();
+
+        WishlistItem::where('wishlist_id', $this->decode(post('id')))
+            ->delete();
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
     public function onDelete()
     {
         $this->setCurrentItem();
