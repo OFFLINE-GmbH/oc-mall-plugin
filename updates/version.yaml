@@ -251,3 +251,5 @@
     - add_pdf_partial_to_payment_method.php
 1.8.1:
     - Fixed price sorting in Products component using the MySQL index
+1.8.2:
+    - Added onClear method to Wishlist component
