@@ -93,8 +93,6 @@ class Wishlists extends MallComponent
 
     public function onRemove()
     {
-        $this->setCurrentItem();
-
         WishlistItem::where('wishlist_id', $this->decode(post('id')))
                     ->where('id', $this->decode(post('item_id')))
                     ->delete();
@@ -119,6 +117,16 @@ class Wishlists extends MallComponent
         WishlistItem::where('wishlist_id', $this->decode(post('id')))
                     ->where('id', $this->decode(post('item_id')))
                     ->update(['quantity' => $quantity]);
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
+    public function onClear()
+    {
+        WishlistItem::where('wishlist_id', $this->decode(post('id')))
+            ->delete();
 
         $this->setCurrentItem();
 
