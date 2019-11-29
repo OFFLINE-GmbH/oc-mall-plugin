@@ -14,6 +14,7 @@ use OFFLINE\Mall\Classes\Traits\Category\Properties;
 use OFFLINE\Mall\Classes\Traits\Category\Slug;
 use OFFLINE\Mall\Classes\Traits\Category\Translation;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
+
 use System\Models\File;
 
 class Category extends Model
@@ -93,6 +94,13 @@ class Category extends Model
             'scope'    => 'published',
             'pivot'    => ['sort_order'],
         ],
+        'products_count' => [
+            Product::class,
+            'table' => 'offline_mall_category_product',
+            'scope' => 'published',
+            'count' => true
+        ],
+
         'property_groups'   => [
             PropertyGroup::class,
             'table'    => 'offline_mall_category_property_group',
@@ -104,6 +112,7 @@ class Category extends Model
             ReviewCategory::class,
             'table' => 'offline_mall_category_review_category',
         ],
+        
     ];
     public $attachOne = [
         'image' => File::class,
@@ -250,5 +259,47 @@ class Category extends Model
         })->review_categories;
 
         return $groups ?? new Collection();
+    }
+
+    /**
+     * Sets the "url" attribute with a URL to this object
+     *
+     * @param string $pageName
+     * @param Cms\Classes\Controller $controller
+     * @param array $urlParams A mapping of overrides for default URL parameter names
+     *
+     * @return string
+     */
+    public function setUrl($pageName, $controller, array $urlParams = array())
+    {
+        $params = [
+            array_get($urlParams, 'id', 'id')   => $this->id,
+            array_get($urlParams, 'slug', 'slug')  => $this->slug,
+        ];
+
+        return $this->url = $controller->pageUrl($pageName, $params, false);
+    }
+
+    /**
+     * Get Category Published Products Count
+     * Create the $this->product_count attribute
+     * @return int
+     */
+    
+    public function getProductCountAttribute()
+    {
+        return optional($this->products_count->first())->count ?? 0;
+    }
+
+    /**
+     * Count products in this and nested categories
+     * @return int
+     */
+
+    public function getNestedProductsCount()
+    {
+        return $this->product_count + $this->children->sum(function ($category) {
+            return $category->getNestedProductsCount();
+        });
     }
 }

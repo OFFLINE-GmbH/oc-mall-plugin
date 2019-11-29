@@ -1,0 +1,18 @@
+{% for category in categories %}
+    {% set productsCount = category.products_count.first.count %}
+    <li {% if category.slug == currentCategorySlug %}class="active"{% endif %}>
+        <a href="{{ category.slug }}">{{ category.name }}</a> 
+        {% if productsCount %}
+            <span class="badge">{{ productsCount }}</span>
+        {% endif %}
+
+        {% if category.children|length > 0 %}
+            <ul class="submenu">
+                {% partial __SELF__ ~ "::items"
+                    categories=category.children
+                    currentCategorySlug=currentCategorySlug
+                %}
+            </ul>
+        {% endif %}
+    </li>
+{% endfor %}

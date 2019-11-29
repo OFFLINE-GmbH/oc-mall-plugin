@@ -1,3 +1,10 @@
-<p>This is the default markup for component Categories</p>
-
-<small>You can delete this file if you want</small>
+{% if __SELF__.categories|length > 0 %}
+    <ul class="category-list flex">
+        {% partial __SELF__ ~ "::items"
+            categories = __SELF__.categories
+            currentCategorySlug = __SELF__.currentCategorySlug
+        %}
+    </ul>
+{% else %}
+    <p>No categories were found.</p>
+{% endif %}
