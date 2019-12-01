@@ -1,13 +1,16 @@
 {% for category in categories %}
+    {% set  displayQuantity = __SELF__.displayQuantity %}
     {% set productsCount = category.products_count.first.count %}
-    <li {% if category.slug == currentCategorySlug %}class="active"{% endif %}>
-        <a href="{{ category.slug }}">{{ category.name }}</a> 
-        {% if productsCount %}
-            <span class="badge">{{ productsCount }}</span>
+    <li class="mall-category-item group {% if category.slug in url_current() %}active{% endif %}">
+        <a href="{{ category.url }}">{{ category.name }}</a> 
+        {% if displayQuantity %}
+            {% if productsCount %}
+               <span class="mall-badge">{{ productsCount }}</span>
+            {% endif %}
         {% endif %}
 
         {% if category.children|length > 0 %}
-            <ul class="submenu">
+            <ul class="mall-category-subitem group-hover:block">
                 {% partial __SELF__ ~ "::items"
                     categories=category.children
                     currentCategorySlug=currentCategorySlug

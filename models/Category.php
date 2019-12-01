@@ -261,25 +261,7 @@ class Category extends Model
         return $groups ?? new Collection();
     }
 
-    /**
-     * Sets the "url" attribute with a URL to this object
-     *
-     * @param string $pageName
-     * @param Cms\Classes\Controller $controller
-     * @param array $urlParams A mapping of overrides for default URL parameter names
-     *
-     * @return string
-     */
-    public function setUrl($pageName, $controller, array $urlParams = array())
-    {
-        $params = [
-            array_get($urlParams, 'id', 'id')   => $this->id,
-            array_get($urlParams, 'slug', 'slug')  => $this->slug,
-        ];
-
-        return $this->url = $controller->pageUrl($pageName, $params, false);
-    }
-
+  
     /**
      * Get Category Published Products Count
      * Create the $this->product_count attribute
@@ -302,4 +284,5 @@ class Category extends Model
             return $category->getNestedProductsCount();
         });
     }
+
 }

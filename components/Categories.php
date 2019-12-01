@@ -1,16 +1,20 @@
 <?php namespace Offline\Mall\Components;
 
+
+
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use Cms\Classes\ComponentBase;
 use Offline\Mall\Models\Category;
-use Log;
+
 
 class Categories extends ComponentBase
 {
     public $categoryPage;
     public $displayEmpty;
+    public $displayQuantity;
     public $categories;
+
 
     public function componentDetails()
     {
@@ -24,14 +28,20 @@ class Categories extends ComponentBase
     {
         return [
             'displayEmpty' => [
-                'title'       => 'offline.mall::lang.components.categories.properties.display_empty.title',
-                'description' => 'offline.mall::lang.components.categories.properties.display_empty.description',
+                'title'       => 'offline.mall::lang.components.categories.properties.displayEmpty.title',
+                'description' => 'offline.mall::lang.components.categories.properties.displayEmpty.description',
                 'type'        => 'checkbox',
                 'default'     => 0,
             ],
+            'displayQuantity' => [
+                'title'       => 'offline.mall::lang.components.categories.properties.displayQuantity.title',
+                'description' => 'offline.mall::lang.components.categories.properties.displayQuantity.description',
+                'type'        => 'checkbox',
+                'default'     => 1,
+            ],
             'categoryPage' => [
-                'title'       => 'offline.mall::lang.components.categories.properties.category_page.title',
-                'description' => 'offline.mall::lang.components.categories.properties.category_page.description',
+                'title'       => 'offline.mall::lang.components.categories.properties.categoryPage.title',
+                'description' => 'offline.mall::lang.components.categories.properties.categoryPage.description',
                 'type'        => 'dropdown',
                 'default'     => 'categories',
             ],
@@ -46,58 +56,17 @@ class Categories extends ComponentBase
     
     public function onRun()
     {
+
+        $this->displayEmpty = $this->page['displayEmpty'] = $this->property('displayEmpty');
+        $this->displayQuantity = $this->page['displayQuantity'] = $this->property('displayQuantity');
         $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
         $this->categories = $this->page['categories'] = $this->loadCategories();
-        Log::info('base page '.$this->categoryPage);
     }
+
 
     /**
-     * @param string $componentName
-     * @param string $page
-     * @return ComponentBase|null
-     */
-    protected function getComponent(string $componentName, string $page)
-    {
-        $component = null;
-
-        $page = Page::load(Theme::getActiveTheme(), $page);
-
-        if (!is_null($page)) {
-            $component = $page->getComponent($componentName);
-        }
-
-        return $component;
-    }
-
-       /**
-     * A helper function to get the real URL parameter name. For example, slug for posts
-     * can be injected as :post into URL. Real argument is necessary if you want to generate
-     * valid URLs for such pages
-     *
-     * @param ComponentBase|null $component
-     * @param string $name
-     *
-     * @return string|null
-     */
-    protected function urlProperty(ComponentBase $component = null, string $name = '')
-    {
-        $property = null;
-
-        if ($component !== null && ($property = $component->property($name))) {
-            preg_match('/{{ :([^ ]+) }}/', $property, $matches);
-
-            if (isset($matches[1])) {
-                $property = $matches[1];
-            }
-        } else {
-            $property = $name;
-        }
-
-        return $property;
-    }
-
-    /**
-     * Load all categories or, depending on the <displayEmpty> option, only those that have blog posts
+     * Load all categories or, depending on the <displayEmpty> option, only those that have products
+     * According to <displayQuantity> it displays products quantities for each categories
      * @return mixed
      */
     protected function loadCategories()
@@ -120,32 +89,21 @@ class Categories extends ComponentBase
 
         }
       
-        /*
-         * Add a "url" helper attribute for linking to each category
-         */
         return $this->linkCategories($categories);
     }
 
-    protected function linkCategories($categories)
+    protected function linkCategories($categories,$url=null)
     {
-     //   return $categories;
-        
-        $productsComponent = $this->getComponent('Products', $this->categoryPage);
-
-        $categories->each(function ($category) use ($productsComponent) {
-            $category->setUrl(
-                $this->categoryPage,
-                $this->controller,
-                [
-                    'slug' => $this->urlProperty($productsComponent, 'categoryFilter')
-                ]
-            );
-
+        $categories->each(function ($category) use ($url) {
+            
+           $category->url .= isset($url)?$url."/":""; 
+           $category->url .= $category->slug;  
             if ($category->children) {
-                $this->linkCategories($category->children);
+                $this->linkCategories($category->children,$category->url);
             }
+            $category->slug = $category->url;
+            $category->url=$this->controller->pageUrl($this->categoryPage, ['slug' => $category->url], false);
         });
-
 
         return $categories;
         

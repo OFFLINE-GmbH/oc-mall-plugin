@@ -973,6 +973,14 @@
                     'title'       => 'Category page',
                     'description' => 'Links will point to this page. If nothing is entered the default settings from the backend settings will be used.',
                 ],
+                'displayEmpty' => [
+                    'title'       => 'Display Empty Categories',
+                    'description' => 'Display a category in the list even if is empty',
+                ],
+                'displayQuantity' => [
+                    'title'       => 'Display Product Quantities',
+                    'description' => 'Display the product quantities that belongs to a category',
+                ],
             ],
             'no_parent'  => 'Show all categories',
             'by_slug'    => 'Use category in url as parent',
