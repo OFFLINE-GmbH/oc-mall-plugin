@@ -29,7 +29,7 @@ class MySQL implements Index
      */
     public $columnCasts = [
         'prices'      => 'float',
-        'sort_orders' => 'int',
+        'sort_orders' => 'unsigned',
     ];
 
     public function __construct()
