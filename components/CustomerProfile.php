@@ -2,6 +2,7 @@
 
 use Auth;
 use DB;
+use Event;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
@@ -98,6 +99,8 @@ class CustomerProfile extends MallComponent
             $this->user->save();
             $this->user->customer->save();
         });
+
+        Event::fire('mall.customer.afterUpdate', [$this->user]);
 
         // Re-authenticate the user with his new credentials
         Auth::login($this->user);
