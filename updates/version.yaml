@@ -253,3 +253,5 @@
     - Fixed price sorting in Products component using the MySQL index
 1.8.2:
     - Added onClear method to Wishlist component
+1.8.3:
+    - Bugfix release
