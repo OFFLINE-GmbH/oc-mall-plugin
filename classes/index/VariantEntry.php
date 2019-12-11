@@ -58,10 +58,12 @@ class VariantEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices($model): Collection
+    protected function mapPrices($variant): Collection
     {
-        return $model->prices->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price->integer];
+        return $variant->withForcedPriceInheritance(function () use ($variant) {
+            return Currency::getAll()->mapWithKeys(function ($currency) use ($variant) {
+                return [$currency->code => $variant->price($currency)->integer];
+            });
         });
     }
 

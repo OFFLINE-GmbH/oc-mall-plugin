@@ -18,6 +18,14 @@ trait PriceAccessors
      * @var Money
      */
     protected $money;
+    /**
+     * Set this to true to force the inheritance
+     * of pricing information.
+     *
+     * @var bool
+     * @see PriceAccessors::withForcedPriceInheritance
+     */
+    protected $forcePriceInheritance = false;
 
     protected static function bootPriceAccessors()
     {
@@ -90,13 +98,31 @@ trait PriceAccessors
     }
 
     /**
+     * Run the provided closure with forced price inheritance.
+     *
+     * @param Closure $fn
+     *
+     * @return mixed
+     */
+    public function withForcedPriceInheritance(Closure $fn)
+    {
+        $this->forcePriceInheritance = true;
+
+        $return = $fn();
+
+        $this->forcePriceInheritance = false;
+
+        return $return;
+    }
+
+    /**
      * This setter makes it easier to set price values
      * in different currencies by providing an array of
      * prices. It is mostly used for unit testing.
      *
-     * @internal
-     *
      * @param $value
+     *
+     * @internal
      */
     public function setPriceAttribute($value)
     {

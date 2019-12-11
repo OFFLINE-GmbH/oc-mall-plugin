@@ -58,6 +58,10 @@ trait NullPrice
      */
     protected function shouldInherit()
     {
+        if (property_exists($this, 'forcePriceInheritance') && $this->forcePriceInheritance) {
+            return true;
+        }
+
         if (app()->runningInBackend()) {
             return false;
         }

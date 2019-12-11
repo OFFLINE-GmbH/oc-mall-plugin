@@ -255,3 +255,5 @@
     - Added onClear method to Wishlist component
 1.8.3:
     - Bugfix release
+1.8.4:
+    - Prices are now correctly indexed in all registered currencies. Run php artisan mall:index to benefit of these optimizations.
