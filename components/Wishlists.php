@@ -57,9 +57,13 @@ class Wishlists extends MallComponent
         return [];
     }
 
-    public function onRun()
+    public function init()
     {
         $this->allowPDFDownload = $this->pdfPartialExists();
+    }
+
+    public function onRun()
+    {
         if ($this->allowPDFDownload && $download = input('download')) {
             return $this->handlePDFDownload($download);
         }
