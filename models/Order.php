@@ -204,7 +204,7 @@ class Order extends Model
             $cart->delete(); // We can empty the cart once the order is created.
 
             return $order;
-        });
+        }, 5);
 
         // Drop any saved payment information since the order has been
         // created successfully.
