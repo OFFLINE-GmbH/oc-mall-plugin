@@ -1,0 +1,48 @@
+<div class="mall-wishlist-button__new">
+    <input type="text" class="mall-wishlist-button__name-input">
+    <div class="mall-wishlist-button__new-label">
+        {{ 'offline.mall::frontend.wishlist.create' | trans }}
+    </div>
+</div>
+<script>
+    var nameInput = document.querySelector('.mall-wishlist-button__name-input')
+    var nameLabel = document.querySelector('.mall-wishlist-button__new-label')
+    var inProgress = false
+    if (nameInput) {
+        nameInput.addEventListener('keypress', function (e) {
+            if (e.keyCode === 13) {
+                e.preventDefault()
+                var el = this
+                if (inProgress) {
+                    return
+                }
+                inProgress = true
+                $.request('{{ __SELF__ }}::onCreate', {
+                    data: {
+                        name: this.value,
+                        product_id: '{{ __SELF__.encode(__SELF__.property('product')) }}',
+                        variant_id: '{{ __SELF__.encode(__SELF__.property('variant')) }}'
+                    },
+                    success: function (data) {
+                        this.success(data);
+                        el.value = ''
+                    },
+                    complete: function (data, textStatus, jqXHR) {
+                        this.complete(data, textStatus, jqXHR)
+                        inProgress = false
+                    }
+                })
+            }
+        })
+        nameInput.addEventListener('focus', function () {
+            nameLabel.style.display = 'none'
+            this.placeholder = '{{ 'offline.mall::frontend.wishlist.create_placeholder' | trans }}'
+        })
+        nameInput.addEventListener('blur', function () {
+            if (this.value === '') {
+                nameLabel.style.display = 'block'
+                this.placeholder = ''
+            }
+        })
+    }
+</script>

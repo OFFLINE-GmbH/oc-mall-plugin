@@ -1,0 +1,21 @@
+fields:
+    enabled:
+        label: offline.mall::lang.review_settings.enabled
+        comment: offline.mall::lang.review_settings.enabled_comment
+        type: switch
+    moderated:
+        label: offline.mall::lang.review_settings.moderated
+        comment: offline.mall::lang.review_settings.moderated_comment
+        type: switch
+        trigger:
+            action: enable
+            field: enabled
+            condition: checked
+    allow_anonymous:
+        label: offline.mall::lang.review_settings.allow_anonymous
+        comment: offline.mall::lang.review_settings.allow_anonymous_comment
+        type: switch
+        trigger:
+            action: enable
+            field: enabled
+            condition: checked

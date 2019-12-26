@@ -4,6 +4,11 @@ use Cms\Classes\Controller;
 use OFFLINE\Mall\Classes\Feeds\GoogleMerchantFeed;
 use OFFLINE\Mall\Models\FeedSettings;
 
+Route::get(
+    '/mall/download/{key}',
+    '\OFFLINE\Mall\Classes\Downloads\VirtualProductFileDownload@handle'
+)->middleware('web');
+
 Route::get('/feeds/google-merchant/{key}', function ($key) {
     $useFeed = FeedSettings::get('google_merchant_enabled');
     if ( ! $useFeed) {

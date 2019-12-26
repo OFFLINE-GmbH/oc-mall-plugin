@@ -1,18 +1,23 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use DB;
 use Event;
+use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Jobs\SendVirtualProductFiles;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
+use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Utils\Money;
 use RuntimeException;
+use Session;
 use System\Classes\PluginManager;
 
 /**
@@ -26,8 +31,9 @@ class Order extends Model
         useCurrency as fallbackCurrency;
     }
     use HashIds;
+    use PDFMaker;
 
-    protected $dates = ['deleted_at', 'shipped_at'];
+    protected $dates = ['deleted_at', 'shipped_at', 'paid_at'];
     public $rules = [
         'currency'                         => 'required',
         'shipping_address_same_as_billing' => 'required|boolean',
@@ -49,8 +55,9 @@ class Order extends Model
     public $table = 'offline_mall_orders';
     public $hasOne = ['payment_log' => PaymentLog::class];
     public $hasMany = [
-        'products'     => OrderProduct::class,
-        'payment_logs' => [PaymentLog::class, 'order' => 'created_at DESC'],
+        'products'         => OrderProduct::class,
+        'virtual_products' => [OrderProduct::class, 'scope' => 'virtual'],
+        'payment_logs'     => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
     public $belongsTo = [
         'payment_method'          => [PaymentMethod::class, 'deleted' => true],
@@ -73,32 +80,41 @@ class Order extends Model
      */
     public $stateNotification = true;
 
-    public static function boot()
+    public function beforeCreate()
     {
-        parent::boot();
-        static::creating(function (self $order) {
-            if ( ! $order->order_number) {
-                $order->setOrderNumber();
-            }
-            $order->payment_hash = str_random(10);
-        });
-        static::updated(function (self $order) {
-            if ($order->isDirty('order_state_id')) {
-                Event::fire('mall.order.state.changed', [$order]);
-            }
-            if ($order->isDirty('tracking_url') || $order->isDirty('tracking_number')) {
-                Event::fire('mall.order.tracking.changed', [$order]);
-            }
+        if ( ! $this->order_number) {
+            $this->setOrderNumber();
+        }
+        $this->payment_hash = str_random(10);
+    }
+
+    public function afterUpdate()
+    {
+        if ($this->isDirty('payment_state')) {
             // Don't trigger payment changes during the checkout flow. A mall.checkout.succeeded
             // Event will already be triggered in the PaymentRedirector.
             $flow = session()->get('mall.checkout.flow');
-            if ($flow !== 'checkout' && $order->isDirty('payment_state')) {
-                Event::fire('mall.order.payment_state.changed', [$order]);
+            if ($flow !== 'checkout') {
+                Event::fire('mall.order.payment_state.changed', [$this]);
             }
-            if ($order->getOriginal('shipped_at') === null && $order->isDirty('shipped_at')) {
-                Event::fire('mall.order.shipped', [$order]);
+            // If the order became paid, distribute all virtual products.
+            if ($this->payment_state === PaidState::class && $this->paid_at === null) {
+                if ($this->virtual_products->count() > 0) {
+                    Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
+                }
+                $this->paid_at = Carbon::today();
+                $this->save();
             }
-        });
+        }
+        if ($this->isDirty('order_state_id')) {
+            Event::fire('mall.order.state.changed', [$this]);
+        }
+        if ($this->isDirty('tracking_url') || $this->isDirty('tracking_number')) {
+            Event::fire('mall.order.tracking.changed', [$this]);
+        }
+        if ($this->getOriginal('shipped_at') === null && $this->isDirty('shipped_at')) {
+            Event::fire('mall.order.shipped', [$this]);
+        }
     }
 
     public function afterDelete()
@@ -136,7 +152,7 @@ class Order extends Model
             }
 
             $cart->validateShippingMethod();
-            if ($cart->shipping_method_id === null) {
+            if ($cart->shipping_method_id === null && ! $cart->is_virtual) {
                 throw new ValidationException(['Your order has no shipping method set. Please select a shipping method.']);
             }
 
@@ -159,6 +175,7 @@ class Order extends Model
             $order->customer_payment_method_id              = $cart->customer_payment_method_id;
             $order->payment_state                           = PendingState::class;
             $order->order_state_id                          = $initialOrderStatus->id;
+            $order->is_virtual                              = $cart->is_virtual;
             $order->attributes['total_shipping_pre_taxes']  = $order->round($totals->shippingTotal()->totalPreTaxes());
             $order->attributes['total_shipping_taxes']      = $order->round($totals->shippingTotal()->totalTaxes());
             $order->attributes['total_shipping_post_taxes'] = $order->round($totals->shippingTotal()->totalPostTaxes());
@@ -191,11 +208,31 @@ class Order extends Model
 
         // Drop any saved payment information since the order has been
         // created successfully.
-        session()->forget('mall.payment_method.data');
+        Session::forget('mall.payment_method.data');
+
+        // Remove any enforced shipping state.
+        Session::forget('mall.shipping.enforced.price');
+        Session::forget('mall.shipping.enforced.name');
 
         Event::fire('mall.order.created', [$order]);
 
         return $order;
+    }
+
+    /**
+     * Returns the pdf invoice for this order.
+     * If no invoice is available false is returned.
+     *
+     * @return PDF|bool
+     * @throws \Cms\Classes\CmsException
+     */
+    public function getPDFInvoice()
+    {
+        if ($this->payment_method->pdf_partial) {
+            return $this->makePDFFromDir($this->payment_method->pdf_partial, ['order' => $this]);
+        }
+
+        return false;
     }
 
     /**

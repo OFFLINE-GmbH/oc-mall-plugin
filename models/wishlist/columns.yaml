@@ -1,0 +1,13 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        sortable: true

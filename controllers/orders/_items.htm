@@ -33,14 +33,29 @@
             <?= $item['variant_name'] ?>
             <div class="attributes">
                 <?php if($item['custom_field_values']): ?>
-                <?php foreach($item['custom_field_values'] as $field): ?>
-                <?= e($field['custom_field']['name']) ?>: <?= $field['display_value'] ?><br/>
-                <?php endforeach; ?>
+                    <?php foreach($item['custom_field_values'] as $field): ?>
+                        <?= e($field['custom_field']['name']) ?>: <?= $field['display_value'] ?><br/>
+                    <?php endforeach; ?>
                 <?php endif; ?>
             </div>
+            <?php if ($item->service_options): ?>
+                <?php foreach($item->service_options as $option): ?>
+                    <strong><?= e(trans('offline.mall::lang.common.service')) ?></strong>:
+                    <?= e($option['name']) ?><br/>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </td>
         <td class="text-right"><?= e($item['quantity']) ?></td>
-        <td class="text-right"><?= e($item->pricePostTaxes()) ?></td>
+        <td class="text-right">
+            <?= e($item->pricePostTaxes()) ?>
+            <?php if ($item->service_options): ?>
+            <?php foreach($item->service_options as $option): ?>
+            <div class="order-product-service" title="<?= e($option['name']) ?>">
+                + <?= e($option['price_formatted']); ?>
+            </div>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </td>
         <td class="text-right"><?= e($item->totalPostTaxes()) ?></td>
     </tr>
     <?php endforeach; ?>
@@ -80,8 +95,8 @@
                 <?= e(trans('offline.mall::lang.common.shipping')) ?>:
                 <?= e($order['shipping']['method']['name']) ?>
                 <?php if($order['shipping']['appliedDiscount']): ?>
-                    (<?= e($order['shipping']['appliedDiscount']['discount']['name']) ?>,
-                     <?= e($money->format($order['shipping']['appliedDiscount']['savings'])) ?>)
+                (<?= e($order['shipping']['appliedDiscount']['discount']['name']) ?>,
+                <?= e($money->format($order['shipping']['appliedDiscount']['savings'])) ?>)
                 <?php endif; ?>
             </span>
         </td>

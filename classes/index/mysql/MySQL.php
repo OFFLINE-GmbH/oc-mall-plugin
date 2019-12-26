@@ -23,6 +23,15 @@ class MySQL implements Index
 {
     const CACHE_KEY = 'offline_mall.mysql.index.exists';
 
+    /**
+     * Type casts for index columns.
+     * @var array
+     */
+    public $columnCasts = [
+        'prices'      => 'unsigned',
+        'sort_orders' => 'unsigned',
+    ];
+
     public function __construct()
     {
         $this->create('');
@@ -67,6 +76,7 @@ class MySQL implements Index
             'name'                  => $data['name'] ?? '',
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
+            'reviews_rating'        => $data['reviews_rating'] ?? 0,
             'sales_count'           => $data['sales_count'] ?? 0,
             'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
             'published'             => $published ? 1 : 0,        // update only because of the true/1 conversion
@@ -109,10 +119,11 @@ class MySQL implements Index
                 $table->integer('product_id');
                 $table->integer('variant_id')->nullable();
                 $table->string('index');
-                $table->string('name');
+                $table->string('name', 191);
                 $table->string('brand');
                 $table->boolean('published');
                 $table->integer('stock');
+                $table->decimal('reviews_rating', 3, 2);
                 $table->integer('sales_count')->default(0);
                 $table->boolean('on_sale')->default(0);
                 $table->boolean('is_ghost')->default(0);
@@ -254,9 +265,15 @@ class MySQL implements Index
             $field = $parts[0];
             array_shift($parts);
             $nested = implode('.', $parts);
-            $db->orderByRaw('JSON_EXTRACT(' . \DB::raw($field) . ', ?) ' . $order->direction(),
-                ['$.' . '"' . $nested . '"']
-            );
+
+            // Apply the right cast for this value. This makes sure, that prices are sorted as floats, not as strings.
+            if (isset($this->columnCasts[$field])) {
+                $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', DB::raw($field),  $this->columnCasts[$field], $order->direction());
+            } else {
+                $orderBy = sprintf('JSON_EXTRACT(%s, ?) %s', DB::raw($field), $order->direction());
+            }
+
+            $db->orderByRaw($orderBy, ['$.' . '"' . $nested . '"']);
         } else {
             $db->orderBy($order->property(), $order->direction());
         }

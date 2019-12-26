@@ -11,6 +11,7 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\User;
 use Auth;
+use OFFLINE\Mall\Models\Wishlist;
 use Redirect;
 use Validator;
 
@@ -76,7 +77,8 @@ class DefaultSignInHandler implements SignInHandler
             throw new AuthException('offline.mall::lang.components.signup.errors.user_is_guest');
         }
 
-        Cart::transferToCustomer($user->customer);
+        Cart::transferSessionCartToCustomer($user->customer);
+        Wishlist::transferToCustomer($user->customer);
 
         return $user;
     }

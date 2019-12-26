@@ -1,17 +1,21 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Closure;
+use Illuminate\Support\Facades\Session;
 use Model;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
-use System\Models\File;
 use Rainlab\Location\Models\Country as RainLabCountry;
+use System\Models\File;
 
 class ShippingMethod extends Model
 {
     use Validation;
     use Sortable;
-    use PriceAccessors;
+    use PriceAccessors {
+        priceRelation as priceAccessorPriceRelation;
+    }
 
     const MORPH_KEY = 'mall.shipping_method';
 
@@ -30,6 +34,13 @@ class ShippingMethod extends Model
     ];
     public $table = 'offline_mall_shipping_methods';
     public $appends = ['price_formatted'];
+    public $fillable = [
+        'name',
+        'description',
+        'guaranteed_delivery_days',
+        'price_includes_tax',
+        'sort_order',
+    ];
     public $morphMany = [
         'prices'                 => [
             Price::class,
@@ -69,6 +80,20 @@ class ShippingMethod extends Model
         ],
     ];
 
+    /**
+     * This method can be used when no shipping is required
+     * for example when there are only virtual products in a cart.
+     *
+     * @return ShippingMethod
+     */
+    public static function noShippingRequired()
+    {
+        return new self([
+            'name'        => trans('offline.mall::lang.shipping_method.not_required_name'),
+            'description' => trans('offline.mall::lang.shipping_method.not_required_description'),
+        ]);
+    }
+
     public function afterDelete()
     {
         \DB::table('offline_mall_prices')
@@ -87,11 +112,43 @@ class ShippingMethod extends Model
         return $this->price()->string;
     }
 
+    public function getNameAttribute()
+    {
+        $enforcedKey = sprintf('mall.shipping.enforced.%s.name', $this->id);
+        if ($this->useEnforcedValues() && $enforced = Session::get($enforcedKey)) {
+            return $enforced;
+        }
+
+        return $this->attributes['name'] ?? '';
+    }
+
+    /**
+     * Check if enforced shipping price/name should be used.
+     * The values are ignored if a ShippingMethodSelector component
+     * is present on the current page.
+     *
+     * @return bool
+     */
+    protected function useEnforcedValues()
+    {
+        // Never use enforced values in the backend.
+        if (app()->runningInBackend() === true) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static function getAvailableByCart(Cart $cart)
     {
+        // Virtual carts cannot be shipped.
+        if ($cart->is_virtual) {
+            return collect([]);
+        }
+
         $total = $cart->totals()->productPostTaxes();
 
-        return ShippingMethod
+        return self
             ::orderBy('sort_order')
             ->when($cart->shipping_address, function ($q) use ($cart) {
                 $q->whereDoesntHave('countries')
@@ -117,6 +174,28 @@ class ShippingMethod extends Model
     public function availableAboveTotal($currency = null)
     {
         return $this->price($currency, 'available_above_totals');
+    }
+
+    protected function priceRelation(
+        $currency = null,
+        $relation = 'prices',
+        ?Closure $filter = null
+    ) {
+        $checkEnforced = $relation === 'prices' && $this->useEnforcedValues();
+        $enforcedKey   = sprintf('mall.shipping.enforced.%s.price', $this->id);
+
+        if ($checkEnforced && $enforced = Session::get($enforcedKey, [])) {
+            $currency = Currency::resolve($currency);
+            $value    = array_get($enforced, $currency->code);
+            $price    = new Price([
+                'currency_id' => $currency->id,
+                'price'       => $value,
+            ]);
+
+            return $price;
+        }
+
+        return $this->priceAccessorPriceRelation($currency, $relation, $filter);
     }
 
     public function jsonSerialize()

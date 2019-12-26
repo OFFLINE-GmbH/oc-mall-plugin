@@ -5,6 +5,8 @@ namespace OFFLINE\Mall\Classes\Events;
 use Backend\Facades\Backend;
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use OFFLINE\Mall\Classes\Jobs\SendOrderConfirmationToCustomer;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\RefundedState;
@@ -93,17 +95,16 @@ class MailingEventHandler
      */
     public function checkoutSucceeded($result)
     {
-        $data = [
-            'order'       => $result->order->fresh(['products', 'customer']),
-            'account_url' => $this->getAccountUrl(),
-            'order_url'   => $this->getBackendOrderUrl($result->order),
-        ];
-
         // Notify the customer
         if ($this->enabledNotifications->has('offline.mall::checkout.succeeded')) {
-            Mail::queue($this->template('offline.mall::checkout.succeeded'), $data, function ($message) use ($result) {
-                $message->to($result->order->customer->user->email, $result->order->customer->name);
-            });
+            $input = [
+                'id'          => $result->order->id,
+                'template'    => $this->template('offline.mall::checkout.succeeded'),
+                'account_url' => $this->getAccountUrl(),
+                'order_url'   => $this->getBackendOrderUrl($result->order),
+            ];
+            // Push the PDF generation and mail send call to the queue.
+            Queue::push(SendOrderConfirmationToCustomer::class, $input);
         }
 
         // Notify the admin
@@ -111,6 +112,11 @@ class MailingEventHandler
             $this->enabledNotifications->has('offline.mall::admin.checkout_succeeded')
             && $adminMail = GeneralSettings::get('admin_email')
         ) {
+            $data = [
+                'order'       => $result->order->fresh(['products', 'customer']),
+                'account_url' => $this->getAccountUrl(),
+                'order_url'   => $this->getBackendOrderUrl($result->order),
+            ];
             Mail::queue(
                 $this->template('offline.mall::admin.checkout_succeeded'), $data,
                 function ($message) use ($adminMail) {

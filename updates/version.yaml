@@ -196,3 +196,66 @@
 1.3.15:
     - Added embeds repeater to Product model to add custom embed code (like videos)
     - add_embeds_column_to_products_table.php
+1.4.0:
+    - Added Wishlists feature
+    - create_offline_mall_wishlists.php
+    - create_offline_mall_wishlist_items.php
+1.4.1:
+    - !!! Added terms and conditions checkbox to signup form. If you manually modified the signup form partials make sure to add the checkbox as well since it is being validated as required by default. (see https://tinyurl.com/yyanm7eo)
+1.5.0:
+    - Added Services feature (e. g. extended warranty, on-site installation)
+    - create_offline_mall_services.php
+1.5.1:
+    - "!!! There is now a changelog documenting breaking changes with every future release. Make sure to check it out: https://bit.ly/2kCk2F9"
+1.5.2:
+    - Various bugfixes
+1.5.3:
+    - Another bugfix release
+1.6.0:
+    - Added Reviews. Speaking of reviews, did you already add a review for this plugin ;-)? https://octobercms.com/plugin/offline-mall
+    - create_offline_mall_reviews.php
+1.6.1:
+    - "Bugfix release. Don't forget to check out the new changelog for updates to 1.6.0: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.6.0.html"
+1.6.2:
+    - Added forceShippingPrice method to Cart model
+1.6.3:
+    - Bugfix release
+1.7.0:
+    - Added support for virtual products
+    - add_virtual_products_support.php
+1.7.1: 
+    - Bugfix for parent category dropdown in backend
+1.7.2: 
+    - Fixed bug where product entries in RainLab.Pages menus included the wrong variant id
+1.7.3: 
+    - Minor Bugfix when editing a Review on the frontend
+1.7.4: 
+    - Bugfix release
+1.7.5: 
+    - Updated russian translations (thanks to @igor-tv)
+1.7.6: 
+    - Made forceShippingPrice feature to only override the price for a specific shipping method. Make sure to add the new ID parameter in case you use this feature in your custom code.
+1.7.7: 
+    - Bugfix release
+1.7.8: 
+    - Another bugfix release
+1.7.9: 
+    - Added showShipping property to the Cart component. This allows you to display a cart without including any shipping information.
+1.7.10:
+    - Added a valid from date for discounts
+    - add_valid_from_column_to_discounts_table.php
+1.7.11:
+    - Bugfix release
+1.8.0:
+    - Added PDF invoices and "export as PDF" support for wishlists (https://tinyurl.com/t6y2pxn)
+    - add_pdf_partial_to_payment_method.php
+1.8.1:
+    - Fixed price sorting in Products component using the MySQL index
+1.8.2:
+    - Added onClear method to Wishlist component
+1.8.3:
+    - Bugfix release
+1.8.4:
+    - Prices are now correctly indexed in all registered currencies. Run php artisan mall:index to benefit of these optimizations.
+1.8.5:
+    - The PDF button in the Wishlists component remains visible now after a Product has been removed or edited by the user

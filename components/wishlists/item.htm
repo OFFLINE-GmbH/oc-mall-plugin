@@ -1,0 +1,17 @@
+<a href="javascript:;"
+   class="mall-wishlist-item {{ list_id == __SELF__.currentItem.hashId ? 'mall-wishlist-item--active' }}"
+   data-request="onSelect"
+   data-request-data="id: '{{ list_id }}'"
+>
+    <div class="mall-wishlist-item__data">
+        <div class="mall-wishlist-item__name">
+            {{ name | default('offline.mall::frontend.wishlist.default_name' | trans) }}
+        </div>
+        <div class="mall-wishlist-item__description">
+            {{ 'offline.mall::frontend.wishlist.count' | transchoice(count | default(0)) }}
+        </div>
+    </div>
+    <div class="mall-wishlist-item__meta">
+        {{ (total | default(0)) | money }}
+    </div>
+</a>

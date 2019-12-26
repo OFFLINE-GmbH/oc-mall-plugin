@@ -3,16 +3,16 @@
 namespace OFFLINE\Mall\Classes\Cart;
 
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
-use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Discount;
 
 class DiscountApplier
 {
     /**
-     * @var Cart
+     * @var TotalsCalculatorInput
      */
-    private $cart;
+    private $input;
     /**
      * @var int
      */
@@ -34,9 +34,9 @@ class DiscountApplier
      */
     private $money;
 
-    public function __construct(Cart $cart, float $total, float $baseTotal = null)
+    public function __construct(TotalsCalculatorInput $input, float $total, float $baseTotal = null)
     {
-        $this->cart         = $cart;
+        $this->input        = $input;
         $this->total        = $total;
         $this->reducedTotal = $baseTotal ?? $total;
         $this->discounts    = collect([]);
@@ -57,7 +57,7 @@ class DiscountApplier
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
-            $savings                   = $this->cart->shipping_method->price()->integer -
+            $savings                   = $this->input->shipping_method->price()->integer -
                 $discount->shippingPrice()->integer;
             $this->reducedTotalIsFixed = true;
         }
@@ -118,6 +118,6 @@ class DiscountApplier
 
     private function productIsInCart(int $productId): bool
     {
-        return $this->cart->products->pluck('product_id')->contains($productId);
+        return $this->input->products->pluck('product_id')->contains($productId);
     }
 }

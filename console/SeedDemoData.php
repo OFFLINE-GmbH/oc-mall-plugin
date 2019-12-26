@@ -8,6 +8,9 @@ use OFFLINE\Mall\Classes\Demo\Products\Cruiser1500;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser3000;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser3500;
 use OFFLINE\Mall\Classes\Demo\Products\Cruiser5000;
+use OFFLINE\Mall\Classes\Demo\Products\GiftCard100;
+use OFFLINE\Mall\Classes\Demo\Products\GiftCard200;
+use OFFLINE\Mall\Classes\Demo\Products\GiftCard50;
 use OFFLINE\Mall\Classes\Demo\Products\Jersey;
 use OFFLINE\Mall\Classes\Demo\Products\RedShirt;
 use OFFLINE\Mall\Classes\Index\Index;
@@ -17,8 +20,13 @@ use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\Price;
+use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
+use OFFLINE\Mall\Models\ReviewCategory;
+use OFFLINE\Mall\Models\Service;
+use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\Tax;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -48,9 +56,11 @@ class SeedDemoData extends Command
         $this->createCurrencies();
         $this->createBrands();
         $this->createProperties();
+        $this->createReviewCategories();
         $this->createCategories();
         $this->createTaxes();
         $this->createProducts();
+        $this->createServices();
 
 
         app()->bind(Index::class, function () use ($originalIndex) {
@@ -104,7 +114,7 @@ class SeedDemoData extends Command
         $this->output->writeln('Creating products...');
         $this->output->newLine();
 
-        $this->output->progressStart(7);
+        $this->output->progressStart(10);
 
         // Bikes
         (new Cruiser1000())->create();
@@ -127,6 +137,12 @@ class SeedDemoData extends Command
         $this->output->progressAdvance();
 
         (new Jersey())->create();
+
+        // Gift Cards
+        (new GiftCard50())->create();
+        (new GiftCard100())->create();
+        (new GiftCard200())->create();
+
         $this->output->progressFinish();
     }
 
@@ -147,26 +163,31 @@ class SeedDemoData extends Command
         foreach ($this->bikePropertyGroups as $index => $group) {
             $bikes->property_groups()->attach($group, ['relation_sort_order' => $index]);
         }
+        ReviewCategory::get()->each(function ($c) use ($bikes) {
+            $bikes->review_categories()->attach($c);
+        });
 
         Category::create([
-            'name'                    => 'Mountainbikes',
-            'slug'                    => 'mountainbikes',
-            'code'                    => 'mountainbikes',
-            'meta_title'              => 'Mountainbikes',
-            'sort_order'              => 0,
-            'meta_description'        => 'Take a look at our huge mountainbike range',
-            'inherit_property_groups' => true,
-            'parent_id'               => $bikes->id,
+            'name'                      => 'Mountainbikes',
+            'slug'                      => 'mountainbikes',
+            'code'                      => 'mountainbikes',
+            'meta_title'                => 'Mountainbikes',
+            'sort_order'                => 0,
+            'meta_description'          => 'Take a look at our huge mountainbike range',
+            'inherit_property_groups'   => true,
+            'inherit_review_categories' => true,
+            'parent_id'                 => $bikes->id,
         ]);
         Category::create([
-            'name'                    => 'Citybikes',
-            'slug'                    => 'citybikes',
-            'code'                    => 'citybikes',
-            'meta_title'              => 'Citybikes',
-            'sort_order'              => 1,
-            'meta_description'        => 'Take a look at our huge citybike range',
-            'inherit_property_groups' => true,
-            'parent_id'               => $bikes->id,
+            'name'                      => 'Citybikes',
+            'slug'                      => 'citybikes',
+            'code'                      => 'citybikes',
+            'meta_title'                => 'Citybikes',
+            'sort_order'                => 1,
+            'meta_description'          => 'Take a look at our huge citybike range',
+            'inherit_property_groups'   => true,
+            'inherit_review_categories' => true,
+            'parent_id'                 => $bikes->id,
         ]);
 
         $clothing = Category::create([
@@ -180,6 +201,17 @@ class SeedDemoData extends Command
         foreach ($this->clothingPropertyGroups as $index => $group) {
             $clothing->property_groups()->attach($group, ['relation_sort_order' => $index]);
         }
+
+        Category::create([
+            'name'                      => 'Gift cards',
+            'slug'                      => 'gift-cards',
+            'code'                      => 'gift-cards',
+            'meta_title'                => 'Gift cards',
+            'sort_order'                => 4,
+            'meta_description'          => 'Order your Mall gift card online',
+            'inherit_property_groups'   => true,
+            'inherit_review_categories' => true,
+        ]);
     }
 
     protected function createProperties()
@@ -370,5 +402,63 @@ class SeedDemoData extends Command
             'name'       => 'VAT',
             'percentage' => 10,
         ]);
+    }
+
+    protected function createReviewCategories()
+    {
+        $this->output->writeln('Creating review categories...');
+        DB::table('offline_mall_review_categories')->truncate();
+        ReviewCategory::create(['name' => 'Price']);
+        ReviewCategory::create(['name' => 'Design']);
+        ReviewCategory::create(['name' => 'Build quality']);
+    }
+
+    protected function createServices()
+    {
+        $this->output->writeln('Creating services...');
+        DB::table('offline_mall_services')->truncate();
+        DB::table('offline_mall_service_options')->truncate();
+
+        $warranty = Service::create([
+            'name'        => 'Warranty',
+            'description' => 'You can extend the vendor supplied warranty for this product.',
+        ]);
+
+        $option = ServiceOption::create([
+            'name'        => '2 years extended warranty',
+            'description' => 'Get one additional year of warranty',
+            'service_id'  => $warranty->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 49]));
+
+        $option = ServiceOption::create([
+            'name'        => '3 years extended warranty',
+            'description' => 'Get two additional years of warranty',
+            'service_id'  => $warranty->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 69]));
+
+        $option = ServiceOption::create([
+            'name'        => '4 years extended warranty',
+            'description' => 'Get three additional years of warranty',
+            'service_id'  => $warranty->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 99]));
+
+        $assembly = Service::create([
+            'name'        => 'Assembly',
+            'description' => "Don't have the right tools at hand? We can preassemble this product for you.",
+        ]);
+
+        $option = ServiceOption::create([
+            'name'        => 'Preassemble product',
+            'description' => 'The completely assembled product will be shipped to your doorstep.',
+            'service_id'  => $assembly->id,
+        ]);
+        $option->prices()->save(new Price(['currency_id' => 2, 'price' => 99]));
+
+        Product::where('name', 'LIKE', 'Cruiser%')->get()->each(function (Product $product) use ($warranty, $assembly) {
+            $product->services()->attach([$warranty->id, $assembly->id]);
+        });
     }
 }

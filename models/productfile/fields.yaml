@@ -1,0 +1,16 @@
+fields:
+    file:
+        label: 'offline.mall::lang.product_file.file'
+        span: full
+        type: fileupload
+        mode: file
+    display_name:
+        label: 'offline.mall::lang.common.display_name'
+        comment: 'offline.mall::lang.product_file.display_name_comment'
+        span: auto
+        type: text
+    version:
+        label: 'offline.mall::lang.common.version'
+        comment: 'offline.mall::lang.product_file.version_comment'
+        span: auto
+        type: text

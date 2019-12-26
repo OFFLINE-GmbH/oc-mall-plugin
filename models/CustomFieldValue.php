@@ -28,6 +28,12 @@ class CustomFieldValue extends Model
             'conditions' => 'price_category_id is null and field is null',
         ],
     ];
+    public $fillable = [
+        'cart_product_id',
+        'custom_field_id',
+        'custom_field_option_id',
+        'value',
+    ];
 
     /**
      * Calculate the price depending on given data.

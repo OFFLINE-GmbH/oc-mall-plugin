@@ -15,7 +15,6 @@ use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
-use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use System\Models\File;
 
@@ -32,7 +31,6 @@ class Variant extends Model
     use ProductPriceAccessors;
     use PropertyValues;
     use StockAndQuantity;
-    use TranslatableRelation;
 
     const MORPH_KEY = 'mall.variant';
 
@@ -44,6 +42,8 @@ class Variant extends Model
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
+        'description_short',
+        'description',
     ];
     public $casts = [
         'published'                    => 'boolean',
@@ -66,13 +66,16 @@ class Variant extends Model
         'downloads'   => File::class,
     ];
     public $belongsTo = [
-        'product'      => Product::class,
-        'cart_product' => CartProduct::class,
-        'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
+        'product'    => Product::class,
+        'image_sets' => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $hasMany = [
         'prices'                  => ProductPrice::class,
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
+        'reviews'                 => [Review::class],
+        'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
+        'cart_products'  => CartProduct::class,
+        'order_products' => OrderProduct::class,
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',
@@ -138,6 +141,7 @@ class Variant extends Model
     public function afterDelete()
     {
         DB::table('offline_mall_property_values')->where('variant_id', $this->id)->delete();
+        DB::table('offline_mall_wishlist_items')->where('variant_id', $this->id)->delete();
     }
 
     protected function createImageSetFromTempImages()
@@ -216,7 +220,7 @@ class Variant extends Model
 
         // If any of the product relation columns are called don't override the method's default behaviour.
         $dontInheritAttribute = \in_array($attribute, ['product', 'product_id', 'all_property_values']);
-        if ($dontInheritAttribute || $inheritanceDisabled) {
+        if ($dontInheritAttribute || $inheritanceDisabled || ! $this->product_id) {
             return $originalValue;
         }
 
@@ -262,16 +266,9 @@ class Variant extends Model
         }
     }
 
-    /**
-     * To easily generate the correct URL to a Product/Variant
-     * we blindly call item.variantId. In this case we return
-     * the Variant's hashed ID. If the property is called on a
-     * Product model null is returned.
-     * @return string
-     */
     public function getVariantIdAttribute()
     {
-        return $this->hashId;
+        return $this->id;
     }
 
     public function getVariantHashIdAttribute()
@@ -302,7 +299,7 @@ class Variant extends Model
 
     protected function isEmpty($attribute, $originalValue): bool
     {
-        if ($attribute === 'description') {
+        if ($attribute === 'description' || $attribute === 'description_short') {
             $originalValue = trim(Html::strip($originalValue));
 
             return $originalValue === '';

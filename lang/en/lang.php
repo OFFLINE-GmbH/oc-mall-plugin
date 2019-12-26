@@ -23,6 +23,10 @@
             'update'  => 'Edit discount',
             'preview' => 'Preview discount',
         ],
+        'services'             => [
+            'create' => 'Create service',
+            'update' => 'Edit service',
+        ],
         'shipping_methods'     => [
             'create'  => 'Create shipping method',
             'update'  => 'Edit shipping method',
@@ -63,6 +67,10 @@
         'taxes'                => [
             'create' => 'Create tax',
             'update' => 'Edit tax',
+        ],
+        'reviews'              => [
+            'create' => 'Create review',
+            'update' => 'Edit review',
         ],
     ],
     'menu_items'               => [
@@ -162,6 +170,15 @@
         'google_merchant_url'             => 'Your Google Merchant Feed URL',
         'google_merchant_url_locale'      => 'Add ?locale=xy to get a localized feed.',
     ],
+    'review_settings'          => [
+        'description'             => 'Configure reviews',
+        'enabled'                 => 'Reviews enabled',
+        'enabled_comment'         => 'Customers can create reviews',
+        'moderated'               => 'Moderate reviews',
+        'moderated_comment'       => 'New reviews have to be published manually by the site admin',
+        'allow_anonymous'         => 'Allow anonymous reviews',
+        'allow_anonymous_comment' => 'Unregistered users can create reviews',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Products',
@@ -204,6 +221,7 @@
         'id'                   => 'ID',
         'created_at'           => 'Created at',
         'updated_at'           => 'Updated at',
+        'approved_at'          => 'Approved at',
         'hide_published'       => 'Hide published',
         'slug'                 => 'URL',
         'name'                 => 'Name',
@@ -276,6 +294,14 @@
         'since_begin'          => 'Since begin',
         'weekly'               => 'Weekly',
         'feeds'                => 'Feeds',
+        'services'             => 'Services',
+        'service'              => 'Service',
+        'review'               => 'Review',
+        'reviews'              => 'Reviews',
+        'review_categories'    => 'Review categories',
+        'review_category'      => 'Review category',
+        'title'                => 'Title',
+        'version'              => 'Version',
     ],
     'variant'                  => [
         'method' => [
@@ -314,6 +340,12 @@
         'name'                                 => 'Product name',
         'published'                            => 'Published',
         'published_short'                      => 'Publ.',
+        'is_virtual'                           => 'Is virtual',
+        'is_virtual_comment'                   => 'This product is virtual (a file, no shipping)',
+        'product_file'                         => 'Product file',
+        'product_files'                        => 'Product files',
+        'product_files_section_comment'        => 'This is a virtual product. You can upload new file versions below. The latest version will be downloadable by customers.',
+        'product_file_version'                 => 'file version',
         'not_published'                        => 'Not published',
         'published_comment'                    => 'This product is visible on the website',
         'stock'                                => 'Stock',
@@ -368,6 +400,30 @@
         'missing_category'                     => 'The product does not have a category associated with it. Please select a category below to edit this product.',
         'variant_support_header'               => 'Variants not supported',
         'variant_support_text'                 => 'The selected category has no Variant properties defined. Please switch the inventory management method to "Article" or select another category.',
+        'filter_virtual'                       => 'Show only virtual products',
+    ],
+    'product_file'             => [
+        'display_name_comment'       => 'This name will be visible to the customer.',
+        'version_comment'            => 'A unique version helps a customer to recognize updated files.',
+        'expires_after_days'         => 'Download valid for days',
+        'expires_after_days_comment' => 'The file can only be downloaded for this many days after purchase. Leave empty for no limit.',
+        'max_download_count'         => 'Maximum number of downloads',
+        'max_download_count_comment' => 'The file can only be downloaded this many times. Leave empty for no limit.',
+        'session_required'           => 'Login required',
+        'session_required_comment'   => 'The file can only be downloaded when the customer is logged in (download link is not shareable).',
+        'file'                       => 'File',
+        'download_count'             => 'Download count',
+        'errors'                     => [
+            'invalid'           => 'Invalid download link',
+            'expired'           => 'Download link expired',
+            'too_many_attempts' => 'Too many download attempts',
+            'not_found'         => 'Cannot find requested file, please contact us for support.',
+        ],
+        'hint'                       => [
+            'intro'     => 'This product does not have a file attached. Please make sure to add one or programmatically gerenate it during checkout.',
+            'info_text' => 'You can find information on how to do this',
+            'info_link' => 'in the documentation',
+        ],
     ],
     'image_sets'               => [
         'is_main_set'         => 'Is main set',
@@ -375,13 +431,15 @@
         'create_new'          => 'Create new set',
     ],
     'category'                 => [
-        'name'                            => 'Name',
-        'code'                            => 'Code',
-        'code_comment'                    => 'This code can be used to identify this category in your frontend partials.',
-        'parent'                          => 'Parent',
-        'no_parent'                       => 'No parent',
-        'inherit_property_groups'         => 'Inherit properties of parent category',
-        'inherit_property_groups_comment' => 'Use the property groups of this category\'s parent category',
+        'name'                              => 'Name',
+        'code'                              => 'Code',
+        'code_comment'                      => 'This code can be used to identify this category in your frontend partials.',
+        'parent'                            => 'Parent',
+        'no_parent'                         => 'No parent',
+        'inherit_property_groups'           => 'Inherit properties of parent category',
+        'inherit_property_groups_comment'   => 'Use the property groups of this category\'s parent category',
+        'inherit_review_categories'         => 'Inherit review categories of parent category',
+        'inherit_review_categories_comment' => 'Use the review categories of this category\'s parent category',
     ],
     'custom_fields'            => [
         'name'             => 'Field name',
@@ -400,12 +458,14 @@
     'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Discount code',
+        'code_comment'                         => 'Leave empty to generate a random code',
         'total_to_reach'                       => 'Minimal order total for discount to be valid',
         'type'                                 => 'Discount type',
         'trigger'                              => 'Valid if',
         'rate'                                 => 'Rate (%)',
         'amount'                               => 'Fixed amount',
         'max_number_of_usages'                 => 'Max number of usages',
+        'valid_from'                           => 'Valid from',
         'expires'                              => 'Expires',
         'number_of_usages'                     => 'Number of usages',
         'shipping_description'                 => 'Name of alternative shipping method',
@@ -441,6 +501,9 @@
         'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
         'instructions'           => 'Payment instructions',
         'instructions_comment'   => 'Twig syntax supported. Use {{ order }} or {{ cart }} to access corresponding information if available',
+        'pdf_partial'            => 'PDF attachment partial',
+        'pdf_partial_comment'    => 'For all orders with this payment method a rendered PDF of the selected partial will be attached to the notification mail',
+        'pdf_partial_none'       => 'No PDF attachment',
     ],
     'order'                    => [
         'order_number'                        => '# Order',
@@ -509,6 +572,7 @@
         'not_shipped'                         => 'Pending',
         'data'                                => 'Order data',
         'total_revenue'                       => 'Total revenue',
+        'download_invoice'                    => 'Download invoice',
         'modal'                               => [
             'cancel' => 'Cancel',
             'update' => 'Update information',
@@ -526,6 +590,8 @@
         'available_below_total'    => 'Available if total is lower than',
         'countries'                => 'Available for shipping to these countries',
         'countries_comment'        => 'If no country is selected this method is available worldwide.',
+        'not_required_name'        => 'No shipping required',
+        'not_required_description' => 'The current cart does not require any shipping.',
     ],
     'payment_status'           => [
         'paid'          => 'Paid',
@@ -562,9 +628,12 @@
         'manage_taxes'              => 'Can manage taxes',
         'manage_payment_log'        => 'Can manage payment log',
         'manage_feeds'              => 'Can manage feeds',
+        'manage_wishlists'          => 'Can manage wishlists',
+        'manage_services'           => 'Can manage services',
+        'manage_reviews'            => 'Can manage reviews',
     ],
     'components'               => [
-        'products'               => [
+        'products'                   => [
             'details'    => [
                 'name'        => 'Products',
                 'description' => 'Displays a list of products',
@@ -606,7 +675,7 @@
                 ],
             ],
         ],
-        'productsFilter'         => [
+        'productsFilter'             => [
             'details'    => [
                 'name'        => 'Products filter',
                 'description' => 'Filters the products from a category',
@@ -647,9 +716,10 @@
                 'random'     => 'Random',
                 'manual'     => 'Manual',
                 'name'       => 'Name',
+                'ratings'    => 'Ratings',
             ],
         ],
-        'myAccount'              => [
+        'myAccount'                  => [
             'details'    => [
                 'name'        => 'User account',
                 'description' => 'Displays different forms where a user can view and edit his profile',
@@ -665,7 +735,7 @@
                 'addresses' => 'Addresses',
             ],
         ],
-        'customerProfile'        => [
+        'customerProfile'            => [
             'details'    => [
                 'name'        => 'Customer profile',
                 'description' => 'Displays a customer profile edit form.',
@@ -673,7 +743,7 @@
             'properties' => [
             ],
         ],
-        'currencyPicker'         => [
+        'currencyPicker'             => [
             'details'    => [
                 'name'        => 'Currency picker',
                 'description' => 'Shows a picker to select the currently active shop currency',
@@ -681,7 +751,7 @@
             'properties' => [
             ],
         ],
-        'dependencies'           => [
+        'dependencies'               => [
             'details'    => [
                 'name'        => 'Frontend dependencies',
                 'description' => 'Includes all needed frontend dependencies',
@@ -689,7 +759,7 @@
             'properties' => [
             ],
         ],
-        'addressList'            => [
+        'addressList'                => [
             'details'    => [
                 'name'        => 'Address list',
                 'description' => 'Displays a list of all registered user addresses',
@@ -704,7 +774,7 @@
                 'address_deleted' => 'Address deleted',
             ],
         ],
-        'ordersList'             => [
+        'ordersList'                 => [
             'details'    => [
                 'name'        => 'Orders list',
                 'description' => 'Displays a list of all customer orders',
@@ -712,7 +782,7 @@
             'properties' => [
             ],
         ],
-        'product'                => [
+        'product'                    => [
             'details'       => [
                 'name'        => 'Product details',
                 'description' => 'Displays details of a product',
@@ -725,7 +795,22 @@
             ],
             'added_to_cart' => 'Added product successfully',
         ],
-        'cart'                   => [
+        'productReviews'             => [
+            'details'    => [
+                'name'        => 'Product reviews',
+                'description' => 'Displays all reviews of a product',
+            ],
+            'properties' => [
+                'perPage'                   => [
+                    'title' => 'Number of reviews per page',
+                ],
+                'currentVariantReviewsOnly' => [
+                    'title'       => 'Show only ratings of this Variant',
+                    'description' => "Don't show reviews of other Variants of this Product",
+                ],
+            ],
+        ],
+        'cart'                       => [
             'details'    => [
                 'name'        => 'Cart',
                 'description' => 'Displays the shopping cart',
@@ -734,12 +819,15 @@
                 'showDiscountApplier' => [
                     'title' => 'Show discount applier',
                 ],
+                'showShipping' => [
+                    'title' => 'Show shipping cost',
+                ],
                 'showTaxes'           => [
                     'title' => 'Show taxes',
                 ],
             ],
         ],
-        'checkout'               => [
+        'checkout'                   => [
             'details' => [
                 'name'        => 'Checkout',
                 'description' => 'Handles the checkout process',
@@ -748,14 +836,14 @@
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
         ],
-        'discountApplier'        => [
+        'discountApplier'            => [
             'details'          => [
                 'name'        => 'Promo code input',
                 'description' => 'Displays a promo code input field',
             ],
             'discount_applied' => 'Discount applied successfully!',
         ],
-        'shippingMethodSelector' => [
+        'shippingMethodSelector'     => [
             'details' => [
                 'name'        => 'Shipping selector',
                 'description' => 'Displays a list of all available shipping methods',
@@ -764,7 +852,7 @@
                 'unavailable' => 'The selected shipping method is not available for your order.',
             ],
         ],
-        'paymentMethodSelector'  => [
+        'paymentMethodSelector'      => [
             'details' => [
                 'name'        => 'Payment method selector',
                 'description' => 'Displays a list of all available payment methods',
@@ -773,7 +861,7 @@
                 'unavailable' => 'The selected payment method is not available for your order.',
             ],
         ],
-        'addressSelector'        => [
+        'addressSelector'            => [
             'details' => [
                 'name'        => 'Address selector',
                 'description' => 'Displays a list of all existing user addresses',
@@ -781,7 +869,7 @@
             'errors'  => [
             ],
         ],
-        'addressForm'            => [
+        'addressForm'                => [
             'details'    => [
                 'name'        => 'Address form',
                 'description' => 'Displays a form to edit a user\'s address',
@@ -805,7 +893,7 @@
                 'shipping' => 'Shipping address',
             ],
         ],
-        'signup'                 => [
+        'signup'                     => [
             'details'    => [
                 'name'        => 'Signup',
                 'description' => 'Displays a signup and signin form',
@@ -862,9 +950,12 @@
                     'required' => 'Choose a state',
                     'exists'   => 'The selected value is not valid.',
                 ],
+                'terms_accepted'  => [
+                    'required' => 'Please accept our terms and conditions.',
+                ],
             ],
         ],
-        'categories'             => [
+        'categories'                 => [
             'details'    => [
                 'name'        => 'Categories',
                 'description' => 'Lists available categories',
@@ -886,7 +977,7 @@
             'no_parent'  => 'Show all categories',
             'by_slug'    => 'Use category in url as parent',
         ],
-        'cartSummary'            => [
+        'cartSummary'                => [
             'details'    => [
                 'name'        => 'Cart summary',
                 'description' => 'Displays the number of products in and total value of the cart',
@@ -902,7 +993,7 @@
                 ],
             ],
         ],
-        'customerDashboard'      => [
+        'customerDashboard'          => [
             'details'    => [
                 'name'        => 'Customer dashboard',
                 'description' => 'Displays a link for the customer to login and change her account settings',
@@ -916,6 +1007,34 @@
                     'title'       => 'Logout label',
                     'description' => 'Link text for the logout link',
                 ],
+            ],
+        ],
+        'enhancedEcommerceAnalytics' => [
+            'details' => [
+                'name'        => 'Enhanced Ecommerce (UA) Component',
+                'description' => 'Implements a Google Tag Manager Data Layer',
+            ],
+        ],
+        'wishlistButton'             => [
+            'details'    => [
+                'name'        => 'Wishlist button',
+                'description' => 'Displays a wishlist button',
+            ],
+            'properties' => [
+                'product' => [
+                    'name'        => 'Product',
+                    'description' => 'ID of the product',
+                ],
+                'variant' => [
+                    'name'        => 'Variant',
+                    'description' => 'ID of the variant',
+                ],
+            ],
+        ],
+        'wishlists'                  => [
+            'details' => [
+                'name'        => 'Wishlists',
+                'description' => 'Displays the wishlist manager',
             ],
         ],
     ],
@@ -961,5 +1080,22 @@
         'message_comment'    => 'This message has been returned by the payment provider',
         'code_comment'       => 'This code has been returned by the payment provider',
         'failed_only'        => 'Failed only',
+    ],
+    'services'                 => [
+        'options'          => 'Options',
+        'option'           => 'Option',
+        'required'         => 'Service is required',
+        'required_comment' => 'One option of this service has to be selected when a product is added to the cart.',
+    ],
+    'reviews'                  => [
+        'rating'          => 'Rating',
+        'review'          => 'Review details',
+        'title'           => 'Title of your review',
+        'pros'            => 'Positive aspects',
+        'cons'            => 'Negative aspects',
+        'anonymous'       => 'Anonymous',
+        'only_unapproved' => 'Show only unapproved',
+        'no_more'         => 'No more unapproved reviews',
+        'approve_next'    => 'Approve and go to next',
     ],
 ];

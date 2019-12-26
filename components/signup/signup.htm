@@ -71,8 +71,10 @@
         {% partial __SELF__ ~ '::addressform' type='shipping' %}
     </div>
 
+    {% partial __SELF__ ~ '::terms' %}
+
     <div class="mall-form-actions">
-        <button class="mall-btn mall-btn--primary mall-btn--full" type="submit">
+        <button class="mall-btn mall-btn-signup mall-btn--primary mall-btn--full" type="submit">
             {{ 'offline.mall::frontend.proceed_to_checkout' | trans }}
         </button>
     </div>

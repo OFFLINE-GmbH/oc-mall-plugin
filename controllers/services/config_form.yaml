@@ -1,0 +1,13 @@
+name: 'offline.mall::lang.common.services'
+modelClass: OFFLINE\Mall\Models\Service
+form: $/offline/mall/models/service/fields.yaml
+defaultRedirect: offline/mall/services
+create:
+    title: 'offline.mall::lang.titles.services.create'
+    redirect: 'offline/mall/services/update/:id'
+    redirectClose: offline/mall/services
+update:
+    title: 'offline.mall::lang.titles.services.update'
+    redirect: offline/mall/services
+    redirectClose: offline/mall/services
+preview: {  }

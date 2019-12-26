@@ -80,3 +80,25 @@ argument.
 
 This event is emitted when there was a problem during the checkout process. It receives a `PaymentResult` as a single 
 argument.
+
+## Review
+
+### `mall.review.created`
+
+This event is emitted when a review was created. It receives the created `Review` model as a single 
+argument.
+
+### `mall.review.updated`
+
+This event is emitted when a review was updated. It receives the updated `Review` model as a single 
+argument.
+
+## Product
+
+### `mall.product.file_grant.created`
+
+This event is emitted when a product file grant was created. It receives the created `ProductFileGrant` model as 
+well as the related `Product` model.
+
+For a usage example see
+[Virtual Products -> Generate user specific product files](../digging-deeper/virtual-products.md#generate-user-specific-product-files)

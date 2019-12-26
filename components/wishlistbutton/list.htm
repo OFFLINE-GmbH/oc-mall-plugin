@@ -1,0 +1,14 @@
+{% for wishlist in items %}
+    {% partial __SELF__ ~ '::item'
+        name=wishlist.name
+        count=wishlist.items.count
+        total=wishlist.totals.totalPostTaxes
+        list_id=wishlist.hash_id
+        product_id=__SELF__.property('product')
+        variant_id=__SELF__.property('variant') %}
+{% else %}
+    {# always include the "default" list if no other lists are available #}
+    {% partial __SELF__ ~ '::item'
+        product_id=__SELF__.property('product')
+        variant_id=__SELF__.property('variant') %}
+{% endfor %}

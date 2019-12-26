@@ -1,44 +1,50 @@
-{% if variants.count > 0 %}
-    <h5 class="mall-product__variants-heading">{{ 'offline.mall::frontend.variants' | trans }}</h5>
-    <div class="mall-product__variants">
-        {% for value, variant in variants %}
-            {% set variant = variant.first() %}
-            <div class="mall-product__variant">
-                <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}"
-                   title="{{ variant.name }}">
-                    <img src="{{ variant.main_image.thumb(80, auto) }}" alt="{{ variant.name }}"/>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
-
-{% if props.count > 0 and item.inventory_management_method == 'variant' %}
-    <div class="mall-product__variant-properties">
-        {% partial __SELF__ ~ '::properties' props=props %}
-    </div>
-{% endif %}
-
-{% if item.custom_fields.count > 0 %}
-    <div class="mall-product__custom-fields">
-        {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
-    </div>
-{% endif %}
-
-<div class="mall-product__price">
-    {% partial __SELF__ ~ '::price' item=item %}
-</div>
-
-<div class="mall-product__tax-info">
-    {% partial __SELF__ ~ '::tax-info' item=item %}
-</div>
-
-<div class="mall-product__add-to-cart">
-    {% if item.allow_out_of_stock_purchases %}
-        {% partial __SELF__ ~ '::addtocart.htm' item=item %}
-    {% else %}
-        <div class="mall-product__property-stock mall-product__property-stock--checking">
-            {{ 'offline.mall::frontend.stock.checking' | trans }}
+<form data-request="onAddToCart"
+      data-request-success="data.added && $.publish('mall.cart.productAdded', data)"
+      data-request-validate
+      data-request-flash
+      id="mall-add-to-cart">
+    {% if variants.count > 0 %}
+        <h5 class="mall-product__variants-heading">{{ 'offline.mall::frontend.variants' | trans }}</h5>
+        <div class="mall-product__variants">
+            {% for value, variant in variants %}
+                {% set variant = variant.first() %}
+                <div class="mall-product__variant">
+                    <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}"
+                       title="{{ variant.name }}">
+                        <img src="{{ variant.main_image.thumb(80, auto) }}" alt="{{ variant.name }}"/>
+                    </a>
+                </div>
+            {% endfor %}
         </div>
     {% endif %}
-</div>
+
+    {% if props.count > 0 and item.inventory_management_method == 'variant' %}
+        <div class="mall-product__variant-properties">
+            {% partial __SELF__ ~ '::properties' props=props %}
+        </div>
+    {% endif %}
+
+    {% if item.custom_fields.count > 0 %}
+        <div class="mall-product__custom-fields">
+            {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
+        </div>
+    {% endif %}
+
+    <div class="mall-product__price">
+        {% partial __SELF__ ~ '::price' item=item %}
+    </div>
+
+    <div class="mall-product__tax-info">
+        {% partial __SELF__ ~ '::tax-info' item=item %}
+    </div>
+
+    <div class="mall-product__add-to-cart">
+        {% if item.allow_out_of_stock_purchases %}
+            {% partial __SELF__ ~ '::addtocart.htm' item=item %}
+        {% else %}
+            <div class="mall-product__property-stock mall-product__property-stock--checking">
+                {{ 'offline.mall::frontend.stock.checking' | trans }}
+            </div>
+        {% endif %}
+    </div>
+</form>

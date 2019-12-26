@@ -4,6 +4,11 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
+    payment_provider:
+        label: 'offline.mall::lang.common.payment_provider'
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
     code:
         label: 'offline.mall::lang.common.code'
         comment: 'offline.mall::lang.common.code_comment'
@@ -13,8 +18,9 @@ fields:
         preset:
             field: name
             type: slug
-    payment_provider:
-        label: 'offline.mall::lang.common.payment_provider'
+    pdf_partial:
+        label: 'offline.mall::lang.payment_method.pdf_partial'
+        comment: 'offline.mall::lang.payment_method.pdf_partial_comment'
         oc.commentPosition: ''
         span: auto
         type: dropdown

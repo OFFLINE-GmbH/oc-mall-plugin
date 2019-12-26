@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Tests\Classes\Totals;
 
 use Auth;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
+use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
@@ -11,6 +12,8 @@ use OFFLINE\Mall\Models\CustomFieldValue;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Service;
+use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
@@ -27,8 +30,73 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($this->getProduct($price), $quantity);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals($quantity * $price['CHF'] * 100, $calc->totalPostTaxes());
+    }
+
+    public function test_it_works_for_a_single_product_with_service_options()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $quantity = 2;
+        $price    = ['CHF' => 200, 'EUR' => 240];
+
+        $service = Service::create(['name' => 'Test']);
+        $service->taxes()->attach($tax1->id);
+
+        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option->prices()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 100,
+        ]));
+
+        $product                     = $this->getProduct($price);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax1->id);
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, $quantity, null, null, [$option->id]);
+
+        $cart->reloadRelations('products');
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(54545.45, round($calc->totalPreTaxes(), 2));
+        $this->assertEquals(5454.55, round($calc->totalTaxes(), 2));
+        $this->assertEquals(60000, $calc->totalPostTaxes());
+    }
+
+    public function test_it_works_for_multiple_products_with_service_options()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 50);
+
+        $quantity = 2;
+        $price    = ['CHF' => 200, 'EUR' => 240];
+
+        $service = Service::create(['name' => 'Test']);
+        $service->taxes()->attach([$tax1->id, $tax2->id]);
+
+        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option->prices()->save(new Price([
+            'currency_id' => 1,
+            'price'       => 100,
+        ]));
+
+        $product                     = $this->getProduct($price);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax1->id);
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, $quantity, null, null, [$option->id]);
+
+        $cart->reloadRelations('products');
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(60000, $calc->productPostTaxes());
+        $this->assertEquals(11136.36, round($calc->productTaxes(), 2));
+        $this->assertEquals(48863.64, round($calc->productPreTaxes(), 2));
     }
 
     public function test_it_works_for_multiple_products()
@@ -42,7 +110,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($this->getProduct($price), $quantity);
         $cart->addProduct($this->getProduct($halfPrice), $quantity * 2);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(
             (($quantity * $price['CHF']) + ($quantity * 2 * $halfPrice['CHF'])) * 100,
             $calc->totalPostTaxes()
@@ -63,7 +131,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(20000, $calc->totalPostTaxes());
         $this->assertEquals(4615.38, round($calc->totalTaxes(), 2));
         $this->assertCount(2, $calc->taxes());
@@ -84,7 +152,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart = $this->getCart();
         $cart->addProduct($product, 2);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(20800, $calc->totalPostTaxes());
         $this->assertEquals(4800, round($calc->totalTaxes(), 2));
         $this->assertCount(2, $calc->taxes());
@@ -113,12 +181,41 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(30000, $calc->totalPostTaxes());
         $this->assertEquals(5524, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
         $this->assertEquals(2448, round($calc->taxes()[0]->total()));
         $this->assertEquals(3077, round($calc->taxes()[1]->total()));
+    }
+
+
+    public function test_it_calculates_enforced_shipping_cost()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->taxes()->attach([$tax1->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->save();
+        $shippingMethod->taxes()->attach([$tax1->id]);
+        $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
+
+        $shippingMethod->taxes()->attach($tax1);
+
+        $cart->setShippingMethod($shippingMethod);
+
+        $cart->forceShippingPrice($shippingMethod->id, ['CHF' => 200, 'EUR' => 150], 'Enforced Price');
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(40000, $calc->totalPostTaxes());
+        $this->assertEquals(5152, round($calc->totalTaxes()));
     }
 
     public function test_it_calculates_taxes()
@@ -142,7 +239,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(21000, $calc->totalPostTaxes());
         $this->assertEquals(1909, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
@@ -171,7 +268,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(43000, $calc->totalPostTaxes());
         $this->assertEquals(4667, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
@@ -199,7 +296,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(21000, $calc->totalPostTaxes());
         $this->assertEquals(1909, round($calc->totalTaxes()));
         $this->assertCount(1, $calc->taxes());
@@ -226,7 +323,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(21000, $calc->totalPostTaxes());
         $this->assertEquals(1909, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->detailedTaxes());
@@ -251,7 +348,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($product, 3);
         $cart->addProduct($product, 1);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(5000, $calc->weightTotal());
     }
 
@@ -280,7 +377,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($product, 2, $variantWeight);
         $cart->addProduct($product, 1, $variantNoWeight);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(5000, $calc->weightTotal());
     }
 
@@ -312,7 +409,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(40000, $calc->totalPostTaxes());
         $this->assertEquals(6434, round($calc->totalTaxes()));
         $this->assertCount(2, $calc->taxes());
@@ -340,7 +437,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($product, 2, $variant);
         $cart->addProduct($product, 1, $variant);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(300 * 100, $calc->totalPostTaxes());
     }
 
@@ -380,7 +477,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($product, 2, null, collect([$customFieldValueA]));
         $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(1000 * 100, $calc->totalPostTaxes());
     }
 
@@ -419,7 +516,7 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($product, 2, null, collect([$customFieldValueA]));
         $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(1500 * 100, $calc->totalPostTaxes());
     }
 
@@ -440,12 +537,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->amounts()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
-            'field'       => 'amount',
+            'field'       => 'amounts',
         ]));
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(($quantity * $price['CHF'] * 100) - 10000, $calc->totalPostTaxes());
     }
 
@@ -467,7 +564,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(($quantity * $price['CHF'] * 100) / 2, $calc->totalPostTaxes());
     }
 
@@ -480,20 +577,20 @@ class TotalsCalculatorTest extends PluginTestCase
         $cart->addProduct($this->getProduct($price), $quantity);
 
         $discountA          = new Discount();
-        $discountA->code    = 'Test';
         $discountA->name    = 'Test discount';
         $discountA->trigger = 'code';
         $discountA->type    = 'rate';
         $discountA->rate    = 25;
         $discountA->save();
 
-        $discountB = $discountA->replicate();
+        $discountB       = $discountA->replicate();
+        $discountB->code = 'xxx';
         $discountB->save();
 
         $cart->applyDiscount($discountA);
         $cart->applyDiscount($discountB);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(($quantity * $price['CHF'] * 100) / 2, $calc->totalPostTaxes());
     }
 
@@ -532,12 +629,12 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->shipping_prices()->save(new Price([
             'price'       => 100,
             'currency_id' => 1,
-            'field'       => 'shipping_price',
+            'field'       => 'shipping_prices',
         ]));
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(30000, $calc->totalPostTaxes());
         $this->assertEquals(5524, round($calc->totalTaxes()));
     }
@@ -560,22 +657,22 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
-            'field'       => 'total_to_reach',
+            'field'       => 'totals_to_reach',
         ]));
         $discount->amounts()->save(new Price([
             'price'       => 150,
             'currency_id' => 1,
-            'field'       => 'amount',
+            'field'       => 'amounts',
         ]));
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(20000, $calc->totalPostTaxes());
 
         $cart->addProduct($product);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(15000, $calc->totalPostTaxes());
     }
 
@@ -598,17 +695,17 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
-            'field'       => 'total_to_reach',
+            'field'       => 'totals_to_reach',
         ]));
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(20000, $calc->totalPostTaxes());
 
         $cart->addProduct($product);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(15000, $calc->totalPostTaxes());
     }
 
@@ -637,22 +734,22 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->totals_to_reach()->save(new Price([
             'price'       => 300,
             'currency_id' => 1,
-            'field'       => 'total_to_reach',
+            'field'       => 'totals_to_reach',
         ]));
         $discount->shipping_prices()->save(new Price([
             'price'       => 0,
             'currency_id' => 1,
-            'field'       => 'shipping_price',
+            'field'       => 'shipping_prices',
         ]));
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(40000, $calc->totalPostTaxes());
 
         $cart->addProduct($product);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(30000, $calc->totalPostTaxes());
     }
 
@@ -677,17 +774,17 @@ class TotalsCalculatorTest extends PluginTestCase
         $discount->amounts()->save(new Price([
             'price'       => 150,
             'currency_id' => 1,
-            'field'       => 'amount',
+            'field'       => 'amounts',
         ]));
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(20000, $calc->totalPostTaxes());
 
         $cart->addProduct($productB);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(15000, $calc->totalPostTaxes());
     }
 
@@ -712,12 +809,12 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(20000, $calc->totalPostTaxes());
 
         $cart->addProduct($productB);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(15000, $calc->totalPostTaxes());
     }
 
@@ -761,12 +858,12 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->applyDiscount($discount);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(40000, $calc->totalPostTaxes());
 
         $cart->addProduct($productB);
 
-        $calc = new TotalsCalculator($cart);
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(30000, $calc->totalPostTaxes());
     }
 

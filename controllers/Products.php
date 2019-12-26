@@ -1,11 +1,12 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
-use Backend;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use BackendMenu;
+use DB;
+use Event;
 use Flash;
 use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Classes\Index\Index;
@@ -16,10 +17,10 @@ use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ProductFile;
 use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
-use DB;
 
 class Products extends Controller
 {
@@ -62,7 +63,7 @@ class Products extends Controller
     public function update($id)
     {
         parent::update($id);
-        // Something went wront if no formModel is available. Proceed with default behaviour.
+        // Something went wrong if no formModel is available. Proceed with default behaviour.
         if ( ! isset($this->vars['formModel'])) {
             return;
         }
@@ -72,6 +73,19 @@ class Products extends Controller
 
             return redirect(Backend::url('offline/mall/products/change_category/' . $id));
         }
+
+        // Strike through all old file versions.
+        Event::listen('backend.list.injectRowClass', function ($lists, $record) {
+            $latestFile = $this->vars['formModel']->latest_file;
+            if ( ! $latestFile || ! $record instanceof ProductFile) {
+                return '';
+            }
+            if ($latestFile->id === $record->id) {
+                return '';
+            }
+
+            return 'strike safe';
+        });
     }
 
     public function change_category($id)
@@ -265,13 +279,11 @@ class Products extends Controller
 
     protected function relationExtendRefreshResults($field)
     {
-        if ($field !== 'variants') {
-            return;
+        if ($field === 'variants') {
+            return [
+                '#Products-update-RelationController-images-view' => $this->relationRenderView('images'),
+            ];
         }
-
-        return [
-            '#Products-update-RelationController-images-view' => $this->relationRenderView('images'),
-        ];
     }
 
     public function relationExtendViewWidget($widget, $field, $model)
@@ -283,7 +295,6 @@ class Products extends Controller
         $widget->bindEvent('list.extendQueryBefore', function ($query) {
             return $query->with('property_values');
         });
-
     }
 
     public function onRelationManageCreate()
@@ -293,6 +304,11 @@ class Products extends Controller
         // Store the pricing information with the custom fields.
         if ($this->relationName === 'custom_fields') {
             $this->updatePrices($this->relationModel, '_prices');
+        }
+
+        // Remove the "missing file partial".
+        if ($this->relationName === 'files') {
+            $parent['#Form-field-Product-missing_file_hint-group'] = '';
         }
 
         return $parent;

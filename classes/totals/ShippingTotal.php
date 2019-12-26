@@ -133,10 +133,14 @@ class ShippingTotal implements \JsonSerializable
      * Get the effective ShippingMethod including changes
      * made by any applied discounts.
      *
-     * @return ShippingMethod
+     * @return ?ShippingMethod
      */
-    public function method(): ShippingMethod
+    public function method(): ?ShippingMethod
     {
+        if ($this->totals->getInput()->products->every('data.is_virtual')) {
+            return ShippingMethod::noShippingRequired();
+        }
+
         if ( ! $this->appliedDiscount) {
             return $this->method;
         }
@@ -153,13 +157,16 @@ class ShippingTotal implements \JsonSerializable
     private function applyDiscounts(int $price): ?float
     {
         $discounts = Discount::whereIn('trigger', ['total', 'product'])
-                             ->where('type', 'shipping')
-                             ->where(function ($q) {
-                                 $q->whereNull('expires')
-                                   ->orWhere('expires', '>', Carbon::now());
-                             })->get();
+            ->where('type', 'shipping')
+            ->where(function ($q) {
+                $q->whereNull('valid_from')
+                    ->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
+                $q->whereNull('expires')
+                    ->orWhere('expires', '>', Carbon::now());
+            })->get();
 
-        $codeDiscount = $this->totals->getCart()->discounts->where('type', 'shipping')->first();
+        $codeDiscount = $this->totals->getInput()->discounts->where('type', 'shipping')->first();
         if ($codeDiscount) {
             $discounts->push($codeDiscount);
         }
@@ -169,7 +176,7 @@ class ShippingTotal implements \JsonSerializable
         }
 
         $applier = new DiscountApplier(
-            $this->totals->getCart(),
+            $this->totals->getInput(),
             $this->totals->productPostTaxes(),
             $price
         );

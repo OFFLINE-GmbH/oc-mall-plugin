@@ -16,10 +16,13 @@ use OFFLINE\Mall\Components\MyAccount;
 use OFFLINE\Mall\Components\OrdersList;
 use OFFLINE\Mall\Components\PaymentMethodSelector;
 use OFFLINE\Mall\Components\Product as ProductComponent;
+use OFFLINE\Mall\Components\ProductReviews;
 use OFFLINE\Mall\Components\Products as ProductsComponent;
 use OFFLINE\Mall\Components\ProductsFilter;
 use OFFLINE\Mall\Components\ShippingMethodSelector;
 use OFFLINE\Mall\Components\SignUp;
+use OFFLINE\Mall\Components\WishlistButton;
+use OFFLINE\Mall\Components\Wishlists;
 use OFFLINE\Mall\FormWidgets\Price;
 use OFFLINE\Mall\FormWidgets\PropertyFields;
 
@@ -46,6 +49,9 @@ trait BootComponents
             CurrencyPicker::class             => 'currencyPicker',
             MallDependencies::class           => 'mallDependencies',
             EnhancedEcommerceAnalytics::class => 'enhancedEcommerceAnalytics',
+            Wishlists::class                  => 'wishlists',
+            WishlistButton::class             => 'wishlistButton',
+            ProductReviews::class             => 'productReviews',
         ];
     }
 
@@ -55,9 +61,5 @@ trait BootComponents
             PropertyFields::class => 'mall.propertyfields',
             Price::class          => 'mall.price',
         ];
-    }
-
-    protected function bootComponents()
-    {
     }
 }

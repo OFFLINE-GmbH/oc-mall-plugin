@@ -1,7 +1,6 @@
 matrix:
   allow_failures:
     - php: nightly
-
   include:
     - language: php
       services:

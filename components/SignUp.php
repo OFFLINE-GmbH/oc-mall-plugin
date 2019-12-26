@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Illuminate\Support\Facades\Session;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -113,11 +114,18 @@ class SignUp extends MallComponent
      */
     protected function redirect()
     {
-        $data = post();
-        if (isset($data['redirect'])) {
-            $redirectUrl = $this->controller->pageUrl($data['redirect']);
-            return Redirect::guest($redirectUrl);
-        } elseif ($url = $this->property('redirect')) {
+        // Check for session redirect.
+        if ($redirect = Session::pull('mall.login.redirect')) {
+            return redirect()->to($redirect);
+        }
+
+        // Check for a redirect parameter specified via GET/POST.
+        if ($redirect = input('redirect')) {
+            return redirect()->guest($this->controller->pageUrl($redirect));
+        }
+
+        // Otherwise, use the redirect property of the component.
+        if ($url = $this->property('redirect')) {
             return redirect()->to($url);
         }
 

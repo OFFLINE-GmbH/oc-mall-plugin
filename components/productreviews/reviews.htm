@@ -1,0 +1,61 @@
+{% for review in __SELF__.reviews %}
+    <div class="mall-review">
+        <div class="mall-review__rating">
+            {% for i in range(1, 5) %}
+                {% partial __SELF__ ~ '::star' active=review.rating >= i %}
+            {% endfor %}
+        </div>
+
+        {% if review.title %}
+            <h4 class="mall-review__title">
+                {{ review.title }}
+            </h4>
+        {% endif %}
+
+        {% if review.variant %}
+            <h5 class="mall-review__subtitle">
+                {{ review.variant.name }}
+            </h5>
+        {% endif %}
+
+        {% if review.description %}
+            <div class="mall-review__content">
+                {{ review.description | nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="mall-review__details">
+            <div class="mall-review__category-reviews">
+                {% for category_review in review.category_reviews %}
+                    {% partial __SELF__ ~ '::stars' rating=category_review.rating label=category_review.review_category.name %}
+                {% endfor %}
+            </div>
+            <div class="mall-review__category-reviews">
+                <ul class="mall-review__pro-con-list">
+                {% for item in review.pros %}
+                    <li>+ {{ item.value }}</li>
+                {% endfor %}
+                {% for item in review.cons %}
+                    <li>- {{ item.value }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="mall-review__author">
+            {{ review.customerName }}
+            &middot;
+            {% partial __SELF__ ~ '::date' date=review.created_at %}
+        </div>
+    </div>
+{% else %}
+    <div class="mall-callout mall-callout--neutral">
+        {{ 'offline.mall::frontend.reviews.none' | trans }}
+    </div>
+{% endfor %}
+
+{% if __SELF__.reviews.hasPages %}
+    <div class="mall-pagination mall-pagination--reviews">
+        {{ __SELF__.reviews | raw }}
+    </div>
+{% endif %}

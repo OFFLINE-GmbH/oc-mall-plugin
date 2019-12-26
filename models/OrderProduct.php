@@ -43,6 +43,7 @@ class OrderProduct extends Model
         'stackable'    => 'boolean',
         'shippable'    => 'boolean',
         'taxable'      => 'boolean',
+        'is_virtual'   => 'boolean',
     ];
 
     public $jsonable = [
@@ -51,6 +52,7 @@ class OrderProduct extends Model
         'custom_field_values',
         'property_values',
         'brand',
+        'service_options',
     ];
 
     public $table = 'offline_mall_order_products';
@@ -60,6 +62,14 @@ class OrderProduct extends Model
         'product' => Product::class,
         'order'   => Order::class,
     ];
+    public $hasMany = [
+        'product_file_grants' => ProductFileGrant::class,
+    ];
+
+    public function scopeVirtual($query)
+    {
+        return $query->where('is_virtual', true);
+    }
 
     public function getPriceColumns()
     {

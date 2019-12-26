@@ -13,8 +13,6 @@ class Jersey extends DemoProduct
             'user_defined_id'              => 'SHIRT002',
             'name'                         => 'Stormrider Jersey Men',
             'slug'                         => 'stormrider-jersey',
-            'price'                        => ['USD' => 79.90, 'CHF' => 81.90, 'EUR' => 69.90],
-            'old_price'                    => null,
             'description_short'            => 'Polyester',
             'description'                  => '<p>The fast-drying and breathable materials of the Stormrider Jersey ensure the perfect balance between durability, abrasion resistance and comfort. </p>',
             'meta_title'                   => 'Stormrider Jersey Men',

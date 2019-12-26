@@ -1,0 +1,10 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    pivot[required]:
+        label: 'offline.mall::lang.services.required'
+        type: switch
+        sortable: true

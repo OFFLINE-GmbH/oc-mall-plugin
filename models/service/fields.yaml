@@ -1,0 +1,38 @@
+fields:
+    name:
+        label: 'offline.mall::lang.custom_field_options.name'
+        span: auto
+        type: text
+    code:
+        label: 'offline.mall::lang.common.code'
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+        comment: 'offline.mall::lang.common.code_comment'
+    description:
+        label: 'offline.mall::lang.product.description'
+        size: large
+        span: auto
+        type: richeditor
+    taxes:
+        label: 'offline.mall::lang.common.taxes'
+        size: large
+        span: auto
+        type: partial
+        path: taxes
+tabs:
+    fields:
+        options:
+            span: full
+            path: options
+            type: partial
+            context: update
+            tab: 'offline.mall::lang.common.options'
+        products:
+            span: full
+            path: products
+            type: partial
+            context: update
+            tab: 'offline.mall::lang.common.products'

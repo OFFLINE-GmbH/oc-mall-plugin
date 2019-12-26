@@ -1,0 +1,9 @@
+<?php if ($this->vars['formModel']->approved_at === null): ?>
+<button class="btn btn-default"
+        data-request="onApprove"
+        data-request-data="id: '<?= e($this->vars['formModel']->id) ?>'"
+        data-request-redirect
+        data-attach-loading>
+    <?= e(trans('offline.mall::lang.reviews.approve_next')) ?>
+</button>
+<?php endif; ?>

@@ -23,6 +23,10 @@
             'update'  => 'Rabatt bearbeiten',
             'preview' => 'Rabatt-Vorschau',
         ],
+        'services'             => [
+            'create' => 'Service erstellen',
+            'update' => 'Service bearbeiten',
+        ],
         'shipping_methods'     => [
             'create'  => 'Versandmethode erstellen',
             'update'  => 'Versandmethode bearbeiten',
@@ -63,6 +67,10 @@
         'taxes'                => [
             'create' => 'Steuer erstellen',
             'update' => 'Steuer bearbeiten',
+        ],
+        'reviews'              => [
+            'create' => 'Review erstellen',
+            'update' => 'Review bearbeiten',
         ],
     ],
     'menu_items'               => [
@@ -161,6 +169,15 @@
         'google_merchant_url'             => 'Deine Google Merchant Feed URL',
         'google_merchant_url_locale'      => 'Füge ?locale=xy zur URL hinzu um einen übersetzten Feed zu erhalten.',
     ],
+    'review_settings'          => [
+        'description'             => 'Reviews konfigurieren',
+        'enabled'                 => 'Reviews aktiviert',
+        'enabled_comment'         => 'Kunden können Produkte bewerten',
+        'moderated'               => 'Reviews moderieren',
+        'moderated_comment'       => 'Reviews werden erst nach manueller Prüfung auf der Website sichtbar',
+        'allow_anonymous'         => 'Anonyme Reviews zulassen',
+        'allow_anonymous_comment' => 'Unregistrierte Benutzer dürfen Reviews erstellen',
+    ],
     'common'                   => [
         'shop'                 => 'Shop',
         'products'             => 'Produkte',
@@ -203,6 +220,7 @@
         'id'                   => 'ID',
         'created_at'           => 'Erstellt',
         'updated_at'           => 'Aktualisiert',
+        'approved_at'          => 'Freigegeben am',
         'hide_published'       => 'Verstecke veröffentlichte',
         'slug'                 => 'URL',
         'name'                 => 'Name',
@@ -275,6 +293,14 @@
         'since_begin'          => 'Seit Beginn',
         'weekly'               => 'Wöchentlich',
         'feeds'                => 'Feeds',
+        'services'             => 'Services',
+        'service'              => 'Service',
+        'review'               => 'Review',
+        'reviews'              => 'Reviews',
+        'review_categories'    => 'Review-Kategorien',
+        'review_category'      => 'Review-Kategorie',
+        'title'                => 'Titel',
+        'version'              => 'Version',
     ],
     'variant'                  => [
         'method' => [
@@ -313,6 +339,12 @@
         'name'                                 => 'Produktname',
         'published'                            => 'Veröffentlicht',
         'published_short'                      => 'Veröffentl.',
+        'is_virtual'                           => 'Ist virtuell',
+        'is_virtual_comment'                   => 'Dieses Produkt ist virtuell (Datei, kein Versand)',
+        'product_file'                         => 'Produkt-Datei',
+        'product_files'                        => 'Produkt-Dateien',
+        'product_files_section_comment'        => 'Dieses Produkt ist virtuell. Laden Sie hier beliebig viele Dateiversionen hoch. Die neuste Version wird dem Kunden beim Kauf zum Download angeboten.',
+        'product_file_version'                 => 'Datei-Version',
         'not_published'                        => 'Nicht veröffentlicht',
         'published_comment'                    => 'Dieser Artikel ist im Shop sichtbar',
         'stock'                                => 'Lagerbestand',
@@ -367,6 +399,30 @@
         'missing_category'                     => 'Dieses Produkt gehört derzeit zu keiner Kategorie. Bitte wählen Sie eine Kategorie aus.',
         'variant_support_header'               => 'Varianten nicht unterstützt',
         'variant_support_text'                 => 'Die ausgewählte Kategorie hat keine Varianten-Eigenschaften definiert. Wechseln Sie die Inventarverwaltungs-Methode auf "Artikel" oder wählen Sie eine andere Kategorie aus.',
+        'filter_virtual'                       => 'Zeige nur virtuelle Produkte',
+    ],
+    'product_file'             => [
+        'display_name_comment'       => 'Dieser Name wird dem Kunden angezeigt.',
+        'version_comment'            => 'Die Versionsnummer erleichtert es Kunden neue Datei zu bemerken.',
+        'expires_after_days'         => 'Gültigkeitsdauer in Tagen nach Kauf',
+        'expires_after_days_comment' => 'Die Datei kann für so viele Tage nach dem Kauf heruntergeladen werden. Leer lassen für unbegrenzt.',
+        'max_download_count'         => 'Anzahl erlaubter Downloads',
+        'max_download_count_comment' => 'Die Datei kann nach erreichen dieser Anzahl nicht mehr heruntergeladen werden. Leer lassen für unbegrenzt.',
+        'session_required'           => 'Login benötigt',
+        'session_required_comment'   => 'Die Datei kann nur nach dem Login mit einem Kundenkonto heruntergeladen werden (Link ist nicht teilbar).',
+        'file'                       => 'Datei',
+        'download_count'             => 'Anz. Downloads',
+        'errors'                     => [
+            'invalid'           => 'Ungültiger Download-Link',
+            'expired'           => 'Download-Link ist nicht mehr gültig',
+            'too_many_attempts' => 'Maximale Anzahl der Download-Versuche erreicht',
+            'not_found'         => 'Die aufgerufene Datei konnte nicht gefunden werden. Bitte kontaktieren Sie uns.',
+        ],
+        'hint'                       => [
+            'intro'     => 'Dieses Produkt hat noch keinen Dateianhang. Laden Sie eine Datei hoch oder generieren Sie diese während des Checkouts.',
+            'info_text' => 'Informationen über automatisch generierte Dateien finden Sie',
+            'info_link' => 'in der Online-Dokumentation',
+        ],
     ],
     'image_sets'               => [
         'is_main_set'         => 'Ist Hauptset',
@@ -374,13 +430,15 @@
         'create_new'          => 'Erstelle neues Set',
     ],
     'category'                 => [
-        'name'                            => 'Name',
-        'code'                            => 'Code',
-        'code_comment'                    => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
-        'parent'                          => 'Elternelement',
-        'no_parent'                       => 'Kein Elternelement',
-        'inherit_property_groups'         => 'Übernehme Eigenschaften von Elternkategorie',
-        'inherit_property_groups_comment' => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
+        'name'                              => 'Name',
+        'code'                              => 'Code',
+        'code_comment'                      => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
+        'parent'                            => 'Elternelement',
+        'no_parent'                         => 'Kein Elternelement',
+        'inherit_property_groups'           => 'Übernehme Eigenschaften von Elternkategorie',
+        'inherit_property_groups_comment'   => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
+        'inherit_review_categories'         => 'Übernehme Review-Kateogiren von Elternkategorie',
+        'inherit_review_categories_comment' => 'Für diese Kategorie werden die gleichen Review-Kategorien wie für die Elternkategorie verwendet',
     ],
     'custom_fields'            => [
         'name'             => 'Feldname',
@@ -399,6 +457,7 @@
     'discounts'                => [
         'name'                                 => 'Name',
         'code'                                 => 'Gutschein-Code',
+        'code_comment'                         => 'Leer lassen, um automatisch zu generieren',
         'total_to_reach'                       => 'Gültig ab Bestellwert',
         'type'                                 => 'Gutschein-Typ',
         'trigger'                              => 'Gültig wenn',
@@ -440,6 +499,9 @@
         'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
         'instructions'           => 'Zahlungsanweisung',
         'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} oder {{ cart }} um Infos zur Bestellung abzurufen (falls vorhanden)',
+        'pdf_partial'            => 'Partial für PDF-Versand',
+        'pdf_partial_comment'    => 'Bei einer Bestellung mit dieser Zahlungsmethode wird das ausgewählte Partial als PDF versendet',
+        'pdf_partial_none'       => 'Kein PDF-Versand',
     ],
     'order'                    => [
         'order_number'                        => '# Bestl.',
@@ -508,6 +570,7 @@
         'not_shipped'                         => 'Versand ausstehend',
         'data'                                => 'Bestellungsdaten',
         'total_revenue'                       => 'Gesamteinnahmen',
+        'download_invoice'                    => 'Rechnung herunterladen',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
@@ -525,6 +588,8 @@
         'available_below_total'    => 'Verfügbar wenn Totalbetrag kleiner',
         'countries'                => 'Verfügbar für den Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewählt kann die Versandmethode weltweit verwendet werden.',
+        'not_required_name'        => 'Kein Versand notwendig',
+        'not_required_description' => 'Der Warenkorb benötigt keinen Versand.',
     ],
     'payment_status'           => [
         'paid'          => 'Bezahlt',
@@ -561,6 +626,9 @@
         'manage_taxes'              => 'Kann Steuern verwalten',
         'manage_payment_log'        => 'Kann Zahlungslog verwalten',
         'manage_feeds'              => 'Kann Feeds verwalten',
+        'manage_wishlists'          => 'Kann Merklisten verwalten',
+        'manage_services'           => 'Kann Services verwalten',
+        'manage_reviews'            => 'Kann Reviews verwalten',
     ],
     'components'               => [
         'products'                   => [
@@ -646,6 +714,7 @@
                 'random'     => 'Zufällig',
                 'manual'     => 'Manuell',
                 'name'       => 'Name',
+                'ratings'    => 'Bewertung',
             ],
         ],
         'myAccount'                  => [
@@ -723,6 +792,21 @@
                 ],
             ],
         ],
+        'productReviews'             => [
+            'details'    => [
+                'name'        => 'Produkt-Reviews',
+                'description' => 'Zeigt alle Reviews zu einem Produkt an',
+            ],
+            'properties' => [
+                'perPage'                   => [
+                    'title' => 'Anzahl Reviews pro Seite',
+                ],
+                'currentVariantReviewsOnly' => [
+                    'title'       => 'Zeige nur Reviews der Variante',
+                    'description' => 'Zeige keine Reviews von anderen Varianten des Produkts an',
+                ],
+            ],
+        ],
         'cart'                       => [
             'details'    => [
                 'name'        => 'Warenkorb',
@@ -731,6 +815,9 @@
             'properties' => [
                 'showDiscountApplier' => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
+                ],
+                'showShipping'        => [
+                    'title' => 'Versandkosten anzeigen',
                 ],
                 'showTaxes'           => [
                     'title' => 'Steuern ausweisen',
@@ -860,6 +947,9 @@
                     'required' => 'Wählen Sie Ihr Kanton/Bundesstaat',
                     'exists'   => 'Der ausgewählte Wert ist ungültig.',
                 ],
+                'terms_accepted'  => [
+                    'required' => 'Bitte bestätigen Sie unsere AGBs.',
+                ],
             ],
         ],
         'categories'                 => [
@@ -922,6 +1012,28 @@
                 'description' => 'Implements a Google Tag Manager Data Layer',
             ],
         ],
+        'wishlistButton'             => [
+            'details'    => [
+                'name'        => 'Merklisten-Button',
+                'description' => 'Zeigt einen Merklisten-Button an',
+            ],
+            'properties' => [
+                'product' => [
+                    'name'        => 'Produkt',
+                    'description' => 'Die ID des Produkts',
+                ],
+                'variant' => [
+                    'name'        => 'Variante',
+                    'description' => 'Die ID der Variante',
+                ],
+            ],
+        ],
+        'wishlists'                  => [
+            'details' => [
+                'name'        => 'Merklisten-Verwaltung',
+                'description' => 'Zeigt die Merklisten-Verwaltung an',
+            ],
+        ],
     ],
     'shipping_method_rates'    => [
         'from_weight' => 'Von (Gewicht in Gramm)',
@@ -965,5 +1077,22 @@
         'message_comment'    => 'Diese Nachricht wurde vom Zahlungsanbieter zurückgegeben',
         'code_comment'       => 'Dieser Code wurde vom Zahlungsanbieter zurückgegeben',
         'failed_only'        => 'Nur fehlgeschlagene',
+    ],
+    'services'                 => [
+        'options'          => 'Optionen',
+        'option'           => 'Option',
+        'required'         => 'Pflichtservice',
+        'required_comment' => 'Bei der Bestellung muss zwingend eine Service-Option ausgewählt werden',
+    ],
+    'reviews'                  => [
+        'rating'          => 'Bewertung',
+        'review'          => 'Details zur Bewertung',
+        'title'           => 'Titel der Bewertung',
+        'pros'            => 'Positive Punkte',
+        'cons'            => 'Negative Punkte',
+        'anonymous'       => 'Anonym',
+        'only_unapproved' => 'Zeige nur zu überprüfende Reviews',
+        'no_more'         => 'Alle Reviews sind freigeschaltet',
+        'approve_next'    => 'Review freigeben und weiter',
     ],
 ];

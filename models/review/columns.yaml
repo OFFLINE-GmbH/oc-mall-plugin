@@ -1,0 +1,55 @@
+columns:
+    rating:
+        label: 'offline.mall::lang.reviews.rating'
+        type: partial
+        path: $/offline/mall/controllers/reviews/_rating.htm
+        searchable: true
+        sortable: true
+    product_id:
+        label: 'offline.mall::lang.common.product'
+        type: text
+        searchable: false
+        select: name
+        relation: product
+    variant_id:
+        label: 'offline.mall::lang.common.variant'
+        type: text
+        select: name
+        relation: variant
+    customer_name:
+        label: 'offline.mall::lang.order.customer'
+        type: text
+        sortable: false
+    title:
+        label: 'offline.mall::lang.common.title'
+        type: text
+        searchable: true
+    description:
+        label: 'offline.mall::lang.product.description'
+        type: text
+        searchable: true
+        invisible: true
+    pros:
+        label: 'offline.mall::lang.reviews.pros'
+        type: text
+        searchable: true
+        invisible: true
+    cons:
+        label: 'offline.mall::lang.reviews.cons'
+        type: text
+        searchable: true
+        invisible: true
+    approved_at:
+        label: 'offline.mall::lang.common.approved_at'
+        type: datetime
+        sortable: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        invisible: true
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        invisible: true
+        sortable: true

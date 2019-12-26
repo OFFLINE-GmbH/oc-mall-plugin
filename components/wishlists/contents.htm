@@ -1,0 +1,71 @@
+<div class="mall-wishlists-manager__header">
+    <form class="mall-wishlists-manager__form">
+        <input type="text" value="{{ item.name }}" name="name" class="mall-wishlists-manager__input">
+        <input type="hidden" value="{{ item.hashId }}" name="id">
+        <button class="mall-btn mall-wishlists-manager__action-button"
+                data-request="onRename"
+                data-attach-loading
+                data-request-flash
+                data-request-validate>
+            {{ 'offline.mall::frontend.wishlist.rename' | trans }}
+        </button>
+        <button class="mall-btn mall-wishlists-manager__action-button"
+                data-request="onDelete"
+                data-request-confirm="{{ 'offline.mall::frontend.confirm' | trans }}"
+                data-attach-loading
+                data-request-flash
+                data-request-validate>
+            <svg class="mall-trash-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M11.06 64l-.16-2.72-2.2-41.89h5.75l2.05 38.86h31l2-38.86h5.8L53 64H11.06zM44.22 0v7.19H60v5.75H4V7.19h15.78V0zM24.81 7.19h14.38V3.6H24.81zm3.72 46.37l-.73-34.17h-5l.73 34.17zm11.86 0l.73-34.17h-5l-.73 34.17z"/>
+            </svg>
+        </button>
+    </form>
+</div>
+
+<div class="mall-wishlists-manager__well">
+    {% partial __SELF__ ~ '::cart' %}
+</div>
+
+{% if __SELF__.currentItem.items.count > 0 %}
+<div class="mall-wishlists-manager__actions">
+    {% if __SELF__.allowPDFDownload %}
+    <a class="mall-btn mall-btn--default"
+       href="?download={{ __SELF__.currentItem.hashId }}"
+        target="_blank">
+        {{ 'offline.mall::frontend.wishlists.pdf_download' | trans }}
+    </a>
+    {% endif %}
+    <button class="mall-btn mall-btn--primary"
+            data-request="onAddToCart"
+            data-request-data="id: '{{ __SELF__.currentItem.hashId }}'"
+            data-attach-loading
+            data-request-flash
+            data-request-validate>
+        {{ 'offline.mall::frontend.wishlists.addtocart' | trans }}
+    </button>
+</div>
+{% endif %}
+
+<script>
+    $(function () {
+        $('.js-mall-quantity').on('change', function () {
+            $.request('{{ __SELF__ }}::onUpdateQuantity', {
+                data: {item_id: this.dataset.id, id: '{{ __SELF__.currentItem.hashId }}', quantity: this.value},
+                loading: $.oc.stripeLoadIndicator,
+            })
+        });
+        $('.js-mall-remove-product').on('click', function (e) {
+            e.preventDefault()
+            $.request('{{ __SELF__ }}::onRemove', {
+                data: {item_id: this.dataset.id, id: '{{ __SELF__.currentItem.hashId }}'},
+                loading: $.oc.stripeLoadIndicator,
+                confirm: '{{ 'offline.mall::frontend.confirm' | trans }}',
+                success: function (data) {
+                    this.success(data)
+                    $.publish('mall.wishlist.productRemoved', data);
+                }
+            })
+        });
+    })
+</script>

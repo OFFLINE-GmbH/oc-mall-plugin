@@ -207,7 +207,7 @@ class OrderTest extends PluginTestCase
         $discount->shipping_prices()->save(new Price([
             'currency_id' => 1,
             'price'       => 10,
-            'field'       => 'shipping_price',
+            'field'       => 'shipping_prices',
         ]));
 
         $cart->applyDiscount($discount);
@@ -262,7 +262,6 @@ class OrderTest extends PluginTestCase
         $discount3->type             = 'rate';
         $discount3->rate             = 20;
         $discount3->trigger          = 'code';
-        $discount3->code             = 'TEST';
         $discount3->number_of_usages = 18;
         $discount3->save();
 

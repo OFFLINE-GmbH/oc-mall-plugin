@@ -15,13 +15,14 @@ class Discount extends Model
 
     public $rules = [
         'name'                                 => 'required',
-        'expires'                              => 'nullable|date',
+        'valid_from'                           => 'nullable|date|before_or_equal:expires',
+        'expires'                              => 'nullable|date|after_or_equal:valid_from',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
         'types'                                => 'in:fixed_amount,rate,shipping',
-        'code'                                 => 'required_if:trigger,code',
         'product'                              => 'required_if:trigger,product',
+        'code'                                 => 'nullable|unique:offline_mall_discounts,code',
         'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
         'shipping_description'                 => 'required_if:type,shipping',
@@ -29,15 +30,30 @@ class Discount extends Model
     ];
     public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
     public $table = 'offline_mall_discounts';
-    public $dates = ['expires'];
+    public $dates = ['valid_from', 'expires'];
     public $nullable = ['max_number_of_usages'];
     public $casts = [
         'number_of_usages' => 'integer',
     ];
     public $morphMany = [
-        'shipping_prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_price"'],
-        'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amount"'],
-        'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "total_to_reach"'],
+        'shipping_prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_prices"'],
+        'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amounts"'],
+        'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "totals_to_reach"'],
+    ];
+    public $fillable = [
+        'name',
+        'valid_from',
+        'expires',
+        'number_of_usages',
+        'max_number_of_usages',
+        'trigger',
+        'types',
+        'product',
+        'type',
+        'rate',
+        'code',
+        'shipping_description',
+        'shipping_guaranteed_days_to_delivery',
     ];
     public $belongsTo = [
         'product' => [Product::class],
@@ -54,6 +70,11 @@ class Discount extends Model
     public static function boot()
     {
         parent::boot();
+        static::saving(function (self $discount) {
+            if ($discount->trigger === 'code' && ! $discount->code) {
+                $discount->code = strtoupper(str_random(10));
+            }
+        });
         static::saving(function (self $discount) {
             $discount->code = strtoupper($discount->code);
             if ($discount->trigger !== 'product') {

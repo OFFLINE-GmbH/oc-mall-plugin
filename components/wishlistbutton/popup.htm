@@ -1,0 +1,8 @@
+<div class="mall-wishlist-button__popup">
+    <div class="mall-wishlist-button__popup-inner">
+        <div class="mall-wishlists mall-wishlists--height-limited">
+            {% partial __SELF__ ~ '::list' items=__SELF__.items %}
+        </div>
+        {% partial __SELF__ ~ '::add' %}
+    </div>
+</div>

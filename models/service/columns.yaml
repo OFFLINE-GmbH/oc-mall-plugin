@@ -1,0 +1,25 @@
+columns:
+    name:
+        label: 'offline.mall::lang.common.name'
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: 'offline.mall::lang.common.code'
+        type: text
+        searchable: true
+        sortable: true
+    description:
+        label: 'offline.mall::lang.product.description'
+        type: text
+        searchable: true
+        sortable: true
+        invisible: true
+    created_at:
+        label: 'offline.mall::lang.common.created_at'
+        type: datetime
+        sortable: true
+    updated_at:
+        label: 'offline.mall::lang.common.updated_at'
+        type: datetime
+        sortable: true

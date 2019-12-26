@@ -4,6 +4,7 @@ use DB;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
@@ -525,6 +526,37 @@ class CartTest extends PluginTestCase
 
         $this->assertCount(0, $available);
         $this->assertNull($cart->shipping_method_id);
+    }
+
+
+    public function test_transferred_carts_get_merged()
+    {
+        $customer = Customer::first();
+        $prod1 = Product::find(1);
+        $prod2 = Product::find(2);
+
+        // Create an existing Cart for a customer.
+        $cart = new Cart();
+        $cart->customer_id = $customer->id;
+        $cart->save();
+        $cart->addProduct($prod1);
+
+        $this->assertEquals(1, $cart->products->count());
+        $this->assertEquals(1, $cart->products->first()->id);
+
+        // Create a new Cart and transfer it to the customer. The Carts
+        // have to be merged.
+        $cart = new Cart();
+        $cart->save();
+        $cart->addProduct($prod2);
+
+        $cart->transferToCustomer($customer);
+
+        $cart = $cart->fresh();
+
+        $this->assertEquals(2, $cart->products->count());
+        $this->assertEquals(1, $cart->products->first()->id);
+        $this->assertEquals(2, $cart->products->last()->id);
     }
 
     /**

@@ -6,6 +6,7 @@ use Backend\Facades\Backend;
 use OFFLINE\Mall\Models\FeedSettings;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
+use OFFLINE\Mall\Models\ReviewSettings;
 
 trait BootSettings
 {
@@ -71,6 +72,16 @@ trait BootSettings
                 'order'       => 50,
                 'permissions' => ['offline.mall.manage_feeds'],
                 'keywords'    => 'shop store mall feeds',
+            ],
+            'review_settings'           => [
+                'label'       => 'offline.mall::lang.common.reviews',
+                'description' => 'offline.mall::lang.review_settings.description',
+                'category'    => 'offline.mall::lang.general_settings.category',
+                'icon'        => 'icon-star',
+                'class'       => ReviewSettings::class,
+                'order'       => 60,
+                'permissions' => ['offline.mall.manage_reviews'],
+                'keywords'    => 'shop store mall reviews',
             ],
             'payment_gateways_settings' => [
                 'label'       => 'offline.mall::lang.payment_gateway_settings.label',

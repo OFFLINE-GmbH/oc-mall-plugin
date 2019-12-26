@@ -13,7 +13,7 @@ class AddNameColumnToIndexTable extends Migration
         }
         Schema::table('offline_mall_index', function (Blueprint $table) {
             if ( ! Schema::hasColumn('offline_mall_index', 'name')) {
-                $table->string('name');
+                $table->string('name', 191);
             }
         });
     }

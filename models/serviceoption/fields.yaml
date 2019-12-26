@@ -1,0 +1,14 @@
+fields:
+    name:
+        label: 'offline.mall::lang.common.name'
+        span: auto
+        type: text
+    _prices:
+        label: 'offline.mall::lang.product.price'
+        span: auto
+        type: mall.price
+    description:
+        label: 'offline.mall::lang.product.description'
+        size: small
+        span: full
+        type: richeditor

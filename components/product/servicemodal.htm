@@ -1,0 +1,75 @@
+<form class="mall-modal__inner"
+      data-request="onAddToCartWithServices"
+      data-request-success="window.Mall.Modal.removeClass('mall-modal--visible'); $.publish('mall.cart.productAdded', data);"
+      data-request-validate
+      data-request-flash>
+    <h3>{{ 'offline.mall::frontend.services.modal_title' | trans }}</h3>
+
+    <div class="mall-product-services">
+        {% for service in services %}
+        <div class="mall-product-service">
+            <h4 class="mall-product-service__name">{{ service.name }}</h4>
+            {% if service.description %}
+            <div class="mall-product-service__description">
+                {{ html_clean(service.description | raw) }}
+            </div>
+            {% endif %}
+            {% if service.pivot.required %}
+                <div class="mall-product-service__required visible" data-validate-for="service.{{ service.id }}">
+                    {{ 'offline.mall::frontend.services.required' | trans }}
+                </div>
+            {% endif %}
+            <div class="mall-product-service-options">
+                {% if not service.pivot.required %}
+                <label class="mall-product-service-option" for="service-none-{{ service.id }}">
+                    <span class="mall-product-service-option__radio">
+                        <input type="radio" name="service[{{ service.id }}][]" value="" id="service-none-{{ service.id }}" checked>
+                    </span>
+                    <span class="mall-product-service-option__name">
+                        {{ 'offline.mall::frontend.services.none' | trans }}
+                    </span>
+                </label>
+                {% endif %}
+                {% for option in service.options %}
+                    <label class="mall-product-service-option" for="option-{{ option.id }}">
+                        <span class="mall-product-service-option__radio">
+                            <input type="radio" name="service[{{ service.id }}][]" value="{{ option.id }}" id="option-{{ option.id }}">
+                        </span>
+                        <span class="mall-product-service-option__name">
+                            {{ option.name }}
+                        </span>
+                        <span class="mall-product-service-option__price">
+                            {{ html_clean(option.price().string | raw) }}
+                        </span>
+                        {% if option.description %}
+                            <span class="mall-product-service-option__description">
+                                {{ html_clean(option.description | raw) }}
+                            </span>
+                        {% endif %}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mall-product-service-error" data-validate-for="quantity"></div>
+
+    <div class="mall-modal__actions">
+        <div>
+            <a href="javascript:;" onclick="window.Mall.Modal.removeClass('mall-modal--visible');" class="mall-btn">
+                {{ 'offline.mall::frontend.cancel' | trans }}
+            </a>
+        </div>
+        <div>
+        <button class="mall-btn mall-btn--primary" data-attach-loading>
+            {{ 'offline.mall::frontend.cart.add' | trans }}
+        </button>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    window.Mall.Modal.addClass('mall-modal--visible')
+</script>

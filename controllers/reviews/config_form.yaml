@@ -1,0 +1,13 @@
+name: 'offline.mall::lang.common.reviews'
+modelClass: OFFLINE\Mall\Models\Review
+form: $/offline/mall/models/review/fields.yaml
+defaultRedirect: offline/mall/reviews
+create:
+    title: 'offline.mall::lang.titles.reviews.create'
+    redirect: 'offline/mall/reviews/update/:id'
+    redirectClose: offline/mall/reviews
+update:
+    title: 'offline.mall::lang.titles.reviews.update'
+    redirect: offline/mall/reviews
+    redirectClose: offline/mall/reviews
+preview: {  }
