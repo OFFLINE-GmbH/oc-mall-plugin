@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Models\CartProduct;
@@ -265,7 +266,7 @@ class TotalsCalculator
      */
     protected function applyTotalDiscounts($total): ?float
     {
-        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])
+        $nonCodeTriggers = Discount::whereIn('trigger', array_merge(['total', 'product'], array_keys(Discount::getCustomTriggerOptions(static::class))))
             ->where(function ($q) {
                 $q->whereNull('valid_from')
                     ->orWhere('valid_from', '<=', Carbon::now());
