@@ -54,6 +54,12 @@ class Tax extends Model
         ],
     ];
 
+    public function getPercentageDecimalAttribute()
+    {
+        return (float)$this->percentage / 100;
+    }
+
+
     public function beforeSave()
     {
         // Enforce a single default tax.
