@@ -1,10 +1,10 @@
-{% if item.taxes.count > 0 %}
+{% if item.filteredTaxes.count > 0 %}
     {% if item.price_includes_tax %}
         {{ 'offline.mall::frontend.tax.inclusive' | trans }}
     {% else %}
         {{ 'offline.mall::frontend.tax.exclusive' | trans }}
     {% endif %}
-    {% for tax in item.taxes %}
+    {% for tax in item.filteredTaxes %}
         {{ tax.name }}
         ({{ tax.percentage }} %){% if not loop.last %}, {% endif %}
     {% endfor %}

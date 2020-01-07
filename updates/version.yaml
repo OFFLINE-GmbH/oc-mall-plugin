@@ -259,3 +259,6 @@
     - Prices are now correctly indexed in all registered currencies. Run php artisan mall:index to benefit of these optimizations.
 1.8.5:
     - The PDF button in the Wishlists component remains visible now after a Product has been removed or edited by the user
+1.8.6:
+    - 'Add option to configure a fallback tax'
+    - add_is_default_column_to_taxes_table.php

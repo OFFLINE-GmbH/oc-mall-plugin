@@ -11,6 +11,7 @@ use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
@@ -37,6 +38,7 @@ class Product extends Model
     use PriceAccessors;
     use ProductPriceAccessors;
     use StockAndQuantity;
+    use FilteredTaxes;
 
     const MORPH_KEY = 'mall.product';
 
@@ -210,6 +212,8 @@ class Product extends Model
      */
     public $forceReindex = false;
 
+    private $cachedFilteredTaxes;
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -326,6 +330,14 @@ class Product extends Model
     public function getProductIdAttribute()
     {
         return $this->id;
+    }
+
+    public function getFilteredTaxesAttribute()
+    {
+        if ($this->cachedFilteredTaxes) {
+            return $this->cachedFilteredTaxes;
+        }
+        return $this->cachedFilteredTaxes = $this->getfilteredTaxes($this->taxes);
     }
 
     /**

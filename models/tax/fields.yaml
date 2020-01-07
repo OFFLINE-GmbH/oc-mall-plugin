@@ -1,4 +1,9 @@
 fields:
+    is_default:
+        type: switch
+        label: offline.mall::lang.tax.is_default
+        span: full
+        comment: 'offline.mall::lang.tax.is_default_comment'
     name:
         label: 'offline.mall::lang.common.name'
         oc.commentPosition: ''
