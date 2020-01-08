@@ -95,3 +95,10 @@ fields:
         type: switch
         default: 1
         comment: offline.mall::lang.general_settings.use_state_comment
+
+    group_search_results_by_product:
+        label: offline.mall::lang.general_settings.group_search_results_by_product
+        span: left
+        type: switch
+        default: 0
+        comment: offline.mall::lang.general_settings.group_search_results_by_product_comment

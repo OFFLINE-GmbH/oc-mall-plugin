@@ -148,6 +148,8 @@
         'redirect_to_cart_comment'   => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
         'use_state'                  => 'Verwende «Kanton/Bundesstaat»',
         'use_state_comment'          => 'Kunden müssen bei der Registrierung ein Kanton/Bundesstaat auswählen',
+        'group_search_results_by_product'                  => 'Suchresultate nach Produkt gruppieren',
+        'group_search_results_by_product_comment'          => 'Zeige in den Suchresultaten nur das Hauptprodukt an, nicht alle passenden Varianten',
         'admin_email'                => 'E-Mail des Admins',
         'admin_email_comment'        => 'Benachrichtigungen werden an diese E-Mail versendet',
         'base'                       => 'Allgemein',

@@ -4,7 +4,7 @@ namespace OFFLINE\Mall\Classes\Search;
 
 use Cms\Classes\Controller;
 use DB;
-use Illuminate\Database\Eloquent\Collection;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
@@ -20,7 +20,32 @@ class ProductsSearchProvider extends ResultsProvider
         $controller  = new Controller();
         $productPage = GeneralSettings::get('product_page');
 
+        $groupByProducts = GeneralSettings::get('group_search_results_by_product', false);
+
+        // Build a results collection, depending on the $groupByProducts setting.
+        $results = new Collection();
         foreach ($matchingProducts->concat($matchingVariants) as $match) {
+            // If results should not be grouped by product, just add this match to the collection.
+            if ( ! $groupByProducts) {
+                $results->push($match);
+                continue;
+            }
+            // If matches should be grouped by product, and this match is a variant, check if
+            // the related product is already in the results collection. If not, add it.
+            if ($match instanceof Variant) {
+                if ( ! $results->has($match->product_id)) {
+                    $results->put($match->product_id, $match->product);
+                }
+                continue;
+            }
+            // The match is a Product, Add it to the result collection if it is not already there.
+            if ( ! $results->has($match->id)) {
+                $results->put($match->id, $match);
+            }
+        }
+
+        // Build the OFFLINE.SiteSearch results collection.
+        foreach ($results as $match) {
             $url = $controller->pageUrl($productPage, [
                 'slug'    => $match->slug,
                 'variant' => $match->variant_hash_id,
