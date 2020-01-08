@@ -35,7 +35,6 @@ class Plugin extends PluginBase
     public function register()
     {
         $this->registerServices();
-        $this->registerTwigEnvironment();
     }
 
     public function boot()
