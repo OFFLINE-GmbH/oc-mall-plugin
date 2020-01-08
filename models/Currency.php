@@ -143,8 +143,10 @@ class Currency extends Model
      */
     public static function unknown($currency = null): self
     {
-        Log::error('[OFFLINE.Mall] Unknown currency was requested',
-            ['currency' => $currency, 'url' => request()->url()]);
+        Log::error(
+            '[OFFLINE.Mall] Unknown currency was requested',
+            ['currency' => $currency, 'url' => request()->url()]
+        );
 
         return new self([
             'code'       => '???',
