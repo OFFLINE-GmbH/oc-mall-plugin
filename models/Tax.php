@@ -14,9 +14,8 @@ class Tax extends Model
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
-        'name'
+        'name',
     ];
-
     public $rules = [
         'name'       => 'required',
         'percentage' => 'numeric|min:0|max:100',
@@ -39,7 +38,7 @@ class Tax extends Model
             'key'      => 'tax_id',
             'otherKey' => 'shipping_method_id',
         ],
-        'payment_methods' => [
+        'payment_methods'  => [
             PaymentMethod::class,
             'table'    => 'offline_mall_payment_method_tax',
             'key'      => 'tax_id',
@@ -59,7 +58,6 @@ class Tax extends Model
         return (float)$this->percentage / 100;
     }
 
-
     public function beforeSave()
     {
         // Enforce a single default tax.
@@ -67,7 +65,6 @@ class Tax extends Model
             DB::table($this->table)->where('id', '<>', $this->id)->update(['is_default' => false]);
         }
     }
-
 
     public function afterSave()
     {
@@ -90,7 +87,6 @@ class Tax extends Model
      */
     public static function defaultTax()
     {
-
         $tax = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
             $tax = static::orderBy('is_default', 'DESC')->first();
 

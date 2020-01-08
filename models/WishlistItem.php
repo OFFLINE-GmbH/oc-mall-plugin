@@ -68,9 +68,10 @@ class WishlistItem extends Model
     public function getCartCountryId()
     {
         $user = Auth::getUser();
-        if (!$user || !$user->customer) {
+        if ( ! $user || ! $user->customer) {
             return null;
         }
+
         return optional($user->customer->shipping_address)->country_id;
     }
 }
