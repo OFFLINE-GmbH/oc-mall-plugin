@@ -1,12 +1,13 @@
-subject = "Thank you for your payment"
+subject = "{{ 'offline.mall::mail.payment.paid.duration' | trans() }}"
 description = "Sent when a payment for an order succeeded"
 ==
 
-Hi {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-We just received a payment for your order **#{{ order.order_number }}**. We will now begin to further process the
-order.
+{{ 'offline.mall::mail.payment.paid.message' | trans({number: order.order_number}) }}
+
+{{ 'offline.mall::mail.payment.paid.process_order' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}
-    Check the status of your order online
+    {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
 {% endpartial %}

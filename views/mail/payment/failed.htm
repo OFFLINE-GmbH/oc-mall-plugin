@@ -1,16 +1,15 @@
-subject = "The payment for your order has failed"
+subject = "{{ 'offline.mall::mail.payment.failed.subject' | trans() }}"
 description = "Sent when a payment for an order fails"
 ==
 
-Hi {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-We just wanted to let you know that the payment for your order **#{{ order.order_number }}**
-has failed.
+{{ 'offline.mall::mail.payment.failed.message' | trans({number: order.order_number}) }}
 
-Please login to your account and try again to pay the order.
+{{ 'offline.mall::mail.payment.failed.payment_advice' | trans() }}
 
-If you continue to experience problems with payments please contact us.
+{{ 'offline.mall::mail.payment.failed.support' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}
-    Check your order online
+    {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
 {% endpartial %}

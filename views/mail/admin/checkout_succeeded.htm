@@ -1,12 +1,11 @@
-subject = "New order #{{ order.order_number }}"
+subject = "{{ 'offline.mall::mail.admin.checkout_succeeded.subject' | trans({number: order.order_number}) }}"
 description = "Sent to the shop admin when a checkout has succeeded"
 ==
-
-The following order was placed in your store:
+{{ 'offline.mall::mail.admin.checkout_succeeded.order_placed' | trans() }}
 
 {% partial 'mall.order.addresses' order=order %}
 
-## Order details
+## {{ 'offline.mall::mail.common.order_details' | trans() }}
 
 {% partial 'mall.order.table' order=order %}
 
@@ -15,5 +14,5 @@ The following order was placed in your store:
 {% endpartial %}
 
 {% partial 'button' url=order_url type='primary' body %}
-    View order in store backend
+    {{ 'offline.mall::mail.common.view_order_in_backend' | trans() }}
 {% endpartial %}

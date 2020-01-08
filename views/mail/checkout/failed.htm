@@ -1,14 +1,12 @@
-subject = "Checkout error for order ({{ order.order_number }})"
+subject = "{{ 'offline.mall::mail.checkout.failed.subject' | trans({number: order.order_number}) }}"
 description = "Sent when a checkout has failed"
 ==
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-Hi {{ order.customer.firstname }}
+{{ 'offline.mall::mail.checkout.failed.problem_message' | trans() }}
 
-We are very sorry that there was a problem during your checkout process. We will look
-into the problem and contact you with further information.
-
-To check the status of your order you may log in to our store at any time.
+{{ 'offline.mall::mail.checkout.failed.check_order_status' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}
-    View order status online
+    {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
 {% endpartial %}

@@ -1,10 +1,9 @@
-subject = "Confirmation for order #{{ order.order_number }}"
+subject = "{{ 'offline.mall::mail.checkout.succeeded.subject' | trans({number: order.order_number}) }}"
 description = "Sent when a checkout has succeeded"
 ==
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-Hi {{ order.customer.firstname }}
-
-Thank you very much for your order. We received the following information:
+{{ 'offline.mall::mail.checkout.succeeded.thanks_for_order' | trans() }}:
 
 {% partial 'mall.order.table' order=order %}
 
@@ -12,8 +11,8 @@ Thank you very much for your order. We received the following information:
     {% partial 'mall.order.payment_state' order=order %}
 {% endpartial %}
 
-You can check the status of your order by visiting the account section of our store.
+{{ 'offline.mall::mail.checkout.succeeded.check_order_status' | trans() }}:
 
 {% partial 'button' url=account_url type='primary' body %}
-    View order status online
+    {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
 {% endpartial %}
