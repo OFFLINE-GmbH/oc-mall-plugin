@@ -1,8 +1,7 @@
-subject = "{{ 'offline.mall::mail.checkout.succeeded.subject' | trans() }} #{{ order.order_number }}"
+subject = "{{ 'offline.mall::mail.checkout.succeeded.subject' | trans({number: order.order_number}) }}"
 description = "Sent when a checkout has succeeded"
 ==
-
-{{ 'offline.mall::mail.common.hello' | trans() }} {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
 {{ 'offline.mall::mail.checkout.succeeded.thanks_for_order' | trans() }}:
 

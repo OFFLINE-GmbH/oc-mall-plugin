@@ -2,9 +2,11 @@ subject = "{{ 'offline.mall::mail.payment.paid.duration' | trans() }}"
 description = "Sent when a payment for an order succeeded"
 ==
 
-{{ 'offline.mall::mail.common.hello' | trans() }} {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-{{ 'offline.mall::mail.payment.paid.received_message' | trans() }} **#{{ order.order_number }}**. {{ 'offline.mall::mail.payment.paid.process_order' | trans() }}
+{{ 'offline.mall::mail.payment.paid.message' | trans({number: order.order_number}) }}
+
+{{ 'offline.mall::mail.payment.paid.process_order' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}
     {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}

@@ -1,7 +1,6 @@
-subject = "{{ 'offline.mall::mail.admin.checkout_succeeded.subject' | trans() }} #{{ order.order_number }}"
+subject = "{{ 'offline.mall::mail.admin.checkout_succeeded.subject' | trans({number: order.order_number}) }}"
 description = "Sent to the shop admin when a checkout has succeeded"
 ==
-
 {{ 'offline.mall::mail.admin.checkout_succeeded.order_placed' | trans() }}
 
 {% partial 'mall.order.addresses' order=order %}

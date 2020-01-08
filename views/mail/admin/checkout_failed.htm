@@ -1,13 +1,18 @@
-subject = "{{ 'offline.mall::mail.admin.checkout_failed.subject' | trans() }} ({{ order.order_number }})"
+subject = "{{ 'offline.mall::mail.admin.checkout_failed.subject' | trans({number: order.order_number}) }}"
 description = "Sent to the shop admin when a checkout has failed"
 ==
 
 {{ 'offline.mall::mail.admin.checkout_failed.not_processed' | trans() }}
 
-## {{ 'offline.mall::mail.admin.checkout_failed.error_details' | trans() }}
+{% if order.payment_log %}
+    ## {{ 'offline.mall::mail.admin.checkout_failed.error_details' | trans() }}
 
-Payment ID: {{ order.payment_log.id }}
-Message: {{ order.payment_log.message }}
+    {{ 'offline.mall::mail.admin.checkout_failed.payment_id' | trans() }}:<br />
+    {{ order.payment_log.id }}
+
+    {{ 'offline.mall::mail.admin.checkout_failed.error' | trans() }}:<br />
+    {{ order.payment_log.message }}
+{% endif %}
 
 {% partial 'mall.order.addresses' order=order %}
 

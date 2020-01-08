@@ -2,9 +2,9 @@ subject = "{{ 'offline.mall::mail.order.state_changed.subject' | trans() }}"
 description = "Sent when the status of an order changes"
 ==
 
-{{ 'offline.mall::mail.common.hello' | trans() }} {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-{{ 'offline.mall::mail.order.state_changed.changed_message.0' | trans() }} **#{{ order.order_number }}** {{ 'offline.mall::mail.order.state_changed.changed_message.1' | trans() }} **{{ order.order_state.name }}**.
+{{ 'offline.mall::mail.order.state_changed.message' | trans({number: order.order_number, state: order.order_state.name}) }}
 
 {% partial 'mall.order.tracking' order=order %}
 

@@ -2,9 +2,10 @@ subject = "{{ 'offline.mall::mail.payment.refunded.subject' | trans() }}"
 description = "Sent when a payment for an order was refunded"
 ==
 
-{{ 'offline.mall::mail.common.hello' | trans() }} {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-{{ 'offline.mall::mail.payment.refunded.refunded_message' | trans() }} **#{{ order.order_number }}**.
+{{ 'offline.mall::mail.payment.refunded.message' | trans({number: order.order_number}) }}
+
 {{ 'offline.mall::mail.payment.refunded.duration' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}

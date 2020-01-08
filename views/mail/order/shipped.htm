@@ -2,9 +2,9 @@ subject = "{{ 'offline.mall::mail.order.shipped.subject' | trans() }}"
 description = "Sent when tracking information was added"
 ==
 
-{{ 'offline.mall::mail.common.hello' | trans() }} {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-{{ 'offline.mall::mail.order.shipped.shipped_message.0' | trans() }} **#{{ order.order_number }}** {{ 'offline.mall::mail.order.shipped.shipped_message.1' | trans() }}.
+{{ 'offline.mall::mail.order.shipped.message' | trans({number: order.order_number}) }}
 
 {% partial 'mall.order.tracking' order=order %}
 
