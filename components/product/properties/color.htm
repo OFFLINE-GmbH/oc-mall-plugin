@@ -9,11 +9,11 @@
 <div class="mall-color-swatches">
     {% for value in item.values %}
         <a class="mall-option-selector mall-color-swatches__swatch
-                {{ propertyValue.value == value.getAttribute('value') ? 'is-active' : '' }}"
+                {{ propertyValue.value == value.getValueAttribute() ? 'is-active' : '' }}"
            data-target="#{{ item.property.hashId }}"
            data-value="{{ value.hashId }}"
-           style="background-color: {{ value.getAttribute('value').hex }};"
-           title="{{ value.getAttribute('value').name }}">
+           style="background-color: {{ value.getValueAttribute().hex }};"
+           title="{{ value.getValueAttribute().name }}">
         </a>
     {% endfor %}
 </div>

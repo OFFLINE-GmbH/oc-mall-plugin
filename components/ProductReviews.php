@@ -98,7 +98,7 @@ class ProductReviews extends ComponentBase
         $limitToVariant = (bool)$this->property('currentVariantReviewsOnly') && (bool)$this->property('variant');
 
         $this->allReviews = Review
-            ::with(['category_reviews.review_category', 'variant'])
+            ::with(['category_reviews.review_category.translations', 'variant'])
             ->where('product_id', $this->product->id)
             ->when($limitToVariant, function ($q) {
                 $q->where('variant_id', $this->property('variant'));
