@@ -450,9 +450,11 @@
         'is_not_required'  => 'Kein Pflichtfeld',
     ],
     'tax'                      => [
-        'percentage'        => 'Prozent',
-        'countries'         => 'Steuer gilt nur für Versand in diese Länder',
-        'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'percentage'         => 'Prozent',
+        'countries'          => 'Steuer gilt nur für Versand in diese Länder',
+        'countries_comment'  => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'is_default'         => 'Ist Standard',
+        'is_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
     ],
     'discounts'                => [
         'name'                                 => 'Name',

@@ -454,6 +454,8 @@
         'percentage'        => 'Percent',
         'countries'         => 'Only apply tax when shipping to these countries',
         'countries_comment' => 'If no country is selected the tax is applied worldwide.',
+        'is_default'         => 'Is default',
+        'is_default_comment' => 'This tax is used if the shipping destination country is not known yet',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
