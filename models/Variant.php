@@ -16,6 +16,7 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
+use RainLab\Translate\Models\Locale;
 use System\Models\File;
 
 class Variant extends Model
@@ -74,8 +75,8 @@ class Variant extends Model
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
         'reviews'                 => [Review::class],
         'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
-        'cart_products'  => CartProduct::class,
-        'order_products' => OrderProduct::class,
+        'cart_products'           => CartProduct::class,
+        'order_products'          => OrderProduct::class,
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',
@@ -100,42 +101,65 @@ class Variant extends Model
         'gtin',
     ];
 
-    public static function boot()
+    public function afterSave()
     {
-        parent::boot();
-        static::saved(function (Variant $variant) {
-            if ( ! $variant->isBackendRelationUpdate()) {
-                return;
+        if ( ! $this->isBackendRelationUpdate()) {
+            return;
+        }
+
+        if ($this->image_set_id === null) {
+            $this->createImageSetFromTempImages();
+        }
+
+        $this->handlePropertyValueUpdates();
+    }
+
+    /**
+     * Handle the form data form the property value form.
+     */
+    protected function handlePropertyValueUpdates()
+    {
+        $locales = Locale::isEnabled()->get();
+
+        $formData = array_wrap(post('VariantPropertyValues', []));
+        if (count($formData) < 1) {
+            PropertyValue::where('variant_id', $this->id)->delete();
+        }
+
+        $properties     = Property::whereIn('id', array_keys($formData))->get();
+        $propertyValues = PropertyValue::where('variant_id', $this->id)->get();
+
+        foreach ($formData as $id => $value) {
+            $property = $properties->find($id);
+            $pv       = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'variant_id'  => $this->id,
+                    'product_id'  => $this->product_id,
+                    'property_id' => $id,
+                ]);
+
+            $pv->value = $value;
+            foreach ($locales as $locale) {
+                $transValue = post(
+                    sprintf('RLTranslate.%s.VariantPropertyValues.%d', $locale->code, $id),
+                    post(sprintf('VariantPropertyValues.%d', $id)) // fallback
+                );
+                $transValue = $this->handleTranslatedPropertyValue(
+                    $property,
+                    $pv,
+                    $value,
+                    $transValue,
+                    $locale->code
+                );
+                $pv->setAttributeTranslated('value', $transValue, $locale->code);
             }
 
-            if ($variant->image_set_id === null) {
-                $variant->createImageSetFromTempImages();
+            if (($pv->value === null || $pv->value === '') && $pv->exists) {
+                $pv->delete();
+            } else {
+                $pv->save();
             }
-
-            $values = array_wrap(post('VariantPropertyValues', []));
-            if (count($values) < 1) {
-                PropertyValue::where('variant_id', $variant->id)->delete();
-            }
-
-            $propertyValues = PropertyValue::where('variant_id', $variant->id)->get();
-
-            foreach ($values as $id => $value) {
-                $pv = $propertyValues->where('property_id', $id)->first()
-                    ?? new PropertyValue([
-                        'variant_id'  => $variant->id,
-                        'product_id'  => $variant->product_id,
-                        'property_id' => $id,
-                    ]);
-
-                $pv->value = $value;
-
-                if (($pv->value === null || $pv->value === '') && $pv->exists) {
-                    $pv->delete();
-                } else {
-                    $pv->save();
-                }
-            }
-        });
+        }
     }
 
     public function afterDelete()
