@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Stats;
 
 use DB;
 use Illuminate\Support\Carbon;
+use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PaymentState;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderState;
@@ -13,11 +14,13 @@ class OrdersStats
 {
     protected $ordersTable;
     protected $statesTable;
+    protected $cancelledStateId;
 
     public function __construct()
     {
-        $this->ordersTable = (new Order())->table;
-        $this->statesTable = (new OrderState())->table;
+        $this->ordersTable      = (new Order())->table;
+        $this->statesTable      = (new OrderState())->table;
+        $this->cancelledStateId = optional(OrderState::where('flag', OrderState::FLAG_CANCELLED)->first())->id;
     }
 
     public function count(): int
@@ -28,6 +31,7 @@ class OrdersStats
     public function perWeekCount(): float
     {
         $firstOrder = DB::table($this->ordersTable)
+                        ->where('order_state_id', '<>', $this->cancelledStateId)
                         ->whereNull('deleted_at')
                         ->orderBy('created_at', 'ASC')
                         ->first(['created_at']);
@@ -46,6 +50,8 @@ class OrdersStats
     public function grandTotal(): int
     {
         return DB::table($this->ordersTable)
+                 ->where('payment_state', PaidState::class)
+                 ->where('order_state_id', '<>', $this->cancelledStateId)
                  ->whereNull('deleted_at')
                  ->sum('total_pre_payment');
     }
