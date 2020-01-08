@@ -22,6 +22,11 @@ not reflect the effective tax total if there are taxes with country restrictions
 Defaults to `true`. Include the shipping method/cost in the cart. Set this to false
 if you don't want to include any shipping information.
 
+### `showProceedToCheckoutButton` (bool)
+
+Defaults to `false`. Include a `proceed to checkout` button below the cart
+table.
+
 
 ## Example implementations
 
@@ -62,11 +67,12 @@ $(function () {
 });
 ```
 
-### Display the cart table without tax summary
+### Display the cart table without tax summary with a proceed to checkout button
 
 ```ini
 [cart]
 showTaxes = 0
+showProceedToCheckoutButton = 1
 ```
 
 ### Display the cart table with tax summary but don't let the user apply a discount 

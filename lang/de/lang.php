@@ -815,14 +815,17 @@
                 'description' => 'Zeigt den Warenkorb an',
             ],
             'properties' => [
-                'showDiscountApplier' => [
+                'showDiscountApplier'         => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
                 ],
-                'showShipping'        => [
+                'showShipping'                => [
                     'title' => 'Versandkosten anzeigen',
                 ],
-                'showTaxes'           => [
+                'showTaxes'                   => [
                     'title' => 'Steuern ausweisen',
+                ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Zur Kasse-Button anzeigen',
                 ],
             ],
         ],

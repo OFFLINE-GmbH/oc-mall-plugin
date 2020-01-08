@@ -827,6 +827,9 @@
                 'showTaxes'           => [
                     'title' => 'Show taxes',
                 ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Show proceed to checkout button',
+                ],
             ],
         ],
         'checkout'                   => [
