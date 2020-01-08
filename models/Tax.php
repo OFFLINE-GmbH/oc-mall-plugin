@@ -71,15 +71,6 @@ class Tax extends Model
         Cache::forget(self::DEFAULT_TAX_CACHE_KEY);
     }
 
-    protected static function guardMissingDefaultTax($tax)
-    {
-        if ( ! $tax) {
-            throw new RuntimeException(
-                '[mall] Please configure at least one tax via the backend settings.'
-            );
-        }
-    }
-
     /**
      * Returns the default tax.
      *
@@ -96,5 +87,14 @@ class Tax extends Model
         static::guardMissingDefaultTax($tax);
 
         return (new Tax)->newFromBuilder($tax);
+    }
+
+    protected static function guardMissingDefaultTax($tax)
+    {
+        if ( ! $tax) {
+            throw new RuntimeException(
+                '[mall] Please configure at least one tax via the backend settings.'
+            );
+        }
     }
 }

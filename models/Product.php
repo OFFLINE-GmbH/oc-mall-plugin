@@ -8,6 +8,7 @@ use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
@@ -212,6 +213,10 @@ class Product extends Model
      */
     public $forceReindex = false;
 
+    /**
+     * Cache all filtered countries for this model and this request.
+     * @var Collection<Tax>
+     */
     private $cachedFilteredTaxes;
 
     public function __construct($attributes = [])
@@ -332,6 +337,10 @@ class Product extends Model
         return $this->id;
     }
 
+    /**
+     * Get this product's filtered taxes based on the shipping destination country.
+     * @return Collection
+     */
     public function getFilteredTaxesAttribute()
     {
         if ($this->cachedFilteredTaxes) {
