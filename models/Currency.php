@@ -171,7 +171,7 @@ class Currency extends Model
             $currency = Currency::whereId($input)->first();
         }
 
-        if ( ! $currency) {
+        if ( ! isset($currency) || ! $currency) {
             return Currency::unknown($input);
         }
 
