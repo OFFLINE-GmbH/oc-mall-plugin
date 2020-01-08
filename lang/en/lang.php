@@ -89,6 +89,7 @@
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
         'is_default'        => 'Is default',
+        'unknown'           => 'Unknown Currency',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Payment gateways',
@@ -451,9 +452,9 @@
         'is_not_required'  => 'Not required',
     ],
     'tax'                      => [
-        'percentage'        => 'Percent',
-        'countries'         => 'Only apply tax when shipping to these countries',
-        'countries_comment' => 'If no country is selected the tax is applied worldwide.',
+        'percentage'         => 'Percent',
+        'countries'          => 'Only apply tax when shipping to these countries',
+        'countries_comment'  => 'If no country is selected the tax is applied worldwide.',
         'is_default'         => 'Is default',
         'is_default_comment' => 'This tax is used if the shipping destination country is not known yet',
     ],
@@ -818,13 +819,13 @@
                 'description' => 'Displays the shopping cart',
             ],
             'properties' => [
-                'showDiscountApplier' => [
+                'showDiscountApplier'         => [
                     'title' => 'Show discount applier',
                 ],
-                'showShipping' => [
+                'showShipping'                => [
                     'title' => 'Show shipping cost',
                 ],
-                'showTaxes'           => [
+                'showTaxes'                   => [
                     'title' => 'Show taxes',
                 ],
                 'showProceedToCheckoutButton' => [

@@ -89,6 +89,7 @@
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Kurs zu Basiswährung',
         'is_default'        => 'Ist Standard',
+        'unknown'           => 'Unbekannte Währung',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Zahlungsanbieter',
