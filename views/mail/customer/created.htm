@@ -2,7 +2,7 @@ subject = "{{ 'offline.mall::mail.customer.created.subject' | trans({firstname: 
 description = "Sent after a customer signs up"
 ==
 
-{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: user.customer.firstname, lastname: user.customer.lastname}) }}
 
 {% if confirm %}
     {{ 'offline.mall::mail.customer.created.confirm_mail' | trans() }}
