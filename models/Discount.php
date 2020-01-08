@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
@@ -15,8 +16,8 @@ class Discount extends Model
 
     public $rules = [
         'name'                                 => 'required',
-        'valid_from'                           => 'nullable|date|before_or_equal:expires',
-        'expires'                              => 'nullable|date|after_or_equal:valid_from',
+        'valid_from'                           => 'nullable|date',
+        'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
         'trigger'                              => 'in:total,code,product',
@@ -83,6 +84,20 @@ class Discount extends Model
             if ($discount->trigger !== 'code') {
                 $discount->code = null;
             }
+        });
+    }
+
+    /**
+     * Filter out discounts that are valid and not expired.
+     */
+    public function scopeIsActive($q)
+    {
+        $q->where(function ($q) {
+            $q->where(function ($q) {
+                $q->whereNull('valid_from')->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
+                $q->whereNull('expires')->orWhere('expires', '>', Carbon::now());
+            });
         });
     }
 
