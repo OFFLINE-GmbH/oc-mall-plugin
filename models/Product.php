@@ -9,9 +9,11 @@ use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
@@ -39,6 +41,7 @@ class Product extends Model
     use PriceAccessors;
     use ProductPriceAccessors;
     use StockAndQuantity;
+    use FilteredTaxes;
 
     const MORPH_KEY = 'mall.product';
 
@@ -211,6 +214,12 @@ class Product extends Model
      * @var bool
      */
     public $forceReindex = false;
+
+    /**
+     * Cache all filtered countries for this model and this request.
+     * @var Collection<Tax>
+     */
+    private $cachedFilteredTaxes;
 
     public function __construct($attributes = [])
     {
@@ -394,6 +403,18 @@ class Product extends Model
     public function getProductIdAttribute()
     {
         return $this->id;
+    }
+
+    /**
+     * Get this product's filtered taxes based on the shipping destination country.
+     * @return Collection
+     */
+    public function getFilteredTaxesAttribute()
+    {
+        if ($this->cachedFilteredTaxes) {
+            return $this->cachedFilteredTaxes;
+        }
+        return $this->cachedFilteredTaxes = $this->getfilteredTaxes($this->taxes);
     }
 
     /**
