@@ -112,6 +112,11 @@ class TotalsCalculator
 
         $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
 
+        // The grand total should never be negative.
+        if ($this->totalPostTaxes < 0) {
+            $this->totalPostTaxes = 0;
+        }
+
         $this->taxes = $this->getTaxTotals();
     }
 
