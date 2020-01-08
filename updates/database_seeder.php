@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->app = app();
 
-        $this->registerTwigEnvironment();
         $this->registerServices();
 
         Model::unguard();
