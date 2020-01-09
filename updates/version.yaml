@@ -264,3 +264,5 @@
     - add_is_default_column_to_taxes_table.php
 1.9.1:
     - Bugfix release
+1.9.2:
+    - Fixed handling of country specific Taxes for Wishlists
