@@ -10,6 +10,7 @@ use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
+use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User;
 use Session;
 
