@@ -163,18 +163,20 @@ class Currency extends Model
      */
     public static function resolve($input = null): self
     {
+        if ($input instanceof self) {
+            return $input;
+        }
         if ($input === null) {
-            $currency = Currency::activeCurrency();
+            $currency = self::activeCurrency();
         }
         if (is_string($input)) {
-            $currency = Currency::whereCode($input)->first();
+            $currency = self::whereCode($input)->first();
         }
         if (is_int($input)) {
-            $currency = Currency::whereId($input)->first();
+            $currency = self::whereId($input)->first();
         }
-
         if ( ! isset($currency) || ! $currency) {
-            return Currency::unknown($input);
+            return self::unknown($input);
         }
 
         return $currency;
