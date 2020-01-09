@@ -409,9 +409,9 @@ class ProductsFilter extends MallComponent
     protected function getPropertyGroups()
     {
         return $this->category
-            ->load('property_groups.translations')
+            ->load('property_groups')
             ->inherited_property_groups
-            ->load('filterable_properties.translations')
+            ->load('filterable_properties')
             ->reject(function (PropertyGroup $group) {
                 return $group->filterable_properties->count() < 1;
             })->sortBy('pivot.sort_order');

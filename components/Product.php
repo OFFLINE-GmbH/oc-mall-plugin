@@ -439,7 +439,7 @@ class Product extends MallComponent
         }
 
         $variantId    = $this->property('variant');
-        $variantModel = Variant::published()->with(['property_values.translations', 'image_sets']);
+        $variantModel = Variant::published()->with(['property_values', 'image_sets']);
 
         // If :slug is set as Variant ID we can fall back to the URL parameter.
         // Otherwise use the Variant the admin as defined as Component property.
@@ -464,7 +464,7 @@ class Product extends MallComponent
         if ($with === null) {
             $with = [
                 'variants',
-                'variants.property_values.translations',
+                'variants.property_values',
                 'variants.image_sets',
                 'image_sets',
                 'downloads',
@@ -638,7 +638,6 @@ class Product extends MallComponent
 
         return PropertyValue
             ::where('product_id', $this->product->id)
-            ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
             ->when($groupedValue > 0, function ($q) use ($groupedValue) {
