@@ -34,7 +34,7 @@ class UniquePropertyValuesInCategoriesQuery
         return DB
             ::table('offline_mall_products')
             ->selectRaw('
-                offline_mall_property_values.id,
+                MIN(offline_mall_property_values.id) AS id,
                 offline_mall_property_values.value,
                 offline_mall_property_values.index_value,
                 offline_mall_property_values.property_id'
@@ -50,7 +50,11 @@ class UniquePropertyValuesInCategoriesQuery
             ->whereNull('offline_mall_products.deleted_at')
             ->where('offline_mall_property_values.value', '<>', '')
             ->whereNotNull('offline_mall_property_values.value')
-            ->groupBy('offline_mall_property_values.value', 'offline_mall_property_values.index_value', 'offline_mall_property_values.property_id')
+            ->groupBy(
+                'offline_mall_property_values.value',
+                'offline_mall_property_values.index_value',
+                'offline_mall_property_values.property_id'
+            )
             ->leftJoin(
                 'offline_mall_product_variants',
                 'offline_mall_products.id',
