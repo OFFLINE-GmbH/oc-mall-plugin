@@ -69,6 +69,7 @@ class TotalsCalculatorInput
         $input            = new self();
         $input->products  = $wishlist->items;
         $input->discounts = new Collection();
+        $input->shipping_country_id = $wishlist->getCartCountryId();
 
         return $input;
     }

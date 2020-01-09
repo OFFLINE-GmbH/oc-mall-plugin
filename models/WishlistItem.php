@@ -46,20 +46,6 @@ class WishlistItem extends Model
         return $this->variant ?? $this->product;
     }
 
-    /**
-     * Filter out taxes, that have no country restrictions.
-     *
-     * @return Collection
-     */
-    public function getFilteredTaxesAttribute()
-    {
-        $taxes = optional($this->data)->taxes ?? new Collection();
-
-        return $taxes->filter(function (Tax $tax) {
-            return $tax->countries->count() === 0;
-        });
-    }
-
     public function price()
     {
         return $this->item->price();
@@ -67,11 +53,6 @@ class WishlistItem extends Model
 
     public function getCartCountryId()
     {
-        $user = Auth::getUser();
-        if ( ! $user || ! $user->customer) {
-            return null;
-        }
-
-        return optional($user->customer->shipping_address)->country_id;
+        return $this->wishlist->getCartCountryId();
     }
 }
