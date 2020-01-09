@@ -11,7 +11,7 @@ description = "Sent when a checkout has succeeded"
     {% partial 'mall.order.payment_state' order=order %}
 {% endpartial %}
 
-{{ 'offline.mall::mail.checkout.succeeded.check_order_status' | trans() }}:
+{{ 'offline.mall::mail.checkout.succeeded.check_order_status' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}
     {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
