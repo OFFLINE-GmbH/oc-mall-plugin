@@ -262,3 +262,5 @@
 1.9.0:
     - "Better handling of country specific taxes, multi-language e-mails, translatable property values and more! (Full Changelog: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.9.0.html)"
     - add_is_default_column_to_taxes_table.php
+1.9.1:
+    - Bigfix release
