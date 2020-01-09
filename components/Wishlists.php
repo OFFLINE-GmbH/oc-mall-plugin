@@ -8,6 +8,7 @@ use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Wishlist;
 use OFFLINE\Mall\Models\WishlistItem;
 use RainLab\User\Facades\Auth;
@@ -22,27 +23,36 @@ class Wishlists extends MallComponent
      * @var Collection<Wishlist>
      */
     public $items;
-
     /**
      * The currently displayed wishlist.
      *
      * @var Wishlist
      */
     public $currentItem;
-
     /**
      * True if at least one wishlist has at least one item.
      *
      * @var bool
      */
     public $hasItems = false;
-
     /**
      * PDF download is available.
      *
      * @var bool
      */
     public $allowPDFDownload = false;
+    /**
+     * Show shipping method selector.
+     *
+     * @var bool
+     */
+    public $showShipping = false;
+    /**
+     * All available shipping methods.
+     *
+     * @var Collection<ShippingMethod>|ShippingMethod[]
+     */
+    public $shippingMethods;
 
     public function componentDetails()
     {
@@ -54,7 +64,13 @@ class Wishlists extends MallComponent
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'showShipping' => [
+                'title'       => 'offline.mall::lang.components.wishlists.properties.showShipping.title',
+                'description' => 'offline.mall::lang.components.wishlists.properties.showShipping.description',
+                'type'        => 'checkbox',
+            ],
+        ];
     }
 
     public function init()
@@ -68,8 +84,12 @@ class Wishlists extends MallComponent
             return $this->handlePDFDownload($download);
         }
 
+        /** @var Collection<Wishlist>|Wishlist[] items */
+        /** @var Wishlist currentItem */
         $this->items       = $this->getWishlists();
         $this->currentItem = $this->items->first();
+
+        $this->handleShipping();
 
         $this->hasItems = $this->items->contains(function ($item) {
             return $item->items->count() > 0;
@@ -127,10 +147,26 @@ class Wishlists extends MallComponent
         return $this->refreshListAndContent();
     }
 
+    public function onChangeShippingMethod()
+    {
+        $this->setCurrentItem();
+
+        $method = post('shipping_method_id');
+        if ( ! $method || ! $this->shippingMethods->contains($method)) {
+            return $this->controller->run('404');
+        }
+
+        $this->currentItem->setShippingMethod(ShippingMethod::find($method));
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
     public function onClear()
     {
         WishlistItem::where('wishlist_id', $this->decode(post('id')))
-            ->delete();
+                    ->delete();
 
         $this->setCurrentItem();
 
@@ -201,6 +237,25 @@ class Wishlists extends MallComponent
     }
 
     /**
+     * Handle the display of shipping methods.
+     */
+    protected function handleShipping()
+    {
+        $this->setVar('showShipping', (bool)$this->property('showShipping'));
+
+        if ( ! $this->showShipping) {
+            return;
+        }
+
+        $this->shippingMethods = ShippingMethod::getAvailableByWishlist($this->currentItem);
+        if ($this->currentItem->shipping_method_id === null) {
+            $this->currentItem->setShippingMethod(ShippingMethod::getDefault());
+        }
+
+        return $this->currentItem->validateShippingMethod();
+    }
+
+    /**
      * Set the currently active item.
      *
      * @throws ValidationException
@@ -213,6 +268,8 @@ class Wishlists extends MallComponent
         if ( ! $this->currentItem) {
             throw new ValidationException(['id' => 'Invalid wishlist ID specified']);
         }
+
+        $this->handleShipping();
     }
 
     protected function refreshListAndContent(): array

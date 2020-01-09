@@ -166,6 +166,30 @@ class ShippingMethod extends Model
             });
     }
 
+    public static function getAvailableByWishlist(Wishlist $wishlist)
+    {
+        $total = $wishlist->totals()->productPostTaxes();
+
+        $countryId = $wishlist->getCartCountryId();
+
+        return self
+            ::orderBy('sort_order')
+            ->when($countryId, function ($q) use ($countryId) {
+                $q->whereDoesntHave('countries')
+                  ->orWhereHas('countries', function ($q) use ($countryId) {
+                      $q->where('country_id', $countryId);
+                  });
+            })
+            ->get()
+            ->filter(function (ShippingMethod $method) use ($total) {
+                $below = $method->availableBelowTotal()->integer;
+                $above = $method->availableAboveTotal()->integer;
+
+                return ($below === null || $below > $total)
+                    && ($above === null || $above <= $total);
+            });
+    }
+
     public function availableBelowTotal($currency = null)
     {
         return $this->price($currency, 'available_below_totals');

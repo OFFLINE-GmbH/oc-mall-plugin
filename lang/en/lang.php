@@ -1044,6 +1044,12 @@
                 'name'        => 'Wishlists',
                 'description' => 'Displays the wishlist manager',
             ],
+            'properties' => [
+                'showShipping' => [
+                    'name'        => 'Show shipping',
+                    'description' => 'Show shipping cost and selector',
+                ],
+            ],
         ],
     ],
     'shipping_method_rates'    => [

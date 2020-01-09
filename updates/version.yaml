@@ -266,3 +266,6 @@
     - Bugfix release
 1.9.2:
     - Fixed handling of country specific Taxes for Wishlists
+1.9.3:
+    - Added shipping method support for Wishlists
+    - add_shipping_method_id_to_wishlists_table.php
