@@ -4,13 +4,16 @@ use Cache;
 use Cms\Classes\Page;
 use DB;
 use Model;
+use October\Rain\Database\Models\DeferredBinding;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
@@ -18,6 +21,7 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
+use RainLab\Translate\Models\Locale;
 use System\Models\File;
 
 /**
@@ -37,6 +41,7 @@ class Product extends Model
     use PriceAccessors;
     use ProductPriceAccessors;
     use StockAndQuantity;
+    use FilteredTaxes;
 
     const MORPH_KEY = 'mall.product';
 
@@ -210,6 +215,12 @@ class Product extends Model
      */
     public $forceReindex = false;
 
+    /**
+     * Cache all filtered countries for this model and this request.
+     * @var Collection<Tax>
+     */
+    private $cachedFilteredTaxes;
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -281,6 +292,72 @@ class Product extends Model
     }
 
     /**
+     * Handle the form data form the property value form.
+     */
+    public function handlePropertyValueUpdates()
+    {
+        $locales = Locale::isEnabled()->get();
+
+        $formData = array_wrap(post('PropertyValues', []));
+        if (count($formData) < 1) {
+            PropertyValue::where('product_id', $this->id)->whereNull('variant_id')->delete();
+        }
+
+        $properties     = Property::whereIn('id', array_keys($formData))->get();
+        $propertyValues = PropertyValue::where('product_id', $this->id)->whereNull('variant_id')->get();
+
+        foreach ($formData as $id => $value) {
+            $property = $properties->find($id);
+
+            $pv = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'product_id'  => $this->id,
+                    'property_id' => $id,
+                ]);
+
+            $pv->value = $value;
+            foreach ($locales as $locale) {
+                $transValue = post(
+                    sprintf('RLTranslate.%s.PropertyValues.%d', $locale->code, $id),
+                    post(sprintf('PropertyValues.%d', $id)) // fallback
+                );
+                $transValue = $this->handleTranslatedPropertyValue(
+                    $property,
+                    $pv,
+                    $value,
+                    $transValue,
+                    $locale->code
+                );
+                $pv->setAttributeTranslated('value', $transValue, $locale->code);
+            }
+
+            // If the value became empty delete it.
+            if (($value === null || $value === '') && $pv->exists) {
+                $pv->delete();
+            } else {
+                $pv->save();
+            }
+
+            // Transfer any deferred media
+            if ($property->type === 'image') {
+                $media = DeferredBinding::where('master_type', PropertyValue::class)
+                                        ->where('master_field', 'image')
+                                        ->where('session_key', post('_session_key'))
+                                        ->get();
+
+                foreach ($media as $m) {
+                    $slave                  = $m->slave_type::find($m->slave_id);
+                    $slave->field           = 'image';
+                    $slave->attachment_type = PropertyValue::class;
+                    $slave->attachment_id   = $pv->id;
+                    $slave->save();
+                    $m->delete();
+                }
+            }
+        }
+    }
+
+    /**
      * Alias for property_values relationship.
      *
      * This can be useful if a shop uses Products and Variants together.
@@ -326,6 +403,18 @@ class Product extends Model
     public function getProductIdAttribute()
     {
         return $this->id;
+    }
+
+    /**
+     * Get this product's filtered taxes based on the shipping destination country.
+     * @return Collection
+     */
+    public function getFilteredTaxesAttribute()
+    {
+        if ($this->cachedFilteredTaxes) {
+            return $this->cachedFilteredTaxes;
+        }
+        return $this->cachedFilteredTaxes = $this->getfilteredTaxes($this->taxes);
     }
 
     /**

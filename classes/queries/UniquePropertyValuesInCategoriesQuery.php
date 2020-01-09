@@ -5,8 +5,6 @@ namespace OFFLINE\Mall\Classes\Queries;
 use DB;
 use Illuminate\Support\Collection;
 use October\Rain\Database\QueryBuilder;
-use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\Variant;
 
 /**
  * This query is used to get a list of all unique property values in one or
@@ -35,11 +33,12 @@ class UniquePropertyValuesInCategoriesQuery
     {
         return DB
             ::table('offline_mall_products')
-            ->selectRaw(\DB::raw('distinct
+            ->selectRaw('
+                offline_mall_property_values.id,
                 offline_mall_property_values.value,
                 offline_mall_property_values.index_value,
                 offline_mall_property_values.property_id'
-            ))
+            )
             ->where(function ($q) {
                 $q->where(function ($q) {
                     $q->where('offline_mall_products.published', true)
@@ -51,6 +50,7 @@ class UniquePropertyValuesInCategoriesQuery
             ->whereNull('offline_mall_products.deleted_at')
             ->where('offline_mall_property_values.value', '<>', '')
             ->whereNotNull('offline_mall_property_values.value')
+            ->groupBy('offline_mall_property_values.value', 'offline_mall_property_values.index_value', 'offline_mall_property_values.property_id')
             ->leftJoin(
                 'offline_mall_product_variants',
                 'offline_mall_products.id',

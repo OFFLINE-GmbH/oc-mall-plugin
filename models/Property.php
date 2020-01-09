@@ -95,7 +95,7 @@ class Property extends Model
     public static function getValuesForCategory($categories)
     {
         $raw    = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
-        $values = PropertyValue::hydrate($raw->toArray())->load('property');
+        $values = PropertyValue::hydrate($raw->toArray())->load(['property.translations', 'translations']);
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
             $firstProp = $values->first()->property;

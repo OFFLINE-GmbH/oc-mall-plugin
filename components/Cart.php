@@ -53,11 +53,23 @@ class Cart extends MallComponent
      */
     public $showTaxes = true;
     /**
+     * Display a proceed to checkout button.
+     *
+     * @var bool
+     */
+    public $showProceedToCheckoutButton = false;
+    /**
      * The name of the product detail page.
      *
      * @var  string
      */
     public $productPage;
+    /**
+     * The name of the checkout page.
+     *
+     * @var  string
+     */
+    public $checkoutPage;
 
     /**
      * Component details.
@@ -94,6 +106,11 @@ class Cart extends MallComponent
                 'type'    => 'checkbox',
                 'title'   => 'offline.mall::lang.components.cart.properties.showShipping.title',
                 'default' => 1,
+            ],
+            'showProceedToCheckoutButton' => [
+                'type'    => 'checkbox',
+                'title'   => 'offline.mall::lang.components.cart.properties.showProceedToCheckoutButton.title',
+                'default' => 0,
             ],
         ];
     }
@@ -136,9 +153,11 @@ class Cart extends MallComponent
 
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
+        $this->setVar('checkoutPage', GeneralSettings::get('checkout_page'));
         $this->setVar('showDiscountApplier', $this->property('showDiscountApplier'));
         $this->setVar('showShipping', $this->property('showShipping'));
         $this->setVar('showTaxes', $this->property('showTaxes'));
+        $this->setVar('showProceedToCheckoutButton', $this->property('showProceedToCheckoutButton'));
     }
 
     /**

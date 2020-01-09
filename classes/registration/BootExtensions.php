@@ -57,8 +57,17 @@ trait BootExtensions
         RainLabUsersController::extend(function (RainLabUsersController $users) {
             // Extend the Users controller with the Relation behaviour that is needed
             // to display the addresses relation widget below.
-            $users->implement[]    = \Backend\Behaviors\RelationController::class;
-            $users->relationConfig = '$/offline/mall/controllers/users/config_relation.yaml';
+            if (!$users->isClassExtendedWith('Backend.Behaviors.RelationController')) {
+                $users->implement[]    = \Backend\Behaviors\RelationController::class;
+            }
+            if (!isset($users->relationConfig)) {
+                $users->addDynamicProperty('relationConfig');
+            }
+            $myConfigPath = '$/offline/mall/controllers/users/config_relation.yaml';
+            $users->relationConfig = $users->mergeConfig(
+                $users->relationConfig,
+                $myConfigPath
+            );
         });
 
         MallUser::extend(function ($model) {

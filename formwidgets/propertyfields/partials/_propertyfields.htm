@@ -21,10 +21,9 @@
                     foreach($group->properties as $field):
                         $i++;
                         $value = $values->where('property_id', $field->id)->first();
-                        $currentValue = $value ? $value->value : '';
                     ?>
                         <div class="form-group span-<?= $i % 2 ? 'left' : 'right' ?>">
-                            <?= $this->createFormWidget($field, $currentValue); ?>
+                            <?= $this->createFormWidget($field, $value); ?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif ?>

@@ -6,6 +6,7 @@ use October\Rain\Database\Traits\Validation;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Traits\Cart\CartItemPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use RainLab\User\Facades\Auth;
 use Session;
 
 class WishlistItem extends Model
@@ -62,5 +63,15 @@ class WishlistItem extends Model
     public function price()
     {
         return $this->item->price();
+    }
+
+    public function getCartCountryId()
+    {
+        $user = Auth::getUser();
+        if ( ! $user || ! $user->customer) {
+            return null;
+        }
+
+        return optional($user->customer->shipping_address)->country_id;
     }
 }

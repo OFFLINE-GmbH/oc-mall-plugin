@@ -35,7 +35,7 @@ The documentation of this plugin can be found here:
 
 #### Requirements
 
-* PHP7.1+
+* PHP7.2+
 * October Build 444+
 * For best performance use MySQL 5.7+ or MariaDB 10.2+
 

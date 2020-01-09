@@ -89,6 +89,7 @@
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Kurs zu Basiswährung',
         'is_default'        => 'Ist Standard',
+        'unknown'           => 'Unbekannte Währung',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Zahlungsanbieter',
@@ -147,6 +148,8 @@
         'redirect_to_cart_comment'   => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
         'use_state'                  => 'Verwende «Kanton/Bundesstaat»',
         'use_state_comment'          => 'Kunden müssen bei der Registrierung ein Kanton/Bundesstaat auswählen',
+        'group_search_results_by_product'                  => 'Suchresultate nach Produkt gruppieren',
+        'group_search_results_by_product_comment'          => 'Zeige in den Suchresultaten nur das Hauptprodukt an, nicht alle passenden Varianten',
         'admin_email'                => 'E-Mail des Admins',
         'admin_email_comment'        => 'Benachrichtigungen werden an diese E-Mail versendet',
         'base'                       => 'Allgemein',
@@ -450,9 +453,11 @@
         'is_not_required'  => 'Kein Pflichtfeld',
     ],
     'tax'                      => [
-        'percentage'        => 'Prozent',
-        'countries'         => 'Steuer gilt nur für Versand in diese Länder',
-        'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'percentage'         => 'Prozent',
+        'countries'          => 'Steuer gilt nur für Versand in diese Länder',
+        'countries_comment'  => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'is_default'         => 'Ist Standard',
+        'is_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -813,14 +818,17 @@
                 'description' => 'Zeigt den Warenkorb an',
             ],
             'properties' => [
-                'showDiscountApplier' => [
+                'showDiscountApplier'         => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
                 ],
-                'showShipping'        => [
+                'showShipping'                => [
                     'title' => 'Versandkosten anzeigen',
                 ],
-                'showTaxes'           => [
+                'showTaxes'                   => [
                     'title' => 'Steuern ausweisen',
+                ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Zur Kasse-Button anzeigen',
                 ],
             ],
         ],

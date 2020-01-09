@@ -89,6 +89,7 @@
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
         'is_default'        => 'Is default',
+        'unknown'           => 'Unknown Currency',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Payment gateways',
@@ -147,6 +148,8 @@
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
         'use_state'                  => 'Use State/County/Province field',
         'use_state_comment'          => 'Customers have to select a State/County/Province during signup',
+        'group_search_results_by_product'                  => 'Group search results by product',
+        'group_search_results_by_product_comment'          => 'Include a Product only once in the search results, don\'t display all matching Variants',
         'admin_email'                => 'Admin email',
         'admin_email_comment'        => 'Admin notifications will be sent to this addres',
         'base'                       => 'Base settings',
@@ -451,9 +454,11 @@
         'is_not_required'  => 'Not required',
     ],
     'tax'                      => [
-        'percentage'        => 'Percent',
-        'countries'         => 'Only apply tax when shipping to these countries',
-        'countries_comment' => 'If no country is selected the tax is applied worldwide.',
+        'percentage'         => 'Percent',
+        'countries'          => 'Only apply tax when shipping to these countries',
+        'countries_comment'  => 'If no country is selected the tax is applied worldwide.',
+        'is_default'         => 'Is default',
+        'is_default_comment' => 'This tax is used if the shipping destination country is not known yet',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -816,14 +821,17 @@
                 'description' => 'Displays the shopping cart',
             ],
             'properties' => [
-                'showDiscountApplier' => [
+                'showDiscountApplier'         => [
                     'title' => 'Show discount applier',
                 ],
-                'showShipping' => [
+                'showShipping'                => [
                     'title' => 'Show shipping cost',
                 ],
-                'showTaxes'           => [
+                'showTaxes'                   => [
                     'title' => 'Show taxes',
+                ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Show proceed to checkout button',
                 ],
             ],
         ],

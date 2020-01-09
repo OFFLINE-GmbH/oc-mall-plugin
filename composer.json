@@ -21,12 +21,12 @@
     "hashids/hashids": "^2.0",
     "filebase/filebase": "^1.0",
     "offline/jsonq": "^5.2.4",
+    "illuminate/support": "5.5.*",
     "elasticsearch/elasticsearch": "^6.0",
     "league/omnipay": "^3",
     "omnipay/paypal": "^3.0",
     "omnipay/stripe": "^3.0",
     "vitalybaev/google-merchant-feed": "^1.1",
-    "illuminate/support": "5.5",
     "barryvdh/laravel-dompdf": "^0.8.5"
   },
   "require-dev": {

@@ -4,11 +4,12 @@ use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Backend\FormWidgets\ColorPicker;
 use Backend\FormWidgets\FileUpload;
-use Backend\FormWidgets\RichEditor;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
-use Svg\Tag\Group;
+use RainLab\Translate\FormWidgets\MLRichEditor;
+use RainLab\Translate\FormWidgets\MLText;
+use RainLab\Translate\FormWidgets\MLTextarea;
 
 /**
  * PropertyFields Form Widget
@@ -57,9 +58,9 @@ class PropertyFields extends FormWidgetBase
         // Make sure every property is only displayed once even if it is
         // assigned to more than one property group.
         $knownIds = collect([]);
-        $groups = $groups->map(function (PropertyGroup $group) use (&$knownIds) {
+        $groups   = $groups->map(function (PropertyGroup $group) use (&$knownIds) {
             $unknownIds = $group->properties->pluck('id')->diff($knownIds);
-            $knownIds = $knownIds->concat($unknownIds);
+            $knownIds   = $knownIds->concat($unknownIds);
 
             $properties = $group->properties->filter(function ($property) use ($unknownIds) {
                 return $unknownIds->contains($property->id);
@@ -73,8 +74,12 @@ class PropertyFields extends FormWidgetBase
         $this->vars['groups'] = $groups->sortBy('pivot.sort_order');
     }
 
-    public function createFormWidget(Property $property, $value)
+    public function createFormWidget(Property $property, ?PropertyValue $value)
     {
+        if ( ! $value) {
+            $value = new PropertyValue();
+        }
+
         switch ($property->type) {
             case 'color':
                 return $this->color($property, $value);
@@ -96,60 +101,107 @@ class PropertyFields extends FormWidgetBase
         }
     }
 
-    private function color($property, $value)
+    private function color($property, PropertyValue $value)
     {
         $config = $this->makeConfig([
-            'model' => new PropertyValue(),
+            'model' => $value,
         ]);
 
-        $formField        = $this->newFormField($property, 'hex');
-        $formField->value = $value['hex'] ?? '';
+        $colorFormField        = $this->newFormField($property, 'hex');
+        $colorFormField->value = $value->value['hex'] ?? '';
 
-        $widget             = new ColorPicker($this->controller, $formField, $config);
+        $textFormField            = $this->newFormField($property, 'name');
+        $textFormField->value     = $value->value['name'] ?? '';
+        $textFormField->valueFrom = 'value';
+
+
+        $colorWidget             = new ColorPicker($this->controller, $colorFormField, $config);
+        $colorWidget->allowEmpty = true;
+        $colorWidget->bindToController();
+
+        $textWidget             = new MLText($this->controller, $textFormField, $config);
+        $textWidget->allowEmpty = true;
+        $textWidget->bindToController();
+
+        return $this->makePartial(
+            'colorpicker',
+            ['field' => $property, 'colorWidget' => $colorWidget, 'textWidget' => $textWidget]
+        );
+    }
+
+    private function textfield($property, PropertyValue $value, $type = 'text')
+    {
+        // Number inputs don't have to be translatable.
+        if ($type !== 'text') {
+            return $this->makePartial('textfield', ['field' => $property, 'value' => $value, 'type' => $type]);
+        }
+
+        // For text inputs, use the MLText form widget.
+        $config = $this->makeConfig([
+            'model' => $value,
+            'type'  => $type,
+        ]);
+
+        $formField            = $this->newFormField($property);
+        $formField->value     = $value->value;
+        $formField->valueFrom = 'value';
+
+        $widget             = new MLText($this->controller, $formField, $config);
         $widget->allowEmpty = true;
         $widget->bindToController();
 
         return $this->makePartial(
-            'colorpicker',
-            ['field' => $property, 'widget' => $widget, 'value' => $value]
+            'textfield',
+            ['field' => $property, 'widget' => $widget, 'value' => $value->value]
         );
     }
 
-    private function textfield($property, $value, $type = 'text')
-    {
-        return $this->makePartial('textfield', ['field' => $property, 'value' => $value, 'type' => $type]);
-    }
-
-    private function textarea($property, $value)
-    {
-        return $this->makePartial('textarea', ['field' => $property, 'value' => $value]);
-    }
-
-    private function richeditor($property, $value)
+    private function textarea($property, PropertyValue $value)
     {
         $config = $this->makeConfig([
-            'model' => new PropertyValue(),
+            'model' => $value,
         ]);
 
-        $formField        = $this->newFormField($property);
-        $formField->value = $value;
+        $formField            = $this->newFormField($property);
+        $formField->value     = $value->value;
+        $formField->valueFrom = 'value';
 
-        $widget             = new RichEditor($this->controller, $formField, $config);
+        $widget             = new MLTextarea($this->controller, $formField, $config);
+        $widget->allowEmpty = true;
+        $widget->bindToController();
+
+        return $this->makePartial(
+            'textfield',
+            ['field' => $property, 'widget' => $widget, 'value' => $value->value]
+        );
+    }
+
+    private function richeditor($property, PropertyValue $value)
+    {
+        $config = $this->makeConfig([
+            'model' => $value,
+        ]);
+
+        $formField            = $this->newFormField($property);
+        $formField->value     = $value->value;
+        $formField->valueFrom = 'value';
+
+        $widget             = new MLRichEditor($this->controller, $formField, $config);
         $widget->allowEmpty = true;
         $widget->bindToController();
 
         return $this->makePartial(
             'richeditor',
-            ['field' => $property, 'widget' => $widget, 'value' => $value]
+            ['field' => $property, 'widget' => $widget, 'value' => $value->value]
         );
     }
 
-    private function dropdown($property, $value)
+    private function dropdown($property, PropertyValue $value)
     {
-        $value = e($value);
+        $escapedValue = e($value->value);
 
         $formField          = $this->newFormField($property);
-        $formField->value   = $value;
+        $formField->value   = $escapedValue;
         $formField->label   = $property->name;
         $formField->options = collect($property->options)->mapWithKeys(function ($i) {
             $value = e($i['value']);
@@ -158,27 +210,27 @@ class PropertyFields extends FormWidgetBase
         })->toArray();
 
         $widget = $this->makePartial('modules/backend/widgets/form/partials/field_dropdown',
-            ['field' => $formField, 'value' => $value]
+            ['field' => $formField, 'value' => $escapedValue]
         );
 
         return $this->makePartial('dropdown', ['widget' => $widget, 'field' => $property]);
     }
 
-    private function checkbox($property, $value)
+    private function checkbox($property, PropertyValue $value)
     {
         $formField          = $this->newFormField($property);
-        $formField->value   = $value;
+        $formField->value   = $value->value;
         $formField->label   = $property->name;
         $formField->options = collect($property->options)->map(function ($i) {
             return [$i['value'], $i['value']];
         })->toArray();
 
         return $this->makePartial('modules/backend/widgets/form/partials/field_checkbox',
-            ['field' => $formField, 'value' => $value]
+            ['field' => $formField, 'value' => $value->value]
         );
     }
 
-    private function image($property, $value)
+    private function image($property, PropertyValue $value)
     {
         $config = $this->makeConfig([
             'model'      => optional($this->model->property_values->where('property_id', $property->id))
@@ -194,7 +246,7 @@ class PropertyFields extends FormWidgetBase
         $widget->bindToController();
 
         return $this->makePartial('fileupload',
-            ['field' => $property, 'widget' => $widget, 'value' => $value, 'session_key' => $this->sessionKey]);
+            ['field' => $property, 'widget' => $widget, 'value' => $value->value, 'session_key' => $this->sessionKey]);
     }
 
     protected function newFormField($property, $subkey = null): FormField

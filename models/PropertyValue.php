@@ -10,6 +10,10 @@ class PropertyValue extends Model
     use Validation;
     use HashIds;
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $translatable = [
+        ['value', 'index' => true],
+    ];
     public $rules = [
     ];
     public $fillable = [
@@ -57,20 +61,7 @@ class PropertyValue extends Model
 
     public function setValueAttribute($value)
     {
-        if ($this->isColor()) {
-            $name = $value['name'] ?? false;
-            $hex  = $value['hex'] ?? false;
-            // If both keys are empty store this value as null.
-            if ( ! $name && ! $hex) {
-                return $this->attributes['value'] = null;
-            }
-        }
-
-        // Some attribute types (like color) have multiple values (a hex color and a display name)
-        // These types of attribute values are stored as json string.
-        $this->attributes['value'] = \is_array($value)
-            ? json_encode($value)
-            : $value;
+        $this->attributes['value'] = $this->handleArrayValue($value);
     }
 
     public function isColor()
@@ -81,7 +72,7 @@ class PropertyValue extends Model
     public function getValueAttribute()
     {
         $type  = optional($this->property)->type;
-        $value = $this->getOriginal('value');
+        $value = $this->getAttributeTranslated('value');
 
         if ($type === 'float') {
             return (float)$value;
@@ -98,7 +89,7 @@ class PropertyValue extends Model
         }
 
         if ($type === 'color') {
-            return $this->jsonDecodeValue();
+            return $this->jsonDecodeValue($value);
         }
 
         return $value;
@@ -120,27 +111,67 @@ class PropertyValue extends Model
      */
     public function getDisplayValueAttribute()
     {
+        $value = $this->getAttributeTranslated('value');
         if ($this->isColor()) {
+            $value = $this->jsonDecodeValue($value);
             return sprintf(
                 '<span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: %s" title="%s"></span>',
-                $this->value['hex'],
-                $this->value['name'] ?? ''
+                $value['hex'] ?? 'unknown',
+                $value['name'] ?? ''
             );
         }
 
-        return e($this->value);
+        return e($value);
+    }
+
+    public function getValueAttributeTranslated($locale)
+    {
+        $value = $this->noFallbackLocale()->getAttributeTranslated('value', $locale);
+        if ($this->isColor()) {
+            // Only the name attribute is translatable for a color value.
+            // We only return the name so the MLText form widget displays
+            // the correct value in the backend form.
+            $value = $this->jsonDecodeValue($value);
+            return $value['name'] ?? '';
+        }
+        return $value;
     }
 
     /**
      * Returns the decoded json value.
+     *
+     * @param null $value
+     *
      * @return mixed
      */
-    private function jsonDecodeValue()
+    private function jsonDecodeValue($value = null)
     {
-        if ( ! $this->attributes['value']) {
+        $value = $value ?? $this->attributes['value'];
+        if ( ! $value) {
             return null;
         }
 
-        return json_decode($this->attributes['value'], true);
+        return json_decode($value, true);
+    }
+
+    /**
+     * Handle special array property values.
+     * @param $value
+     *
+     * @return string|null
+     */
+    public function handleArrayValue($value): ?string
+    {
+        if ($this->isColor()) {
+            $name = $value['name'] ?? false;
+            $hex  = $value['hex'] ?? false;
+            // If both keys are empty store this value as null.
+            if ( ! $name && ! $hex) {
+                return null;
+            }
+        }
+        // Some attribute types (like color) have multiple values (a hex color and a display name)
+        // These types of attribute values are stored as json string.
+        return \is_array($value) ? json_encode($value) : $value;
     }
 }

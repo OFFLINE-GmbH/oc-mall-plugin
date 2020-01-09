@@ -1,18 +1,19 @@
-subject = "Welcome to our store, {{ user.customer.firstname }}!"
+subject = "{{ 'offline.mall::mail.customer.created.subject' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}"
 description = "Sent after a customer signs up"
 ==
 
-Hi {{ user.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: user.customer.firstname, lastname: user.customer.lastname}) }}
 
 {% if confirm %}
-    Welcome to our store! Please click on the button below to confirm your e-mail address.
+    {{ 'offline.mall::mail.customer.created.confirm_mail' | trans() }}
 {% else %}
-    Welcome to our store! You can log in using your e-mail address {{ user.email }}
-    and start shopping immediately.
+    {{ 'offline.mall::mail.customer.created.message' | trans({email: user.email}) }}
 {% endif %}
 
-Your user account enables you to keep track of open and past orders.
+{{ 'offline.mall::mail.customer.created.possibilities' | trans() }}
 
 {% partial 'button' url=(confirm ? confirm_url : app_url) type='primary' body %}
-    {{ confirm ? 'Confirm your e-mail address' : 'Visit our store' }}
+    {{ confirm
+       ? 'offline.mall::mail.customer.created.button.confirm' | trans()
+       : 'offline.mall::mail.customer.created.button.visit_store' | trans() }}
 {% endpartial %}

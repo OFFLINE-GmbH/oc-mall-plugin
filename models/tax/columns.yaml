@@ -9,3 +9,7 @@ columns:
         type: text
         searchable: true
         sortable: true
+    is_default:
+        label: 'offline.mall::lang.tax.is_default'
+        type: switch
+        searchable: true

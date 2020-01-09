@@ -55,7 +55,7 @@ trait Discounts
         }
 
         try {
-            $discount = Discount::whereCode($code)->firstOrFail();
+            $discount = Discount::isActive()->whereCode($code)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ValidationException([
                 'code' => trans('offline.mall::lang.discounts.validation.not_found'),

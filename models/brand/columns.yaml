@@ -14,6 +14,12 @@ columns:
         type: text
         searchable: true
         sortable: true
+    sort_order:
+        label: 'offline.mall::lang.common.sort_order'
+        type: number
+        searchable: false
+        sortable: true
+        invisible: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
