@@ -272,3 +272,5 @@
     - set_default_tax.php
 1.9.4:
     - Another bugfix release
+1.9.5:
+    - Added Customer relation to Wishlist model
