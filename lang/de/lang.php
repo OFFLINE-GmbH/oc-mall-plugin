@@ -1041,6 +1041,12 @@
                 'name'        => 'Merklisten-Verwaltung',
                 'description' => 'Zeigt die Merklisten-Verwaltung an',
             ],
+            'properties' => [
+                'showShipping' => [
+                    'name'        => 'Versandkosten anzeigen',
+                    'description' => 'Zeige Auswahlliste und Kosten für Versand',
+                ],
+            ],
         ],
     ],
     'shipping_method_rates'    => [

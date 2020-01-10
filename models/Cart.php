@@ -13,6 +13,7 @@ use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
 use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
 use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
+use OFFLINE\Mall\Classes\Traits\ShippingMethods;
 use Session;
 
 /**
@@ -25,6 +26,7 @@ class Cart extends Model
     use CartSession;
     use CartActions;
     use Discounts;
+    use ShippingMethods;
 
     protected $dates = ['deleted_at'];
     protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
@@ -71,12 +73,6 @@ class Cart extends Model
                 }
             }
         });
-    }
-
-    public function setShippingMethod(?ShippingMethod $method)
-    {
-        $this->shipping_method_id = $method ? $method->id : null;
-        $this->save();
     }
 
     public function setPaymentMethod($method)
@@ -195,28 +191,6 @@ class Cart extends Model
         }
 
         return $query->count() > 0;
-    }
-
-    /**
-     * Makes sure that the selected shipping method
-     * can still be applied to this cart.
-     */
-    public function validateShippingMethod()
-    {
-        if ( ! $this->shipping_method_id) {
-            return true;
-        }
-
-        $available = ShippingMethod::getAvailableByCart($this);
-        if ($available->pluck('id')->contains($this->shipping_method_id)) {
-            return true;
-        }
-
-        if (count($available) > 0) {
-            return $this->setShippingMethod($available->first());
-        }
-
-        return $this->setShippingMethod(null);
     }
 
     /**

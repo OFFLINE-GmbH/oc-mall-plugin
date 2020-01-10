@@ -10,17 +10,17 @@ use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
+use OFFLINE\Mall\Classes\Traits\ShippingMethods;
+use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User;
 use Session;
 
-/**
- * Model
- */
 class Wishlist extends Model
 {
     use Validation;
     use HashIds;
     use PDFMaker;
+    use ShippingMethods;
 
     public $table = 'offline_mall_wishlists';
     public $rules = [
@@ -31,6 +31,10 @@ class Wishlist extends Model
     public $hasMany = [
         'items' => [WishlistItem::class, 'delete' => true],
     ];
+    public $belongsTo = [
+        'shipping_method' => [ShippingMethod::class],
+        'customer'        => [Customer::class],
+    ];
     public $fillable = [
         'name',
         'session_id',
@@ -38,6 +42,7 @@ class Wishlist extends Model
     ];
     public $with = [
         'items',
+        'shipping_method',
     ];
     /**
      * @var TotalsCalculator
@@ -128,6 +133,10 @@ class Wishlist extends Model
             }
         });
 
+        if ($this->shipping_method_id) {
+            $cart->setShippingMethod($this->shipping_method);
+        }
+
         return $allInStock;
     }
 
@@ -162,5 +171,20 @@ class Wishlist extends Model
                 $wishlist->items->each->delete();
                 $wishlist->delete();
             });
+    }
+
+    public function getAvailableShippingMethods()
+    {
+        return ShippingMethod::getAvailableByWishlist($this);
+    }
+
+    public function getCartCountryId()
+    {
+        $user = Auth::getUser();
+        if ( ! $user || ! $user->customer) {
+            return null;
+        }
+
+        return optional($user->customer->shipping_address)->country_id;
     }
 }

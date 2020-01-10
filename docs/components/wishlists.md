@@ -5,7 +5,10 @@ logged in customer.
  
 ## Properties
 
-There are no properties available for this component.
+### `showShipping` (bool)
+
+Show a shipping method selector along with the Wishlist. Shipping cost will be included in the totals.
+
 
 ## Styling
 

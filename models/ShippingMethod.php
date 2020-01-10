@@ -3,6 +3,7 @@
 use Closure;
 use Illuminate\Support\Facades\Session;
 use Model;
+use October\Rain\Database\Collection;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
@@ -154,6 +155,34 @@ class ShippingMethod extends Model
                 $q->whereDoesntHave('countries')
                   ->orWhereHas('countries', function ($q) use ($cart) {
                       $q->where('country_id', $cart->shipping_address->country_id);
+                  });
+            })
+            ->get()
+            ->filter(function (ShippingMethod $method) use ($total) {
+                $below = $method->availableBelowTotal()->integer;
+                $above = $method->availableAboveTotal()->integer;
+
+                return ($below === null || $below > $total)
+                    && ($above === null || $above <= $total);
+            });
+    }
+
+    public static function getAvailableByWishlist(?Wishlist $wishlist)
+    {
+        if ( ! $wishlist) {
+            return new Collection();
+        }
+
+        $total = $wishlist->totals()->productPostTaxes();
+
+        $countryId = $wishlist->getCartCountryId();
+
+        return self
+            ::orderBy('sort_order')
+            ->when($countryId, function ($q) use ($countryId) {
+                $q->whereDoesntHave('countries')
+                  ->orWhereHas('countries', function ($q) use ($countryId) {
+                      $q->where('country_id', $countryId);
                   });
             })
             ->get()

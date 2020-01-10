@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Tests\Classes\Totals;
 use Auth;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
+use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
@@ -22,6 +23,15 @@ use OFFLINE\Mall\Tests\PluginTestCase;
 
 class TotalsCalculatorTest extends PluginTestCase
 {
+    protected $address;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->address = Address::first();
+    }
+
     public function test_it_works_for_a_single_product()
     {
         $quantity = 5;
@@ -884,6 +894,7 @@ class TotalsCalculatorTest extends PluginTestCase
     protected function getCart(): Cart
     {
         $cart = new Cart();
+        $cart->shipping_address_id = $this->address->id;
         $cart->save();
 
         return $cart;

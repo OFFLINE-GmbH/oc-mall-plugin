@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
@@ -15,6 +16,8 @@ use OFFLINE\Mall\Models\WishlistItem;
  */
 class TotalsCalculator
 {
+    use FilteredTaxes;
+
     /**
      * @var TotalsCalculatorInput
      */
@@ -299,15 +302,7 @@ class TotalsCalculator
     {
         $taxes = optional($this->input->shipping_method)->taxes ?? new Collection();
 
-        return $taxes->filter(function (Tax $tax) {
-            // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->input->shipping_country_id === null) {
-                return $tax->countries->count() === 0;
-            }
-
-            return $tax->countries->count() === 0
-                || $tax->countries->pluck('id')->search($this->input->shipping_country_id) !== false;
-        });
+        return $this->getFilteredTaxes($taxes);
     }
 
     /**
@@ -320,14 +315,14 @@ class TotalsCalculator
     {
         $taxes = optional($this->input->payment_method)->taxes ?? new Collection();
 
-        return $taxes->filter(function (Tax $tax) {
-            // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->input->shipping_country_id === null) {
-                return $tax->countries->count() === 0;
-            }
+        return $this->getFilteredTaxes($taxes);
+    }
 
-            return $tax->countries->count() === 0
-                || $tax->countries->pluck('id')->search($this->input->shipping_country_id) !== false;
-        });
+    /**
+     * Return the current shipping destination country id.
+     */
+    public function getCartCountryId()
+    {
+        return $this->input->shipping_country_id;
     }
 }

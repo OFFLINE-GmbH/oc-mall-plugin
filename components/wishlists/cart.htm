@@ -17,8 +17,12 @@
                 {% endfor %}
                 </tbody>
                 <tfoot>
-                {% partial 'cart::table/total'      totals=totals %}
-                {% partial 'cart::table/taxes'      taxes=totals.taxes %}
+                {% partial 'cart::table/total' totals=totals %}
+                {% if __SELF__.showShipping %}
+                    {% partial __SELF__ ~ '::shipping'  shipping=totals.shippingTotal %}
+                    {% partial 'cart::table/grandtotal' totals=totals %}
+                {% endif %}
+                {% partial 'cart::table/taxes' totals=totals %}
                 </tfoot>
             </table>
         </div>

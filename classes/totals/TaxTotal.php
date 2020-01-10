@@ -51,14 +51,15 @@ class TaxTotal implements JsonSerializable
         return $this->preTax;
     }
 
-    public function __toArray(): array
+    public function toArray(): array
     {
+        return $this->jsonSerialize();
     }
 
     public function jsonSerialize()
     {
         return [
-            'tax'              => $this->tax,
+            'tax'              => $this->tax->toArray(),
             'amount'           => round($this->preTax),
             'total'            => round($this->total),
             'amount_formatted' => $this->money->format(round($this->preTax)),

@@ -262,3 +262,15 @@
 1.9.0:
     - "Better handling of country specific taxes, multi-language e-mails, translatable property values and more! (Full Changelog: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.9.0.html)"
     - add_is_default_column_to_taxes_table.php
+1.9.1:
+    - Bugfix release
+1.9.2:
+    - Fixed handling of country specific Taxes for Wishlists
+1.9.3:
+    - Added shipping method support for Wishlists
+    - add_shipping_method_id_to_wishlists_table.php
+    - set_default_tax.php
+1.9.4:
+    - Another bugfix release
+1.9.5:
+    - Added Customer relation to Wishlist model

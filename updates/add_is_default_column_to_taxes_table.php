@@ -3,7 +3,7 @@
 use Schema;
 use October\Rain\Database\Updates\Migration;
 
-class AddIsDefaultColumnForTaxes extends Migration
+class AddIsDefaultColumnToTaxesTable extends Migration
 {
     public function up()
     {
