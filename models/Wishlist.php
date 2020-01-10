@@ -33,6 +33,7 @@ class Wishlist extends Model
     ];
     public $belongsTo = [
         'shipping_method' => [ShippingMethod::class],
+        'customer'        => [Customer::class],
     ];
     public $fillable = [
         'name',
