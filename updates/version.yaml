@@ -44,7 +44,6 @@
     - allow_non_unique_emails_for_rainlab_user.php
     - add_customer_group_id_to_rainlab_users.php
     - create_offline_mall_notifications.php
-    - database_seeder.php
 1.0.2:
     - Fixed event handler for welcome email
 1.0.3:
@@ -269,3 +268,5 @@
 1.9.3:
     - Added shipping method support for Wishlists
     - add_shipping_method_id_to_wishlists_table.php
+    - set_default_tax.php
+    - database_seeder.php

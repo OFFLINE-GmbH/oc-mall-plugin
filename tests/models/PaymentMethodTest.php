@@ -40,6 +40,7 @@ class PaymentMethodTest extends PluginTestCase
     {
         $product = $this->getProduct(100);
         $cart    = new Cart();
+        $cart->shipping_address_id = Address::first()->id;
 
         $cart->addProduct($product, 1);
 

@@ -1,16 +1,19 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Model;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Database\Collection;
 use Rainlab\Location\Models\Country as RainLabCountry;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Tax extends Model
 {
     use Validation;
 
-    public const DEFAULT_TAX_CACHE_KEY = 'mall.tax.default';
+    public const DEFAULT_TAX_CACHE_KEY = 'mall.taxes.default';
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
@@ -23,8 +26,10 @@ class Tax extends Model
     public $fillable = [
         'name',
         'percentage',
+        'is_default',
     ];
     public $table = 'offline_mall_taxes';
+    public $casts = ['is_default' => 'boolean'];
     public $belongsToMany = [
         'products'         => [
             Product::class,
@@ -58,43 +63,32 @@ class Tax extends Model
         return (float)$this->percentage / 100;
     }
 
-    public function beforeSave()
-    {
-        // Enforce a single default tax.
-        if ($this->is_default) {
-            DB::table($this->table)->where('id', '<>', $this->id)->update(['is_default' => false]);
-        }
-    }
-
     public function afterSave()
     {
         Cache::forget(self::DEFAULT_TAX_CACHE_KEY);
     }
 
     /**
-     * Returns the default tax.
+     * Returns the default taxes.
      *
-     * @return tax
+     * @return Collection<Tax>|Tax[]
      */
-    public static function defaultTax()
+    public static function defaultTaxes(): Collection
     {
-        $tax = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
-            $tax = static::orderBy('is_default', 'DESC')->first();
+        $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
+            $taxes = static::where('is_default', true)->get(['id', 'name', 'percentage', 'is_default']);
+            if ( ! $taxes) {
+                return [];
+            }
 
-            return $tax->toArray();
+            // Make sure the "translations" relation is not cached.
+            return $taxes->map->only('id', 'name', 'percentage', 'is_default')->toArray();
         });
 
-        static::guardMissingDefaultTax($tax);
-
-        return (new Tax)->newFromBuilder($tax);
-    }
-
-    protected static function guardMissingDefaultTax($tax)
-    {
-        if ( ! $tax) {
-            throw new RuntimeException(
-                '[mall] Please configure at least one tax via the backend settings.'
-            );
+        if ( ! $taxes) {
+            return new Collection();
         }
+
+        return self::hydrate($taxes);
     }
 }
