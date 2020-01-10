@@ -12,7 +12,6 @@ class TaxTableSeeder extends Seeder
     {
         $method             = new Tax();
         $method->name       = 'Default';
-        $method->is_default = true;
         $method->percentage = 8;
         $method->save();
     }
