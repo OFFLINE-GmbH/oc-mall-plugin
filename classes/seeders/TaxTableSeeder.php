@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Classes\Seeders;
 
 use October\Rain\Database\Updates\Seeder;
-use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Tax;
 
 class TaxTableSeeder extends Seeder
