@@ -3,6 +3,7 @@
 use Closure;
 use Illuminate\Support\Facades\Session;
 use Model;
+use October\Rain\Database\Collection;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
@@ -166,8 +167,12 @@ class ShippingMethod extends Model
             });
     }
 
-    public static function getAvailableByWishlist(Wishlist $wishlist)
+    public static function getAvailableByWishlist(?Wishlist $wishlist)
     {
+        if ( ! $wishlist) {
+            return new Collection();
+        }
+
         $total = $wishlist->totals()->productPostTaxes();
 
         $countryId = $wishlist->getCartCountryId();

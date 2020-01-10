@@ -243,13 +243,14 @@ class Wishlists extends MallComponent
     {
         $this->setVar('showShipping', (bool)$this->property('showShipping'));
 
-        if ( ! $this->showShipping) {
+        if ( ! $this->showShipping || !$this->currentItem) {
             return;
         }
 
         $this->shippingMethods = ShippingMethod::getAvailableByWishlist($this->currentItem);
         if ($this->currentItem->shipping_method_id === null) {
             $this->currentItem->setShippingMethod(ShippingMethod::getDefault());
+            $this->currentItem = $this->currentItem->fresh('shipping_method');
         }
 
         return $this->currentItem->validateShippingMethod();
