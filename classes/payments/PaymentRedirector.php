@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Event;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * The PaymentRedirector handles all external and
@@ -61,32 +62,32 @@ class PaymentRedirector
     }
 
     /**
-     * Returns the URL to a substep of the payment process.
-     *
-     * @param       $step
-     * @param array $params
-     *
-     * @return string
-     */
-    public function stepUrl($step, $params = []): string
-    {
-        return $this->controller->pageUrl(
-            $this->page,
-            array_merge($params, ['step' => $step])
-        );
-    }
-
-    /**
      * Handles a PaymentResult.
      *
      * @param PaymentResult $result
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handlePaymentResult(PaymentResult $result)
     {
         if ($result->redirect) {
-            return $result->redirectUrl ? redirect()->to($result->redirectUrl) : $result->redirectResponse;
+            if ($result->redirectUrl) {
+                return redirect()->to($result->redirectUrl);
+            }
+
+            if ( ! $result->redirectResponse) {
+                throw new \LogicException('redirectUrl or redirectResponse on PaymentResult is required.');
+            }
+
+            if ($result->redirectResponse instanceof RedirectResponse) {
+                return $result->redirectResponse;
+            }
+
+            // If a default Response was returned, store the contents in the session so it can be
+            // rendered on the separate checkout page.
+            session()->put('mall.checkout.response', $result->redirectResponse->getContent());
+
+            return redirect()->to('/mall/checkout/response');
         }
 
         if ($result->successful) {
@@ -112,7 +113,7 @@ class PaymentRedirector
      *
      * @param $type
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handleOffSiteReturn($type)
     {
@@ -148,6 +149,23 @@ class PaymentRedirector
 
         return $this->finalRedirect('successful');
     }
+
+    /**
+     * Returns the URL to a substep of the payment process.
+     *
+     * @param       $step
+     * @param array $params
+     *
+     * @return string
+     */
+    public function stepUrl($step, $params = []): string
+    {
+        return $this->controller->pageUrl(
+            $this->page,
+            array_merge($params, ['step' => $step])
+        );
+    }
+
 
     /**
      * The user is redirected to this URL if a payment failed.

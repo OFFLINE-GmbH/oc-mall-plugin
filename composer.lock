@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8413427c7949ff3c208cb88072607979",
+    "content-hash": "0fe71786fa82185109cb769326b45efd",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -61,6 +61,61 @@
                 "pdf"
             ],
             "time": "2019-08-23T14:30:33+00:00"
+        },
+        {
+            "name": "bummzack/omnipay-postfinance",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bummzack/omnipay-postfinance.git",
+                "reference": "92080b3e26f70c311ca403995504fdbeebd45771"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bummzack/omnipay-postfinance/zipball/92080b3e26f70c311ca403995504fdbeebd45771",
+                "reference": "92080b3e26f70c311ca403995504fdbeebd45771",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3",
+                "league/omnipay": "^3",
+                "omnipay/common": "^3.0"
+            },
+            "require-dev": {
+                "omnipay/tests": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\Postfinance\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Schmid",
+                    "email": "bummzack@gmail.com"
+                }
+            ],
+            "description": "Postfinance Gateway for the Omnipay payment processing library",
+            "homepage": "https://github.com/bummzack/omnipay-postfinance",
+            "keywords": [
+                "gateway",
+                "merchant",
+                "omnipay",
+                "pay",
+                "payment",
+                "postfinance"
+            ],
+            "time": "2019-10-18T22:10:34+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -3449,7 +3504,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bummzack/omnipay-postfinance": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
