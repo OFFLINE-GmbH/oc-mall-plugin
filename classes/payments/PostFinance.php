@@ -153,7 +153,7 @@ class PostFinance extends PaymentProvider
      */
     public function encryptedSettings(): array
     {
-        return ['pspid', 'sha_in', 'sha_out'];
+        return ['postfinance_pspid', 'postfinance_sha_in', 'postfinance_sha_out'];
     }
 
     /**
