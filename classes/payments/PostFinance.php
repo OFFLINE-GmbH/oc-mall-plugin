@@ -81,7 +81,7 @@ class PostFinance extends PaymentProvider
     {
         $this->setOrder($result->order);
 
-        return $result->success([], null);
+        return $result->success(['transactionId' => $result->order->id], null);
     }
 
     /**
@@ -158,11 +158,11 @@ class PostFinance extends PaymentProvider
 
     /**
      * PostFinance requires a locale in the form of de_DE.
-     * this method naively convert the two letter locale code
-     * from RainLab.Translate to this form. This won't work
+     * this method naively converts the two letter locale code (de)
+     * from RainLab.Translate to the "de_DE" form. This won't work
      * for every language, but should work most of the time.
      *
-     * @param string $getLocale
+     * @param string $locale
      *
      * @return string
      */

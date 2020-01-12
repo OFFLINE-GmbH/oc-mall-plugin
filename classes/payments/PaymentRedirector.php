@@ -79,12 +79,21 @@ class PaymentRedirector
                 throw new \LogicException('redirectUrl or redirectResponse on PaymentResult is required.');
             }
 
+            // If the PaymentProvider returned a RedirectResponse we can re-use it
+            // as is. This will redirect the user to the payment provider's external page.
             if ($result->redirectResponse instanceof RedirectResponse) {
                 return $result->redirectResponse;
             }
 
-            // If a default Response was returned, store the contents in the session so it can be
-            // rendered on the separate checkout page.
+            // If the returned response is not a RedirectResponse, we have to render the content
+            // of the response in the browser. To do this, the special route "/mall/checkout/response"
+            // is registered, that simply renders the content of the "mall.checkout.response" session
+            // key in the browser. This is usually used by PaymentProviders to render a custom form
+            // that is submitted immediately after it was loaded. This in turn sends a POST
+            // request to the payment provider with all the required payment information.
+
+            // Let's put the response's content into the session store and redirect
+            // the user to the route that will display it.
             session()->put('mall.checkout.response', $result->redirectResponse->getContent());
 
             return redirect()->to('/mall/checkout/response');
