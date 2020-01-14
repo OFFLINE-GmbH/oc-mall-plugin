@@ -45,7 +45,7 @@ return [
     'form.forgot_password'                     => 'Forgot password?',
     'form.firstname'                           => 'First name',
     'form.lastname'                            => 'Last name',
-    'form.company'                             => 'Company name',
+    'form.company'                             => 'Company',
     'form.company_placeholder'                 => 'Leave blank if private person',
     'form.taxnr'                               => 'Tax number',
     'form.taxnr_placeholder'                   => 'Leave blank if not a company',
