@@ -1,8 +1,18 @@
-<div class="mall-form-control">
+ <div class="mall-two-fields">
+
+        <div class="mall-form-control">
     <label for="{{ type }}_company">{{ 'offline.mall::frontend.form.company' | trans }}</label>
     <input id="{{ type }}_company" type="text"
            placeholder="{{ 'offline.mall::frontend.form.company_placeholder' | trans }}" name="{{ type }}_company">
     <div data-validate-for="{{ type }}_company"></div>
+</div>
+<div class="mall-form-control">
+    <label for="{{ type }}_taxnr">{{ 'offline.mall::frontend.form.taxnr' | trans }}</label>
+    <input id="{{ type }}_taxnr" type="text"
+           placeholder="{{ 'offline.mall::frontend.form.taxnr_placeholder' | trans }}" name="{{ type }}_taxnr">
+    <div data-validate-for="{{ type }}_taxnr"></div>
+</div>
+
 </div>
 <div class="mall-form-control">
     <label for="{{ type }}_address_name">{{ 'offline.mall::frontend.form.recipient' | trans }}</label>

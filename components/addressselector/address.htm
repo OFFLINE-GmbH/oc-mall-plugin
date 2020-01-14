@@ -3,6 +3,9 @@
         {% if address.company %}
             {{ address.company }}<br/>
         {% endif %}
+        {% if address.taxnr %}
+            {{ address.taxnr }}<br/>
+        {% endif %}
         {{ address.name }}<br/>
         {{ address.lines }} <br/>
         {{ address.zip }} {{ address.city }}<br/>

@@ -47,6 +47,8 @@ return [
     'form.lastname'                            => 'Nom',
     'form.company'                             => 'Société',
     'form.company_placeholder'                 => 'Laisser vide si personne privée',
+    'form.taxnr'                               => 'Numéro de taxe',
+    'form.taxnr_placeholder'                   => 'Laisser vide si personne privée',
     'form.recipient'                           => 'Nom du destinataire',
     'form.recipient_placeholder'               => 'Laisse vide si c\'est toi',
     'form.address_lines'                       => 'Adresse',

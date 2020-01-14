@@ -9,6 +9,11 @@ columns:
         type: text
         searchable: true
         sortable: true
+    taxnr:
+        label: 'offline.mall::frontend.form.taxnr'
+        type: text
+        searchable: true
+        sortable: true
     name:
         label: 'offline.mall::frontend.form.recipient'
         type: text

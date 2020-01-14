@@ -47,6 +47,8 @@ return [
     'form.forgot_password'                     => 'Passwort vergessen?',
     'form.company'                             => 'Firma',
     'form.company_placeholder'                 => 'Für Privatpersonen leer lassen',
+    'form.taxnr'                               => 'Steuernummer',
+    'form.taxnr_placeholder'                   => 'Für Privatpersonen leer lassen',
     'form.recipient'                           => 'Name des Empfängers',
     'form.recipient_placeholder'               => 'Leer lassen, wenn Sie das sind',
     'form.address_lines'                       => 'Strasse und Hausnummer',

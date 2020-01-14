@@ -26,6 +26,7 @@ class Address extends Model
 
     public $fillable = [
         'company',
+        'taxnr',
         'name',
         'lines',
         'zip',
@@ -93,6 +94,7 @@ class Address extends Model
         return [
             'id'          => $this->id,
             'company'     => $this->company,
+            'taxnr'       => $this->taxnr,
             'name'        => $this->name,
             'lines'       => $this->lines,
             'zip'         => $this->zip,

@@ -47,6 +47,8 @@ return [
     'form.lastname'                            => 'Фамилия',
     'form.company'                             => 'Компания',
     'form.company_placeholder'                 => 'Не заполняйте, если вы часное лицо',
+    'form.taxnr'                               => 'Налоговый номер',
+    'form.taxnr_placeholder'                   => 'Не заполняйте, если вы часное лицо',
     'form.recipient'                           => "Имя получателя",
     'form.recipient_placeholder'               => "Не заполняйте, если этот заказ для вас",
     'form.address_lines'                       => 'Адрес',

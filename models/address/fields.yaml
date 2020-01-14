@@ -7,6 +7,10 @@ fields:
         label: 'offline.mall::frontend.form.company'
         span: auto
         type: text
+    taxnr:
+        label: 'offline.mall::frontend.form.taxnr'
+        span: auto
+        type: text
     lines:
         label: 'offline.mall::frontend.form.address_lines'
         size: ''

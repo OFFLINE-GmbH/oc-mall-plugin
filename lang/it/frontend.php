@@ -46,6 +46,8 @@ return [
     'form.lastname'                            => 'Cognome',
     'form.company'                             => 'Azienda',
     'form.company_placeholder'                 => 'Lascia vuoto se sei un privato',
+    'form.taxnr'                               => 'Codice fiscale',
+    'form.taxnr_placeholder'                   => 'Lascia vuoto se sei un privato',
     'form.recipient'                           => "Nome del destinatario",
     'form.recipient_placeholder'               => "Lascia vuoto se sei tu",
     'form.address_lines'                       => 'Indirizzo',
