@@ -12,6 +12,7 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomerPaymentMethod;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
+use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
 /**
@@ -142,7 +143,7 @@ class PaymentMethodSelector extends MallComponent
      *
      * Any specified payment data is stored in the session.
      *
-     * @return RedirectResponse
+     * @return Response
      * @throws \Cms\Classes\CmsException
      */
     public function onSubmit()
@@ -198,7 +199,6 @@ class PaymentMethodSelector extends MallComponent
 
     /**
      * The customer proceeds with a saved payment method.
-     *
      */
     public function onUseCustomerPaymentMethod()
     {
@@ -263,7 +263,7 @@ class PaymentMethodSelector extends MallComponent
      * @param \Illuminate\Foundation\Application $gateway
      * @param                                    $data
      *
-     * @return RedirectResponse|array
+     * @return Response|array
      * @throws \Cms\Classes\CmsException
      */
     protected function doRedirect(PaymentGateway $gateway, $data)

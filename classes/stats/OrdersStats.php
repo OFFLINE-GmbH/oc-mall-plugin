@@ -66,7 +66,7 @@ class OrdersStats
                      "{$this->statesTable}.color",
                      DB::raw('count(order_state_id) as value')
                  )
-                 ->groupBy("{$this->ordersTable}.order_state_id")
+                 ->groupBy("{$this->ordersTable}.order_state_id", "{$this->statesTable}.name", "{$this->statesTable}.color")
                  ->get()
                  ->toArray();
 

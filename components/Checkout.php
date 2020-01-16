@@ -198,7 +198,7 @@ class Checkout extends MallComponent
     /**
      * Handle the checkout process.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws ValidationException
      * @throws \Cms\Classes\CmsException
      */
