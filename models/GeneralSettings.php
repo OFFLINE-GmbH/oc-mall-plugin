@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Models;
 use Cms\Classes\Page;
 use Illuminate\Support\Facades\Cache;
 use Model;
+use Cms\Classes\Theme;
 use Session;
 
 class GeneralSettings extends Model
@@ -18,8 +19,52 @@ class GeneralSettings extends Model
         Cache::forget('offline_mall.mysql.index.driver');
     }
 
-    public function getPageOptions()
+    public function getPagesByComponent($component)
     {
-        return Page::sortBy('baseFileName')->lists('title', 'baseFileName');
+        $theme = Theme::getActiveTheme();
+        $pages = Page::listInTheme($theme, true);
+        
+        $cmsPages = [];
+        
+        foreach ($pages as $page) {
+            if (!$page->hasComponent($component)) {
+                continue;
+            }
+            $cmsPages[$page->baseFileName] = $page->title;
+        }
+
+        return $cmsPages;
     }
+
+    public function getProductPageOptions()
+    {
+        return $this->getPagesByComponent('product');
+    }
+
+    public function getCategoryPageOptions()
+    {
+        return $this->getPagesByComponent('products');
+    }
+
+    public function getAddressPageOptions()
+    {
+        return $this->getPagesByComponent('addressForm');
+    }
+
+    public function getCheckoutPageOptions()
+    {
+        return $this->getPagesByComponent('checkout');
+    }
+
+    public function getAccountPageOptions()
+    {
+        return $this->getPagesByComponent('myAccount');
+    }
+
+    public function getCartPageOptions()
+    {
+        return $this->getPagesByComponent('cart');
+    }
+
+
 }
