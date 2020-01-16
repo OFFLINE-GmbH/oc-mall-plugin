@@ -5,7 +5,6 @@
 property_groups:
     label: 'offline.mall::lang.common.property_group'
     deferredBinding: false
-    showSorting: false
     view:
         list: $/offline/mall/models/propertygroup/columns_pivot.yaml
         toolbarButtons: add|remove
