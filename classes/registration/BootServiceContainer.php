@@ -21,6 +21,7 @@ use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
 use OFFLINE\Mall\Classes\Payments\Offline;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
+use OFFLINE\Mall\Classes\Payments\PostFinance;
 use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
@@ -44,6 +45,7 @@ trait BootServiceContainer
             $gateway->registerProvider(new Offline());
             $gateway->registerProvider(new PayPalRest());
             $gateway->registerProvider(new Stripe());
+            $gateway->registerProvider(new PostFinance());
 
             return $gateway;
         });

@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Event;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * The PaymentRedirector handles all external and
@@ -61,32 +62,41 @@ class PaymentRedirector
     }
 
     /**
-     * Returns the URL to a substep of the payment process.
-     *
-     * @param       $step
-     * @param array $params
-     *
-     * @return string
-     */
-    public function stepUrl($step, $params = []): string
-    {
-        return $this->controller->pageUrl(
-            $this->page,
-            array_merge($params, ['step' => $step])
-        );
-    }
-
-    /**
      * Handles a PaymentResult.
      *
      * @param PaymentResult $result
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handlePaymentResult(PaymentResult $result)
     {
         if ($result->redirect) {
-            return $result->redirectUrl ? redirect()->to($result->redirectUrl) : $result->redirectResponse;
+            if ($result->redirectUrl) {
+                return redirect()->to($result->redirectUrl);
+            }
+
+            if ( ! $result->redirectResponse) {
+                throw new \LogicException('redirectUrl or redirectResponse on PaymentResult is required.');
+            }
+
+            // If the PaymentProvider returned a RedirectResponse we can re-use it
+            // as is. This will redirect the user to the payment provider's external page.
+            if ($result->redirectResponse instanceof RedirectResponse) {
+                return $result->redirectResponse;
+            }
+
+            // If the returned response is not a RedirectResponse, we have to render the content
+            // of the response in the browser. To do this, the special route "/mall/checkout/response"
+            // is registered, that simply renders the content of the "mall.checkout.response" session
+            // key in the browser. This is usually used by PaymentProviders to render a custom form
+            // that is submitted immediately after it was loaded. This in turn sends a POST
+            // request to the payment provider with all the required payment information.
+
+            // Let's put the response's content into the session store and redirect
+            // the user to the route that will display it.
+            session()->put('mall.checkout.response', $result->redirectResponse->getContent());
+
+            return redirect()->to('/mall/checkout/response');
         }
 
         if ($result->successful) {
@@ -112,7 +122,7 @@ class PaymentRedirector
      *
      * @param $type
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handleOffSiteReturn($type)
     {
@@ -148,6 +158,23 @@ class PaymentRedirector
 
         return $this->finalRedirect('successful');
     }
+
+    /**
+     * Returns the URL to a substep of the payment process.
+     *
+     * @param       $step
+     * @param array $params
+     *
+     * @return string
+     */
+    public function stepUrl($step, $params = []): string
+    {
+        return $this->controller->pageUrl(
+            $this->page,
+            array_merge($params, ['step' => $step])
+        );
+    }
+
 
     /**
      * The user is redirected to this URL if a payment failed.

@@ -26,7 +26,7 @@ class PaymentMethod extends Model
     public $rules = [
         'name'             => 'required',
         'payment_provider' => 'required',
-        'fee_percentage'   => 'nullable|max:99',
+        'fee_percentage'   => 'nullable',
     ];
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
@@ -36,9 +36,6 @@ class PaymentMethod extends Model
     public $hidden = ['settings', 'prices', 'created_at', 'updated_at', 'deleted_at'];
     public $slugs = [
         'code' => 'name',
-    ];
-    public $casts = [
-        'fee_percentage' => 'float',
     ];
     public $translatable = [
         'name',

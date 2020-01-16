@@ -125,28 +125,28 @@ class Product extends MallComponent
         $langPrefix = 'offline.mall::lang.components.product.properties.redirectOnPropertyChange';
 
         return [
-            'product'                  => [
+            'product'                   => [
                 'title'   => 'offline.mall::lang.common.product',
                 'default' => ':slug',
                 'type'    => 'dropdown',
             ],
-            'variant'                  => [
+            'variant'                   => [
                 'title'   => 'offline.mall::lang.common.variant',
                 'default' => ':slug',
                 'depends' => ['product'],
                 'type'    => 'dropdown',
             ],
-            'redirectOnPropertyChange' => [
+            'redirectOnPropertyChange'  => [
                 'title'       => $langPrefix . '.title',
                 'description' => $langPrefix . '.description',
                 'default'     => 0,
                 'type'        => 'checkbox',
             ],
             'currentVariantReviewsOnly' => [
-                'title' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
+                'title'       => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
                 'description' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.description',
-                'type' => 'checkbox',
-                'default' => 0
+                'type'        => 'checkbox',
+                'default'     => 0,
             ],
         ];
     }
@@ -242,8 +242,8 @@ class Product extends MallComponent
 
         $this->showReviews = (bool)ReviewSettings::get('enabled', false);
         $this->addComponent(ProductReviews::class, 'productReviews', [
-            'product' => $this->product->id,
-            'variant' => optional($this->variant)->id,
+            'product'                   => $this->product->id,
+            'variant'                   => optional($this->variant)->id,
             'currentVariantReviewsOnly' => $this->property('currentVariantReviewsOnly'),
         ]);
 
@@ -439,7 +439,12 @@ class Product extends MallComponent
         }
 
         $variantId    = $this->property('variant');
-        $variantModel = Variant::published()->with(['property_values.translations', 'image_sets']);
+        $variantModel = Variant::published()->with([
+            'property_values.translations',
+            'property_values.property.property_groups',
+            'product_property_values.property.property_groups',
+            'image_sets',
+        ]);
 
         // If :slug is set as Variant ID we can fall back to the URL parameter.
         // Otherwise use the Variant the admin as defined as Component property.
@@ -469,6 +474,7 @@ class Product extends MallComponent
                 'image_sets',
                 'downloads',
                 'categories',
+                'property_values.property.property_groups',
                 'services.options',
                 'taxes',
             ];

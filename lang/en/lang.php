@@ -106,6 +106,17 @@
             'test_mode'         => 'Test mode',
             'test_mode_comment' => 'Run all payments in the PayPal Sandbox.',
         ],
+        'postfinance' => [
+            'test_mode'              => 'Test mode',
+            'test_mode_comment'      => 'Run all payments against the test environment',
+            'pspid'                  => 'PSPID (Username)',
+            'hashing_method'         => 'Hash algorithm',
+            'hashing_method_comment' => 'Configuration -> Technical information -> Global security parameters',
+            'sha_in'                 => 'SHA-IN Signature',
+            'sha_in_comment'         => 'Configuration -> Technical information -> Data and origin verification',
+            'sha_out'                => 'SHA-OUT Signature',
+            'sha_out_comment'        => 'Configuration -> Technical information -> Transaction feedback',
+        ],
     ],
     'notification_settings'    => [
         'label'       => 'Notifications',

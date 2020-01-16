@@ -17,7 +17,7 @@
 * Stock management
 * Wishlists
 * Reviews and ratings
-* Checkout via Stripe and PayPal supported out-of-the-box
+* Checkout via Stripe, PayPal and PostFinance supported out-of-the-box
 * Custom payment providers 
 * Integrated with RainLab.User
 * Multi-currency and multi-language (integrates with RainLab.Translate)
