@@ -37,9 +37,6 @@ class PaymentMethod extends Model
     public $slugs = [
         'code' => 'name',
     ];
-    public $casts = [
-        'fee_percentage' => 'float',
-    ];
     public $translatable = [
         'name',
         'description',
