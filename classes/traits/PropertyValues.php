@@ -48,12 +48,12 @@ trait PropertyValues
         }
 
         return $groups->map(function(PropertyGroup $group) {
-            return [
+            return collect([
                 'group' => $group,
                 'values' => $this->all_property_values->filter(function(PropertyValue $value) use ($group) {
                     return $value->property->property_groups->contains($group->id);
                 }),
-            ];
+            ]);
         });
     }
 
