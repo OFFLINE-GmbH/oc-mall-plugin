@@ -439,7 +439,12 @@ class Product extends MallComponent
         }
 
         $variantId    = $this->property('variant');
-        $variantModel = Variant::published()->with(['property_values.translations', 'image_sets']);
+        $variantModel = Variant::published()->with([
+            'property_values.translations',
+            'property_values.property.property_groups',
+            'product_property_values.property.property_groups',
+            'image_sets',
+        ]);
 
         // If :slug is set as Variant ID we can fall back to the URL parameter.
         // Otherwise use the Variant the admin as defined as Component property.
@@ -469,6 +474,7 @@ class Product extends MallComponent
                 'image_sets',
                 'downloads',
                 'categories',
+                'property_values.property.property_groups',
                 'services.options',
                 'taxes',
             ];
