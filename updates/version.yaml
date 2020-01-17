@@ -276,3 +276,5 @@
     - Added Customer relation to Wishlist model
 1.10.0:
     - "!!! Added property values to default Product component markup. This will add new markup that needs styling! See Changelog: https://tinyurl.com/txwozkj"
+1.10.1:
+    - Bugfix release

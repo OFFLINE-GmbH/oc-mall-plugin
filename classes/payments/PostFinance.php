@@ -48,14 +48,7 @@ class PostFinance extends PaymentProvider
 
         $response = null;
         try {
-            $response = $gateway->purchase([
-                'transactionId' => $result->order->id,
-                'amount'        => $this->order->total_in_currency,
-                'currency'      => $this->order->currency['code'],
-                'returnUrl'     => $this->returnUrl(),
-                'cancelUrl'     => $this->cancelUrl(),
-                'notifyUrl'     => $this->cancelUrl(),
-            ])->send();
+            $response = $gateway->purchase($this->options($result))->send();
         } catch (Throwable $e) {
             return $result->fail([], $e);
         }
@@ -81,7 +74,19 @@ class PostFinance extends PaymentProvider
     {
         $this->setOrder($result->order);
 
-        return $result->success(['transactionId' => $result->order->id], null);
+        try {
+            $response = $this->getGateway()->completePurchase($this->options($result))->send();
+        } catch (Throwable $e) {
+            return $result->fail([], $e);
+        }
+
+        $data = (array)$response->getData();
+
+        if ( ! $response->isSuccessful()) {
+            return $result->fail($data, $response);
+        }
+
+        return $result->success($data, null);
     }
 
     /**
@@ -93,9 +98,9 @@ class PostFinance extends PaymentProvider
     {
         $gateway = Omnipay::create('Postfinance');
         $gateway->initialize([
-            'pspId'         => PaymentGatewaySettings::get('postfinance_pspid'),
-            'shaIn'         => PaymentGatewaySettings::get('postfinance_sha_in'),
-            'shaOut'        => PaymentGatewaySettings::get('postfinance_sha_out'),
+            'pspId'         => decrypt(PaymentGatewaySettings::get('postfinance_pspid')),
+            'shaIn'         => decrypt(PaymentGatewaySettings::get('postfinance_sha_in')),
+            'shaOut'        => decrypt(PaymentGatewaySettings::get('postfinance_sha_out')),
             'language'      => $this->transformLocale(Translator::instance()->getLocale() ?? 'en'),
             'hashingMethod' => PaymentGatewaySettings::get('postfinance_hashing_method'),
             'testMode'      => (bool)PaymentGatewaySettings::get('postfinance_test_mode'),
@@ -169,5 +174,24 @@ class PostFinance extends PaymentProvider
     private function transformLocale(string $locale)
     {
         return sprintf("%s_%s", strtolower($locale), strtoupper($locale));
+    }
+
+    /**
+     * Returns the default payment request options.
+     *
+     * @param PaymentResult $result
+     *
+     * @return array
+     */
+    protected function options(PaymentResult $result): array
+    {
+        return [
+            'transactionId' => $result->order->id,
+            'amount'        => $this->order->total_in_currency,
+            'currency'      => $this->order->currency['code'],
+            'returnUrl'     => $this->returnUrl(),
+            'cancelUrl'     => $this->cancelUrl(),
+            'notifyUrl'     => $this->cancelUrl(),
+        ];
     }
 }

@@ -32,42 +32,36 @@ fields:
         label: offline.mall::lang.general_settings.product_page
         span: left
         type: dropdown
-        options: getPageOptions
         comment: offline.mall::lang.general_settings.product_page_comment
 
     category_page:
         label: offline.mall::lang.general_settings.category_page
         span: right
         type: dropdown
-        options: getPageOptions
         comment: offline.mall::lang.general_settings.category_page_comment
 
     address_page:
         label: offline.mall::lang.general_settings.address_page
         span: left
         type: dropdown
-        options: getPageOptions
         comment: offline.mall::lang.general_settings.address_page_comment
 
     checkout_page:
         label: offline.mall::lang.general_settings.checkout_page
         span: right
         type: dropdown
-        options: getPageOptions
         comment: offline.mall::lang.general_settings.checkout_page_comment
 
     account_page:
         label: offline.mall::lang.general_settings.account_page
         span: left
         type: dropdown
-        options: getPageOptions
         comment: offline.mall::lang.general_settings.account_page_comment
 
     cart_page:
         label: offline.mall::lang.general_settings.cart_page
         span: right
         type: dropdown
-        options: getPageOptions
         comment: offline.mall::lang.general_settings.cart_page_comment
 
     customizations:
