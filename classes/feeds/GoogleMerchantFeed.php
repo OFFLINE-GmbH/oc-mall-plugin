@@ -68,7 +68,7 @@ class GoogleMerchantFeed
 
         $url = Page::url($this->productPage, [
             'slug'    => $item->slug,
-            'variant' => $item->variantId,
+            'variant' => $item->variantHashId,
         ]);
 
         $description = \Html::strip($item->description ?: $item->description_short);
