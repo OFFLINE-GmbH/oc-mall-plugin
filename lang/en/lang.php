@@ -448,6 +448,8 @@
         'name'                              => 'Name',
         'code'                              => 'Code',
         'code_comment'                      => 'This code can be used to identify this category in your frontend partials.',
+        'google_product_category_id'        => 'Google Product Category ID',
+        'google_product_category_id_comment'=> 'For more information, see https://support.google.com/merchants/answer/6324436',
         'parent'                            => 'Parent',
         'no_parent'                         => 'No parent',
         'inherit_property_groups'           => 'Inherit properties of parent category',

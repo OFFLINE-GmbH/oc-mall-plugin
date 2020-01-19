@@ -34,6 +34,11 @@ fields:
         comment: 'offline.mall::lang.category.code_comment'
         span: left
         type: text
+    google_product_category_id:
+            label: 'offline.mall::lang.category.google_product_category_id'
+            comment: 'offline.mall::lang.category.google_product_category_id_comment'
+            span: left
+            type: number
 tabs:
     fields:
         inherit_property_groups:

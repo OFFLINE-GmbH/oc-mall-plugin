@@ -447,6 +447,8 @@
         'name'                              => 'Name',
         'code'                              => 'Code',
         'code_comment'                      => 'Dieser Code kann im Frontend zur Identifikation der Kategorie genutzt werden.',
+        'google_product_category_id'        => 'Google Produktkategorie ID',
+        'google_product_category_id_comment'=> 'Für mehr Infos siehe https://support.google.com/merchants/answer/6324436',
         'parent'                            => 'Elternelement',
         'no_parent'                         => 'Kein Elternelement',
         'inherit_property_groups'           => 'Übernehme Eigenschaften von Elternkategorie',
