@@ -55,6 +55,7 @@ The easiest way to get you started is by using the command line:
 ```bash
 php artisan plugin:install rainlab.user
 php artisan plugin:install rainlab.location
+php artisan plugin:install rainlab.translate
 php artisan plugin:install offline.mall
 ``` 
 
