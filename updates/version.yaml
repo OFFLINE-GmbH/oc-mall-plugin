@@ -281,4 +281,4 @@
 1.10.2:
     - "!!! Do not update until version 1.11 is released. There is a bug in RainLab.Translate because of which translations won't be loaded correctly. Also do not update RainLab.Translate until this bug is fixed: https://github.com/rainlab/translate-plugin/issues/539. We will release a new version as soon as everything is back in order."
 1.11.0:
-    - "!!! Fixed RainLab.Translate issue. Also, RainLab.Translate is now a required dependency for this plugin. Make sure to install at least version 1.6.5 of RainLab.Translate before installing this update."
+    - "!!! Fixed RainLab.Translate issue. Also, RainLab.Translate is now a required dependency for this plugin. Make sure to install at least version 1.6.6 of RainLab.Translate before installing this update."
