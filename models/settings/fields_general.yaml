@@ -96,3 +96,17 @@ fields:
         type: switch
         default: 0
         comment: offline.mall::lang.general_settings.group_search_results_by_product_comment
+
+    click_and_collect:
+        label: offline.mall::lang.general_settings.click_and_collect.use_state
+        span: left
+        type: switch
+        default: 1
+        comment: offline.mall::lang.general_settings.click_and_collect.use_state_comment
+
+    order_start:
+        label: offline.mall::lang.general_settings.click_and_collect.percent
+        comment: offline.mall::lang.general_settings.click_and_collect.percent_comment
+        type: text
+        span: right
+        default: 20
