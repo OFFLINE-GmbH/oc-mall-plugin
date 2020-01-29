@@ -66,9 +66,11 @@ class TotalsCalculatorInput
     {
         $wishlist->loadMissing('items.data.taxes');
 
-        $input            = new self();
-        $input->products  = $wishlist->items;
-        $input->discounts = new Collection();
+        $input                      = new self();
+        $input->products            = $wishlist->items;
+        $input->discounts           = new Collection();
+        $input->shipping_method     = $wishlist->shipping_method;
+        $input->shipping_country_id = $wishlist->getCartCountryId();
 
         return $input;
     }

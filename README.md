@@ -17,7 +17,7 @@
 * Stock management
 * Wishlists
 * Reviews and ratings
-* Checkout via Stripe and PayPal supported out-of-the-box
+* Checkout via Stripe, PayPal and PostFinance supported out-of-the-box
 * Custom payment providers 
 * Integrated with RainLab.User
 * Multi-currency and multi-language (integrates with RainLab.Translate)
@@ -35,7 +35,7 @@ The documentation of this plugin can be found here:
 
 #### Requirements
 
-* PHP7.1+
+* PHP7.2+
 * October Build 444+
 * For best performance use MySQL 5.7+ or MariaDB 10.2+
 

@@ -1,13 +1,13 @@
-subject = "Your order has been shipped"
+subject = "{{ 'offline.mall::mail.order.shipped.subject' | trans() }}"
 description = "Sent when tracking information was added"
 ==
 
-Hi {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-We just wanted to let you know that your order **#{{ order.order_number }}** has been shipped.
+{{ 'offline.mall::mail.order.shipped.message' | trans({number: order.order_number}) }}
 
 {% partial 'mall.order.tracking' order=order %}
 
 {% partial 'button' url=account_url type='primary' body %}
-    Check your order online
+    {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
 {% endpartial %}

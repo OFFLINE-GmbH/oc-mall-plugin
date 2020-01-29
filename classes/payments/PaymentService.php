@@ -52,7 +52,7 @@ class PaymentService
      *
      * @param string $flow
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function process($flow = 'checkout')
     {

@@ -493,7 +493,7 @@ class Products extends MallComponent
      */
     protected function productIncludes(): array
     {
-        return ['image_sets.images', 'customer_group_prices', 'additional_prices'];
+        return ['translations', 'image_sets.images', 'customer_group_prices', 'additional_prices'];
     }
 
     /**

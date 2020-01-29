@@ -299,7 +299,6 @@ class Order extends Model
     public function getTotalInCurrencyAttribute()
     {
         $total = (int)$this->getOriginal('total_post_taxes');
-        $total *= (float)$this->currency['rate'];
 
         return app(Money::class)->round($total, $this->currency['decimals']);
     }

@@ -5,11 +5,14 @@ namespace OFFLINE\Mall\Classes\Traits\Cart;
 
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TaxTotal;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\Tax;
 
 trait CartItemPriceAccessors
 {
+
+    use FilteredTaxes;
     /**
      * Cached tax factor.
      * @var int
@@ -155,7 +158,7 @@ trait CartItemPriceAccessors
         }
 
         return $this->service_options->sum(function ($option) {
-            $taxes     = $option->service->taxes->filter($this->filterTaxes());
+            $taxes     = $this->getFilteredTaxes($option->service->taxes);
             $taxFactor = $taxes->sum('percentageDecimal');
 
             return $option->price()->integer / (1 + $taxFactor) * $taxFactor;
@@ -224,7 +227,7 @@ trait CartItemPriceAccessors
     {
         $taxes = optional($this->data)->taxes ?? new Collection();
 
-        return $taxes->filter($this->filterTaxes());
+        return $this->getFilteredTaxes($taxes);
     }
 
     /**
@@ -241,7 +244,7 @@ trait CartItemPriceAccessors
         }
 
         return $this->service_options->flatMap(function (ServiceOption $option) {
-            $taxes    = $option->service->taxes->filter($this->filterTaxes()) ?? new Collection();
+            $taxes    = $this->getFilteredTaxes($option->service->taxes);
             $factor   = $taxes->sum('percentageDecimal');
             $preTaxes = $option->price()->integer / (1 + $factor) * $this->quantity;
 
@@ -251,24 +254,9 @@ trait CartItemPriceAccessors
         });
     }
 
-    /**
-     * Filter taxes based on shipping country restrictions.
-     * @return \Closure
-     */
-    protected function filterTaxes()
+    public function getCartCountryId()
     {
-        return function (Tax $tax) {
-            if ( ! $this->cart) {
-                return true;
-            }
-
-            // If no shipping address is available only include taxes that have no country restrictions.
-            if ($this->cart->shipping_address === null) {
-                return $tax->countries->count() === 0;
-            }
-
-            return $tax->countries->count() === 0
-                || $tax->countries->pluck('id')->search($this->cart->shipping_address->country_id) !== false;
-        };
+        return optional(optional($this->cart)->shipping_address)->country_id;
     }
+
 }

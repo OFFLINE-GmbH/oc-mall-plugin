@@ -89,6 +89,7 @@
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
         'is_default'        => 'Is default',
+        'unknown'           => 'Unknown Currency',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Payment gateways',
@@ -104,6 +105,17 @@
             'secret'            => 'PayPal Secret',
             'test_mode'         => 'Test mode',
             'test_mode_comment' => 'Run all payments in the PayPal Sandbox.',
+        ],
+        'postfinance' => [
+            'test_mode'              => 'Test mode',
+            'test_mode_comment'      => 'Run all payments against the test environment',
+            'pspid'                  => 'PSPID (Username)',
+            'hashing_method'         => 'Hash algorithm',
+            'hashing_method_comment' => 'Configuration -> Technical information -> Global security parameters',
+            'sha_in'                 => 'SHA-IN Signature',
+            'sha_in_comment'         => 'Configuration -> Technical information -> Data and origin verification',
+            'sha_out'                => 'SHA-OUT Signature',
+            'sha_out_comment'        => 'Configuration -> Technical information -> Transaction feedback',
         ],
     ],
     'notification_settings'    => [
@@ -147,6 +159,8 @@
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
         'use_state'                  => 'Use State/County/Province field',
         'use_state_comment'          => 'Customers have to select a State/County/Province during signup',
+        'group_search_results_by_product'                  => 'Group search results by product',
+        'group_search_results_by_product_comment'          => 'Include a Product only once in the search results, don\'t display all matching Variants',
         'admin_email'                => 'Admin email',
         'admin_email_comment'        => 'Admin notifications will be sent to this addres',
         'base'                       => 'Base settings',
@@ -451,9 +465,11 @@
         'is_not_required'  => 'Not required',
     ],
     'tax'                      => [
-        'percentage'        => 'Percent',
-        'countries'         => 'Only apply tax when shipping to these countries',
-        'countries_comment' => 'If no country is selected the tax is applied worldwide.',
+        'percentage'         => 'Percent',
+        'countries'          => 'Only apply tax when shipping to these countries',
+        'countries_comment'  => 'If no country is selected the tax is applied worldwide.',
+        'is_default'         => 'Is default',
+        'is_default_comment' => 'This tax is used if the shipping destination country is not known yet',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -816,14 +832,17 @@
                 'description' => 'Displays the shopping cart',
             ],
             'properties' => [
-                'showDiscountApplier' => [
+                'showDiscountApplier'         => [
                     'title' => 'Show discount applier',
                 ],
-                'showShipping' => [
+                'showShipping'                => [
                     'title' => 'Show shipping cost',
                 ],
-                'showTaxes'           => [
+                'showTaxes'                   => [
                     'title' => 'Show taxes',
+                ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Show proceed to checkout button',
                 ],
             ],
         ],
@@ -973,14 +992,6 @@
                     'title'       => 'Category page',
                     'description' => 'Links will point to this page. If nothing is entered the default settings from the backend settings will be used.',
                 ],
-                'displayEmpty' => [
-                    'title'       => 'Display Empty Categories',
-                    'description' => 'Display a category in the list even if is empty',
-                ],
-                'displayQuantity' => [
-                    'title'       => 'Display Product Quantities',
-                    'description' => 'Display the product quantities that belongs to a category',
-                ],
             ],
             'no_parent'  => 'Show all categories',
             'by_slug'    => 'Use category in url as parent',
@@ -1043,6 +1054,12 @@
             'details' => [
                 'name'        => 'Wishlists',
                 'description' => 'Displays the wishlist manager',
+            ],
+            'properties' => [
+                'showShipping' => [
+                    'name'        => 'Show shipping',
+                    'description' => 'Show shipping cost and selector',
+                ],
             ],
         ],
     ],

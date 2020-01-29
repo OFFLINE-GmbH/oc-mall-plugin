@@ -253,3 +253,30 @@
     - Fixed price sorting in Products component using the MySQL index
 1.8.2:
     - Added onClear method to Wishlist component
+1.8.3:
+    - Bugfix release
+1.8.4:
+    - Prices are now correctly indexed in all registered currencies. Run php artisan mall:index to benefit of these optimizations.
+1.8.5:
+    - The PDF button in the Wishlists component remains visible now after a Product has been removed or edited by the user
+1.9.0:
+    - "Better handling of country specific taxes, multi-language e-mails, translatable property values and more! (Full Changelog: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.9.0.html)"
+    - add_is_default_column_to_taxes_table.php
+1.9.1:
+    - Bugfix release
+1.9.2:
+    - Fixed handling of country specific Taxes for Wishlists
+1.9.3:
+    - Added shipping method support for Wishlists
+    - add_shipping_method_id_to_wishlists_table.php
+    - set_default_tax.php
+1.9.4:
+    - Another bugfix release
+1.9.5:
+    - Added Customer relation to Wishlist model
+1.10.0:
+    - "!!! Added property values to default Product component markup. This will add new markup that needs styling! See Changelog: https://tinyurl.com/txwozkj"
+1.10.1:
+    - Bugfix release
+1.10.2:
+    - "!!! Do not update until version 1.11 is released. There is a bug in RainLab.Translate because of which translations won't be loaded correctly. Also do not update RainLab.Translate until this bug is fixed: https://github.com/rainlab/translate-plugin/issues/539. We will release a new version as soon as everything is back in order."

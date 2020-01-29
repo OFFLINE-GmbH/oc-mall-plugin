@@ -251,7 +251,7 @@ class Stripe extends PaymentProvider
                 'city'        => $customer->shipping_address->city,
                 'country'     => $customer->shipping_address->country->name,
                 'postal_code' => $customer->shipping_address->zip,
-                'state'       => $customer->shipping_address->state->name,
+                'state'       => optional($customer->shipping_address->state)->name,
             ],
         ];
     }

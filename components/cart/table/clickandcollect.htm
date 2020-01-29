@@ -1,0 +1,29 @@
+{% if __SELF__.showClickAndCollect %}
+<tr class="mall-cart__grand-total">
+    <td></td>
+    <td colspan="3">
+            {{ 'offline.mall::frontend.clickandcollect.pay_online' | trans }}       
+    </td>
+    <td class="text-right">
+        
+            {{ totals.totalPostTaxes | money }}
+        
+            {{ totals.productPostTaxes | money }}
+        
+    </td>
+</tr>
+<tr class="mall-cart__grand-total">
+    <td></td>
+    <td colspan="3">
+            {{ 'offline.mall::frontend.clickandcollect.pay_instore' | trans }}
+    </td>
+    <td class="text-right">
+        
+            {{ totals.totalPostTaxes | money }}
+        
+            {{ totals.productPostTaxes | money }}
+        
+    </td>
+</tr>
+
+{% endif %}

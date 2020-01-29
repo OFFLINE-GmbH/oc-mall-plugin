@@ -52,8 +52,10 @@ class ProductEntry implements Entry
 
     protected function mapPrices(Product $product): Collection
     {
-        return $product->prices->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price->integer];
+        return $product->withForcedPriceInheritance(function() use ($product) {
+            return Currency::getAll()->mapWithKeys(function ($currency) use ($product) {
+                return [$currency->code => $product->price($currency)->integer];
+            });
         });
     }
 

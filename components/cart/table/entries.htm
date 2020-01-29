@@ -15,7 +15,7 @@
                 {% partial __SELF__ ~ '::table/shipping'   shipping=cart.totals.shippingTotal %}
                 {% partial __SELF__ ~ '::table/payment'    payment=cart.totals.paymentTotal %}
                 {% partial __SELF__ ~ '::table/grandtotal' totals=cart.totals %}
-                {% partial __SELF__ ~ '::table/taxes'      taxes=cart.totals.taxes %}
+                {% partial __SELF__ ~ '::table/taxes'      totals=cart.totals %}
             </tfoot>
         </table>
     </div>

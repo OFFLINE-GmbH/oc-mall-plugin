@@ -1,12 +1,13 @@
-subject = "Your payment was refunded"
+subject = "{{ 'offline.mall::mail.payment.refunded.subject' | trans() }}"
 description = "Sent when a payment for an order was refunded"
 ==
 
-Hi {{ order.customer.firstname }}
+{{ 'offline.mall::mail.common.hello' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}
 
-We just refunded the payment for your order **#{{ order.order_number }}**.
-Please be aware that it may take multiple days until you receive your funds.
+{{ 'offline.mall::mail.payment.refunded.message' | trans({number: order.order_number}) }}
+
+{{ 'offline.mall::mail.payment.refunded.duration' | trans() }}
 
 {% partial 'button' url=account_url type='primary' body %}
-    Check the status of your order online
+    {{ 'offline.mall::mail.common.view_order_status_online' | trans() }}
 {% endpartial %}

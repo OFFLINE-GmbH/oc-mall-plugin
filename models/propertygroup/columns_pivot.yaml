@@ -5,10 +5,6 @@ columns:
             path: $/offline/mall/models/property/_reorder_handle.htm
             sortable: false
             width: 20px
-    pivot[sort_order]:
-        invisible: true
-        type: number
-        sortable: true
     name:
         label: 'offline.mall::lang.common.name'
         type: text
@@ -27,3 +23,8 @@ columns:
         label: 'offline.mall::lang.common.updated_at'
         type: datetime
         invisible: true
+    pivot[relation_sort_order]:
+        label: 'offline.mall::lang.common.sort_order'
+        invisible: false
+        type: number
+        sortable: true

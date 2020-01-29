@@ -862,14 +862,6 @@
                     'title'       => 'Pagina categoria',
                     'description' => 'I link punteranno a questa pagina. Se lasciato vuoto, verranno usate le impostazioni di default del backend.',
                 ],
-                'displayEmpty' => [
-                    'title'       => 'Mostra categorie vuote',
-                    'description' => 'Mostra una categoria della lista anche se non ha prodotti',
-                ],
-                'displayQuantity' => [
-                    'title'       => 'Mostra quantità',
-                    'description' => 'Mostra la quantità di prodotti della categoria a fianco della stessa',
-                ],
             ],
             'no_parent'  => 'Mostra tutte le categorie',
             'by_slug'    => 'Usa la categoria nell\'url come categoria genitore',

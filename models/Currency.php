@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Model;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
@@ -137,22 +138,45 @@ class Currency extends Model
     }
 
     /**
-     * Turns a currency id or code into a currency model.
-     *
-     * @param $currency
-     *
+     * Return a dummy currency for unknown inputs.
      * @return Currency
      */
-    public static function resolve($currency = null)
+    public static function unknown($currency = null): self
     {
-        if ($currency === null) {
-            $currency = Currency::activeCurrency();
+        Log::error(
+            '[OFFLINE.Mall] Unknown currency was requested',
+            ['currency' => $currency, 'url' => request()->url()]
+        );
+
+        return new self([
+            'code'       => '???',
+            'symbol'     => trans('offline.mall::lang.currency_settings.unknown'),
+            'rate'       => 1,
+            'decimals'   => 2,
+            'format'     => '{{ price|number_format(currency.decimals, " ", ",") }} ({{ currency.symbol }})',
+            'is_default' => false,
+        ]);
+    }
+
+    /**
+     * Turns a currency id or code into a currency model.
+     */
+    public static function resolve($input = null): self
+    {
+        if ($input instanceof self) {
+            return $input;
         }
-        if (is_string($currency)) {
-            $currency = Currency::whereCode($currency)->firstOrFail();
+        if ($input === null) {
+            $currency = self::activeCurrency();
         }
-        if (is_int($currency)) {
-            $currency = Currency::whereId($currency)->firstOrFail();
+        if (is_string($input)) {
+            $currency = self::whereCode($input)->first();
+        }
+        if (is_int($input)) {
+            $currency = self::whereId($input)->first();
+        }
+        if ( ! isset($currency) || ! $currency) {
+            return self::unknown($input);
         }
 
         return $currency;
