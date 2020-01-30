@@ -104,7 +104,7 @@ fields:
         default: 1
         comment: offline.mall::lang.general_settings.click_and_collect.use_state_comment
 
-    order_start:
+    click_and_collect_percent:
         label: offline.mall::lang.general_settings.click_and_collect.percent
         comment: offline.mall::lang.general_settings.click_and_collect.percent_comment
         type: text
