@@ -10,22 +10,23 @@ next: /getting-started/theme-setup
 The plugin can be found on the official [October CMS Marketplace](https://octobercms.com/plugin/offline-mall). You 
 can install it via the Projects feature of the Marketplace itself or via your installation's backend settings.
 
-The `OFFLINE.Mall` plugin depends on `RainLab.User` and `RainLab.Location`
+The `OFFLINE.Mall` plugin depends on `RainLab.User`, `RainLab.Location`
+and `RainLab.Translate`.
 
 The easiest way to get you started is by using the command line:
 
 ```bash
 php artisan plugin:install rainlab.user
 php artisan plugin:install rainlab.location
+php artisan plugin:install rainlab.translate
 php artisan plugin:install offline.mall
 ```
 
 If you plan to use our [demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) make sure to also
- install `RainLab.Translate` and `RainLab.Pages`. These are dependencies of the demo theme, not the plugin itself.
+ install `RainLab.Pages`. These are dependencies of the demo theme, not the plugin itself.
 
 ```bash
 # For the demo theme only!
-php artisan plugin:install rainlab.translate
 php artisan plugin:install rainlab.pages
 ```   
 

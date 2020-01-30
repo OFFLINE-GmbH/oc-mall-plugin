@@ -117,6 +117,8 @@ class Product extends Model
         'published',
         'mpn',
         'gtin',
+        'additional_descriptions',
+        'additional_properties',
     ];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
