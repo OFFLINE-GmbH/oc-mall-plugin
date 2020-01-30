@@ -64,8 +64,8 @@ return [
     "form.signin" => "Войти",
     "form.signup" => "Регистрация",
     "form.state" => "Штат/округ/провинция",
-    "form.taxnr" => "",
-    "form.taxnr_placeholder" => "",
+    "form.taxnr" => "Налоговый номер",
+    "form.taxnr_placeholder" => "Как частное лицо не заполняйте",
     "form.zip" => "Индекс",
     "grand_total" => "Общая сумма",
     "guest_upgrade.callout" => "В настоящее время вы вошли как гость. Введите пароль для обновления вашей учетной записи.",
@@ -164,6 +164,6 @@ return [
     "wishlists.addedtocart" => "Все товары были добавлены в вашу корзину",
     "wishlists.addtocart" => "Добавить все товары в корзину",
     "wishlists.none" => "Вы еще не создали ни одного списка желаний.",
-    "wishlists.pdf_download" => "",
+    "wishlists.pdf_download" => "Скачать в формате PDF",
     "wishlists.stockmissing" => "Некоторые товары отсутствуют на складе и не были добавлены в корзину."
 ];

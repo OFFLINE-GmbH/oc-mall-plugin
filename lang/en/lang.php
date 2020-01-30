@@ -211,12 +211,21 @@ return [
             ]
         ],
         "category" => [
-            "by_slug" => "",
-            "no_parent" => "",
+            "by_slug" => "Use the category in the URL as a parent",
+            "no_parent" => "Show all categories",
             "properties" => [
-                "categoryPage" => ["description" => "", "title" => ""],
-                "categorySlug" => ["description" => "", "title" => ""],
-                "parent" => ["description" => "", "title" => ""]
+                "categoryPage" => [
+                    "description" => "Links will point to this page. If nothing is specified, the default backend settings will be used.",
+                    "title" => "Category Page"
+                ],
+                "categorySlug" => [
+                    "description" => "Use this parameter to load the parent category from the URL.",
+                    "title" => "Category slug parameter"
+                ],
+                "parent" => [
+                    "description" => "Show only children in this category",
+                    "title" => "Starting category"
+                ]
             ]
         ],
         "checkout" => [

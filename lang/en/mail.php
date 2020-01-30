@@ -2,10 +2,10 @@
 return [
     "admin" => [
         "checkout_failed" => [
-            "error" => "",
+            "error" => "Error message",
             "error_details" => "Error details",
             "not_processed" => "The following order could not be processed correctly. It is possible that you have to contact the customer.",
-            "payment_id" => "",
+            "payment_id" => "Payment ID",
             "subject" => "Checkout failed #:number"
         ],
         "checkout_succeeded" => [

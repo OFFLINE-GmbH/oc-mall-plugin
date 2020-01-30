@@ -16,8 +16,8 @@ return [
     "checkout" => [
         "failed" => [
             "check_order_status" => "Um den aktuellen Status Ihrer Bestellen zu prüfen, können Sie sich jederzeit mit Ihrem Benutzerkonto anmelden.",
-            "error" => "",
-            "payment_id" => "",
+            "error" => "Fehlermeldung",
+            "payment_id" => "Zahlungs ID",
             "problem_message" => "Leider ist ein Problem während der Bearbeitung Ihrer Bestellung aufgetreten. Wir schauen uns das Problem an und melden uns bei Ihnen mit weiteren Informationen. Wir entschuldigen uns für die Unannehmlichkeiten.",
             "subject" => "Fehler bei der Bestellung #:number"
         ],

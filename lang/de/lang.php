@@ -211,12 +211,21 @@ return [
             ]
         ],
         "category" => [
-            "by_slug" => "",
-            "no_parent" => "",
+            "by_slug" => "Verwenden Sie die Kategorie in der URL als übergeordnetes Element",
+            "no_parent" => "Alle Kategorien anzeigen",
             "properties" => [
-                "categoryPage" => ["description" => "", "title" => ""],
-                "categorySlug" => ["description" => "", "title" => ""],
-                "parent" => ["description" => "", "title" => ""]
+                "categoryPage" => [
+                    "description" => "Links verweisen auf diese Seite. Wenn nichts angegeben ist, werden die Standardeinstellungen des Backends verwendet.",
+                    "title" => "Kategorieseite"
+                ],
+                "categorySlug" => [
+                    "description" => "Verwenden Sie diesen Parameter, um die übergeordnete Kategorie von der URL zu laden.",
+                    "title" => "Kategorie-Slug-Parameter"
+                ],
+                "parent" => [
+                    "description" => "Zeige nur Kinder in dieser Kategorie",
+                    "title" => "Startkategorie"
+                ]
             ]
         ],
         "checkout" => [
@@ -295,7 +304,7 @@ return [
             ]
         ],
         "product" => [
-            "added_to_cart" => "",
+            "added_to_cart" => "Produkt erfolgreich hinzugefügt",
             "details" => [
                 "description" => "Zeigt die Details zu einem Produkt an",
                 "name" => "Produkt-Details"
@@ -540,7 +549,7 @@ return [
             "rate" => "Prozentualer-Rabatt",
             "shipping" => "Alternativer Versand-Preis"
         ],
-        "valid_from" => "",
+        "valid_from" => "Gültig ab",
         "validation" => [
             "duplicate" => "Ein Gutschein kann nur einmal verwendet werden.",
             "empty" => "Geben Sie einen Gutschein-Code ein.",
@@ -570,15 +579,15 @@ return [
         "category" => "Mall: Allgemein",
         "category_orders" => "Mall: Bestellungen",
         "category_page" => "Kategorie-Seite für Produkte-Übersicht",
-        "category_page_comment" => "",
+        "category_page_comment" => "Fügen Sie dieser Seite die Komponente \"Produkte\" hinzu.",
         "category_payments" => "Mall: Zahlungen",
         "checkout_page" => "Checkout-Seite",
         "checkout_page_comment" => "Auf dieser Seite muss die checkout Komponente platziert werden",
         "click_and_collect" => [
-            "percent" => "",
-            "percent_comment" => "",
-            "use_state" => "",
-            "use_state_comment" => ""
+            "percent" => "Klicken und Rate sammeln",
+            "percent_comment" => "Prozentsatz für die Buchung von Produkten",
+            "use_state" => "Aktivieren Sie Click and Collect",
+            "use_state_comment" => "Aktivieren oder deaktivieren Sie das Klicken und Sammeln"
         ],
         "customizations" => "Optionen",
         "customizations_comment" => "Globale Konfigurationseinstellungen für deinen Shop",

@@ -64,8 +64,8 @@ return [
     "form.signin" => "Connexion",
     "form.signup" => "Créer un compte",
     "form.state" => "Etat/Comté/Province",
-    "form.taxnr" => "",
-    "form.taxnr_placeholder" => "",
+    "form.taxnr" => "Numéro d'identification fiscale",
+    "form.taxnr_placeholder" => "En tant que particulier, ne remplissez pas",
     "form.zip" => "ZIP",
     "grand_total" => "TOTAL",
     "guest_upgrade.callout" => "Vous êtes actuellement connecté en tant qu'invité. Entrez un mot de passe pour mettre à jour votre compte.",
@@ -164,6 +164,6 @@ return [
     "wishlists.addedtocart" => "Tous les produits ont été ajoutés à votre panier",
     "wishlists.addtocart" => "Ajouter tous les produits à votre panier",
     "wishlists.none" => "Vous n'avez pas encore créé de liste de souhaits.",
-    "wishlists.pdf_download" => "",
+    "wishlists.pdf_download" => "Télécharger en PDF",
     "wishlists.stockmissing" => "Certains articles ne sont pas en stock et n'ont pas été ajoutés au panier."
 ];

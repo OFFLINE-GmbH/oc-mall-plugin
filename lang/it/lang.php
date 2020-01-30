@@ -5,8 +5,8 @@ return [
         "code_comment" => "Questo codice può essere usato per identificare questa categoria nei tuoi parziali del frontend.",
         "inherit_property_groups" => "Eredita le proprietà dalla categoria superiore",
         "inherit_property_groups_comment" => "Usa i gruppi di proprietà della categoria superiore",
-        "inherit_review_categories" => "",
-        "inherit_review_categories_comment" => "",
+        "inherit_review_categories" => "Eredita rivedere le categorie della categoria principale",
+        "inherit_review_categories_comment" => "Utilizza le categorie di recensioni della categoria principale di questa categoria",
         "name" => "Nome",
         "no_parent" => "Nessuna categoria superiore",
         "parent" => "Sottocategoria di"
@@ -20,7 +20,7 @@ return [
         "addresses" => "Indirizzi",
         "allowed" => "Permesso",
         "api_error" => "Impossibile salvare sconto. Errore durante l'accesso alle API di Mall.",
-        "approved_at" => "",
+        "approved_at" => "Approvato a",
         "attachments" => "Immagini/Download",
         "brand" => "Brand",
         "brands" => "Brands",
@@ -49,7 +49,7 @@ return [
         "downloads" => "Download",
         "export_orders" => "Esporta ordini",
         "failed" => "Fallito",
-        "feeds" => "",
+        "feeds" => "Feed",
         "fees" => "Tasse",
         "general" => "Generali",
         "group_name" => "Nome gruppo",
@@ -99,17 +99,17 @@ return [
         "rates" => "Aliquote",
         "reference" => "Riferimento",
         "reorder" => "Riordina voci",
-        "review" => "",
-        "review_categories" => "",
-        "review_category" => "",
-        "reviews" => "",
+        "review" => "Revisione",
+        "review_categories" => "Rivedi le categorie",
+        "review_category" => "Rivedi la categoria",
+        "reviews" => "recensioni",
         "saved_changes" => "Salvato con successo",
         "select_file" => "Scegli file",
         "select_image" => "Scegli immagine",
         "select_placeholder" => "-- Per favore scegli",
         "seo" => "SEO",
-        "service" => "",
-        "services" => "",
+        "service" => "servizio",
+        "services" => "Servizi",
         "session_id" => "ID sessione",
         "shipping" => "Spedizione",
         "shipping_methods" => "Metodi di spedizione",
@@ -122,7 +122,7 @@ return [
         "stock_limit_reached" => "Non puoi aggiungere altri oggetti di questo tipo al tuo carrello perchè il limite di provvigione è stato raggiunto.",
         "successful" => "Riuscito",
         "taxes" => "Tasse",
-        "title" => "",
+        "title" => "Titolo",
         "unchecked" => "Non verificato",
         "unit" => "Unità",
         "updated_at" => "Aggiornato il",
@@ -130,7 +130,7 @@ return [
         "value" => "Valore",
         "variant" => "Variante",
         "variants" => "Varianti",
-        "version" => "",
+        "version" => "Versione",
         "website" => "Sito web",
         "weekly" => "Settimanalmente",
         "yes" => "Si"
@@ -170,8 +170,8 @@ return [
             "details" => ["description" => "Mostra il carrello", "name" => "Carrello"],
             "properties" => [
                 "showDiscountApplier" => ["title" => "Mostra form per applicare gli sconti"],
-                "showProceedToCheckoutButton" => ["title" => ""],
-                "showShipping" => ["title" => ""],
+                "showProceedToCheckoutButton" => ["title" => "Mostra procedi al pulsante di pagamento"],
+                "showShipping" => ["title" => "Mostra i costi di spedizione"],
                 "showTaxes" => ["title" => "Mostra tasse"]
             ]
         ],
@@ -211,12 +211,21 @@ return [
             ]
         ],
         "category" => [
-            "by_slug" => "",
-            "no_parent" => "",
+            "by_slug" => "Usa la categoria nell'URL come genitore",
+            "no_parent" => "Mostra tutte le categorie",
             "properties" => [
-                "categoryPage" => ["description" => "", "title" => ""],
-                "categorySlug" => ["description" => "", "title" => ""],
-                "parent" => ["description" => "", "title" => ""]
+                "categoryPage" => [
+                    "description" => "I collegamenti rimandano a questa pagina. Se non viene specificato nulla, verranno utilizzate le impostazioni di backend predefinite.",
+                    "title" => "Pagina categoria"
+                ],
+                "categorySlug" => [
+                    "description" => "Utilizzare questo parametro per caricare la categoria padre dall'URL.",
+                    "title" => "Parametro slug di categoria"
+                ],
+                "parent" => [
+                    "description" => "Mostra solo i bambini in questa categoria",
+                    "title" => "Categoria di partenza"
+                ]
             ]
         ],
         "checkout" => [
@@ -263,7 +272,12 @@ return [
             ],
             "discount_applied" => "Sconto applicato con successo!"
         ],
-        "enhancedEcommerceAnalytics" => ["details" => ["description" => "", "name" => ""]],
+        "enhancedEcommerceAnalytics" => [
+            "details" => [
+                "description" => "Implementa un livello dati di Google Tag Manager",
+                "name" => "Componente e-commerce avanzato (UA)"
+            ]
+        ],
         "myAccount" => [
             "details" => [
                 "description" => "Mostra molteplici form dove un utente può vedere e modificare il suo profilo",
@@ -293,13 +307,24 @@ return [
                 "description" => "Mostra i dettagli di un prodotto",
                 "name" => "Dettagli prodotto"
             ],
-            "properties" => ["redirectOnPropertyChange" => ["description" => "", "title" => ""]]
+            "properties" => [
+                "redirectOnPropertyChange" => [
+                    "description" => "Reindirizzare l'utente alla nuova pagina dei dettagli se una proprietà è stata modificata",
+                    "title" => "Reindirizzamento sulla modifica della proprietà"
+                ]
+            ]
         ],
         "productReviews" => [
-            "details" => ["description" => "", "name" => ""],
+            "details" => [
+                "description" => "Visualizza tutte le recensioni di un prodotto",
+                "name" => "Recensioni dei prodotti"
+            ],
             "properties" => [
-                "currentVariantReviewsOnly" => ["description" => "", "title" => ""],
-                "perPage" => ["title" => ""]
+                "currentVariantReviewsOnly" => [
+                    "description" => "Non mostrare recensioni di altre varianti di questo prodotto",
+                    "title" => "Mostra solo le valutazioni di questa variante"
+                ],
+                "perPage" => ["title" => "Numero di recensioni per pagina"]
             ]
         ],
         "products" => [
@@ -368,12 +393,12 @@ return [
                 "bestseller" => "Bestseller",
                 "latest" => "Ultimi arrivi",
                 "manual" => "Manuale",
-                "name" => "",
+                "name" => "Nome",
                 "oldest" => "Da più tempo nel negozio",
                 "priceHigh" => "Prezzo più alto",
                 "priceLow" => "Prezzo più basso",
                 "random" => "Casuale",
-                "ratings" => ""
+                "ratings" => "Giudizi"
             ]
         ],
         "shippingMethodSelector" => [
@@ -410,7 +435,7 @@ return [
                     "email" => "Per favore, inserisci un indirizzo email valido.",
                     "required" => "Per favore, inserisci un indirizzo email."
                 ],
-                "not_activated" => "",
+                "not_activated" => "Il tuo account deve essere attivato prima di poter accedere.",
                 "password" => [
                     "max" => "La password fornita é troppo lunga.",
                     "min" => "La password fornita é troppo corta. Per favore, inserisci almeno 8 caratteri.",
@@ -424,7 +449,7 @@ return [
                     "exists" => "Il valore  selezionato non é valido.",
                     "required" => "Scegli una provincia"
                 ],
-                "terms_accepted" => ["required" => ""],
+                "terms_accepted" => ["required" => "Si prega di accettare i nostri termini e condizioni."],
                 "unknown_user" => "Le credenziali che hai inserito non sono valide.",
                 "user_is_guest" => "Stai provando ad accedere con un account ospite.",
                 "zip" => ["required" => "Per favore, inserisci il tuo CAP."]
@@ -432,15 +457,26 @@ return [
             "properties" => ["redirect" => ["name" => "Reindirizza dopo il login"]]
         ],
         "wishlistButton" => [
-            "details" => ["description" => "", "name" => ""],
+            "details" => [
+                "description" => "Visualizza un pulsante della lista dei desideri",
+                "name" => "Pulsante Wishlist"
+            ],
             "properties" => [
-                "product" => ["description" => "", "name" => ""],
-                "variant" => ["description" => "", "name" => ""]
+                "product" => ["description" => "ID del prodotto", "name" => "Prodotto"],
+                "variant" => ["description" => "ID della variante", "name" => "Variante"]
             ]
         ],
         "wishlists" => [
-            "details" => ["description" => "", "name" => ""],
-            "properties" => ["showShipping" => ["description" => "", "name" => ""]]
+            "details" => [
+                "description" => "Visualizza il gestore lista desideri",
+                "name" => "Lista dei desideri"
+            ],
+            "properties" => [
+                "showShipping" => [
+                    "description" => "Mostra costi di spedizione e selettore",
+                    "name" => "Mostra spedizione"
+                ]
+            ]
         ]
     ],
     "currency_settings" => [
@@ -453,7 +489,7 @@ return [
         "description" => "Imposta le tue valute",
         "is_default" => "È predefinita",
         "label" => "Valute",
-        "unknown" => ""
+        "unknown" => "Valuta sconosciuta"
     ],
     "custom_field_options" => [
         "add" => "Aggiungi opzione",
@@ -487,7 +523,7 @@ return [
     "discounts" => [
         "amount" => "Importo fisso",
         "code" => "Codice sconto",
-        "code_comment" => "",
+        "code_comment" => "Lascia vuoto per generare un codice casuale",
         "expires" => "Scadenza",
         "max_number_of_usages" => "Numero massimo di utilizzi",
         "name" => "Nome",
@@ -511,7 +547,7 @@ return [
             "rate" => "Tasso",
             "shipping" => "Spedizione alternativa"
         ],
-        "valid_from" => "",
+        "valid_from" => "valido dal",
         "validation" => [
             "duplicate" => "Puoi usare lo stesso codice promozionale solo una volta.",
             "empty" => "Inserisci un codice di promozione.",
@@ -522,11 +558,11 @@ return [
         ]
     ],
     "feed_settings" => [
-        "description" => "",
-        "google_merchant_enabled" => "",
-        "google_merchant_enabled_comment" => "",
-        "google_merchant_url" => "",
-        "google_merchant_url_locale" => ""
+        "description" => "Configura i feed del centro commerciale",
+        "google_merchant_enabled" => "Abilita feed di Google Merchant Center",
+        "google_merchant_enabled_comment" => "Verrà generato un feed di prodotto",
+        "google_merchant_url" => "Il tuo URL del feed commerciante di Google",
+        "google_merchant_url_locale" => "Aggiungi? Locale = xy per ottenere un feed localizzato."
     ],
     "general_settings" => [
         "account_page" => "Pagina account",
@@ -554,8 +590,8 @@ return [
         "customizations" => "Personalizzazioni",
         "customizations_comment" => "Personalizza le caratteristiche del tuo negozio",
         "description" => "Impostazioni Generali",
-        "group_search_results_by_product" => "",
-        "group_search_results_by_product_comment" => "",
+        "group_search_results_by_product" => "Raggruppa i risultati della ricerca per prodotto",
+        "group_search_results_by_product_comment" => "Includi un prodotto solo una volta nei risultati della ricerca, non visualizzare tutte le varianti corrispondenti",
         "index_driver" => "Driver per l'indicizzazione",
         "index_driver_comment" => "Se il tuo database supporta JSON usa il driver database.",
         "index_driver_database" => "Database (solo per MySQL 5.7+ o MariaDB 10.2+)",
@@ -570,8 +606,8 @@ return [
         "product_page_comment" => "Qui è dove vengono visualizzati i dettagli del prodotti",
         "redirect_to_cart" => "Reindirizza al carrello",
         "redirect_to_cart_comment" => "Reindirizza al carrello dopo che l'utente ha aggiunto un prodotto",
-        "use_state" => "",
-        "use_state_comment" => ""
+        "use_state" => "Usa il campo Stato / Contea / Provincia",
+        "use_state_comment" => "I clienti devono selezionare uno Stato / Contea / Provincia durante la registrazione"
     ],
     "image_sets" => [
         "create_new" => "Crea un nuovo set",
@@ -608,7 +644,7 @@ return [
         "delete_confirm" => "Sei sicuro di voler eliminare questo ordine?",
         "deleted" => "Ordine eliminato con successo",
         "deleting" => "Eliminando l'ordine...",
-        "download_invoice" => "",
+        "download_invoice" => "Scarica la fattura",
         "email" => "Email",
         "grand_total" => "Totale",
         "invalid_status" => "Lo stato selezionato non esiste.",
@@ -696,15 +732,15 @@ return [
             "test_mode_comment" => "Esegue tutti i pagamenti all'interno della Sandbox di PayPal."
         ],
         "postfinance" => [
-            "hashing_method" => "",
-            "hashing_method_comment" => "",
-            "pspid" => "",
-            "sha_in" => "",
-            "sha_in_comment" => "",
-            "sha_out" => "",
-            "sha_out_comment" => "",
-            "test_mode" => "",
-            "test_mode_comment" => ""
+            "hashing_method" => "Algoritmo di hash",
+            "hashing_method_comment" => "Configurazione -> Informazioni tecniche -> Parametri di sicurezza globali",
+            "pspid" => "PSPID (nome utente)",
+            "sha_in" => "Firma SHA-IN",
+            "sha_in_comment" => "Configurazione -> Informazioni tecniche -> Verifica dei dati e dell'origine",
+            "sha_out" => "Firma SHA-OUT",
+            "sha_out_comment" => "Configurazione -> Informazioni tecniche -> Feedback sulle transazioni",
+            "test_mode" => "Modalità di prova",
+            "test_mode_comment" => "Esegui tutti i pagamenti sull'ambiente di test"
         ],
         "stripe" => [
             "api_key" => "Chiave API Stripe",
@@ -728,9 +764,9 @@ return [
         "fee_percentage_comment" => "La percentuale del totale da aggiungere al totale dell'ordine",
         "instructions" => "Istruzioni di pagamento",
         "instructions_comment" => "Sintassi Twig supportata. Usa {{ order }} per accedere alle informazioni dell'ordine, se disponibili",
-        "pdf_partial" => "",
-        "pdf_partial_comment" => "",
-        "pdf_partial_none" => "",
+        "pdf_partial" => "PDF allegato parziale",
+        "pdf_partial_comment" => "Per tutti gli ordini con questo metodo di pagamento, alla posta di notifica verrà allegato un PDF renderizzato del parziale selezionato",
+        "pdf_partial_none" => "Nessun allegato PDF",
         "price" => "Tariffa fissa",
         "price_comment" => "Valore da aggiungere al totale dell'ordine"
     ],
@@ -754,7 +790,7 @@ return [
         "manage_customer_addresses" => "Può gestire gli indirizzi dei clienti",
         "manage_customer_groups" => "Può gestire i gruppi di clienti",
         "manage_discounts" => "Può gestire gli sconti",
-        "manage_feeds" => "",
+        "manage_feeds" => "Può gestire i feed",
         "manage_notifications" => "Può gestire le notifiche",
         "manage_order_states" => "Può gestire gli stati d'ordine",
         "manage_orders" => "Può gestire gli ordini",
@@ -762,15 +798,15 @@ return [
         "manage_price_categories" => "Può gestire le categorie dei prezzi",
         "manage_products" => "Può gestire i prodotti",
         "manage_properties" => "Può modificare le proprietà dei prodotti",
-        "manage_reviews" => "",
-        "manage_services" => "",
+        "manage_reviews" => "Può gestire le recensioni",
+        "manage_services" => "Può gestire i servizi",
         "manage_shipping_methods" => "Può gestire i metodi di spedizione",
         "manage_taxes" => "Può gestire le tasse",
-        "manage_wishlists" => "",
+        "manage_wishlists" => "Può gestire le liste dei desideri",
         "settings" => [
             "manage_currency" => "Può cambiare le impostazioni di valuta del negozio",
             "manage_general" => "Può cambiare le impostazioni generali del negozio",
-            "manage_payment_gateways" => "",
+            "manage_payment_gateways" => "Può modificare le impostazioni del gateway di pagamento",
             "manage_payment_methods" => "Può gestire i metodi di pagamento"
         ]
     ],
@@ -790,25 +826,25 @@ return [
         "description_short" => "Descrizione breve",
         "details" => "Dettagli",
         "duplicate_currency" => "Hai inserito molteplici prezzi per la stessa valuta",
-        "embed_code" => "",
-        "embed_title" => "",
-        "embeds" => "",
-        "filter_virtual" => "",
+        "embed_code" => "Codice di incorporamento",
+        "embed_title" => "Titolo",
+        "embeds" => "incorpora",
+        "filter_virtual" => "Mostra solo prodotti virtuali",
         "general" => "Generale",
         "group_by_property" => "Attributo di raggruppamento per varianti",
-        "gtin" => "",
+        "gtin" => "Numero oggetto commerciale globale (GTIN)",
         "height" => "Altezza (mm)",
         "inventory_management_method" => "Metodo di gestione dell'inventario",
         "is_not_taxable" => "Non usare tasse",
         "is_taxable" => "Usa tassa",
-        "is_virtual" => "",
-        "is_virtual_comment" => "",
+        "is_virtual" => "È virtuale",
+        "is_virtual_comment" => "Questo prodotto è virtuale (un file, nessuna spedizione)",
         "length" => "Lunghezza (mm)",
         "link_target" => "URL di riferimento",
         "link_title" => "Titolo",
         "links" => "Link",
         "missing_category" => "Il prodotto non ha associata una categoria. Per favore scegli una categoria qui sotto per modificare questo prodotto.",
-        "mpn" => "",
+        "mpn" => "Codice produttore (MPN)",
         "name" => "Nome prodotto",
         "not_published" => "Non pubblicato",
         "price" => "Prezzo",
@@ -820,10 +856,10 @@ return [
             "title" => "Panoramica prezzi e quantità",
             "trigger" => "Modifica quantità e prezzi"
         ],
-        "product_file" => "",
-        "product_file_version" => "",
-        "product_files" => "",
-        "product_files_section_comment" => "",
+        "product_file" => "File del prodotto",
+        "product_file_version" => "versione del file",
+        "product_files" => "File del prodotto",
+        "product_files_section_comment" => "Questo è un prodotto virtuale Di seguito puoi caricare nuove versioni di file. L'ultima versione sarà scaricabile dai clienti.",
         "properties" => "Proprietà",
         "property_title" => "Titolo",
         "property_value" => "Valore",
@@ -847,18 +883,27 @@ return [
         "width" => "Larghezza (mm)"
     ],
     "product_file" => [
-        "display_name_comment" => "",
-        "download_count" => "",
-        "errors" => ["expired" => "", "invalid" => "", "not_found" => "", "too_many_attempts" => ""],
-        "expires_after_days" => "",
-        "expires_after_days_comment" => "",
-        "file" => "",
-        "hint" => ["info_link" => "", "info_text" => "", "intro" => ""],
-        "max_download_count" => "",
-        "max_download_count_comment" => "",
-        "session_required" => "",
-        "session_required_comment" => "",
-        "version_comment" => ""
+        "display_name_comment" => "Questo nome sarà visibile al cliente.",
+        "download_count" => "Conteggio dei download",
+        "errors" => [
+            "expired" => "Link per il download scaduto",
+            "invalid" => "Link di download non valido",
+            "not_found" => "Impossibile trovare il file richiesto, ti preghiamo di contattarci per il supporto.",
+            "too_many_attempts" => "Troppi tentativi di download"
+        ],
+        "expires_after_days" => "Download valido per giorni",
+        "expires_after_days_comment" => "Il file può essere scaricato solo per molti giorni dopo l'acquisto. Lascia vuoto per nessun limite.",
+        "file" => "file",
+        "hint" => [
+            "info_link" => "nella documentazione",
+            "info_text" => "Puoi trovare informazioni su come farlo",
+            "intro" => "Questo prodotto non ha un file allegato. Assicurati di aggiungerne uno o gerenarlo a livello di codice durante il checkout."
+        ],
+        "max_download_count" => "Numero massimo di download",
+        "max_download_count_comment" => "Il file può essere scaricato solo molte volte. Lascia vuoto per nessun limite.",
+        "session_required" => "Accesso richiesto",
+        "session_required_comment" => "Il file può essere scaricato solo quando il cliente ha effettuato l'accesso (il link per il download non è condivisibile).",
+        "version_comment" => "Una versione unica aiuta un cliente a riconoscere i file aggiornati."
     ],
     "products" => ["variants_comment" => "Crea più varianti dello stesso prodotto"],
     "properties" => [
@@ -868,42 +913,47 @@ return [
         "use_for_variants_comment" => "Questa proprietà é differente per ogni variante di questo prodotto"
     ],
     "review_settings" => [
-        "allow_anonymous" => "",
-        "allow_anonymous_comment" => "",
-        "description" => "",
-        "enabled" => "",
-        "enabled_comment" => "",
-        "moderated" => "",
-        "moderated_comment" => ""
+        "allow_anonymous" => "Consenti recensioni anonime",
+        "allow_anonymous_comment" => "Gli utenti non registrati possono creare recensioni",
+        "description" => "Configura recensioni",
+        "enabled" => "Recensioni abilitate",
+        "enabled_comment" => "I clienti possono creare recensioni",
+        "moderated" => "Recensioni moderate",
+        "moderated_comment" => "Le nuove recensioni devono essere pubblicate manualmente dall'amministratore del sito"
     ],
     "reviews" => [
-        "anonymous" => "",
-        "approve_next" => "",
-        "cons" => "",
-        "no_more" => "",
-        "only_unapproved" => "",
-        "pros" => "",
-        "rating" => "",
-        "review" => "",
-        "title" => ""
+        "anonymous" => "Anonimo",
+        "approve_next" => "Approvare e passare al prossimo",
+        "cons" => "Aspetti negativi",
+        "no_more" => "Niente più recensioni non approvate",
+        "only_unapproved" => "Mostra solo non approvato",
+        "pros" => "Aspetti positivi",
+        "rating" => "Valutazione",
+        "review" => "Rivedi i dettagli",
+        "title" => "titolo della tua recensione"
     ],
-    "services" => ["option" => "", "options" => "", "required" => "", "required_comment" => ""],
+    "services" => [
+        "option" => "opzione",
+        "options" => "Opzioni",
+        "required" => "È richiesto il servizio",
+        "required_comment" => "Un'opzione di questo servizio deve essere selezionata quando un prodotto viene aggiunto al carrello."
+    ],
     "shipping_method" => [
         "available_above_total" => "Disponibile se il totale é maggiore o uguale a",
         "available_below_total" => "Disponibile se il totale é inferiore a",
         "countries" => "Disponibile per le spedizioni in queste nazioni",
         "countries_comment" => "Se non si seleziona alcuna nazione, questo metodo é disponibile globalmente.",
         "guaranteed_delivery_days" => "Giorni garantiti per la consegna",
-        "not_required_description" => "",
-        "not_required_name" => ""
+        "not_required_description" => "Il carrello attuale non richiede alcuna spedizione.",
+        "not_required_name" => "Nessuna spedizione richiesta"
     ],
     "shipping_method_rates" => ["from_weight" => "Da (peso in grammi)", "to_weight" => "A (peso in grammi)"],
     "shipping_method_settings" => ["description" => "Gestisci i metodi di spedizione"],
     "tax" => [
         "countries" => "Applica le tasse solo quando spedito verso queste nazioni",
         "countries_comment" => "Se nessuna nazione è selezionata le tasse si applicano globalmente.",
-        "is_default" => "",
-        "is_default_comment" => "",
+        "is_default" => "È predefinito",
+        "is_default_comment" => "Questa imposta viene utilizzata se il paese di destinazione della spedizione non è ancora noto",
         "percentage" => "Percentuale"
     ],
     "tax_settings" => ["description" => "Gestisci le tasse"],
@@ -940,8 +990,8 @@ return [
         ],
         "properties" => ["create" => "Crea proprietà", "edit" => "Modifica proprietà"],
         "property_groups" => ["create" => "Crea gruppo", "edit" => "Modifica gruppo"],
-        "reviews" => ["create" => "", "update" => ""],
-        "services" => ["create" => "", "update" => ""],
+        "reviews" => ["create" => "Crea recensione", "update" => "Modifica recensione"],
+        "services" => ["create" => "Crea servizio", "update" => "Modifica servizio"],
         "shipping_methods" => [
             "create" => "Crea metodo di spedizione",
             "preview" => "Anteprima metodo di spedizione",
