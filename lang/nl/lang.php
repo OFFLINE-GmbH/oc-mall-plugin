@@ -11,6 +11,10 @@ return [
         "no_parent" => "Geen ouder",
         "parent" => "Ouder"
     ],
+    "click_and_collect" => [
+        "pay_instore" => "Bedrag te betalen in de winkel wanneer u de items ophaalt",
+        "pay_online" => "Bedrag om online te betalen om de producten te boeken"
+    ],
     "common" => [
         "accessories" => "Accessoires",
         "accessory" => "medeplichtig",

@@ -11,6 +11,10 @@ return [
         "no_parent" => "Aucun parent",
         "parent" => "Parent"
     ],
+    "click_and_collect" => [
+        "pay_instore" => "Montant à payer au magasin lorsque vous récupérez les articles",
+        "pay_online" => "Montant à payer en ligne pour réserver les produits"
+    ],
     "common" => [
         "accessories" => "Accessoires",
         "accessory" => "Champs personnalisés",

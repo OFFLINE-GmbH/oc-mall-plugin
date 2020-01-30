@@ -101,7 +101,7 @@ fields:
         label: offline.mall::lang.general_settings.click_and_collect.use_state
         span: left
         type: switch
-        default: 1
+        default: 0
         comment: offline.mall::lang.general_settings.click_and_collect.use_state_comment
 
     click_and_collect_percent:

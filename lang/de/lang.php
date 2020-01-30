@@ -11,6 +11,10 @@ return [
         "no_parent" => "Kein Elternelement",
         "parent" => "Elternelement"
     ],
+    "click_and_collect" => [
+        "pay_instore" => "Betrag, der im Geschäft zu zahlen ist, wenn Sie die Artikel abholen",
+        "pay_online" => "Online zu zahlender Betrag, um die Produkte zu buchen"
+    ],
     "common" => [
         "accessories" => "Zubehör",
         "accessory" => "Zubehör",

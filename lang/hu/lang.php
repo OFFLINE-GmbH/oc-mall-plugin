@@ -11,6 +11,10 @@ return [
         "no_parent" => "Nincs szülő",
         "parent" => "Szülő"
     ],
+    "click_and_collect" => [
+        "pay_instore" => "A boltban fizetendő összeg, amikor összegyűjti az elemeket",
+        "pay_online" => "Online fizetés a termékek foglalásához"
+    ],
     "common" => [
         "accessories" => "Kiegészitők",
         "accessory" => "Tartozék",

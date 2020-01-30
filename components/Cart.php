@@ -8,6 +8,7 @@ use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
+
 use Request;
 use Session;
 
@@ -40,6 +41,18 @@ class Cart extends MallComponent
      * @var bool
      */
     public $showDiscountApplier = true;
+    /**
+     * Display Click and Collect.
+     *
+     * @var bool
+     */
+    public $isClickAndCollectEnabled = false;
+    /**
+     * Default maximum quantity.
+     *
+     * @var int
+     */
+    public $clickAndCollectRate = 20;
     /**
      * Show the shipping information in the cart.
      *
@@ -158,6 +171,8 @@ class Cart extends MallComponent
         $this->setVar('showShipping', $this->property('showShipping'));
         $this->setVar('showTaxes', $this->property('showTaxes'));
         $this->setVar('showProceedToCheckoutButton', $this->property('showProceedToCheckoutButton'));
+        $this->setVar('isClickAndCollectEnabled',GeneralSettings::get('click_and_collect'));
+        $this->setVar('clickAndCollectRate',GeneralSettings::get('click_and_collect_percent'));
     }
 
     /**

@@ -1,27 +1,25 @@
-{% if __SELF__.showClickAndCollect %}
-<tr class="mall-cart__grand-total">
+{% if __SELF__.isClickAndCollectEnabled %}
+<tr class="mall-cart__clickandcollect">
     <td></td>
     <td colspan="3">
-            {{ 'offline.mall::frontend.clickandcollect.pay_online' | trans }}       
+            {{ 'offline.mall::lang.click_and_collect.pay_online' | trans }}       
     </td>
     <td class="text-right">
-        
-            {{ totals.totalPostTaxes | money }}
-        
-            {{ totals.productPostTaxes | money }}
-        
+            {{ (totals.productPostTaxes * __SELF__.clickAndCollectRate/100)|round| money }}
+
     </td>
 </tr>
-<tr class="mall-cart__grand-total">
+<tr class="mall-cart__clickandcollect">
     <td></td>
     <td colspan="3">
-            {{ 'offline.mall::frontend.clickandcollect.pay_instore' | trans }}
+            {{ 'offline.mall::lang.click_and_collect.pay_instore' | trans }}
     </td>
     <td class="text-right">
-        
-            {{ totals.totalPostTaxes | money }}
-        
-            {{ totals.productPostTaxes | money }}
+        {% if __SELF__.showShipping %}
+                {{ (totals.totalPostTaxes - (totals.totalPostTaxes * __SELF__.clickAndCollectRate/100)|round)| money }}
+        {% else %}
+                {{ (totals.productPostTaxes - (totals.productPostTaxes * __SELF__.clickAndCollectRate/100)|round)| money }}
+        {% endif %}
         
     </td>
 </tr>

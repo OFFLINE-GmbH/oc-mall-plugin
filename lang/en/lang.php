@@ -11,6 +11,10 @@ return [
         "no_parent" => "No parent",
         "parent" => "Parent"
     ],
+    "click_and_collect" => [
+        "pay_instore" => "Amount to pay at the store when you collect the items",
+        "pay_online" => "Amount to pay online to book the products"
+    ],
     "common" => [
         "accessories" => "Accessories",
         "accessory" => "Accessory",

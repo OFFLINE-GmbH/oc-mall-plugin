@@ -11,6 +11,10 @@ return [
         "no_parent" => "Nessuna categoria superiore",
         "parent" => "Sottocategoria di"
     ],
+    "click_and_collect" => [
+        "pay_instore" => "Importo da pagare al negozio al momento del ritiro degli articoli",
+        "pay_online" => "Importo da pagare online per prenotare i prodotti"
+    ],
     "common" => [
         "accessories" => "Accessori",
         "accessory" => "Accessorio",
