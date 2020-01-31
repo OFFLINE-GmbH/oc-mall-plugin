@@ -60,7 +60,12 @@ class Checkout extends MallComponent
      * @var array
      */
     public $dataLayer;
-
+    /**
+     * Display Click and Collect.
+     *
+     * @var bool
+     */
+    public $isClickAndCollectEnabled = false;
     /**
      * Component details.
      *
@@ -164,6 +169,7 @@ class Checkout extends MallComponent
         }
 
         $this->setVar('dataLayer', $this->handleDataLayer());
+        $this->setVar('isClickAndCollectEnabled',GeneralSettings::get('click_and_collect'));
     }
 
     /**

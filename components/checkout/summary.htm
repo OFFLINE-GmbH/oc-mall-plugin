@@ -4,21 +4,34 @@
             <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.billing_address' | trans }}</h4>
             {% component 'billingAddressSelector' %}
         </div>
+
+        {% if  __SELF__.isClickAndCollectEnabled %}
+        <div class="mall-cart-summary__click-and-collect-address">
+            <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.click_and_collect' | trans }}</h4>
+            {% component 'clickAndCollect' %}
+        </div>
+        {% endif %}
+        {% if not __SELF__.isClickAndCollectEnabled %}
         <div class="mall-cart-summary__shipping-address">
             <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.shipping_address' | trans }}</h4>
             {% component 'shippingAddressSelector' %}
         </div>
+        {% endif %}
+
         <div class="mall-cart-summary__payment-method">
             <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.payment_method' | trans }}</h4>
             <div>
                 {% partial __SELF__ ~ '::paymentmethod' %}
             </div>
         </div>
+        {% if not __SELF__.isClickAndCollectEnabled %}
         <div class="mall-cart-summary__shipping-method">
             <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.shipping_method' | trans }}</h4>
             <div>
                 {% partial __SELF__ ~ '::shippingmethod' %}
             </div>
         </div>
+        {% endif %}
+
     </div>
 </div>

@@ -35,6 +35,8 @@ return [
     "checkout.payment.failed.line_3" => "De volgende fout is opgetreden:",
     "checkout.payment.successful.heading" => "Bedankt voor uw betaling",
     "checkout.payment.successful.line_1" => "Uw betaling is succesvol verwerkt.",
+    "click_and_collect" => "Klik en verzamel",
+    "click_and_collect_desc" => "De aankoop via \"Click and Collect\" bestaat uit het boeken van de producten, het onmiddellijk betalen van het: percentage% en het later ophalen in de winkel, het resterende deel betalen en de aankoop voltooien.",
     "confirm" => "Weet u het zeker?",
     "created_at" => "Gemaakt op",
     "customer_payment_method.does_not_exist" => "De geselecteerde betaalmethode bestaat niet",

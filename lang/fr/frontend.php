@@ -35,6 +35,8 @@ return [
     "checkout.payment.failed.line_3" => "L'erreur suivante s'est produite:",
     "checkout.payment.successful.heading" => "Merci pour votre paiement",
     "checkout.payment.successful.line_1" => "Votre paiement a été traité avec succès.",
+    "click_and_collect" => "Cliquez et collectez",
+    "click_and_collect_desc" => "L'achat via \"Click and Collect\" consiste à réserver les produits, à payer immédiatement le: rate% puis à le récupérer ultérieurement dans la boutique en payant la partie restante et à finaliser l'achat.",
     "confirm" => "Etes-vous sûr ?",
     "created_at" => "Créé le",
     "customer_payment_method.does_not_exist" => "Le mode de paiement sélectionné n'existe pas",

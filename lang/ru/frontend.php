@@ -35,6 +35,8 @@ return [
     "checkout.payment.failed.line_3" => "Произошла следующая ошибка:",
     "checkout.payment.successful.heading" => "Спасибо за ваш платеж",
     "checkout.payment.successful.line_1" => "Ваш платеж был успешно обработан",
+    "click_and_collect" => "Нажмите и собрать",
+    "click_and_collect_desc" => "Покупка через «Click and Collect» заключается в бронировании товаров, немедленной оплате:% ставки и последующем получении этого в магазине, оплате оставшейся части и завершении покупки.",
     "confirm" => "Вы уверены?",
     "created_at" => "Создан",
     "customer_payment_method.does_not_exist" => "Выбранный способ оплаты не существует",

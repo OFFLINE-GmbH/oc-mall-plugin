@@ -35,6 +35,8 @@ return [
     "checkout.payment.failed.line_3" => "A következő hiba történt:",
     "checkout.payment.successful.heading" => "Köszönjük fizetését",
     "checkout.payment.successful.line_1" => "A fizetést sikeresen feldolgoztuk.",
+    "click_and_collect" => "Kattintson és gyűjtse",
+    "click_and_collect_desc" => "A „Kattintás és gyűjtés” révén történő vásárlás a termékek foglalásával, a következők azonnali megfizetésével jár:%, majd később begyűjti a boltban a fennmaradó rész kifizetésével és a vásárlás befejezésével.",
     "confirm" => "Biztos vagy benne?",
     "created_at" => "Létrehozva",
     "customer_payment_method.does_not_exist" => "The selected payment method does not exist",

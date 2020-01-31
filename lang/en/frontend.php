@@ -35,6 +35,8 @@ return [
     "checkout.payment.failed.line_3" => "The following error occurred:",
     "checkout.payment.successful.heading" => "Thank you for your payment",
     "checkout.payment.successful.line_1" => "Your payment has been processed successfully.",
+    "click_and_collect" => "Click And Collect",
+    "click_and_collect_desc" => "The purchase through \"Click and Collect\" consists in booking the products, paying immediately the :rate % and then collect it later in the shop paying the remaining part and completing the purchase.",
     "confirm" => "Are you sure?",
     "created_at" => "Created at",
     "customer_payment_method.does_not_exist" => "The selected payment method does not exist",

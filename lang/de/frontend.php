@@ -35,6 +35,8 @@ return [
     "checkout.payment.failed.line_3" => "Folgendes Problem wurde gemeldet:",
     "checkout.payment.successful.heading" => "Vielen Dank für Ihre Zahlung",
     "checkout.payment.successful.line_1" => "Ihre Zahlung wurde erfolgreich verarbeitet.",
+    "click_and_collect" => "Klicken Sie auf und sammeln",
+    "click_and_collect_desc" => "Der Kauf über \"Click and Collect\" besteht darin, die Produkte zu buchen, den: -Satz sofort zu zahlen und ihn später im Shop zu sammeln, den restlichen Teil zu bezahlen und den Kauf abzuschließen.",
     "confirm" => "Sind sie sicher?",
     "created_at" => "Erstellungszeitpunkt",
     "customer_payment_method.does_not_exist" => "Die ausgewhälte Zahlungsmethode existiert nicht",
