@@ -136,7 +136,10 @@ class PaymentTotal implements \JsonSerializable
      */
     protected function getCharge($base, $price, $percentage)
     {
+        
         return ($base + $price) / (1 - $percentage);
+        
+       
     }
 
     /**

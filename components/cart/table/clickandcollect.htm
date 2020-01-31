@@ -6,7 +6,6 @@
     </td>
     <td class="text-right">
             {{ (totals.productPostTaxes * __SELF__.clickAndCollectRate/100)|round| money }}
-
     </td>
 </tr>
 <tr class="mall-cart__clickandcollect">
@@ -15,12 +14,7 @@
             {{ 'offline.mall::lang.click_and_collect.pay_instore' | trans }}
     </td>
     <td class="text-right">
-        {% if __SELF__.showShipping %}
-                {{ (totals.totalPostTaxes - (totals.totalPostTaxes * __SELF__.clickAndCollectRate/100)|round)| money }}
-        {% else %}
-                {{ (totals.productPostTaxes - (totals.productPostTaxes * __SELF__.clickAndCollectRate/100)|round)| money }}
-        {% endif %}
-        
+         {{ (totals.productPostTaxes- (totals.productPostTaxes * __SELF__.clickAndCollectRate/100)) | money }}
     </td>
 </tr>
 

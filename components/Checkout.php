@@ -67,6 +67,12 @@ class Checkout extends MallComponent
      */
     public $isClickAndCollectEnabled = false;
     /**
+     * Default Click and Collect rate.
+     *
+     * @var int
+     */
+    public $clickAndCollectRate = 20;
+    /**
      * Component details.
      *
      * @return array
@@ -170,6 +176,8 @@ class Checkout extends MallComponent
 
         $this->setVar('dataLayer', $this->handleDataLayer());
         $this->setVar('isClickAndCollectEnabled',GeneralSettings::get('click_and_collect'));
+        $this->setVar('clickAndCollectRate',GeneralSettings::get('click_and_collect_percent'));
+
     }
 
     /**

@@ -19,7 +19,7 @@ use OFFLINE\Mall\Classes\Utils\Money;
 use RuntimeException;
 use Session;
 use System\Classes\PluginManager;
-
+use OFFLINE\Mall\Models\GeneralSettings;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

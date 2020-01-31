@@ -8,7 +8,8 @@
         {% if  __SELF__.isClickAndCollectEnabled %}
         <div class="mall-cart-summary__click-and-collect-address">
             <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.click_and_collect' | trans }}</h4>
-            {% component 'clickAndCollect' %}
+             {{ 'offline.mall::frontend.click_and_collect_desc' | trans({ rate: __SELF__.clickAndCollectRate}) }}
+            {# component 'clickAndCollect' #}
         </div>
         {% endif %}
         {% if not __SELF__.isClickAndCollectEnabled %}

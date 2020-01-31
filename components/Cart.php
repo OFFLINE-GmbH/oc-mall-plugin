@@ -48,7 +48,7 @@ class Cart extends MallComponent
      */
     public $isClickAndCollectEnabled = false;
     /**
-     * Default maximum quantity.
+     * Default Click and Collect rate.
      *
      * @var int
      */
