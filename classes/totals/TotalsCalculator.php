@@ -110,12 +110,12 @@ class TotalsCalculator
 
         $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
 
+        $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
+
         if (GeneralSettings::get('click_and_collect')) {
-            $this->totalPrePayment = $this->productPostTaxes * GeneralSettings::get('click_and_collect_percent')/100 - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
-        } else {
-            $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
+            // With Click And Collect the customer pay in advance a part of the total Payment
+            $this->totalPrePayment *= GeneralSettings::get('click_and_collect_percent')/100;
         }
-      
         
         $this->paymentTaxes    = $this->filterPaymentTaxes();
         $this->paymentTotal    = new PaymentTotal($this->input->payment_method, $this);
