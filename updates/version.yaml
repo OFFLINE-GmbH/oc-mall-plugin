@@ -286,3 +286,7 @@
     - "Optimized compatibility with Laravel 6"
 1.11.2:
     - "A product's short description supports now multi-line text input"
+1.11.3:
+    - "A variants's short description also supports multi-line text input now :)"
+    - update_description_short_column_of_products_table.php
+    - update_description_short_column_of_product_variants_table.php

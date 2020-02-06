@@ -3,7 +3,7 @@
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class UpdateDescriptionShortColumnFormProductsTable extends Migration
+class UpdateDescriptionShortColumnOfProductsTable extends Migration
 {
     public function up()
     {
