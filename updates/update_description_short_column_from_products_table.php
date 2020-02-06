@@ -9,7 +9,7 @@ class UpdateDescriptionShortColumnFormProductsTable extends Migration
     {
         Schema::table('offline_mall_products', function($table)
         {
-            $table->text('description_short')->nullable()->unsigned(false)->default(null)->change();
+            $table->text('description_short')->change();
         });
     }
 
@@ -17,7 +17,7 @@ class UpdateDescriptionShortColumnFormProductsTable extends Migration
     {
         Schema::table('offline_mall_products', function($table)
         {
-            $table->string('description_short', 255)->nullable()->unsigned(false)->default(null)->change();
+            $table->string('description_short', 255)->change();
         });
     }
 }
