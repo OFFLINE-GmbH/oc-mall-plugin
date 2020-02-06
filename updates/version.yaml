@@ -284,3 +284,5 @@
     - "!!! Fixed RainLab.Translate issue. Also, RainLab.Translate is now a required dependency for this plugin. Make sure to install at least version 1.6.6 of RainLab.Translate before installing this update."
 1.11.1:
     - "Optimized compatibility with Laravel 6"
+1.11.2:
+    - "A product's short description supports now multi-line text input"

@@ -133,9 +133,10 @@ tabs:
             dependsOn: categories
         description_short:
             label: 'offline.mall::lang.product.description_short'
+            size: small
             oc.commentPosition: ''
             span: left
-            type: text
+            type: textarea
             tab: 'offline.mall::lang.product.description'
         user_defined_id:
             label: 'offline.mall::lang.product.user_defined_id'
