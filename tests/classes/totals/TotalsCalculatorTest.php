@@ -215,6 +215,51 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(0, round($calc->taxes()[1]->total()));
     }
 
+    public function test_it_calculates_taxes_with_different_taxes_and_discount()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 5);
+        $tax3 = $this->getTax('Test 3', 15);
+
+        $product                     = $this->getProduct(115);
+        $product->price_includes_tax = true;
+        $product->stock              = 10;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1);
+
+        $product                     = $this->getProduct(57.50);
+        $product->price_includes_tax = true;
+        $product->stock              = 10;
+        $product->taxes()->attach([$tax3->id]);
+        $product->save();
+
+        $cart->addProduct($product, 1);
+
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->trigger = 'code';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'fixed_amount';
+        $discount->save();
+        $discount->amounts()->save(new Price([
+            'price'       => 50,
+            'currency_id' => 1,
+            'field'       => 'amounts',
+        ]));
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(12250, $calc->totalPostTaxes());
+        $this->assertEquals(1837.5, round($calc->totalTaxes(), 2));
+        $this->assertEquals(816.666667, round($calc->taxes()[0]->total()));
+        $this->assertEquals(408.333333, round($calc->taxes()[1]->total()));
+        $this->assertEquals(612.5, round($calc->taxes()[2]->total()));
+    }
+
     public function test_it_calculates_taxes_excluded()
     {
         $tax1 = $this->getTax('Test 1', 10);
