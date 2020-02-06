@@ -3,11 +3,11 @@
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class UpdateDescriptionShortColumnFormProductsTable extends Migration
+class UpdateDescriptionShortColumnOfProductVariantsTable extends Migration
 {
     public function up()
     {
-        Schema::table('offline_mall_products', function($table)
+        Schema::table('offline_mall_product_variants', function($table)
         {
             $table->text('description_short')->change();
         });
@@ -15,7 +15,7 @@ class UpdateDescriptionShortColumnFormProductsTable extends Migration
 
     public function down()
     {
-        Schema::table('offline_mall_products', function($table)
+        Schema::table('offline_mall_product_variants', function($table)
         {
             $table->string('description_short', 255)->change();
         });
