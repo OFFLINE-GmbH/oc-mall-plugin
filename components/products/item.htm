@@ -18,7 +18,7 @@
             </div>
             <div class="mall-products-item__info-secondary">
                 <div class="mall-products-item__short-description">
-                    {{ item.description_short }}
+                    {{ item.description_short | nl2br }}
                 </div>
                 <div class="mall-products-item__old-price">
                     {% if price.official %}
