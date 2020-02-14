@@ -58,7 +58,7 @@ class WishlistButton extends MallComponent
     {
         $v = Validator::make(post(), [
             'product_id' => 'required',
-            'quantity' => 'int'
+            'quantity' => 'nullable|int'
         ]);
         if ($v->fails()) {
             throw new ValidationException($v);
@@ -79,7 +79,10 @@ class WishlistButton extends MallComponent
             throw new ValidationException(['wishlist_id' => 'Invalid list ID provided.']);
         }
 
-        $quantity = (post('quantity')) ? post('quantity') : 1;
+        $quantity = (int)post('quantity', 1);
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
 
         list($productId, $variantId) = $this->decodeIds();
 
