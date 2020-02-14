@@ -290,3 +290,5 @@
     - "A variants's short description also supports multi-line text input now :)"
     - update_description_short_column_of_products_table.php
     - update_description_short_column_of_product_variants_table.php
+1.11.4:
+    - "Save quantity for Wishlist items correctly"
