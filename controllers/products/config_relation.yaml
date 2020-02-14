@@ -10,6 +10,7 @@ custom_fields:
     manage:
         form: $/offline/mall/models/customfield/fields.yaml
         recordsPerPage: 10
+        showSearch: true
     deferredBinding: true
 
 files:
@@ -33,6 +34,7 @@ services:
     manage:
         form: $/offline/mall/models/service/fields.yaml
         recordsPerPage: 10
+        showSearch: true
     pivot:
         form: $/offline/mall/models/service/fields_pivot.yaml
     deferredBinding: true
@@ -56,6 +58,7 @@ accessories:
     manage:
         form: $/offline/mall/models/product/fields_create.yaml
         recordsPerPage: 10
+        showSearch: true
     deferredBinding: true
 
 taxes:
@@ -66,6 +69,7 @@ taxes:
     manage:
         form: $/offline/mall/models/tax/fields.yaml
         recordsPerPage: 10
+        showSearch: true
     deferredBinding: true
 
 brand:
@@ -76,6 +80,8 @@ brand:
     manage:
         form: $/offline/mall/models/brand/fields.yaml
         list: $/offline/mall/models/brand/columns.yaml
+        showSearch: true
+        recordsPerPage: 10
 
 image_sets:
     label: 'offline.mall::lang.common.images'

@@ -292,3 +292,5 @@
     - update_description_short_column_of_product_variants_table.php
 1.11.4:
     - "Save quantity for Wishlist items correctly"
+1.11.5:
+    - Added search boxes to various Product relation managers
