@@ -35,13 +35,13 @@ class AddressList extends MallComponent
      *
      * @var int
      */
-    public $default_billing_address_id;
+    public $defaultBillingAddressId;
     /**
      * The id of the default shipping address.
      *
      * @var int
      */
-    public $default_shipping_address_id;
+    public $defaultShippingAddressId;
 
     /**
      * Component details.
@@ -75,8 +75,8 @@ class AddressList extends MallComponent
     {
         if ($user = Auth::getUser()) {
             $this->addresses = $user->customer->addresses;
-            $this->default_billing_address_id = $user->customer->default_billing_address_id;
-            $this->default_shipping_address_id = $user->customer->default_shipping_address_id;
+            $this->defaultBillingAddressId = $user->customer->default_billing_address_id;
+            $this->defaultShippingAddressId = $user->customer->default_shipping_address_id;
             $this->addressPage = GeneralSettings::get('address_page');
         }
     }
@@ -87,7 +87,7 @@ class AddressList extends MallComponent
      */
     public function onChangeDefaultShippingAddress()
     {
-        $this->updateDefaultAddressFromUser('default_shipping_address_id');
+        $this->updateDefaultAddressFromUser('shipping');
 
         Flash::success(trans('offline.mall::lang.components.addressList.messages.default_shipping_address_changed'));
 
@@ -102,7 +102,7 @@ class AddressList extends MallComponent
      */
     public function onChangeDefaultBillingAddress()
     {
-        $this->updateDefaultAddressFromUser('default_billing_address_id');
+        $this->updateDefaultAddressFromUser('billing');
 
         Flash::success(trans('offline.mall::lang.components.addressList.messages.default_billing_address_changed'));
 
@@ -149,6 +149,10 @@ class AddressList extends MallComponent
         $id = $this->decode(post('id'));
         $customer = Auth::getUser()->customer;
         $address = Address::byCustomer($customer)->find($id);
+
+        if (!$address) {
+            throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
+        }
 
         if (Address::byCustomer($customer)->count() <= 1) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.cannot_delete_last_address')]);
