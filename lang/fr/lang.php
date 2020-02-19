@@ -677,6 +677,8 @@
             ],
             'messages'   => [
                 'address_deleted' => 'Adresse supprimée',
+                'default_billing_address_changed' => 'L\'adresse de facturation par défaut a été modifiée',
+                'default_shipping_address_changed' => 'L\'adresse de livraison par défaut a été modifiée'
             ],
         ],
         'ordersList'             => [

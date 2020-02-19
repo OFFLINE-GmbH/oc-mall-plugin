@@ -788,6 +788,8 @@
             ],
             'messages'   => [
                 'address_deleted' => 'Address deleted',
+                'default_billing_address_changed' => 'Default billing address changed',
+                'default_shipping_address_changed' => 'Default shipping address changed'
             ],
         ],
         'ordersList'                 => [
