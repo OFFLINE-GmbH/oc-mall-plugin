@@ -30,7 +30,6 @@ class AddressList extends MallComponent
      * @var string
      */
     public $addressPage;
-
     /**
      * The id of the default billing address.
      *
@@ -43,6 +42,7 @@ class AddressList extends MallComponent
      * @var int
      */
     public $default_shipping_address_id;
+
     /**
      * Component details.
      *
@@ -116,7 +116,8 @@ class AddressList extends MallComponent
      * @return mixed
      * @throws ValidationException
      */
-    public function updateDefaultAddressFromUser(string $type) {
+    public function updateDefaultAddressFromUser(string $type)
+    {
 
         $id = $this->decode(post('id'));
         $customer = Auth::getUser()->customer;
@@ -126,7 +127,7 @@ class AddressList extends MallComponent
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
         }
 
-        $customer->{$type} = $id;
+        $this->{$type} = $customer->{$type} = $id;
 
         return $customer->save();
 
@@ -141,11 +142,11 @@ class AddressList extends MallComponent
      */
     public function onDelete()
     {
-        $id       = $this->decode(post('id'));
+        $id = $this->decode(post('id'));
         $customer = Auth::getUser()->customer;
-        $address  = Address::byCustomer($customer)->find($id);
+        $address = Address::byCustomer($customer)->find($id);
 
-        if ( ! $address) {
+        if (!$address) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
         }
 
