@@ -127,7 +127,11 @@ class AddressList extends MallComponent
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
         }
 
-        $this->{$type} = $customer->{$type} = $id;
+        if ($type === 'billing') {
+            $this->defaultBillingAddressId = $customer->default_billing_address_id = $id;
+        } elseif ($type === 'shipping') {
+            $this->defaultShippingAddressId = $customer->default_shipping_address_id = $id;
+        }
 
         return $customer->save();
 
@@ -145,10 +149,6 @@ class AddressList extends MallComponent
         $id = $this->decode(post('id'));
         $customer = Auth::getUser()->customer;
         $address = Address::byCustomer($customer)->find($id);
-
-        if (!$address) {
-            throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
-        }
 
         if (Address::byCustomer($customer)->count() <= 1) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.cannot_delete_last_address')]);
