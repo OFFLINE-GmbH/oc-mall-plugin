@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\PaymentMethod;
 
 class PaymentTotal implements \JsonSerializable
@@ -30,11 +31,16 @@ class PaymentTotal implements \JsonSerializable
      * @var int
      */
     protected $price;
+    /**
+     * @var Currency
+     */
+    protected $currency;
 
     public function __construct(?PaymentMethod $method, TotalsCalculator $totals)
     {
         $this->method = $method;
         $this->totals = $totals;
+        $this->currency = Currency::activeCurrency();
 
         $this->calculate();
     }
@@ -59,7 +65,7 @@ class PaymentTotal implements \JsonSerializable
 
         $charge = $this->getCharge($base, $price, $percentage);
 
-        return round($charge - $base, 0);
+        return $this->round($charge - $base, $this->currency->rounding);
     }
 
     protected function calculateTotal(): float
@@ -81,12 +87,20 @@ class PaymentTotal implements \JsonSerializable
 
         $charge = $this->getCharge($base, $price, $percentage);
 
-        return round($charge - $base, 0);
+        return $this->round($charge - $base, $this->currency->rounding);
     }
 
     protected function calculateTaxes(): float
     {
-        return $this->total - $this->preTaxes;
+//        return $this->total - $this->preTaxes;
+
+        return $this->round($this->total - $this->preTaxes, $this->currency->rounding);
+    }
+
+    protected function round($int, int $factor = 10)
+    {
+        $factor = 1 / $factor;
+        return (round($int * $factor) / $factor);
     }
 
     public function totalPreTaxes(): float

@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Models\CartProduct;
+use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\WishlistItem;
@@ -86,11 +87,16 @@ class TotalsCalculator
      * @var Collection
      */
     public $paymentTaxes;
+    /**
+     * @var Currency
+     */
+    private $currency;
 
     public function __construct(TotalsCalculatorInput $input)
     {
         $this->input = $input;
         $this->taxes = new Collection();
+        $this->currency = Currency::activeCurrency();
 
         $this->calculate();
     }
@@ -132,8 +138,15 @@ class TotalsCalculator
 
     protected function calculateProductTaxes(): float
     {
-        return $this->input->products->sum('totalTaxes');
+        return $this->round($this->input->products->sum('totalTaxes'), $this->currency->rounding);
     }
+
+    protected function round($int, int $factor = 10)
+    {
+        $factor = 1 / $factor;
+        return (round($int * $factor) / $factor);
+    }
+
 
     protected function getTaxTotals(): Collection
     {
@@ -182,12 +195,13 @@ class TotalsCalculator
         return $taxTotals->groupBy(function (TaxTotal $taxTotal) {
             return $taxTotal->tax->id;
         })->map(function (Collection $grouped) {
-            $tax    = $grouped->first()->tax;
-            $preTax = $grouped->sum(function (TaxTotal $tax) {
-                return $tax->preTax();
+            $tax = $grouped->first()->tax;
+            $taxTotal = $grouped->sum(function(TaxTotal $type) use ($tax) {
+                return (new TaxTotal($type->preTax(), $tax))->total();
             });
 
-            return new TaxTotal($preTax, $tax);
+            return array_merge(['tax' => $tax->toArray()],['total' => $taxTotal]);
+
         })->values();
     }
 
@@ -274,12 +288,12 @@ class TotalsCalculator
     protected function applyTotalDiscounts($total): ?float
     {
         $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])
-            ->where(function ($q) {
-                $q->whereNull('valid_from')
-                    ->orWhere('valid_from', '<=', Carbon::now());
-            })->where(function ($q) {
+                                   ->where(function ($q) {
+                                       $q->whereNull('valid_from')
+                                         ->orWhere('valid_from', '<=', Carbon::now());
+                                   })->where(function ($q) {
                 $q->whereNull('expires')
-                    ->orWhere('expires', '>', Carbon::now());
+                  ->orWhere('expires', '>', Carbon::now());
             })->get();
 
         $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
