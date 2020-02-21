@@ -4,7 +4,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
-use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
@@ -12,6 +12,7 @@ use OFFLINE\Mall\Models\Tax;
 
 class ShippingTotal implements \JsonSerializable
 {
+    use Rounding;
     /**
      * @var TotalsCalculator
      */
@@ -40,16 +41,11 @@ class ShippingTotal implements \JsonSerializable
      * @var int
      */
     protected $price;
-    /**
-     * @var Currency
-     */
-    protected $currency;
 
     public function __construct(?ShippingMethod $method, TotalsCalculator $totals)
     {
         $this->method = $method;
         $this->totals = $totals;
-        $this->currency = Currency::activeCurrency();
 
         $this->calculate();
     }
@@ -94,15 +90,8 @@ class ShippingTotal implements \JsonSerializable
             return $price * $tax->percentageDecimal;
         });
 
-        return $this->round($totalTax, $this->currency->rounding);
+        return $this->round($totalTax);
     }
-
-    protected function round($int, int $factor = 10)
-    {
-        $factor = 1 / $factor;
-        return (round($int * $factor) / $factor);
-    }
-
 
     protected function calculateTotal(): float
     {
@@ -172,13 +161,13 @@ class ShippingTotal implements \JsonSerializable
     private function applyDiscounts(int $price): ?float
     {
         $discounts = Discount::whereIn('trigger', ['total', 'product'])
-                             ->where('type', 'shipping')
-                             ->where(function ($q) {
-                                 $q->whereNull('valid_from')
-                                   ->orWhere('valid_from', '<=', Carbon::now());
-                             })->where(function ($q) {
+            ->where('type', 'shipping')
+            ->where(function ($q) {
+                $q->whereNull('valid_from')
+                    ->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
                 $q->whereNull('expires')
-                  ->orWhere('expires', '>', Carbon::now());
+                    ->orWhere('expires', '>', Carbon::now());
             })->get();
 
         $codeDiscount = $this->totals->getInput()->discounts->where('type', 'shipping')->first();

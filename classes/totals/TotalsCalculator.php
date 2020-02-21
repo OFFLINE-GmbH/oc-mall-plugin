@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
+use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\CartProduct;
-use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\WishlistItem;
@@ -17,7 +17,7 @@ use OFFLINE\Mall\Models\WishlistItem;
  */
 class TotalsCalculator
 {
-    use FilteredTaxes;
+    use FilteredTaxes, Rounding;
 
     /**
      * @var TotalsCalculatorInput
@@ -87,16 +87,11 @@ class TotalsCalculator
      * @var Collection
      */
     public $paymentTaxes;
-    /**
-     * @var Currency
-     */
-    private $currency;
 
     public function __construct(TotalsCalculatorInput $input)
     {
         $this->input = $input;
         $this->taxes = new Collection();
-        $this->currency = Currency::activeCurrency();
 
         $this->calculate();
     }
@@ -138,15 +133,8 @@ class TotalsCalculator
 
     protected function calculateProductTaxes(): float
     {
-        return $this->round($this->input->products->sum('totalTaxes'), $this->currency->rounding);
+        return $this->round($this->input->products->sum('totalTaxes'));
     }
-
-    protected function round($int, int $factor = 10)
-    {
-        $factor = 1 / $factor;
-        return (round($int * $factor) / $factor);
-    }
-
 
     protected function getTaxTotals(): Collection
     {
@@ -196,11 +184,18 @@ class TotalsCalculator
             return $taxTotal->tax->id;
         })->map(function (Collection $grouped) {
             $tax = $grouped->first()->tax;
-            $taxTotal = $grouped->sum(function(TaxTotal $type) use ($tax) {
-                return (new TaxTotal($type->preTax(), $tax))->total();
+
+            $preTax = $grouped->sum(function (TaxTotal $tax) {
+                return $tax->preTax();
             });
 
-            return array_merge(['tax' => $tax->toArray()],['total' => $taxTotal]);
+            $taxTotal = new TaxTotal($preTax, $tax);
+
+            $taxTotal->setTotal($grouped->sum(function(TaxTotal $type) use ($tax) {
+                return (new TaxTotal($type->preTax(), $tax))->total();
+            }));
+
+            return $taxTotal;
 
         })->values();
     }
@@ -288,12 +283,12 @@ class TotalsCalculator
     protected function applyTotalDiscounts($total): ?float
     {
         $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product'])
-                                   ->where(function ($q) {
-                                       $q->whereNull('valid_from')
-                                         ->orWhere('valid_from', '<=', Carbon::now());
-                                   })->where(function ($q) {
+            ->where(function ($q) {
+                $q->whereNull('valid_from')
+                    ->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
                 $q->whereNull('expires')
-                  ->orWhere('expires', '>', Carbon::now());
+                    ->orWhere('expires', '>', Carbon::now());
             })->get();
 
         $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
