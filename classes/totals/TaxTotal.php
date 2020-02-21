@@ -52,12 +52,6 @@ class TaxTotal implements JsonSerializable
         return $this->round($this->total);
     }
 
-    protected function round($int, int $factor = 10)
-    {
-        $factor = 1 / $factor;
-        return (round($int * $factor) / $factor);
-    }
-
     public function preTax(): float
     {
         return $this->preTax;
