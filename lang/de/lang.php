@@ -786,6 +786,8 @@
             ],
             'messages'   => [
                 'address_deleted' => 'Adresse gelöscht',
+                'default_billing_address_changed' => 'Standard Rechnungsadresse wurde geändert',
+                'default_shipping_address_changed' => 'Standard Lieferadresse wurde geändert'
             ],
         ],
         'ordersList'                 => [
