@@ -23,11 +23,13 @@ trait Rounding
     protected function round($int, ?int $factor = null)
     {
         if ($factor === null) {
-            if ($this->getCurrency()->rounding === null) {
-                return $int;
-            }
-            $factor = ($this->getCurrency()->rounding);
+            $factor = $this->getCurrency()->rounding;
         }
+
+        if ($factor === 0) {
+            return $int;
+        }
+
         $factor = 1 / $factor;
 
         return (round($int * $factor) / $factor);
