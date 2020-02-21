@@ -589,6 +589,7 @@
         'data'                                => 'Order data',
         'total_revenue'                       => 'Total revenue',
         'download_invoice'                    => 'Download invoice',
+        'order_file_name'                     => 'order-:order',
         'modal'                               => [
             'cancel' => 'Cancel',
             'update' => 'Update information',
