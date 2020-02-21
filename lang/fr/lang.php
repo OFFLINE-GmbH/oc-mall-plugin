@@ -493,6 +493,7 @@
         'not_shipped'                         => 'En cours',
         'data'                                => 'Données de commande',
         'total_revenue'                       => 'Revenu total',
+        'order_file_name'                     => 'commande-:order',
         'modal'                               => [
             'cancel' => 'Annuler',
             'update' => 'Mettre à jour information',

@@ -587,6 +587,7 @@
         'data'                                => 'Bestellungsdaten',
         'total_revenue'                       => 'Gesamteinnahmen',
         'download_invoice'                    => 'Rechnung herunterladen',
+        'order_file_name'                     => 'bestellung-:order',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
