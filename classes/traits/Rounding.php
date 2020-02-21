@@ -1,5 +1,7 @@
 <?php
+
 namespace OFFLINE\Mall\Classes\Traits;
+
 use OFFLINE\Mall\Models\Currency;
 
 trait Rounding
@@ -14,15 +16,20 @@ trait Rounding
         if ($this->currency) {
             return $this->currency;
         }
-		return $this->currency = Currency::activeCurrency();
-	}
+
+        return $this->currency = Currency::activeCurrency();
+    }
 
     protected function round($int, ?int $factor = null)
     {
         if ($factor === null) {
-            $factor = $this->getCurrency()->rounding;
+            if ($this->getCurrency()->rounding === null) {
+                return $int;
+            }
+            $factor = ($this->getCurrency()->rounding);
         }
         $factor = 1 / $factor;
+
         return (round($int * $factor) / $factor);
     }
 }
