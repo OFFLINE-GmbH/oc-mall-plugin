@@ -134,7 +134,6 @@ class AddressList extends MallComponent
         }
 
         return $customer->save();
-
     }
 
 
