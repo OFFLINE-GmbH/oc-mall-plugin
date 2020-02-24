@@ -26,12 +26,12 @@ trait Rounding
             $factor = $this->getCurrency()->rounding;
         }
 
-        if (! $factor) {
+        if ( ! $factor) {
             return $int;
         }
 
         $factor = 1 / $factor;
 
-        return (round($int * $factor) / $factor);
+        return round($int * $factor) / $factor;
     }
 }
