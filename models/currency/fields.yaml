@@ -19,11 +19,6 @@ fields:
         type: text
         label: offline.mall::lang.currency_settings.currency_decimals
         span: auto
-    rounding:
-        type: dropdown
-        label: offline.mall::lang.currency_settings.currency_rounding
-        comment: offline.mall::lang.currency_settings.currency_rounding_comment
-        span: full
     format:
         type: codeeditor
         label: offline.mall::lang.currency_settings.currency_format
