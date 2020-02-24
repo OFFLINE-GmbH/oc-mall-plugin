@@ -294,3 +294,6 @@
     - "Save quantity for Wishlist items correctly"
 1.11.5:
     - Added search boxes to various Product relation managers
+1.11.6:
+    - A customer can now set a default shipping and billing address on the profile page. Don't forget to add some styles! (see https://tinyurl.com/vpr3g8x)
+    - add_rounding_column_to_currencies_table.php
