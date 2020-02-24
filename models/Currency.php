@@ -40,6 +40,17 @@ class Currency extends Model
     ];
     public $table = 'offline_mall_currencies';
 
+    public function getRoundingOptions()
+    {
+        return [
+            1 => '0.01',
+            5 => '0.05',
+            10 => '0.10',
+            50 => '0.50',
+            100 => '1.00',
+        ];
+    }
+
     public function beforeSave()
     {
         // Enforce a single default currency.

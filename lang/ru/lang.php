@@ -1,604 +1,604 @@
 <?php return [
-    'plugin'                   => [
-        'name'        => 'Шоп',
+    'plugin' => [
+        'name' => 'Шоп',
         'description' => 'E-commerce решение для October CMS',
     ],
-    'titles'                   => [
-        'products'             => [
-            'create'  => 'Создание продукта',
-            'update'  => 'Изменить продукт',
+    'titles' => [
+        'products' => [
+            'create' => 'Создание продукта',
+            'update' => 'Изменить продукт',
             'preview' => 'Просмотр продукта',
         ],
-        'categories'           => [
-            'create'  => 'Создать категорию',
-            'update'  => 'Редактирование категории',
+        'categories' => [
+            'create' => 'Создать категорию',
+            'update' => 'Редактирование категории',
             'preview' => 'Просмотр категории',
         ],
-        'orders'               => [
-            'show'   => 'Детали заказа',
+        'orders' => [
+            'show' => 'Детали заказа',
             'export' => 'Экспорт заказов',
         ],
-        'discounts'            => [
-            'create'  => 'Создать скидку',
-            'update'  => 'Редактировать скидку',
+        'discounts' => [
+            'create' => 'Создать скидку',
+            'update' => 'Редактировать скидку',
             'preview' => 'Просмотр скидки',
         ],
-        'shipping_methods'     => [
-            'create'  => 'Создайте метод доставки',
-            'update'  => 'Изменить способ доставки',
+        'shipping_methods' => [
+            'create' => 'Создайте метод доставки',
+            'update' => 'Изменить способ доставки',
             'preview' => 'Просмотр доставки',
         ],
-        'payment_methods'      => [
-            'create'  => 'Создать метод оплаты',
-            'edit'    => 'Изменить способ оплаты',
+        'payment_methods' => [
+            'create' => 'Создать метод оплаты',
+            'edit' => 'Изменить способ оплаты',
             'reorder' => 'Изменение порядка',
         ],
         'custom_field_options' => [
             'edit' => 'Редактировать параметры поля',
         ],
-        'properties'           => [
+        'properties' => [
             'create' => 'Создание свойства',
-            'edit'   => 'Изменить свойства',
+            'edit' => 'Изменить свойства',
         ],
-        'order_states'         => [
-            'create'  => 'Создание статус',
-            'edit'    => 'Изменить статус',
+        'order_states' => [
+            'create' => 'Создание статус',
+            'edit' => 'Изменить статус',
             'reorder' => 'Изменить порядок',
         ],
-        'brands'               => [
+        'brands' => [
             'create' => 'Создание бренда',
-            'edit'   => 'Редактировать бренд',
+            'edit' => 'Редактировать бренд',
         ],
-        'property_groups'      => [
+        'property_groups' => [
             'create' => 'Создать группу',
-            'edit'   => 'Редактирование группы',
+            'edit' => 'Редактирование группы',
         ],
-        'customer_groups'      => [
+        'customer_groups' => [
             'create' => 'Создать группу',
             'update' => 'Редактирование группы',
         ],
-        'notifications'        => [
+        'notifications' => [
             'update' => 'Уведомление об обновлении',
         ],
-        'taxes'                => [
+        'taxes' => [
             'create' => 'Создание налоговых ставок',
             'update' => 'Редактировать налог',
         ],
     ],
-    'menu_items'               => [
-        'all_categories'  => 'Все категории магазина',
+    'menu_items' => [
+        'all_categories' => 'Все категории магазина',
         'single_category' => 'Категория одного магазина',
-        'all_products'    => 'Все товары магазин',
-        'all_variants'    => 'Все варианты магазина',
+        'all_products' => 'Все товары магазин',
+        'all_variants' => 'Все варианты магазина',
     ],
-    'currency_settings'        => [
-        'label'             => 'Валюты',
-        'description'       => 'Настройка вашей валюты',
-        'currencies'        => 'Введите только официальные 3-х символа валюты.',
-        'currency_code'     => 'Код валюты',
+    'currency_settings' => [
+        'label' => 'Валюты',
+        'description' => 'Настройка вашей валюты',
+        'currencies' => 'Введите только официальные 3-х символа валюты.',
+        'currency_code' => 'Код валюты',
         'currency_decimals' => 'Количество знаков после запятой',
-        'currency_format'   => 'Формат',
-        'currency_symbol'   => 'Символ',
-        'currency_rate'     => 'Курс',
-        'is_default'        => 'По умолчанию',
+        'currency_format' => 'Формат',
+        'currency_symbol' => 'Символ',
+        'currency_rate' => 'Курс',
+        'is_default' => 'По умолчанию',
     ],
     'payment_gateway_settings' => [
-        'label'       => 'Платежные шлюзы',
+        'label' => 'Платежные шлюзы',
         'description' => 'Настроить ваши платежные шлюзы',
-        'stripe'      => [
-            'api_key'                 => 'Stripe API ключ',
-            'api_key_comment'         => 'Вы можете найти этот ключ в панели инструментов Stripe.',
-            'publishable_key'         => 'Stripe публичный ключ',
+        'stripe' => [
+            'api_key' => 'Stripe API ключ',
+            'api_key_comment' => 'Вы можете найти этот ключ в панели инструментов Stripe.',
+            'publishable_key' => 'Stripe публичный ключ',
             'publishable_key_comment' => 'Вы можете найти этот ключ в панели инструментов Stripe.',
         ],
-        'paypal'      => [
-            'client_id'         => 'PayPal клиент |',
-            'secret'            => 'PayPal секрет',
-            'test_mode'         => 'Тестовый режим',
+        'paypal' => [
+            'client_id' => 'PayPal клиент |',
+            'secret' => 'PayPal секрет',
+            'test_mode' => 'Тестовый режим',
             'test_mode_comment' => 'Запустите все выплаты в PayPal песочнице',
         ],
     ],
-    'notification_settings'    => [
-        'label'       => 'Уведомления',
+    'notification_settings' => [
+        'label' => 'Уведомления',
         'description' => 'Настройка уведомлений магазина',
     ],
-    'price_category_settings'  => [
-        'label'       => 'Ценовые категории',
+    'price_category_settings' => [
+        'label' => 'Ценовые категории',
         'description' => 'Настройка дополнительных ценовых категорий',
     ],
-    'order_state_settings'     => [
+    'order_state_settings' => [
         'description' => 'Настройка порядка стран',
     ],
-    'payment_method_settings'  => [
+    'payment_method_settings' => [
         'description' => 'Управление методами оплаты',
     ],
     'shipping_method_settings' => [
         'description' => 'Управление методами доставки',
     ],
-    'tax_settings'             => [
+    'tax_settings' => [
         'description' => 'Управление налогами',
     ],
-    'general_settings'         => [
-        'category'                   => 'Торговый центр: общие',
-        'category_payments'          => 'Торговый центр: платежи',
-        'category_orders'            => 'Торговый центр: заказы',
-        'label'                      => 'Конфигурация',
-        'description'                => 'Общие параметры',
-        'product_page'               => 'Страница сведений о продукте',
-        'product_page_comment'       => 'Это то, где отображаются сведения о продукте',
-        'address_page'               => 'Страница адреса',
-        'address_page_comment'       => 'AddressForm компонент должен присутствовать на этой странице.',
-        'checkout_page'              => 'Страница оформления заказа',
-        'checkout_page_comment'      => 'Компонент проверки должен присутствовать на этой странице',
-        'account_page'               => 'Страница Учетная запись',
-        'account_page_comment'       => 'MyAccount компонент должен присутствовать на этой странице.',
-        'cart_page'                  => 'Страница корзины',
-        'cart_page_comment'          => 'Компонент проверки должен присутствовать на этой странице',
-        'category_page'              => 'Страница категорий для списка товаров',
-        'redirect_to_cart'           => 'Перенаправление в корзину',
-        'redirect_to_cart_comment'   => 'Перенаправление в корзину после того, как пользователь добавил продукт',
-        'admin_email'                => 'Почта Администратора',
-        'admin_email_comment'        => 'Уведомления администратора будет отправлено на этот адрес',
-        'base'                       => 'Базовые параметры',
-        'links'                      => 'CMS страницы',
-        'links_comment'              => 'Выберите страницы, которые используются для отображения ваших товаров',
-        'customizations'             => 'Настройки',
-        'customizations_comment'     => 'Настройте функции вашего магазина',
-        'category_page_comment'      => 'Добавьте компонент «продукты» на эту страницу.',
-        'order_number_start'         => 'Первый номер заказа',
+    'general_settings' => [
+        'category' => 'Торговый центр: общие',
+        'category_payments' => 'Торговый центр: платежи',
+        'category_orders' => 'Торговый центр: заказы',
+        'label' => 'Конфигурация',
+        'description' => 'Общие параметры',
+        'product_page' => 'Страница сведений о продукте',
+        'product_page_comment' => 'Это то, где отображаются сведения о продукте',
+        'address_page' => 'Страница адреса',
+        'address_page_comment' => 'AddressForm компонент должен присутствовать на этой странице.',
+        'checkout_page' => 'Страница оформления заказа',
+        'checkout_page_comment' => 'Компонент проверки должен присутствовать на этой странице',
+        'account_page' => 'Страница Учетная запись',
+        'account_page_comment' => 'MyAccount компонент должен присутствовать на этой странице.',
+        'cart_page' => 'Страница корзины',
+        'cart_page_comment' => 'Компонент проверки должен присутствовать на этой странице',
+        'category_page' => 'Страница категорий для списка товаров',
+        'redirect_to_cart' => 'Перенаправление в корзину',
+        'redirect_to_cart_comment' => 'Перенаправление в корзину после того, как пользователь добавил продукт',
+        'admin_email' => 'Почта Администратора',
+        'admin_email_comment' => 'Уведомления администратора будет отправлено на этот адрес',
+        'base' => 'Базовые параметры',
+        'links' => 'CMS страницы',
+        'links_comment' => 'Выберите страницы, которые используются для отображения ваших товаров',
+        'customizations' => 'Настройки',
+        'customizations_comment' => 'Настройте функции вашего магазина',
+        'category_page_comment' => 'Добавьте компонент «продукты» на эту страницу.',
+        'order_number_start' => 'Первый номер заказа',
         'order_number_start_comment' => 'Первоначальный идентификатор первого заказа',
     ],
-    'common'                   => [
-        'shop'                 => 'Магазин',
-        'products'             => 'Товары',
-        'product'              => 'Товар',
-        'orders'               => 'Заказы',
-        'cart'                 => 'Корзина',
-        'shipping'             => 'Доставка',
-        'taxes'                => 'Налоги',
-        'rates'                => 'Курсы',
-        'inventory'            => 'Инвентаризация',
-        'accessories'          => 'Аксессуары',
-        'shipping_methods'     => 'Методы доставки',
-        'accessory'            => 'Аксессуар',
-        'custom_fields'        => 'Настраиваемые поля',
-        'variants'             => 'Варианты',
-        'discounts'            => 'Скидки',
-        'discount'             => 'Скидка',
-        'select_placeholder'   => '--Пожалуйста, выберите',
-        'main_image'           => 'Основное изображение',
-        'images'               => 'Изображения',
-        'image_set'            => 'Изображение набора',
-        'attachments'          => 'Изображения/Загрузки',
-        'downloads'            => 'Загрузки',
-        'select_image'         => 'Выбрать изображение',
-        'select_file'          => 'Выберите файл',
-        'allowed'              => 'Допупен',
-        'not_allowed'          => 'Не допускается',
-        'yes'                  => 'Да',
-        'no'                   => 'Нет',
-        'seo'                  => 'SEO',
-        'properties_links'     => 'Свойства/ссылки',
-        'categories'           => 'Категории',
-        'category'             => 'Категория',
-        'meta_title'           => 'Мета-заголовок',
-        'meta_description'     => 'Мета-описание',
-        'meta_keywords'        => 'Мета ключевые слова',
-        'reorder'              => 'Порядок записей',
-        'id'                   => 'ID',
-        'created_at'           => 'Создан',
-        'updated_at'           => 'Обновлен',
-        'hide_published'       => 'Скрыть',
-        'slug'                 => 'URL',
-        'name'                 => 'Имя',
-        'display_name'         => 'Отображаемое имя',
-        'group_name'           => 'Имя группы',
-        'add_value'            => 'Добавить значение',
-        'export_orders'        => 'Экспорт заказов',
+    'common' => [
+        'shop' => 'Магазин',
+        'products' => 'Товары',
+        'product' => 'Товар',
+        'orders' => 'Заказы',
+        'cart' => 'Корзина',
+        'shipping' => 'Доставка',
+        'taxes' => 'Налоги',
+        'rates' => 'Курсы',
+        'inventory' => 'Инвентаризация',
+        'accessories' => 'Аксессуары',
+        'shipping_methods' => 'Методы доставки',
+        'accessory' => 'Аксессуар',
+        'custom_fields' => 'Настраиваемые поля',
+        'variants' => 'Варианты',
+        'discounts' => 'Скидки',
+        'discount' => 'Скидка',
+        'select_placeholder' => '--Пожалуйста, выберите',
+        'main_image' => 'Основное изображение',
+        'images' => 'Изображения',
+        'image_set' => 'Изображение набора',
+        'attachments' => 'Изображения/Загрузки',
+        'downloads' => 'Загрузки',
+        'select_image' => 'Выбрать изображение',
+        'select_file' => 'Выберите файл',
+        'allowed' => 'Допупен',
+        'not_allowed' => 'Не допускается',
+        'yes' => 'Да',
+        'no' => 'Нет',
+        'seo' => 'SEO',
+        'properties_links' => 'Свойства/ссылки',
+        'categories' => 'Категории',
+        'category' => 'Категория',
+        'meta_title' => 'Мета-заголовок',
+        'meta_description' => 'Мета-описание',
+        'meta_keywords' => 'Мета ключевые слова',
+        'reorder' => 'Порядок записей',
+        'id' => 'ID',
+        'created_at' => 'Создан',
+        'updated_at' => 'Обновлен',
+        'hide_published' => 'Скрыть',
+        'slug' => 'URL',
+        'name' => 'Имя',
+        'display_name' => 'Отображаемое имя',
+        'group_name' => 'Имя группы',
+        'add_value' => 'Добавить значение',
+        'export_orders' => 'Экспорт заказов',
         'use_backend_defaults' => 'Использовать значения по умолчанию из параметров бэкэнда',
-        'api_error'            => 'Не удалось сохранить скидку. Ошибка при отправке изменений в торговом центре API.',
-        'includes_tax'         => 'Включая налоги',
-        'conditions'           => 'Условия',
-        'general'              => 'Общие',
-        'logo'                 => 'Логотип',
-        'payment_gateway'      => 'Платежный шлюз',
-        'payment_provider'     => 'Провайдера платежей',
-        'payment_methods'      => 'Способы оплаты',
-        'payment'              => 'Оплата',
-        'payments'             => 'Платежи',
-        'image'                => 'Изображение',
-        'color'                => 'Цвет',
-        'unit'                 => 'Единица',
-        'dont_group'           => '--Нет группы',
-        'properties'           => 'Свойства',
-        'old_price'            => 'Старая цена',
-        'property'             => 'Свойства',
-        'property_groups'      => 'Группы свойств',
-        'property_group'       => 'Свойства группы',
-        'options'              => 'Параметры',
-        'option'               => 'Параметр',
-        'catalogue'            => 'Каталог',
-        'out_of_stock'         => 'Этот товар закончился.',
-        'out_of_stock_short'   => 'Нет в наличии',
-        'stock_limit_reached'  => 'Вы не можете добавить больше товаров этого товара в вашу корзину, так как был достигнут предел запаса.',
-        'deleted_at'           => 'Удален',
-        'sort_order'           => 'Сортировка',
-        'order_states'         => 'Состояние заказа',
-        'website'              => 'Веб-сайт',
-        'brands'               => 'Бренды',
-        'brand'                => 'Бренд',
-        'sorting_updated'      => 'Порядок сортировки был обновлен',
-        'not_in_use'           => 'Параметр не используется',
-        'saved_changes'        => 'Изменения успешно сохранены',
-        'none'                 => '-- Нет',
-        'customers'            => 'Клиенты',
-        'customer_groups'      => 'Группы клиентов',
-        'customer_group'       => 'Группы клиентов',
-        'product_or_variant'   => 'Тоавр / Вариант',
-        'code'                 => 'Код',
-        'code_comment'         => 'Этот код может быть использован для идентификации этой записи программно',
-        'checked'              => 'Отмечен',
-        'unchecked'            => 'Не отмечен',
-        'notifications'        => 'Уведомления',
-        'notification'         => 'Уведомление',
-        'price_missing'        => 'Введите хотя бы цену для валюты по умолчанию',
-        'slug_unique'          => 'URL должен быть уникальным',
-        'fees'                 => 'Сборы',
-        'value'                => 'Значение',
-        'services'             => 'Услуги',
-        'service'              => 'Услуга',
-        'review'               => 'Отзыв',
-        'reviews'              => 'Отзывы',
+        'api_error' => 'Не удалось сохранить скидку. Ошибка при отправке изменений в торговом центре API.',
+        'includes_tax' => 'Включая налоги',
+        'conditions' => 'Условия',
+        'general' => 'Общие',
+        'logo' => 'Логотип',
+        'payment_gateway' => 'Платежный шлюз',
+        'payment_provider' => 'Провайдера платежей',
+        'payment_methods' => 'Способы оплаты',
+        'payment' => 'Оплата',
+        'payments' => 'Платежи',
+        'image' => 'Изображение',
+        'color' => 'Цвет',
+        'unit' => 'Единица',
+        'dont_group' => '--Нет группы',
+        'properties' => 'Свойства',
+        'old_price' => 'Старая цена',
+        'property' => 'Свойства',
+        'property_groups' => 'Группы свойств',
+        'property_group' => 'Свойства группы',
+        'options' => 'Параметры',
+        'option' => 'Параметр',
+        'catalogue' => 'Каталог',
+        'out_of_stock' => 'Этот товар закончился.',
+        'out_of_stock_short' => 'Нет в наличии',
+        'stock_limit_reached' => 'Вы не можете добавить больше товаров этого товара в вашу корзину, так как был достигнут предел запаса.',
+        'deleted_at' => 'Удален',
+        'sort_order' => 'Сортировка',
+        'order_states' => 'Состояние заказа',
+        'website' => 'Веб-сайт',
+        'brands' => 'Бренды',
+        'brand' => 'Бренд',
+        'sorting_updated' => 'Порядок сортировки был обновлен',
+        'not_in_use' => 'Параметр не используется',
+        'saved_changes' => 'Изменения успешно сохранены',
+        'none' => '-- Нет',
+        'customers' => 'Клиенты',
+        'customer_groups' => 'Группы клиентов',
+        'customer_group' => 'Группы клиентов',
+        'product_or_variant' => 'Тоавр / Вариант',
+        'code' => 'Код',
+        'code_comment' => 'Этот код может быть использован для идентификации этой записи программно',
+        'checked' => 'Отмечен',
+        'unchecked' => 'Не отмечен',
+        'notifications' => 'Уведомления',
+        'notification' => 'Уведомление',
+        'price_missing' => 'Введите хотя бы цену для валюты по умолчанию',
+        'slug_unique' => 'URL должен быть уникальным',
+        'fees' => 'Сборы',
+        'value' => 'Значение',
+        'services' => 'Услуги',
+        'service' => 'Услуга',
+        'review' => 'Отзыв',
+        'reviews' => 'Отзывы',
     ],
-    'variant'                  => [
+    'variant' => [
         'method' => [
-            'single'  => 'Артикул',
+            'single' => 'Артикул',
             'variant' => 'Артикул вариантов',
         ],
     ],
-    'properties'               => [
-        'use_for_variants'         => 'Использовать для вариантов',
+    'properties' => [
+        'use_for_variants' => 'Использовать для вариантов',
         'use_for_variants_comment' => 'Это свойство отличается для различных вариантов продукта',
-        'filter_type'              => 'Тип фильтра',
-        'filter_types'             => [
-            'none'  => 'Без фильтра',
-            'set'   => 'Набор',
+        'filter_type' => 'Тип фильтра',
+        'filter_types' => [
+            'none' => 'Без фильтра',
+            'set' => 'Набор',
             'range' => 'Диапазон',
         ],
     ],
-    'custom_field_options'     => [
-        'text'       => 'Текстовое поле',
-        'integer'    => 'Целое число',
-        'float'      => 'Число с плавающей точкой',
-        'textarea'   => 'Многострочное текстовое поле',
+    'custom_field_options' => [
+        'text' => 'Текстовое поле',
+        'integer' => 'Целое число',
+        'float' => 'Число с плавающей точкой',
+        'textarea' => 'Многострочное текстовое поле',
         'richeditor' => 'Rich-редактор',
-        'dropdown'   => 'Выпадающий список',
-        'checkbox'   => 'Флажок',
-        'color'      => 'Цвет',
-        'image'      => 'Изображение',
-        'add'        => 'Добавить параметр',
-        'name'       => 'Имя',
-        'price'      => 'Цена',
+        'dropdown' => 'Выпадающий список',
+        'checkbox' => 'Флажок',
+        'color' => 'Цвет',
+        'image' => 'Изображение',
+        'add' => 'Добавить параметр',
+        'name' => 'Имя',
+        'price' => 'Цена',
         'attributes' => 'Атрибут',
-        'option'     => 'Параметр',
+        'option' => 'Параметр',
     ],
-    'product'                  => [
-        'user_defined_id'                      => 'ID товара',
-        'name'                                 => 'Название  товара',
-        'published'                            => 'Опубликован',
-        'published_short'                      => 'Опубл.',
-        'not_published'                        => 'Не опубликовано',
-        'published_comment'                    => 'Этот товар видимый на веб-сайте',
-        'stock'                                => 'Запас',
-        'price'                                => 'Цена',
-        'description_short'                    => 'Краткое описание',
-        'description'                          => 'Описание',
-        'weight'                               => 'Вес (г)',
-        'length'                               => 'Длина (мм)',
-        'height'                               => 'Высота (мм)',
-        'width'                                => 'Ширина (мм)',
-        'quantity_default'                     => 'Количество по умолчанию',
-        'quantity_min'                         => 'Минимальное количество',
-        'quantity_max'                         => 'Минимальное количество',
-        'inventory_management_method'          => 'Метод управления инвентаризации',
-        'allow_out_of_stock_purchases'         => 'Разрешить покупки, если нет на складе',
+    'product' => [
+        'user_defined_id' => 'ID товара',
+        'name' => 'Название  товара',
+        'published' => 'Опубликован',
+        'published_short' => 'Опубл.',
+        'not_published' => 'Не опубликовано',
+        'published_comment' => 'Этот товар видимый на веб-сайте',
+        'stock' => 'Запас',
+        'price' => 'Цена',
+        'description_short' => 'Краткое описание',
+        'description' => 'Описание',
+        'weight' => 'Вес (г)',
+        'length' => 'Длина (мм)',
+        'height' => 'Высота (мм)',
+        'width' => 'Ширина (мм)',
+        'quantity_default' => 'Количество по умолчанию',
+        'quantity_min' => 'Минимальное количество',
+        'quantity_max' => 'Минимальное количество',
+        'inventory_management_method' => 'Метод управления инвентаризации',
+        'allow_out_of_stock_purchases' => 'Разрешить покупки, если нет на складе',
         'allow_out_of_stock_purchases_comment' => 'Этот продукт можно заказать, даже если нет на складе',
-        'stackable'                            => 'В корзину',
-        'stackable_comment'                    => 'Если товар добавлен в корзину несколько раз показывать только одну запись (увеличение количества)',
-        'shippable'                            => 'Транспортируемый',
-        'shippable_comment'                    => 'Этот продукт может быть доставлен',
-        'taxable'                              => 'С налогом',
-        'taxable_comment'                      => 'Рассчитать налоги на этот товар',
-        'add_currency'                         => 'Добавить валюту',
-        'is_taxable'                           => 'Использование налога',
-        'is_not_taxable'                       => 'Нет налога',
-        'currency'                             => 'Валюта',
-        'general'                              => 'Общие',
-        'duplicate_currency'                   => 'Вы ввели несколько цен для одной валюты',
-        'property_title'                       => 'Название',
-        'property_value'                       => 'Значение',
-        'link_title'                           => 'Название',
-        'link_target'                          => 'Целевой URL-адрес',
-        'properties'                           => 'Свойства',
-        'links'                                => 'Ссылки',
-        'details'                              => 'Детали',
-        'price_includes_tax'                   => 'Цена включает в себя налоги',
-        'price_includes_tax_comment'           => 'В указанную цену включены все налоги',
-        'group_by_property'                    => 'Атрибут для варианта группировки',
-        'additional_descriptions'              => 'Дополнительные описания',
-        'additional_properties'                => 'Дополнительные свойства',
-        'price_table_modal'                    => [
-            'trigger'           => 'Редактировать значения запасов и цен',
-            'label'             => 'Цена и запасы',
-            'title'             => 'Обзор цены и запасов',
+        'stackable' => 'В корзину',
+        'stackable_comment' => 'Если товар добавлен в корзину несколько раз показывать только одну запись (увеличение количества)',
+        'shippable' => 'Транспортируемый',
+        'shippable_comment' => 'Этот продукт может быть доставлен',
+        'taxable' => 'С налогом',
+        'taxable_comment' => 'Рассчитать налоги на этот товар',
+        'add_currency' => 'Добавить валюту',
+        'is_taxable' => 'Использование налога',
+        'is_not_taxable' => 'Нет налога',
+        'currency' => 'Валюта',
+        'general' => 'Общие',
+        'duplicate_currency' => 'Вы ввели несколько цен для одной валюты',
+        'property_title' => 'Название',
+        'property_value' => 'Значение',
+        'link_title' => 'Название',
+        'link_target' => 'Целевой URL-адрес',
+        'properties' => 'Свойства',
+        'links' => 'Ссылки',
+        'details' => 'Детали',
+        'price_includes_tax' => 'Цена включает в себя налоги',
+        'price_includes_tax_comment' => 'В указанную цену включены все налоги',
+        'group_by_property' => 'Атрибут для варианта группировки',
+        'additional_descriptions' => 'Дополнительные описания',
+        'additional_properties' => 'Дополнительные свойства',
+        'price_table_modal' => [
+            'trigger' => 'Редактировать значения запасов и цен',
+            'label' => 'Цена и запасы',
+            'title' => 'Обзор цены и запасов',
             'currency_dropdown' => 'Валюта: ',
         ],
     ],
-    'image_sets'               => [
-        'is_main_set'         => 'Основной набор',
+    'image_sets' => [
+        'is_main_set' => 'Основной набор',
         'is_main_set_comment' => 'Используйте этот набор для этого продукта',
-        'create_new'          => 'Создать новый набор',
+        'create_new' => 'Создать новый набор',
     ],
-    'category'                 => [
-        'name'                            => 'Имя',
-        'code'                            => 'Код',
-        'code_comment'                    => 'Этот код может быть использован для идентификации этой категории в части внешнего интерфейса',
-        'parent'                          => 'Родительская категория',
-        'no_parent'                       => 'Нет родительской категории',
-        'inherit_property_groups'         => 'Наследовать свойства родительской категории',
+    'category' => [
+        'name' => 'Имя',
+        'code' => 'Код',
+        'code_comment' => 'Этот код может быть использован для идентификации этой категории в части внешнего интерфейса',
+        'parent' => 'Родительская категория',
+        'no_parent' => 'Нет родительской категории',
+        'inherit_property_groups' => 'Наследовать свойства родительской категории',
         'inherit_property_groups_comment' => 'Используйте группы свойства родительской категории в этой категории',
     ],
-    'custom_fields'            => [
-        'name'             => 'Имя поля',
-        'type'             => 'Тип поля',
-        'options'          => 'Параметры',
-        'required'         => 'Обязательно',
+    'custom_fields' => [
+        'name' => 'Имя поля',
+        'type' => 'Тип поля',
+        'options' => 'Параметры',
+        'required' => 'Обязательно',
         'required_comment' => 'Это поле является обязательным для размещения заказа',
-        'is_required'      => 'Обязательно',
-        'is_not_required'  => 'Не требуется',
+        'is_required' => 'Обязательно',
+        'is_not_required' => 'Не требуется',
     ],
-    'tax'                      => [
-        'percentage'        => 'Процент',
-        'countries'         => 'Применяются налог при транспортировке в этих странах',
+    'tax' => [
+        'percentage' => 'Процент',
+        'countries' => 'Применяются налог при транспортировке в этих странах',
         'countries_comment' => 'Если выбрана ни одна страна, налог применяется во всем мире.',
     ],
-    'discounts'                => [
-        'name'                                 => 'Имя',
-        'code'                                 => 'Код скидки',
-        'total_to_reach'                       => 'Минимальная сумма заказа, чтобы применить скидку',
-        'type'                                 => 'Тип скидки',
-        'trigger'                              => 'Действительный если',
-        'rate'                                 => 'Ставка (%)',
-        'amount'                               => 'Фиксированная сумма',
-        'max_number_of_usages'                 => 'Максимальное количество использований',
-        'expires'                              => 'Срок действия',
-        'number_of_usages'                     => 'Количество использований',
-        'shipping_description'                 => 'Наименование альтернативного способа доставки',
-        'shipping_price'                       => 'Цена альтернативного способа доставки',
+    'discounts' => [
+        'name' => 'Имя',
+        'code' => 'Код скидки',
+        'total_to_reach' => 'Минимальная сумма заказа, чтобы применить скидку',
+        'type' => 'Тип скидки',
+        'trigger' => 'Действительный если',
+        'rate' => 'Ставка (%)',
+        'amount' => 'Фиксированная сумма',
+        'max_number_of_usages' => 'Максимальное количество использований',
+        'expires' => 'Срок действия',
+        'number_of_usages' => 'Количество использований',
+        'shipping_description' => 'Наименование альтернативного способа доставки',
+        'shipping_price' => 'Цена альтернативного способа доставки',
         'shipping_guaranteed_days_to_delivery' => 'Гарантированный срок доставки',
-        'section_type'                         => 'Что делает эта скидка?',
-        'section_trigger'                      => 'Когда применяется скидка?',
-        'types'                                => [
-            'fixed_amount'    => 'Фиксированная сумма',
-            'rate'            => 'Процент',
-            'shipping'        => 'Альтернативная доставка',
+        'section_type' => 'Что делает эта скидка?',
+        'section_trigger' => 'Когда применяется скидка?',
+        'types' => [
+            'fixed_amount' => 'Фиксированная сумма',
+            'rate' => 'Процент',
+            'shipping' => 'Альтернативная доставка',
         ],
-        'triggers'                             => [
-            'total'   => 'Общая сумма заказа достигнута',
-            'code'    => 'Код скидки введен',
+        'triggers' => [
+            'total' => 'Общая сумма заказа достигнута',
+            'code' => 'Код скидки введен',
             'product' => 'Этот товар присутствует в корзине',
         ],
-        'validation'                           => [
-            'empty'               => 'Введите промо-код.',
-            'shipping'            => 'Вы можете применить только один промо-код, который снижает стоимость доставки.',
-            'duplicate'           => 'Можно использовать код только один раз.',
-            'expired'             => 'Этот промо-код истек.',
-            'not_found'           => 'Этот промо-код не действителен.',
+        'validation' => [
+            'empty' => 'Введите промо-код.',
+            'shipping' => 'Вы можете применить только один промо-код, который снижает стоимость доставки.',
+            'duplicate' => 'Можно использовать код только один раз.',
+            'expired' => 'Этот промо-код истек.',
+            'not_found' => 'Этот промо-код не действителен.',
             'usage_limit_reached' => 'Этот промо-код был применен к много раз и больше не является допустимым.',
         ],
     ],
-    'payment_method'           => [
-        'price'                  => 'Фиксированная плата',
-        'price_comment'          => 'Сумма, добавляемая к сумме заказа',
-        'fee_percentage'         => 'Процентная ставка',
+    'payment_method' => [
+        'price' => 'Фиксированная плата',
+        'price_comment' => 'Сумма, добавляемая к сумме заказа',
+        'fee_percentage' => 'Процентная ставка',
         'fee_percentage_comment' => 'Процент от суммы, добавляемой к сумме заказа',
-        'fee_label'              => 'Ярлык для сбора',
-        'fee_label_comment'      => 'Этот текст будет отображаться клиенту при оформлении заказа.',
+        'fee_label' => 'Ярлык для сбора',
+        'fee_label_comment' => 'Этот текст будет отображаться клиенту при оформлении заказа.',
     ],
-    'order'                    => [
-        'order_number'                        => 'Номер заказа',
-        'invoice_number'                      => 'Номер счета',
-        'customer'                            => 'Клиент',
-        'creation_date'                       => 'Создан',
-        'modification_date'                   => 'Изменен',
-        'completion_date'                     => 'Завершен',
-        'credit_card'                         => 'Кредитная карта',
-        'payment_status'                      => 'Статус платежа',
-        'grand_total'                         => 'Общая сумма',
-        'billing_address'                     => 'Адрес оплаты',
-        'shipping_address'                    => 'Адрес доставки',
-        'currency'                            => 'Валюта',
-        'status'                              => 'Статус',
-        'email'                               => 'Email',
-        'will_be_paid_later'                  => 'Будет оплачен позже',
-        'shipping_address_same_as_billing'    => 'Адрес доставки совпадает с адресом оплаты',
-        'credit_card_last4_digits'            => 'Последние 4 цифры',
-        'tracking_number'                     => 'Номер для отслеживания',
-        'tracking_url'                        => 'URL-адрес отслеживания',
-        'tracking_shipped'                    => 'Пометить заказ как отправленный',
-        'tracking_shipped_comment'            => 'Заказ будет отмечен как отправленный',
-        'tracking_completed'                  => 'Пометить заказ как завершенный',
-        'tracking_notification'               => 'Отправить уведомление',
-        'tracking_notification_comment'       => 'Уведомление, содержащее информацию об отслеживании будет отправлен заказчику',
-        'shipping_fees'                       => 'Стоимость доставки',
-        'shipping_provider'                   => 'Транспортная компания',
-        'shipping_method'                     => 'Метод доставки',
-        'card_holder_name'                    => 'Владелец карты',
-        'card_type'                           => 'Тип карты',
-        'payment_method'                      => 'Метод оплаты',
-        'payment_gateway_used'                => 'Платежный шлюз',
-        'tax_provider'                        => 'Налоговый поставщик',
-        'lang'                                => 'Язык',
-        'refunds_amount'                      => 'Сумма возмещения',
-        'adjusted_amount'                     => 'Скорректированная сумма',
-        'rebate_amount'                       => 'Сумма бонуса',
-        'total'                               => 'Итого',
-        'taxes_total'                         => 'Сумма налогов',
-        'items_total'                         => 'Всего товаров',
-        'subtotal'                            => 'Итого',
-        'taxable_total'                       => 'Всего НДС',
-        'total_weight'                        => 'Общий вес',
-        'total_rebate_rate'                   => 'Общая скидка',
-        'notes'                               => 'Примечания',
-        'custom_fields'                       => 'Настраиваемые поля',
-        'shipping_enabled'                    => 'Доставка включена',
-        'payment_transaction_id'              => 'Идентификатор транзакции оплаты',
-        'change_order_status'                 => 'Изменить статус заказа',
-        'change_payment_status'               => 'Изменить статус платежа',
-        'items'                               => 'Товары',
-        'quantity'                            => 'Количество',
+    'order' => [
+        'order_number' => 'Номер заказа',
+        'invoice_number' => 'Номер счета',
+        'customer' => 'Клиент',
+        'creation_date' => 'Создан',
+        'modification_date' => 'Изменен',
+        'completion_date' => 'Завершен',
+        'credit_card' => 'Кредитная карта',
+        'payment_status' => 'Статус платежа',
+        'grand_total' => 'Общая сумма',
+        'billing_address' => 'Адрес оплаты',
+        'shipping_address' => 'Адрес доставки',
+        'currency' => 'Валюта',
+        'status' => 'Статус',
+        'email' => 'Email',
+        'will_be_paid_later' => 'Будет оплачен позже',
+        'shipping_address_same_as_billing' => 'Адрес доставки совпадает с адресом оплаты',
+        'credit_card_last4_digits' => 'Последние 4 цифры',
+        'tracking_number' => 'Номер для отслеживания',
+        'tracking_url' => 'URL-адрес отслеживания',
+        'tracking_shipped' => 'Пометить заказ как отправленный',
+        'tracking_shipped_comment' => 'Заказ будет отмечен как отправленный',
+        'tracking_completed' => 'Пометить заказ как завершенный',
+        'tracking_notification' => 'Отправить уведомление',
+        'tracking_notification_comment' => 'Уведомление, содержащее информацию об отслеживании будет отправлен заказчику',
+        'shipping_fees' => 'Стоимость доставки',
+        'shipping_provider' => 'Транспортная компания',
+        'shipping_method' => 'Метод доставки',
+        'card_holder_name' => 'Владелец карты',
+        'card_type' => 'Тип карты',
+        'payment_method' => 'Метод оплаты',
+        'payment_gateway_used' => 'Платежный шлюз',
+        'tax_provider' => 'Налоговый поставщик',
+        'lang' => 'Язык',
+        'refunds_amount' => 'Сумма возмещения',
+        'adjusted_amount' => 'Скорректированная сумма',
+        'rebate_amount' => 'Сумма бонуса',
+        'total' => 'Итого',
+        'taxes_total' => 'Сумма налогов',
+        'items_total' => 'Всего товаров',
+        'subtotal' => 'Итого',
+        'taxable_total' => 'Всего НДС',
+        'total_weight' => 'Общий вес',
+        'total_rebate_rate' => 'Общая скидка',
+        'notes' => 'Примечания',
+        'custom_fields' => 'Настраиваемые поля',
+        'shipping_enabled' => 'Доставка включена',
+        'payment_transaction_id' => 'Идентификатор транзакции оплаты',
+        'change_order_status' => 'Изменить статус заказа',
+        'change_payment_status' => 'Изменить статус платежа',
+        'items' => 'Товары',
+        'quantity' => 'Количество',
         'shipping_address_is_same_as_billing' => 'Адрес доставки совпадает с адресом оплаты',
-        'update_shipping_state'               => 'Обновить состояние доставки',
-        'invalid_status'                      => 'Выбранный статус не существует.',
-        'updated'                             => 'Обновление заказа прошло успешно',
-        'deleted'                             => 'Удаление заказа прошло успешно',
-        'deleting'                            => 'Удаление заказа ...',
-        'delete_confirm'                      => 'Вы действительно хотите удалить этот заказ?',
-        'update_invoice_number'               => 'Установить номер счета',
-        'shipped'                             => 'Отправлен',
-        'shipping_pending'                    => 'Ожидает отправки',
-        'not_shipped'                         => 'В ожидании',
-        'modal'                               => [
+        'update_shipping_state' => 'Обновить состояние доставки',
+        'invalid_status' => 'Выбранный статус не существует.',
+        'updated' => 'Обновление заказа прошло успешно',
+        'deleted' => 'Удаление заказа прошло успешно',
+        'deleting' => 'Удаление заказа ...',
+        'delete_confirm' => 'Вы действительно хотите удалить этот заказ?',
+        'update_invoice_number' => 'Установить номер счета',
+        'shipped' => 'Отправлен',
+        'shipping_pending' => 'Ожидает отправки',
+        'not_shipped' => 'В ожидании',
+        'modal' => [
             'cancel' => 'Отменен',
             'update' => 'Обновить информацию',
         ],
-        'payment_states'                      => [
-            'pending_state'  => 'Ожидает оплаты',
-            'failed_state'   => 'Платеж не прошел',
+        'payment_states' => [
+            'pending_state' => 'Ожидает оплаты',
+            'failed_state' => 'Платеж не прошел',
             'refunded_state' => 'Платеж возвращен',
-            'paid_state'     => 'Оплачен',
+            'paid_state' => 'Оплачен',
         ],
     ],
-    'shipping_method'          => [
+    'shipping_method' => [
         'guaranteed_delivery_days' => 'Гарантированная доставка в днях',
-        'available_above_total'    => 'Доступно, если общее число больше или равно',
-        'available_below_total'    => 'Доступно, если общее количество меньше, чем',
-        'countries'                => 'Доступно для доставки в страны',
-        'countries_comment'        => 'Если ни одна страна не выбрана, этот метод доступен во всем мире.',
+        'available_above_total' => 'Доступно, если общее число больше или равно',
+        'available_below_total' => 'Доступно, если общее количество меньше, чем',
+        'countries' => 'Доступно для доставки в страны',
+        'countries_comment' => 'Если ни одна страна не выбрана, этот метод доступен во всем мире.',
     ],
-    'payment_status'           => [
-        'paid'          => 'Оплачен',
-        'deferred'      => 'Отложенный',
+    'payment_status' => [
+        'paid' => 'Оплачен',
+        'deferred' => 'Отложенный',
         'paid_deferred' => 'Платеж отложен',
-        'paiddeferred'  => 'Платеж отложен',
-        'charged_back'  => 'Отправлен обратно',
-        'refunded'      => 'Платеж возмещен',
-        'paidout'       => 'Выплачен',
-        'failed'        => 'Неудачный',
-        'pending'       => 'В ожидании',
-        'expired'       => 'Просрочен',
-        'cancelled'     => 'Отменен',
-        'open'          => 'Открыт',
+        'paiddeferred' => 'Платеж отложен',
+        'charged_back' => 'Отправлен обратно',
+        'refunded' => 'Платеж возмещен',
+        'paidout' => 'Выплачен',
+        'failed' => 'Неудачный',
+        'pending' => 'В ожидании',
+        'expired' => 'Просрочен',
+        'cancelled' => 'Отменен',
+        'open' => 'Открыт',
     ],
-    'permissions'              => [
-        'manage_products'         => 'Может управлять товарами',
-        'manage_categories'       => 'Может управлять категориями',
-        'manage_orders'           => 'Может управлять заказами',
-        'manage_discounts'        => 'Может управлять скидками',
-        'settings'                => [
-            'manage_general'         => 'Может управлять общими настройка магазина',
-            'manage_currency'        => 'Может управлять валютами магазина',
+    'permissions' => [
+        'manage_products' => 'Может управлять товарами',
+        'manage_categories' => 'Может управлять категориями',
+        'manage_orders' => 'Может управлять заказами',
+        'manage_discounts' => 'Может управлять скидками',
+        'settings' => [
+            'manage_general' => 'Может управлять общими настройка магазина',
+            'manage_currency' => 'Может управлять валютами магазина',
             'manage_payment_methods' => 'Может управлять способами оплаты магазина',
         ],
-        'manage_properties'       => 'Может редактировать свойства товара',
-        'manage_customer_groups'  => ' Может управлять группами покупателей',
-        'manage_notifications'    => 'Можно управлять уведомлениями',
+        'manage_properties' => 'Может редактировать свойства товара',
+        'manage_customer_groups' => ' Может управлять группами покупателей',
+        'manage_notifications' => 'Можно управлять уведомлениями',
         'manage_price_categories' => 'Можно управлять ценой категорий',
-        'manage_order_states'     => 'Можно управлять статусом заказа',
+        'manage_order_states' => 'Можно управлять статусом заказа',
         'manage_shipping_methods' => 'Можно управлять методами доставки',
-        'manage_taxes'            => 'Можно управлять налогами',
+        'manage_taxes' => 'Можно управлять налогами',
     ],
-    'components'               => [
-        'products'               => [
-            'details'    => [
-                'name'        => 'Товары',
+    'components' => [
+        'products' => [
+            'details' => [
+                'name' => 'Товары',
                 'description' => 'Список товаров',
             ],
             'properties' => [
                 'no_category_filter' => 'Не фильтровать по категориям',
-                'use_url'            => 'Использовать Slug-категории из URL-адреса',
-                'filter_component'   => [
-                    'title'       => 'Псевдоним компонента фильтра',
+                'use_url' => 'Использовать Slug-категории из URL-адреса',
+                'filter_component' => [
+                    'title' => 'Псевдоним компонента фильтра',
                     'description' => 'Псевдоним компонента ProductsFilter, который фильтрует этот компонент Товары',
                 ],
-                'include_variants'   => [
-                    'title'       => 'Показать Артикул вариантов',
+                'include_variants' => [
+                    'title' => 'Показать Артикул вариантов',
                     'description' => 'Не показывать отдельные продукты, но все доступные варианты продуктов',
                 ],
-                'include_children'   => [
-                    'title'       => 'Включить дочерние',
+                'include_children' => [
+                    'title' => 'Включить дочерние',
                     'description' => 'Показать все товары дочерних категорий',
                 ],
-                'per_page'           => [
-                    'title'       => 'На страницу',
+                'per_page' => [
+                    'title' => 'На страницу',
                     'description' => 'Сколько продуктов, отображать на странице',
                 ],
-                'paginate'           => [
-                    'title'       => 'Пагинация',
+                'paginate' => [
+                    'title' => 'Пагинация',
                     'description' => 'Разбивать результат (более чем одной страницы)',
                 ],
-                'sort'               => [
-                    'title'       => 'Сортировка',
+                'sort' => [
+                    'title' => 'Сортировка',
                     'description' => 'Это отменяет предпочтения пользователя по сортировке',
                 ],
-                'set_page_title'     => [
-                    'title'       => 'Название страницы',
+                'set_page_title' => [
+                    'title' => 'Название страницы',
                     'description' => 'Использовать имя категории как заголовок страницы',
                 ],
             ],
         ],
-        'productsFilter'         => [
-            'details'    => [
-                'name'        => 'Фильтр товаров',
+        'productsFilter' => [
+            'details' => [
+                'name' => 'Фильтр товаров',
                 'description' => 'Фильтры товаров из категории',
             ],
             'properties' => [
-                'showPriceFilter'     => [
+                'showPriceFilter' => [
                     'title' => 'Показать ценовой фильтр',
                 ],
-                'showBrandFilter'     => [
+                'showBrandFilter' => [
                     'title' => 'Показать фильтр бренда',
                 ],
-                'includeChildren'     => [
-                    'title'       => 'Включить дочерние',
+                'includeChildren' => [
+                    'title' => 'Включить дочерние',
                     'description' => 'Включать свойства и фильтры из дочерних категории',
                 ],
-                'includeVariants'     => [
-                    'title'       => 'Включить варианты',
+                'includeVariants' => [
+                    'title' => 'Включить варианты',
                     'description' => 'Показать фильтры для вариантов свойств',
                 ],
                 'includeSliderAssets' => [
-                    'title'       => 'Включать noUI слайдер',
+                    'title' => 'Включать noUI слайдер',
                     'description' => 'Включить все зависимости noUI слайдера через cdnjs',
                 ],
-                'sortOrder'           => [
-                    'title'       => 'Сортировка',
+                'sortOrder' => [
+                    'title' => 'Сортировка',
                     'description' => 'Начальный порядок сортировки',
                 ],
             ],
-            'sortOrder'  => [
+            'sortOrder' => [
                 'bestseller' => 'Бестселлер',
-                'priceLow'   => 'Низкая цена',
-                'priceHigh'  => 'Высокая цена',
-                'latest'     => 'Новейшие',
-                'oldest'     => 'Старые',
-                'random'     => 'Случайно',
-                'manual'     => 'Вручную',
+                'priceLow' => 'Низкая цена',
+                'priceHigh' => 'Высокая цена',
+                'latest' => 'Новейшие',
+                'oldest' => 'Старые',
+                'random' => 'Случайно',
+                'manual' => 'Вручную',
             ],
         ],
-        'myAccount'              => [
-            'details'    => [
-                'name'        => 'Ваш кабинет',
+        'myAccount' => [
+            'details' => [
+                'name' => 'Ваш кабинет',
                 'description' => 'Отображает различные формы, где пользователь может просматривать и редактировать свой профиль',
             ],
             'properties' => [
@@ -606,150 +606,150 @@
                     'title' => 'Активные подстраницы',
                 ],
             ],
-            'pages'      => [
-                'orders'    => 'Заказы',
-                'profile'   => 'Профиль',
+            'pages' => [
+                'orders' => 'Заказы',
+                'profile' => 'Профиль',
                 'addresses' => 'Адреса',
             ],
         ],
-        'customerProfile'        => [
-            'details'    => [
-                'name'        => 'Профиль клиента',
+        'customerProfile' => [
+            'details' => [
+                'name' => 'Профиль клиента',
                 'description' => 'Отображает форму редактирования профиля клиента.',
             ],
             'properties' => [
             ],
         ],
-        'currencyPicker'         => [
-            'details'    => [
-                'name'        => 'Выбор валюты',
+        'currencyPicker' => [
+            'details' => [
+                'name' => 'Выбор валюты',
                 'description' => 'Показывает переключатель для выбора текущей валюты магазина',
             ],
             'properties' => [
             ],
         ],
-        'dependencies'           => [
-            'details'    => [
-                'name'        => 'Frontend зависимости',
+        'dependencies' => [
+            'details' => [
+                'name' => 'Frontend зависимости',
                 'description' => 'Включает в себя все необходимые frontend зависимости',
             ],
             'properties' => [
             ],
         ],
-        'addressList'            => [
-            'details'    => [
-                'name'        => 'Список адресов',
+        'addressList' => [
+            'details' => [
+                'name' => 'Список адресов',
                 'description' => 'Отображает список всех адресов зарегистрированных пользователей',
             ],
             'properties' => [
             ],
-            'errors'     => [
-                'address_not_found'          => 'Не удалось найти запрошенный адрес',
+            'errors' => [
+                'address_not_found' => 'Не удалось найти запрошенный адрес',
                 'cannot_delete_last_address' => 'Нельзя удалить последний адрес',
             ],
-            'messages'   => [
+            'messages' => [
                 'address_deleted' => 'Адрес удален',
             ],
         ],
-        'ordersList'             => [
-            'details'    => [
-                'name'        => 'Список заказов',
+        'ordersList' => [
+            'details' => [
+                'name' => 'Список заказов',
                 'description' => 'Отображает список всех заказов клиента',
             ],
             'properties' => [
             ],
         ],
-        'product'                => [
-            'details'       => [
-                'name'        => 'Сведения о товаре',
+        'product' => [
+            'details' => [
+                'name' => 'Сведения о товаре',
                 'description' => 'Отображает подробности товара',
             ],
-            'properties'    => [
+            'properties' => [
             ],
             'added_to_cart' => 'Товар успешно добавлен',
         ],
-        'cart'                   => [
-            'details'    => [
-                'name'        => 'Корзина',
+        'cart' => [
+            'details' => [
+                'name' => 'Корзина',
                 'description' => 'Отображает корзину',
             ],
             'properties' => [
                 'showDiscountApplier' => [
                     'title' => 'Показать скидку',
                 ],
-                'showTaxes'           => [
+                'showTaxes' => [
                     'title' => 'Показать налоги',
                 ],
             ],
         ],
-        'checkout'               => [
+        'checkout' => [
             'details' => [
-                'name'        => 'Оформить заказ',
+                'name' => 'Оформить заказ',
                 'description' => 'Обрабатывает процесс покупки',
             ],
-            'errors'  => [
+            'errors' => [
                 'missing_settings' => 'Пожалуйста, выберите способ оплаты и доставки.',
             ],
         ],
-        'discountApplier'        => [
+        'discountApplier' => [
             'details' => [
-                'name'        => 'Ввод промо-кода',
+                'name' => 'Ввод промо-кода',
                 'description' => 'Отображает поле промо-кода',
             ],
         ],
         'shippingMethodSelector' => [
             'details' => [
-                'name'        => 'Переключатель доставки',
+                'name' => 'Переключатель доставки',
                 'description' => 'Отображает список всех доступных методов доставки',
             ],
-            'errors'  => [
+            'errors' => [
                 'unavailable' => 'Выбранный способ доставки не доступен для заказа.',
             ],
         ],
-        'paymentMethodSelector'  => [
+        'paymentMethodSelector' => [
             'details' => [
-                'name'        => 'Переключатель метода оплаты',
+                'name' => 'Переключатель метода оплаты',
                 'description' => 'Отображает список всех доступных способов оплаты',
             ],
-            'errors'  => [
+            'errors' => [
                 'unavailable' => 'Выбранный способ оплаты не доступен для заказа.',
             ],
         ],
-        'addressSelector'        => [
+        'addressSelector' => [
             'details' => [
-                'name'        => 'Переключатель адресов',
+                'name' => 'Переключатель адресов',
                 'description' => 'Отображает список всех существующих адресов пользователей',
             ],
-            'errors'  => [
+            'errors' => [
             ],
         ],
-        'addressForm'            => [
-            'details'    => [
-                'name'        => 'Форма адреса',
+        'addressForm' => [
+            'details' => [
+                'name' => 'Форма адреса',
                 'description' => 'Отображает форму для редактирования адреса пользователя',
             ],
             'properties' => [
-                'address'  => [
+                'address' => [
                     'title' => 'Адрес',
                 ],
                 'redirect' => [
                     'title' => 'Перенаправление (после сохранения)',
                 ],
-                'set'      => [
+                'set' => [
                     'title' => 'Использовать этот адрес как',
                 ],
             ],
-            'redirects'  => [
+            'redirects' => [
                 'checkout' => 'Страница оформления заказа',
             ],
-            'set'        => [
-                'billing'  => 'Адрес для оплаты',
+            'set' => [
+                'billing' => 'Адрес для оплаты',
                 'shipping' => 'Адрес доставки',
             ],
         ],
-        'signup'                 => [
-            'details'    => [
-                'name'        => 'Зарегистрироваться',
+        'signup' => [
+            'details' => [
+                'name' => 'Зарегистрироваться',
                 'description' => 'Отображает форму регистрации и входа',
             ],
             'properties' => [
@@ -757,140 +757,140 @@
                     'name' => 'Перенаправление после входа',
                 ],
             ],
-            'errors'     => [
-                'user_is_guest'   => 'Вы пытаетесь войти в учетную запись гостя.',
-                'unknown_user'    => 'Недопустимые учетные данные, которые вы ввели.',
-                'login'           => [
+            'errors' => [
+                'user_is_guest' => 'Вы пытаетесь войти в учетную запись гостя.',
+                'unknown_user' => 'Недопустимые учетные данные, которые вы ввели.',
+                'login' => [
                     'required' => 'Пожалуйста, введите адрес электронной почты.',
-                    'email'    => 'Пожалуйста, введите действительный адрес электронной почты.',
-                    'between'  => 'Пожалуйста, введите действительный адрес электронной почты.',
+                    'email' => 'Пожалуйста, введите действительный адрес электронной почты.',
+                    'between' => 'Пожалуйста, введите действительный адрес электронной почты.',
                 ],
-                'password'        => [
+                'password' => [
                     'required' => 'Пожалуйста, введите ваш пароль.',
-                    'max'      => 'Пароль слишком длинный.',
-                    'min'      => 'Пароль короткий. Пожалуйста, введите по крайней мере 8 символов.',
+                    'max' => 'Пароль слишком длинный.',
+                    'min' => 'Пароль короткий. Пожалуйста, введите по крайней мере 8 символов.',
                 ],
                 'password_repeat' => [
                     'required' => 'Пожалуйста, повторите пароль.',
-                    'same'     => 'Подтверждение пароля не совпадает.',
+                    'same' => 'Подтверждение пароля не совпадает.',
                 ],
-                'email'           => [
-                    'required'          => 'Пожалуйста, введите адрес электронной почты.',
-                    'email'             => 'Адрес электронной почты недействительный.',
-                    'unique'            => 'Пользователь с таким адресом электронной почты уже зарегистрирован.',
+                'email' => [
+                    'required' => 'Пожалуйста, введите адрес электронной почты.',
+                    'email' => 'Адрес электронной почты недействительный.',
+                    'unique' => 'Пользователь с таким адресом электронной почты уже зарегистрирован.',
                     'non_existing_user' => 'Пользователь с таким адресом электронной почты уже зарегистрирован. Используйте сброс пароля.',
                 ],
-                'firstname'       => [
+                'firstname' => [
                     'required' => 'Пожалуйста, введите вашу фамилию.',
                 ],
-                'lastname'        => [
+                'lastname' => [
                     'required' => 'Пожалуйста, введите ваше имя.',
                 ],
-                'lines'           => [
+                'lines' => [
                     'required' => 'Пожалуйста, введите ваш адрес.',
                 ],
-                'zip'             => [
+                'zip' => [
                     'required' => 'Пожалуйста, введите ваш почтовый индекс.',
                 ],
-                'city'            => [
+                'city' => [
                     'required' => 'Пожалуйста, введите город.',
                 ],
-                'country_id'      => [
+                'country_id' => [
                     'required' => 'Выберите страну.',
-                    'exists'   => 'Страна не допуступна.',
+                    'exists' => 'Страна не допуступна.',
                 ],
-                'state_id'        => [
+                'state_id' => [
                     'required' => 'Выберите область',
-                    'exists'   => 'Выбранное значение не доступно.',
+                    'exists' => 'Выбранное значение не доступно.',
                 ],
             ],
         ],
-        'categories'             => [
-            'details'    => [
-                'name'        => 'Категории',
+        'categories' => [
+            'details' => [
+                'name' => 'Категории',
                 'description' => 'Список доступных категорий',
             ],
             'properties' => [
-                'parent'       => [
-                    'title'       => 'Начать с категории',
+                'parent' => [
+                    'title' => 'Начать с категории',
                     'description' => 'Показывать только дочерние категории в этой категории',
                 ],
                 'categorySlug' => [
-                    'title'       => 'Категория Slug-параметр',
+                    'title' => 'Категория Slug-параметр',
                     'description' => 'Используйте этот параметр, чтобы загрузить родительскую категорию из Url',
                 ],
                 'categoryPage' => [
-                    'title'       => 'Страница категории',
+                    'title' => 'Страница категории',
                     'description' => 'Ссылки будут указывать на эту страницу. Если ничего не введено, будут использованы настройки по умолчанию из настроек бэкэнда.',
                 ],
             ],
-            'no_parent'  => 'Показать все категории',
-            'by_slug'    => 'Использовать категорию в URL как родитель',
+            'no_parent' => 'Показать все категории',
+            'by_slug' => 'Использовать категорию в URL как родитель',
         ],
-        'cartSummary'            => [
-            'details'    => [
-                'name'        => 'Итоги корзины',
+        'cartSummary' => [
+            'details' => [
+                'name' => 'Итоги корзины',
                 'description' => 'Отображать количество товаров и общую стоимость корзины',
             ],
             'properties' => [
-                'showItemCount'  => [
-                    'title'       => 'Показать количество товаров',
+                'showItemCount' => [
+                    'title' => 'Показать количество товаров',
                     'description' => 'Показать количество товаров в корзине',
                 ],
                 'showTotalPrice' => [
-                    'title'       => 'Показать общую стоимость',
+                    'title' => 'Показать общую стоимость',
                     'description' => 'Отображать общую стоимость всех товаров в корзине',
                 ],
             ],
         ],
-        'customerDashboard'      => [
-            'details'    => [
-                'name'        => 'Панель управления для клиентов',
+        'customerDashboard' => [
+            'details' => [
+                'name' => 'Панель управления для клиентов',
                 'description' => 'Отображает ссылку для входа в систему клиента и изменения настроек его учетной записи.',
             ],
             'properties' => [
                 'customerDashboardLabel' => [
-                    'title'       => 'Ярлык для Панели управления клиентов',
+                    'title' => 'Ярлык для Панели управления клиентов',
                     'description' => 'Текст ссылки для страницы панели управления клиента',
                 ],
-                'logoutLabel'            => [
-                    'title'       => 'Logout метка',
+                'logoutLabel' => [
+                    'title' => 'Logout метка',
                     'description' => 'Текст для ссылки выхода',
                 ],
             ],
         ],
     ],
-    'shipping_method_rates'    => [
+    'shipping_method_rates' => [
         'from_weight' => 'От (вес в граммах)',
-        'to_weight'   => 'До (вес в граммах)',
+        'to_weight' => 'До (вес в граммах)',
     ],
-    'products'                 => [
+    'products' => [
         'variants_comment' => 'Создавать различные варианты этого товара',
     ],
-    'order_states'             => [
-        'name'        => 'Имя',
+    'order_states' => [
+        'name' => 'Имя',
         'description' => 'Описание',
-        'color'       => 'Цвет',
-        'flag'        => 'Специальная пометка',
-        'flags'       => [
-            'new'      => 'Установить состояние заказа как «новый»',
+        'color' => 'Цвет',
+        'flag' => 'Специальная пометка',
+        'flags' => [
+            'new' => 'Установить состояние заказа как «новый»',
             'complete' => 'Установить состояние заказа как «выполнен»',
         ],
     ],
-    'customer_group'           => [
+    'customer_group' => [
         'code_comment' => 'Этот код может быть использован для идентификации этой группы программно',
     ],
-    'order_status'             => [
+    'order_status' => [
         'processed' => 'Обработан',
-        'disputed'  => 'Обсуждаемый',
-        'shipped'   => 'Отправлен',
+        'disputed' => 'Обсуждаемый',
+        'shipped' => 'Отправлен',
         'delivered' => 'Доставлен',
-        'pending'   => 'В ожидании',
+        'pending' => 'В ожидании',
         'cancelled' => 'Отменен',
     ],
-    'notifications'            => [
-        'enabled'         => 'Включены',
+    'notifications' => [
+        'enabled' => 'Включены',
         'enabled_comment' => 'Это уведомление активно',
-        'template'        => 'Шаблон почты',
+        'template' => 'Шаблон почты',
     ],
 ];

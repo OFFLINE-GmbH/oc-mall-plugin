@@ -2,10 +2,12 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\PaymentMethod;
 
 class PaymentTotal implements \JsonSerializable
 {
+    use Rounding;
     /**
      * @var TotalsCalculator
      */
@@ -59,7 +61,7 @@ class PaymentTotal implements \JsonSerializable
 
         $charge = $this->getCharge($base, $price, $percentage);
 
-        return round($charge - $base, 0);
+        return $this->round($charge - $base);
     }
 
     protected function calculateTotal(): float
@@ -81,12 +83,12 @@ class PaymentTotal implements \JsonSerializable
 
         $charge = $this->getCharge($base, $price, $percentage);
 
-        return round($charge - $base, 0);
+        return $this->round($charge - $base);
     }
 
     protected function calculateTaxes(): float
     {
-        return $this->total - $this->preTaxes;
+        return $this->round($this->total - $this->preTaxes);
     }
 
     public function totalPreTaxes(): float

@@ -30,6 +30,18 @@ class AddressList extends MallComponent
      * @var string
      */
     public $addressPage;
+    /**
+     * The id of the default billing address.
+     *
+     * @var int
+     */
+    public $defaultBillingAddressId;
+    /**
+     * The id of the default shipping address.
+     *
+     * @var int
+     */
+    public $defaultShippingAddressId;
 
     /**
      * Component details.
@@ -62,10 +74,68 @@ class AddressList extends MallComponent
     public function init()
     {
         if ($user = Auth::getUser()) {
-            $this->addresses   = $user->customer->addresses;
+            $this->addresses = $user->customer->addresses;
+            $this->defaultBillingAddressId = $user->customer->default_billing_address_id;
+            $this->defaultShippingAddressId = $user->customer->default_shipping_address_id;
             $this->addressPage = GeneralSettings::get('address_page');
         }
     }
+
+    /**
+     * @return array
+     * @throws ValidationException
+     */
+    public function onChangeDefaultShippingAddress()
+    {
+        $this->updateDefaultAddressFromUser('shipping');
+
+        Flash::success(trans('offline.mall::lang.components.addressList.messages.default_shipping_address_changed'));
+
+        return [
+            '.mall-address-list__list' => $this->renderPartial($this->alias . '::list'),
+        ];
+    }
+
+    /**
+     * @return array
+     * @throws ValidationException
+     */
+    public function onChangeDefaultBillingAddress()
+    {
+        $this->updateDefaultAddressFromUser('billing');
+
+        Flash::success(trans('offline.mall::lang.components.addressList.messages.default_billing_address_changed'));
+
+        return [
+            '.mall-address-list__list' => $this->renderPartial($this->alias . '::list'),
+        ];
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     * @throws ValidationException
+     */
+    public function updateDefaultAddressFromUser(string $type)
+    {
+
+        $id = $this->decode(post('id'));
+        $customer = Auth::getUser()->customer;
+        $address = Address::byCustomer($customer)->find($id);
+
+        if (!$address) {
+            throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
+        }
+
+        if ($type === 'billing') {
+            $this->defaultBillingAddressId = $customer->default_billing_address_id = $id;
+        } elseif ($type === 'shipping') {
+            $this->defaultShippingAddressId = $customer->default_shipping_address_id = $id;
+        }
+
+        return $customer->save();
+    }
+
 
     /**
      * The user deleted an address.
@@ -75,11 +145,11 @@ class AddressList extends MallComponent
      */
     public function onDelete()
     {
-        $id       = $this->decode(post('id'));
+        $id = $this->decode(post('id'));
         $customer = Auth::getUser()->customer;
-        $address  = Address::byCustomer($customer)->find($id);
+        $address = Address::byCustomer($customer)->find($id);
 
-        if ( ! $address) {
+        if (!$address) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
         }
 

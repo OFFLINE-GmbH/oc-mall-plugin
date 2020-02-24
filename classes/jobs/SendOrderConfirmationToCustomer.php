@@ -36,7 +36,8 @@ class SendOrderConfirmationToCustomer
             function (Message $message) use ($order) {
                 $message->to($order->customer->user->email, $order->customer->name);
                 if ($pdf = $order->getPDFInvoice()) {
-                    $message->attachData($pdf->output(), sprintf('invoice-order-%d.pdf', $order->id));
+                    $file_name = trans('offline.mall::lang.order.order_file_name', ['order' => $order->id]);
+                    $message->attachData($pdf->output(), sprintf('%s.pdf', $file_name));
                 }
             });
 
