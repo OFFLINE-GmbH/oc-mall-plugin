@@ -85,6 +85,8 @@
         'currencies'        => 'Geben Sie jeweils nur den offiziellen dreistelligen Währungscode ein.',
         'currency_code'     => 'Währungscode',
         'currency_decimals' => 'Anz. Dezimalstellen',
+        'currency_rounding' => 'Rundung des Totals',
+        'currency_rounding_comment' => 'Das Gesamttotal inklusive Steuern wird auf diesen Wert gerundet, wenn diese Währung aktiv ist.',
         'currency_format'   => 'Formatierung',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Kurs zu Basiswährung',

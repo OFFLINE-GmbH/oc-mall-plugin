@@ -3,11 +3,13 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use JsonSerializable;
+use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Tax;
 
 class TaxTotal implements JsonSerializable
 {
+    use Rounding;
     /**
      * @var Tax
      */
@@ -28,10 +30,14 @@ class TaxTotal implements JsonSerializable
     public function __construct(float $preTax, Tax $tax)
     {
         $this->preTax = $preTax;
-        $this->tax    = $tax;
-        $this->money  = app(Money::class);
+        $this->tax = $tax;
+        $this->money = app(Money::class);
 
         $this->calculate();
+    }
+
+    public function setTotal(float $total) {
+        $this->total = $total;
     }
 
     protected function calculate()
@@ -43,7 +49,7 @@ class TaxTotal implements JsonSerializable
 
     public function total(): float
     {
-        return $this->total;
+        return $this->round($this->total);
     }
 
     public function preTax(): float

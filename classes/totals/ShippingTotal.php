@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
+use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
@@ -11,6 +12,7 @@ use OFFLINE\Mall\Models\Tax;
 
 class ShippingTotal implements \JsonSerializable
 {
+    use Rounding;
     /**
      * @var TotalsCalculator
      */
@@ -80,13 +82,15 @@ class ShippingTotal implements \JsonSerializable
 
         $totalTaxPercentage = $this->totals->shippingTaxes->sum('percentageDecimal');
 
-        return $this->totals->shippingTaxes->sum(function (Tax $tax) use ($price, $totalTaxPercentage) {
+        $totalTax = $this->totals->shippingTaxes->sum(function (Tax $tax) use ($price, $totalTaxPercentage) {
             if ($this->method->price_includes_tax) {
                 return $price / (1 + $totalTaxPercentage) * $tax->percentageDecimal;
             }
 
             return $price * $tax->percentageDecimal;
         });
+
+        return $this->round($totalTax);
     }
 
     protected function calculateTotal(): float

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
+use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
@@ -16,7 +17,7 @@ use OFFLINE\Mall\Models\WishlistItem;
  */
 class TotalsCalculator
 {
-    use FilteredTaxes;
+    use FilteredTaxes, Rounding;
 
     /**
      * @var TotalsCalculatorInput
@@ -132,7 +133,7 @@ class TotalsCalculator
 
     protected function calculateProductTaxes(): float
     {
-        return $this->input->products->sum('totalTaxes');
+        return $this->round($this->input->products->sum('totalTaxes'));
     }
 
     protected function getTaxTotals(): Collection
@@ -182,12 +183,20 @@ class TotalsCalculator
         return $taxTotals->groupBy(function (TaxTotal $taxTotal) {
             return $taxTotal->tax->id;
         })->map(function (Collection $grouped) {
-            $tax    = $grouped->first()->tax;
+            $tax = $grouped->first()->tax;
+
             $preTax = $grouped->sum(function (TaxTotal $tax) {
                 return $tax->preTax();
             });
 
-            return new TaxTotal($preTax, $tax);
+            $taxTotal = new TaxTotal($preTax, $tax);
+
+            $taxTotal->setTotal($grouped->sum(function(TaxTotal $type) use ($tax) {
+                return (new TaxTotal($type->preTax(), $tax))->total();
+            }));
+
+            return $taxTotal;
+
         })->values();
     }
 

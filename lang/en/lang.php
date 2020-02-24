@@ -85,6 +85,8 @@
         'currencies'        => 'Only enter official 3-char currency codes.',
         'currency_code'     => 'Currency code',
         'currency_decimals' => 'Decimal places',
+        'currency_rounding' => 'Rounding the total',
+        'currency_rounding_comment' => 'The total, including taxes, is rounded to this value if this currency is active.',
         'currency_format'   => 'Format',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
