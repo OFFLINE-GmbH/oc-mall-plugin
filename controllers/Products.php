@@ -4,11 +4,11 @@ use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
 use BackendMenu;
 use DB;
 use Event;
 use Flash;
-use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
@@ -19,9 +19,7 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductFile;
 use OFFLINE\Mall\Models\ProductPrice;
-use OFFLINE\Mall\Models\Property;
-use OFFLINE\Mall\Models\PropertyValue;
-use RainLab\Translate\Models\Locale;
+use OFFLINE\Mall\Models\Review;
 
 class Products extends Controller
 {
@@ -190,6 +188,19 @@ class Products extends Controller
         $this->vars['type']  = post('type');
 
         return ['#optionList' => $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm')];
+    }
+
+    public function onApproveReview()
+    {
+        Review::findOrFail(post('id'))->approve();
+
+        Flash::success(trans('offline.mall::lang.reviews.approved'));
+
+        $this->initRelation(Product::findOrFail($this->params[0]), 'reviews');
+
+        return [
+            '#Products-update-RelationController-reviews-view' => $this->relationRenderView('reviews'),
+        ];
     }
 
     protected function getCustomFieldModel()

@@ -1126,6 +1126,8 @@
         'anonymous' => 'Anonymous',
         'only_unapproved' => 'Show only unapproved',
         'no_more' => 'No more unapproved reviews',
+        'approved' => 'Review approved',
+        'approve' => 'Approve review',
         'approve_next' => 'Approve and go to next',
     ],
 ];
