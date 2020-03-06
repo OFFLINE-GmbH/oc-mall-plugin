@@ -9,7 +9,7 @@ class AddRoundingColumnToCurrenciesTable extends Migration
     {
         Schema::table('offline_mall_currencies', function($table)
         {
-            $table->integer('rounding')->default(1);
+            $table->integer('rounding')->nullable();
         });
     }
 
