@@ -1123,6 +1123,8 @@
         'anonymous' => 'Anonym',
         'only_unapproved' => 'Zeige nur zu überprüfende Reviews',
         'no_more' => 'Alle Reviews sind freigeschaltet',
+        'approved' => 'Review freigegeben',
+        'approve' => 'Review freigeben',
         'approve_next' => 'Review freigeben und weiter',
     ],
 ];
