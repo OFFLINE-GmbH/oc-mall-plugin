@@ -299,3 +299,5 @@
     - add_rounding_column_to_currencies_table.php
 1.11.7:
     - Added Czech translations, fixed Review approvals in Product form
+1.11.8:
+    - Added Farsi translations
