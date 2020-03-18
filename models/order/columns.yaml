@@ -17,11 +17,19 @@ columns:
         sortable: true
     customer:
         label: 'offline.mall::lang.order.customer'
-        path: $/offline/mall/models/order/_customer.htm
         relation: customer
-        type: partial
+        type: text
         searchable: true
         sortable: false
+        select: concat(firstname, ' ', lastname)
+    user:
+        label: 'offline.mall::lang.order.email'
+        relation: user
+        type: text
+        select: email
+        sortable: false
+        searchable: true
+        invisible: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
