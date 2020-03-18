@@ -15,6 +15,7 @@ columns:
         type: text
         searchable: true
         sortable: true
+        invisible: true
     customer:
         label: 'offline.mall::lang.order.customer'
         relation: customer
@@ -29,7 +30,6 @@ columns:
         select: email
         sortable: false
         searchable: true
-        invisible: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
