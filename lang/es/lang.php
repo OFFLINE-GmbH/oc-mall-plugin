@@ -665,469 +665,469 @@
                     'description' => 'Alias del componente ProductsFilter que filtra este componente de Productos',
                 ],
                 'filter' => [
-                    'title' => 'Filter string',
-                    'description' => 'Forced filter for this component',
+                    'title' => 'Filtrar por',
+                    'description' => 'Forzar el filtro para este componente',
                 ],
                 'include_variants' => [
-                    'title' => 'Show article variants',
-                    'description' => 'Don\'t show single products but all available product variants',
+                    'title' => 'Mostrar variantes de artículos',
+                    'description' => 'No mostrar productos únicos sino todas sus variantes disponibles',
                 ],
                 'include_children' => [
-                    'title' => 'Include children',
-                    'description' => 'Show all products of child categories as well',
+                    'title' => 'Incluir hijos',
+                    'description' => 'También mostrar todos los productos de categorías anidadas',
                 ],
                 'per_page' => [
-                    'title' => 'Per page',
-                    'description' => 'How many products to display per page',
+                    'title' => 'Por página',
+                    'description' => 'Cantidad de productos a mostrar por página',
                 ],
                 'paginate' => [
-                    'title' => 'Paginate',
-                    'description' => 'Paginate the result (show more than one page)',
+                    'title' => 'Paginar',
+                    'description' => 'Paginar el resultado (mostrar más de una página)',
                 ],
                 'sort' => [
-                    'title' => 'Sort',
-                    'description' => 'This overrides the user\'s sort preference',
+                    'title' => 'Orden',
+                    'description' => 'Esto sobreescribe la preferencia de orden establecida por el cliente',
                 ],
                 'set_page_title' => [
-                    'title' => 'Set page title',
-                    'description' => 'Use the category\'s name as page title',
+                    'title' => 'Fijar título de página',
+                    'description' => 'Usar el nombre de la categoría como título de página',
                 ],
             ],
         ],
         'productsFilter' => [
             'details' => [
-                'name' => 'Products filter',
-                'description' => 'Filters the products from a category',
+                'name' => 'Filtro de productos',
+                'description' => 'Filtra el listado de productos por categoría',
             ],
             'properties' => [
                 'showPriceFilter' => [
-                    'title' => 'Show price filter',
+                    'title' => 'Mostrar filtro de precio',
                 ],
                 'showBrandFilter' => [
-                    'title' => 'Show brand filter',
+                    'title' => 'Mostrar filtro de marca',
                 ],
                 'showOnSaleFilter' => [
-                    'title' => 'Show on sale filter',
+                    'title' => 'Mostrar filtro de artículos en oferta',
                 ],
                 'includeChildren' => [
-                    'title' => 'Include children',
-                    'description' => 'Include properties and filters from products in child categories as well',
+                    'title' => 'Incluir hijos',
+                    'description' => 'Adicionalmente incluye propiedades y filtros de categorías anidadas',
                 ],
                 'includeVariants' => [
-                    'title' => 'Include variants',
-                    'description' => 'Show filters for variant properties',
+                    'title' => 'Incluir variantes',
+                    'description' => 'Mostrar filtros para propiedades de variantes',
                 ],
                 'includeSliderAssets' => [
-                    'title' => 'Include noUI Slider',
-                    'description' => 'Include all dependencies of noUI Slider via cdnjs',
+                    'title' => 'Incluir noUI Slider',
+                    'description' => 'Incluir todas las dependencias de noUI Slider a través de cdnjs',
                 ],
                 'sortOrder' => [
-                    'title' => 'Sort order',
-                    'description' => 'Initial sort order',
+                    'title' => 'Orden Predeterminado',
+                    'description' => 'Parámetro de orden inicial',
                 ],
             ],
             'sortOrder' => [
-                'bestseller' => 'Bestseller',
-                'priceLow' => 'Lowest price',
-                'priceHigh' => 'Highest price',
-                'latest' => 'Latest',
-                'oldest' => 'Oldest',
-                'random' => 'Random',
+                'bestseller' => 'Más vendidos',
+                'priceLow' => 'Menor precio',
+                'priceHigh' => 'Mayor precio',
+                'latest' => 'Últimos',
+                'oldest' => 'Más antiguos',
+                'random' => 'Aleatorio',
                 'manual' => 'Manual',
-                'name' => 'Name',
-                'ratings' => 'Ratings',
+                'name' => 'Nombre',
+                'ratings' => 'Evaluaciones',
             ],
         ],
         'myAccount' => [
             'details' => [
-                'name' => 'User account',
-                'description' => 'Displays different forms where a user can view and edit his profile',
+                'name' => 'Cuenta de usuario',
+                'description' => 'Muestra diversos formularios donde un usuario puede ver y editar su perfil',
             ],
             'properties' => [
                 'page' => [
-                    'title' => 'Active subpage',
+                    'title' => 'Subpágina activa',
                 ],
             ],
             'pages' => [
-                'orders' => 'Orders',
-                'profile' => 'Profile',
-                'addresses' => 'Addresses',
+                'orders' => 'Órdenes',
+                'profile' => 'Perfil',
+                'addresses' => 'Direcciones',
             ],
         ],
         'customerProfile' => [
             'details' => [
-                'name' => 'Customer profile',
-                'description' => 'Displays a customer profile edit form.',
+                'name' => 'Perfil de Cliente',
+                'description' => 'Muestra un formulario de edición de perfil de cliente.',
             ],
             'properties' => [
             ],
         ],
         'currencyPicker' => [
             'details' => [
-                'name' => 'Currency picker',
-                'description' => 'Shows a picker to select the currently active shop currency',
+                'name' => 'Selector de divisas',
+                'description' => 'Muestra un campo donde el usuario selecciona la divisa a utilizar en la tienda',
             ],
             'properties' => [
             ],
         ],
         'dependencies' => [
             'details' => [
-                'name' => 'Frontend dependencies',
-                'description' => 'Includes all needed frontend dependencies',
+                'name' => 'Dependencias de Frontend',
+                'description' => 'Incluye todas las dependencias necesarias del frontend',
             ],
             'properties' => [
             ],
         ],
         'addressList' => [
             'details' => [
-                'name' => 'Address list',
-                'description' => 'Displays a list of all registered user addresses',
+                'name' => 'Lista de direcciones',
+                'description' => 'Muestra una lista con todas las direcciones registradas por el usuario',
             ],
             'properties' => [
             ],
             'errors' => [
-                'address_not_found' => 'The requested address could not be found',
-                'cannot_delete_last_address' => 'You cannot delete your last address',
+                'address_not_found' => 'La dirección solicitada no se encuentra',
+                'cannot_delete_last_address' => 'No puedes editar la última dirección registrada',
             ],
             'messages' => [
-                'address_deleted' => 'Address deleted',
-                'default_billing_address_changed' => 'Default billing address changed',
-                'default_shipping_address_changed' => 'Default shipping address changed',
+                'address_deleted' => 'Dirección eliminada',
+                'default_billing_address_changed' => 'Se ha cambiado la dirección de facturación predeterminada',
+                'default_shipping_address_changed' => 'Se ha cambiado la dirección de despacho predeterminada',
             ],
         ],
         'ordersList' => [
             'details' => [
-                'name' => 'Orders list',
-                'description' => 'Displays a list of all customer orders',
+                'name' => 'Lista de pedidos',
+                'description' => 'Muestra una lista con todos los pedidos del cliente',
             ],
             'properties' => [
             ],
         ],
         'product' => [
             'details' => [
-                'name' => 'Product details',
-                'description' => 'Displays details of a product',
+                'name' => 'Detalles de producto',
+                'description' => 'Muestra los detalles de un producto',
             ],
             'properties' => [
                 'redirectOnPropertyChange' => [
-                    'title' => 'Redirect on property change',
-                    'description' => 'Redirect the user to the new detail page if a property was changed',
+                    'title' => 'Redirigir al cambiar propiedades',
+                    'description' => 'Redirigir al usuario a la nueva página de detalle si alguna propiedad de producto fue cambiada',
                 ],
             ],
-            'added_to_cart' => 'Added product successfully',
+            'added_to_cart' => 'Producto agregado exitosamente',
         ],
         'productReviews' => [
             'details' => [
-                'name' => 'Product reviews',
-                'description' => 'Displays all reviews of a product',
+                'name' => 'Reseñas de producto',
+                'description' => 'Muestra todas las reseñas de productos',
             ],
             'properties' => [
                 'perPage' => [
-                    'title' => 'Number of reviews per page',
+                    'title' => 'Cantidad de reseñas por página',
                 ],
                 'currentVariantReviewsOnly' => [
-                    'title' => 'Show only ratings of this Variant',
-                    'description' => "Don't show reviews of other Variants of this Product",
+                    'title' => 'Mostrar sólo las reseñas de esta variante',
+                    'description' => "No mostrar las reseñas de otras variantes de este producto.",
                 ],
             ],
         ],
         'cart' => [
             'details' => [
-                'name' => 'Cart',
-                'description' => 'Displays the shopping cart',
+                'name' => 'Carro',
+                'description' => 'Muestra el carro de compras',
             ],
             'properties' => [
                 'showDiscountApplier' => [
-                    'title' => 'Show discount applier',
+                    'title' => 'Mostrar aplicador de descuento',
                 ],
                 'showShipping' => [
-                    'title' => 'Show shipping cost',
+                    'title' => 'Mostrar costo de despacho',
                 ],
                 'showTaxes' => [
-                    'title' => 'Show taxes',
+                    'title' => 'Mostrar impuestos',
                 ],
                 'showProceedToCheckoutButton' => [
-                    'title' => 'Show proceed to checkout button',
+                    'title' => 'Mostrar botón para proceder al checkout',
                 ],
             ],
         ],
         'checkout' => [
             'details' => [
                 'name' => 'Checkout',
-                'description' => 'Handles the checkout process',
+                'description' => 'Gestiona el proceso de finalización compra',
             ],
             'errors' => [
-                'missing_settings' => 'Please select a payment and shipping method.',
+                'missing_settings' => 'Por favor seleccione un medio de pago y envío.',
             ],
         ],
         'discountApplier' => [
             'details' => [
-                'name' => 'Promo code input',
-                'description' => 'Displays a promo code input field',
+                'name' => 'Campo de descuento',
+                'description' => 'Muestra un campo de texto para el ingreso de un código de descuento',
             ],
-            'discount_applied' => 'Discount applied successfully!',
+            'discount_applied' => 'Descuento realizado exitosamente!',
         ],
         'shippingMethodSelector' => [
             'details' => [
-                'name' => 'Shipping selector',
-                'description' => 'Displays a list of all available shipping methods',
+                'name' => 'Selector de envío',
+                'description' => 'Muestra una lista de medios de envío/despacho disponibles',
             ],
             'errors' => [
-                'unavailable' => 'The selected shipping method is not available for your order.',
+                'unavailable' => 'El medio de envío seleccionado no se encuentra disponible para su pedido.',
             ],
         ],
         'paymentMethodSelector' => [
             'details' => [
-                'name' => 'Payment method selector',
-                'description' => 'Displays a list of all available payment methods',
+                'name' => 'Selector de medio de despacho',
+                'description' => 'Muestra una lista con todos los medios de despacho disponibles',
             ],
             'errors' => [
-                'unavailable' => 'The selected payment method is not available for your order.',
+                'unavailable' => 'El método de despacho seleccionado no se encuentra disponible para su pedido.',
             ],
         ],
         'addressSelector' => [
             'details' => [
-                'name' => 'Address selector',
-                'description' => 'Displays a list of all existing user addresses',
+                'name' => 'Selector de Dirección',
+                'description' => 'Muestra una lista de direcciones disponibles para el usuario',
             ],
             'errors' => [
             ],
         ],
         'addressForm' => [
             'details' => [
-                'name' => 'Address form',
-                'description' => 'Displays a form to edit a user\'s address',
+                'name' => 'Formulario de Dirección',
+                'description' => 'Muestra un formulario para que el usuario ingrese direcciones',
             ],
             'properties' => [
                 'address' => [
-                    'title' => 'Address',
+                    'title' => 'Dirección',
                 ],
                 'redirect' => [
-                    'title' => 'Redirect (after save)',
+                    'title' => 'Redirigir (después de guardar)',
                 ],
                 'set' => [
-                    'title' => 'Use this address as',
+                    'title' => 'Usar esta dirección como',
                 ],
             ],
             'redirects' => [
-                'checkout' => 'Checkout page',
+                'checkout' => 'Página de Checkout',
             ],
             'set' => [
-                'billing' => 'Billing address',
-                'shipping' => 'Shipping address',
+                'billing' => 'Dirección de facturación',
+                'shipping' => 'Dirección de despacho',
             ],
         ],
         'signup' => [
             'details' => [
-                'name' => 'Signup',
-                'description' => 'Displays a signup and signin form',
+                'name' => 'Registro',
+                'description' => 'Muestra formularios de registro e inicio de sesión',
             ],
             'properties' => [
                 'redirect' => [
-                    'name' => 'Redirect after login',
+                    'name' => 'Redirigir después del inicio de sesión',
                 ],
             ],
             'errors' => [
-                'user_is_guest' => 'You are trying to sign in with a guest account.',
-                'unknown_user' => 'The credentials you have entered are invalid.',
-                'not_activated' => 'Your account needs to be activated before you can login.',
+                'user_is_guest' => 'Estás tratando de iniciar sesión con una cuenta de invitado.',
+                'unknown_user' => 'Las credenciales ingresadas no son válidas.',
+                'not_activated' => 'Tu cuenta debe ser activada antes de poder iniciar sesión.',
                 'login' => [
-                    'required' => 'Please enter an email address.',
-                    'email' => 'Please enter a valid email address.',
-                    'between' => 'Please enter a valid email address.',
+                    'required' => 'Por favor ingresa tu correo electrónico.',
+                    'email' => 'Por favor ingresa un email válido.',
+                    'between' => 'Por favor ingresa un email válido.',
                 ],
                 'password' => [
-                    'required' => 'Please enter your password.',
-                    'max' => 'The provided password is too long.',
-                    'min' => 'The provided password is too short. Please enter at least 8 characters.',
+                    'required' => 'Por favor ingresa tu contraseña.',
+                    'max' => 'La contraseña ingresada es demasiado larga.',
+                    'min' => 'La contraseña ingresada es demasiado corta. Por favor utiliza al menos 8 caracteres.',
                 ],
                 'password_repeat' => [
-                    'required' => 'Please repeat your password.',
-                    'same' => 'Your password confirmation does not match your entered password.',
+                    'required' => 'Por favor confirma tu contraseña.',
+                    'same' => 'La confirmación de contraseña no coincide con la contraseña ingresada.',
                 ],
                 'email' => [
-                    'required' => 'Please enter an email address.',
-                    'email' => 'This email address is invalid.',
-                    'unique' => 'A user with this email address is already registered.',
-                    'non_existing_user' => 'A user with this email address is already registered. Use the password reset function.',
+                    'required' => 'Por favor ingresa tu correo electrónico.',
+                    'email' => 'Esta cuenta de correo electrónico no es válida.',
+                    'unique' => 'Un usuario con esta cuenta de correo electrónico ya existe.',
+                    'non_existing_user' => 'Un usuario ya se ha registrado con este email. Por favor, intenta con reestablecer tu contraseña.',
                 ],
                 'firstname' => [
-                    'required' => 'Please enter your first name.',
+                    'required' => 'Por favor ingresa tu nombre.',
                 ],
                 'lastname' => [
-                    'required' => 'Please enter your last name.',
+                    'required' => 'Por favor ingresa tu apellido.',
                 ],
                 'lines' => [
-                    'required' => 'Please enter your address.',
+                    'required' => 'Por favor ingresa tu dirección.',
                 ],
                 'zip' => [
-                    'required' => 'Please enter your zip code.',
+                    'required' => 'Por favor ingresa tu código postal.',
                 ],
                 'city' => [
-                    'required' => 'Please enter a city.',
+                    'required' => 'Por favor ingresa tu ciudad.',
                 ],
                 'country_id' => [
-                    'required' => 'Choose a country.',
-                    'exists' => 'The provided country is not valid.',
+                    'required' => 'Selecciona un país.',
+                    'exists' => 'El país seleccionado no es válido.',
                 ],
                 'state_id' => [
-                    'required' => 'Choose a state',
-                    'exists' => 'The selected value is not valid.',
+                    'required' => 'Selecciona un estado o provincia',
+                    'exists' => 'El estado o provincia seleccionado(a) no es válido(a).',
                 ],
                 'terms_accepted' => [
-                    'required' => 'Please accept our terms and conditions.',
+                    'required' => 'Debes aceptar los términos y condiciones para proceder.',
                 ],
             ],
         ],
         'categories' => [
             'details' => [
-                'name' => 'Categories',
-                'description' => 'Lists available categories',
+                'name' => 'Cat3egorías',
+                'description' => 'Lista las categorías disponibles',
             ],
             'properties' => [
                 'parent' => [
-                    'title' => 'Start from category',
-                    'description' => 'Only show child categories of this category',
+                    'title' => 'Empezar desde la categoría',
+                    'description' => 'Sólo mostrar categorías hijas de esta categoría',
                 ],
                 'categorySlug' => [
-                    'title' => 'Category slug parameter',
-                    'description' => 'Use this parameter to load the parent category from the url',
+                    'title' => 'Parámetro de slug de categoría',
+                    'description' => 'Usa este parámetro para cargar la categoría padre desde la URL',
                 ],
                 'categoryPage' => [
-                    'title' => 'Category page',
-                    'description' => 'Links will point to this page. If nothing is entered the default settings from the backend settings will be used.',
+                    'title' => 'Página de categoría',
+                    'description' => 'Los enlaces generados apuntarán a esta página. Si se deja en blanco se utilizará la configuración predeterminada.',
                 ],
             ],
-            'no_parent' => 'Show all categories',
-            'by_slug' => 'Use category in url as parent',
+            'no_parent' => 'Mostrar todas las categorías',
+            'by_slug' => 'Utilizar la categoría definida en el slug como padre',
         ],
         'cartSummary' => [
             'details' => [
-                'name' => 'Cart summary',
-                'description' => 'Displays the number of products in and total value of the cart',
+                'name' => 'Resumen del carro',
+                'description' => 'Muestra la cantidad de productos y valor total del carro',
             ],
             'properties' => [
                 'showItemCount' => [
-                    'title' => 'Show product count',
-                    'description' => 'Displays the count of items in the cart',
+                    'title' => 'Mostrar cantidad total de productos',
+                    'description' => 'Muestra la cantidad total de productos agregados al carro',
                 ],
                 'showTotalPrice' => [
-                    'title' => 'Show total value',
-                    'description' => 'Displays the total value of all items in the cart',
+                    'title' => 'Mostrar valor total',
+                    'description' => 'Muestra la suma total de todos los productos en el carro',
                 ],
             ],
         ],
         'customerDashboard' => [
             'details' => [
-                'name' => 'Customer dashboard',
-                'description' => 'Displays a link for the customer to login and change her account settings',
+                'name' => 'Escritorio del Cliente',
+                'description' => 'Muestra un enlace para que el cliente inicie sesión y cambie los ajustes de su cuenta',
             ],
             'properties' => [
                 'customerDashboardLabel' => [
-                    'title' => 'Customer dashboard label',
-                    'description' => 'Link text for the customer account page',
+                    'title' => 'Etiqueta del escritorio del cliente',
+                    'description' => 'Texto a agregar en el link a la página de perfil del cliente',
                 ],
                 'logoutLabel' => [
-                    'title' => 'Logout label',
-                    'description' => 'Link text for the logout link',
+                    'title' => 'Etiqueta de cierre de sesión',
+                    'description' => 'Texto a utilizar para el enlace de cierre de sesión',
                 ],
             ],
         ],
         'enhancedEcommerceAnalytics' => [
             'details' => [
-                'name' => 'Enhanced Ecommerce (UA) Component',
-                'description' => 'Implements a Google Tag Manager Data Layer',
+                'name' => 'Component de Ecommerce Mejorado (UA)',
+                'description' => 'Implementa una capa de datos de Google Tag Manager',
             ],
         ],
         'wishlistButton' => [
             'details' => [
-                'name' => 'Wishlist button',
-                'description' => 'Displays a wishlist button',
+                'name' => 'Botón de Lista de Deseos',
+                'description' => 'Muestra un botón para agregar a lista de deseos',
             ],
             'properties' => [
                 'product' => [
-                    'name' => 'Product',
-                    'description' => 'ID of the product',
+                    'name' => 'Producto',
+                    'description' => 'ID del producto',
                 ],
                 'variant' => [
-                    'name' => 'Variant',
-                    'description' => 'ID of the variant',
+                    'name' => 'Variante',
+                    'description' => 'ID de la variante',
                 ],
             ],
         ],
         'wishlists' => [
             'details' => [
-                'name' => 'Wishlists',
-                'description' => 'Displays the wishlist manager',
+                'name' => 'Listas de deseos',
+                'description' => 'Muestra el gestionador de listas de deseos',
             ],
             'properties' => [
                 'showShipping' => [
-                    'name' => 'Show shipping',
-                    'description' => 'Show shipping cost and selector',
+                    'name' => 'Mostrar envío/despacho',
+                    'description' => 'Mostrar selector y calculadora de costos de envío',
                 ],
             ],
         ],
     ],
     'shipping_method_rates' => [
-        'from_weight' => 'From (Weight in grams)',
-        'to_weight' => 'To (Weight in grams)',
+        'from_weight' => 'Desde (Peso en gramos)',
+        'to_weight' => 'Hasta (Peso en gramos)',
     ],
     'products' => [
-        'variants_comment' => 'Create different variants of the same product',
+        'variants_comment' => 'Crear diferentes variantes del mismo producto',
     ],
     'order_states' => [
-        'name' => 'Name',
-        'description' => 'Description',
+        'name' => 'Nombre',
+        'description' => 'Descripción',
         'color' => 'Color',
-        'flag' => 'Special flag',
+        'flag' => 'Etiquetas especiales',
         'flags' => [
-            'new' => 'Set the state of the order as "new"',
-            'complete' => 'Set the state of the order as "done"',
-            'cancelled' => 'Set the state of the order as "cancelled"',
+            'new' => 'Fijar el estado del pedido como "nuevo"',
+            'complete' => 'Fijar el estado del pedido como "terminado"',
+            'cancelled' => 'Fijar el estado del pedido como "cancelado"',
         ],
     ],
     'customer_group' => [
-        'code_comment' => 'This code can be used to identify this group programmatically',
-        'discount_comment' => 'Give this customer group a specific discount in % on your whole catalogue',
+        'code_comment' => 'Este código puede ser utilizado para identificar este grupo programáticamente',
+        'discount_comment' => 'Dar un descuento porcentual específico a este grupo de clientes en todo el catálogo',
     ],
     'order_status' => [
-        'processed' => 'Processed',
-        'disputed' => 'Disputed',
-        'shipped' => 'Shipped',
-        'delivered' => 'Delivered',
-        'pending' => 'Pending',
-        'cancelled' => 'Cancelled',
+        'processed' => 'Procesado',
+        'disputed' => 'Cuestionado',
+        'shipped' => 'Despachado',
+        'delivered' => 'Entregado',
+        'pending' => 'Pendiente',
+        'cancelled' => 'Cancelado',
     ],
     'notifications' => [
-        'enabled' => 'Enabled',
-        'enabled_comment' => 'This notification is enabled',
-        'template' => 'Mail template',
+        'enabled' => 'Habilitado',
+        'enabled_comment' => 'Esta notificación está habilitada',
+        'template' => 'Plantilla de correo electrónico',
     ],
     'payment_log' => [
-        'payment_data' => 'Payment data',
-        'data_comment' => 'This data has been returned by the payment provider',
-        'order_data_comment' => 'This is all the order data for this payment',
-        'message_comment' => 'This message has been returned by the payment provider',
-        'code_comment' => 'This code has been returned by the payment provider',
-        'failed_only' => 'Failed only',
+        'payment_data' => 'Información del pago',
+        'data_comment' => 'Estos son los datos informados por el portal de pagos',
+        'order_data_comment' => 'esta es toda la información de pedido para este pago',
+        'message_comment' => 'Respuesta del proveedor de pagos',
+        'code_comment' => 'Código devuelto por el proveedor de pagos',
+        'failed_only' => 'Sólo fallos',
     ],
     'services' => [
-        'options' => 'Options',
-        'option' => 'Option',
-        'required' => 'Service is required',
-        'required_comment' => 'One option of this service has to be selected when a product is added to the cart.',
+        'options' => 'Opciones',
+        'option' => 'Opción',
+        'required' => 'Debes seleccionar un searvicio',
+        'required_comment' => 'Una opción de servicio debe ser seleccionada cuando el producto es añadido al carro.',
     ],
     'reviews' => [
-        'rating' => 'Rating',
-        'review' => 'Review details',
-        'title' => 'Title of your review',
-        'pros' => 'Positive aspects',
-        'cons' => 'Negative aspects',
-        'anonymous' => 'Anonymous',
-        'only_unapproved' => 'Show only unapproved',
-        'no_more' => 'No more unapproved reviews',
-        'approved' => 'Review approved',
-        'approve' => 'Approve review',
-        'approve_next' => 'Approve and go to next',
+        'rating' => 'Evaluación',
+        'review' => 'Detalles de la reseña',
+        'title' => 'Título de la reseña',
+        'pros' => 'Aspectos positivos',
+        'cons' => 'Aspectos negativos',
+        'anonymous' => 'Anónimo',
+        'only_unapproved' => 'Mostrar sólo no aprobadas',
+        'no_more' => 'No se encontraron reseñas no aprobadas',
+        'approved' => 'Reseña aprobada',
+        'approve' => 'Aprobar reseña',
+        'approve_next' => 'Aprobar y revisar siguiente',
     ],
 ];
