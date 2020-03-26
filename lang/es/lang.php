@@ -28,9 +28,9 @@
             'update' => 'Editar servicio',
         ],
         'shipping_methods' => [
-            'create' => 'Crear método de envío',
-            'update' => 'Editar método de envío',
-            'preview' => 'Previsualizar método de envío',
+            'create' => 'Crear método de despacho',
+            'update' => 'Editar método de despacho',
+            'preview' => 'Previsualizar método de despacho',
         ],
         'payment_methods' => [
             'create' => 'Crear medio de pago',
@@ -135,7 +135,7 @@
         'description' => 'Gestionar medios de pago',
     ],
     'shipping_method_settings' => [
-        'description' => 'Gestionar medios de envío',
+        'description' => 'Gestionar métodos de despacho',
     ],
     'tax_settings' => [
         'description' => 'Gestionar impuestos',
@@ -201,12 +201,12 @@
         'product' => 'Producto',
         'orders' => 'Pedidos',
         'cart' => 'Carro',
-        'shipping' => 'Envío',
+        'shipping' => 'Despacho',
         'taxes' => 'Impuestos',
         'rates' => 'Tarifas',
         'inventory' => 'Inventario',
         'accessories' => 'Accesorios',
-        'shipping_methods' => 'Métodos de envío',
+        'shipping_methods' => 'Métodos de despacho',
         'accessory' => 'Accesorio',
         'custom_fields' => 'Campos personalizados',
         'variants' => 'Variantes',
@@ -535,7 +535,7 @@
         'payment_status' => 'Estado del pago',
         'grand_total' => 'Total',
         'billing_address' => 'Dirección de facturación',
-        'shipping_address' => 'Dirección de envío',
+        'shipping_address' => 'Dirección de despacho',
         'currency' => 'Divisa',
         'status' => 'Estado',
         'email' => 'Email',
@@ -643,7 +643,7 @@
         'manage_notifications' => 'Puede gestionar notificaciones',
         'manage_price_categories' => 'Puede gestionar categorías de precios',
         'manage_order_states' => 'Puede gestionar estados de pedidos',
-        'manage_shipping_methods' => 'puede gestionar medios de envío/despacho',
+        'manage_shipping_methods' => 'puede gestionar medios de despacho',
         'manage_taxes' => 'Puede gestionar impuestos',
         'manage_payment_log' => 'Puede gestionar el registro de pagos',
         'manage_feeds' => 'Puede gestionar feeds',
@@ -857,7 +857,7 @@
                 'description' => 'Gestiona el proceso de finalización compra',
             ],
             'errors' => [
-                'missing_settings' => 'Por favor seleccione un medio de pago y envío.',
+                'missing_settings' => 'Por favor seleccione un medio de pago y despacho.',
             ],
         ],
         'discountApplier' => [
@@ -869,11 +869,11 @@
         ],
         'shippingMethodSelector' => [
             'details' => [
-                'name' => 'Selector de envío',
-                'description' => 'Muestra una lista de medios de envío/despacho disponibles',
+                'name' => 'Selector de despacho',
+                'description' => 'Muestra una lista de medios de despacho disponibles',
             ],
             'errors' => [
-                'unavailable' => 'El medio de envío seleccionado no se encuentra disponible para su pedido.',
+                'unavailable' => 'El medio de despacho seleccionado no se encuentra disponible para su pedido.',
             ],
         ],
         'paymentMethodSelector' => [
@@ -1062,7 +1062,7 @@
             ],
             'properties' => [
                 'showShipping' => [
-                    'name' => 'Mostrar envío/despacho',
+                    'name' => 'Mostrar despacho',
                     'description' => 'Mostrar selector y calculadora de costos de envío',
                 ],
             ],
