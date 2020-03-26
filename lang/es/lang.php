@@ -176,7 +176,7 @@
         'index_driver' => 'Controlador del índice',
         'index_driver_comment' => 'Si tu base de datos soporta JSON utiliza el controlador de base de datos.',
         'index_driver_filesystem' => 'Sistema de archivos',
-        'index_driver_database' => 'Base de Datos (solo para MySQL 5.7+ o MariaDB 10.2+)',
+        'index_driver_database' => 'Base de Datos (sólo para MySQL 5.7+ o MariaDB 10.2+)',
         'index_driver_hint' => 'Si cambias esta opción asegúrate de correr "php artisan mall:reindex"en la línea de comandos para reindexar tus productos!',
     ],
     'feed_settings' => [
@@ -422,7 +422,7 @@
         'display_name_comment' => 'Este nombre será visible al cliente.',
         'version_comment' => 'Un identificador único de versión ayuda al cliente a reconocer actualizaciones de archivos.',
         'expires_after_days' => 'Días de validez de la descarga',
-        'expires_after_days_comment' => 'El archivo solo puede ser descargado por esta cantidad de días después de la compra. Dejar en blanco para no establecer un límite.',
+        'expires_after_days_comment' => 'El archivo sólo puede ser descargado por esta cantidad de días después de la compra. Dejar en blanco para no establecer un límite.',
         'max_download_count' => 'Cantidad máxima de descargas',
         'max_download_count_comment' => 'El archivo sólo puede ser descargado esta cantidad de veces. Dejar en blanco para no establecer un límite.',
         'session_required' => 'Requiere inicio de sesión',
