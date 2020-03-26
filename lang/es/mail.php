@@ -76,7 +76,7 @@ return [
         'checkout_failed'    => [
             'subject'       => 'Falló la creación del pedido #:number',
             'not_processed' => 'El siguiente pedido no pudo ser procesado correctamente. Por favor valida la información y contacta al cliente a la brevedad.',
-            'error_details' => 'Error details',
+            'error_details' => 'Detalles del problema',
         ],
     ],
 ];
