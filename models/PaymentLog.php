@@ -17,6 +17,8 @@ class PaymentLog extends Model
         'payment_method' => 'required',
     ];
 
+    public $belongsTo = ['order' => Order::class];
+
     public static function boot()
     {
         parent::boot();

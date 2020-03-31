@@ -4,11 +4,13 @@ columns:
         type: number
         sortable: true
         invisible: true
-    order_id:
+    order:
         label: 'offline.mall::lang.order.order_number'
+        relation: order
         type: number
         searchable: true
         sortable: true
+        select: order_number
     failed:
         label: 'offline.mall::lang.order.status'
         type: partial
