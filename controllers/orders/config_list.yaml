@@ -8,7 +8,7 @@ showSetup: true
 showCheckboxes: false
 defaultSort:
     column: created_at
-    direction: asc
+    direction: desc
 toolbar:
     buttons: list_toolbar
     search:
