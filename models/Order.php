@@ -59,6 +59,15 @@ class Order extends Model
         'virtual_products' => [OrderProduct::class, 'scope' => 'virtual'],
         'payment_logs'     => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
+    public $hasManyThrough = [
+        'user'=> [
+            User::class,
+            'through'    => Customer::class,
+            'throughKey' => 'id',
+            'otherKey'   => 'customer_id',
+            'key'        => 'user_id'
+        ],
+    ];
     public $belongsTo = [
         'payment_method'          => [PaymentMethod::class, 'deleted' => true],
         'customer_payment_method' => [CustomerPaymentMethod::class, 'deleted' => true],

@@ -1,4 +1,4 @@
-subject = "{{ 'offline.mall::mail.customer.created.subject' | trans({firstname: order.customer.firstname, lastname: order.customer.lastname}) }}"
+subject = "{{ 'offline.mall::mail.customer.created.subject' | trans({firstname: user.customer.firstname, lastname: user.customer.lastname}) }}"
 description = "Sent after a customer signs up"
 ==
 
