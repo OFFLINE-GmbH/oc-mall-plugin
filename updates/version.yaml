@@ -303,3 +303,5 @@
     - Added Farsi translations
 1.11.9:
     - Minor bugfix release
+1.11.10:
+    - Fixed multi-lang search with recent RainLab.Translate versions

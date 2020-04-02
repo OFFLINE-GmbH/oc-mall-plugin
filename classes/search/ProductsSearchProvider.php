@@ -140,7 +140,7 @@ class ProductsSearchProvider extends ResultsProvider
     protected function searchProductsFromCurrentLocale()
     {
         // First fetch all model ids with matching contents.
-        $ids = $this->getModelIdsForQuery(Product::class);
+        $ids = $this->getModelIdsForQuery(Product::MORPH_KEY);
 
         // Then return all matching models via Eloquent.
         return Product::where('inventory_management_method', 'single')
@@ -157,8 +157,8 @@ class ProductsSearchProvider extends ResultsProvider
     protected function searchVariantsFromCurrentLocale()
     {
         // First fetch all model ids with matching contents.
-        $variantIds = $this->getModelIdsForQuery(Variant::class);
-        $productIds = $this->getModelIdsForQuery(Product::class); // @TODO This query runs twice
+        $variantIds = $this->getModelIdsForQuery(Variant::MORPH_KEY);
+        $productIds = $this->getModelIdsForQuery(Product::MORPH_KEY); // @TODO This query runs twice
 
         // Then return all matching models via Eloquent.
         return Variant::published()
