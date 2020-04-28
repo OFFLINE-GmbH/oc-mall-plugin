@@ -116,7 +116,7 @@ return [
     'empty' => 'Nincs itt semmi látnivaló.',
     'password_reset.heading' => 'Elfelejtett jelszó',
     'password_reset.lead' => 'Elfelejtetted a jelszavad? Nem probléma! Az alábbi űrlap segítségével visszaállíthatod azt. Egyszerűen add meg e-mail címed, hogy megkapd a visszaállítási linket.',
-    'password_reset.lead_check' => 'Kérjük ellenőrizd az hogy megérkezett az aktiválási kódod.',
+    'password_reset.lead_check' => 'Kérjük ellenőrizd, hogy megérkezett az aktiválási kódod.',
     'password_reset.restore' => 'A jelszó visszaállítása',
     'password_reset.reset' => 'Jelszavam visszaállítása',
     'password_reset.complete' => 'A jelszó visszaállítása befejeződött, most már bejelentkezhetsz',
