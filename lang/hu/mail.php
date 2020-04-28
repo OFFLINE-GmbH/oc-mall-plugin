@@ -11,7 +11,7 @@ return [
         'refunded' => [
             'subject' => 'Fizetésed vissza lett térítve',
             'message' => '**#:number** számú rendeléshez tartozó fizetésed vissza lett térítve.',
-            'duration' => 'Kérünk vedd figyelembe, hogy a viszatérített összeg megérkezése pár napig eltarthat.',
+            'duration' => 'Kérjük vedd figyelembe, hogy a viszatérített összeg megérkezése pár napig eltarthat.',
         ],
         'paid' => [
             'subject' => 'Köszönjük a fizetésed',
@@ -21,7 +21,7 @@ return [
         'failed' => [
             'subject' => 'Rendelésedhez tartozó fizetés sikertelen volt',
             'message' => 'Tudatodra szeretnénk hozni, hogy **#:number** számú rendelésdhez tartozó fizetés sikertelen volt',
-            'payment_advice' => 'Kérünk, hogy jelentkezz be fiókodba és próbálkozz újra.',
+            'payment_advice' => 'Kérjük jelentkezz be fiókodba és próbálkozz újra.',
             'support' => 'Ha továbbra is problémák merülnek fel, lépj kapcsolatba velünk.',
         ],
     ],
@@ -46,7 +46,7 @@ return [
     'customer' => [
         'created' => [
             'subject' => 'Üdvözlünk az webáruházunkban, :firstname',
-            'confirm_mail' => 'Üdvözlünk az webáruházunkban! Kérlek kattints az alábbi gombra e-mail címed megerősítéséhez.',
+            'confirm_mail' => 'Üdvözlünk az webáruházunkban! Kérjük kattints az alábbi gombra e-mail címed megerősítéséhez.',
             'message' => 'Üdvözlünk az webáruházunkban! Bejelentkezéshez használhatod az e-mail címed (**:email**) és megkezdheted a vásárlást.',
             'possibilities' => 'Felhasználói fiókoddal nyomon követheted a jelenlegi és múltbeli rendeléseid.',
             'button' => [
