@@ -459,7 +459,7 @@
     ],
     'custom_fields' => [
         'name' => 'Nom du champ',
-        'type' => 'Type du chqmp',
+        'type' => 'Type du champ',
         'options' => 'Options',
         'required' => 'Requis',
         'required_comment' => 'Ce champ est obligatoire pour passer une commande',
