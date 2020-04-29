@@ -145,6 +145,7 @@ return [
     'wishlists' => 'Listes de souhaits',
     'wishlists.none' => 'Vous n\'avez pas encore créé de liste de souhaits.',
     'wishlists.addtocart' => 'Ajouter tous les produits à votre panier',
+    'wishlists.pdf_download' => 'Télécharger en PDF',
     'wishlists.addedtocart' => 'Tous les produits ont été ajoutés à votre panier',
     'wishlists.stockmissing' => 'Certains articles ne sont pas en stock et n\'ont pas été ajoutés au panier.',
     'services.modal_title' => 'Choisissez des services supplémentaires pour ce produit',
