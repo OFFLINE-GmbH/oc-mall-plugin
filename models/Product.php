@@ -119,6 +119,9 @@ class Product extends Model
         'gtin',
         'additional_descriptions',
         'additional_properties',
+        'file_expires_after_days',
+        'file_max_download_count',
+        'file_session_required',
     ];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];

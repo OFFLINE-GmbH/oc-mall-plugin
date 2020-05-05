@@ -23,13 +23,12 @@ columns:
         searchable: true
         sortable: false
         select: concat(firstname, ' ', lastname)
-    user:
+    email:
         label: 'offline.mall::lang.order.email'
-        relation: user
-        type: text
-        select: email
+        type: partial
+        path: $/offline/mall/models/order/_email.htm
         sortable: false
-        searchable: true
+        searchable: false
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime

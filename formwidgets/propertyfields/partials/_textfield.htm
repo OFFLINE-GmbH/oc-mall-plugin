@@ -1,6 +1,6 @@
 <?php $id = uniqid(); ?>
 
-<label for="<?= $id ?>"><?= e($field->name) ?></label>
+<label for="<?= $id ?>"><?= e($field->name) ?> <?= $field->unit ? sprintf('(%s)', e($field->unit)) : '' ?></label>
 <?php
 if (isset($widget)):
     echo $widget->render();
