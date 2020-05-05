@@ -51,12 +51,12 @@ class ShippingMethod extends Model
         'available_below_totals' => [
             Price::class,
             'name'       => 'priceable',
-            'conditions' => 'price_category_id is null and field = "available_below_totals"',
+            'conditions' => "price_category_id is null and field = 'available_below_totals'",
         ],
         'available_above_totals' => [
             Price::class,
             'name'       => 'priceable',
-            'conditions' => 'price_category_id is null and field = "available_above_totals"',
+            'conditions' => "price_category_id is null and field = 'available_above_totals'",
         ],
     ];
     public $hasMany = [
