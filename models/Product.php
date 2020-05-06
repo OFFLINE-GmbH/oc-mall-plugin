@@ -276,6 +276,21 @@ class Product extends Model
 
     public function afterSave()
     {
+        // If the management method goes from single to variant, we need to remove all "variant only" property values
+        // from the product. Otherwise we will end up with duplicated values.
+        if ($this->getOriginal('inventory_management_method') === 'single' && $this->inventory_management_method === 'variant') {
+            $this->forceReindex = true;
+            $properties = $this->categories->flatMap->properties->filter(function ($q) {
+                return $q->pivot->use_for_variants;
+            })->pluck('id');
+
+            PropertyValue
+                ::where('product_id', $this->id)
+                ->whereNull('variant_id')
+                ->whereIn('property_id', $properties)
+                ->delete();
+        }
+
         if ($this->forceReindex) {
             $this->forceReindex = false;
             (new ProductObserver(app(Index::class)))->updated($this);
