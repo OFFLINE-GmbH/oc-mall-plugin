@@ -307,3 +307,5 @@
     - Fixed multi-lang search with recent RainLab.Translate versions
 1.11.11:
     - Fixed display of e-mail address in orders list
+1.11.12:
+    - Various bugfixes
