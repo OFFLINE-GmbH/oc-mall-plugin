@@ -3,8 +3,8 @@ fields:
         label: 'offline.mall::lang.common.name'
         span: auto
         type: text
-    website:
-        label: 'offline.mall::lang.common.website'
+    slug:
+        label: 'offline.mall::lang.common.slug'
         span: auto
         type: text
     description:
@@ -12,6 +12,10 @@ fields:
         size: large
         span: auto
         type: richeditor
+    website:
+        label: 'offline.mall::lang.common.website'
+        span: auto
+        type: text
     logo:
         label: 'offline.mall::lang.common.logo'
         mode: image
