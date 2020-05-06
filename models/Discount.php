@@ -37,9 +37,9 @@ class Discount extends Model
         'number_of_usages' => 'integer',
     ];
     public $morphMany = [
-        'shipping_prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "shipping_prices"'],
-        'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "amounts"'],
-        'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => 'field = "totals_to_reach"'],
+        'shipping_prices' => [Price::class, 'name' => 'priceable', 'conditions' => "field = 'shipping_prices'"],
+        'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => "field = 'amounts'"],
+        'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => "field = 'totals_to_reach'"],
     ];
     public $fillable = [
         'name',
