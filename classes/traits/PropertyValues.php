@@ -30,8 +30,13 @@ trait PropertyValues
             $this->loadMissing('property_values.property.property_groups');
         }
 
-        $groups = $this->all_property_values->map(function($value) {
-            return optional($value->property->property_groups)->first();
+        $category = $this->categories->first();
+        $groups = $this->all_property_values->map(function($value) use ($category) {
+            return optional($value->property->property_groups)->first(function($group) use ($category) {
+                // Select the first property group that is assigned to the product's category.
+                // Fallback to the first property group that is assigned.
+                return $category ? $category->inherited_property_groups->contains($group) : true;
+            });
         })->unique();
 
         if ($groups->count() < 1) {
@@ -39,7 +44,7 @@ trait PropertyValues
         }
 
         // Sort the property groups by the categories' pivot sort order.
-        if ($category = $this->categories->first()) {
+        if ($category) {
             $order = optional($category->inherited_property_groups)->pluck('id', 'pivot.relation_sort_order');
 
             $groups = $groups->sortBy(function ($group) use ($order) {
