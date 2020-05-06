@@ -55,6 +55,12 @@ This event is emitted when a product has been removed from the cart. It receives
 
 * `CartProduct` model that was removed from the cart 
 
+### `mall.cart.product.updating`
+
+This event is emitted before a cart product is being updated. It receives the following arguments:
+
+* `CartProduct` model that was updated in the cart 
+
 ### `mall.cart.product.updated`
 
 This event is emitted when a cart product was updated. It receives the following arguments:

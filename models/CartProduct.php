@@ -16,6 +16,7 @@ class CartProduct extends Model
     use CartItemPriceAccessors;
 
     public $table = 'offline_mall_cart_products';
+    public $fillable = ['quantity', 'product_id', 'variant_id', 'weight', 'price'];
     public $jsonable = ['price'];
     public $casts = [
         'quantity'   => 'integer',
@@ -58,6 +59,9 @@ class CartProduct extends Model
         });
         static::created(function (self $cartProduct) {
             Event::fire('mall.cart.product.added', [$cartProduct]);
+        });
+        static::updating(function (self $cartProduct) {
+            Event::fire('mall.cart.product.updating', [$cartProduct]);
         });
         static::updated(function (self $cartProduct) {
             Event::fire('mall.cart.product.updated', [$cartProduct]);
