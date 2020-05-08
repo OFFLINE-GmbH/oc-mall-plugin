@@ -309,3 +309,5 @@
     - Fixed display of e-mail address in orders list
 1.11.12:
     - Various bugfixes
+1.11.13:
+    - Fixed handling of virtual product downloads for logged out customers 
