@@ -89,8 +89,8 @@ class VirtualProductFileDownload
      */
     protected function redirectToLogin()
     {
-        Session::put('mall.login.redirect', Request::url());
-        Flash::warning(trans('offline.mall::frontend.session.login_required'));
+        Session::put('mall.login.redirect', \Request::url());
+        \Flash::warning(trans('offline.mall::frontend.session.login_required'));
 
         $url = Page::url(GeneralSettings::get('account_page'));
 
