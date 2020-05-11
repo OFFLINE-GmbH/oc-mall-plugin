@@ -18,6 +18,8 @@ use OFFLINE\Mall\Models\Variant;
 
 trait ProductPriceTable
 {
+    public $productPriceTableConfig = 'config_table.yaml';
+    
     public function onLoadPriceTable()
     {
         return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
@@ -25,7 +27,7 @@ trait ProductPriceTable
 
     protected function preparePriceTable()
     {
-        $config = $this->makeConfig('config_table.yaml');
+        $config = $this->makeConfig($this->productPriceTableConfig);
 
         $additionalPriceCategories = PriceCategory::orderBy('sort_order', 'ASC')->get();
         $additionalPriceCategories->each(function (PriceCategory $category) use ($config) {
