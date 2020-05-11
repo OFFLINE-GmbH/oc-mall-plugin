@@ -17,9 +17,7 @@ use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Variant;
 
 trait ProductPriceTable
-{
-    public $productPriceTableConfig = 'config_table.yaml';
-    
+{   
     public function onLoadPriceTable()
     {
         return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
