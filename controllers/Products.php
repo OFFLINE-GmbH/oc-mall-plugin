@@ -33,6 +33,7 @@ class Products extends Controller
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
     public $relationConfig = 'config_relation.yaml';
+    public $productPriceTableConfig = 'config_table.yaml';
     public $requiredPermissions = [
         'offline.mall.manage_products',
     ];
