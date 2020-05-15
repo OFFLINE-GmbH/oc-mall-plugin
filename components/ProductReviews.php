@@ -85,7 +85,7 @@ class ProductReviews extends ComponentBase
     public function setData()
     {
         $this->product          = ProductModel::findOrFail($this->property('product'));
-        $this->reviewCategories = $this->product->categories->flatMap->inherited_review_categories->unique();
+        $this->reviewCategories = $this->product->categories->flatMap->inherited_review_categories->unique('id');
         $this->accountPage      = GeneralSettings::get('account_page');
         $this->isModerated      = ReviewSettings::get('moderated');
 
