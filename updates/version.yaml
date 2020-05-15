@@ -311,3 +311,5 @@
     - Various bugfixes
 1.11.13:
     - Fixed handling of virtual product downloads for logged out customers 
+1.11.14:
+    - Fixed infinite loop with certain Review Categories setups
