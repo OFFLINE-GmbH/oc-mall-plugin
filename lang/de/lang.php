@@ -453,7 +453,7 @@
         'no_parent' => 'Kein Elternelement',
         'inherit_property_groups' => 'Übernehme Eigenschaften von Elternkategorie',
         'inherit_property_groups_comment' => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
-        'inherit_review_categories' => 'Übernehme Review-Kateogiren von Elternkategorie',
+        'inherit_review_categories' => 'Übernehme Review-Kategorien von Elternkategorie',
         'inherit_review_categories_comment' => 'Für diese Kategorie werden die gleichen Review-Kategorien wie für die Elternkategorie verwendet',
     ],
     'custom_fields' => [
