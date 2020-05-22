@@ -5,6 +5,7 @@ use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
+use DB;
 
 class Service extends Model
 {
