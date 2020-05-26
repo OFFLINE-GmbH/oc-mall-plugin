@@ -1,4 +1,8 @@
 columns:
+    sort_order:
+        label: 'offline.mall::lang.common.sort_order'
+        type: number
+        invisible: true
     enabled:
         label:  'offline.mall::lang.notifications.enabled'
         type: partial
@@ -25,10 +29,6 @@ columns:
         type: text
         searchable: true
         sortable: true
-    sort_order:
-        label: 'offline.mall::lang.common.sort_order'
-        type: number
-        invisible: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
