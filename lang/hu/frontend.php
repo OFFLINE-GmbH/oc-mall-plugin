@@ -158,11 +158,11 @@ return [
     'reviews.update' => 'Értékelés frissítése',
     'reviews.overall_rating' => 'Összesített értékelés',
     'reviews.overall_rating_summary' => 'Ø :value az 5 csillagból',
-    'reviews.your_rating' => 'A te értékelésed',
+    'reviews.your_rating' => 'Vásárlói értékelések',
     'reviews.callout' => 'Köszönjük az értékelésed!',
     'reviews.moderated' => 'Bolti személyzet áttekintése után látható lesz.',
     'reviews.none' => 'Ezt a terméket még nem értékelték.',
-    'reviews.ratings' => 'értékelés|értékelések',
+    'reviews.ratings' => 'értékelés',
     'reviews.optional' => 'Nem kötelező, de segít jobban megértenünk az értékelésed',
     'reviews.one_per_line' => 'Nem kötelező, minden bejegyzés kerüljön saját sorba',
 ];
