@@ -315,3 +315,5 @@
     - Fixed infinite loop with certain Review Categories setups
 1.11.15:
     - Bugfix release
+1.11.16:
+    - Added cart product count and quantity sum info to the mall.cart.productAdded event to make consistent counter updates in the frontend easier (see https://tinyurl.com/ybxl9jlf)
