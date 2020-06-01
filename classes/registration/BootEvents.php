@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Registration;
 use Illuminate\Support\Facades\Event;
 use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
+use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Customer;
@@ -31,6 +32,7 @@ trait BootEvents
     {
         Product::observe(\OFFLINE\Mall\Classes\Observers\ProductObserver::class);
         Variant::observe(\OFFLINE\Mall\Classes\Observers\VariantObserver::class);
+        Brand::observe(\OFFLINE\Mall\Classes\Observers\BrandObserver::class);
         PropertyValue::observe(\OFFLINE\Mall\Classes\Observers\PropertyValueObserver::class);
         ProductPrice::observe(\OFFLINE\Mall\Classes\Observers\ProductPriceObserver::class);
     }

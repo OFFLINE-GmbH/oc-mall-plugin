@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Observers;
 
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Models\Brand;
+use OFFLINE\Mall\Models\Product;
 
 class BrandObserver
 {
@@ -30,22 +31,13 @@ class BrandObserver
 
     protected function handle(Brand $brand)
     {
-
-        if ($brand->product && $brand->product->skipReindex !== true) {
-            (new ProductObserver($this->index))->updated($brand->product);
+        if ( ! $brand->isDirty('slug')) {
+            return;
         }
-        if ($brand->variant && $brand->variant->skipReindex !== true) {
-            (new VariantObserver($this->index))->updated($brand->variant);
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isBackendRelationUpdate(): bool
-    {
-        return app()->runningInBackend()
-            && post('_relation_field') === 'variants'
-            && post('_relation_mode') === 'form';
+        $brand->products->each(function (Product $product) {
+            if ($product->skipReindex !== true) {
+                (new ProductObserver($this->index))->updated($product);
+            }
+        });
     }
 }
