@@ -192,7 +192,7 @@ class Order extends Model
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
             
-            Event::fire('mall.order.beforeCreate', [$order, $cart]);
+            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart
                 ->loadMissing(['products.product.brand'])
