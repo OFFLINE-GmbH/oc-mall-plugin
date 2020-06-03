@@ -191,6 +191,8 @@ class Order extends Model
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
+            
+            Event::fire('mall.order.beforeCreate', [$order, $cart]);
 
             $cart
                 ->loadMissing(['products.product.brand'])
