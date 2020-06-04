@@ -317,3 +317,5 @@
     - Bugfix release
 1.11.16:
     - Added cart product count and quantity sum info to the mall.cart.productAdded event to make consistent counter updates in the frontend easier (see https://tinyurl.com/ybxl9jlf)
+1.11.17:
+    - Added `mall.order.afterCreate` event, fixed various bugs
