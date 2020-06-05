@@ -54,7 +54,7 @@ class Products extends Controller
             // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
 
-            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER'), 'PriceTable')) {
+            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER',''), 'PriceTable')) {
                 $this->preparePriceTable();
             }
         }
