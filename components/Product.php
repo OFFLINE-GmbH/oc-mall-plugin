@@ -710,6 +710,7 @@ class Product extends MallComponent
 
         return [
             '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),
+            '.mall-product__info'        => $this->renderPartial($this->alias . '::info', $data),
             '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
         ];
     }
