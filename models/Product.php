@@ -156,6 +156,7 @@ class Product extends Model
         'image_sets'             => ImageSet::class,
         'property_values'        => PropertyValue::class,
         'reviews'                => Review::class,
+        'discounts'              => Discount::class,
         'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null'],
         'files'                  => [ProductFile::class],
     ];
