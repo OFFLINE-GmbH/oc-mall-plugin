@@ -80,6 +80,13 @@ tabs:
             type: partial
             tab: 'offline.mall::lang.common.products'
             context: update
+        description_short:
+            label: 'offline.mall::lang.product.description_short'
+            size: small
+            oc.commentPosition: ''
+            span: left
+            type: textarea
+            tab: 'offline.mall::lang.product.description'
         description:
             label: 'offline.mall::lang.product.description'
             size: huge

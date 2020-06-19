@@ -305,3 +305,6 @@
     - Minor bugfix release
 1.11.10:
     - Fixed multi-lang search with recent RainLab.Translate versions
+1.11.11:
+    - Add short description field to Category model
+    - add_short_description_field_to_category.php
