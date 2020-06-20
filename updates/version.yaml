@@ -306,5 +306,19 @@
 1.11.10:
     - Fixed multi-lang search with recent RainLab.Translate versions
 1.11.11:
+    - Fixed display of e-mail address in orders list
+1.11.12:
+    - Various bugfixes
+1.11.13:
+    - Fixed handling of virtual product downloads for logged out customers 
+1.11.14:
+    - Fixed infinite loop with certain Review Categories setups
+1.11.15:
+    - Bugfix release
+1.11.16:
+    - Added cart product count and quantity sum info to the mall.cart.productAdded event to make consistent counter updates in the frontend easier (see https://tinyurl.com/ybxl9jlf)
+1.11.17:
+    - Added `mall.order.afterCreate` event, fixed various bugs
+1.11.18:
     - Add short description field to Category model
     - add_short_description_field_to_category.php

@@ -7,6 +7,9 @@ recordsPerPage: 20
 showSetup: true
 showCheckboxes: true
 showSorting: 1
+defaultSort:
+    column: sort_order
+    direction: asc
 toolbar:
     buttons: list_toolbar
     search:

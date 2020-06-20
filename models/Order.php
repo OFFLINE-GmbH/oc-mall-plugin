@@ -59,15 +59,6 @@ class Order extends Model
         'virtual_products' => [OrderProduct::class, 'scope' => 'virtual'],
         'payment_logs'     => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
-    public $hasManyThrough = [
-        'user'=> [
-            User::class,
-            'through'    => Customer::class,
-            'throughKey' => 'id',
-            'otherKey'   => 'customer_id',
-            'key'        => 'user_id'
-        ],
-    ];
     public $belongsTo = [
         'payment_method'          => [PaymentMethod::class, 'deleted' => true],
         'customer_payment_method' => [CustomerPaymentMethod::class, 'deleted' => true],
@@ -200,6 +191,8 @@ class Order extends Model
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
+            
+            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart
                 ->loadMissing(['products.product.brand'])

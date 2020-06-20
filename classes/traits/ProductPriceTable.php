@@ -25,7 +25,7 @@ trait ProductPriceTable
 
     protected function preparePriceTable()
     {
-        $config = $this->makeConfig('config_table.yaml');
+        $config = $this->makeConfig($this->productPriceTableConfig);
 
         $additionalPriceCategories = PriceCategory::orderBy('sort_order', 'ASC')->get();
         $additionalPriceCategories->each(function (PriceCategory $category) use ($config) {

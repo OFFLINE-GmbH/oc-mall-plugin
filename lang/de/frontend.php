@@ -26,7 +26,7 @@ return [
     'total.taxes' => 'Steuertotal',
     'grand_total' => 'Gesamttotal',
     'remove' => 'Entfernen',
-    'confirm' => 'Sind sie sicher?',
+    'confirm' => 'Sind Sie sicher?',
     'discount.label' => 'Möchten Sie einen Gutschein-Code einlösen?',
     'discount.placeholder' => 'Geben Sie Ihren Code hier ein',
     'discount.apply' => 'Code anwenden',

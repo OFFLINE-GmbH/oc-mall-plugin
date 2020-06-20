@@ -31,6 +31,11 @@ class Orders extends Controller
         BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-orders');
     }
 
+    public function listExtendQuery($query)
+    {
+        $query->with('customer.user');
+    }
+
     public function index()
     {
         parent::index();

@@ -136,13 +136,20 @@ paginate = 0
 sort = "random"
 ==
 use OFFLINE\Mall\Models\Category;
+
 function onStart() {
     // Fetch the category from the product component.
-    $category = Category::find(optional($this->page->components['product']->item)->category_id);
-    if ($category) {
-        // If a category is available, use it for the products component.
-        $this->page->components['products']->category = $category;
+    $productComponent = $this->findComponentByName('product');
+    $item = optional($productComponent)->item;
+    if (!$item) {
+        return;
     }
+    $category = optional($item->categories)->first();
+    if (!$category) {
+        return;
+    }
+    // If a category is available, use it for the products component.
+    $this->findComponentByName('relatedProducts')->category = $category;
 }
 ==
 {% component 'product' %}

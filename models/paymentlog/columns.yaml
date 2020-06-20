@@ -20,7 +20,7 @@ columns:
     total:
         label: 'offline.mall::lang.order.total'
         type: partial
-        searchable: true
+        searchable: false
         sortable: false
         path: $/offline/mall/controllers/paymentlogs/_total.htm
     order_data:
