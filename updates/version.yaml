@@ -319,3 +319,6 @@
     - Added cart product count and quantity sum info to the mall.cart.productAdded event to make consistent counter updates in the frontend easier (see https://tinyurl.com/ybxl9jlf)
 1.11.17:
     - Added `mall.order.afterCreate` event, fixed various bugs
+1.11.18:
+    - Added short description field to Category model
+    - add_short_description_field_to_category.php
