@@ -322,3 +322,5 @@
 1.11.18:
     - Added short description field to Category model
     - add_short_description_field_to_category.php
+1.11.19:
+    - Minor bugfix release
