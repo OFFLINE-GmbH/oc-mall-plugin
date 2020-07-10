@@ -25,7 +25,9 @@ class OrdersStats
 
     public function count(): int
     {
-        return DB::table($this->ordersTable)->count();
+        return DB::table($this->ordersTable)
+            ->whereNull('deleted_at')
+            ->count();
     }
 
     public function perWeekCount(): float
