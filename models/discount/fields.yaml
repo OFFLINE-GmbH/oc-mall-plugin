@@ -96,6 +96,16 @@ fields:
             action: show
             field: trigger
             condition: value[product]
+    customer_group:
+        label: 'offline.mall::lang.common.customer_group'
+        span: auto
+        type: recordfinder
+        list: ~/plugins/offline/mall/models/customergroup/columns.yaml
+        nameFrom: name
+        trigger:
+            action: show
+            field: trigger
+            condition: value[customer_group]
     shipping_guaranteed_days_to_delivery:
         label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
         oc.commentPosition: ''

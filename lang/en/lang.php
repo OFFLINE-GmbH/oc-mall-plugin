@@ -500,6 +500,7 @@
             'total' => 'Order total is reached',
             'code' => 'Discount code is entered',
             'product' => 'A specific product is present in the cart',
+            'customer_group' => 'The user belongs to a specific customer group',
         ],
         'validation' => [
             'empty' => 'Enter a promo code.',

@@ -20,9 +20,10 @@ class Discount extends Model
         'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
-        'trigger'                              => 'in:total,code,product',
+        'trigger'                              => 'in:total,code,product,customer_group',
         'types'                                => 'in:fixed_amount,rate,shipping',
         'product'                              => 'required_if:trigger,product',
+        'customer_group'                       => 'required_if:trigger,customer_group',
         'code'                                 => 'nullable|unique:offline_mall_discounts,code',
         'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
@@ -50,6 +51,7 @@ class Discount extends Model
         'trigger',
         'types',
         'product',
+        'customer_group',
         'type',
         'rate',
         'code',
@@ -58,6 +60,7 @@ class Discount extends Model
     ];
     public $belongsTo = [
         'product' => [Product::class],
+        'customer_group' => [CustomerGroup::class]
     ];
     public $belongsToMany = [
         'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
@@ -83,6 +86,9 @@ class Discount extends Model
             }
             if ($discount->trigger !== 'code') {
                 $discount->code = null;
+            }
+            if ($discount->trigger !== 'customer_group') {
+                $discount->customer_group_id = null;
             }
         });
     }

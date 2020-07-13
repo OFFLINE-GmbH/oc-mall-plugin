@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Cart;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
+use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Discount;
 
 class DiscountApplier
@@ -113,11 +114,20 @@ class DiscountApplier
             return true;
         }
 
+        if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
+            return true;
+        }
+
         return $discount->trigger === 'code';
     }
 
     private function productIsInCart(int $productId): bool
     {
         return $this->input->products->pluck('product_id')->contains($productId);
+    }
+
+    private function userBelongsToCustomerGroup(int $customerGroupId): bool
+    {
+        return optional(\Auth::getUser())->customer_group()->where('id', $customerGroupId)->exists();
     }
 }
