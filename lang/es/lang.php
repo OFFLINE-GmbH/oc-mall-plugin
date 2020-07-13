@@ -589,7 +589,7 @@
         'shipped' => 'Enviado',
         'shipping_pending' => 'Medio de despacho',
         'not_shipped' => 'Pendiente',
-        'data' => 'Datos de la pedido',
+        'data' => 'Datos del pedido',
         'total_revenue' => 'Utilidad total',
         'download_invoice' => 'Descargar factura',
         'order_file_name' => 'pedido-:order',
