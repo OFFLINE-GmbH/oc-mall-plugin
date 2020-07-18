@@ -500,6 +500,7 @@
             'total' => 'Se llega al total del pedido',
             'code' => 'Se ingresa el código de descuento',
             'product' => 'Un producto específico se encuentra en el carro',
+            'customer_group' => 'El usuario pertenece a un grupo de clientes',
         ],
         'validation' => [
             'empty' => 'Ingresa un código de promoción.',
@@ -588,7 +589,7 @@
         'shipped' => 'Enviado',
         'shipping_pending' => 'Medio de despacho',
         'not_shipped' => 'Pendiente',
-        'data' => 'Datos de la pedido',
+        'data' => 'Datos del pedido',
         'total_revenue' => 'Utilidad total',
         'download_invoice' => 'Descargar factura',
         'order_file_name' => 'pedido-:order',

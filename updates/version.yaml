@@ -324,3 +324,6 @@
     - add_short_description_field_to_category.php
 1.11.19:
     - Minor bugfix release
+1.11.20:
+    - Added "Customer Group" discount trigger
+    - add_user_belongs_to_group_discount.php
