@@ -498,6 +498,7 @@
             'total' => 'Bestimmter Bestellwert erreicht wird',
             'code' => 'Gutschein-Code eingegeben wird',
             'product' => 'Bestimmtes Produkt im Warenkorb liegt',
+            'customer_group' => 'Der Benutzer zu einer Kundengruppe gehört',
         ],
         'validation' => [
             'empty' => 'Geben Sie einen Gutschein-Code ein.',

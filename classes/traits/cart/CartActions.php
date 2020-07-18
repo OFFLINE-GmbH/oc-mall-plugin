@@ -48,7 +48,7 @@ trait CartActions
 
                 $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
-                CartProduct::where('id', $cartEntry->id)->update(['quantity' => $newQuantity]);
+                $cartEntry->update(['quantity' => $newQuantity]);
 
                 $this->validateStock($variant ?? $product, $quantity);
                 $this->validateShippingMethod();
