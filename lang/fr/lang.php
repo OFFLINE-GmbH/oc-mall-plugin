@@ -345,6 +345,7 @@
         'checkbox' => 'Case à cocher',
         'color' => 'Couleur',
         'image' => 'Image',
+        'switch' => 'Commutateur',
         'add' => 'Ajouter option',
         'name' => 'Nom',
         'price' => 'Prix',

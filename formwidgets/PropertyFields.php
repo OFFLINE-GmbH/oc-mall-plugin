@@ -93,6 +93,8 @@ class PropertyFields extends FormWidgetBase
                 return $this->richeditor($property, $value);
             case 'image':
                 return $this->image($property, $value);
+            case 'switch':
+                return $this->switch($property, $value);
             case 'float':
             case 'integer':
                 return $this->textfield($property, $value, 'number');
@@ -226,6 +228,20 @@ class PropertyFields extends FormWidgetBase
         })->toArray();
 
         return $this->makePartial('modules/backend/widgets/form/partials/field_checkbox',
+            ['field' => $formField, 'value' => $value->value]
+        );
+    }
+
+    private function switch($property, PropertyValue $value)
+    {
+        $formField          = $this->newFormField($property);
+        $formField->value   = $value->value;
+        $formField->label   = $property->name;
+        $formField->options = collect($property->options)->map(function ($i) {
+            return [$i['value'], $i['value']];
+        })->toArray();
+
+        return $this->makePartial('modules/backend/widgets/form/partials/field_switch',
             ['field' => $formField, 'value' => $value->value]
         );
     }
