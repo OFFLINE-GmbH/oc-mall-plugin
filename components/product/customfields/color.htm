@@ -4,7 +4,9 @@
     <div class="mall-field-color-selector">
         {% if field.custom_field_options.count > 0 %}
             <input type="hidden" id="{{ fieldId }}" name="fields[{{ field.hashId }}]"
-                   data-id="{{ item.property.hashId }}">
+                   data-id="{{ item.property.hashId }}"
+                   data-mall-custom-field
+            >
             {% for option in field.custom_field_options %}
                 <a class="mall-option-selector" data-target="#{{ fieldId }}" data-value="{{ option.hashId }}">
                 <span style="background: {{ option.option_value }}; width: 20px; height: 20px; display: inline-block;

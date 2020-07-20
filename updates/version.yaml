@@ -327,3 +327,5 @@
 1.11.20:
     - Added "Customer Group" discount trigger
     - add_user_belongs_to_group_discount.php
+1.11.21:
+    - Minor bugfix to color custom field type
