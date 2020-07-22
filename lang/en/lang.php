@@ -345,6 +345,7 @@
         'checkbox' => 'Checkbox',
         'color' => 'Color',
         'image' => 'Image',
+        'switch' => 'Switch',
         'add' => 'Add option',
         'name' => 'Name',
         'price' => 'Price',

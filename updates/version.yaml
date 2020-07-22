@@ -329,3 +329,5 @@
     - add_user_belongs_to_group_discount.php
 1.11.21:
     - Minor bugfix to color custom field type
+1.11.22:
+    - Bugfix release
