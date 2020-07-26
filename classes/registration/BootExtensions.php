@@ -101,7 +101,7 @@ trait BootExtensions
                     'permissions' => ['rainlab.users.*', 'offline.mall.manage_customer_addresses'],
                 ],
             ]);
-        });
+        }, 5);
 
         // Add Customer Groups relation to RainLab.User form
         Event::listen('backend.form.extendFields', function (Form $widget) {
@@ -131,6 +131,6 @@ trait BootExtensions
                 //     'tab'   => 'offline.mall::lang.plugin.name',
                 // ],
             ]);
-        });
+        }, 5);
     }
 }
