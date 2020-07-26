@@ -53,12 +53,18 @@ class Variant extends Model
         'stock'                        => 'integer',
         'sales_count'                  => 'integer',
         'weight'                       => 'integer',
+        'height'                       => 'integer',
+        'length'                       => 'integer',
+        'width'                        => 'integer',
     ];
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required',
         'stock'                        => 'required|integer',
         'weight'                       => 'nullable|integer',
+        'height'                       => 'nullable|integer',
+        'length'                       => 'nullable|integer',
+        'width'                        => 'nullable|integer',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
     ];
@@ -96,6 +102,9 @@ class Variant extends Model
         'name',
         'published',
         'weight',
+        'length',
+        'width',
+        'height',
         'allow_out_of_stock_purchases',
         'mpn',
         'gtin',
