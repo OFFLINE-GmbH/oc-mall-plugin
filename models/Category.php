@@ -73,6 +73,7 @@ class Category extends Model
         'inherit_property_groups',
         'inherit_review_categories',
         'sort_order',
+        'google_product_category_id',
     ];
     public $casts = [
         'inherit_property_groups'   => 'boolean',

@@ -107,3 +107,9 @@ tabs:
             span: left
             type: richeditor
             tab: 'offline.mall::lang.product.description'
+        google_product_category_id:
+            label: 'offline.mall::lang.category.google_product_category_id'
+            comment: 'offline.mall::lang.category.google_product_category_id_comment'
+            span: right
+            type: number
+            tab: 'offline.mall::lang.product.description'

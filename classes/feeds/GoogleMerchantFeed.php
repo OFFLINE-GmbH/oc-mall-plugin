@@ -36,7 +36,7 @@ class GoogleMerchantFeed
             Translator::instance()->setLocale($this->locale);
         }
 
-        $products = ProductModel::published()->with(['brand'])->get();
+        $products = ProductModel::published()->with(['brand', 'categories', 'variants.product.categories'])->get();
 
         foreach ($products as $product) {
             if ($product->inventory_management_method === 'variant') {
@@ -47,7 +47,6 @@ class GoogleMerchantFeed
                 $this->addItem($product);
             }
         }
-
         return $this->feed->build();
     }
 
@@ -96,6 +95,7 @@ class GoogleMerchantFeed
             $entry->setAvailability(Availability::OUT_OF_STOCK);
         }
 
+        $this->handleProductCategory($item, $entry);
         $this->handleIdentifier($item, $entry);
 
         $this->feed->addProduct($entry);
@@ -108,6 +108,23 @@ class GoogleMerchantFeed
     {
         if ($this->locale === null && $this->rainlabTranslateInstalled()) {
             $this->locale = Translator::instance()->getDefaultLocale();
+        }
+    }
+
+    /**
+     * Handle Product Category attribute.
+     *
+     * @param         $item
+     * @param Product $entry
+     */
+    private function handleProductCategory($item, Product $entry): void
+    {
+        $category = $item->inventory_management_method === 'variant'
+            ? optional($item->product->categories)->first()
+            : optional($item->categories)->first();
+
+        if ($category) {
+            $entry->setGoogleCategory($category->google_product_category_id);
         }
     }
 
