@@ -334,3 +334,6 @@
 1.11.23:
     - Added width, height and length fields to Products and Variants
     - add_width_and_length_to_product_model.php
+1.11.24:
+    - Added Google Category ID field to Categories (Google Merchant integration)
+    - add_google_category_id_to_categories_table.php

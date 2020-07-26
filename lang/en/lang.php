@@ -457,6 +457,8 @@
         'inherit_property_groups_comment' => 'Use the property groups of this category\'s parent category',
         'inherit_review_categories' => 'Inherit review categories of parent category',
         'inherit_review_categories_comment' => 'Use the review categories of this category\'s parent category',
+        'google_product_category_id' => 'Google Product Category ID',
+        'google_product_category_id_comment' => 'Used for Google Merchant integration, see https://support.google.com/merchants/answer/6324436',
     ],
     'custom_fields' => [
         'name' => 'Field name',

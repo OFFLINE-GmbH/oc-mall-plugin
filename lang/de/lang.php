@@ -455,6 +455,8 @@
         'inherit_property_groups_comment' => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
         'inherit_review_categories' => 'Übernehme Review-Kategorien von Elternkategorie',
         'inherit_review_categories_comment' => 'Für diese Kategorie werden die gleichen Review-Kategorien wie für die Elternkategorie verwendet',
+        'google_product_category_id' => 'Google Produkt-Kategorie ID',
+        'google_product_category_id_comment' => 'Für Google Merchant Integration, siehe https://support.google.com/merchants/answer/6324436?hl=de',
     ],
     'custom_fields' => [
         'name' => 'Feldname',
