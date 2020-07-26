@@ -36,7 +36,7 @@ class GoogleMerchantFeed
             Translator::instance()->setLocale($this->locale);
         }
 
-        $products = ProductModel::published()->with(['brand', 'categories'])->get();
+        $products = ProductModel::published()->with(['brand', 'categories', 'variants.product.categories'])->get();
 
         foreach ($products as $product) {
             if ($product->inventory_management_method === 'variant') {
@@ -47,7 +47,6 @@ class GoogleMerchantFeed
                 $this->addItem($product);
             }
         }
-
         return $this->feed->build();
     }
 
