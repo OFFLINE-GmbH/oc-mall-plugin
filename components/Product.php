@@ -697,6 +697,12 @@ class Product extends MallComponent
      */
     protected function stockCheckResponse(): array
     {
+        // Make sure reviews are fetched correctly.
+        $reviews = $this->controller->findComponentByName('productReviews');
+        if ($reviews) {
+            $reviews->onRun();
+        }
+
         $data = [
             'stock' => $this->page['stock'],
             'item'  => $this->page['item'],
