@@ -337,3 +337,5 @@
 1.11.24:
     - Added Google Category ID field to Categories (Google Merchant integration)
     - add_google_category_id_to_categories_table.php
+1.11.25:
+    - Bugfix release
