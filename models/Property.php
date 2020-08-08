@@ -20,7 +20,7 @@ class Property extends Model
     public $jsonable = ['options'];
     public $rules = [
         'name' => 'required',
-        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer,richeditor,switch',
+        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer,richeditor,switch,datetime,date',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -125,7 +125,8 @@ class Property extends Model
             'checkbox'   => trans('offline.mall::lang.custom_field_options.checkbox'),
             'color'      => trans('offline.mall::lang.custom_field_options.color'),
 //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
-            'switch'     => trans('offline.mall::lang.custom_field_options.switch'),
+            'datetime'   => trans('offline.mall::lang.custom_field_options.datetime'),
+            'date'       => trans('offline.mall::lang.custom_field_options.date'),
         ];
     }
 }
