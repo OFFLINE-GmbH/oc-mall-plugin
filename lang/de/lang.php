@@ -349,6 +349,8 @@
         'price' => 'Aufpreis',
         'attributes' => 'Attribute',
         'option' => 'Option',
+        'date' => 'Datum',
+        'datetime' => 'Datum und Uhrzeit',
     ],
     'product' => [
         'user_defined_id' => 'Artikelnummer',

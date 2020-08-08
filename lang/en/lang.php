@@ -1,4 +1,5 @@
-<?php return [
+<?php
+return [
     'plugin' => [
         'name' => 'Mall',
         'description' => 'E-commerce solution for October CMS',
@@ -351,6 +352,8 @@
         'price' => 'Price',
         'attributes' => 'Attribute',
         'option' => 'Option',
+        'date' => 'Date',
+        'datetime' => 'Date Time',
     ],
     'product' => [
         'user_defined_id' => 'Product ID',

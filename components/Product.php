@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php
+
+namespace OFFLINE\Mall\Components;
 
 use Auth;
 use DB;
@@ -35,6 +37,7 @@ use Validator;
 class Product extends MallComponent
 {
     use CustomFields;
+
     /**
      * The item to display.
      *
@@ -110,7 +113,7 @@ class Product extends MallComponent
     public function componentDetails()
     {
         return [
-            'name'        => 'offline.mall::lang.components.product.details.name',
+            'name' => 'offline.mall::lang.components.product.details.name',
             'description' => 'offline.mall::lang.components.product.details.description',
         ];
     }
@@ -125,28 +128,28 @@ class Product extends MallComponent
         $langPrefix = 'offline.mall::lang.components.product.properties.redirectOnPropertyChange';
 
         return [
-            'product'                   => [
-                'title'   => 'offline.mall::lang.common.product',
+            'product' => [
+                'title' => 'offline.mall::lang.common.product',
                 'default' => ':slug',
-                'type'    => 'dropdown',
+                'type' => 'dropdown',
             ],
-            'variant'                   => [
-                'title'   => 'offline.mall::lang.common.variant',
+            'variant' => [
+                'title' => 'offline.mall::lang.common.variant',
                 'default' => ':slug',
                 'depends' => ['product'],
-                'type'    => 'dropdown',
+                'type' => 'dropdown',
             ],
-            'redirectOnPropertyChange'  => [
-                'title'       => $langPrefix . '.title',
+            'redirectOnPropertyChange' => [
+                'title' => $langPrefix . '.title',
                 'description' => $langPrefix . '.description',
-                'default'     => 0,
-                'type'        => 'checkbox',
+                'default' => 0,
+                'type' => 'checkbox',
             ],
             'currentVariantReviewsOnly' => [
-                'title'       => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
+                'title' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
                 'description' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.description',
-                'type'        => 'checkbox',
-                'default'     => 0,
+                'type' => 'checkbox',
+                'default' => 0,
             ],
         ];
     }
@@ -189,25 +192,7 @@ class Product extends MallComponent
             return $this->controller->run('404');
         }
 
-        // If a Product model is displayed but it's management method is "variants" the user
-        // should be redirected to the first Variant of this Product.
-        if ($this->product->inventory_management_method === 'variant' && ! $this->param('variant')) {
-
-            $variants = optional($this->product->variants);
-            $variant  = optional($variants->where('published', true))->first();
-            if ( ! $variant) {
-                return $this->controller->run('404');
-            }
-
-            $url = $this->controller->pageUrl($this->page->fileName, [
-                'slug'    => $this->product->slug,
-                'variant' => $variant->hashId,
-            ]);
-
-            return redirect()->to($url);
-        }
-
-        $this->page->title            = $this->item->meta_title ?? $this->item->name;
+        $this->page->title = $this->item->meta_title ?? $this->item->name;
         $this->page->meta_description = $this->item->meta_description;
     }
 
@@ -218,9 +203,6 @@ class Product extends MallComponent
      */
     public function init()
     {
-        $variantId = $this->decode($this->param('variant'));
-        $this->setVar('variantId', $variantId);
-
         try {
             $this->setVar('item', $this->getItem());
             $this->setVar('variants', $this->getVariants());
@@ -241,11 +223,15 @@ class Product extends MallComponent
         }
 
         $this->showReviews = (bool)ReviewSettings::get('enabled', false);
-        $this->addComponent(ProductReviews::class, 'productReviews', [
-            'product'                   => $this->product->id,
-            'variant'                   => optional($this->variant)->id,
-            'currentVariantReviewsOnly' => $this->property('currentVariantReviewsOnly'),
-        ]);
+        $this->addComponent(
+            ProductReviews::class,
+            'productReviews',
+            [
+                'product' => $this->product->id,
+                'variant' => optional($this->variant)->id,
+                'currentVariantReviewsOnly' => $this->property('currentVariantReviewsOnly'),
+            ]
+        );
 
         $this->setVar('variantPropertyValues', $this->getPropertyValues());
         $this->setVar('props', $this->getProps());
@@ -264,7 +250,7 @@ class Product extends MallComponent
         $product = $this->getProduct();
 
         $variant = null;
-        $values  = $this->validateCustomFields(post('fields', []));
+        $values = $this->validateCustomFields(post('fields', []));
 
         if ($this->variantId !== null) {
             // In case a Variant is added we have to retrieve the model first by the selected props.
@@ -289,10 +275,13 @@ class Product extends MallComponent
 
         // Display the services modal.
         return [
-            '.mall-modal' => $this->renderPartial($this->alias . '::servicemodal', [
-                'services' => $product->services,
-                'added'    => false,
-            ]),
+            '.mall-modal' => $this->renderPartial(
+                $this->alias . '::servicemodal',
+                [
+                    'services' => $product->services,
+                    'added' => false,
+                ]
+            ),
         ];
     }
 
@@ -308,15 +297,19 @@ class Product extends MallComponent
 
         // Create validation rules for required services.
         $required = $product->services->where('pivot.required', true);
-        $rules    = $required->mapWithKeys(function ($service) {
-            return [
-                'service.' . $service->id        => 'required|min:1|array',
-                'service.' . $service->id . '.*' => 'required|in:' . $service->options->pluck('id')->implode(','),
-            ];
-        });
-        $messages = $required->mapWithKeys(function ($service) {
-            return ['service.' . $service->id . '.*.required' => trans('offline.mall::frontend.services.required')];
-        });
+        $rules = $required->mapWithKeys(
+            function ($service) {
+                return [
+                    'service.' . $service->id => 'required|min:1|array',
+                    'service.' . $service->id . '.*' => 'required|in:' . $service->options->pluck('id')->implode(','),
+                ];
+            }
+        );
+        $messages = $required->mapWithKeys(
+            function ($service) {
+                return ['service.' . $service->id . '.*.required' => trans('offline.mall::frontend.services.required')];
+            }
+        );
 
         // Validate all required services are selected.
         $v = Validator::make(post(), $rules->toArray(), $messages->toArray());
@@ -325,12 +318,14 @@ class Product extends MallComponent
         }
 
         // Fetch the original cart data from the session.
-        $variant  = Variant::find(Session::pull('mall.cart.add.variant'));
+        $variant = Variant::find(Session::pull('mall.cart.add.variant'));
         $quantity = Session::pull('mall.cart.add.quantity');
-        $values   = Collection::wrap(Session::pull('mall.cart.add.values', []));
-        $values   = $values->map(function ($attributes) {
-            return CustomFieldValue::make($attributes);
-        });
+        $values = Collection::wrap(Session::pull('mall.cart.add.values', []));
+        $values = $values->map(
+            function ($attributes) {
+                return CustomFieldValue::make($attributes);
+            }
+        );
 
         $serviceOptionIds = collect(post('service', []))->values()->flatten()->toArray();
 
@@ -347,12 +342,12 @@ class Product extends MallComponent
      */
     public function onChangeProperty()
     {
-        $values    = post('values', []);
+        $values = post('values', []);
         $isInitial = (bool)post('initial', false);
-        $variant   = $this->getVariantByPropertyValues($values);
+        $variant = $this->getVariantByPropertyValues($values);
 
         $this->page['stock'] = $variant ? $variant->stock : 0;
-        $this->page['item']  = $variant ?: $this->getProduct();
+        $this->page['item'] = $variant ?: $this->getProduct();
 
         if ($this->redirectOnPropertyChange && $isInitial === false) {
             $item = $this->page['item'];
@@ -380,7 +375,7 @@ class Product extends MallComponent
         $item = $this->getItem();
 
         $this->page['stock'] = $item ? $item->stock : 0;
-        $this->page['item']  = $item;
+        $this->page['item'] = $item;
 
         return $this->stockCheckResponse();
     }
@@ -400,7 +395,7 @@ class Product extends MallComponent
         // by the url parameter.
         if ($this->param('variant')) {
             $propertyValues = post('props', []);
-            $item           = $this->getVariantByPropertyValues($propertyValues);
+            $item = $this->getVariantByPropertyValues($propertyValues);
         } else {
             $item = $this->getItem();
         }
@@ -410,7 +405,7 @@ class Product extends MallComponent
         $return = ['.mall-product__add-to-cart' => ''];
         if ($item) {
             $priceData = $item->priceIncludingCustomFieldValues($values);
-            $price     = Price::fromArray($priceData);
+            $price = Price::fromArray($priceData);
 
             $partial = $this->renderPartial($this->alias . '::currentprice', ['price' => $price->string]);
 
@@ -434,23 +429,37 @@ class Product extends MallComponent
 
         // If no Variant is specified as URL parameter the Product
         // model can be returned directly.
-        if ( ! $this->param('variant')) {
+        if ($this->product->inventory_management_method !== 'variant') {
             return $this->product;
         }
 
-        $variantId    = $this->property('variant');
-        $variantModel = Variant::published()->with([
-            'property_values.translations',
-            'property_values.property.property_groups',
-            'product_property_values.property.property_groups',
-            'image_sets',
-        ]);
+        // Use the Variant that was configured via the property.
+        $variantId = $this->property('variant');
 
-        // If :slug is set as Variant ID we can fall back to the URL parameter.
-        // Otherwise use the Variant the admin as defined as Component property.
-        $id = $variantId === ':slug' ? $this->variantId : $variantId;
+        // If the property is set to `:slug`, we use the variant from the URL param.
+        if ($variantId === ':slug') {
+            $variantId = $this->decode($this->param('variant'));
+            // If no URL param is present, let's use the first Variant of this Product.
+            if ( ! $variantId) {
+                $variantId = optional($this->product->variants->first())->id;
+            }
+            // If no Variants are available, simply display the Product itself.
+            if ( ! $variantId) {
+                return $this->product;
+            }
+        }
+        $this->setVar('variantId', $variantId);
 
-        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($id);
+        $variantModel = Variant::published()->with(
+            [
+                'property_values.translations',
+                'property_values.property.property_groups',
+                'product_property_values.property.property_groups',
+                'image_sets',
+            ]
+        );
+
+        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($this->variantId);
     }
 
     /**
@@ -481,7 +490,7 @@ class Product extends MallComponent
         }
 
         $product = $this->property('product');
-        $model   = ProductModel::published()->with($with);
+        $model = ProductModel::published()->with($with);
 
         if ($product === ':slug') {
             $method = $this->rainlabTranslateInstalled() ? 'transWhere' : 'where';
@@ -504,12 +513,16 @@ class Product extends MallComponent
             return collect();
         }
 
-        $variants = $this->product->variants->reject(function (Variant $variant) {
-            // Only display "other" Variants, so remove the currently displayed.
-            return $variant->id === $this->variantId;
-        })->groupBy(function (Variant $variant) {
-            return $this->getGroupedPropertyValue($variant);
-        });
+        $variants = $this->product->variants->reject(
+            function (Variant $variant) {
+                // Only display "other" Variants, so remove the currently displayed.
+                return $variant->id === $this->variantId;
+            }
+        )->groupBy(
+            function (Variant $variant) {
+                return $this->getGroupedPropertyValue($variant);
+            }
+        );
 
         if ($this->variant) {
             // Remove the property value of the currently viewed variant.
@@ -553,12 +566,12 @@ class Product extends MallComponent
         Flash::success(trans('offline.mall::frontend.cart.added'));
 
         return [
-            'item'     => $this->dataLayerArray($product, $variant),
+            'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
-            'added'    => true,
+            'added' => true,
         ];
     }
 
@@ -589,9 +602,11 @@ class Product extends MallComponent
             return (object)['value' => 0];
         }
 
-        return $variant->property_values->first(function (PropertyValue $value) use ($variant) {
-            return $value->property_id === $variant->product->group_by_property_id;
-        });
+        return $variant->property_values->first(
+            function (PropertyValue $value) use ($variant) {
+                return $value->property_id === $variant->product->group_by_property_id;
+            }
+        );
     }
 
     /**
@@ -606,24 +621,32 @@ class Product extends MallComponent
             return $valueMap;
         }
 
-        return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
-            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
-                return $this->variant && $value->variant_id === null;
-            });
+        return $this->product->categories->flatMap->properties->map(
+            function (Property $property) use ($valueMap) {
+                $filteredValues = optional($valueMap->get($property->id))->reject(
+                    function ($value) {
+                        return $this->variant && $value->variant_id === null;
+                    }
+                );
 
-            return (object)[
-                'property' => $property,
-                'values'   => optional($filteredValues)->unique('value'),
-            ];
-        })->filter(function ($collection) {
-            if ($this->variant && $collection->property->pivot->use_for_variants != true) {
-                return false;
+                return (object)[
+                    'property' => $property,
+                    'values' => optional($filteredValues)->unique('value'),
+                ];
             }
+        )->filter(
+            function ($collection) {
+                if ($this->variant && $collection->property->pivot->use_for_variants != true) {
+                    return false;
+                }
 
-            return $collection->values && $collection->values->count() > 0;
-        })->keyBy(function ($value) {
-            return $value->property->id;
-        });
+                return $collection->values && $collection->values->count() > 0;
+            }
+        )->keyBy(
+            function ($value) {
+                return $value->property->id;
+            }
+        );
     }
 
     /**
@@ -649,9 +672,12 @@ class Product extends MallComponent
             ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
-            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
-                $q->where('value', '<>', $groupedValue);
-            })
+            ->when(
+                $groupedValue > 0,
+                function ($q) use ($groupedValue) {
+                    $q->where('value', '<>', $groupedValue);
+                }
+            )
             ->get()
             ->groupBy('property_id');
     }
@@ -665,9 +691,11 @@ class Product extends MallComponent
      */
     protected function getVariantByPropertyValues($valueIds)
     {
-        $ids = collect($valueIds)->map(function ($id) {
-            return $this->decode($id);
-        });
+        $ids = collect($valueIds)->map(
+            function ($id) {
+                return $this->decode($id);
+            }
+        );
 
         $product = $this->getProduct([]);
 
@@ -705,18 +733,18 @@ class Product extends MallComponent
 
         $data = [
             'stock' => $this->page['stock'],
-            'item'  => $this->page['item'],
+            'item' => $this->page['item'],
         ];
 
         // Factor in currently selected custom field values in the displayed price
-        $fields        = $this->mapToCustomFields(post('props', []));
-        $values        = $this->mapToCustomFieldValues($fields);
-        $priceData     = $data['item']->priceIncludingCustomFieldValues($values);
+        $fields = $this->mapToCustomFields(post('props', []));
+        $values = $this->mapToCustomFieldValues($fields);
+        $priceData = $data['item']->priceIncludingCustomFieldValues($values);
         $data['price'] = Price::fromArray($priceData);
 
         return [
-            '.mall-product__price'       => $this->renderPartial($this->alias . '::price', $data),
-            '.mall-product__info'        => $this->renderPartial($this->alias . '::info', $data),
+            '.mall-product__price' => $this->renderPartial($this->alias . '::price', $data),
+            '.mall-product__info' => $this->renderPartial($this->alias . '::info', $data),
             '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
         ];
     }
@@ -731,10 +759,13 @@ class Product extends MallComponent
      */
     private function getProductPageUrl($slug, ?Variant $item): string
     {
-        return $this->controller->pageUrl(GeneralSettings::get('product_page'), [
-            'slug'    => $slug,
-            'variant' => optional($item)->variantHashId,
-        ]);
+        return $this->controller->pageUrl(
+            GeneralSettings::get('product_page'),
+            [
+                'slug' => $slug,
+                'variant' => optional($item)->variantHashId,
+            ]
+        );
     }
 
     /**
@@ -783,12 +814,12 @@ class Product extends MallComponent
         $item = $variant ?? $product;
 
         return [
-            'id'       => $item->prefixedId,
-            'name'     => $product->name,
-            'price'    => $item->price()->decimal,
-            'brand'    => optional($item->brand)->name,
+            'id' => $item->prefixedId,
+            'name' => $product->name,
+            'price' => $item->price()->decimal,
+            'brand' => optional($item->brand)->name,
             'category' => optional(optional($item->categories)->first())->name,
-            'variant'  => optional($variant)->name,
+            'variant' => optional($variant)->name,
         ];
     }
 }
