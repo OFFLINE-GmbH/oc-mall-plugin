@@ -339,3 +339,5 @@
     - add_google_category_id_to_categories_table.php
 1.11.25:
     - Bugfix release
+1.11.26:
+    - Added date and datetime Property field types
