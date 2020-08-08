@@ -351,6 +351,8 @@
         'price' => 'Price',
         'attributes' => 'Attribute',
         'option' => 'Option',
+        'date'       => 'Date',
+        'datetime'   => 'Date Time',
     ],
     'product' => [
         'user_defined_id' => 'Product ID',

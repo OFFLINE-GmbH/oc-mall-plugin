@@ -4,6 +4,7 @@ use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Backend\FormWidgets\ColorPicker;
 use Backend\FormWidgets\FileUpload;
+use Backend\FormWidgets\DatePicker;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -93,8 +94,10 @@ class PropertyFields extends FormWidgetBase
                 return $this->richeditor($property, $value);
             case 'image':
                 return $this->image($property, $value);
-            case 'switch':
-                return $this->switch($property, $value);
+            case 'date':
+                return $this->datepicker($property, $value);
+            case 'datetime':
+                return $this->datetimepicker($property, $value);
             case 'float':
             case 'integer':
                 return $this->textfield($property, $value, 'number');
@@ -195,6 +198,49 @@ class PropertyFields extends FormWidgetBase
         return $this->makePartial(
             'richeditor',
             ['field' => $property, 'widget' => $widget, 'value' => $value->value]
+        );
+    }
+
+    private function datetimepicker($property, PropertyValue $value)
+    {
+        $config = $this->makeConfig([
+            'model' => $value,
+        ]);
+
+        $formField            = $this->newFormField($property);
+        $formField->value     = $value->value;
+        $formField->valueFrom = 'value';
+
+        $widget             = new DatePicker($this->controller, $formField, $config);
+        $widget->allowEmpty = true;
+        $widget->ignoreTimezone = true;
+        $widget->bindToController();
+
+        return $this->makePartial(
+            'datetimepicker',
+            ['field' => $property, 'widget' => $widget, 'value' => $value]
+        );
+    }
+
+    private function datepicker($property, PropertyValue $value)
+    {
+        $config = $this->makeConfig([
+            'model' => $value,
+        ]);
+
+        $formField            = $this->newFormField($property);
+        $formField->value     = $value->value;
+        $formField->valueFrom = 'value';
+
+        $widget             = new DatePicker($this->controller, $formField, $config);
+        $widget->allowEmpty = true;
+        $widget->ignoreTimezone = true;
+        $widget->mode = 'date';
+        $widget->bindToController();
+
+        return $this->makePartial(
+            'datepicker',
+            ['field' => $property, 'widget' => $widget, 'value' => $value]
         );
     }
 
