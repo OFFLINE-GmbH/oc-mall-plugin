@@ -14,6 +14,10 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: dropdown
+        trigger:
+            action: hide
+            field: type
+            condition: 'value[date] or value[datetime]' # frontend filters for these types are not yet implemented.
         options:
             '': 'offline.mall::lang.properties.filter_types.none'
             set: 'offline.mall::lang.properties.filter_types.set'
