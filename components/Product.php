@@ -189,25 +189,7 @@ class Product extends MallComponent
             return $this->controller->run('404');
         }
 
-        // If a Product model is displayed but it's management method is "variants" the user
-        // should be redirected to the first Variant of this Product.
-        if ($this->product->inventory_management_method === 'variant' && ! $this->param('variant')) {
-
-            $variants = optional($this->product->variants);
-            $variant  = optional($variants->where('published', true))->first();
-            if ( ! $variant) {
-                return $this->controller->run('404');
-            }
-
-            $url = $this->controller->pageUrl($this->page->fileName, [
-                'slug'    => $this->product->slug,
-                'variant' => $variant->hashId,
-            ]);
-
-            return redirect()->to($url);
-        }
-
-        $this->page->title            = $this->item->meta_title ?? $this->item->name;
+        $this->page->title = $this->item->meta_title ?? $this->item->name;
         $this->page->meta_description = $this->item->meta_description;
     }
 
@@ -218,9 +200,6 @@ class Product extends MallComponent
      */
     public function init()
     {
-        $variantId = $this->decode($this->param('variant'));
-        $this->setVar('variantId', $variantId);
-
         try {
             $this->setVar('item', $this->getItem());
             $this->setVar('variants', $this->getVariants());
@@ -434,23 +413,37 @@ class Product extends MallComponent
 
         // If no Variant is specified as URL parameter the Product
         // model can be returned directly.
-        if ( ! $this->param('variant')) {
+        if ($this->product->inventory_management_method !== 'variant') {
             return $this->product;
         }
 
-        $variantId    = $this->property('variant');
-        $variantModel = Variant::published()->with([
-            'property_values.translations',
-            'property_values.property.property_groups',
-            'product_property_values.property.property_groups',
-            'image_sets',
-        ]);
+        // Use the Variant that was configured via the property.
+        $variantId = $this->property('variant');
 
-        // If :slug is set as Variant ID we can fall back to the URL parameter.
-        // Otherwise use the Variant the admin as defined as Component property.
-        $id = $variantId === ':slug' ? $this->variantId : $variantId;
+        // If the property is set to `:slug`, we use the variant from the URL param.
+        if ($variantId === ':slug') {
+            $variantId = $this->decode($this->param('variant'));
+            // If no URL param is present, let's use the first Variant of this Product.
+            if ( ! $variantId) {
+                $variantId = optional($this->product->variants->first())->id;
+            }
+            // If no Variants are available, simply display the Product itself.
+            if ( ! $variantId) {
+                return $this->product;
+            }
+        }
+        $this->setVar('variantId', $variantId);
 
-        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($id);
+        $variantModel = Variant::published()->with(
+            [
+                'property_values.translations',
+                'property_values.property.property_groups',
+                'product_property_values.property.property_groups',
+                'image_sets',
+            ]
+        );
+
+        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($this->variantId);
     }
 
     /**
