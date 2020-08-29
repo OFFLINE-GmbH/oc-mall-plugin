@@ -68,7 +68,7 @@ navigation:
                 url: offline/mall/brands
                 icon: icon-cube
                 permissions:
-                    - offline.mall.manage_products
+                    - offline.mall.manage_brands
             mall-properties:
                 label: 'offline.mall::lang.common.properties'
                 url: offline/mall/propertygroups
@@ -136,3 +136,6 @@ permissions:
     offline.mall.manage_reviews:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_reviews'
+    offline.mall.manage_brands:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_brands'
