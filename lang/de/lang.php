@@ -653,6 +653,7 @@
         'manage_wishlists' => 'Kann Merklisten verwalten',
         'manage_services' => 'Kann Services verwalten',
         'manage_reviews' => 'Kann Reviews verwalten',
+        'manage_brands' => 'Kann Marken verwalten',
     ],
     'components' => [
         'products' => [
