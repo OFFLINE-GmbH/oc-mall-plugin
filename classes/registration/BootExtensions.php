@@ -55,11 +55,6 @@ trait BootExtensions
         });
 
         RainLabUsersController::extend(function (RainLabUsersController $users) {
-            // Extend the Users controller with the Relation behaviour that is needed
-            // to display the addresses relation widget below.
-            if (!$users->isClassExtendedWith('Backend.Behaviors.RelationController')) {
-                $users->implement[]    = \Backend\Behaviors\RelationController::class;
-            }
             if (!isset($users->relationConfig)) {
                 $users->addDynamicProperty('relationConfig');
             }
@@ -68,6 +63,11 @@ trait BootExtensions
                 $users->relationConfig,
                 $myConfigPath
             );
+            // Extend the Users controller with the Relation behaviour that is needed
+            // to display the addresses relation widget above.
+            if (!$users->isClassExtendedWith('Backend.Behaviors.RelationController')) {
+                $users->extendClassWith(\Backend\Behaviors\RelationController::class);
+            }
         });
 
         MallUser::extend(function ($model) {
@@ -78,19 +78,11 @@ trait BootExtensions
         // Add Customer Groups menu entry to RainLab.User
         Event::listen('backend.menu.extendItems', function ($manager) {
             $manager->addSideMenuItems('RainLab.User', 'user', [
-                'users' => [
-                    'label'       => 'rainlab.user::lang.users.menu_label',
-                    'url'         => \Backend::url('rainlab/user/users'),
-                    'icon'        => 'icon-user',
-                    'permissions' => ['rainlab.users.*'],
-                ],
-            ]);
-            $manager->addSideMenuItems('RainLab.User', 'user', [
                 'customer_groups' => [
                     'label'       => 'offline.mall::lang.common.customer_groups',
                     'url'         => \Backend::url('offline/mall/customergroups'),
                     'icon'        => 'icon-users',
-                    'permissions' => ['rainlab.users.*', 'offline.mall.manage_customer_groups'],
+                    'permissions' => ['offline.mall.manage_customer_groups'],
                 ],
             ]);
             $manager->addSideMenuItems('RainLab.User', 'user', [
@@ -98,7 +90,7 @@ trait BootExtensions
                     'label'       => 'offline.mall::lang.common.addresses',
                     'url'         => \Backend::url('offline/mall/addresses'),
                     'icon'        => 'icon-home',
-                    'permissions' => ['rainlab.users.*', 'offline.mall.manage_customer_addresses'],
+                    'permissions' => ['offline.mall.manage_customer_addresses'],
                 ],
             ]);
         }, 5);

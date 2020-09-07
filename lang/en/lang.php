@@ -657,6 +657,7 @@ return [
         'manage_wishlists' => 'Can manage wishlists',
         'manage_services' => 'Can manage services',
         'manage_reviews' => 'Can manage reviews',
+        'manage_brands' => 'Can manage brands',
     ],
     'components' => [
         'products' => [
