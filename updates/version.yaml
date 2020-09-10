@@ -154,7 +154,7 @@
 1.2.7:
     - Fixed some minor bugs
 1.2.8:
-    - Added sort by name option to Products component (requires `php artisan mall:reindex` to work)
+    - "Added sort by name option to Products component (requires `php artisan mall:reindex` to work)"
 1.3.0:
     - Added Google Merchant Center integration
     - add_identifier_columns_for_products_and_variants.php
@@ -162,7 +162,7 @@
     - add_brand_column_to_order_products_table.php
     - add_name_column_to_index_table.php
 1.3.1:
-    - Added Google Tag Manager integration (see https://tinyurl.com/mall-analytics-docs)
+    - "Added Google Tag Manager integration (see https://tinyurl.com/mall-analytics-docs)"
 1.3.2:
     - Minor bug fix release
 1.3.3:
@@ -184,7 +184,7 @@
 1.3.9:
     - Fixed minor dataLayer bugs
 1.3.10:
-    - Re-use Eloquent model events to trigger `mall.cart.product.*` events. If you added custom event listeners for any of these events make sure to update your function signature to only accept a single CartProduct model (see https://offline-gmbh.github.io/oc-mall-plugin/development/events.html#cart)
+    - "Re-use Eloquent model events to trigger `mall.cart.product.*` events. If you added custom event listeners for any of these events make sure to update your function signature to only accept a single CartProduct model (see https://offline-gmbh.github.io/oc-mall-plugin/development/events.html#cart)"
 1.3.11:
     - Added links to edit and preview customer data to orders list (thanks to @Eoler)      
 1.3.12:
@@ -192,7 +192,7 @@
 1.3.13:
     - Fixed payment log display in backend order list
 1.3.14:
-    - !!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website: https://bit.ly/2Y4lUs3
+    - !!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website https://bit.ly/2Y4lUs3
 1.3.15:
     - Added embeds repeater to Product model to add custom embed code (like videos)
     - add_embeds_column_to_products_table.php
@@ -201,7 +201,7 @@
     - create_offline_mall_wishlists.php
     - create_offline_mall_wishlist_items.php
 1.4.1:
-    - !!! Added terms and conditions checkbox to signup form. If you manually modified the signup form partials make sure to add the checkbox as well since it is being validated as required by default. (see https://tinyurl.com/yyanm7eo)
+    - "!!! Added terms and conditions checkbox to signup form. If you manually modified the signup form partials make sure to add the checkbox as well since it is being validated as required by default. (see https://tinyurl.com/yyanm7eo)"
 1.5.0:
     - Added Services feature (e. g. extended warranty, on-site installation)
     - create_offline_mall_services.php
@@ -342,4 +342,6 @@
 1.11.26:
     - Added date and datetime Property field types
 1.11.27:
+    - Bugfix release
+1.11.28:
     - Bugfix release
