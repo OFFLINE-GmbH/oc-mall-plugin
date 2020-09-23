@@ -44,6 +44,7 @@ tabs:
             label: 'offline.mall::lang.common.logo'
             oc.commentPosition: ''
             mode: image
+            fileTypes: jpg,jpeg,bmp,png,webp,gif,svg
             imageWidth: '200'
             imageHeight: '200'
             useCaption: 0
