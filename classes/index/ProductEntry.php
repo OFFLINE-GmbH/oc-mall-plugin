@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Product;
+use Event;
 
 class ProductEntry implements Entry
 {
@@ -35,7 +36,13 @@ class ProductEntry implements Entry
 
         $data['sort_orders'] = $product->getSortOrders();
 
-        $this->data = $data;
+        $result = Event::fire('mall.index.extendProduct', [$product]);
+
+        if ($result && is_array($result)) {
+            $this->data = call_user_func_array('array_merge', array_filter($result)) + $data;
+        } else {
+            $this->data = $data;
+        }
     }
 
     public function data(): array

@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Variant;
+use Event;
 
 class VariantEntry implements Entry
 {
@@ -43,7 +44,13 @@ class VariantEntry implements Entry
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
         }
 
-        $this->data = $data;
+        $result = Event::fire('mall.index.extendVariant', [$product, $variant]);
+
+        if ($result && is_array($result)) {
+            $this->data = call_user_func_array('array_merge', array_filter($result)) + $data;
+        } else {
+            $this->data = $data;
+        }
     }
 
     public function data(): array
