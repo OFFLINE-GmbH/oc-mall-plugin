@@ -127,6 +127,7 @@ class Property extends Model
 //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
             'datetime'   => trans('offline.mall::lang.custom_field_options.datetime'),
             'date'       => trans('offline.mall::lang.custom_field_options.date'),
+            'switch'     => trans('offline.mall::lang.custom_field_options.switch'),
         ];
     }
 }
