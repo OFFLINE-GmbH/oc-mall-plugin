@@ -94,6 +94,8 @@ class PropertyFields extends FormWidgetBase
                 return $this->richeditor($property, $value);
             case 'image':
                 return $this->image($property, $value);
+            case 'switch':
+                return $this->switch($property, $value);
             case 'date':
                 return $this->datepicker($property, $value);
             case 'datetime':

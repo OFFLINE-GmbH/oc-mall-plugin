@@ -112,3 +112,12 @@ well as the related `Product` model.
 
 For a usage example see
 [Virtual Products -> Generate user specific product files](../digging-deeper/virtual-products.md#generate-user-specific-product-files)
+
+
+## Index
+
+### `mall.index.extendProduct` and `mall.index.extendVariant`
+
+This event can be used to add additional data to the index table.
+
+It receives the `Product` model (for Products) or the `Product` and `Variant` models (for Variants). You can return an array of additional data to be stored with the index entry.
