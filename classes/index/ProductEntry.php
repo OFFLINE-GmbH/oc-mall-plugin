@@ -38,8 +38,8 @@ class ProductEntry implements Entry
 
         $result = Event::fire('mall.index.extendProduct', [$product]);
 
-        if ($result && is_array($result)) {
-            $this->data = call_user_func_array('array_merge', array_filter($result)) + $data;
+        if ($result && is_array($result) && $filtered = array_filter($result)) {
+            $this->data = array_merge(...$filtered) + $data;
         } else {
             $this->data = $data;
         }
