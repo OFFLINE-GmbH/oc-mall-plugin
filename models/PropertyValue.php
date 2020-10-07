@@ -83,9 +83,7 @@ class PropertyValue extends Model
         }
 
         if ($type === 'checkbox') {
-            $key = (bool)$value ? 'checked' : 'unchecked';
-
-            return trans('offline.mall::lang.common.' . $key);
+            return (bool)$value;
         }
 
         if ($type === 'color') {
