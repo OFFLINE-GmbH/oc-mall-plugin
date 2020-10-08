@@ -347,3 +347,5 @@
     - Bugfix release
 1.11.29:
     - Bugfix release
+1.11.30:
+    - Fixed mall.index.extend event handling

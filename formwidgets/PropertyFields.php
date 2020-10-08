@@ -67,7 +67,7 @@ class PropertyFields extends FormWidgetBase
                 return $unknownIds->contains($property->id);
             });
 
-            $group->setRelation('properties', $properties);
+            $group->setRelation('properties', $properties->sortBy('sort_order'));
 
             return $group;
         });
