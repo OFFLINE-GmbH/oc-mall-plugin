@@ -41,6 +41,32 @@ trait Discounts
         if ($discount->max_number_of_usages !== null && $discount->number_of_usages >= $discount->max_number_of_usages) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.usage_limit_reached')]);
         }
+        
+        // check whether this user already applied the same code before and deny it if so
+        $user = \Auth::getUser();
+        $customer = $user->customer;
+        $orders = \OFFLINE\Mall\Models\Order
+                        ::where('customer_id', $customer->id)
+                        ->get(); // there might be away to search here directly for the promo code to avoid the following loop?
+        $collection = new \Illuminate\Database\Eloquent\Collection;
+        $collection = $orders->filter(function($order) use ($discount) {
+            if (! empty($order->discounts)) {
+                $discounts = $order->discounts;
+                foreach ($discounts as $appliedDiscount) {
+                    $appliedDiscount = $appliedDiscount['discount'];
+                    if ($appliedDiscount['trigger'] == 'code'
+                        && $discount->code == $appliedDiscount['code']) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+
+        if ($collection->count() > 0) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.expired') . ' You already used this code in a previous order.' ]);
+        }
+        
 
         $this->discounts()->save($discount);
     }
