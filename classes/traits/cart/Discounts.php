@@ -30,11 +30,9 @@ trait Discounts
         $previousOrderDiscounts = collect();
         $customer = optional(Auth::getUser())->customer;
         if (optional($customer)->orders) {
-            $previousOrderDiscounts = $customer->orders->map(
-                function ($order) {
-                    return array_get($order, 'discounts.0.discount.id');
-                }
-            );
+            $previousOrderDiscounts = $customer->orders->map(function ($order) {
+                return array_get($order, 'discounts.0.discount.id');
+            });
         }
 
         if ($this->discounts->contains($discount) || $previousOrderDiscounts->contains($discount->id)) {
