@@ -33,7 +33,18 @@ class GeneralSettings extends Model
             $cmsPages[$page->baseFileName] = $page->title;
         }
 
-        return $cmsPages;
+        return count($cmsPages) < 1
+            ? $this->allPages()
+            : $cmsPages;
+    }
+
+    protected function allPages()
+    {
+        return Page
+            ::listInTheme( Theme::getActiveTheme(), true)
+            ->mapWithKeys(function($page) {
+                return [$page->baseFileName => $page->title];
+            });
     }
 
     public function getProductPageOptions()
