@@ -349,3 +349,5 @@
     - Bugfix release
 1.11.30:
     - Fixed mall.index.extend event handling
+1.11.31:
+    - Fixed handling of checkbox properties, prevent discount codes from being applied multiple times by the same user
