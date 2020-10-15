@@ -370,6 +370,9 @@ class Variant extends Model
 
         $items = self
             ::published()
+			->whereHas('product',function($query) {
+					$query->where('offline_mall_products.published', 1);
+				})
             ->with('product')
             ->get()
             ->map(function (self $variant) use ($cmsPage, $page, $url) {
