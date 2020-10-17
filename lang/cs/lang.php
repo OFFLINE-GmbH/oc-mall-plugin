@@ -161,6 +161,8 @@
         'use_state_comment'          => 'Zákazník musí použít pole Stát/Země/Provincie během registrace',
         'group_search_results_by_product'                  => 'Skupinové hledání - výsledky produktů',
         'group_search_results_by_product_comment'          => 'Produkt zobrazit ve výsledcích hledání pouze jednou, nezobrazovat všechny varianty',
+        'shipping_selection_before_payment' => 'Select shipping method BEFORE payment during checkout',
+        'shipping_selection_before_payment_comment' => 'By default, during checkout, the user is first asked to select a payment method before selecting a shipping method; use this option to reverse this logic',
         'admin_email'                => 'Email správce',
         'admin_email_comment'        => 'Zprávy pro správce budou zasílány na tuto adresu',
         'base'                       => 'Základní nastavení',

@@ -9,6 +9,7 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\CustomerPaymentMethod;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
@@ -65,6 +66,12 @@ class PaymentMethodSelector extends MallComponent
      * @var Order|Cart
      */
     public $workingOnModel;
+    /**
+     * Backend setting whether shipping should be before payment.
+     *
+     * @var bool
+     */
+    public $shippingSelectionBeforePayment = false;
 
     /**
      * Component details.
@@ -118,6 +125,7 @@ class PaymentMethodSelector extends MallComponent
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('customerMethods', $this->getCustomerMethods());
         $this->setVar('activeMethod', $method);
+        $this->setVar('shippingSelectionBeforePayment', GeneralSettings::get('shipping_selection_before_payment', false));	// Needed by themes
 
         try {
             $paymentData = json_decode(decrypt(session()->get('mall.payment_method.data')), true);
@@ -284,7 +292,15 @@ class PaymentMethodSelector extends MallComponent
         // Just to prevent any data leakage we store payment information encrypted to the session.
         session()->put('mall.payment_method.data', encrypt(json_encode($data)));
 
-        $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
+		$shippingBeforePayment = GeneralSettings::get('shipping_selection_before_payment', false);
+		if ($shippingBeforePayment) 
+		{
+			$nextStep = 'confirm';
+		}
+		else 
+		{
+			$nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
+		}
 
         $url = $this->getStepUrl($nextStep, 'payment');
 

@@ -96,3 +96,10 @@ fields:
         type: switch
         default: 0
         comment: offline.mall::lang.general_settings.group_search_results_by_product_comment
+
+    shipping_selection_before_payment:
+        label: offline.mall::lang.general_settings.shipping_selection_before_payment
+        span: left
+        type: switch
+        default: 0
+        comment: offline.mall::lang.general_settings.shipping_selection_before_payment_comment
