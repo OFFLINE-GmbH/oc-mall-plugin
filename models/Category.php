@@ -52,6 +52,7 @@ class Category extends Model
         'meta_description',
         'meta_title',
         'description',
+        'description_short',
     ];
     public $implement = [
         '@RainLab.Translate.Behaviors.TranslatableModel',
@@ -64,6 +65,7 @@ class Category extends Model
         'name',
         'slug',
         'code',
+        'description_short',
         'description',
         'meta_title',
         'meta_description',
@@ -71,6 +73,7 @@ class Category extends Model
         'inherit_property_groups',
         'inherit_review_categories',
         'sort_order',
+        'google_product_category_id',
     ];
     public $casts = [
         'inherit_property_groups'   => 'boolean',
@@ -210,10 +213,10 @@ class Category extends Model
     {
         $items = $this->id ? Category::withoutSelf()->get() : Category::getAll();
 
-        return array_merge([
-            // null key for "no parent"
-            null => '(' . trans('offline.mall::lang.category.no_parent') . ')',
-        ], $items->listsNested('name', 'id'));
+        return [
+                // null key for "no parent"
+                null => '(' . trans('offline.mall::lang.category.no_parent') . ')',
+            ] + $items->listsNested('name', 'id');
     }
 
     /**

@@ -23,6 +23,15 @@ class MySQL implements Index
 {
     const CACHE_KEY = 'offline_mall.mysql.index.exists';
 
+    /**
+     * Type casts for index columns.
+     * @var array
+     */
+    public $columnCasts = [
+        'prices'      => 'unsigned',
+        'sort_orders' => 'unsigned',
+    ];
+
     public function __construct()
     {
         $this->create('');
@@ -256,9 +265,15 @@ class MySQL implements Index
             $field = $parts[0];
             array_shift($parts);
             $nested = implode('.', $parts);
-            $db->orderByRaw('JSON_EXTRACT(' . \DB::raw($field) . ', ?) ' . $order->direction(),
-                ['$.' . '"' . $nested . '"']
-            );
+
+            // Apply the right cast for this value. This makes sure, that prices are sorted as floats, not as strings.
+            if (isset($this->columnCasts[$field])) {
+                $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', DB::raw($field),  $this->columnCasts[$field], $order->direction());
+            } else {
+                $orderBy = sprintf('JSON_EXTRACT(%s, ?) %s', DB::raw($field), $order->direction());
+            }
+
+            $db->orderByRaw($orderBy, ['$.' . '"' . $nested . '"']);
         } else {
             $db->orderBy($order->property(), $order->direction());
         }

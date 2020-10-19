@@ -13,6 +13,7 @@ use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
 use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
 use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
+use OFFLINE\Mall\Classes\Traits\ShippingMethods;
 use Session;
 
 /**
@@ -25,6 +26,7 @@ class Cart extends Model
     use CartSession;
     use CartActions;
     use Discounts;
+    use ShippingMethods;
 
     protected $dates = ['deleted_at'];
     protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
@@ -73,12 +75,6 @@ class Cart extends Model
         });
     }
 
-    public function setShippingMethod(?ShippingMethod $method)
-    {
-        $this->shipping_method_id = $method ? $method->id : null;
-        $this->save();
-    }
-
     public function setPaymentMethod($method)
     {
         if ($method instanceof PaymentMethod) {
@@ -119,7 +115,7 @@ class Cart extends Model
      */
     public function getIsVirtualAttribute(): bool
     {
-        return $this->products->every(function(CartProduct $product) {
+        return $this->products->count() > 0 && $this->products->every(function (CartProduct $product) {
             return $product->data->is_virtual;
         });
     }
@@ -198,28 +194,6 @@ class Cart extends Model
     }
 
     /**
-     * Makes sure that the selected shipping method
-     * can still be applied to this cart.
-     */
-    public function validateShippingMethod()
-    {
-        if ( ! $this->shipping_method_id) {
-            return true;
-        }
-
-        $available = ShippingMethod::getAvailableByCart($this);
-        if ($available->pluck('id')->contains($this->shipping_method_id)) {
-            return true;
-        }
-
-        if (count($available) > 0) {
-            return $this->setShippingMethod($available->first());
-        }
-
-        return $this->setShippingMethod(null);
-    }
-
-    /**
      * Cleanup of old data using OFFLINE.GDPR.
      *
      * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
@@ -240,7 +214,7 @@ class Cart extends Model
     }
 
     /**
-     * Enforce a fixed shipping price for this cart.
+     * Enforce a fixed shipping price for a shipping method.
      *
      * The provided price will override the default price for the
      * current shipping method.
@@ -248,16 +222,26 @@ class Cart extends Model
      * This is useful if you need a dynamic way to set shipping costs
      * based on an arbitrary other value.
      *
-     * @example $cart->forceShippingPrice(['EUR' => 200], 'Fee Zone 2');
-     *
+     * @param int    $id
      * @param array  $price
      * @param string $name
+     *
+     * @example $cart->forceShippingPrice(1, ['EUR' => 200], 'Fee Zone 2');
+     *
      */
-    public function forceShippingPrice(array $price, string $name = '')
+    public function forceShippingPrice(int $id, array $price, string $name = '')
     {
-        Session::put('mall.shipping.enforced.price', $price);
+        Session::put('mall.shipping.enforced.' . $id . '.price', $price);
         if ($name) {
-            Session::put('mall.shipping.enforced.name', $name);
+            Session::put('mall.shipping.enforced.' . $id . '.name', $name);
         }
+    }
+
+    /**
+     * Undo an enforced shipping price.
+     */
+    public function forgetForcedShippingPrice()
+    {
+        Session::forget('mall.shipping.enforced');
     }
 }

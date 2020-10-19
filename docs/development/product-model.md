@@ -30,6 +30,25 @@ To get the value of a specific property the `getPropertyValue` method can be use
 ```php
 // Returns the value of Property ID 4
 $model->getPropertyValue(4);
+// Returns the value of the Property with the "size" slug
+$model->getPropertyValueBySlug('size');
+// Returns the value of the Property with the "Size" name
+$model->getPropertyValueByName('size');
+```
+
+## Grouped values
+
+You can access all property values grouped by their property value group by using the `grouped_properties` 
+accessor:
+
+```twig
+{% for entry in product.grouped_properties %}
+    <h2>{{ entry.group.name }}</h2>
+    {% for value in entry.values %}
+        <strong>{{ value.property.name }}</strong><br>
+        {{ value.display_value | raw }} {{ value.property.unit }}
+    {% endfor %}
+{% endfor %}
 ```
 
 ## Custom fields

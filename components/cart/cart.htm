@@ -6,3 +6,7 @@
         {% partial __SELF__ ~ '::discountapplier' %}
     {% endif %}
 {% endif %}
+
+{% if __SELF__.showProceedToCheckoutButton and cart.products.count > 0 %}
+    {% partial __SELF__ ~ '::proceedtocheckout' %}
+{% endif %}

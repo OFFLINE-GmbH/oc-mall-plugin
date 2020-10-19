@@ -41,17 +41,35 @@ class Cart extends MallComponent
      */
     public $showDiscountApplier = true;
     /**
+     * Show the shipping information in the cart.
+     *
+     * @var bool
+     */
+    public $showShipping = true;
+    /**
      * Display a tax summary at the end of the cart.
      *
      * @var bool
      */
     public $showTaxes = true;
     /**
+     * Display a proceed to checkout button.
+     *
+     * @var bool
+     */
+    public $showProceedToCheckoutButton = false;
+    /**
      * The name of the product detail page.
      *
      * @var  string
      */
     public $productPage;
+    /**
+     * The name of the checkout page.
+     *
+     * @var  string
+     */
+    public $checkoutPage;
 
     /**
      * Component details.
@@ -83,6 +101,16 @@ class Cart extends MallComponent
                 'type'    => 'checkbox',
                 'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.name',
                 'default' => 1,
+            ],
+            'showShipping' => [
+                'type'    => 'checkbox',
+                'title'   => 'offline.mall::lang.components.cart.properties.showShipping.title',
+                'default' => 1,
+            ],
+            'showProceedToCheckoutButton' => [
+                'type'    => 'checkbox',
+                'title'   => 'offline.mall::lang.components.cart.properties.showProceedToCheckoutButton.title',
+                'default' => 0,
             ],
         ];
     }
@@ -125,8 +153,11 @@ class Cart extends MallComponent
 
         $this->setVar('cart', $cart);
         $this->setVar('productPage', GeneralSettings::get('product_page'));
+        $this->setVar('checkoutPage', GeneralSettings::get('checkout_page'));
         $this->setVar('showDiscountApplier', $this->property('showDiscountApplier'));
+        $this->setVar('showShipping', $this->property('showShipping'));
         $this->setVar('showTaxes', $this->property('showTaxes'));
+        $this->setVar('showProceedToCheckoutButton', $this->property('showProceedToCheckoutButton'));
     }
 
     /**
@@ -172,6 +203,8 @@ class Cart extends MallComponent
         return [
             'item'     => $this->dataLayerArray($product->product, $product->variant),
             'quantity' => $product->quantity,
+            'new_items_count' => optional($cart->products)->count() ?? 0,
+            'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ];
     }
 

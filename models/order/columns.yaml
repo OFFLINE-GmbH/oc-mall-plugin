@@ -15,13 +15,20 @@ columns:
         type: text
         searchable: true
         sortable: true
+        invisible: true
     customer:
         label: 'offline.mall::lang.order.customer'
-        path: $/offline/mall/models/order/_customer.htm
         relation: customer
-        type: partial
+        type: text
         searchable: true
         sortable: false
+        select: concat(firstname, ' ', lastname)
+    email:
+        label: 'offline.mall::lang.order.email'
+        type: partial
+        path: $/offline/mall/models/order/_email.htm
+        sortable: false
+        searchable: false
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime
@@ -36,7 +43,7 @@ columns:
         label: 'offline.mall::lang.order.status'
         type: partial
         path: $/offline/mall/models/order/_order_state.htm
-        sortable: true
+        sortable: false
         searchable: false
     payment_state:
         label: 'offline.mall::lang.order.payment_status'

@@ -1,9 +1,17 @@
 <tr class="mall-cart__grand-total">
     <td></td>
     <td colspan="3">
-        {{ 'offline.mall::frontend.grand_total' | trans }}
+        {% if __SELF__.showShipping %}
+            {{ 'offline.mall::frontend.grand_total' | trans }}
+        {% else %}
+            {{ 'offline.mall::frontend.total' | trans }}
+        {% endif %}
     </td>
     <td class="text-right">
-        {{ totals.totalPostTaxes | money }}
+        {% if __SELF__.showShipping %}
+            {{ totals.totalPostTaxes | money }}
+        {% else %}
+            {{ totals.productPostTaxes | money }}
+        {% endif %}
     </td>
 </tr>

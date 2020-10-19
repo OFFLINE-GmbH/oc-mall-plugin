@@ -15,6 +15,16 @@ fields:
             field: name
             type: slug
 tabs:
+    lazy:
+#        - 'offline.mall::lang.product.description'
+#        - 'offline.mall::lang.product.details'
+        - 'offline.mall::lang.common.attachments'
+        - 'offline.mall::lang.common.taxes'
+#        - 'offline.mall::lang.common.shipping'
+        - 'offline.mall::lang.common.cart'
+        - 'offline.mall::lang.common.accessories'
+#        - 'offline.mall::lang.common.seo'
+        - 'offline.mall::lang.common.reviews'
     fields:
         published:
             label: 'offline.mall::lang.product.published'
@@ -123,9 +133,10 @@ tabs:
             dependsOn: categories
         description_short:
             label: 'offline.mall::lang.product.description_short'
+            size: small
             oc.commentPosition: ''
             span: left
-            type: text
+            type: textarea
             tab: 'offline.mall::lang.product.description'
         user_defined_id:
             label: 'offline.mall::lang.product.user_defined_id'
@@ -204,7 +215,7 @@ tabs:
             span: full
             type: mall.propertyfields
             tab: 'offline.mall::lang.common.properties'
-            dependsOn: categories
+            dependsOn: [categories, inventory_management_method]
         price_includes_tax:
             label: 'offline.mall::lang.product.price_includes_tax'
             span: auto
@@ -279,7 +290,25 @@ tabs:
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''
-            span: left
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        height:
+            label: 'offline.mall::lang.product.height'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        width:
+            label: 'offline.mall::lang.product.width'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        length:
+            label: 'offline.mall::lang.product.length'
+            oc.commentPosition: ''
+            span: auto
             type: number
             tab: 'offline.mall::lang.common.shipping'
         stackable:
@@ -350,3 +379,4 @@ tabs:
             type: partial
             path: reviews
             tab: 'offline.mall::lang.common.reviews'
+            permissions: 'offline.mall.manage_reviews'

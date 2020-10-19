@@ -17,6 +17,16 @@ discount code directly from the cart overview.
 Display a tax summary at the end of the cart. If the user has not yet specified a shipping address this summary may 
 not reflect the effective tax total if there are taxes with country restrictions.
 
+### `showShipping` (bool)
+
+Defaults to `true`. Include the shipping method/cost in the cart. Set this to false
+if you don't want to include any shipping information.
+
+### `showProceedToCheckoutButton` (bool)
+
+Defaults to `false`. Include a `proceed to checkout` button below the cart
+table.
+
 
 ## Example implementations
 
@@ -38,30 +48,34 @@ automatically when a product is added or removed from the cart.
 
 ```js
 $(function () {
-    var nbItems = '{{ cartButton.cart.products.count }}';
     var $count = $('.js-count');
     $.subscribe('mall.cart.productAdded', function (e, data) {
         // You have access to different values here.
-        // console.log(data.item);
-        // console.log(data.quantity);
-        $count.text(++nbItems);
+        // console.log(data.item); // All item data
+        // console.log(data.quantity); // Added quantity
+        // console.log(data.new_items_count); // New total items in cart
+        // console.log(data.new_items_quantity); // New total quantity of items in cart
+        $count.text(data.new_items_count);
+        // /* or */ $count.text(data.new_items_quantity);
     });
     $.subscribe('mall.cart.productRemoved', function (e, data) {
         // You have access to different values here.
-        // console.log(data.item);
-        // console.log(data.quantity);
-        nbItems--;
-        if (nbItems < 0) nbItems = 0;
-        $count.text(nbItems);
+        // console.log(data.item); // All item data
+        // console.log(data.quantity); // Removed quantity
+        // console.log(data.new_items_count); // New total items in cart
+        // console.log(data.new_items_quantity); // New total quantity of items in cart
+        $count.text(data.new_items_count);
+        // /* or */ $count.text(data.new_items_quantity);
     });
 });
 ```
 
-### Display the cart table without tax summary
+### Display the cart table without tax summary with a proceed to checkout button
 
 ```ini
 [cart]
 showTaxes = 0
+showProceedToCheckoutButton = 1
 ```
 
 ### Display the cart table with tax summary but don't let the user apply a discount 

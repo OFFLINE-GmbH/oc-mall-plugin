@@ -8,6 +8,10 @@ The oc-mall plugin emits the following events:
 
 An order is about to be created. This event receives the `$cart` model that is about to be converted into an `Order` model.
 
+### `mall.order.afterCreate`
+
+An order has been created. This event receives the `$order` model and `$cart` model that was used to create the order.
+
 ### `mall.order.state.changed`
 
 An order's `OrderState` has changed. This event receives the modified `$order` as a single argument.
@@ -54,6 +58,12 @@ This event is emitted when a product has been added to the cart. It receives the
 This event is emitted when a product has been removed from the cart. It receives the following arguments:
 
 * `CartProduct` model that was removed from the cart 
+
+### `mall.cart.product.updating`
+
+This event is emitted before a cart product is being updated. It receives the following arguments:
+
+* `CartProduct` model that was updated in the cart 
 
 ### `mall.cart.product.updated`
 
@@ -102,3 +112,12 @@ well as the related `Product` model.
 
 For a usage example see
 [Virtual Products -> Generate user specific product files](../digging-deeper/virtual-products.md#generate-user-specific-product-files)
+
+
+## Index
+
+### `mall.index.extendProduct` and `mall.index.extendVariant`
+
+This event can be used to add additional data to the index table.
+
+It receives the `Product` model (for Products) or the `Product` and `Variant` models (for Variants). You can return an array of additional data to be stored with the index entry.

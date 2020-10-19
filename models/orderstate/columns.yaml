@@ -1,4 +1,10 @@
 columns:
+    sort_order:
+        label: 'offline.mall::lang.common.sort_order'
+        type: number
+        searchable: false
+        sortable: true
+        invisible: true
     name:
         label: 'offline.mall::lang.order_states.name'
         type: partial
@@ -21,8 +27,4 @@ columns:
     deleted_at:
         label: 'offline.mall::lang.common.deleted_at'
         type: datetime
-        invisible: true
-    sort_order:
-        label: 'offline.mall::lang.common.sort_order'
-        type: number
         invisible: true

@@ -1,9 +1,13 @@
-<tr class="mall-cart__total">
-    <td></td>
-    <td colspan="3">
-        {{ 'offline.mall::frontend.total' | trans }}
-    </td>
-    <td class="text-right">
-        {{ totals.productPostTaxes | money }}
-    </td>
-</tr>
+{% if __SELF__.showShipping %}
+    {# if the showShipping property is set to false, the grandtotal row will equal this row #}
+    {# this is why we only need to display this row if the showShipping property is set to true #}
+    <tr class="mall-cart__total">
+        <td></td>
+        <td colspan="3">
+            {{ 'offline.mall::frontend.total' | trans }}
+        </td>
+        <td class="text-right">
+            {{ totals.productPostTaxes | money }}
+        </td>
+    </tr>
+{% endif %}

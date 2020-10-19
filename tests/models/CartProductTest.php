@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Tests\Models;
 
+use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\CustomField;
@@ -19,10 +20,13 @@ class CartProductTest extends PluginTestCase
     public $variant;
     public $cart;
     public $customFieldValueA;
+    protected $address;
 
     public function setUp()
     {
         parent::setUp();
+
+        $this->address = Address::first();
 
         $product                   = Product::first();
         $product->meta_description = 'Test';
@@ -219,6 +223,7 @@ class CartProductTest extends PluginTestCase
     protected function getCart()
     {
         $cart = new Cart();
+        $cart->shipping_address_id = $this->address->id;
         $cart->save();
 
         return $cart;

@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use DB;
 use Event;
@@ -13,6 +14,7 @@ use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
+use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Utils\Money;
 use RuntimeException;
 use Session;
@@ -29,6 +31,7 @@ class Order extends Model
         useCurrency as fallbackCurrency;
     }
     use HashIds;
+    use PDFMaker;
 
     protected $dates = ['deleted_at', 'shipped_at', 'paid_at'];
     public $rules = [
@@ -96,7 +99,9 @@ class Order extends Model
             }
             // If the order became paid, distribute all virtual products.
             if ($this->payment_state === PaidState::class && $this->paid_at === null) {
-                Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
+                if ($this->virtual_products->count() > 0) {
+                    Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
+                }
                 $this->paid_at = Carbon::today();
                 $this->save();
             }
@@ -186,6 +191,8 @@ class Order extends Model
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
+            
+            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart
                 ->loadMissing(['products.product.brand'])
@@ -212,6 +219,22 @@ class Order extends Model
         Event::fire('mall.order.created', [$order]);
 
         return $order;
+    }
+
+    /**
+     * Returns the pdf invoice for this order.
+     * If no invoice is available false is returned.
+     *
+     * @return PDF|bool
+     * @throws \Cms\Classes\CmsException
+     */
+    public function getPDFInvoice()
+    {
+        if ($this->payment_method->pdf_partial) {
+            return $this->makePDFFromDir($this->payment_method->pdf_partial, ['order' => $this]);
+        }
+
+        return false;
     }
 
     /**
@@ -278,7 +301,6 @@ class Order extends Model
     public function getTotalInCurrencyAttribute()
     {
         $total = (int)$this->getOriginal('total_post_taxes');
-        $total *= (float)$this->currency['rate'];
 
         return app(Money::class)->round($total, $this->currency['decimals']);
     }

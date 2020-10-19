@@ -97,7 +97,7 @@ class PropertyGroup extends Model
     public function getDisplayNameAttribute()
     {
         if ($this->getOriginal('display_name')) {
-            return $this->getOriginal('display_name');
+            return $this->getAttributeTranslated('display_name');
         }
 
         return $this->name;

@@ -7,6 +7,7 @@ use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * The PaymentResult contains the result of a payment attempt.
@@ -25,7 +26,7 @@ class PaymentResult
     public $redirect = false;
     /**
      * Use this response as redirect.
-     * @var \Illuminate\Http\RedirectResponse
+     * @var \Illuminate\Http\Response
      */
     public $redirectResponse;
     /**
@@ -187,6 +188,21 @@ class PaymentResult
     {
         $this->redirect    = true;
         $this->redirectUrl = $url;
+
+        return $this;
+    }
+
+    /**
+     * The payment gateway returned a re-usable Symfony response.
+     *
+     * @param Response $response
+     *
+     * @return PaymentResult
+     */
+    public function redirectResponse(Response $response): self
+    {
+        $this->redirect         = true;
+        $this->redirectResponse = $response;
 
         return $this;
     }

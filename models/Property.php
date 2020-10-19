@@ -8,7 +8,6 @@ use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 
 class Property extends Model
 {
@@ -16,13 +15,12 @@ class Property extends Model
     use SoftDelete;
     use HashIds;
     use Sluggable;
-    use TranslatableRelation;
 
     protected $dates = ['deleted_at'];
     public $jsonable = ['options'];
     public $rules = [
         'name' => 'required',
-        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer,richeditor',
+        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer,richeditor,switch,datetime,date',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -57,8 +55,6 @@ class Property extends Model
 
     public function afterSave()
     {
-        $this->setTranslatableFields();
-
         if ($this->pivot && ! $this->pivot->use_for_variants) {
             $categories = $this->property_groups->flatMap->getRelatedCategories();
 
@@ -99,7 +95,7 @@ class Property extends Model
     public static function getValuesForCategory($categories)
     {
         $raw    = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
-        $values = PropertyValue::hydrate($raw->toArray())->load('property');
+        $values = PropertyValue::hydrate($raw->toArray())->load(['property.translations', 'translations']);
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
             $firstProp = $values->first()->property;
@@ -126,9 +122,12 @@ class Property extends Model
             'textarea'   => trans('offline.mall::lang.custom_field_options.textarea'),
             'richeditor' => trans('offline.mall::lang.custom_field_options.richeditor'),
             'dropdown'   => trans('offline.mall::lang.custom_field_options.dropdown'),
-//            'checkbox' => trans('offline.mall::lang.custom_field_options.checkbox'),
+            'checkbox'   => trans('offline.mall::lang.custom_field_options.checkbox'),
             'color'      => trans('offline.mall::lang.custom_field_options.color'),
 //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
+            'datetime'   => trans('offline.mall::lang.custom_field_options.datetime'),
+            'date'       => trans('offline.mall::lang.custom_field_options.date'),
+            'switch'     => trans('offline.mall::lang.custom_field_options.switch'),
         ];
     }
 }

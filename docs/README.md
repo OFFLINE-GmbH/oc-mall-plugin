@@ -19,7 +19,7 @@ You can find a demo of this plugin on [mall.offline.swiss](https://mall.offline.
 
 ## Requirements
 
-* PHP7.1+
+* PHP7.2+
 * October Build 444+
 * For best performance use MySQL 5.7+ or MariaDB 10.2+
 

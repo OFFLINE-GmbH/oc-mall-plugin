@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Product;
+use Event;
 
 class ProductEntry implements Entry
 {
@@ -35,7 +36,13 @@ class ProductEntry implements Entry
 
         $data['sort_orders'] = $product->getSortOrders();
 
-        $this->data = $data;
+        $result = Event::fire('mall.index.extendProduct', [$product]);
+
+        if ($result && is_array($result) && $filtered = array_filter($result)) {
+            $this->data = array_merge(...$filtered) + $data;
+        } else {
+            $this->data = $data;
+        }
     }
 
     public function data(): array
@@ -52,8 +59,10 @@ class ProductEntry implements Entry
 
     protected function mapPrices(Product $product): Collection
     {
-        return $product->prices->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price->integer];
+        return $product->withForcedPriceInheritance(function() use ($product) {
+            return Currency::getAll()->mapWithKeys(function ($currency) use ($product) {
+                return [$currency->code => $product->price($currency)->integer];
+            });
         });
     }
 

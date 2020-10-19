@@ -1,7 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
-use Model;
 use Event;
+use Model;
 use October\Rain\Database\Traits\Validation;
 use RainLab\User\Facades\Auth;
 
@@ -14,11 +14,11 @@ class Review extends Model
 
     public $table = 'offline_mall_reviews';
     public $rules = [
-        'title'       => 'required_with:description|max:190',
+        'title' => 'required_with:description|max:190',
         'description' => 'max:500',
-        'rating'      => 'required|numeric|between:1,5',
-        'product_id'  => 'required|exists:offline_mall_products,id',
-        'variant_id'  => 'nullable|exists:offline_mall_product_variants,id',
+        'rating' => 'required|numeric|between:1,5',
+        'product_id' => 'required|exists:offline_mall_products,id',
+        'variant_id' => 'nullable|exists:offline_mall_product_variants,id',
         'customer_id' => 'nullable|exists:offline_mall_customers,id',
     ];
     public $fillable = [
@@ -36,8 +36,8 @@ class Review extends Model
         'rating' => 'integer',
     ];
     public $belongsTo = [
-        'product'  => Product::class,
-        'variant'  => Variant::class,
+        'product' => Product::class,
+        'variant' => Variant::class,
         'customer' => Customer::class,
     ];
     public $hasMany = [
@@ -96,7 +96,7 @@ class Review extends Model
             });
 
         $count = $baseQuery->count();
-        $sum   = $baseQuery->sum('rating');
+        $sum = $baseQuery->sum('rating');
 
         $target->reviews_rating = round($sum / $count, 2);
         $target->save();
@@ -112,7 +112,7 @@ class Review extends Model
         $user = Auth::getUser();
 
         $userId = $user->id ?? 0;
-        $data   = implode('-', [request()->ip(), request()->userAgent(), $userId]);
+        $data = implode('-', [request()->ip(), request()->userAgent(), $userId]);
 
         return hash('sha256', $data);
     }
@@ -120,6 +120,13 @@ class Review extends Model
     public function afterDelete()
     {
         $this->category_reviews->each->delete();
+    }
+
+    public function filterFields($fields)
+    {
+        if ($this->approved_at !== null && isset($fields->approve_now)) {
+            $fields->approve_now->hidden = true;
+        }
     }
 
     public function getCustomerNameAttribute()

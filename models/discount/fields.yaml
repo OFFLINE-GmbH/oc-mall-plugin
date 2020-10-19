@@ -4,6 +4,11 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: text
+    valid_from:
+        label: 'offline.mall::lang.discounts.valid_from'
+        mode: date
+        span: auto
+        type: datepicker
     expires:
         label: 'offline.mall::lang.discounts.expires'
         oc.commentPosition: ''
@@ -79,17 +84,28 @@ fields:
             field: type
             condition: value[shipping]
         type: text
-    product_id:
+    product:
         label: 'offline.mall::lang.common.product'
         oc.commentPosition: ''
-        nameFrom: name
-        descriptionFrom: description
+        descriptionFrom: user_defined_id
         span: auto
-        type: dropdown
+        type: recordfinder
+        list: ~/plugins/offline/mall/models/product/columns.yaml
+        nameFrom: name
         trigger:
             action: show
             field: trigger
             condition: value[product]
+    customer_group:
+        label: 'offline.mall::lang.common.customer_group'
+        span: auto
+        type: recordfinder
+        list: ~/plugins/offline/mall/models/customergroup/columns.yaml
+        nameFrom: name
+        trigger:
+            action: show
+            field: trigger
+            condition: value[customer_group]
     shipping_guaranteed_days_to_delivery:
         label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
         oc.commentPosition: ''

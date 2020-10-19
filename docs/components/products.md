@@ -136,13 +136,20 @@ paginate = 0
 sort = "random"
 ==
 use OFFLINE\Mall\Models\Category;
+
 function onStart() {
     // Fetch the category from the product component.
-    $category = Category::find(optional($this->page->components['product']->item)->category_id);
-    if ($category) {
-        // If a category is available, use it for the products component.
-        $this->page->components['products']->category = $category;
+    $productComponent = $this->findComponentByName('product');
+    $item = optional($productComponent)->item;
+    if (!$item) {
+        return;
     }
+    $category = optional($item->categories)->first();
+    if (!$category) {
+        return;
+    }
+    // If a category is available, use it for the products component.
+    $this->findComponentByName('relatedProducts')->category = $category;
 }
 ==
 {% component 'product' %}
@@ -162,7 +169,7 @@ Add the following `a` tag to your item partial `/plugins/offline/components/prod
     <a class="mall-products-item__cart-button"
        href="javascript:;"
        data-request="{{ __SELF__ }}::onAddToCart"
-       data-request-success="$.publish('mall.cart.productAdded')"
+       data-request-success="data.added && $.publish('mall.cart.productAdded', data)" 
        data-request-data="product: '{{ item.productHashId }}', variant: '{{ item.variantHashId }}'"
        data-request-flash
     >

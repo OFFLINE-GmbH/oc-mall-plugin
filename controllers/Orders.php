@@ -31,6 +31,11 @@ class Orders extends Controller
         BackendMenu::setContext('OFFLINE.Mall', 'mall-orders', 'mall-orders');
     }
 
+    public function listExtendQuery($query)
+    {
+        $query->with('customer.user');
+    }
+
     public function index()
     {
         parent::index();
@@ -129,6 +134,19 @@ class Orders extends Controller
         $data = ['invoice_number' => $invoiceNumber];
 
         $this->updateOrder($data);
+    }
+
+    /**
+     * Download a PDF invoice.
+     *
+     * @return mixed
+     */
+    public function invoice()
+    {
+        $id    = $this->params[0];
+        $order = Order::with(['customer', 'products'])->findOrFail($id);
+
+        return $order->getPDFInvoice()->stream(sprintf('mall-order-%s.pdf', $id));
     }
 
     public function onDelete($recordId = null)

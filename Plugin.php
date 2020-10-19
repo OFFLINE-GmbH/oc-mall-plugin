@@ -19,7 +19,7 @@ use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.User', 'RainLab.Location'];
+    public $require = ['RainLab.User', 'RainLab.Location', 'RainLab.Translate'];
 
     use BootEvents;
     use BootExtensions;
@@ -31,6 +31,13 @@ class Plugin extends PluginBase
     use BootTwig;
     use BootRelations;
 
+    public function __construct($app)
+    {
+        parent::__construct($app);
+        // The morph map has to be registered in the constructor so it is available
+        // when plugin migrations are run.
+        $this->registerRelations();
+    }
 
     public function register()
     {
@@ -48,8 +55,6 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('offline.mall.reindex', ReindexProducts::class);
         $this->registerConsoleCommand('offline.mall.system-check', SystemCheck::class);
         $this->registerConsoleCommand('offline.mall.initialize', Initialize::class);
-
-        $this->registerRelations();
 
         View::share('app_url', config('app.url'));
     }

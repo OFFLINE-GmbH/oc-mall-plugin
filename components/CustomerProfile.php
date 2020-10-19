@@ -87,6 +87,8 @@ class CustomerProfile extends MallComponent
         DB::transaction(function () use ($data) {
             $this->user->customer->firstname = $data['firstname'];
             $this->user->customer->lastname  = $data['lastname'];
+            $this->user->name                = $data['firstname'];
+            $this->user->surname             = $data['lastname'];
             $this->user->email               = $data['email'];
             if ($data['password']) {
                 $this->user->password              = $data['password'];

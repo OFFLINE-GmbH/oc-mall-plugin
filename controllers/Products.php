@@ -4,11 +4,11 @@ use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
 use BackendMenu;
 use DB;
 use Event;
 use Flash;
-use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
@@ -19,8 +19,7 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductFile;
 use OFFLINE\Mall\Models\ProductPrice;
-use OFFLINE\Mall\Models\Property;
-use OFFLINE\Mall\Models\PropertyValue;
+use OFFLINE\Mall\Models\Review;
 
 class Products extends Controller
 {
@@ -34,6 +33,7 @@ class Products extends Controller
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
     public $relationConfig = 'config_relation.yaml';
+    public $productPriceTableConfig = 'config_table.yaml';
     public $requiredPermissions = [
         'offline.mall.manage_products',
     ];
@@ -54,7 +54,7 @@ class Products extends Controller
             // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
 
-            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER'), 'PriceTable')) {
+            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER',''), 'PriceTable')) {
                 $this->preparePriceTable();
             }
         }
@@ -150,49 +150,7 @@ class Products extends Controller
 
     public function formAfterUpdate(Product $model)
     {
-        $values = array_wrap(post('PropertyValues', []));
-        if (count($values) < 1) {
-            PropertyValue::where('product_id', $model->id)->whereNull('variant_id')->delete();
-        }
-
-        $properties = Property::whereIn('id', array_keys($values))->get();
-
-        $propertyValues = PropertyValue::where('product_id', $model->id)->whereNull('variant_id')->get();
-
-        foreach ($values as $id => $value) {
-            $pv = $propertyValues->where('property_id', $id)->first()
-                ?? new PropertyValue([
-                    'product_id'  => $model->id,
-                    'property_id' => $id,
-                ]);
-
-            $pv->value = $value;
-
-            // If the value became empty delete it.
-            if (($value === null || $value === '') && $pv->exists) {
-                $pv->delete();
-            } else {
-                $pv->save();
-            }
-
-            // Transfer any deferred media
-            $property = $properties->find($id);
-            if ($property->type === 'image') {
-                $media = DeferredBinding::where('master_type', PropertyValue::class)
-                                        ->where('master_field', 'image')
-                                        ->where('session_key', post('_session_key'))
-                                        ->get();
-
-                foreach ($media as $m) {
-                    $slave                  = $m->slave_type::find($m->slave_id);
-                    $slave->field           = 'image';
-                    $slave->attachment_type = PropertyValue::class;
-                    $slave->attachment_id   = $pv->id;
-                    $slave->save();
-                    $m->delete();
-                }
-            }
-        }
+        $model->handlePropertyValueUpdates();
     }
 
     public function onCreateOption()
@@ -231,6 +189,19 @@ class Products extends Controller
         $this->vars['type']  = post('type');
 
         return ['#optionList' => $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm')];
+    }
+
+    public function onApproveReview()
+    {
+        Review::findOrFail(post('id'))->approve();
+
+        Flash::success(trans('offline.mall::lang.reviews.approved'));
+
+        $this->initRelation(Product::findOrFail($this->params[0]), 'reviews');
+
+        return [
+            '#Products-update-RelationController-reviews-view' => $this->relationRenderView('reviews'),
+        ];
     }
 
     protected function getCustomFieldModel()

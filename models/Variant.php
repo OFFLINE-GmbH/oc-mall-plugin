@@ -15,8 +15,8 @@ use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
-use OFFLINE\Mall\Classes\Traits\TranslatableRelation;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
+use RainLab\Translate\Models\Locale;
 use System\Models\File;
 
 class Variant extends Model
@@ -32,7 +32,6 @@ class Variant extends Model
     use ProductPriceAccessors;
     use PropertyValues;
     use StockAndQuantity;
-    use TranslatableRelation;
 
     const MORPH_KEY = 'mall.variant';
 
@@ -54,12 +53,18 @@ class Variant extends Model
         'stock'                        => 'integer',
         'sales_count'                  => 'integer',
         'weight'                       => 'integer',
+        'height'                       => 'integer',
+        'length'                       => 'integer',
+        'width'                        => 'integer',
     ];
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required',
         'stock'                        => 'required|integer',
         'weight'                       => 'nullable|integer',
+        'height'                       => 'nullable|integer',
+        'length'                       => 'nullable|integer',
+        'width'                        => 'nullable|integer',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
     ];
@@ -68,15 +73,16 @@ class Variant extends Model
         'downloads'   => File::class,
     ];
     public $belongsTo = [
-        'product'      => Product::class,
-        'cart_product' => CartProduct::class,
-        'image_sets'   => [ImageSet::class, 'key' => 'image_set_id'],
+        'product'    => Product::class,
+        'image_sets' => [ImageSet::class, 'key' => 'image_set_id'],
     ];
     public $hasMany = [
         'prices'                  => ProductPrice::class,
         'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
         'reviews'                 => [Review::class],
-        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
+        'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
+        'cart_products'           => CartProduct::class,
+        'order_products'          => OrderProduct::class,
         'product_property_values' => [
             PropertyValue::class,
             'key'      => 'product_id',
@@ -96,52 +102,79 @@ class Variant extends Model
         'name',
         'published',
         'weight',
+        'length',
+        'width',
+        'height',
         'allow_out_of_stock_purchases',
         'mpn',
         'gtin',
     ];
 
-    public static function boot()
+    public function afterSave()
     {
-        parent::boot();
-        static::saved(function (Variant $variant) {
-            if ( ! $variant->isBackendRelationUpdate()) {
-                return;
+        if ( ! $this->isBackendRelationUpdate()) {
+            return;
+        }
+
+        if ($this->image_set_id === null) {
+            $this->createImageSetFromTempImages();
+        }
+
+        $this->handlePropertyValueUpdates();
+    }
+
+    /**
+     * Handle the form data form the property value form.
+     */
+    protected function handlePropertyValueUpdates()
+    {
+        $locales = Locale::isEnabled()->get();
+
+        $formData = array_wrap(post('VariantPropertyValues', []));
+        if (count($formData) < 1) {
+            PropertyValue::where('variant_id', $this->id)->delete();
+        }
+
+        $properties     = Property::whereIn('id', array_keys($formData))->get();
+        $propertyValues = PropertyValue::where('variant_id', $this->id)->get();
+
+        foreach ($formData as $id => $value) {
+            $property = $properties->find($id);
+            $pv       = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'variant_id'  => $this->id,
+                    'product_id'  => $this->product_id,
+                    'property_id' => $id,
+                ]);
+
+            $pv->value = $value;
+            foreach ($locales as $locale) {
+                $transValue = post(
+                    sprintf('RLTranslate.%s.VariantPropertyValues.%d', $locale->code, $id),
+                    post(sprintf('VariantPropertyValues.%d', $id)) // fallback
+                );
+                $transValue = $this->handleTranslatedPropertyValue(
+                    $property,
+                    $pv,
+                    $value,
+                    $transValue,
+                    $locale->code
+                );
+                $pv->setAttributeTranslated('value', $transValue, $locale->code);
             }
 
-            if ($variant->image_set_id === null) {
-                $variant->createImageSetFromTempImages();
+            if (($pv->value === null || $pv->value === '') && $pv->exists) {
+                $pv->delete();
+            } else {
+                $pv->save();
             }
-
-            $values = array_wrap(post('VariantPropertyValues', []));
-            if (count($values) < 1) {
-                PropertyValue::where('variant_id', $variant->id)->delete();
-            }
-
-            $propertyValues = PropertyValue::where('variant_id', $variant->id)->get();
-
-            foreach ($values as $id => $value) {
-                $pv = $propertyValues->where('property_id', $id)->first()
-                    ?? new PropertyValue([
-                        'variant_id'  => $variant->id,
-                        'product_id'  => $variant->product_id,
-                        'property_id' => $id,
-                    ]);
-
-                $pv->value = $value;
-
-                if (($pv->value === null || $pv->value === '') && $pv->exists) {
-                    $pv->delete();
-                } else {
-                    $pv->save();
-                }
-            }
-        });
+        }
     }
 
     public function afterDelete()
     {
         DB::table('offline_mall_property_values')->where('variant_id', $this->id)->delete();
+        DB::table('offline_mall_wishlist_items')->where('variant_id', $this->id)->delete();
     }
 
     protected function createImageSetFromTempImages()
@@ -220,7 +253,7 @@ class Variant extends Model
 
         // If any of the product relation columns are called don't override the method's default behaviour.
         $dontInheritAttribute = \in_array($attribute, ['product', 'product_id', 'all_property_values']);
-        if ($dontInheritAttribute || $inheritanceDisabled) {
+        if ($dontInheritAttribute || $inheritanceDisabled || ! $this->product_id) {
             return $originalValue;
         }
 
@@ -299,7 +332,7 @@ class Variant extends Model
 
     protected function isEmpty($attribute, $originalValue): bool
     {
-        if ($attribute === 'description') {
+        if ($attribute === 'description' || $attribute === 'description_short') {
             $originalValue = trim(Html::strip($originalValue));
 
             return $originalValue === '';
@@ -337,6 +370,9 @@ class Variant extends Model
 
         $items = self
             ::published()
+			->whereHas('product',function($query) {
+					$query->where('offline_mall_products.published', 1);
+				})
             ->with('product')
             ->get()
             ->map(function (self $variant) use ($cmsPage, $page, $url) {

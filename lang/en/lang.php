@@ -85,10 +85,13 @@
         'currencies'        => 'Only enter official 3-char currency codes.',
         'currency_code'     => 'Currency code',
         'currency_decimals' => 'Decimal places',
+        'currency_rounding' => 'Rounding the total',
+        'currency_rounding_comment' => 'The total, including taxes, is rounded to this value if this currency is active.',
         'currency_format'   => 'Format',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Rate',
         'is_default'        => 'Is default',
+        'unknown' => 'Unknown Currency',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Payment gateways',
@@ -104,6 +107,17 @@
             'secret'            => 'PayPal Secret',
             'test_mode'         => 'Test mode',
             'test_mode_comment' => 'Run all payments in the PayPal Sandbox.',
+        ],
+        'postfinance' => [
+            'test_mode' => 'Test mode',
+            'test_mode_comment' => 'Run all payments against the test environment',
+            'pspid' => 'PSPID (Username)',
+            'hashing_method' => 'Hash algorithm',
+            'hashing_method_comment' => 'Configuration -> Technical information -> Global security parameters',
+            'sha_in' => 'SHA-IN Signature',
+            'sha_in_comment' => 'Configuration -> Technical information -> Data and origin verification',
+            'sha_out' => 'SHA-OUT Signature',
+            'sha_out_comment' => 'Configuration -> Technical information -> Transaction feedback',
         ],
     ],
     'notification_settings'    => [
@@ -147,6 +161,8 @@
         'redirect_to_cart_comment'   => 'Redirect to cart after the user added a product',
         'use_state'                  => 'Use State/County/Province field',
         'use_state_comment'          => 'Customers have to select a State/County/Province during signup',
+        'group_search_results_by_product' => 'Group search results by product',
+        'group_search_results_by_product_comment' => 'Include a Product only once in the search results, don\'t display all matching Variants',
         'admin_email'                => 'Admin email',
         'admin_email_comment'        => 'Admin notifications will be sent to this addres',
         'base'                       => 'Base settings',
@@ -329,11 +345,14 @@
         'checkbox'   => 'Checkbox',
         'color'      => 'Color',
         'image'      => 'Image',
+        'switch' => 'Switch',
         'add'        => 'Add option',
         'name'       => 'Name',
         'price'      => 'Price',
         'attributes' => 'Attribute',
         'option'     => 'Option',
+        'date' => 'Date',
+        'datetime' => 'Date Time',
     ],
     'product'                  => [
         'user_defined_id'                      => 'Product ID',
@@ -352,10 +371,10 @@
         'price'                                => 'Price',
         'description_short'                    => 'Short description',
         'description'                          => 'Description',
-        'weight'                               => 'Weight (g)',
-        'length'                               => 'Length (mm)',
-        'height'                               => 'Height (mm)',
-        'width'                                => 'Width (mm)',
+        'weight' => 'Weight',
+        'length' => 'Length',
+        'height' => 'Height',
+        'width' => 'Width',
         'quantity_default'                     => 'Default quantity',
         'quantity_min'                         => 'Minimum quantity',
         'quantity_max'                         => 'Maximum quantity',
@@ -440,6 +459,8 @@
         'inherit_property_groups_comment'   => 'Use the property groups of this category\'s parent category',
         'inherit_review_categories'         => 'Inherit review categories of parent category',
         'inherit_review_categories_comment' => 'Use the review categories of this category\'s parent category',
+        'google_product_category_id' => 'Google Product Category ID',
+        'google_product_category_id_comment' => 'Used for Google Merchant integration, see https://support.google.com/merchants/answer/6324436',
     ],
     'custom_fields'            => [
         'name'             => 'Field name',
@@ -454,6 +475,8 @@
         'percentage'        => 'Percent',
         'countries'         => 'Only apply tax when shipping to these countries',
         'countries_comment' => 'If no country is selected the tax is applied worldwide.',
+        'is_default' => 'Is default',
+        'is_default_comment' => 'This tax is used if the shipping destination country is not known yet',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -465,6 +488,7 @@
         'rate'                                 => 'Rate (%)',
         'amount'                               => 'Fixed amount',
         'max_number_of_usages'                 => 'Max number of usages',
+        'valid_from' => 'Valid from',
         'expires'                              => 'Expires',
         'number_of_usages'                     => 'Number of usages',
         'shipping_description'                 => 'Name of alternative shipping method',
@@ -481,6 +505,7 @@
             'total'   => 'Order total is reached',
             'code'    => 'Discount code is entered',
             'product' => 'A specific product is present in the cart',
+            'customer_group' => 'The user belongs to a specific customer group',
         ],
         'validation'                           => [
             'empty'               => 'Enter a promo code.',
@@ -500,6 +525,9 @@
         'fee_label_comment'      => 'This text will be displayed to the customer when checking out.',
         'instructions'           => 'Payment instructions',
         'instructions_comment'   => 'Twig syntax supported. Use {{ order }} or {{ cart }} to access corresponding information if available',
+        'pdf_partial' => 'PDF attachment partial',
+        'pdf_partial_comment' => 'For all orders with this payment method a rendered PDF of the selected partial will be attached to the notification mail',
+        'pdf_partial_none' => 'No PDF attachment',
     ],
     'order'                    => [
         'order_number'                        => '# Order',
@@ -532,7 +560,7 @@
         'shipping_provider'                   => 'Shipping provider',
         'shipping_method'                     => 'Shipping method',
         'card_holder_name'                    => 'Card holder',
-        'card_type'                           => 'Cart type',
+        'card_type' => 'Card type',
         'payment_method'                      => 'Payment method',
         'payment_gateway_used'                => 'Payment gateway',
         'tax_provider'                        => 'Tax provider',
@@ -568,6 +596,8 @@
         'not_shipped'                         => 'Pending',
         'data'                                => 'Order data',
         'total_revenue'                       => 'Total revenue',
+        'download_invoice' => 'Download invoice',
+        'order_file_name' => 'order-:order',
         'modal'                               => [
             'cancel' => 'Cancel',
             'update' => 'Update information',
@@ -626,6 +656,7 @@
         'manage_wishlists'          => 'Can manage wishlists',
         'manage_services'           => 'Can manage services',
         'manage_reviews'            => 'Can manage reviews',
+        'manage_brands' => 'Can manage brands',
     ],
     'components'               => [
         'products'                   => [
@@ -767,6 +798,8 @@
             ],
             'messages'   => [
                 'address_deleted' => 'Address deleted',
+                'default_billing_address_changed' => 'Default billing address changed',
+                'default_shipping_address_changed' => 'Default shipping address changed',
             ],
         ],
         'ordersList'                 => [
@@ -814,8 +847,14 @@
                 'showDiscountApplier' => [
                     'title' => 'Show discount applier',
                 ],
+                'showShipping' => [
+                    'title' => 'Show shipping cost',
+                ],
                 'showTaxes'           => [
                     'title' => 'Show taxes',
+                ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Show proceed to checkout button',
                 ],
             ],
         ],
@@ -1034,6 +1073,12 @@
                 'name'        => 'Wishlists',
                 'description' => 'Displays the wishlist manager',
             ],
+            'properties' => [
+                'showShipping' => [
+                    'name' => 'Show shipping',
+                    'description' => 'Show shipping cost and selector',
+                ],
+            ],
         ],
     ],
     'shipping_method_rates'    => [
@@ -1094,6 +1139,8 @@
         'anonymous'       => 'Anonymous',
         'only_unapproved' => 'Show only unapproved',
         'no_more'         => 'No more unapproved reviews',
+        'approved' => 'Review approved',
+        'approve' => 'Approve review',
         'approve_next'    => 'Approve and go to next',
     ],
 ];

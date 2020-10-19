@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Components;
 
+use Cms\Classes\Theme;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Exception\ValidationException;
@@ -7,6 +8,7 @@ use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Wishlist;
 use OFFLINE\Mall\Models\WishlistItem;
 use RainLab\User\Facades\Auth;
@@ -21,20 +23,36 @@ class Wishlists extends MallComponent
      * @var Collection<Wishlist>
      */
     public $items;
-
     /**
      * The currently displayed wishlist.
      *
      * @var Wishlist
      */
     public $currentItem;
-
     /**
      * True if at least one wishlist has at least one item.
      *
      * @var bool
      */
     public $hasItems = false;
+    /**
+     * PDF download is available.
+     *
+     * @var bool
+     */
+    public $allowPDFDownload = false;
+    /**
+     * Show shipping method selector.
+     *
+     * @var bool
+     */
+    public $showShipping = false;
+    /**
+     * All available shipping methods.
+     *
+     * @var Collection<ShippingMethod>|ShippingMethod[]
+     */
+    public $shippingMethods;
 
     public function componentDetails()
     {
@@ -46,13 +64,32 @@ class Wishlists extends MallComponent
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'showShipping' => [
+                'title'       => 'offline.mall::lang.components.wishlists.properties.showShipping.title',
+                'description' => 'offline.mall::lang.components.wishlists.properties.showShipping.description',
+                'type'        => 'checkbox',
+            ],
+        ];
+    }
+
+    public function init()
+    {
+        $this->allowPDFDownload = $this->pdfPartialExists();
     }
 
     public function onRun()
     {
+        if ($this->allowPDFDownload && $download = input('download')) {
+            return $this->handlePDFDownload($download);
+        }
+
+        /** @var Collection<Wishlist>|Wishlist[] items */
+        /** @var Wishlist currentItem */
         $this->items       = $this->getWishlists();
         $this->currentItem = $this->items->first();
+
+        $this->handleShipping();
 
         $this->hasItems = $this->items->contains(function ($item) {
             return $item->items->count() > 0;
@@ -80,8 +117,6 @@ class Wishlists extends MallComponent
 
     public function onRemove()
     {
-        $this->setCurrentItem();
-
         WishlistItem::where('wishlist_id', $this->decode(post('id')))
                     ->where('id', $this->decode(post('item_id')))
                     ->delete();
@@ -106,6 +141,32 @@ class Wishlists extends MallComponent
         WishlistItem::where('wishlist_id', $this->decode(post('id')))
                     ->where('id', $this->decode(post('item_id')))
                     ->update(['quantity' => $quantity]);
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
+    public function onChangeShippingMethod()
+    {
+        $this->setCurrentItem();
+
+        $method = post('shipping_method_id');
+        if ( ! $method || ! $this->shippingMethods->contains($method)) {
+            return $this->controller->run('404');
+        }
+
+        $this->currentItem->setShippingMethod(ShippingMethod::find($method));
+
+        $this->setCurrentItem();
+
+        return $this->refreshListAndContent();
+    }
+
+    public function onClear()
+    {
+        WishlistItem::where('wishlist_id', $this->decode(post('id')))
+                    ->delete();
 
         $this->setCurrentItem();
 
@@ -154,6 +215,48 @@ class Wishlists extends MallComponent
     }
 
     /**
+     * Return the wishlist as a PDF.
+     *
+     * @param string $download
+     *
+     * @return \Illuminate\Http\Response|string
+     */
+    protected function handlePDFDownload(string $download)
+    {
+        $id        = $this->decode($download);
+        $wishlists = Wishlist::byUser(Auth::getUser());
+
+        /** @var Wishlist $wishlist */
+        $wishlist = $wishlists->find($id);
+
+        if ( ! $wishlist) {
+            return $this->controller->run('404');
+        }
+
+        return $wishlist->getPDF()->stream(sprintf('wishlist-%s.pdf', $download));
+    }
+
+    /**
+     * Handle the display of shipping methods.
+     */
+    protected function handleShipping()
+    {
+        $this->setVar('showShipping', (bool)$this->property('showShipping'));
+
+        if ( ! $this->showShipping || !$this->currentItem) {
+            return;
+        }
+
+        $this->shippingMethods = ShippingMethod::getAvailableByWishlist($this->currentItem);
+        if ($this->currentItem->shipping_method_id === null) {
+            $this->currentItem->setShippingMethod(ShippingMethod::getDefault());
+            $this->currentItem = $this->currentItem->fresh('shipping_method');
+        }
+
+        return $this->currentItem->validateShippingMethod();
+    }
+
+    /**
      * Set the currently active item.
      *
      * @throws ValidationException
@@ -166,6 +269,8 @@ class Wishlists extends MallComponent
         if ( ! $this->currentItem) {
             throw new ValidationException(['id' => 'Invalid wishlist ID specified']);
         }
+
+        $this->handleShipping();
     }
 
     protected function refreshListAndContent(): array
@@ -191,5 +296,18 @@ class Wishlists extends MallComponent
                 ['items' => $this->items]
             ),
         ];
+    }
+
+    /**
+     * Check if the required PDF partial exists.
+     * @return bool
+     */
+    private function pdfPartialExists()
+    {
+        return file_exists(
+            themes_path(
+                sprintf('%s/partials/mallPDF/wishlist/default.htm', Theme::getActiveThemeCode())
+            )
+        );
     }
 }

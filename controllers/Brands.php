@@ -19,7 +19,7 @@ class Brands extends Controller
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.manage_products',
+        'offline.mall.manage_brands',
     ];
 
     public function __construct()

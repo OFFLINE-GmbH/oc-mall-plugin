@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Variant;
+use Event;
 
 class VariantEntry implements Entry
 {
@@ -43,7 +44,13 @@ class VariantEntry implements Entry
             $data['brand'] = ['id' => $product->brand->id, 'slug' => $product->brand->slug];
         }
 
-        $this->data = $data;
+        $result = Event::fire('mall.index.extendVariant', [$product, $variant]);
+
+        if ($result && is_array($result) && $filtered = array_filter($result)) {
+            $this->data = array_merge(...$filtered) + $data;
+        } else {
+            $this->data = $data;
+        }
     }
 
     public function data(): array
@@ -58,10 +65,12 @@ class VariantEntry implements Entry
         return $this;
     }
 
-    protected function mapPrices($model): Collection
+    protected function mapPrices($variant): Collection
     {
-        return $model->prices->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price->integer];
+        return $variant->withForcedPriceInheritance(function () use ($variant) {
+            return Currency::getAll()->mapWithKeys(function ($currency) use ($variant) {
+                return [$currency->code => $variant->price($currency)->integer];
+            });
         });
     }
 

@@ -85,10 +85,13 @@
         'currencies'        => 'Geben Sie jeweils nur den offiziellen dreistelligen Währungscode ein.',
         'currency_code'     => 'Währungscode',
         'currency_decimals' => 'Anz. Dezimalstellen',
+        'currency_rounding' => 'Rundung des Totals',
+        'currency_rounding_comment' => 'Das Gesamttotal inklusive Steuern wird auf diesen Wert gerundet, wenn diese Währung aktiv ist.',
         'currency_format'   => 'Formatierung',
         'currency_symbol'   => 'Symbol',
         'currency_rate'     => 'Kurs zu Basiswährung',
         'is_default'        => 'Ist Standard',
+        'unknown' => 'Unbekannte Währung',
     ],
     'payment_gateway_settings' => [
         'label'       => 'Zahlungsanbieter',
@@ -104,6 +107,17 @@
             'secret'            => 'PayPal Secret',
             'test_mode'         => 'Test-Modus',
             'test_mode_comment' => 'Führe alle Zahlungen in der PayPal Sandbox aus.',
+        ],
+        'postfinance' => [
+            'test_mode' => 'Test-Modus',
+            'test_mode_comment' => 'Führe alle Zahlungen im Test-Modus aus.',
+            'pspid' => 'PSPID (Benutzername)',
+            'hashing_method' => 'Hash-Algorithmus',
+            'hashing_method_comment' => 'Konfiguration -> Technische Informationen -> Globale Sicherheitsparameter',
+            'sha_in' => 'SHA-IN Signatur',
+            'sha_in_comment' => 'Konfiguration -> Technische Informationen -> Daten- und Ursprungsüberprüfung',
+            'sha_out' => 'SHA-OUT Signatur',
+            'sha_out_comment' => 'Konfiguration -> Technische Informationen -> Transaktions-Feedback',
         ],
     ],
     'notification_settings'    => [
@@ -147,6 +161,8 @@
         'redirect_to_cart_comment'   => 'Der Warenkorb wird direkt angezeigt, wenn ein Produkt hinzugefügt wurde',
         'use_state'                  => 'Verwende «Kanton/Bundesstaat»',
         'use_state_comment'          => 'Kunden müssen bei der Registrierung ein Kanton/Bundesstaat auswählen',
+        'group_search_results_by_product' => 'Suchresultate nach Produkt gruppieren',
+        'group_search_results_by_product_comment' => 'Zeige in den Suchresultaten nur das Hauptprodukt an, nicht alle passenden Varianten',
         'admin_email'                => 'E-Mail des Admins',
         'admin_email_comment'        => 'Benachrichtigungen werden an diese E-Mail versendet',
         'base'                       => 'Allgemein',
@@ -333,6 +349,8 @@
         'price'      => 'Aufpreis',
         'attributes' => 'Attribute',
         'option'     => 'Option',
+        'date' => 'Datum',
+        'datetime' => 'Datum und Uhrzeit',
     ],
     'product'                  => [
         'user_defined_id'                      => 'Artikelnummer',
@@ -351,10 +369,10 @@
         'price'                                => 'Preis',
         'description_short'                    => 'Kurzbeschreibung',
         'description'                          => 'Beschreibung',
-        'weight'                               => 'Gewicht (g)',
-        'length'                               => 'Länge (mm)',
-        'height'                               => 'Höhe (mm)',
-        'width'                                => 'Breite (mm)',
+        'weight' => 'Gewicht',
+        'length' => 'Länge',
+        'height' => 'Höhe',
+        'width' => 'Breite',
         'quantity_default'                     => 'Standard-Bestellmenge',
         'quantity_min'                         => 'Minimale Bestellmenge',
         'quantity_max'                         => 'Maximale Bestellmenge',
@@ -437,8 +455,10 @@
         'no_parent'                         => 'Kein Elternelement',
         'inherit_property_groups'           => 'Übernehme Eigenschaften von Elternkategorie',
         'inherit_property_groups_comment'   => 'Für diese Kategorie werden die gleichen Eigenschaften wie für die Elternkategorie verwendet',
-        'inherit_review_categories'         => 'Übernehme Review-Kateogiren von Elternkategorie',
+        'inherit_review_categories' => 'Übernehme Review-Kategorien von Elternkategorie',
         'inherit_review_categories_comment' => 'Für diese Kategorie werden die gleichen Review-Kategorien wie für die Elternkategorie verwendet',
+        'google_product_category_id' => 'Google Produkt-Kategorie ID',
+        'google_product_category_id_comment' => 'Für Google Merchant Integration, siehe https://support.google.com/merchants/answer/6324436?hl=de',
     ],
     'custom_fields'            => [
         'name'             => 'Feldname',
@@ -453,6 +473,8 @@
         'percentage'               => 'Prozent',
         'countries'                => 'Steuer gilt nur für Versand in diese Länder',
         'countries_comment'        => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'is_default' => 'Ist Standard',
+        'is_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
     ],
     'discounts'                => [
         'name'                                 => 'Name',
@@ -480,6 +502,7 @@
             'total'   => 'Bestimmter Bestellwert erreicht wird',
             'code'    => 'Gutschein-Code eingegeben wird',
             'product' => 'Bestimmtes Produkt im Warenkorb liegt',
+            'customer_group' => 'Der Benutzer zu einer Kundengruppe gehört',
         ],
         'validation'                           => [
             'empty'               => 'Geben Sie einen Gutschein-Code ein.',
@@ -499,6 +522,9 @@
         'fee_label_comment'      => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
         'instructions'           => 'Zahlungsanweisung',
         'instructions_comment'   => 'Unterstützt Twig Syntax. Verwende {{ order }} oder {{ cart }} um Infos zur Bestellung abzurufen (falls vorhanden)',
+        'pdf_partial' => 'Partial für PDF-Versand',
+        'pdf_partial_comment' => 'Bei einer Bestellung mit dieser Zahlungsmethode wird das ausgewählte Partial als PDF versendet',
+        'pdf_partial_none' => 'Kein PDF-Versand',
     ],
     'order'                    => [
         'order_number'                        => '# Bestl.',
@@ -567,6 +593,8 @@
         'not_shipped'                         => 'Versand ausstehend',
         'data'                                => 'Bestellungsdaten',
         'total_revenue'                       => 'Gesamteinnahmen',
+        'download_invoice' => 'Rechnung herunterladen',
+        'order_file_name' => 'bestellung-:order',
         'modal'                               => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',
@@ -625,6 +653,7 @@
         'manage_wishlists'          => 'Kann Merklisten verwalten',
         'manage_services'           => 'Kann Services verwalten',
         'manage_reviews'            => 'Kann Reviews verwalten',
+        'manage_brands' => 'Kann Marken verwalten',
     ],
     'components'               => [
         'products'                   => [
@@ -766,6 +795,8 @@
             ],
             'messages'   => [
                 'address_deleted' => 'Adresse gelöscht',
+                'default_billing_address_changed' => 'Standard Rechnungsadresse wurde geändert',
+                'default_shipping_address_changed' => 'Standard Lieferadresse wurde geändert',
             ],
         ],
         'ordersList'                 => [
@@ -812,8 +843,14 @@
                 'showDiscountApplier' => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
                 ],
+                'showShipping' => [
+                    'title' => 'Versandkosten anzeigen',
+                ],
                 'showTaxes'           => [
                     'title' => 'Steuern ausweisen',
+                ],
+                'showProceedToCheckoutButton' => [
+                    'title' => 'Zur Kasse-Button anzeigen',
                 ],
             ],
         ],
@@ -1032,6 +1069,12 @@
                 'name'        => 'Merklisten-Verwaltung',
                 'description' => 'Zeigt die Merklisten-Verwaltung an',
             ],
+            'properties' => [
+                'showShipping' => [
+                    'name' => 'Versandkosten anzeigen',
+                    'description' => 'Zeige Auswahlliste und Kosten für Versand',
+                ],
+            ],
         ],
     ],
     'shipping_method_rates'    => [
@@ -1092,6 +1135,8 @@
         'anonymous'       => 'Anonym',
         'only_unapproved' => 'Zeige nur zu überprüfende Reviews',
         'no_more'         => 'Alle Reviews sind freigeschaltet',
+        'approved' => 'Review freigegeben',
+        'approve' => 'Review freigeben',
         'approve_next'    => 'Review freigeben und weiter',
     ],
 ];

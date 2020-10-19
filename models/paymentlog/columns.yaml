@@ -4,11 +4,13 @@ columns:
         type: number
         sortable: true
         invisible: true
-    order_id:
+    order:
         label: 'offline.mall::lang.order.order_number'
+        relation: order
         type: number
         searchable: true
         sortable: true
+        select: order_number
     failed:
         label: 'offline.mall::lang.order.status'
         type: partial
@@ -18,7 +20,7 @@ columns:
     total:
         label: 'offline.mall::lang.order.total'
         type: partial
-        searchable: true
+        searchable: false
         sortable: false
         path: $/offline/mall/controllers/paymentlogs/_total.htm
     order_data:

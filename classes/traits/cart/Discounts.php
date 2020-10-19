@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Discount;
+use RainLab\User\Facades\Auth;
 
 trait Discounts
 {
@@ -26,8 +27,20 @@ trait Discounts
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.' . $discount->type)]);
         }
 
-        if ($this->discounts->contains($discount)) {
+        $previousOrderDiscounts = collect();
+        $customer = optional(Auth::getUser())->customer;
+        if (optional($customer)->orders) {
+            $previousOrderDiscounts = $customer->orders->map(function ($order) {
+                return array_get($order, 'discounts.0.discount.id');
+            });
+        }
+
+        if ($this->discounts->contains($discount) || $previousOrderDiscounts->contains($discount->id)) {
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.duplicate')]);
+        }
+
+        if ($discount->valid_from && $discount->valid_from->gte(Carbon::now())) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.not_found')]);
         }
 
         if ($discount->expires && $discount->expires->lt(Carbon::today())) {
@@ -51,7 +64,7 @@ trait Discounts
         }
 
         try {
-            $discount = Discount::whereCode($code)->firstOrFail();
+            $discount = Discount::isActive()->whereCode($code)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ValidationException([
                 'code' => trans('offline.mall::lang.discounts.validation.not_found'),

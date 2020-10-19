@@ -321,8 +321,11 @@ class Products extends MallComponent
         Flash::success(trans('offline.mall::frontend.cart.added'));
 
         return [
+            'added'    => true,
             'item'     => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
+            'new_items_count' => optional($cart->products)->count() ?? 0,
+            'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
             'quantity' => $quantity,
         ];
     }
@@ -492,7 +495,7 @@ class Products extends MallComponent
      */
     protected function productIncludes(): array
     {
-        return ['image_sets.images', 'customer_group_prices', 'additional_prices'];
+        return ['translations', 'image_sets.images', 'customer_group_prices', 'additional_prices'];
     }
 
     /**

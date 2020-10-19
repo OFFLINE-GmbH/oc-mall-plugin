@@ -1,0 +1,28 @@
+<tr class="mall-cart__shipping">
+    <td></td>
+    <td colspan="3">
+        {% if __SELF__.shippingMethods.count > 1 %}
+            <label for="mall-shipping-method-select">
+                {{ 'offline.mall::lang.order.shipping_method' | trans }}
+            </label>
+
+            <select id="mall-shipping-method-select"
+                    class="mall-selectbox-sm"
+                    name="shipping_method_id"
+                    data-request="{{ __SELF__ ~ '::onChangeShippingMethod' }}"
+                    data-request-data="id: '{{ __SELF__.currentItem.hash_id }}'"
+                    data-track-input>
+                {% for method in __SELF__.shippingMethods %}
+                    <option value="{{ method.id }}" {{ method.id == shipping.method.id ? 'selected="selected"' }}>
+                        {{ method.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% else %}
+            {{ shipping.method.name }}
+        {% endif %}
+    </td>
+    <td class="text-right">
+        {{ shipping.totalPostTaxes | money }}
+    </td>
+</tr>

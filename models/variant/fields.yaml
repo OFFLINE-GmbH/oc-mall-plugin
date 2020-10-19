@@ -54,9 +54,10 @@ tabs:
             tab: 'offline.mall::lang.product.description'
         description_short:
             label: 'offline.mall::lang.product.description_short'
+            size: small
             oc.commentPosition: ''
             span: full
-            type: text
+            type: textarea
             tab: 'offline.mall::lang.product.description'
         description:
             label: 'offline.mall::lang.product.description'
@@ -99,6 +100,24 @@ tabs:
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''
-            span: left
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        height:
+            label: 'offline.mall::lang.product.height'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        width:
+            label: 'offline.mall::lang.product.width'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.shipping'
+        length:
+            label: 'offline.mall::lang.product.length'
+            oc.commentPosition: ''
+            span: auto
             type: number
             tab: 'offline.mall::lang.common.shipping'

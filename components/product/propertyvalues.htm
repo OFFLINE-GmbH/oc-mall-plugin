@@ -1,0 +1,15 @@
+<div class="mall-product__properties">
+    {% for entry in item.grouped_properties %}
+        <h3 class="mall-product__properties-heading">{{ entry.group.name }}</h3>
+        <div class="mall-three-columns">
+            {% for value in entry.values %}
+                <div class="mall-column">
+                    <p>
+                        <strong>{{ value.property.name }}</strong><br>
+                        {{ value.display_value | raw }} {{ value.property.unit }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

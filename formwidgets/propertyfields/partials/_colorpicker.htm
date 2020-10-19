@@ -2,11 +2,8 @@
 
 <label for="<?= $id ?>"><?= e($field->name) ?></label>
 <div style="overflow: auto;">
-    <input type="text" name="<?= $this->fieldPrefix() ?>[<?= e($field->id) ?>][name]"
-           class="form-control"
-           id="<?= $id ?>"
-           style="margin-bottom: 10px"
-           value="<?= e($value['name'] ?? '') ?>"
-    >
-    <?= $widget->render() ?>
+    <div style="margin-bottom: 10px">
+        <?= $textWidget->render() ?>
+    </div>
+    <?= $colorWidget->render() ?>
 </div>

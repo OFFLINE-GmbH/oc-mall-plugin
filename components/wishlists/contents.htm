@@ -29,6 +29,13 @@
 
 {% if __SELF__.currentItem.items.count > 0 %}
 <div class="mall-wishlists-manager__actions">
+    {% if __SELF__.allowPDFDownload %}
+    <a class="mall-btn mall-btn--default"
+       href="?download={{ __SELF__.currentItem.hashId }}"
+        target="_blank">
+        {{ 'offline.mall::frontend.wishlists.pdf_download' | trans }}
+    </a>
+    {% endif %}
     <button class="mall-btn mall-btn--primary"
             data-request="onAddToCart"
             data-request-data="id: '{{ __SELF__.currentItem.hashId }}'"

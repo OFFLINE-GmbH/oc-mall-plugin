@@ -9,7 +9,7 @@
         <?= e($address['lines']) ?><br/>
         <?= e($address['zip']) ?>
         <?= e($address['city']) ?><br/>
-        <?= e($address['state']['name']) ?><br/>
-        <?= e($address['country']['name']) ?>
+        <?= e(optional($address['state'])['name']) ?><br/>
+        <?= e(optional($address['country'])['name']) ?>
     </p>
 </div>

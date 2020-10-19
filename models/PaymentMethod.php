@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use Cms\Classes\Theme;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
@@ -25,7 +26,7 @@ class PaymentMethod extends Model
     public $rules = [
         'name'             => 'required',
         'payment_provider' => 'required',
-        'fee_percentage'   => 'nullable|max:99',
+        'fee_percentage'   => 'nullable',
     ];
     public $table = 'offline_mall_payment_methods';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
@@ -35,9 +36,6 @@ class PaymentMethod extends Model
     public $hidden = ['settings', 'prices', 'created_at', 'updated_at', 'deleted_at'];
     public $slugs = [
         'code' => 'name',
-    ];
-    public $casts = [
-        'fee_percentage' => 'float',
     ];
     public $translatable = [
         'name',
@@ -105,6 +103,19 @@ class PaymentMethod extends Model
         }
 
         return $options;
+    }
+
+    public function getPdfPartialOptions(): array
+    {
+
+        $null = [null => '-- ' . trans('offline.mall::lang.payment_method.pdf_partial_none')];
+        $path = themes_path(sprintf('%s/partials/mallPDF/*', Theme::getActiveThemeCode()));
+
+        return $null + collect(glob($path, GLOB_ONLYDIR))->mapWithKeys(function ($dir) {
+                $dir = basename($dir);
+
+                return [$dir => $dir];
+            })->toArray();
     }
 
     public static function getDefault()

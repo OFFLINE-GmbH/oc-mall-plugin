@@ -4,13 +4,16 @@ use Cache;
 use Cms\Classes\Page;
 use DB;
 use Model;
+use October\Rain\Database\Models\DeferredBinding;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
@@ -18,6 +21,7 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
+use RainLab\Translate\Models\Locale;
 use System\Models\File;
 
 /**
@@ -37,6 +41,7 @@ class Product extends Model
     use PriceAccessors;
     use ProductPriceAccessors;
     use StockAndQuantity;
+    use FilteredTaxes;
 
     const MORPH_KEY = 'mall.product';
 
@@ -64,6 +69,9 @@ class Product extends Model
         'name'                         => 'required',
         'slug'                         => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
         'weight'                       => 'integer|nullable',
+        'height'                       => 'nullable|integer',
+        'length'                       => 'nullable|integer',
+        'width'                        => 'nullable|integer',
         'stock'                        => 'required_unless:inventory_management_method,variant',
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
@@ -75,6 +83,9 @@ class Product extends Model
         'price_includes_tax'           => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
         'weight'                       => 'integer',
+        'height'                       => 'integer',
+        'length'                       => 'integer',
+        'width'                        => 'integer',
         'id'                           => 'integer',
         'stackable'                    => 'boolean',
         'published'                    => 'boolean',
@@ -97,6 +108,9 @@ class Product extends Model
         'meta_description',
         'meta_keywords',
         'weight',
+        'length',
+        'width',
+        'height',
         'inventory_management_method',
         'quantity_default',
         'quantity_min',
@@ -112,6 +126,11 @@ class Product extends Model
         'published',
         'mpn',
         'gtin',
+        'additional_descriptions',
+        'additional_properties',
+        'file_expires_after_days',
+        'file_max_download_count',
+        'file_session_required',
     ];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
@@ -142,9 +161,11 @@ class Product extends Model
         'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
         'variants'               => Variant::class,
         'cart_products'          => CartProduct::class,
+        'order_products'         => OrderProduct::class,
         'image_sets'             => ImageSet::class,
         'property_values'        => PropertyValue::class,
         'reviews'                => Review::class,
+        'discounts'              => Discount::class,
         'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null'],
         'files'                  => [ProductFile::class],
     ];
@@ -209,6 +230,12 @@ class Product extends Model
      */
     public $forceReindex = false;
 
+    /**
+     * Cache all filtered countries for this model and this request.
+     * @var Collection<Tax>
+     */
+    private $cachedFilteredTaxes;
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -259,6 +286,21 @@ class Product extends Model
 
     public function afterSave()
     {
+        // If the management method goes from single to variant, we need to remove all "variant only" property values
+        // from the product. Otherwise we will end up with duplicated values.
+        if ($this->getOriginal('inventory_management_method') === 'single' && $this->inventory_management_method === 'variant') {
+            $this->forceReindex = true;
+            $properties = $this->categories->flatMap->properties->filter(function ($q) {
+                return $q->pivot->use_for_variants;
+            })->pluck('id');
+
+            PropertyValue
+                ::where('product_id', $this->id)
+                ->whereNull('variant_id')
+                ->whereIn('property_id', $properties)
+                ->delete();
+        }
+
         if ($this->forceReindex) {
             $this->forceReindex = false;
             (new ProductObserver(app(Index::class)))->updated($this);
@@ -276,6 +318,73 @@ class Product extends Model
         DB::table('offline_mall_cart_products')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_category_product')->where('product_id', $this->id)->delete();
+        DB::table('offline_mall_wishlist_items')->where('product_id', $this->id)->delete();
+    }
+
+    /**
+     * Handle the form data form the property value form.
+     */
+    public function handlePropertyValueUpdates()
+    {
+        $locales = Locale::isEnabled()->get();
+
+        $formData = array_wrap(post('PropertyValues', []));
+        if (count($formData) < 1) {
+            PropertyValue::where('product_id', $this->id)->whereNull('variant_id')->delete();
+        }
+
+        $properties     = Property::whereIn('id', array_keys($formData))->get();
+        $propertyValues = PropertyValue::where('product_id', $this->id)->whereNull('variant_id')->get();
+
+        foreach ($formData as $id => $value) {
+            $property = $properties->find($id);
+
+            $pv = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'product_id'  => $this->id,
+                    'property_id' => $id,
+                ]);
+
+            $pv->value = $value;
+            foreach ($locales as $locale) {
+                $transValue = post(
+                    sprintf('RLTranslate.%s.PropertyValues.%d', $locale->code, $id),
+                    post(sprintf('PropertyValues.%d', $id)) // fallback
+                );
+                $transValue = $this->handleTranslatedPropertyValue(
+                    $property,
+                    $pv,
+                    $value,
+                    $transValue,
+                    $locale->code
+                );
+                $pv->setAttributeTranslated('value', $transValue, $locale->code);
+            }
+
+            // If the value became empty delete it.
+            if (($value === null || $value === '') && $pv->exists) {
+                $pv->delete();
+            } else {
+                $pv->save();
+            }
+
+            // Transfer any deferred media
+            if ($property->type === 'image') {
+                $media = DeferredBinding::where('master_type', PropertyValue::class)
+                                        ->where('master_field', 'image')
+                                        ->where('session_key', post('_session_key'))
+                                        ->get();
+
+                foreach ($media as $m) {
+                    $slave                  = $m->slave_type::find($m->slave_id);
+                    $slave->field           = 'image';
+                    $slave->attachment_type = PropertyValue::class;
+                    $slave->attachment_id   = $pv->id;
+                    $slave->save();
+                    $m->delete();
+                }
+            }
+        }
     }
 
     /**
@@ -324,6 +433,18 @@ class Product extends Model
     public function getProductIdAttribute()
     {
         return $this->id;
+    }
+
+    /**
+     * Get this product's filtered taxes based on the shipping destination country.
+     * @return Collection
+     */
+    public function getFilteredTaxesAttribute()
+    {
+        if ($this->cachedFilteredTaxes) {
+            return $this->cachedFilteredTaxes;
+        }
+        return $this->cachedFilteredTaxes = $this->getfilteredTaxes($this->taxes);
     }
 
     /**
@@ -456,19 +577,19 @@ class Product extends Model
         }
 
         if ($this->is_virtual) {
-            $fields->inventory_management_method->hidden = true;
-            $fields->variants->hidden                    = true;
-            $fields->weight->hidden                      = true;
+            $this->hideField($fields, 'inventory_management_method');
+            $this->hideField($fields, 'variants');
+            $this->hideField($fields, 'weight');
             if ($this->files->count() > 0) {
                 $fields->missing_file_hint->hidden = true;
             }
         } else {
-            $fields->product_files->hidden           = true;
-            $fields->missing_file_hint->hidden       = true;
-            $fields->product_files_section->hidden   = true;
-            $fields->file_expires_after_days->hidden = true;
-            $fields->file_max_download_count->hidden = true;
-            $fields->file_session_required->hidden   = true;
+            $this->hideField($fields, 'product_files');
+            $this->hideField($fields, 'missing_file_hint');
+            $this->hideField($fields, 'product_files_section');
+            $this->hideField($fields, 'file_expires_after_days');
+            $this->hideField($fields, 'file_max_download_count');
+            $this->hideField($fields, 'file_session_required');
         }
 
         // If less than properties are available (1 is the null property)
@@ -476,6 +597,17 @@ class Product extends Model
         if (count($this->getGroupByPropertyIdOptions()) < 2) {
             $fields->variants->path               = 'variants_unavailable';
             $fields->group_by_property_id->hidden = true;
+        }
+    }
+
+    /**
+     * Hides a field only if it is present. This makes sure
+     * the form does not crash if a user programmatically removes
+     * a field.
+     */
+    protected function hideField($fields, string $field) {
+        if (property_exists($fields, $field)) {
+            $fields->$field->hidden = true;
         }
     }
 

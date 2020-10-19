@@ -29,17 +29,17 @@ trait MenuItems
 
         // Replace this menu item with its products.
         if ($item->replace) {
-            $page    = GeneralSettings::get('product_page', 'product');
-            $cmsPage = Page::loadCached($theme, $page);
-
-            if ( ! $cmsPage) {
+            $page = GeneralSettings::get('product_page', 'product');
+            if ( ! Page::loadCached($theme, $page)) {
                 return;
             }
 
-            $items = $category->products
-                ->map(function (Product $product) use ($cmsPage, $page, $url) {
+            $controller = Controller::getController() ?: new Controller;
 
-                    $pageUrl = $cmsPage->url($page, ['slug' => $product->slug]);
+            $items = $category->products
+                ->map(function (Product $product) use ($page, $url, $controller) {
+
+                    $pageUrl = $controller->pageUrl($page, ['slug' => $product->slug], false);
 
                     return [
                         'title'    => $product->name,
@@ -130,7 +130,7 @@ trait MenuItems
         }
 
         $controller = new Controller();
-        $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug]);
+        $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug], false);
 
         $result             = [];
         $result['url']      = $entryUrl;

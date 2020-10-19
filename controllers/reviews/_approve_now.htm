@@ -1,9 +1,20 @@
-<?php if ($this->vars['formModel']->approved_at === null): ?>
+<?php
+if($this->vars['formModel'] instanceof \OFFLINE\Mall\Models\Review) {
+    $id = $this->vars['formModel']->id;
+    $handler = 'onApprove';
+    $label = 'approve_next';
+} else {
+    $id = post('manage_id');
+    $handler = 'onApproveReview';
+    $label = 'approve';
+}
+?>
 <button class="btn btn-default"
-        data-request="onApprove"
-        data-request-data="id: '<?= e($this->vars['formModel']->id) ?>'"
+        data-request="<?= e($handler) ?>"
+        data-request-data="id: '<?= e($id) ?>'"
+        data-dismiss="popup"
         data-request-redirect
+        data-request-flash
         data-attach-loading>
-    <?= e(trans('offline.mall::lang.reviews.approve_next')) ?>
+    <?= e(trans('offline.mall::lang.reviews.' . $label)) ?>
 </button>
-<?php endif; ?>

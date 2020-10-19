@@ -123,7 +123,11 @@ class Checkout extends MallComponent
         }
 
         if ($this->param('step') === 'shipping') {
-            $this->addComponent(ShippingMethodSelector::class, 'shippingMethodSelector', ['skipIfOnlyOneAvailable' => true]);
+            $this->addComponent(
+                ShippingMethodSelector::class,
+                'shippingMethodSelector',
+                ['skipIfOnlyOneAvailable' => true]
+            );
         }
 
         if ($this->param('step') === 'payment') {
@@ -201,7 +205,7 @@ class Checkout extends MallComponent
     /**
      * Handle the checkout process.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws ValidationException
      * @throws \Cms\Classes\CmsException
      */

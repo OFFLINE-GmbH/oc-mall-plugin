@@ -25,3 +25,11 @@
 <a data-toggle="modal" href="#content-invoice-number" class="btn btn-default  oc-icon-file-text">
     <?= e(trans('offline.mall::lang.order.update_invoice_number')) ?>
 </a>
+
+<?php if ($order->payment_method->pdf_partial): ?>
+<a class="btn btn-default  oc-icon-file-pdf-o"
+   href="<?= e(Backend::url('offline/mall/orders/invoice/' . $order['id'])) ?>"
+   target="_blank">
+    <?= e(trans('offline.mall::lang.order.download_invoice')) ?>
+</a>
+<?php endif; ?>

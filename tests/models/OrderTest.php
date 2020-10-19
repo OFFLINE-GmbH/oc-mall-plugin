@@ -35,7 +35,11 @@ class OrderTest extends PluginTestCase
 
     public function test_it_creates_a_new_order_from_a_cart()
     {
-        $cart  = $this->getFullCart();
+        $cart                      = $this->getFullCart();
+        $cart->shipping_address_id = 2;
+        $cart->billing_address_id  = 1;
+        $cart->save();
+
         $order = Order::fromCart($cart);
         $order->save();
 

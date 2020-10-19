@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Tests\Classes\Totals;
 use Auth;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
+use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
@@ -22,6 +23,15 @@ use OFFLINE\Mall\Tests\PluginTestCase;
 
 class TotalsCalculatorTest extends PluginTestCase
 {
+    protected $address;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->address = Address::first();
+    }
+
     public function test_it_works_for_a_single_product()
     {
         $quantity = 5;
@@ -139,7 +149,182 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(3077, round($calc->taxes()[1]->total()));
     }
 
+    public function test_it_calculates_taxes_included_on_amount_after_discount_applied()
+    {
+        $this->markTestSkipped('This test covers an open bug, @see https://github.com/OFFLINE-GmbH/oc-mall-plugin/issues/423');
+
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->stock              = 10;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->trigger = 'code';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'fixed_amount';
+        $discount->save();
+        $discount->amounts()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 1,
+            'field'       => 'amounts',
+        ]));
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(10000, $calc->totalPostTaxes());
+        $this->assertEquals(2307.69, round($calc->totalTaxes(), 2));
+        $this->assertEquals(769, round($calc->taxes()[0]->total()));
+        $this->assertEquals(1538.5, round($calc->taxes()[1]->total()));
+    }
+
+    public function test_it_calculates_taxes_included_on_zero_amount_after_discount_applied()
+    {
+        $this->markTestSkipped('This test covers an open bug, @see https://github.com/OFFLINE-GmbH/oc-mall-plugin/issues/423');
+
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        $product                     = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->stock              = 10;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->trigger = 'code';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'rate';
+        $discount->rate    = 100;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(0, $calc->totalPostTaxes());
+        $this->assertEquals(0, round($calc->totalTaxes(), 2));
+        $this->assertEquals(0, round($calc->taxes()[0]->total()));
+        $this->assertEquals(0, round($calc->taxes()[1]->total()));
+    }
+
+    public function test_it_calculates_taxes_with_different_taxes_and_discount()
+    {
+        $this->markTestSkipped('This test covers an open bug, @see https://github.com/OFFLINE-GmbH/oc-mall-plugin/issues/423');
+
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 5);
+        $tax3 = $this->getTax('Test 3', 15);
+
+        $product                     = $this->getProduct(115);
+        $product->price_includes_tax = true;
+        $product->stock              = 10;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1);
+
+        $product                     = $this->getProduct(57.50);
+        $product->price_includes_tax = true;
+        $product->stock              = 10;
+        $product->taxes()->attach([$tax3->id]);
+        $product->save();
+
+        $cart->addProduct($product, 1);
+
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->trigger = 'code';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'fixed_amount';
+        $discount->save();
+        $discount->amounts()->save(new Price([
+            'price'       => 50,
+            'currency_id' => 1,
+            'field'       => 'amounts',
+        ]));
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(12250, $calc->totalPostTaxes());
+        $this->assertEquals(1837.5, round($calc->totalTaxes(), 2));
+        $this->assertEquals(816.666667, round($calc->taxes()[0]->total()));
+        $this->assertEquals(408.333333, round($calc->taxes()[1]->total()));
+        $this->assertEquals(612.5, round($calc->taxes()[2]->total()));
+    }
+
     public function test_it_calculates_taxes_excluded()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        $product                     = $this->getProduct(80);
+        $product->price_includes_tax = false;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(20800, $calc->totalPostTaxes());
+        $this->assertEquals(4800, round($calc->totalTaxes(), 2));
+        $this->assertCount(2, $calc->taxes());
+        $this->assertEquals(1600, $calc->taxes()[0]->total());
+        $this->assertEquals(3200, $calc->taxes()[1]->total());
+    }
+
+    public function test_it_calculates_taxes_excluded_with_discount()
+    {
+        $this->markTestSkipped('This test covers an open bug, @see https://github.com/OFFLINE-GmbH/oc-mall-plugin/issues/423');
+
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        $product                     = $this->getProduct(80);
+        $product->price_includes_tax = false;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+
+        $discount          = new Discount();
+        $discount->code    = 'Test';
+        $discount->trigger = 'code';
+        $discount->name    = 'Test discount';
+        $discount->type    = 'fixed_amount';
+        $discount->save();
+        $discount->amounts()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 1,
+            'field'       => 'amounts',
+        ]));
+
+        $cart->applyDiscount($discount);
+
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+        $this->assertEquals(10800, $calc->totalPostTaxes());
+        $this->assertEquals(2400, round($calc->totalTaxes(), 2));
+        $this->assertCount(2, $calc->taxes());
+        $this->assertEquals(800, $calc->taxes()[0]->total());
+        $this->assertEquals(1600, $calc->taxes()[1]->total());
+    }
+
+    public function test_it_calculates_taxes_excluded_on_amount_after_discount_applied()
     {
         $tax1 = $this->getTax('Test 1', 10);
         $tax2 = $this->getTax('Test 2', 20);
@@ -211,7 +396,7 @@ class TotalsCalculatorTest extends PluginTestCase
 
         $cart->setShippingMethod($shippingMethod);
 
-        $cart->forceShippingPrice(['CHF' => 200, 'EUR' => 150], 'Enforced Price');
+        $cart->forceShippingPrice($shippingMethod->id, ['CHF' => 200, 'EUR' => 150], 'Enforced Price');
 
         $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(40000, $calc->totalPostTaxes());
@@ -883,7 +1068,8 @@ class TotalsCalculatorTest extends PluginTestCase
 
     protected function getCart(): Cart
     {
-        $cart = new Cart();
+        $cart                      = new Cart();
+        $cart->shipping_address_id = $this->address->id;
         $cart->save();
 
         return $cart;

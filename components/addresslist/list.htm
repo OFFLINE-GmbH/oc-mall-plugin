@@ -15,6 +15,22 @@
                 {% endif %}
                 {{ address.country.name }}
             </td>
+            <td>
+                <div class="mall-switcher__outer">
+                    <div class="mall-switcher">
+                        <a href="javascript:;" data-request="onChangeDefaultBillingAddress"
+                           data-request-data="id: '{{ address.hashId }}'"
+                           class="mall-switcher__item {{ __SELF__.defaultBillingAddressId == address.id ? 'mall-switcher__item--active' }}">
+                            {{ 'offline.mall::frontend.billing_address' | trans }}
+                        </a>
+                        <a href="javascript:;" data-request="onChangeDefaultShippingAddress"
+                           data-request-data="id: '{{ address.hashId }}'"
+                           class="mall-switcher__item {{ __SELF__.defaultShippingAddressId == address.id ? 'mall-switcher__item--active' }}">
+                            {{ 'offline.mall::frontend.shipping_address' | trans }}
+                        </a>
+                    </div>
+                </div>
+            </td>
             <td class="mall-address-list__table-actions">
                 <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: 'account'}) }}"
                    class="mall-btn mall-btn--sm">

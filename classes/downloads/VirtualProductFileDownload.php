@@ -5,6 +5,8 @@ namespace OFFLINE\Mall\Classes\Downloads;
 use Auth;
 use Cms\Classes\Page;
 use File;
+use Flash;
+use Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Models\GeneralSettings;
