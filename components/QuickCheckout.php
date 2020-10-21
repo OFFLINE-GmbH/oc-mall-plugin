@@ -1,16 +1,18 @@
 <?php namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Faker\Provider\Payment;
+use DB;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
+use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
-use OFFLINE\Mall\Classes\Payments\PaymentProvider;
+use OFFLINE\Mall\Classes\Payments\PaymentService;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
+use OFFLINE\Mall\Models\User;
 use RainLab\Location\Models\Country;
 use Validator;
 
@@ -56,6 +58,30 @@ class QuickCheckout extends MallComponent
      * @var boolean
      */
     public $useState = true;
+    /**
+     * Name of the CMS page that hosts the signUp component.
+     *
+     * @var string
+     */
+    public $loginPage = 'login';
+    /**
+     * Current page URL.
+     *
+     * @var string
+     */
+    public $currentPage;
+    /**
+     * Account page.
+     *
+     * @var string
+     */
+    public $accountPage;
+    /**
+     * The current user.
+     *
+     * @var User
+     */
+    public $user;
 
     /**
      * Component details.
@@ -77,7 +103,25 @@ class QuickCheckout extends MallComponent
      */
     public function defineProperties()
     {
-        return [];
+        return [
+            'loginPage' => [
+                'title' => 'Name of the login page',
+                'default' => 'login'
+            ]
+        ];
+    }
+
+    /**
+     * The component is initialized.
+     *
+     * All child components get added.
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
+        $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
     }
 
     /**
@@ -88,6 +132,54 @@ class QuickCheckout extends MallComponent
     public function onRun()
     {
         $this->setData();
+    }
+
+    /**
+     * Where the magic happens.
+     */
+    public function onSubmit()
+    {
+        $this->setData();
+
+        $data = post();
+
+        // The user is not signed in. Let's create a new account.
+        if (!$this->user) {
+            $this->user = app(SignUpHandler::class)->handle($data, (bool)post('as_guest'));
+            if (!$this->user) {
+                throw new ValidationException(
+                    [trans('offline.mall::lang.components.quickCheckout.errors.signup_failed')]
+                );
+            }
+        }
+
+        if ($this->cart->payment_method_id === null) {
+            throw new ValidationException(
+                [trans('offline.mall::lang.components.checkout.errors.missing_settings')]
+            );
+        }
+
+        $paymentData = post('payment_data', []);
+
+        $paymentMethod = PaymentMethod::findOrFail($this->cart->payment_method_id);
+
+        // Grab the PaymentGateway from the Service Container.
+        $gateway = app(PaymentGateway::class);
+        $gateway->init($paymentMethod, $paymentData);
+
+        // Create the order first.
+        $order = DB::transaction(function () {
+            return Order::fromCart($this->cart);
+        });
+
+        // If the order was created successfully proceed with the payment.
+        $paymentService = new PaymentService(
+            $gateway,
+            $order,
+            $this->page->page->fileName
+        );
+
+        return $paymentService->process();
     }
 
     /**
@@ -172,6 +264,7 @@ class QuickCheckout extends MallComponent
         return array_merge([
             '.mall-quick-checkout__shipping-methods' => $this->renderPartial($withAlias('shippingmethod')),
             '.mall-quick-checkout__payment-methods' => $this->renderPartial($withAlias('paymentmethod')),
+            '.mall-quick-checkout__cart' => $this->renderPartial($withAlias('cart')),
         ], $withData);
     }
 
@@ -201,7 +294,12 @@ class QuickCheckout extends MallComponent
      */
     protected function setData()
     {
-        $cart = Cart::byUser(Auth::getUser());
+        $this->loginPage = $this->property('loginPage');
+        $this->setVar('accountPage', GeneralSettings::get('account_page'));
+        $this->currentPage = $this->page->page->getBaseFileName();
+
+        $this->setVar('user', Auth::getUser());
+        $cart = Cart::byUser($this->user);
         if ( ! $cart->payment_method_id) {
             $cart->setPaymentMethod(PaymentMethod::getDefault());
         }

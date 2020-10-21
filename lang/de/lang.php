@@ -867,7 +867,10 @@
             'details' => [
                 'name'        => 'Schneller Checkout',
                 'description' => 'Checkout auf einer Seite',
-            ]
+            ],
+            'errors'  => [
+                'signup_failed' => 'Fehler beim Erstellen Ihres Benutzerkontos.',
+            ],
         ],
         'discountApplier'            => [
             'details'          => [

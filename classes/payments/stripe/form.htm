@@ -5,7 +5,7 @@
     </div>
     <div id="card-errors" data-validate-for="stripeToken"></div>
 
-    <input type="hidden" name="payment_data[token]" value="" id="stripe-token">
+    <input type="hidden" class="js-mall-checkout-trigger" name="payment_data[token]" value="" id="stripe-token">
 </div>
 
 <script>
@@ -35,31 +35,57 @@
                 }
             });
 
-            var form = document.getElementById('mall-payment-form');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                var submit = form.querySelector('[type="submit"]')
-                submit.classList.add('oc-loading')
-                submit.disabled = true
-
-                stripe.createToken(card).then(function (result) {
-                    if (result.error) {
-                        var errorElement = document.getElementById('card-errors');
-                        errorElement.textContent = result.error.message;
-                        submit.classList.remove('oc-loading')
-                        submit.disabled = false
-                    } else {
-                        stripeTokenHandler(result.token);
+            window.Mall.Callbacks.Checkout.push(function () {
+                return new Promise(function (resolve, reject) {
+                        generateToken().then(resolve).catch(reject)
                     }
-                });
-            });
+                )
+            })
+
+            var form = document.getElementById('mall-payment-form');
+            if (form) {
+                form.addEventListener('submit', generateToken);
+            }
+
+            var input = document.getElementById('stripe-token')
+
+            function generateToken (event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                var errorElement = document.getElementById('card-errors');
+                errorElement.classList.remove('visible')
+                if (form) {
+                    var submit = form.querySelector('[type="submit"]')
+                    if (submit) {
+                        submit.classList.add('oc-loading')
+                        submit.disabled = true
+                    }
+                }
+                return new Promise(function (resolve, reject) {
+                    stripe.createToken(card).then(function (result) {
+                        if (result.error) {
+                            errorElement.textContent = result.error.message;
+                            errorElement.classList.add('visible')
+                            if (submit) {
+                                submit.classList.remove('oc-loading')
+                                submit.disabled = false
+                            }
+                            reject(result.error.message)
+                        } else {
+                            stripeTokenHandler(result.token);
+                            resolve()
+                        }
+                    });
+                })
+            }
 
             function stripeTokenHandler (token) {
-                var input = document.getElementById('stripe-token')
                 input.value = token.id
-
-                $('#mall-payment-form').request('{{ __SELF__ }}::onSubmit')
+                var $form = $('#mall-payment-form')
+                if ($form.length) {
+                    $form.request('onSubmit')
+                }
             }
         }
     });

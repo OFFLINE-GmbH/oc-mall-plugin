@@ -872,6 +872,9 @@
                 'name'        => 'Quick Checkout',
                 'description' => 'Single-page checkout process',
             ],
+            'errors'  => [
+                'signup_failed' => 'Failed to create user account.',
+            ],
         ],
         'discountApplier'            => [
             'details'          => [

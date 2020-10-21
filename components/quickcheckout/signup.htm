@@ -1,0 +1,70 @@
+<div class="mall-quick-checkout__address">
+    <div class="mall-form-control">
+        <label for="signup_email">{{ 'offline.mall::frontend.form.email' | trans }}</label>
+        <input id="signup_email" type="email" placeholder="email@email.com" name="email">
+        <div data-validate-for="email"></div>
+    </div>
+    <p class="mall-quick-checkout__sign-in-link">
+        Already have an account?
+        <a href="{{ __SELF__.loginPage | page }}?redirect={{ __SELF__.currentPage }}">Sign in</a>
+    </p>
+    <div class="mall-two-fields">
+        <div class="mall-form-control">
+            <label for="firstname">{{ 'offline.mall::frontend.form.firstname' | trans }}</label>
+            <input id="firstname" type="text" name="firstname">
+            <div data-validate-for="firstname"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="lastname">{{ 'offline.mall::frontend.form.lastname' | trans }}</label>
+            <input id="lastname" type="text" name="lastname">
+            <div data-validate-for="lastname"></div>
+        </div>
+    </div>
+
+    <div class="mall-quick-checkout__guest-option">
+        <label class="mall-checkbox">
+            <input class="js-mall-toggle-guest-signup"
+                   type="checkbox" name="as_guest"
+                   value="1">
+            <span>{{ 'offline.mall::frontend.signup.as_guest' | trans }}</span>
+        </label>
+    </div>
+
+    <div class="mall-quick-checkout__password-inputs">
+        <div class="mall-two-fields">
+            <div class="mall-form-control">
+                <label
+                    for="signup_password">{{ 'offline.mall::frontend.form.password' | trans }}</label>
+                <input id="signup_password" type="password" name="password">
+                <div data-validate-for="password"></div>
+            </div>
+            <div class="mall-form-control">
+                <label
+                    for="password_repeat">{{ 'offline.mall::frontend.form.password_repeat' | trans }}</label>
+                <input id="password_repeat" type="password" name="password_repeat">
+                <div data-validate-for="password_repeat"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mall-quick-checkout__billing-address">
+
+        {% partial __SELF__ ~ '::addressform' type='billing' %}
+
+        <div class="mall-quick-checkout__shipping-address-option">
+            <label class="mall-checkbox">
+                <input class="js-mall-toggle-shipping-address"
+                       type="checkbox"
+                       name="use_different_shipping" value="1">
+                <span>{{ 'offline.mall::frontend.signup.different_address' | trans }}</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="mall-shipping-address" style="display: none; padding-top: 4rem;">
+        <h2 class="mall-quick-checkout__heading">
+            {{ 'offline.mall::frontend.shipping_address' | trans }}
+        </h2>
+        {% partial __SELF__ ~ '::addressform' type='shipping' %}
+    </div>
+</div>
