@@ -35,12 +35,12 @@
                 }
             });
 
-            window.Mall.Callbacks.Checkout.push(function () {
+            window.Mall.Callbacks.Checkout.Stripe = function () {
                 return new Promise(function (resolve, reject) {
                         generateToken().then(resolve).catch(reject)
                     }
                 )
-            })
+            }
 
             var form = document.getElementById('mall-payment-form');
             if (form) {

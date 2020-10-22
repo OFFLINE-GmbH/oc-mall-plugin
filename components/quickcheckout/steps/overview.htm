@@ -1,0 +1,46 @@
+<form class="mall-quick-checkout" data-request data-request-validate>
+    <div class="mall-quick-checkout__content-column">
+        <div class="mall-quick-checkout__collapsible">
+            <div class="mall-quick-checkout__collapsible-element mall-quick-checkout__collapsible-element--open">
+                {% partial __SELF__ ~ '::customerinfo' %}
+            </div>
+            <div class="mall-quick-checkout__collapsible-element mall-quick-checkout__shipping-methods">
+                {% partial __SELF__ ~ '::shippingmethod' %}
+            </div>
+            <div class="mall-quick-checkout__collapsible-element mall-quick-checkout__payment-methods">
+                {% partial __SELF__ ~ '::paymentmethod' %}
+            </div>
+        </div>
+    </div>
+    <aside class="mall-quick-checkout__cart-column">
+        <h2 class="mall-quick-checkout__heading">
+            Your Cart
+        </h2>
+
+        <div class="mall-quick-checkout__cart">
+            {% partial __SELF__ ~ '::cart' %}
+        </div>
+
+        {% if __SELF__.cart.products.count > 0 %}
+            <div class="mall-signup-terms">
+                <label class="mall-checkbox">
+                    <input class="js-mall-toggle-signup-terms"
+                           type="checkbox"
+                           name="terms_accepted"
+                           value="1"
+                    >
+                    <span>
+                    {% partial __SELF__ ~ '::termslabel' %}
+                    <div data-validate-for="terms_accepted"></div>
+                </span>
+                </label>
+            </div>
+
+            <div class="mall-quick-checkout__actions">
+                <button class="js-mall-checkout mall-btn-checkout mall-btn mall-btn--secondary">
+                    {{ 'offline.mall::frontend.checkout.checkout' | trans }}
+                </button>
+            </div>
+        {% endif %}
+    </aside>
+</form>

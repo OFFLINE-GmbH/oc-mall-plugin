@@ -25,7 +25,7 @@
                      style="{% if not isActiveMethod %}display: none{% endif %}">
                     <div class="mall-payment-method__data">
                         {% if method.payment_provider %}
-                            {{ method.payment_provider.renderPaymentForm() | raw }}
+                            {{ __SELF__.renderPaymentForm() | raw }}
                         {% endif %}
                     </div>
                     {% set customerMethods = __SELF__.customerMethods[method.id] %}

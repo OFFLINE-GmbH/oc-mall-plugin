@@ -10,9 +10,10 @@
                 $overlay.prependTo($body).show()
 
                 // Run registered callback functions.
-                if (window.Mall.Callbacks.Checkout.length > 0) {
-                    var callbacks = window.Mall.Callbacks.Checkout.map(function (fn) {
-                        return fn()
+                var keys = Object.keys(window.Mall.Callbacks.Checkout)
+                if (keys.length > 0) {
+                    var callbacks = keys.map(function (handler) {
+                        return window.Mall.Callbacks.Checkout[handler]()
                     })
                     Promise.all(callbacks).then(submit).catch(handleError)
                 } else {
@@ -58,6 +59,9 @@
             $('.js-mall-toggle-signup-terms').on('click', function () {
                 $('.js-mall-checkout').prop('disabled', ! this.checked);
             });
+            $body.on('click', '.mall-quick-checkout__payment-methods .mall-quick-checkout__toggle-option', function() {
+                window.Mall.Callbacks.Checkout = {}
+            })
         })
     </script>
 {% endput %}

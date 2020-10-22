@@ -122,11 +122,11 @@ abstract class PaymentProvider
     /**
      * Renders the payment form partial.
      *
-     * @param Cart $cart
+     * @param Cart|Order $cartOrOrder
      *
      * @return string
      */
-    public function renderPaymentForm(Cart $cart): string
+    public function renderPaymentForm($cartOrOrder): string
     {
         $override = themes_path(sprintf('partials/mall/payments/%s/%s.htm',
             $this->identifier(),
@@ -134,7 +134,7 @@ abstract class PaymentProvider
         ));
 
         if (file_exists($override)) {
-            return (new Twig)->parse(file_get_contents($override), ['cart' => $cart]);
+            return (new Twig)->parse(file_get_contents($override), ['cart' => $cartOrOrder]);
         }
 
         $fallback = plugins_path(sprintf(
@@ -144,7 +144,7 @@ abstract class PaymentProvider
         ));
 
         return file_exists($fallback)
-            ? (new Twig)->parse(file_get_contents($fallback), ['cart' => $cart])
+            ? (new Twig)->parse(file_get_contents($fallback), ['cart' => $cartOrOrder])
             : '';
     }
 
