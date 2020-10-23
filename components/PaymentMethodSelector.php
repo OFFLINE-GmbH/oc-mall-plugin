@@ -227,6 +227,26 @@ class PaymentMethodSelector extends MallComponent
     }
 
     /**
+     * Renders the payment form of the currently selected
+     * payment method.
+     *
+     * @return string
+     */
+    public function renderPaymentForm()
+    {
+        if ( ! $this->workingOnModel->payment_method) {
+            return '';
+        }
+
+        /** @var PaymentGateway $gateway */
+        $gateway = app(PaymentGateway::class);
+
+        return $gateway
+            ->getProviderById($this->workingOnModel->payment_method->payment_provider)
+            ->renderPaymentForm($this->workingOnModel);
+    }
+
+    /**
      * Get the URL to a specific checkout step.
      *
      * @param      $step
@@ -281,7 +301,7 @@ class PaymentMethodSelector extends MallComponent
             return $paymentService->process('payment');
         }
 
-        // Just to prevent any data leakage we store payment information encrypted to the session.
+        // To prevent any data leakage we store payment information encrypted in the session.
         session()->put('mall.payment_method.data', encrypt(json_encode($data)));
 
         $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'shipping';
@@ -303,8 +323,6 @@ class PaymentMethodSelector extends MallComponent
      */
     protected function getPaymentMethod()
     {
-        $paymentMethod = PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
-
-        return $paymentMethod;
+        return PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
     }
 }

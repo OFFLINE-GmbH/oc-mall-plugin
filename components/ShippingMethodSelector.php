@@ -118,7 +118,7 @@ class ShippingMethodSelector extends MallComponent
 
         $id = post('id');
 
-        if ( ! $this->methods || ! $this->methods->pluck('id')->contains($id)) {
+        if ( ! $this->methods || ! $this->methods->contains($id)) {
             throw new ValidationException([
                 'id' => trans('offline.mall::lang.components.shippingMethodSelector.errors.unavailable'),
             ]);

@@ -1,0 +1,34 @@
+{% set type = type|default(form_value('type')) %}
+{% set countryId = form_value(type ~ '_country_id') %}
+{% set stateId = form_value(type ~ '_state_id') %}
+
+{# If only one country is available it can be preselected. #}
+{% if (__SELF__.countries | length) == 1 %}
+    {% set countryId = (__SELF__.countries | keys)[0] %}
+{% endif %}
+
+{% set id = type ~ '_country_id' %}
+<div class="mall-form-control">
+    <label for="{{ id }}">{{ 'offline.mall::frontend.form.country' | trans }}</label>
+    {{ form_select_country(id, countryId, {
+        id: id,
+        emptyOption: ('offline.mall::frontend.select' | trans ),
+        'data-request': 'onInit',
+        'data-request-data' : ("type: '" ~ type ~ "'"),
+        'data-request-update': {
+            (__SELF__ ~ '::countrystate'): ('#countryState_' ~ type)
+        }
+    }) }}
+    <div data-validate-for="{{ id }}"></div>
+</div>
+{% if __SELF__.useState %}
+    {% set id = type ~ '_state_id' %}
+    <div class="mall-form-control">
+        <label for="{{ id }}">{{ 'offline.mall::frontend.form.state' | trans }}</label>
+        {{ form_select_state(id, countryId, stateId, {
+            id: id,
+            emptyOption: ('offline.mall::frontend.select' | trans ),
+        }) }}
+        <div data-validate-for="{{ id }}"></div>
+    </div>
+{% endif %}

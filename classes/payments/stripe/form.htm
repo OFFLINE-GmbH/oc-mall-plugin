@@ -1,0 +1,92 @@
+<div class="mall-form-control">
+    <label class="mall-label">{{ 'offline.mall::frontend.payment_method.card_info' | trans }}</label>
+    <div id="card-element" class="mall-input mall-input--width-limited">
+        {{ 'offline.mall::frontend.please_wait' | trans }}
+    </div>
+    <div id="card-errors" data-validate-for="stripeToken"></div>
+
+    <input type="hidden" class="js-mall-checkout-trigger" name="payment_data[token]" value="" id="stripe-token">
+</div>
+
+<script>
+    $(function () {
+
+        {# Lazy load stripe.js to ensure everything works when changing the payment method. #}
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = 'https://js.stripe.com/v3/';
+        s.onload = initStripe;
+
+        document.head.appendChild(s)
+
+        function initStripe () {
+            var stripe = Stripe('{{ cart.payment_method.settings.stripe_publishable_key }}');
+            var elements = stripe.elements();
+
+            var card = elements.create('card');
+            card.mount('#card-element');
+
+            card.addEventListener('change', function (event) {
+                var displayError = document.getElementById('card-errors');
+                if (event.error) {
+                    displayError.textContent = event.error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+
+            window.Mall.Callbacks.Checkout.Stripe = function () {
+                return new Promise(function (resolve, reject) {
+                        generateToken().then(resolve).catch(reject)
+                    }
+                )
+            }
+
+            var form = document.getElementById('mall-payment-form');
+            if (form) {
+                form.addEventListener('submit', generateToken);
+            }
+
+            var input = document.getElementById('stripe-token')
+
+            function generateToken (event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                var errorElement = document.getElementById('card-errors');
+                errorElement.classList.remove('visible')
+                if (form) {
+                    var submit = form.querySelector('[type="submit"]')
+                    if (submit) {
+                        submit.classList.add('oc-loading')
+                        submit.disabled = true
+                    }
+                }
+                return new Promise(function (resolve, reject) {
+                    stripe.createToken(card).then(function (result) {
+                        if (result.error) {
+                            errorElement.textContent = result.error.message;
+                            errorElement.classList.add('visible')
+                            if (submit) {
+                                submit.classList.remove('oc-loading')
+                                submit.disabled = false
+                            }
+                            reject(result.error.message)
+                        } else {
+                            stripeTokenHandler(result.token);
+                            resolve()
+                        }
+                    });
+                })
+            }
+
+            function stripeTokenHandler (token) {
+                input.value = token.id
+                var $form = $('#mall-payment-form')
+                if ($form.length) {
+                    $form.request('onSubmit')
+                }
+            }
+        }
+    });
+</script>

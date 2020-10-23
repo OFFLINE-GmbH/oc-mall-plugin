@@ -1,0 +1,49 @@
+<header class="mall-quick-checkout__collapsible-header">
+    <h2 class="mall-quick-checkout__heading">Payment</h2>
+    <div class="mall-quick-checkout__collapsible-summary">
+        {{ cart.payment_method.name }}
+    </div>
+</header>
+<section class="mall-quick-checkout__collapsible-content">
+    <div class="mall-quick-checkout__collapsible-inner">
+        {% for method in __SELF__.paymentMethods %}
+            {% set isActiveMethod = cart.payment_method.id == method.id %}
+            <a href="javascript:;" class="mall-quick-checkout__toggle-option {{ isActiveMethod ? 'mall-quick-checkout__toggle-option--active' : '' }}"
+               data-request="onChangePaymentMethod"
+               data-request-data="id: '{{ method.id }}'"
+               data-request-success="$.publish('mall.cart.paymentMethodChanged', data)"
+            >
+                <div class="mall-quick-checkout__toggle-option-selection">
+                    <div
+                        class="mall-selection-indicator {{ isActiveMethod ? 'mall-selection-indicator--active' : '' }}">
+                        &check;
+                    </div>
+                </div>
+                <div class="mall-quick-checkout__toggle-option-text">
+                    <h4 class="mall-quick-checkout__toggle-option-name">{{ method.name }}</h4>
+                    <div class="mall-quick-checkout__toggle-option-meta">
+                        {% if method.description %}
+                            <div>
+                                {{ method.description | raw }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if method.logo %}
+                    <div class="mall-quick-checkout__toggle-option-logo">
+                        <img class="mall-quick-checkout__toggle-option-image"
+                             src="{{ method.logo.thumb(75, 75) }}" alt=""/>
+                    </div>
+                {% endif %}
+            </a>
+            {% if isActiveMethod %}
+                <div class="mall-quick-checkout__payment-method-form">
+                    {{ __SELF__.renderPaymentForm() | raw }}
+                </div>
+            {% endif %}
+        {% else %}
+            <p>No method available.</p>
+        {% endfor %}
+
+    </div>
+</section>

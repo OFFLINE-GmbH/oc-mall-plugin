@@ -25,10 +25,7 @@
                      style="{% if not isActiveMethod %}display: none{% endif %}">
                     <div class="mall-payment-method__data">
                         {% if method.payment_provider %}
-                            {% set path = __SELF__ ~ '::gateways/' ~ (method.payment_provider) %}
-                            {% if partial(path) %}
-                                {% partial path %}
-                            {% endif %}
+                            {{ __SELF__.renderPaymentForm() | raw }}
                         {% endif %}
                     </div>
                     {% set customerMethods = __SELF__.customerMethods[method.id] %}

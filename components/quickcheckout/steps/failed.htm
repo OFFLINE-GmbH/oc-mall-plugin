@@ -1,0 +1,17 @@
+<div class="mall-checkout-result mall-checkout-result--failed">
+    {% if __SELF__.order %}
+        <h3 class="mall-checkout-result__heading">{{ 'offline.mall::frontend.checkout.payment.failed.heading' | trans }}</h3>
+        <p>{{ 'offline.mall::frontend.checkout.payment.failed.line_1' | trans }}</p>
+        <p>{{ 'offline.mall::frontend.checkout.payment.failed.line_2' | trans }}</p>
+        {% if __SELF__.paymentError %}
+            <p>
+                {{ 'offline.mall::frontend.checkout.payment.failed.line_3' | trans }}<br/>
+                <strong>{{ __SELF__.paymentError }}</strong>
+            </p>
+        {% endif %}
+    {% else %}
+        <h3 class="mall-checkout-result__heading">{{ 'offline.mall::frontend.checkout.order.failed.heading' | trans }}</h3>
+        <p>{{ 'offline.mall::frontend.checkout.order.failed.line_1' | trans }}</p>
+    {% endif %}
+    {% partial __SELF__ ~ '::resultactions' %}
+</div>

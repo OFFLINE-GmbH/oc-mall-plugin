@@ -1,0 +1,45 @@
+{% set url = (productPage | page({slug: product.data.slug, variant: product.variant.hashId})) %}
+{% set image = product.variant ? product.variant.image : product.data.image %}
+<tr class="mall-cart__product">
+    <td>
+        <a href="{{ url }}">
+            {{ product.variant.name ?: product.data.name }}
+        </a>
+        {% if product.variant %}
+            <br/>
+            <span class="text-muted">
+                {{ product.variant.properties_description | raw }}
+            </span>
+        {% endif %}
+        {% if product.custom_field_values %}
+            <br/>
+            <span class="text-muted">
+                {{ product.custom_field_value_description | raw }}
+            </span>
+        {% endif %}
+        <div class="text-muted">
+            {{ 'offline.mall::frontend.quantity' | trans }}: {{ product.quantity }}
+        </div>
+        <div>
+            <a href="javascript:;"
+               class="js-mall-remove-product"
+               data-id="{{ product.hashId }}"
+            >
+                {{ 'offline.mall::frontend.remove' | trans }}
+            </a>
+        </div>
+    </td>
+    <td class="text-right">
+        {{ product.totalPostTaxes | money }}
+    </td>
+</tr>
+
+{% for option in product.service_options %}
+    <tr class="mall-cart__services {{ loop.first ? 'mall-cart__services--first' }} {{ loop.last ? 'mall-cart__services--last' }}">
+        <td></td>
+        <td colspan="2">
+            {{ option.name }}
+        </td>
+        <td></td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,67 @@
+{% put scripts %}
+    <script>
+        $(function () {
+            var $body = $('body')
+            var $form = $('.mall-quick-checkout')
+            var $overlay = $('.mall-overlay')
+
+            $body.on('click', '.js-mall-checkout', function (e) {
+                e.preventDefault()
+                $overlay.prependTo($body).show()
+
+                // Run registered callback functions.
+                var keys = Object.keys(window.Mall.Callbacks.Checkout)
+                if (keys.length > 0) {
+                    var callbacks = keys.map(function (handler) {
+                        return window.Mall.Callbacks.Checkout[handler]()
+                    })
+                    Promise.all(callbacks).then(submit).catch(handleError)
+                } else {
+                    submit()
+                }
+
+                function handleError () {
+                    $overlay.hide();
+                    $form.find('[data-validate-for].visible:first').closest('.mall-quick-checkout__collapsible-element').trigger('click')
+                }
+
+                function submit () {
+                    $form.request('{{ __SELF__ }}::onSubmit', {
+                        error: function (jqXHR) {
+                            $overlay.hide();
+                            if (jqXHR.status === 406) {
+                                var data = jqXHR.responseJSON
+                                $form.trigger('ajaxValidation', [{}, data['X_OCTOBER_ERROR_MESSAGE'], data['X_OCTOBER_ERROR_FIELDS']])
+                                return handleError()
+                            }
+                            this.error(jqXHR)
+                            document.location.href = '{{ __SELF__.accountPage | page }}'
+                        },
+                        handleValidationMessage: function (message, fields) {
+                            $triggerEl.trigger('ajaxValidation', [context, message, fields])
+                            alert("There was an error while processing your order: " + message)
+                        }
+                    })
+                }
+            })
+
+            $('.js-mall-toggle-shipping-address').on('click', function () {
+                $('.mall-shipping-address').toggle(this.checked);
+            })
+            $('.js-mall-toggle-guest-signup').on('click', function () {
+                $('.mall-quick-checkout__password-inputs').toggle(!this.checked);
+            })
+            $('.mall-quick-checkout__collapsible-element').on('click', function () {
+                $('.mall-quick-checkout__collapsible-element--open').removeClass('mall-quick-checkout__collapsible-element--open');
+                $(this).addClass('mall-quick-checkout__collapsible-element--open')
+            })
+            $('.js-mall-checkout').prop('disabled', true)
+            $('.js-mall-toggle-signup-terms').on('click', function () {
+                $('.js-mall-checkout').prop('disabled', ! this.checked);
+            });
+            $body.on('click', '.mall-quick-checkout__payment-methods .mall-quick-checkout__toggle-option', function() {
+                window.Mall.Callbacks.Checkout = {}
+            })
+        })
+    </script>
+{% endput %}

@@ -1,0 +1,38 @@
+<div class="mall-address-form--{{ type }}">
+    <div class="mall-two-fields">
+        <div class="mall-form-control">
+            <label for="{{ type }}_company">{{ 'offline.mall::frontend.form.company' | trans }}</label>
+            <input id="{{ type }}_company" type="text"
+                   placeholder="{{ 'offline.mall::frontend.form.company_placeholder' | trans }}"
+                   name="{{ type }}_company">
+            <div data-validate-for="{{ type }}_company"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="{{ type }}_address_name">{{ 'offline.mall::frontend.form.recipient' | trans }}</label>
+            <input id="{{ type }}_address_name" type="text"
+                   placeholder="{{ 'offline.mall::frontend.form.recipient_placeholder' | trans }}"
+                   name="{{ type }}_address_name">
+            <div data-validate-for="{{ type }}_address_name"></div>
+        </div>
+    </div>
+    <div class="mall-form-control">
+        <label for="{{ type }}_lines">{{ 'offline.mall::frontend.form.address_lines' | trans }}</label>
+        <textarea id="{{ type }}_lines" type="text" name="{{ type }}_lines"></textarea>
+        <div data-validate-for="{{ type }}_lines"></div>
+    </div>
+    <div class="mall-two-fields">
+        <div class="mall-form-control">
+            <label for="{{ type }}_zip">{{ 'offline.mall::frontend.form.zip' | trans }}</label>
+            <input id="{{ type }}_zip" name="{{ type }}_zip" type="text">
+            <div data-validate-for="{{ type }}_zip"></div>
+        </div>
+        <div class="mall-form-control">
+            <label for="{{ type }}_city">{{ 'offline.mall::frontend.form.city' | trans }}</label>
+            <input id="{{ type }}_city" name="{{ type }}_city" type="text">
+            <div data-validate-for="{{ type }}_city"></div>
+        </div>
+    </div>
+    <div class="{{ __SELF__.useState ? 'mall-two-fields' }}" id="countryState_{{ type }}">
+        {% partial __SELF__ ~ '::countrystate' type=type %}
+    </div>
+</div>

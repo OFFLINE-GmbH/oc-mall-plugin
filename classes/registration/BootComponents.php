@@ -19,6 +19,7 @@ use OFFLINE\Mall\Components\Product as ProductComponent;
 use OFFLINE\Mall\Components\ProductReviews;
 use OFFLINE\Mall\Components\Products as ProductsComponent;
 use OFFLINE\Mall\Components\ProductsFilter;
+use OFFLINE\Mall\Components\QuickCheckout;
 use OFFLINE\Mall\Components\ShippingMethodSelector;
 use OFFLINE\Mall\Components\SignUp;
 use OFFLINE\Mall\Components\WishlistButton;
@@ -38,6 +39,7 @@ trait BootComponents
             AddressForm::class                => 'addressForm',
             PaymentMethodSelector::class      => 'paymentMethodSelector',
             Checkout::class                   => 'checkout',
+            QuickCheckout::class              => 'quickCheckout',
             ProductsComponent::class          => 'products',
             ProductsFilter::class             => 'productsFilter',
             ProductComponent::class           => 'product',

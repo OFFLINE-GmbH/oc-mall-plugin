@@ -43,6 +43,7 @@ module.exports = {
                     '/components/cart',
                     '/components/discount-applier',
                     '/components/checkout',
+                    '/components/quick-checkout',
                     '/components/signup',
                     '/components/wishlists',
                     '/components/wishlist-button',
