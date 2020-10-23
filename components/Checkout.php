@@ -60,6 +60,12 @@ class Checkout extends MallComponent
      * @var array
      */
     public $dataLayer;
+    /**
+     * Backend setting whether shipping should be before payment.
+     *
+     * @var bool
+     */
+    public $shippingSelectionBeforePayment = false;
 
     /**
      * Component details.
@@ -164,6 +170,10 @@ class Checkout extends MallComponent
         $this->setVar('paymentMethod', $paymentMethod);
         $this->setVar('step', $this->property('step'));
         $this->setVar('accountPage', GeneralSettings::get('account_page'));
+        $this->setVar(
+            'shippingSelectionBeforePayment',
+            GeneralSettings::get('shipping_selection_before_payment', false)
+        );
 
         if ($orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
@@ -190,7 +200,7 @@ class Checkout extends MallComponent
         // the payment method selection screen.
         $step = $this->property('step');
         if ( ! $step || ! array_key_exists($step, $this->getStepOptions())) {
-            $url = $this->stepUrl('payment');
+            $url = $this->stepUrl($this->shippingSelectionBeforePayment ? 'shipping' : 'payment');
 
             return redirect()->to($url);
         }
