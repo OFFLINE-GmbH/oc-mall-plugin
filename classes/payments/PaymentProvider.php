@@ -3,6 +3,8 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use October\Rain\Exception\ValidationException;
+use October\Rain\Parse\Twig;
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Request;
@@ -95,6 +97,55 @@ abstract class PaymentProvider
     public function encryptedSettings(): array
     {
         return [];
+    }
+
+    /**
+     * Name of the payment form partial.
+     *
+     * @return string
+     */
+    public function paymentFormPartial(): string
+    {
+        return 'form';
+    }
+
+    /**
+     * Name of the customer methods partial.
+     *
+     * @return string
+     */
+    public function customerMethodsPartial(): string
+    {
+        return 'customermethods';
+    }
+
+    /**
+     * Renders the payment form partial.
+     *
+     * @param Cart|Order $cartOrOrder
+     *
+     * @return string
+     */
+    public function renderPaymentForm($cartOrOrder): string
+    {
+        $override = themes_path(sprintf('partials/mall/payments/%s/%s.htm',
+            $this->identifier(),
+            $this->paymentFormPartial()
+        ));
+
+        if (file_exists($override)) {
+            return (new Twig)->parse(file_get_contents($override), ['cart' => $cartOrOrder]);
+        }
+
+        $fallback = plugins_path(sprintf(
+            'offline/mall/classes/payments/%s/%s.htm',
+            $this->identifier(),
+            $this->paymentFormPartial()
+        ));
+
+        return file_exists($fallback)
+            ? (new Twig)->parse(file_get_contents($fallback), ['cart' => $cartOrOrder])
+            : '';
     }
 
     /**

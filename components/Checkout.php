@@ -154,7 +154,14 @@ class Checkout extends MallComponent
             $cart->setPaymentMethod(PaymentMethod::getDefault());
         }
         $this->setVar('cart', $cart);
-        $this->setVar('paymentMethod', PaymentMethod::find($cart->payment_method_id) ?? PaymentMethod::getDefault());
+
+        $paymentMethod = PaymentMethod::find($cart->payment_method_id);
+        if ( ! $paymentMethod) {
+            $paymentMethod = PaymentMethod::getDefault();
+            $cart->setPaymentMethod($paymentMethod);
+        }
+
+        $this->setVar('paymentMethod', $paymentMethod);
         $this->setVar('step', $this->property('step'));
         $this->setVar('accountPage', GeneralSettings::get('account_page'));
 

@@ -351,3 +351,5 @@
     - Fixed mall.index.extend event handling
 1.11.31:
     - Fixed handling of checkbox properties, prevent discount codes from being applied multiple times by the same user
+1.12.0:
+    - Added experimental QuickCheckout component (single-page checkout), added dutch mail translations, various buxfixes and optimizations

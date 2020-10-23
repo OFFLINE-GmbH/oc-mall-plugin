@@ -1,0 +1,5 @@
+{% if __SELF__.cart.products.count < 1 %}
+    {{ 'offline.mall::frontend.cart.empty' | trans }}
+{% else %}
+    {% partial __SELF__ ~ '::carttable/base' %}
+{% endif %}
