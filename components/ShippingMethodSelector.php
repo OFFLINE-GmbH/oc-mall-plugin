@@ -3,6 +3,7 @@
 use Auth;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
 use Validator;
 
@@ -31,6 +32,12 @@ class ShippingMethodSelector extends MallComponent
      * @var bool
      */
     public $skipIfOnlyOneAvailable = true;
+    /**
+     * Backend setting whether shipping should be before payment.
+     *
+     * @var bool
+     */
+    public $shippingSelectionBeforePayment = false;
 
     /**
      * Component details.
@@ -71,6 +78,17 @@ class ShippingMethodSelector extends MallComponent
         $this->skipIfOnlyOneAvailable = (bool)$this->property('skipIfOnlyOneAvailable');
         $this->setVar('cart', Cart::byUser(Auth::getUser()));
         $this->setVar('methods', ShippingMethod::getAvailableByCart($this->cart));
+        $this->setVar('shippingSelectionBeforePayment', GeneralSettings::get('shipping_selection_before_payment', false));	// Needed by themes
+    }
+
+    /**
+     * The component is initialized.
+     *
+     * @return string
+     */
+    public function init()
+    {
+        $this->setData();
     }
 
     /**
@@ -80,8 +98,6 @@ class ShippingMethodSelector extends MallComponent
      */
     public function onRun()
     {
-        $this->setData();
-
         if ($this->shouldSkipStep()) {
             return $this->redirect();
         }
@@ -94,8 +110,6 @@ class ShippingMethodSelector extends MallComponent
      */
     public function onSubmit()
     {
-        $this->setData();
-
         return $this->redirect();
     }
 
@@ -106,8 +120,6 @@ class ShippingMethodSelector extends MallComponent
      */
     public function onChangeMethod()
     {
-        $this->setData();
-
         $v = Validator::make(post(), [
             'id' => 'required|exists:offline_mall_shipping_methods,id',
         ]);
@@ -133,6 +145,24 @@ class ShippingMethodSelector extends MallComponent
             '.mall-shipping-selector' => $this->renderPartial($this->alias . '::selector'),
             'method'                  => ShippingMethod::find($id),
         ];
+	}
+
+    /**
+     * Get the URL to a specific checkout step.
+     *
+     * @param      $step
+     * @param null $via
+     *
+     * @return string
+     */
+    protected function getStepUrl($step, $via = null): string
+    {
+        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => $step]);
+        if ( ! $via) {
+            return $url;
+        }
+
+        return $url . '?' . http_build_query(['via' => $via]);
     }
 
     /**
@@ -142,7 +172,12 @@ class ShippingMethodSelector extends MallComponent
      */
     protected function redirect()
     {
-        $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => 'confirm']);
+        $nextStep = 'confirm';
+        if ($this->shippingSelectionBeforePayment) {
+            $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'payment';
+        }
+
+        $url = $this->getStepUrl($nextStep);
 
         // If the analytics component is present return the datalayer partial that handles the redirect.
         if ( ! $this->shouldSkipStep() && $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
@@ -169,6 +204,6 @@ class ShippingMethodSelector extends MallComponent
         // Skip if only one method is available.
         return $this->skipIfOnlyOneAvailable
             && $this->methods->count() === 1
-            && request()->get('via') === 'payment';
+            && (request()->get('via') === 'payment' || $this->shippingSelectionBeforePayment);
     }
 }

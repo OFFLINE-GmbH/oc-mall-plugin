@@ -163,6 +163,8 @@
         'use_state_comment' => 'Los clientes deben seleccionar un Estado/País/Provincia durante el registro',
         'group_search_results_by_product' => 'Agrupar resultados por producto',
         'group_search_results_by_product_comment' => 'Mostrar un Producto sólo una vez en resultados de búsqueda, no incluir las Variantes',
+        'shipping_selection_before_payment' => 'Select shipping method BEFORE payment during checkout',
+        'shipping_selection_before_payment_comment' => 'By default, during checkout, the user is first asked to select a payment method before selecting a shipping method; use this option to reverse this logic',
         'admin_email' => 'Email del administrador',
         'admin_email_comment' => 'Las notificaciones de administración serán enviadas a esta dirección',
         'base' => 'Ajustes de Base',

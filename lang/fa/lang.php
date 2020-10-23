@@ -161,6 +161,8 @@
         'use_state_comment'          => 'مشتریان مجبور به انتخاب استان/ایالت در هنگام ثبت نام باشند',
         'group_search_results_by_product'                  => ' گروه بندی نتیجه جستجو براساس محصول ',
         'group_search_results_by_product_comment'          => 'فقط یک بار در نتایج جستجو یک محصول را نمایش دهد ، تمام متغیرهای مطابق با آنها نمایش داده نشود',
+        'shipping_selection_before_payment' => 'Select shipping method BEFORE payment during checkout',
+        'shipping_selection_before_payment_comment' => 'By default, during checkout, the user is first asked to select a payment method before selecting a shipping method; use this option to reverse this logic',
         'admin_email'                => 'ایمیل مدیریت',
         'admin_email_comment'        => 'اعلان های مدیریت به این آدرس ایمیل ارسال می شوند',
         'base'                       => 'تنظمیات پایه',
