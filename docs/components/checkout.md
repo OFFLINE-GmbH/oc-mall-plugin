@@ -1,6 +1,7 @@
 # Checkout
 
 The `Checkout` component orchestrates the complete checkout process.
+An alternative to this component is the [QuickCheckout](./quick-checkout.md) component.
 
 By changing the `step` property, a different checkout step will be displayed. The component takes 
 care of all redirects and component initialisations.
