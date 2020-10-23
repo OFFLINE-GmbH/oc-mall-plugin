@@ -212,6 +212,7 @@ class QuickCheckout extends MallComponent
                     [trans('offline.mall::lang.components.quickCheckout.errors.signup_failed')]
                 );
             }
+            $this->cart = $this->cart->refresh();
         }
 
         if ($this->cart->payment_method_id === null && $this->order === null) {
