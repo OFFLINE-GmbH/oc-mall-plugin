@@ -17,7 +17,7 @@ class DefaultMoney implements Money
         $this->twig = App::make('mall.twig.environment');
     }
 
-    public function format(?int $value, $product = null, ?Currency $currency = null): string
+    public function format(?float $value, $product = null, ?Currency $currency = null): string
     {
         $currency = $currency ?? Currency::activeCurrency();
 
