@@ -597,6 +597,7 @@
         'total_revenue' => 'Gesamteinnahmen',
         'download_invoice' => 'Rechnung herunterladen',
         'order_file_name' => 'bestellung-:order',
+        'download_link' => 'Download-Links werden nach Zahlungseingang separat verschickt.',
         'modal' => [
             'cancel' => 'Abbrechen',
             'update' => 'Daten aktualisieren',

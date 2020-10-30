@@ -497,6 +497,7 @@
         'not_shipped' => 'Pendente',
         'data' => 'Data dell\'ordine',
         'total_revenue' => 'Entrate totali',
+        'download_link' => 'I link per il download verranno inviati separatamente dopo il pagamento.',
         'modal' => [
             'cancel' => 'Annulla',
             'update' => 'Aggiorna informazioni',

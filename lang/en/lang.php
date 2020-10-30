@@ -601,6 +601,7 @@ return [
         'total_revenue' => 'Total revenue',
         'download_invoice' => 'Download invoice',
         'order_file_name' => 'order-:order',
+        'download_link' => 'Download links will be sent separately after payment.',
         'modal' => [
             'cancel' => 'Cancel',
             'update' => 'Update information',

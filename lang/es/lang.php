@@ -595,6 +595,7 @@
         'total_revenue' => 'Utilidad total',
         'download_invoice' => 'Descargar factura',
         'order_file_name' => 'pedido-:order',
+        'download_link' => 'Los enlaces de descarga se enviarán por separado después del pago.',
         'modal' => [
             'cancel' => 'Cancelar',
             'update' => 'Actualizar información',

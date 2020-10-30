@@ -591,6 +591,7 @@
         'data'                                => 'Data objednávky',
         'total_revenue'                       => 'Celkové příjmy',
         'download_invoice'                    => 'Stáhnout fakturu',
+        'download_link'                       => 'Odkazy ke stažení budou zaslány samostatně po zaplacení.',
         'modal'                               => [
             'cancel' => 'Zrušit',
             'update' => 'Aktualizovat informace',

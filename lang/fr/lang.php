@@ -595,6 +595,7 @@
         'total_revenue' => 'Revenu total',
         'download_invoice' => 'Télécharger la facture',
         'order_file_name' => 'commande-:order',
+        'download_link' => 'Les liens de téléchargement seront envoyés séparément après le paiement.',
         'modal' => [
             'cancel' => 'Annuler',
             'update' => 'Mettre à jour information',
