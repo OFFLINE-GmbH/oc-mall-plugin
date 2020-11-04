@@ -13,13 +13,18 @@ use OFFLINE\Mall\Models\User as MallUser;
 use RainLab\Location\Models\Country as RainLabCountry;
 use RainLab\User\Controllers\Users as RainLabUsersController;
 use RainLab\User\Models\User as RainLabUser;
+use System\Classes\PluginManager;
 
 trait BootExtensions
 {
     protected function registerExtensions()
     {
-        $this->extendRainLabCountry();
-        $this->extendRainLabUser();
+        if (PluginManager::instance()->exists('RainLab.Location')) {
+            $this->extendRainLabCountry();
+        }
+        if (PluginManager::instance()->exists('RainLab.User')) {
+            $this->extendRainLabUser();
+        }
     }
 
     protected function extendRainLabCountry()
