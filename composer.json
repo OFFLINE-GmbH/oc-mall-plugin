@@ -19,7 +19,7 @@
   "require": {
     "composer/installers": "~1.0",
     "hashids/hashids": "^2.0",
-    "filebase/filebase": "^1.0",
+    "tmarois/filebase": "^1.0",
     "offline/jsonq": "^5.2.4",
     "illuminate/support": "5.5.*|6.*",
     "elasticsearch/elasticsearch": "^6.0",
