@@ -13,7 +13,7 @@ The currently active checkout step. This parameter should be filled via URL para
 
 The name of the cms page that hosts the `signUp` component. By default, a sign up form is
 displayed by the `quickCheckout` component. For users with an existing account a "Log in"
-link is available. This property determines what cms page will be used for that linked.
+link is available. This property determines what cms page will be used for that link.
 
 ## Example implementations
 
