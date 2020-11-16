@@ -145,6 +145,7 @@ return [
     'wishlists' => 'Списки желаний',
     'wishlists.none' => 'Вы еще не создали ни одного списка желаний.',
     'wishlists.addtocart' => 'Добавить все товары в корзину',
+    'wishlists.pdf_download' => 'Скачать PDF',
     'wishlists.addedtocart' => 'Все товары были добавлены в вашу корзину',
     'wishlists.stockmissing' => 'Некоторые товары отсутствуют на складе и не были добавлены в корзину.',
     'services.modal_title' => 'Выберите дополнительные услуги для этого товара',
