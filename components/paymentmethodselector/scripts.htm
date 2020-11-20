@@ -23,6 +23,7 @@
                 error: function(res) {
                     submit.classList.remove('oc-loading')
                     submit.disabled = false
+                    $overlay.hide()
                     this.error(res)
                 }
             })

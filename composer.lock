@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1601e3bab147589c18c434ba6547e66b",
+    "content-hash": "1cb085209a35e993fb2ebecbe0a87975",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -483,60 +483,6 @@
                 "search"
             ],
             "time": "2019-07-19T14:48:24+00:00"
-        },
-        {
-            "name": "filebase/filebase",
-            "version": "v1.0.24",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/filebase/Filebase.git",
-                "reference": "b660650472362e45f78d97cb395f09889196d164"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/filebase/Filebase/zipball/b660650472362e45f78d97cb395f09889196d164",
-                "reference": "b660650472362e45f78d97cb395f09889196d164",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.0",
-                "phpunit/phpunit": "5.*",
-                "symfony/yaml": "^3.4"
-            },
-            "suggest": {
-                "symfony/yaml": "Allows Yaml format"
-            },
-            "type": "package",
-            "autoload": {
-                "psr-4": {
-                    "Filebase\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Timothy Marois",
-                    "email": "timothymarois@gmail.com"
-                }
-            ],
-            "description": "A Simple but Powerful Flat File Database Storage.",
-            "homepage": "https://github.com/filebase/Filebase",
-            "keywords": [
-                "database",
-                "document",
-                "file",
-                "file-files",
-                "filebase",
-                "flat",
-                "flat-file",
-                "key-value",
-                "serverless"
-            ],
-            "abandoned": "tmarois/filebase",
-            "time": "2019-02-24T22:55:23+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2830,6 +2776,59 @@
                 "standards"
             ],
             "time": "2019-11-18T17:27:11+00:00"
+        },
+        {
+            "name": "tmarois/filebase",
+            "version": "v1.0.24",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tmarois/Filebase.git",
+                "reference": "b660650472362e45f78d97cb395f09889196d164"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tmarois/Filebase/zipball/b660650472362e45f78d97cb395f09889196d164",
+                "reference": "b660650472362e45f78d97cb395f09889196d164",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "5.*",
+                "symfony/yaml": "^3.4"
+            },
+            "suggest": {
+                "symfony/yaml": "Allows Yaml format"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Filebase\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Timothy Marois",
+                    "email": "timothymarois@gmail.com"
+                }
+            ],
+            "description": "A Simple but Powerful Flat File Database Storage.",
+            "homepage": "https://github.com/filebase/Filebase",
+            "keywords": [
+                "database",
+                "document",
+                "file",
+                "file-files",
+                "filebase",
+                "flat",
+                "flat-file",
+                "key-value",
+                "serverless"
+            ],
+            "time": "2019-02-24T22:55:23+00:00"
         },
         {
             "name": "vitalybaev/google-merchant-feed",
