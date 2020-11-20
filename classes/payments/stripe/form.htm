@@ -83,8 +83,17 @@
             function stripeTokenHandler (token) {
                 input.value = token.id
                 var $form = $('#mall-payment-form')
+                var submit = form.querySelector('.oc-loading')
                 if ($form.length) {
-                    $form.request('onSubmit')
+                    $form.request('onSubmit', {
+                        error: function(res) {
+                            if (submit) {
+                                submit.classList.remove('oc-loading')
+                                submit.disabled = false
+                            }
+                            this.error(res)
+                        }
+                    })
                 }
             }
         }
