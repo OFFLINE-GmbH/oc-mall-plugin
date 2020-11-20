@@ -355,3 +355,5 @@
     - Added experimental QuickCheckout component (single-page checkout), added dutch mail translations, various buxfixes and optimizations
 1.12.1:
     - Added option to display Shipping selector before Payment method selector in default Checkout component
+1.12.2:
+    - Bugfix release
