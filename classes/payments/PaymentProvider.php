@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use Cms\Classes\Theme;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Parse\Twig;
 use OFFLINE\Mall\Models\Cart;
@@ -120,6 +121,16 @@ abstract class PaymentProvider
     }
 
     /**
+     * Code of the active theme.
+     *
+     * @return string
+     */
+    public function activeThemeCode(): string
+    {
+        return Theme::getActiveThemeCode();
+    }
+
+    /**
      * Renders the payment form partial.
      *
      * @param Cart|Order $cartOrOrder
@@ -128,7 +139,8 @@ abstract class PaymentProvider
      */
     public function renderPaymentForm($cartOrOrder): string
     {
-        $override = themes_path(sprintf('partials/mall/payments/%s/%s.htm',
+        $override = themes_path(sprintf('%s/partials/mall/payments/%s/%s.htm',
+            $this->activeThemeCode(),
             $this->identifier(),
             $this->paymentFormPartial()
         ));
