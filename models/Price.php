@@ -25,7 +25,7 @@ class Price extends Model
         'field',
     ];
     public $belongsTo = [
-        'category' => [PriceCategory::class],
+        'category' => [PriceCategory::class, 'key' => 'price_category_id'],
         'currency' => [Currency::class],
     ];
     /**
