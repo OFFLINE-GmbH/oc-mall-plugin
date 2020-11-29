@@ -169,8 +169,8 @@ class QuickCheckout extends MallComponent
             $this->step = 'overview';
         }
         if ($this->step === 'overview') {
-            $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
-            $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
+            $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing', 'redirect' => 'quickCheckout']);
+            $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping', 'redirect' => 'quickCheckout']);
         } elseif ($this->step === 'payment') {
             $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         }
@@ -188,6 +188,11 @@ class QuickCheckout extends MallComponent
         // An off-site payment has been completed
         if ($type = request()->input('return')) {
             return $this->handleOffSiteReturn($type);
+        }
+
+        // If a invalid step is provided, show a 404 error page.
+        if ( ! in_array($this->step, array_keys($this->getStepOptions()))) {
+            return $this->controller->run('404');
         }
 
         // If an order has been created but something failed we can fetch the paymentError

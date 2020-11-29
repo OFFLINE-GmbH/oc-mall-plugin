@@ -228,6 +228,11 @@ class AddressForm extends MallComponent
                 GeneralSettings::get('checkout_page'),
                 ['step' => 'confirm']
             );
+        } elseif ($redirect === 'quickCheckout') {
+            $url = $this->controller->pageUrl(
+                GeneralSettings::get('checkout_page'),
+                ['step' => 'overview']
+            );
         } elseif ($redirect === 'account') {
             $url = $this->controller->pageUrl(
                 GeneralSettings::get('account_page'),
