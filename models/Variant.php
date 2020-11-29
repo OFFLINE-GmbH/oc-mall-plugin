@@ -378,7 +378,7 @@ class Variant extends Model
             ->map(function (self $variant) use ($cmsPage, $page, $url) {
                 $pageUrl = $cmsPage->url($page, [
                     'slug'    => $variant->product->slug,
-                    'variant' => $variant->variantId,
+                    'variant' => $variant->variantHashId,
                 ]);
 
                 return [
