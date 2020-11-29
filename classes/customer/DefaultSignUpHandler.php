@@ -168,6 +168,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
     public static function rules($forSignup = true): array
     {
+        $minPasswordLength = \RainLab\User\Models\User::getMinPasswordLength();
         $rules = [
             'firstname'           => 'required',
             'lastname'            => 'required',
@@ -182,7 +183,7 @@ class DefaultSignUpHandler implements SignUpHandler
             'shipping_city'       => 'required_if:use_different_shipping,1',
             'shipping_state_id'   => 'required_if:use_different_shipping,1|exists:rainlab_location_states,id',
             'shipping_country_id' => 'required_if:use_different_shipping,1|exists:rainlab_location_countries,id',
-            'password'            => 'required|min:8|max:255',
+            'password'            => sprintf('required|min:%d|max:255', $minPasswordLength),
             'password_repeat'     => 'required|same:password',
             'terms_accepted'      => 'required',
         ];
