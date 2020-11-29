@@ -357,3 +357,5 @@
     - Added option to display Shipping selector before Payment method selector in default Checkout component
 1.12.2:
     - Bugfix release
+1.12.3:
+    - Re-use RainLab.User's min password length setting, fixed various bugs
