@@ -10,5 +10,6 @@ name = "Address"
     {% if address.state_id %}
         {{ address.state.name }}<br />
     {% endif %}
-    {{ address.country.name }}
+    {{ address.country.name }}<br>
+    {{ order.customer.user.email }}
 </p>

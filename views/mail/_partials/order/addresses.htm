@@ -3,9 +3,9 @@ name = "Addresses"
 ## {{ order.shipping_address_same_as_billing
 ? ('offline.mall::mail.order.partials.billing_and_shipping' | trans())
 : ('offline.mall::mail.order.partials.billing_address' | trans()) }}
-{% partial 'mall.customer.address' address=order.billing_address %}
+{% partial 'mall.customer.address' address=order.billing_address order=order %}
 
 {% if not order.shipping_address_same_as_billing %}
     ## {{ 'offline.mall::mail.order.partials.shipping_address' | trans() }}
-    {% partial 'mall.customer.address' address=order.shipping_address %}
+    {% partial 'mall.customer.address' address=order.shipping_address order=order %}
 {% endif %}
