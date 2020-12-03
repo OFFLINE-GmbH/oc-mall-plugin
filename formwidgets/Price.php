@@ -85,11 +85,7 @@ class Price extends FormWidgetBase
     public function prepareVars()
     {
         $this->vars['defaultCurrency'] = $this->defaultCurrency;
-        if ($this->value) {
-            $this->vars['defaultValue'] = $this->value;
-        } else {
-            $this->vars['defaultValue'] = $this->getPriceValue($this->defaultCurrency->id);
-        }
+        $this->vars['defaultValue']    = $this->getPriceValue($this->defaultCurrency->id);
         $this->vars['currencies']      = Currency::orderBy('sort_order', 'ASC')->get();
         $this->vars['field']           = $this->formField;
     }
@@ -105,7 +101,7 @@ class Price extends FormWidgetBase
     {
         $value = $this->getLoadValue();
         if ( ! $value) {
-            return null;
+            return $this->value;
         }
 
         return $value->where('currency_id', $currency)->first()->decimal ?? false;
