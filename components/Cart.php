@@ -99,7 +99,7 @@ class Cart extends MallComponent
             ],
             'showTaxes'           => [
                 'type'    => 'checkbox',
-                'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.name',
+                'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.title',
                 'default' => 1,
             ],
             'showShipping' => [
