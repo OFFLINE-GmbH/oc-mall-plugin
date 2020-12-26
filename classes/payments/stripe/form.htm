@@ -83,8 +83,8 @@
             function stripeTokenHandler (token) {
                 input.value = token.id
                 var $form = $('#mall-payment-form')
-                var submit = form.querySelector('.oc-loading')
                 if ($form.length) {
+                    var submit = $form.querySelector('.oc-loading')
                     $form.request('onSubmit', {
                         error: function(res) {
                             if (submit) {
