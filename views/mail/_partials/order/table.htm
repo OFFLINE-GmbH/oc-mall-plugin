@@ -41,7 +41,7 @@ name = "Order table"
                     </div>
                     {% if item.is_virtual %}
                         <div class="download">
-                            Download links will be sent separately after payment.
+                            {{ 'offline.mall::lang.order.virtual_product_download_hint' | trans }}
                         </div>
                     {% endif %}
                 </td>
