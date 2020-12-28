@@ -566,6 +566,8 @@ class Product extends MallComponent
         Flash::success(trans('offline.mall::frontend.cart.added'));
 
         return [
+            'product' => $product,
+            'variant' => $variant,
             'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
