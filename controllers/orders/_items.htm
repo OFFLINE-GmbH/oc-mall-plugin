@@ -102,7 +102,7 @@
         </td>
         <td class="text-right">
             <span>
-                <?= e($order['shipping']['method']['price_formatted']) ?>
+                <?= e($order->totalShippingPostTaxes()); ?>
             </span>
         </td>
     </tr>
