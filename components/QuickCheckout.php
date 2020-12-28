@@ -172,7 +172,7 @@ class QuickCheckout extends MallComponent
         if ($this->step === 'overview') {
             $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing', 'redirect' => 'quickCheckout']);
             $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping', 'redirect' => 'quickCheckout']);
-        } elseif ($this->step === 'payment') {
+        } elseif ($this->step === 'payment' || $this->step === 'cancelled') {
             $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         }
         $this->setData();
