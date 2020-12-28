@@ -566,8 +566,8 @@ class Product extends MallComponent
         Flash::success(trans('offline.mall::frontend.cart.added'));
 
         return [
-            'product' => $product,
-            'variant' => $variant,
+            'product' => $product->only($this->getPublicAttributes()),
+            'variant' => $variant->only($this->getPublicAttributes()),
             'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
@@ -575,6 +575,16 @@ class Product extends MallComponent
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
             'added' => true,
         ];
+    }
+
+    /**
+     * Defines what attributes are returned as JSON when a product was added to the cart.
+     *
+     * @return string[]
+     */
+    protected function getPublicAttributes(): array
+    {
+        return ['hash_id', 'user_defined_id', 'name', 'slug', 'description_short', 'description', 'is_virtual', 'image_sets'];
     }
 
     /**
