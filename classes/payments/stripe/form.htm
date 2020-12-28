@@ -84,12 +84,12 @@
                 input.value = token.id
                 var $form = $('#mall-payment-form')
                 if ($form.length) {
-                    var submit = $form.querySelector('.oc-loading')
+                    var submit = $form.find('.oc-loading')
                     $form.request('onSubmit', {
                         error: function(res) {
                             if (submit) {
-                                submit.classList.remove('oc-loading')
-                                submit.disabled = false
+                                submit.removeClass('oc-loading')
+                                submit.prop('disabled', false)
                             }
                             this.error(res)
                         }

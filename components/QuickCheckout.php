@@ -149,6 +149,7 @@ class QuickCheckout extends MallComponent
             'failed' => trans('offline.mall::lang.components.checkout.steps.failed'),
             'cancelled' => trans('offline.mall::lang.components.checkout.steps.cancelled'),
             'done' => trans('offline.mall::lang.components.checkout.steps.done'),
+            'payment' => trans('offline.mall::lang.components.checkout.steps.payment'),
         ];
     }
 
