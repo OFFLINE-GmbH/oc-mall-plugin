@@ -3,11 +3,8 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
-use October\Rain\Database\Relations\HasMany;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Models\ImageSet;
-use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\Variant;
 use System\Models\File;
 
 trait Images

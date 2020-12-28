@@ -584,7 +584,7 @@ class Product extends MallComponent
      */
     protected function getPublicAttributes(): array
     {
-        return ['hash_id', 'user_defined_id', 'name', 'slug', 'description_short', 'description', 'is_virtual', 'image_sets'];
+        return ['hash_id', 'user_defined_id', 'name', 'slug', 'description_short', 'description', 'is_virtual', 'images', 'main_image', 'all_images'];
     }
 
     /**
