@@ -27,6 +27,7 @@ class Address extends Model
     public $fillable = [
         'company',
         'name',
+        'customer_id',
         'lines',
         'zip',
         'country_id',
