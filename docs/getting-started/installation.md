@@ -23,11 +23,12 @@ php artisan plugin:install offline.mall
 ```
 
 If you plan to use our [demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) make sure to also
- install `RainLab.Pages`. These are dependencies of the demo theme, not the plugin itself.
+ install `RainLab.Pages` and `OFFLINE.SiteSearch`. These are dependencies of the demo theme, not the plugin itself.
 
 ```bash
 # For the demo theme only!
 php artisan plugin:install rainlab.pages
+php artisan plugin:install offline.sitesearch
 ```   
 
 ### Check your installation
@@ -76,7 +77,7 @@ If you use the demo theme you should still apply the steps mentioned in the "Con
 
 * <input type="checkbox"> Simply clone the theme to `<your installation>/themes/mall` and select it as your active theme.
 
-* <input type="checkbox"> The demo theme requires `RainLab.Translate` and `RainLab.Pages` to be installed. Make sure 
+* <input type="checkbox"> The demo theme requires `OFFLINE.SiteSearch` and `RainLab.Pages` to be installed. Make sure 
 these plugins are available as well.
 
 If you want to start with a blank slate just follow the instructions on this and the [Theme Setup](./theme-setup.md) 
