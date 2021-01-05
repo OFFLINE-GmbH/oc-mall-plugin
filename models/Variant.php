@@ -108,6 +108,8 @@ class Variant extends Model
         'allow_out_of_stock_purchases',
         'mpn',
         'gtin',
+        'description',
+        'description_short',
     ];
 
     public function afterSave()
