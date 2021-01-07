@@ -567,7 +567,7 @@ class Product extends MallComponent
 
         return [
             'product' => $product->only($this->getPublicAttributes()),
-            'variant' => $variant->only($this->getPublicAttributes()),
+            'variant' => optional($variant)->only($this->getPublicAttributes()),
             'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
