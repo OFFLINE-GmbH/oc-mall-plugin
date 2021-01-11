@@ -99,7 +99,7 @@ class Cart extends MallComponent
             ],
             'showTaxes'           => [
                 'type'    => 'checkbox',
-                'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.name',
+                'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.title',
                 'default' => 1,
             ],
             'showShipping' => [
@@ -247,7 +247,7 @@ class Cart extends MallComponent
             'name'     => $product->name,
             'price'    => $item->price()->decimal,
             'brand'    => optional($item->brand)->name,
-            'category' => $item->categories->first()->name,
+            'category' => optional($item->categories->first())->name,
             'variant'  => optional($variant)->name,
         ];
     }

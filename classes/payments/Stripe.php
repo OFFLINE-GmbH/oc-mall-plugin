@@ -2,12 +2,15 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use Illuminate\Support\Facades\Session;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\CustomerPaymentMethod;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Omnipay\Common\GatewayInterface;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\Omnipay;
+use Omnipay\Stripe\Message\PaymentIntents\Response;
+use Omnipay\Stripe\PaymentIntentsGateway;
 use Throwable;
 use Validator;
 
@@ -61,8 +64,7 @@ class Stripe extends PaymentProvider
         $response                 = null;
         $useCustomerPaymentMethod = $this->order->customer_payment_method;
         try {
-            $gateway = Omnipay::create('Stripe');
-            $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
+            $gateway = $this->getGateway();
 
             $customer        = $this->order->customer;
             $isFirstCheckout = false;
@@ -80,8 +82,10 @@ class Stripe extends PaymentProvider
                     return $result->fail((array)$response->getData(), $response);
                 }
 
-                $customerReference = $response->getCustomerReference();
+                $customerReference = $customer->stripe_customer_id;
                 $cardReference     = $response->getCardReference();
+
+                $this->createCustomerPaymentMethod($customerReference, $cardReference, array_get($response->getData(), 'card'));
             } else {
                 // If this is the first checkout for this customer we have to register
                 // the customer and a card on Stripe.
@@ -90,8 +94,21 @@ class Stripe extends PaymentProvider
                     return $result->fail((array)$response->getData(), $response);
                 }
 
+                $responseData      = $response->getData();
                 $customerReference = $response->getCustomerReference();
                 $cardReference     = $response->getCardReference();
+
+                // Try to find the newly created card in the response. Since this is a new customer,
+                // the default_source will be the card we are looking for.
+                $defaultSource = array_get($responseData, 'default_source');
+                $sources = array_get($responseData, 'sources.data', []);
+                $card = array_first($sources, function($source) use ($defaultSource) {
+                    return $source['id'] === $defaultSource;
+                });
+
+                if ($card) {
+                    $this->createCustomerPaymentMethod($customerReference, $cardReference, $card);
+                }
 
                 $isFirstCheckout = true;
             }
@@ -105,24 +122,82 @@ class Stripe extends PaymentProvider
             }
 
             $response = $this->charge($gateway, $customerReference, $cardReference);
+
         } catch (Throwable $e) {
             return $result->fail([], $e);
         }
 
-        $data = (array)$response->getData();
+        // Everthing went OK, no 3DS required.
+        if ($response->isSuccessful()) {
+            return $this->completeOrder($result, $response);
+        }
+
+        // 3DS authentication is required, redirect to Stripe.
+        if ($response->isRedirect()) {
+            Session::put('mall.payment.callback', self::class);
+            Session::put('mall.stripe.paymentIntentReference', $response->getPaymentIntentReference());
+
+            return $result->redirect($response->getRedirectUrl());
+        }
+
+        // Something went wrong! :(
+        return $result->fail((array)$response->getData(), $response);
+    }
+
+    /**
+     * Stripe has processed the payment and redirected the user back.
+     *
+     * @param PaymentResult $result
+     *
+     * @return PaymentResult
+     */
+    public function complete(PaymentResult $result): PaymentResult
+    {
+        $intentReference     = Session::pull('mall.stripe.paymentIntentReference');
+
+        if ( ! $intentReference) {
+            return $result->fail([
+                'msg'   => 'Missing payment intent reference',
+                'intent_reference'   => $intentReference,
+            ], null);
+        }
+
+        $this->setOrder($result->order);
+
+        try {
+            $response = $this->getGateway()->confirm([
+                'paymentIntentReference' => $intentReference,
+                'returnUrl' => $this->returnUrl(),
+            ])->send();
+        } catch (Throwable $e) {
+            return $result->fail([], $e);
+        }
+
         if ( ! $response->isSuccessful()) {
-            return $result->fail($data, $response);
+            return $result->fail((array)$response->getData(), $response);
         }
 
-        if ( ! $useCustomerPaymentMethod) {
-            $this->createCustomerPaymentMethod($customerReference, $cardReference, $data);
-        }
+        return $this->completeOrder($result, $response);
+    }
 
-        $this->order->card_type                = $data['source']['brand'];
-        $this->order->card_holder_name         = $data['source']['name'];
-        $this->order->credit_card_last4_digits = $data['source']['last4'];
+    /**
+     * Set the returned info from Stripe on the Order and Customer.
+     *
+     * @param PaymentResult $result
+     * @param Response $response
+     * @return PaymentResult
+     */
+    protected function completeOrder(PaymentResult $result, Response $response)
+    {
+        $data = $response->getData();
 
-        $this->order->customer->stripe_customer_id = $customerReference;
+        $charge = array_get($data, 'charges.data.0', []);
+
+        $this->order->card_type                = array_get($charge, 'payment_method_details.card.brand');
+        $this->order->card_holder_name         = array_get($charge, 'payment_method_details.card.name');
+        $this->order->credit_card_last4_digits = array_get($charge, 'payment_method_details.card.last4');
+
+        $this->order->customer->stripe_customer_id = array_get($data, 'customer');
         $this->order->customer->save();
 
         return $result->success($data, $response);
@@ -220,7 +295,7 @@ class Stripe extends PaymentProvider
     {
         return $gateway->createCard([
             'customerReference' => $customer->stripe_customer_id,
-            'source'            => $this->data['token'] ?? false,
+            'token'             => $this->data['token'] ?? false,
             'name'              => $customer->name,
         ])->send();
     }
@@ -263,9 +338,9 @@ class Stripe extends PaymentProvider
      * @param                  $customerReference
      * @param                  $cardReference
      *
-     * @return ResponseInterface
+     * @return Response
      */
-    protected function charge(GatewayInterface $gateway, $customerReference, $cardReference): ResponseInterface
+    protected function charge(GatewayInterface $gateway, $customerReference, $cardReference): Response
     {
         return $gateway->purchase([
             'amount'            => $this->order->total_in_currency,
@@ -274,6 +349,7 @@ class Stripe extends PaymentProvider
             'cancelUrl'         => $this->cancelUrl(),
             'customerReference' => $customerReference,
             'cardReference'     => $cardReference,
+            'confirm'           => true,
         ])->send();
     }
 
@@ -282,9 +358,9 @@ class Stripe extends PaymentProvider
      *
      * @param       $customerReference
      * @param       $cardReference
-     * @param array $data
+     * @param array $card
      */
-    protected function createCustomerPaymentMethod($customerReference, $cardReference, array $data)
+    protected function createCustomerPaymentMethod($customerReference, $cardReference, array $card)
     {
         CustomerPaymentMethod::create([
             'name'              => trans('offline.mall::lang.order.credit_card'),
@@ -293,10 +369,23 @@ class Stripe extends PaymentProvider
             'data'              => [
                 'stripe_customer_id' => $customerReference,
                 'stripe_card_id'     => $cardReference,
-                'stripe_card_brand'  => $data['source']['brand'],
-                'stripe_card_last4'  => $data['source']['last4'],
+                'stripe_card_brand'  => array_get($card, 'brand'),
+                'stripe_card_last4'  => array_get($card, 'last4'),
             ],
         ]);
+    }
+
+    /**
+     * Build and return the Stripe Intents gateway.
+     *
+     * @return PaymentIntentsGateway
+     */
+    protected function getGateway(): PaymentIntentsGateway
+    {
+        $gateway = Omnipay::create('Stripe\PaymentIntents');
+        $gateway->setApiKey(decrypt(PaymentGatewaySettings::get('stripe_api_key')));
+
+        return $gateway;
     }
 
 }

@@ -7,6 +7,7 @@ use Cms\Classes\Page;
 use File;
 use Flash;
 use Request;
+use Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Models\GeneralSettings;

@@ -108,6 +108,8 @@ class Variant extends Model
         'allow_out_of_stock_purchases',
         'mpn',
         'gtin',
+        'description',
+        'description_short',
     ];
 
     public function afterSave()
@@ -378,7 +380,7 @@ class Variant extends Model
             ->map(function (self $variant) use ($cmsPage, $page, $url) {
                 $pageUrl = $cmsPage->url($page, [
                     'slug'    => $variant->product->slug,
-                    'variant' => $variant->variantId,
+                    'variant' => $variant->variantHashId,
                 ]);
 
                 return [

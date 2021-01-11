@@ -357,3 +357,10 @@
     - Added option to display Shipping selector before Payment method selector in default Checkout component
 1.12.2:
     - Bugfix release
+1.12.3:
+    - Re-use RainLab.User's min password length setting, fixed various bugs
+1.13.0:
+    - '!!! Switched to Stripe Intents API (supports Strong Customer Authentication and 3D Secure payment flows). Test this update with your Stripe setup before deploying it in production! (Changelog: https://tinyurl.com/y79ane6j)'
+1.13.1:
+    - 'Bugfix release'
+

@@ -4,6 +4,8 @@ namespace OFFLINE\Mall\Classes\Utils;
 
 use Illuminate\Support\Facades\App;
 use OFFLINE\Mall\Models\Currency;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class DefaultMoney implements Money
 {
@@ -41,8 +43,8 @@ class DefaultMoney implements Money
 
     protected function render($contents, array $vars)
     {
-        $template = $this->twig->createTemplate($contents);
+        $twig = new Environment(new ArrayLoader(['content' => $contents]));
 
-        return $template->render($vars);
+        return $twig->render('content', $vars);
     }
 }

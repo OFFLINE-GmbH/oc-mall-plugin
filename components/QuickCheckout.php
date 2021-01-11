@@ -149,6 +149,7 @@ class QuickCheckout extends MallComponent
             'failed' => trans('offline.mall::lang.components.checkout.steps.failed'),
             'cancelled' => trans('offline.mall::lang.components.checkout.steps.cancelled'),
             'done' => trans('offline.mall::lang.components.checkout.steps.done'),
+            'payment' => trans('offline.mall::lang.components.checkout.steps.payment'),
         ];
     }
 
@@ -169,9 +170,9 @@ class QuickCheckout extends MallComponent
             $this->step = 'overview';
         }
         if ($this->step === 'overview') {
-            $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing']);
-            $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping']);
-        } elseif ($this->step === 'payment') {
+            $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing', 'redirect' => 'quickCheckout']);
+            $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping', 'redirect' => 'quickCheckout']);
+        } elseif ($this->step === 'payment' || $this->step === 'cancelled') {
             $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
         }
         $this->setData();
@@ -188,6 +189,11 @@ class QuickCheckout extends MallComponent
         // An off-site payment has been completed
         if ($type = request()->input('return')) {
             return $this->handleOffSiteReturn($type);
+        }
+
+        // If a invalid step is provided, show a 404 error page.
+        if ( ! in_array($this->step, array_keys($this->getStepOptions()))) {
+            return $this->controller->run('404');
         }
 
         // If an order has been created but something failed we can fetch the paymentError

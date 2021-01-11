@@ -88,9 +88,10 @@ class DefaultSignInHandler implements SignInHandler
      */
     protected function validate(array $data)
     {
+        $minPasswordLength = \RainLab\User\Models\User::getMinPasswordLength();
         $rules    = [
             'login'    => 'required|email|between:6,255',
-            'password' => 'required|min:8|max:255',
+            'password' => sprintf('required|min:%d|max:255', $minPasswordLength),
         ];
         $messages = [
             'login.required'    => trans('offline.mall::lang.components.signup.errors.login.required'),

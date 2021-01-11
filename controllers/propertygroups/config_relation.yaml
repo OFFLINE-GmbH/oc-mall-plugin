@@ -15,5 +15,7 @@ properties:
     manage:
         form: $/offline/mall/models/property/fields_pivot.yaml
         list: $/offline/mall/models/property/columns.yaml
+        showSearch: true
+        recordsPerPage: 50
     pivot:
         form: $/offline/mall/models/property/fields_pivot.yaml

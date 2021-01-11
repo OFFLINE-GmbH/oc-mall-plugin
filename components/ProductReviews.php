@@ -113,7 +113,7 @@ class ProductReviews extends ComponentBase
             ->when($this->property('variant'), function ($q) {
                 $q->where('variant_id', $this->property('variant'));
             })
-            ->when(Auth::getUser(), function ($q) {
+            ->when(optional(Auth::getUser())->customer, function ($q) {
                 $q->where('customer_id', Auth::getUser()->customer->id);
             }, function ($q) {
                 $q->where('user_hash', Review::getUserHash());

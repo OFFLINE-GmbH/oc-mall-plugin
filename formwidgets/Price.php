@@ -13,6 +13,8 @@ class Price extends FormWidgetBase
 
     protected $defaultAlias = 'price';
 
+    public $value = null;
+
     public function init()
     {
         $this->defaultCurrency = Currency::orderBy('is_default', 'DESC')->first();
@@ -99,7 +101,7 @@ class Price extends FormWidgetBase
     {
         $value = $this->getLoadValue();
         if ( ! $value) {
-            return null;
+            return $this->value;
         }
 
         return $value->where('currency_id', $currency)->first()->decimal ?? false;
