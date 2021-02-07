@@ -408,9 +408,9 @@ class QuickCheckout extends MallComponent
         $this->useState = GeneralSettings::get('use_state', true);
 
         $this->setVar('shippingMethods', ShippingMethod::getAvailableByCart($cart));
-        if ($orderId = request()->get('order')) {
+        if ($this->user && $orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
-            $this->setVar('order', Order::byCustomer(optional($this->user)->customer)->find($orderId));
+            $this->setVar('order', Order::byCustomer($this->user->customer)->find($orderId));
         }
     }
 
