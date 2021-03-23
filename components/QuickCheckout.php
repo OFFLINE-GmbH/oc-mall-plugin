@@ -19,6 +19,7 @@ use OFFLINE\Mall\Models\User;
 use RainLab\Location\Models\Country;
 use Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use RainLab\User\Facades\Auth as FrontendAuth;
 
 /**
  * The QuickCheckout component provides a checkout process on a single page.
@@ -179,7 +180,7 @@ class QuickCheckout extends MallComponent
             // Payment step guard
             // Redirect user to the login page when they request order details while not logged in
             $orderId = request()->get('order');
-            if ($orderId && $currentUser === null) {
+            if ($orderId && !FrontendAuth::check()) {
                 throw new HttpResponseException(redirect($this->property('loginPage')));
             }
         }
