@@ -18,6 +18,7 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\User;
 use RainLab\Location\Models\Country;
 use Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 /**
  * The QuickCheckout component provides a checkout process on a single page.
@@ -174,6 +175,13 @@ class QuickCheckout extends MallComponent
             $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping', 'redirect' => 'quickCheckout']);
         } elseif ($this->step === 'payment' || $this->step === 'cancelled') {
             $this->addComponent(PaymentMethodSelector::class, 'paymentMethodSelector', []);
+            
+            // Payment step guard
+            // Redirect user to the login page when they request order details while not logged in
+            $orderId = request()->get('order');
+            if ($orderId && $currentUser === null) {
+                throw new HttpResponseException(redirect($this->property('loginPage')));
+            }
         }
         $this->setData();
     }
