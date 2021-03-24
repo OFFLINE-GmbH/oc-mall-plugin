@@ -30,7 +30,14 @@ class DiscountApplier extends MallComponent
      */
     public function defineProperties()
     {
-        return [];
+        return [
+            'discountCodeLimit' => [
+                'type'    => 'string',
+                'title'   => 'offline.mall::lang.components.cart.properties.discountCodeLimit.title',
+                'description' => 'offline.mall::lang.components.cart.properties.discountCodeLimit.description',
+                'default' => 0,
+            ],
+        ];
     }
 
     /**
@@ -46,7 +53,7 @@ class DiscountApplier extends MallComponent
         $cart = Cart::byUser(Auth::getUser());
 
         try {
-            $cart->applyDiscountByCode($code);
+            $cart->applyDiscountByCode($code, (int)$this->property('discountCodeLimit'));
         } catch (\Throwable $e) {
             throw new ValidationException([
                 'code' => $e->getMessage(),
