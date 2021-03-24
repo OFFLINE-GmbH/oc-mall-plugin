@@ -120,7 +120,7 @@ class ShippingMethod extends Model
             return $enforced;
         }
 
-        return $this->attributes['name'] ?? '';
+        return $this->getAttributeTranslated('name');
     }
 
     /**

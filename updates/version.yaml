@@ -363,4 +363,6 @@
     - '!!! Switched to Stripe Intents API (supports Strong Customer Authentication and 3D Secure payment flows). Test this update with your Stripe setup before deploying it in production! (Changelog: https://tinyurl.com/y79ane6j)'
 1.13.1:
     - 'Bugfix release'
+1.13.2:
+    - 'Bugfix release'
 
