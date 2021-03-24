@@ -45,7 +45,7 @@ trait Slug
             $slug .= trim($model->slug, '/');
             $map  = $model->getSlugMap($locale);
 
-            if (array_key_exists($slug, $map) && $map[$slug] !== $model->id) {
+            if (array_key_exists($slug, $map) && $map[$slug] !== (int)$model->id) {
                 throw new ValidationException(['slug' => trans('offline.mall::lang.common.slug_unique')]);
             }
         }
