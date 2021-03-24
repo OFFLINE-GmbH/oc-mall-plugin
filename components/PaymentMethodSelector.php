@@ -14,6 +14,8 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 /**
  * The PaymentMethodSelector component allows the user
@@ -113,10 +115,13 @@ class PaymentMethodSelector extends MallComponent
         if ($orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
 
-            $order = Order::byCustomer($user->customer)->findOrFail($orderId);
-
-            $this->order          = $order;
-            $this->workingOnModel = $order;
+            try {
+                $order = Order::byCustomer($user->customer)->findOrFail($orderId);
+                $this->order          = $order;
+                $this->workingOnModel = $order;
+            } catch (ModelNotFoundException $e) {
+                throw new HttpResponseException(redirect('/'));
+            }
         }
 
         $method = PaymentMethod::find($this->order->payment_method_id ?? $this->cart->payment_method_id);
