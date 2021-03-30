@@ -97,6 +97,12 @@ class Cart extends MallComponent
                 'title'   => 'offline.mall::lang.components.cart.properties.showDiscountApplier.title',
                 'default' => 1,
             ],
+            'discountCodeLimit' => [
+                'type'    => 'string',
+                'title'   => 'offline.mall::lang.components.cart.properties.discountCodeLimit.title',
+                'description' => 'offline.mall::lang.components.cart.properties.discountCodeLimit.description',
+                'default' => 0,
+            ],
             'showTaxes'           => [
                 'type'    => 'checkbox',
                 'title'   => 'offline.mall::lang.components.cart.properties.showTaxes.title',
@@ -124,7 +130,9 @@ class Cart extends MallComponent
      */
     public function init()
     {
-        $this->addComponent(DiscountApplier::class, 'discountApplier', []);
+      $this->addComponent(DiscountApplier::class, 'discountApplier', [
+          'discountCodeLimit' => $this->property('discountCodeLimit')
+      ]);
     }
 
     /**

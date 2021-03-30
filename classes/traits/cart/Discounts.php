@@ -11,14 +11,17 @@ use RainLab\User\Facades\Auth;
 trait Discounts
 {
     /**
-     * Apply a discount to this cart.
+     * Apply a discount to this cart. Limit the number of codes that can be applied
+     * to a cart by setting the $discountCodeLimit.$discountCodeLimit defaults to 0
+     * where user are allowed to apply unlimited codes.
      *
      * @param Discount $discount
+     * @param int      $discountCodeLimit
      *
      * @throws \October\Rain\Exception\ValidationException
      * @throws ValidationException
      */
-    public function applyDiscount(Discount $discount)
+    public function applyDiscount(Discount $discount, int $discountCodeLimit = 0)
     {
         $uniqueDiscountTypes = ['shipping'];
 
@@ -33,6 +36,10 @@ trait Discounts
             $previousOrderDiscounts = $customer->orders->map(function ($order) {
                 return array_get($order, 'discounts.0.discount.id');
             });
+        }
+
+        if ($discountCodeLimit > 0 && $this->discounts->count() >= $discountCodeLimit) {
+            throw new ValidationException([trans('offline.mall::lang.discounts.validation.cart_limit_reached')]);
         }
 
         if ($this->discounts->contains($discount) || $previousOrderDiscounts->contains($discount->id)) {
@@ -54,7 +61,7 @@ trait Discounts
         $this->discounts()->save($discount);
     }
 
-    public function applyDiscountByCode(string $code)
+    public function applyDiscountByCode(string $code, int $discountCodeLimit)
     {
         $code = strtoupper(trim($code));
         if ($code === '') {
@@ -71,7 +78,7 @@ trait Discounts
             ]);
         }
 
-        return $this->applyDiscount($discount);
+        return $this->applyDiscount($discount, $discountCodeLimit);
     }
 
     /**

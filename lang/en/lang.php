@@ -517,6 +517,7 @@ return [
             'expired' => 'This promo code has expired.',
             'not_found' => 'This promo code is not valid.',
             'usage_limit_reached' => 'This promo code has been applied to many times and is therefore no longer valid.',
+            'cart_limit_reached' => 'Promo code limit reached. You can no longer add promo codes for this cart.',
         ],
     ],
     'payment_method' => [
@@ -850,6 +851,10 @@ return [
             'properties' => [
                 'showDiscountApplier' => [
                     'title' => 'Show discount applier',
+                ],
+                'discountCodeLimit' => [
+                    'title' => 'Discount code limit',
+                    'description' => 'Set to 0 for unlimited codes',
                 ],
                 'showShipping' => [
                     'title' => 'Show shipping cost',
