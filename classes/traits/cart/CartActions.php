@@ -92,6 +92,7 @@ trait CartActions
     public function removeProduct(CartProduct $product)
     {
         $product->delete();
+        $this->validateShippingMethod();
 
         return $this;
     }
