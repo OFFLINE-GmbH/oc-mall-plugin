@@ -468,7 +468,7 @@ class Products extends MallComponent
         $filter = array_wrap($filter);
 
         $filters = (new QueryString())->deserialize($filter, $this->category);
-        if ($this->categories) {
+        if ($this->categories && !isset($filters['category_id'])) {
             $filters->put('category_id', new SetFilter('category_id', $this->categories->pluck('id')->toArray()));
         }
 
