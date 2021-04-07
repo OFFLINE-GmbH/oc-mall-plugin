@@ -91,17 +91,17 @@
     - Updated Omnipay to v3, added list views for payment logs and customer addresses. If you have custom payment providers that use Omnipay make sure that they are compatible with v3 before updating
 1.1.0:
     - |
-        !!! A product can now belong to multiple categories. If you are using the `$product->category`
+        "!!! A product can now belong to multiple categories. If you are using the `$product->category`
         relationship directly make sure to update it to use the new `$product->categories` relationship.
-        Existing products will be migrated to the new database structure during this update.
+        Existing products will be migrated to the new database structure during this update."
     - migrate_categories_to_belongs_to_many_relation.php
 1.1.1:
     - |
-        !!! New database-backed index. To increase the performance of this plugin the product index can now be
+        "!!! New database-backed index. To increase the performance of this plugin the product index can now be
         stored in the database if you use MySQL 5.7+ or MariaDB 10.2+ (support will be auto-detected).
         After this update your index will have to be rebuilt by running "php artisan mall:reindex" from the terminal.
         Between the completition of the update and the re-indexing your store will be empty!
-        Make sure to consider this downtime when deploying to a production system.
+        Make sure to consider this downtime when deploying to a production system."
     - handle_index_table.php
 1.1.2:
     - Fixed manual sort orders when using new table-backed index
@@ -192,7 +192,7 @@
 1.3.13:
     - Fixed payment log display in backend order list
 1.3.14:
-    - !!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website https://bit.ly/2Y4lUs3
+    - "!!! This release does not contain any code updates. If you are using the mall demo theme make sure to patch the following two lines to prevent XSS attacks on your website https://bit.ly/2Y4lUs3"
 1.3.15:
     - Added embeds repeater to Product model to add custom embed code (like videos)
     - add_embeds_column_to_products_table.php
