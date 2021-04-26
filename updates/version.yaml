@@ -369,4 +369,6 @@
     - 'Another Bugfix release'
 1.13.4:
     - 'Optimized October 2.0 compatibility'
+1.13.5:
+    - 'Fixed another October 2.0 incompatibility'
 
