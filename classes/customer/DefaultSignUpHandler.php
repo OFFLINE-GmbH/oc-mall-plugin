@@ -192,7 +192,7 @@ class DefaultSignUpHandler implements SignUpHandler
             unset($rules['billing_state_id'], $rules['shipping_state_id']);
         }
 
-        Event::fire('mall.customer.afterRules', [&$rules]);
+        Event::fire('mall.customer.extendSignupRules', [&$rules, $forSignup]);
         
         return $rules;
     }
