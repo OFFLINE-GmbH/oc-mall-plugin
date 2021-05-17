@@ -79,6 +79,13 @@ abstract class SortOrder
             'name'       => new Name(),
         ];
 
+        $extensions = \Event::fire('offline.mall.extendSortOrder');
+        if (count($extensions) > 0) {
+            foreach ($extensions as $extension) {
+                $options = array_merge($options, $extension);
+            }
+        }
+        
         if ($excludeInternal) {
             unset($options['manual'], $options['random'], $options['name']);
         }
