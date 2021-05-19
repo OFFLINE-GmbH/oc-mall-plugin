@@ -399,10 +399,13 @@ class Variant extends Model
 
     protected function isBackendRelationUpdate(): bool
     {
+        $backendReqByOctoberCMS = starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage');
+        $backendReqByWinterCMS = starts_with(request()->header('X-WINTER-REQUEST-HANDLER'), 'onRelationManage');
+        
         return app()->runningInBackend()
             && request('Variant')
             && request('MallPrice')
             && request('_relation_field') === 'variants'
-            && starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage');
+            && ($backendReqByOctoberCMS || $backendReqByWinterCMS);
     }
 }
