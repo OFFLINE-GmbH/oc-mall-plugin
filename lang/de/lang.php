@@ -865,6 +865,11 @@
             'errors' => [
                 'missing_settings' => 'Bitte wählen Sie eine Zahlungs- und Versandmethode aus.',
             ],
+            'properties' => [
+                'step' => [
+                    'name' => 'Aktiver Schritt des Checkouts (wird automatisch gesetzt)',
+                ],
+            ],
         ],
         'quickCheckout'                   => [
             'details' => [

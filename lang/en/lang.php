@@ -875,6 +875,11 @@ return [
             'errors' => [
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
+            'properties' => [
+                'step' => [
+                    'name' => 'Active checkout step (is set automatically)',
+                ],
+            ],
         ],
         'quickCheckout'              => [
             'details' => [

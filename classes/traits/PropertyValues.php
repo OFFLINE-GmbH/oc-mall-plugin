@@ -97,7 +97,7 @@ trait PropertyValues
     /**
      * Apply transforms to the translated value field of a PropertyValue.
      */
-    protected function handleTranslatedPropertyValue(
+    public function handleTranslatedPropertyValue(
         Property $property,
         PropertyValue $propertyValue,
         $originalValue,

@@ -8,6 +8,7 @@ users:
         form: $/rainlab/user/models/user/fields.yaml
         list: $/rainlab/user/models/user/columns.yaml
         showSearch: true
+        recordsPerPage: 20
     view:
         list: $/rainlab/user/models/user/columns.yaml
         toolbarButtons: add|remove

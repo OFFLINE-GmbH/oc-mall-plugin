@@ -371,4 +371,6 @@
     - 'Optimized October 2.0 compatibility'
 1.13.5:
     - 'Fixed another October 2.0 incompatibility'
+1.13.6:
+    - 'Optimized compatibility with Winter CMS, fixed various bugs'
 

@@ -31,7 +31,8 @@
                             $overlay.hide();
                             if (jqXHR.status === 406) {
                                 var data = jqXHR.responseJSON
-                                $form.trigger('ajaxValidation', [{}, data['X_OCTOBER_ERROR_MESSAGE'], data['X_OCTOBER_ERROR_FIELDS']])
+                                var platform = data.hasOwnProperty('X_OCTOBER_ERROR_MESSAGE') ? 'OCTOBER' : 'WINTER'
+                                $form.trigger('ajaxValidation', [{}, data['X_' + platform + '_ERROR_MESSAGE'], data['X_' + platform + '_ERROR_FIELDS']])
                                 return handleError()
                             }
                             this.error(jqXHR)

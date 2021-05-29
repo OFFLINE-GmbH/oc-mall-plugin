@@ -63,11 +63,10 @@ class CategoriesProducts extends Controller
 
         foreach ($ids as $order => $id) {
             DB::table('offline_mall_category_product')
-              ->where('category_id', $this->category->id)
-              ->where('product_id', $id)
-              ->update([
-                  'sort_order' => $order,
-              ]);
+                ->updateOrInsert(
+                    ['category_id' => $this->category->id, 'product_id' => $id],
+                    ['sort_order' => $order]
+                );
 
             // Flush the cached sort order information.
             Cache::forget(Product::sortOrderCacheKey($id));
