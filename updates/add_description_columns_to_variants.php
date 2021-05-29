@@ -16,8 +16,7 @@ class AddDescriptionColumnsToVariants extends Migration
     public function down()
     {
         Schema::table('offline_mall_product_variants', function ($table) {
-            $table->dropColumn(['description_short']);
-            $table->dropColumn(['description']);
+            $table->dropColumn(['description_short', 'description']);
         });
     }
 }

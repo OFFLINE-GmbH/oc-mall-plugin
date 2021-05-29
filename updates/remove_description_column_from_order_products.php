@@ -19,7 +19,7 @@ class RemoveDescriptionColumnFromOrderProducts extends Migration
     public function down()
     {
         Schema::table('offline_mall_order_products', function ($table) {
-            $table->longText('description');
+            $table->longText('description')->nullable();
         });
     }
 }
