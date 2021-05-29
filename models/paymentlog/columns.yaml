@@ -25,8 +25,9 @@ columns:
         path: $/offline/mall/controllers/paymentlogs/_total.htm
     order_data:
         label: 'offline.mall::lang.order.data'
-        type: text
         searchable: true
+        type: partial
+        path: $/offline/mall/controllers/paymentlogs/_order_data.htm
         invisible: true
         sortable: true
     reference:
