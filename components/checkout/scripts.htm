@@ -17,9 +17,10 @@
                     error: function (jqXHR) {
                         $overlay.hide();
                         if (jqXHR.status === 406) {
+                            var platform = data.hasOwnProperty('X_OCTOBER_ERROR_MESSAGE') ? 'OCTOBER' : 'WINTER'
                             return this.options.handleValidationMessage(
-                                jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE'],
-                                jqXHR.responseJSON['X_OCTOBER_ERROR_FIELDS']
+                                jqXHR.responseJSON['X_' + platform + '_ERROR_MESSAGE'],
+                                jqXHR.responseJSON['X_' + platform + '_ERROR_FIELDS']
                             )
                         }
                         this.error(jqXHR)

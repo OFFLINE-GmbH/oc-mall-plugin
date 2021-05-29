@@ -9,6 +9,7 @@ use BackendMenu;
 use DB;
 use Event;
 use Flash;
+use October\Rain\Database\Model;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
@@ -19,7 +20,11 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductFile;
 use OFFLINE\Mall\Models\ProductPrice;
+use OFFLINE\Mall\Models\Property;
+use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Review;
+use OFFLINE\Mall\Models\Variant;
+use RainLab\Translate\Models\Locale;
 
 class Products extends Controller
 {
@@ -54,7 +59,7 @@ class Products extends Controller
             // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
 
-            if (str_contains(\Request::header('X-OCTOBER-REQUEST-HANDLER',''), 'PriceTable')) {
+            if (str_contains($this->getAjaxHandler() ?? '', 'PriceTable')) {
                 $this->preparePriceTable();
             }
         }
@@ -297,11 +302,95 @@ class Products extends Controller
             $variant = $this->relationModel->find($this->vars['relationManageId']);
             $this->updateProductPrices($this->vars['formModel'], $variant);
 
+            if ($variant->image_set_id === null) {
+                $this->createImageSetFromTempImages($variant);
+            }
+
+            $this->handlePropertyValueUpdates($variant);
+
             // Force a re-index of the product
             (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }
 
         return $parent;
+    }
+
+    /**
+     * Handle the form data form the property value form.
+     */
+    protected function handlePropertyValueUpdates(Variant $variant)
+    {
+        $locales = Locale::isEnabled()->get();
+
+        $formData = array_wrap(post('VariantPropertyValues', []));
+        if (count($formData) < 1) {
+            PropertyValue::where('variant_id', $variant->id)->delete();
+        }
+
+        $properties     = Property::whereIn('id', array_keys($formData))->get();
+        $propertyValues = PropertyValue::where('variant_id', $variant->id)->get();
+
+        foreach ($formData as $id => $value) {
+            $property = $properties->find($id);
+            $pv       = $propertyValues->where('property_id', $id)->first()
+                ?? new PropertyValue([
+                    'variant_id'  => $variant->id,
+                    'product_id'  => $variant->product_id,
+                    'property_id' => $id,
+                ]);
+
+            $pv->value = $value;
+            foreach ($locales as $locale) {
+                $transValue = post(
+                    sprintf('RLTranslate.%s.VariantPropertyValues.%d', $locale->code, $id),
+                    post(sprintf('VariantPropertyValues.%d', $id)) // fallback
+                );
+                $transValue = $variant->handleTranslatedPropertyValue(
+                    $property,
+                    $pv,
+                    $value,
+                    $transValue,
+                    $locale->code
+                );
+                $pv->setAttributeTranslated('value', $transValue, $locale->code);
+            }
+
+            if (($pv->value === null || $pv->value === '') && $pv->exists) {
+                $pv->delete();
+            } else {
+                $pv->save();
+            }
+        }
+    }
+
+    protected function createImageSetFromTempImages(Variant $variant)
+    {
+        $tempImages = $variant->temp_images()->withDeferred(post('_session_key'))->count();
+        if ($tempImages < 1) {
+            return;
+        }
+
+        return DB::transaction(function () use ($variant) {
+            $set             = new ImageSet();
+            $set->name       = $variant->name;
+            $set->product_id = $variant->product_id;
+            $set->save();
+
+            $variant->image_set_id = $set->id;
+            $variant->save();
+
+            $variant->commitDeferred(post('_session_key'));
+
+            return DB::table('system_files')
+                ->where('attachment_type', Variant::MORPH_KEY)
+                ->where('attachment_id', $variant->id)
+                ->where('field', 'temp_images')
+                ->update([
+                    'attachment_type' => ImageSet::MORPH_KEY,
+                    'attachment_id'   => $set->id,
+                    'field'           => 'images',
+                ]);
+        });
     }
 
     protected function updatePrices($model, $key = 'prices')
