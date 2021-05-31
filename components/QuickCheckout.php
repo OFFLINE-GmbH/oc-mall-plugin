@@ -4,6 +4,8 @@ namespace OFFLINE\Mall\Components;
 
 use Auth;
 use DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
@@ -11,15 +13,15 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentRedirector;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\User;
 use RainLab\Location\Models\Country;
-use Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use RainLab\User\Facades\Auth as FrontendAuth;
+use Validator;
 
 /**
  * The QuickCheckout component provides a checkout process on a single page.
@@ -341,6 +343,54 @@ class QuickCheckout extends MallComponent
     }
 
     /**
+     * The user removed an item from the cart.
+     *
+     * @return array
+     */
+    public function onRemoveProduct()
+    {
+        $id = $this->decode(input('id'));
+
+        $cart = Cart::byUser(FrontendAuth::getUser());
+
+        $product = $this->getProductFromCart($cart, $id);
+
+        $cart->removeProduct($product);
+
+        $this->setData();
+
+        return $this->updateForm([
+            'item' => $this->dataLayerArray($product->product, $product->variant),
+            'quantity' => $product->quantity,
+            'new_items_count' => optional($cart->products)->count() ?? 0,
+            'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
+        ]);
+    }
+
+
+    /**
+     * Fetch the item from the user's cart.
+     *
+     * This fails if an item is modified that is not in the
+     * currently logged in user's cart.
+     *
+     * @param Cart $cart
+     * @param mixed $id
+     *
+     * @return mixed
+     * @throws ModelNotFoundException
+     */
+    protected function getProductFromCart(Cart $cart, $id)
+    {
+        return CartProduct
+            ::whereHas('cart', function ($query) use ($cart) {
+                $query->where('id', $cart->id);
+            })
+            ->where('id', $id)
+            ->firstOrFail();
+    }
+
+    /**
      * Re-renders all dynamic form components. Additional
      * data to be returned to the partial can be specified.
      *
@@ -450,5 +500,27 @@ class QuickCheckout extends MallComponent
     protected function handleOffSiteReturn($type)
     {
         return (new PaymentRedirector($this->page->page->fileName))->handleOffSiteReturn($type);
+    }
+
+    /**
+     * Return the dataLayer representation of an item.
+     *
+     * @param null $product
+     * @param null $variant
+     *
+     * @return array
+     */
+    private function dataLayerArray($product = null, $variant = null)
+    {
+        $item = $variant ?? $product;
+
+        return [
+            'id' => $item->prefixedId,
+            'name' => $product->name,
+            'price' => $item->price()->decimal,
+            'brand' => optional($item->brand)->name,
+            'category' => optional($item->categories->first())->name,
+            'variant' => optional($variant)->name,
+        ];
     }
 }

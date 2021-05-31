@@ -63,6 +63,19 @@
             $body.on('click', '.mall-quick-checkout__payment-methods .mall-quick-checkout__toggle-option', function() {
                 window.Mall.Callbacks.Checkout = {}
             })
+            $body.on('click', '.js-mall-remove-product', function () {
+                $.request('{{ __SELF__ }}::onRemoveProduct', {
+                    data: {id: this.dataset.id},
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    loading: $.oc.stripeLoadIndicator,
+                    confirm: '{{ 'offline.mall::frontend.confirm' | trans }}',
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                        $.publish('mall.cart.productRemoved', data)
+                    }
+                })
+            });
         })
     </script>
 {% endput %}
