@@ -157,13 +157,18 @@ class DefaultSignUpHandler implements SignUpHandler
 
     protected function renameExistingGuestAccounts(array $data, $user)
     {
-        $newEmail = sprintf('%s_%s%s', $data['email'], 'old_', date('Y-m-d_His'));
+        // Add a "old_2021-05-31_075100" suffix to the already registered email.
+        $parts = explode('@', $data['email']);
+        $suffix = 'old_' . date('Y-m-d_His');
+
+        $newEmail = sprintf('%s_%s@%s', $parts[0], $suffix, $parts[1]);
+
         User::where('id', '<>', $user->id)
             ->where('email', $data['email'])
             ->whereHas('customer', function ($q) {
                 $q->where('is_guest', 1);
             })
-            ->update(['email' => $newEmail]);
+            ->update(['email' => $newEmail, 'username' => $newEmail]);
     }
 
     public static function rules($forSignup = true): array
