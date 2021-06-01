@@ -10,5 +10,17 @@
         <td class="text-right">
             {{ entry.savings | money }}
         </td>
+        <td class="text-center">
+            {% if entry.discount.code %}
+                <div>
+                    <a href="javascript:;"
+                        class="js-mall-remove-discount-code"
+                        data-id="{{ entry.discount.id }}"
+                    >
+                        <i class="icon-trash icons--small" title="{{ 'offline.mall::frontend.remove' | trans }}"></i>
+                    </a>
+                </div>
+            {% endif %}
+        </td>
     </tr>
 {% endfor %}
