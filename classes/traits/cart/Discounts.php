@@ -97,4 +97,26 @@ trait Discounts
             $shippingDiscount['discount']->save();
         }
     }
+    
+    
+    public function removeDiscountCodeById(int $id)
+    {
+        try {
+            $discount = Discount::find($id);
+            $code = $discount->code;
+            $this->discounts()->remove($discount);
+
+            $this->totals()->appliedDiscounts()->each(function (array $discount) use ($code) {
+                if ($code == $discount['discount']->code) {
+                    $discount['discount']->number_of_usages--;
+                    $discount['discount']->save();
+                }
+            });
+
+        } catch (ModelNotFoundException $e) {
+            throw new ValidationException([
+                'code' => trans('offline.mall::lang.discounts.validation.not_found'),
+            ]);
+        }
+    }
 }
