@@ -36,6 +36,11 @@ tabs:
             path: $/offline/mall/controllers/shippingmethods/_taxes.htm
             type: partial
             tab: 'offline.mall::lang.common.general'
+        discounts:
+            span: right
+            path: $/offline/mall/controllers/shippingmethods/_discounts.htm
+            type: partial
+            tab: 'offline.mall::lang.common.general'
         logo:
             label: 'offline.mall::lang.common.logo'
             oc.commentPosition: ''

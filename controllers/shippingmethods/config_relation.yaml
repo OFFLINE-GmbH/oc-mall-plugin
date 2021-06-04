@@ -20,3 +20,12 @@ rates:
         form: $/offline/mall/models/shippingmethodrate/fields.yaml
         recordsPerPage: 10
     deferredBinding: true
+discounts:
+    label: 'offline.mall::lang.common.discounts'
+    view:
+        list: $/offline/mall/models/discount/columns.yaml
+        toolbarButtons: add|create|remove
+    manage:
+        form: $/offline/mall/models/discount/fields.yaml
+        recordsPerPage: 10
+    deferredBinding: true

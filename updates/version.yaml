@@ -373,4 +373,6 @@
     - 'Fixed another October 2.0 incompatibility'
 1.13.6:
     - 'Optimized compatibility with Winter CMS, fixed various bugs'
-
+1.13.7:
+    - 'Enable discounts on shipping methods'
+    - create_offline_mall_shipping_method_discounts.php
