@@ -533,11 +533,11 @@ return [
         ]
     ],
     "feed_settings" => [
-        "description" => "",
-        "google_merchant_enabled" => "",
-        "google_merchant_enabled_comment" => "",
-        "google_merchant_url" => "",
-        "google_merchant_url_locale" => ""
+        "description" => "Configura le sorgenti dati di mall",
+        "google_merchant_enabled" => "Abilita la sorgente dati per Google Merchant Center",
+        "google_merchant_enabled_comment" => "Verrà generata usa sorgente dati",
+        "google_merchant_url" => "URL della sorgente dati per Google Merchant",
+        "google_merchant_url_locale" => "Aggiungere ?locale=xy per ottenere una sogrente dati tradotta"
     ],
     "general_settings" => [
         "account_page" => "Pagina account",
@@ -878,25 +878,25 @@ return [
         "use_for_variants_comment" => "Questa proprietà é differente per ogni variante di questo prodotto"
     ],
     "review_settings" => [
-        "allow_anonymous" => "",
-        "allow_anonymous_comment" => "",
-        "description" => "",
-        "enabled" => "",
-        "enabled_comment" => "",
-        "moderated" => "",
-        "moderated_comment" => ""
+        "allow_anonymous" => "Permetti recensioni anonime",
+        "allow_anonymous_comment" => "Utenti non registrati possono inviare recensioni",
+        "description" => "Configura le recensioni",
+        "enabled" => "Recensioni abilitate",
+        "enabled_comment" => "I clienti possono creare recensioni",
+        "moderated" => "Modera le recensioni",
+        "moderated_comment" => "Le nuove recensioni possono venire pubblicate solo dall'amministratore del sito"
     ],
     "reviews" => [
-        "anonymous" => "",
-        "approve" => "",
-        "approve_next" => "",
-        "approved" => "",
-        "cons" => "",
-        "no_more" => "",
-        "only_unapproved" => "",
-        "pros" => "",
-        "rating" => "",
-        "review" => "",
+        "anonymous" => "Anonimo",
+        "approve" => "Approva la recensione",
+        "approve_next" => "Approva e passa alla seguente",
+        "approved" => "Recensione approvata",
+        "cons" => "Aspetti negativi",
+        "no_more" => "Non ci sono più recensioni da approvare",
+        "only_unapproved" => "Mostrare solo quelle non approvate",
+        "pros" => "Aspetti positivi",
+        "rating" => "Valutazione",
+        "review" => "Dettagli recensione",
         "title" => ""
     ],
     "services" => ["option" => "", "options" => "", "required" => "", "required_comment" => ""],
