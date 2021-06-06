@@ -6,7 +6,7 @@ shipping_methods:
     label: 'offline.mall::lang.common.shipping_methods'
     view:
         list: $/offline/mall/models/shippingmethod/columns.yaml
-        toolbarButtons: add|delete
+        toolbarButtons: add|remove
     manage:
         form: $/offline/mall/models/shippingmethod/fields.yaml
         recordsPerPage: 10

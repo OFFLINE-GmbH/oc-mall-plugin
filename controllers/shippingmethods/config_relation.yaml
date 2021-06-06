@@ -24,7 +24,7 @@ discounts:
     label: 'offline.mall::lang.common.discounts'
     view:
         list: $/offline/mall/models/discount/columns.yaml
-        toolbarButtons: add|create|remove
+        toolbarButtons: add|remove
     manage:
         form: $/offline/mall/models/discount/fields.yaml
         recordsPerPage: 10
