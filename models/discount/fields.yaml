@@ -51,6 +51,15 @@ fields:
             field: trigger
             condition: value[total]
         type: mall.price
+    shipping_methods:
+        span: right
+        path: $/offline/mall/controllers/discounts/_shipping_methods.htm
+        type: partial
+        trigger:
+            action: show
+            field: trigger
+            condition: value[shipping_method]
+
     rate:
         label: 'offline.mall::lang.discounts.rate'
         oc.commentPosition: ''
@@ -98,7 +107,7 @@ fields:
             condition: value[product]
     customer_group:
         label: 'offline.mall::lang.common.customer_group'
-        span: auto
+        span: right
         type: recordfinder
         list: ~/plugins/offline/mall/models/customergroup/columns.yaml
         nameFrom: name

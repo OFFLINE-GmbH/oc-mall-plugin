@@ -1,1129 +1,970 @@
-<?php return [
-    'plugin'                   => [
-        'name'        => 'E-shop',
-        'description' => 'E-shop pro October CMS',
+<?php
+return [
+    "category" => [
+        "code" => "Kód",
+        "code_comment" => "Tento kód může být použit pro identifikaci této kategorie na vaší stránce.",
+        "google_product_category_id" => "",
+        "google_product_category_id_comment" => "",
+        "inherit_property_groups" => "Zdědit vlastnosti nadřazené kategorie",
+        "inherit_property_groups_comment" => "Použijte skupiny vlastností nadřazené kategorie této kategorie",
+        "inherit_review_categories" => "Zdědit kategorie recenzí nadřazené kategorie",
+        "inherit_review_categories_comment" => "Použijte kategorie recenzí této nadřazené kategorie",
+        "name" => "Název",
+        "no_parent" => "bez nadřazené kategorie",
+        "parent" => "Nadřazená kategorie"
     ],
-    'titles'                   => [
-        'products'             => [
-            'create'  => 'Vytvořit produkt',
-            'update'  => 'Upravit produkt',
-            'preview' => 'Náhled produktu',
-        ],
-        'categories'           => [
-            'create'  => 'Vytvořit kategorii',
-            'update'  => 'Upravit kategorii',
-            'preview' => 'Náhled kategorie',
-        ],
-        'orders'               => [
-            'show'   => 'Detaily objednávky',
-            'export' => 'Exportovat objednávky',
-        ],
-        'discounts'            => [
-            'create'  => 'Vytvořit slevu',
-            'update'  => 'Upravit slevu',
-            'preview' => 'Náhled slevy',
-        ],
-        'services'             => [
-            'create' => 'Vytvořit službu',
-            'update' => 'Upravit službu',
-        ],
-        'shipping_methods'     => [
-            'create'  => 'Vytvořit typ dopravy',
-            'update'  => 'Upravit typ dopravy',
-            'preview' => 'Náhled typu dopravy',
-        ],
-        'payment_methods'      => [
-            'create'  => 'Vytvořit typ platby',
-            'edit'    => 'Upravit typ platby',
-            'reorder' => 'Reorder',
-        ],
-        'custom_field_options' => [
-            'edit' => 'Upravit možnosti pole',
-        ],
-        'properties'           => [
-            'create' => 'Vytvořit vlastnosti',
-            'edit'   => 'Upravit vlastnosti',
-        ],
-        'order_states'         => [
-            'create'  => 'Vytvořit stav',
-            'edit'    => 'Upravit stav',
-            'reorder' => 'Změna pořadí stavu',
-        ],
-        'brands'               => [
-            'create' => 'Vytvořit značku',
-            'edit'   => 'Upravit značku',
-        ],
-        'property_groups'      => [
-            'create' => 'Vytvořit filtry',
-            'edit'   => 'Upravit filtry',
-        ],
-        'customer_groups'      => [
-            'create' => 'Vytvořit skupinu',
-            'update' => 'Upravit skupinu',
-        ],
-        'notifications'        => [
-            'update' => 'Aktualizovat zprávu',
-        ],
-        'taxes'                => [
-            'create' => 'Vytvořit DPH',
-            'update' => 'Upravit DPH',
-        ],
-        'reviews'              => [
-            'create' => 'Vytvořit recenzi',
-            'update' => 'Upravit recenzi',
-        ],
+    "common" => [
+        "accessories" => "Příslušenství",
+        "accessory" => "Accessory",
+        "action_required" => "Je vyžadována akce!",
+        "add_value" => "Přidat",
+        "address" => "Adresa",
+        "addresses" => "Adresy",
+        "allowed" => "Povoleno",
+        "api_error" => "Slevu nelze uložit. Chyba při odesílání změn do rozhraní API Mall.",
+        "approved_at" => "Schváleno",
+        "attachments" => "Obrázky/Soubory",
+        "brand" => "Značky",
+        "brands" => "Značky",
+        "cart" => "Košík",
+        "catalogue" => "Katalog zboží",
+        "categories" => "Kategorie",
+        "category" => "Kategorie",
+        "caution" => "Pozor",
+        "checked" => "Označeno",
+        "code" => "Kód",
+        "code_comment" => "Tento kód může být použit k identifikaci tohoto záznamu programově",
+        "color" => "Barva",
+        "conditions" => "Podmínky dopravy",
+        "created_at" => "Vytvořeno",
+        "custom_fields" => "Vlastní pole",
+        "customer_group" => "Skupina zakazníků",
+        "customer_groups" => "Skupiny zákazníků",
+        "customers" => "Zákazníci",
+        "data" => "Data",
+        "deleted_at" => "Smazáno",
+        "discount" => "Sleva",
+        "discount_percentage" => "Sleva (%)",
+        "discounts" => "Slevy",
+        "display_name" => "Název filtru - zobrazí se na stránce",
+        "dont_group" => "-- Neseskupovat",
+        "downloads" => "Soubory",
+        "export_orders" => "Exportovat objednávky",
+        "failed" => "neúspěšný",
+        "feeds" => "Kanály",
+        "fees" => "Poplatky",
+        "general" => "Obecné",
+        "group_name" => "Název skupiny",
+        "hide_published" => "Skrýt publikované",
+        "id" => "ID",
+        "image" => "Obrázek",
+        "image_set" => "Skupina obrázků",
+        "images" => "Obrázek",
+        "includes_tax" => "Včetně daní",
+        "invalid_quantity" => "Vybraná hodnota není platná",
+        "inventory" => "Inventory",
+        "logo" => "Logo",
+        "main_image" => "Hlavní obrázek",
+        "message" => "Zpráva",
+        "meta_description" => "Meta - popis",
+        "meta_keywords" => "Meta - klíčové slova",
+        "meta_title" => "Meta - titulek",
+        "name" => "Name",
+        "no" => "Ne",
+        "none" => "-- Žádná",
+        "not_allowed" => "Zakázáno",
+        "not_in_use" => "Možnost se nepoužívá",
+        "notification" => "Zpráva",
+        "notifications" => "Zprávy",
+        "old_price" => "Stará cena",
+        "option" => "Možnost",
+        "options" => "Možnosti",
+        "order_states" => "Stavy objednávek",
+        "orders" => "Objednávky",
+        "out_of_stock" => "Tento produkt není skladem",
+        "out_of_stock_short" => "Není skladem",
+        "payment" => "Platba",
+        "payment_gateway" => "Platební brána",
+        "payment_method" => "Typ platby",
+        "payment_methods" => "Způsob platby",
+        "payment_provider" => "Poskytovatel plateb",
+        "payments" => "Platby",
+        "price_missing" => "Zadejte alespoň cenu pro výchozí měnu",
+        "product" => "Produkt",
+        "product_or_variant" => "Produkt/Varianta",
+        "products" => "Produkty",
+        "properties" => "Filtry",
+        "properties_links" => "Vlastnosti/Odkazy",
+        "property" => "Filtr",
+        "property_group" => "Skupinu filtrů",
+        "property_groups" => "Skupiny filtrů",
+        "rates" => "Sazbu",
+        "reference" => "Reference",
+        "reorder" => "Přeskupit záznamy",
+        "review" => "Recenze",
+        "review_categories" => "Recenze - kategorie",
+        "review_category" => "Recenze - kategorie",
+        "reviews" => "Recenze",
+        "saved_changes" => "Změny byly uloženy",
+        "select_file" => "Vyberte soubor",
+        "select_image" => "Vyberte obrázek",
+        "select_placeholder" => "-- Prosím vyberte",
+        "seo" => "SEO",
+        "service" => "Služba",
+        "services" => "Služby",
+        "session_id" => "ID relace",
+        "shipping" => "Doprava",
+        "shipping_methods" => "Doprava",
+        "shop" => "E-shop",
+        "since_begin" => "Od začátku",
+        "slug" => "URL",
+        "slug_unique" => "WWW adresa musí být unikátní",
+        "sort_order" => "Sort order",
+        "sorting_updated" => "Pořadí řazení bylo aktualizováno",
+        "stock_limit_reached" => "Nemůžete přidat více kusů do košíku, protože byl dosažen limit zásob.",
+        "successful" => "Úspěšný",
+        "taxes" => "DPH",
+        "title" => "Název",
+        "unchecked" => "Neoznačené",
+        "unit" => "Jednotka",
+        "updated_at" => "Aktualizováno",
+        "use_backend_defaults" => "Použijte výchozí nastavení nakonfigurovaná v nastavení backendu",
+        "value" => "Hodnota",
+        "variant" => "Varianty",
+        "variants" => "Varianty",
+        "version" => "Verze",
+        "website" => "WWW",
+        "weekly" => "Týdně",
+        "yes" => "Ano"
     ],
-    'menu_items'               => [
-        'all_categories'  => 'Všechny kategorie obchodu',
-        'single_category' => 'Jedna kategorie obchodu',
-        'all_products'    => 'Všechny produkty obchodu',
-        'all_variants'    => 'Všechny varianty obchodu',
+    "components" => [
+        "addressForm" => [
+            "details" => [
+                "description" => "Zobrazí formulář pro úpravu adresy uživatele",
+                "name" => "Formulář adresy"
+            ],
+            "properties" => [
+                "address" => ["title" => "Adresa"],
+                "redirect" => ["title" => "Přesměrovat (po uložení)"],
+                "set" => ["title" => "Použít tuto adresu jako"]
+            ],
+            "redirects" => ["checkout" => "Pokladna"],
+            "set" => ["billing" => "Fakturační adresa", "shipping" => "Adresa dopravy"]
+        ],
+        "addressList" => [
+            "details" => [
+                "description" => "Zobrazuje seznam adres všech registrovaných zákazníků",
+                "name" => "Seznam adres"
+            ],
+            "errors" => [
+                "address_not_found" => "Požadovaná adresa nebyla nalezena",
+                "cannot_delete_last_address" => "Nemůžete smazat svou poslední adresu"
+            ],
+            "messages" => [
+                "address_deleted" => "Adresa smazána",
+                "default_billing_address_changed" => "",
+                "default_shipping_address_changed" => ""
+            ]
+        ],
+        "addressSelector" => [
+            "details" => [
+                "description" => "Zobrazí seznam všech existujících adres zákazníka",
+                "name" => "Výběr adres"
+            ]
+        ],
+        "cart" => [
+            "details" => ["description" => "Zobrazuje košík", "name" => "Košík"],
+            "properties" => [
+                "discountCodeLimit" => ["description" => "", "title" => ""],
+                "showDiscountApplier" => ["title" => "Zobrazit aplikátor slev"],
+                "showProceedToCheckoutButton" => ["title" => "Zobrazit tlačítko \"přejít k pokladně"],
+                "showShipping" => ["title" => "Zobrazit cenu dopravy"],
+                "showTaxes" => ["title" => "Zobrazit DPH"]
+            ]
+        ],
+        "cartSummary" => [
+            "details" => [
+                "description" => "Zobrazí počet produktů a celkovou cenu košíku",
+                "name" => "Souhrn košíku"
+            ],
+            "properties" => [
+                "showItemCount" => [
+                    "description" => "Zobrazí počet produktů v košíku",
+                    "title" => "Zobrazit počet produktů"
+                ],
+                "showTotalPrice" => [
+                    "description" => "Zobrazí celkovou cenu všech produktů v košíku",
+                    "title" => "Zobrazit celkovou cenu"
+                ]
+            ]
+        ],
+        "categories" => [
+            "by_slug" => "Jako nadřazenou použijte kategorii v adrese URL",
+            "details" => ["description" => "Seznam dostupných kategorií", "name" => "Kategorie"],
+            "no_parent" => "Zobrazit všechny kategorie",
+            "properties" => [
+                "categoryPage" => [
+                    "description" => "Odkazy odkazují na tuto stránku. Pokud není zadáno nic, použije se výchozí nastavení z nastavení backendu.",
+                    "title" => "Stránka kategorie"
+                ],
+                "categorySlug" => [
+                    "description" => "Tento parametr použijte k načtení nadřazené kategorie z adresy URL",
+                    "title" => "Kategorie slug parametr"
+                ],
+                "parent" => [
+                    "description" => "Zobrazit pouze podřazené kategorie této kategorie",
+                    "title" => "Začít od kategorie"
+                ]
+            ]
+        ],
+        "checkout" => [
+            "details" => ["description" => "Stará se o proces platby", "name" => "Pokladna"],
+            "errors" => ["missing_settings" => "Prosím, vyberte způsob platby a dopravy."],
+            "properties" => ["step" => ["name" => ""]]
+        ],
+        "currencyPicker" => ["details" => ["description" => "Možnost výběru měny", "name" => "Výběr měny"]],
+        "customerDashboard" => [
+            "details" => [
+                "description" => "Zobrazí odkaz pro přihlášení a změny nastavení zákazníckého účtu",
+                "name" => "Hlavní panel zákazníka"
+            ],
+            "properties" => [
+                "customerDashboardLabel" => [
+                    "description" => "Text odkazu na stránku zákaznického účtu",
+                    "title" => "Štítek hlavního panelu zákazníka"
+                ],
+                "logoutLabel" => ["description" => "Text odkazu pro odhlášení", "title" => "Štítek odhlášení"]
+            ]
+        ],
+        "customerProfile" => [
+            "details" => [
+                "description" => "Zobrazuje formulář profilu zákazníka.",
+                "name" => "Profil zákazníka"
+            ]
+        ],
+        "dependencies" => [
+            "details" => [
+                "description" => "Zahrnuje všechny potřebné závislosti frontendu",
+                "name" => "Frontendové závislosti"
+            ]
+        ],
+        "discountApplier" => [
+            "details" => [
+                "description" => "Zobrazuje vstupní pole promo kódu",
+                "name" => "Zadání promo kódu"
+            ],
+            "discount_applied" => "Sleva byla úspěšně uplatněna!"
+        ],
+        "enhancedEcommerceAnalytics" => [
+            "details" => [
+                "description" => "Implementuje Google Tag Manager Data Layer",
+                "name" => "Rozšířený Ecommerce (UA) komponent"
+            ]
+        ],
+        "myAccount" => [
+            "details" => [
+                "description" => "Zobrazuje různé formuláře, kde si zákazník může prohlížet a upravovat své údaje",
+                "name" => "Uživatelský účet"
+            ],
+            "pages" => ["addresses" => "Adresy", "orders" => "Objednávky", "profile" => "Profil"],
+            "properties" => ["page" => ["title" => "Aktivní podstránka"]]
+        ],
+        "ordersList" => [
+            "details" => [
+                "description" => "Zobrazuje seznam objednávek všech zákazníků",
+                "name" => "Seznam objednávek"
+            ]
+        ],
+        "paymentMethodSelector" => [
+            "details" => [
+                "description" => "Zobrazí seznam všech dostupných platebních metod\n                ",
+                "name" => "Výběr způsobu platby"
+            ],
+            "errors" => ["unavailable" => "Vybraný způsob platby není pro vaši objednávku k dispozici."]
+        ],
+        "product" => [
+            "added_to_cart" => "Produkt byl úspěšně přidán",
+            "details" => ["description" => "Zobrazuje detaily produktu", "name" => "Detaily produktu"],
+            "properties" => [
+                "redirectOnPropertyChange" => [
+                    "description" => "Přesměruje zákazníka na novou stránku detailu produktu pokud byla změněna vlastnost",
+                    "title" => "Přesměrování při změně vlastnosti"
+                ]
+            ]
+        ],
+        "productReviews" => [
+            "details" => [
+                "description" => "Zobrazuje všechny recenze produktu",
+                "name" => "Recenze produktu"
+            ],
+            "properties" => [
+                "currentVariantReviewsOnly" => [
+                    "description" => "Nezobrazovat recenze jiných variant tohoto produktu",
+                    "title" => "Zobrazit pouze hodnocení této varianty"
+                ],
+                "perPage" => ["title" => "Počet recenzí na stránce"]
+            ]
+        ],
+        "products" => [
+            "details" => ["description" => "Zobrazí seznam produktů", "name" => "Produkty"],
+            "properties" => [
+                "filter" => [
+                    "description" => "Vynucený filtr pro tuto komponentu",
+                    "title" => "Řetězec filtru"
+                ],
+                "filter_component" => [
+                    "description" => "Alias komponenty ProductsFilter, který tuto komponentu filtruje",
+                    "title" => "Filtrovat alias komponenty"
+                ],
+                "include_children" => [
+                    "description" => "Zobrazit také všechny produkty podřazených kategorií",
+                    "title" => "Zahrnout podřazené"
+                ],
+                "include_variants" => [
+                    "description" => "Nezobrazovat jednotlivé produkty, ale všechny dostupné varianty produktů",
+                    "title" => "Zobrazit varianty produktu"
+                ],
+                "no_category_filter" => "Nefiltrovat podle kategorie",
+                "paginate" => [
+                    "description" => "Stránkovat výsledky (zobrazit více než jednu stránku)",
+                    "title" => "Stránkování"
+                ],
+                "per_page" => ["description" => "Kolik produktů se zobrazí na stránce", "title" => "Na stránce"],
+                "set_page_title" => [
+                    "description" => "Jako název stránky použijte název kategorie",
+                    "title" => "Nastavit název stránky"
+                ],
+                "sort" => ["description" => "Toto přepíše preference řazení uživatele", "title" => "Seřadit"],
+                "use_url" => "Použijte slug kategorie z URL"
+            ]
+        ],
+        "productsFilter" => [
+            "details" => ["description" => "Filtruje produkty z kategorie", "name" => "Filtr produktů"],
+            "properties" => [
+                "includeChildren" => [
+                    "description" => "Zahrnout také vlastnosti a filtry z produktů z podřazených kategorií",
+                    "title" => "Zahrnout podřazené"
+                ],
+                "includeSliderAssets" => [
+                    "description" => "Přidat všechny pluginy noUI Slider skrz cdnjs",
+                    "title" => "Přidat noUI Slider"
+                ],
+                "includeVariants" => [
+                    "description" => "Zobrazit filtry pro vlastnosti variant",
+                    "title" => "Zahrnout varianty"
+                ],
+                "showBrandFilter" => ["title" => "Zobrazit filtr značek"],
+                "showOnSaleFilter" => ["title" => "Zobrazit filtr AKCE"],
+                "showPriceFilter" => ["title" => "Zobrazit filtr cen"],
+                "sortOrder" => ["description" => "Výchozí řazení", "title" => "Řazení"]
+            ],
+            "sortOrder" => [
+                "bestseller" => "Nejčastěji kupovaný",
+                "latest" => "Nejnovější",
+                "manual" => "Ručně",
+                "name" => "Název",
+                "oldest" => "Nejstarší",
+                "priceHigh" => "Nejvyšší cena",
+                "priceLow" => "Nejnižší cena",
+                "random" => "Náhodně",
+                "ratings" => "Hodnocení"
+            ]
+        ],
+        "quickCheckout" => [
+            "details" => ["description" => "", "name" => ""],
+            "errors" => ["signup_failed" => ""]
+        ],
+        "shippingMethodSelector" => [
+            "details" => [
+                "description" => "Zobrazí seznam všech dostupných způsobů dopravy",
+                "name" => "Výběr způsobu přepravy"
+            ],
+            "errors" => ["unavailable" => "Vybraný způsob dopravy není pro vaši objednávku k dispozici."]
+        ],
+        "signup" => [
+            "details" => [
+                "description" => "Zobrazí formulář pro registraci a přihlášení",
+                "name" => "Přihlášení"
+            ],
+            "errors" => [
+                "city" => ["required" => "Vložte město."],
+                "country_id" => ["exists" => "Tato hodnota není platná.", "required" => "Vyberte zemi."],
+                "email" => [
+                    "email" => "Emailová adresa je neplatná.",
+                    "non_existing_user" => "Zákazník s touto emailovou adresou již existuje. Použijte funkci \"Zapomenuté heslo\" .",
+                    "required" => "Vložte emailovou adresu.",
+                    "unique" => "Zákazník s touto emailovou adresou již existuje."
+                ],
+                "firstname" => ["required" => "Vložte své jméno."],
+                "lastname" => ["required" => "Vložte své příjmení."],
+                "lines" => ["required" => "Vložte svou adresu."],
+                "login" => [
+                    "between" => "Vložte správnou emailovou adresu.",
+                    "email" => "Vložte správnou emailovou adresu.",
+                    "required" => "Vložte emailovou adresu."
+                ],
+                "not_activated" => "Váš účet musí být aktivován před přihlášením.",
+                "password" => [
+                    "max" => "Heslo je příliš dlouhé.",
+                    "min" => "Heslo je příliš krátké - musí mít alespoň 8 znaků. ",
+                    "required" => "Vložte své heslo."
+                ],
+                "password_repeat" => ["required" => "Zopakujte své heslo.", "same" => "Hesla se neshodují."],
+                "state_id" => ["exists" => "Vybraná hodnota není platná.", "required" => "Vyberte stát"],
+                "terms_accepted" => ["required" => "Přijměte podmínky."],
+                "unknown_user" => "Email nebo heslo je neplatné.",
+                "user_is_guest" => "Snažíte se přihlásit s účtem neregistrovaného zákazníka.",
+                "zip" => ["required" => "Vložte směrovací číslo."]
+            ],
+            "properties" => ["redirect" => ["name" => "Přesměrovat po přihlášení"]]
+        ],
+        "wishlistButton" => [
+            "details" => [
+                "description" => "Zobrazí tlačítko Seznam přání",
+                "name" => "Tlačítko Seznam přání"
+            ],
+            "properties" => [
+                "product" => ["description" => "ID produktu", "name" => "Produkt"],
+                "variant" => ["description" => "ID varianty", "name" => "Varianta"]
+            ]
+        ],
+        "wishlists" => [
+            "details" => ["description" => "Zobrazí správce Seznamu přání", "name" => "Seznamy přání"],
+            "properties" => [
+                "showShipping" => ["description" => "Zobrazí cenu dopravy", "name" => "Zobrazit dopravu"]
+            ]
+        ]
     ],
-    'currency_settings'        => [
-        'label'             => 'Měna',
-        'description'       => 'Konfigurace měn',
-        'currencies'        => 'Vložte oficiální 3-znakové kódy měn.',
-        'currency_code'     => 'Kód měny',
-        'currency_decimals' => 'Počet desetinných míst',
-        'currency_format'   => 'Formát',
-        'currency_symbol'   => 'Symbol',
-        'currency_rate'     => 'Kurz',
-        'is_default'        => 'Výchozí měna',
-        'unknown'           => 'Neznámá měna',
+    "currency_settings" => [
+        "currencies" => "Vložte oficiální 3-znakové kódy měn.",
+        "currency_code" => "Kód měny",
+        "currency_decimals" => "Počet desetinných míst",
+        "currency_format" => "Formát",
+        "currency_rate" => "Kurz",
+        "currency_rounding" => "",
+        "currency_rounding_comment" => "",
+        "currency_symbol" => "Symbol",
+        "description" => "Konfigurace měn",
+        "is_default" => "Výchozí měna",
+        "label" => "Měna",
+        "unknown" => "Neznámá měna"
     ],
-    'payment_gateway_settings' => [
-        'label'       => 'Platební brány',
-        'description' => 'Konfigurace platebních bran',
-        'stripe'      => [
-            'api_key'                 => 'Stripe API klíč',
-            'api_key_comment'         => 'Klíč najdeve v Stripe Dashboard',
-            'publishable_key'         => 'Stripe veřejný klíč',
-            'publishable_key_comment' => 'klíč najdeve v  Stripe Dashboard',
-        ],
-        'paypal'      => [
-            'client_id'         => 'PayPal Client ID',
-            'secret'            => 'PayPal Secret',
-            'test_mode'         => 'Testovaci mód',
-            'test_mode_comment' => 'Všechny platby pomocí PayPal Sandbox.',
-        ],
-        'postfinance' => [
-            'test_mode'              => 'Testovací mód',
-            'test_mode_comment'      => 'Všechny platby budou v testovacím režimu',
-            'pspid'                  => 'PSPID (Uživatelské jméno)',
-            'hashing_method'         => 'Hash algoritmus',
-            'hashing_method_comment' => 'Configuration -> Technical information -> Global security parameters',
-            'sha_in'                 => 'SHA-IN podpis',
-            'sha_in_comment'         => 'Configuration -> Technical information -> Data and origin verification',
-            'sha_out'                => 'SHA-OUT podpis',
-            'sha_out_comment'        => 'Configuration -> Technical information -> Transaction feedback',
-        ],
+    "custom_field_options" => [
+        "add" => "Přidat možnost",
+        "attributes" => "Atribut",
+        "checkbox" => "Zaškrtávací políčko",
+        "color" => "Barva",
+        "date" => "",
+        "datetime" => "",
+        "dropdown" => "Rozbalovací seznam",
+        "float" => "Float",
+        "image" => "Obrázek",
+        "integer" => "Číslo",
+        "name" => "Název",
+        "option" => "Možnost",
+        "price" => "Cena",
+        "richeditor" => "Editor",
+        "switch" => "",
+        "text" => "Textové pole",
+        "textarea" => "Více řádkové textové pole"
     ],
-    'notification_settings'    => [
-        'label'       => 'Oznámení',
-        'description' => 'Konfigurace oznámení',
+    "custom_fields" => [
+        "is_not_required" => "Není povinné",
+        "is_required" => "Povinné",
+        "name" => "Název pole",
+        "options" => "Možnosti",
+        "required" => "Povinné",
+        "required_comment" => "Toto pole je povinné pro vytvoření objednávky",
+        "type" => "Typ pole"
     ],
-    'price_category_settings'  => [
-        'label'       => 'Kategorie cen',
-        'description' => 'Konfigurace dalších cenových kategorií',
+    "customer_group" => [
+        "code_comment" => "Tento kód může být použit na identifikaci této skupiny programově",
+        "discount_comment" => "Dejte této skupině zákazníků určitou slevu v % na všechny produkty"
     ],
-    'order_state_settings'     => [
-        'description' => 'Konfigurace stavu objednávek',
+    "discounts" => [
+        "amount" => "Pevná částka",
+        "code" => "Kód slevy",
+        "code_comment" => "Nechte prázdné pro vytvoření náhodného kódu",
+        "expires" => "Platnost končí",
+        "max_number_of_usages" => "Maximální počet použití slevy",
+        "name" => "Název",
+        "number_of_usages" => "počet použití slevy",
+        "rate" => "Procenta (%)",
+        "section_trigger" => "Kdy se sleva aplikuje?",
+        "section_type" => "K čemu tato sleva slouží?",
+        "shipping_description" => "Jméno alternativního způsobu dopravy",
+        "shipping_guaranteed_days_to_delivery" => "Zaručené dny na doručení",
+        "shipping_price" => "Cena alternativního způsobu dopravy",
+        "total_to_reach" => "Minimální celková částka pro uplatnění slevy",
+        "trigger" => "Platná pokud",
+        "triggers" => [
+            "code" => "je zadán slevový kód",
+            "customer_group" => "",
+            "product" => "Určitý produkt je v košíku",
+            "shipping_method" => "Způsob dopravy je jeden z následujících",
+            "total" => "Celková cena objednávky je dosažena"
+        ],
+        "type" => "Typ slevy",
+        "types" => [
+            "fixed_amount" => "Pevná částka",
+            "rate" => "Procenta",
+            "shipping" => "Alternativní doprava"
+        ],
+        "valid_from" => "Platné od",
+        "validation" => [
+            "cart_limit_reached" => "",
+            "duplicate" => "Stejný kupón můžete použít pouze jednou.",
+            "empty" => "Vložte kupón.",
+            "expired" => "Tento kupón již vypršel.",
+            "not_found" => "Tento kupón není platný.",
+            "shipping" => "Můžete použít pouze jeden kupón, který sníží Vaši dopravu.",
+            "usage_limit_reached" => "Tento kupón byl již použit a proto je neplatný."
+        ]
     ],
-    'payment_method_settings'  => [
-        'description' => 'Konfigurace platebních možností',
+    "feed_settings" => [
+        "description" => "Konfigurace kanálů",
+        "google_merchant_enabled" => "Povolit Google Merchant Center Feed",
+        "google_merchant_enabled_comment" => "Bude vytvořen kanál produktů",
+        "google_merchant_url" => "Vaše Google Merchant Feed URL",
+        "google_merchant_url_locale" => "Přidejte ?locale=xy pro získání lokalizovaného kanálu."
     ],
-    'shipping_method_settings' => [
-        'description' => 'Konfigurace dopravy',
+    "general_settings" => [
+        "account_page" => "Stránka Účet",
+        "account_page_comment" => "Komponent \"myAccount\" musí být na této stránce",
+        "address_page" => "Stránka Adresa",
+        "address_page_comment" => "Komponent \"addressForm\" musí být na této stránce",
+        "admin_email" => "Email správce",
+        "admin_email_comment" => "Zprávy pro správce budou zasílány na tuto adresu",
+        "base" => "Základní nastavení",
+        "cart_page" => "Stránka košík",
+        "cart_page_comment" => "Komponent \"cart\" musí být na této stránce",
+        "category" => "E-shop: Obecné",
+        "category_orders" => "E-shop: Objednávky",
+        "category_page" => "Stránka Kategorie",
+        "category_page_comment" => "Komponent \"products\" musí být na této stránce.",
+        "category_payments" => "E-shop: Platby",
+        "checkout_page" => "Stránka Pokladna",
+        "checkout_page_comment" => "Komponent \"checkout\" musí být na této stránce",
+        "customizations" => "Přizpůsobení",
+        "customizations_comment" => "Upravte funkce eshopu",
+        "description" => "Obecná nastavení",
+        "group_search_results_by_product" => "Skupinové hledání - výsledky produktů",
+        "group_search_results_by_product_comment" => "Produkt zobrazit ve výsledcích hledání pouze jednou, nezobrazovat všechny varianty",
+        "index_driver" => "Ovladač indexu",
+        "index_driver_comment" => "Pokud Vaše databáze podporuje JSON, použijte databázový ovladač.",
+        "index_driver_database" => "Databáze (pouze pro MySQL 5.7+ ne MariaDB 10.2+)",
+        "index_driver_filesystem" => "Souborový systém",
+        "index_driver_hint" => "Pokud změníte tuto možnost, spusťte \"php artisan mall:reindex\" v příkazovém řádku pro reindexaci Vašich produktů!",
+        "label" => "Konfigurace",
+        "links" => "CMS stránky",
+        "links_comment" => "Vyberte, které stránky budou zobrazovat produkty",
+        "order_number_start" => "Číslo první objednávky",
+        "order_number_start_comment" => "Výchozí ID první objednávky",
+        "product_page" => "Stránka Detail produktu",
+        "product_page_comment" => "Na této stránce bude zobrazen detail produktu",
+        "redirect_to_cart" => "Přesměrovat do košíku",
+        "redirect_to_cart_comment" => "Přesměruje do košíku poté, co zákazník přidal produkt",
+        "shipping_selection_before_payment" => "Select shipping method BEFORE payment during checkout",
+        "shipping_selection_before_payment_comment" => "By default, during checkout, the user is first asked to select a payment method before selecting a shipping method; use this option to reverse this logic",
+        "use_state" => "Použijte pole Stát/Země/Provincie",
+        "use_state_comment" => "Zákazník musí použít pole Stát/Země/Provincie během registrace"
     ],
-    'tax_settings'             => [
-        'description' => 'Konfigurace DPH',
+    "image_sets" => [
+        "create_new" => "Vytvořit novou sadu",
+        "is_main_set" => "Hlavní obrázek",
+        "is_main_set_comment" => "Použít jako hlavní obrázek"
     ],
-    'general_settings'         => [
-        'category'                   => 'E-shop: Obecné',
-        'category_payments'          => 'E-shop: Platby',
-        'category_orders'            => 'E-shop: Objednávky',
-        'label'                      => 'Konfigurace',
-        'description'                => 'Obecná nastavení',
-        'product_page'               => 'Stránka Detail produktu',
-        'product_page_comment'       => 'Na této stránce bude zobrazen detail produktu',
-        'address_page'               => 'Stránka Adresa',
-        'address_page_comment'       => 'Komponent "addressForm" musí být na této stránce',
-        'checkout_page'              => 'Stránka Pokladna',
-        'checkout_page_comment'      => 'Komponent "checkout" musí být na této stránce',
-        'account_page'               => 'Stránka Účet',
-        'account_page_comment'       => 'Komponent "myAccount" musí být na této stránce',
-        'cart_page'                  => 'Stránka košík',
-        'cart_page_comment'          => 'Komponent "cart" musí být na této stránce',
-        'category_page'              => 'Stránka Kategorie',
-        'redirect_to_cart'           => 'Přesměrovat do košíku',
-        'redirect_to_cart_comment'   => 'Přesměruje do košíku poté, co zákazník přidal produkt',
-        'use_state'                  => 'Použijte pole Stát/Země/Provincie',
-        'use_state_comment'          => 'Zákazník musí použít pole Stát/Země/Provincie během registrace',
-        'group_search_results_by_product'                  => 'Skupinové hledání - výsledky produktů',
-        'group_search_results_by_product_comment'          => 'Produkt zobrazit ve výsledcích hledání pouze jednou, nezobrazovat všechny varianty',
-        'shipping_selection_before_payment' => 'Select shipping method BEFORE payment during checkout',
-        'shipping_selection_before_payment_comment' => 'By default, during checkout, the user is first asked to select a payment method before selecting a shipping method; use this option to reverse this logic',
-        'admin_email'                => 'Email správce',
-        'admin_email_comment'        => 'Zprávy pro správce budou zasílány na tuto adresu',
-        'base'                       => 'Základní nastavení',
-        'links'                      => 'CMS stránky',
-        'links_comment'              => 'Vyberte, které stránky budou zobrazovat produkty',
-        'customizations'             => 'Přizpůsobení',
-        'customizations_comment'     => 'Upravte funkce eshopu',
-        'category_page_comment'      => 'Komponent "products" musí být na této stránce.',
-        'order_number_start'         => 'Číslo první objednávky',
-        'order_number_start_comment' => 'Výchozí ID první objednávky',
-        'index_driver'               => 'Ovladač indexu',
-        'index_driver_comment'       => 'Pokud Vaše databáze podporuje JSON, použijte databázový ovladač.',
-        'index_driver_filesystem'    => 'Souborový systém',
-        'index_driver_database'      => 'Databáze (pouze pro MySQL 5.7+ ne MariaDB 10.2+)',
-        'index_driver_hint'          => 'Pokud změníte tuto možnost, spusťte "php artisan mall:reindex" v příkazovém řádku pro reindexaci Vašich produktů!',
+    "menu_items" => [
+        "all_categories" => "Všechny kategorie obchodu",
+        "all_products" => "Všechny produkty obchodu",
+        "all_variants" => "Všechny varianty obchodu",
+        "single_category" => "Jedna kategorie obchodu"
     ],
-    'feed_settings'            => [
-        'description'                     => 'Konfigurace kanálů',
-        'google_merchant_enabled'         => 'Povolit Google Merchant Center Feed',
-        'google_merchant_enabled_comment' => 'Bude vytvořen kanál produktů',
-        'google_merchant_url'             => 'Vaše Google Merchant Feed URL',
-        'google_merchant_url_locale'      => 'Přidejte ?locale=xy pro získání lokalizovaného kanálu.',
+    "notification_settings" => ["description" => "Konfigurace oznámení", "label" => "Oznámení"],
+    "notifications" => [
+        "enabled" => "Povoleno",
+        "enabled_comment" => "Toto oznámení je povoleno",
+        "template" => "Šablona emailu"
     ],
-    'review_settings'          => [
-        'description'             => 'Konfigurace recenzí',
-        'enabled'                 => 'Recenze povoleny',
-        'enabled_comment'         => 'Zákazník může vytvářet recenze',
-        'moderated'               => 'Kontrola recenzí',
-        'moderated_comment'       => 'Nové recenze budou publikovány ručně správcem',
-        'allow_anonymous'         => 'Povolit anonymní recenze',
-        'allow_anonymous_comment' => 'Nezaregistrovaní uživatelé mohou vytvářet recenze',
+    "order" => [
+        "adjusted_amount" => "Upravená částka",
+        "billing_address" => "Fakturační adresa",
+        "card_holder_name" => "Majitel karty",
+        "card_type" => "Typ karty",
+        "change_order_status" => "Změnit stav objednávky",
+        "change_payment_status" => "Změnit stav platby",
+        "completion_date" => "Vyřízeno",
+        "creation_date" => "Vytvořeno",
+        "credit_card" => "Kreditní karta",
+        "credit_card_last4_digits" => "Poslední 4 čísla",
+        "currency" => "Měna",
+        "custom_fields" => "Vlastní pole",
+        "customer" => "Zákazník",
+        "data" => "Data objednávky",
+        "delete_confirm" => "Opravdu chcete smazat tuto objednávku?",
+        "deleted" => "Objednávka úspěšně smazána",
+        "deleting" => "Mazání objednávky..",
+        "download_invoice" => "Stáhnout fakturu",
+        "email" => "Email",
+        "grand_total" => "Celkem",
+        "invalid_status" => "Vybraný stav neexistuje.",
+        "invoice_number" => "Číslo faktury",
+        "items" => "Položky",
+        "items_total" => "Kusy celkem",
+        "lang" => "Jazyk",
+        "modal" => ["cancel" => "Zrušit", "update" => "Aktualizovat informace"],
+        "modification_date" => "Změněno",
+        "not_shipped" => "Čeká se",
+        "notes" => "Poznámky",
+        "order_file_name" => "",
+        "order_number" => "Číslo objednávky",
+        "payment_gateway_used" => "Platba",
+        "payment_hash" => "Platební řetězec",
+        "payment_method" => "Způsob platby",
+        "payment_states" => [
+            "failed_state" => "Platba neúspěšná",
+            "paid_state" => "Zaplaceno",
+            "pending_state" => "Na platbu se čeká",
+            "refunded_state" => "Platba vrácena"
+        ],
+        "payment_status" => "Stav platby",
+        "payment_transaction_id" => "ID platební transakce",
+        "quantity" => "Množství",
+        "rebate_amount" => "Částka slevy",
+        "refunds_amount" => "Vrácení částky",
+        "shipped" => "Odesláno",
+        "shipping_address" => "Doručovací adresa",
+        "shipping_address_is_same_as_billing" => "Dodací adresa je stejná jako fakturační",
+        "shipping_address_same_as_billing" => "Doručovací adresa je stejná",
+        "shipping_enabled" => "Přeprava povolena",
+        "shipping_fees" => "Poplatky za dopravu",
+        "shipping_method" => "Způsob dopravy",
+        "shipping_pending" => "Čeká se na dopravu",
+        "shipping_provider" => "Dopravce",
+        "status" => "Stav",
+        "subtotal" => "Mezisoučet",
+        "tax_provider" => "Poskytovatel daně",
+        "taxable_total" => "Zdanitelný součet",
+        "taxes_total" => "Daně celkem",
+        "total" => "Cena celkem",
+        "total_rebate_rate" => "Celková sleva",
+        "total_revenue" => "Celkové příjmy",
+        "total_weight" => "Celková váha",
+        "tracking_completed" => "Označit jako vyřízeno",
+        "tracking_completed_comment" => "Objednávka bude označená jako vyřízená",
+        "tracking_notification" => "Poslat oznámení",
+        "tracking_notification_comment" => "Oznámení s informacemi o stavu objednávky bude zasláno zákazníkoví",
+        "tracking_number" => "Sledovací číslo",
+        "tracking_shipped" => "Označit jako odesláno",
+        "tracking_shipped_comment" => "Objednávka bude označená jako odeslána",
+        "tracking_url" => "Sledovací www adresa ",
+        "update_invoice_number" => "Nastavit číslo faktury",
+        "update_shipping_state" => "Aktualizovat stav dopravy",
+        "updated" => "Objednávka úspěšně aktualizována",
+        "virtual_product_download_hint" => "",
+        "will_be_paid_later" => "Bude placeno později"
     ],
-    'common'                   => [
-        'shop'                 => 'E-shop',
-        'products'             => 'Produkty',
-        'product'              => 'Produkt',
-        'orders'               => 'Objednávky',
-        'cart'                 => 'Košík',
-        'shipping'             => 'Doprava',
-        'taxes'                => 'DPH',
-        'rates'                => 'Sazbu',
-        'inventory'            => 'Inventory',
-        'accessories'          => 'Příslušenství',
-        'shipping_methods'     => 'Doprava',
-        'accessory'            => 'Accessory',
-        'custom_fields'        => 'Vlastní pole',
-        'variants'             => 'Varianty',
-        'variant'              => 'Varianty',
-        'discounts'            => 'Slevy',
-        'discount'             => 'Sleva',
-        'discount_percentage'  => 'Sleva (%)',
-        'select_placeholder'   => '-- Prosím vyberte',
-        'main_image'           => 'Hlavní obrázek',
-        'images'               => 'Obrázek',
-        'image_set'            => 'Skupina obrázků',
-        'attachments'          => 'Obrázky/Soubory',
-        'downloads'            => 'Soubory',
-        'select_image'         => 'Vyberte obrázek',
-        'select_file'          => 'Vyberte soubor',
-        'allowed'              => 'Povoleno',
-        'not_allowed'          => 'Zakázáno',
-        'yes'                  => 'Ano',
-        'no'                   => 'Ne',
-        'seo'                  => 'SEO',
-        'properties_links'     => 'Vlastnosti/Odkazy',
-        'categories'           => 'Kategorie',
-        'category'             => 'Kategorie',
-        'meta_title'           => 'Meta - titulek',
-        'meta_description'     => 'Meta - popis',
-        'meta_keywords'        => 'Meta - klíčové slova',
-        'reorder'              => 'Přeskupit záznamy',
-        'id'                   => 'ID',
-        'created_at'           => 'Vytvořeno',
-        'updated_at'           => 'Aktualizováno',
-        'approved_at'          => 'Schváleno',
-        'hide_published'       => 'Skrýt publikované',
-        'slug'                 => 'URL',
-        'name'                 => 'Name',
-        'display_name'         => 'Název filtru - zobrazí se na stránce',
-        'group_name'           => 'Název skupiny',
-        'add_value'            => 'Přidat',
-        'export_orders'        => 'Exportovat objednávky',
-        'use_backend_defaults' => 'Použijte výchozí nastavení nakonfigurovaná v nastavení backendu',
-        'api_error'            => 'Slevu nelze uložit. Chyba při odesílání změn do rozhraní API Mall.',
-        'includes_tax'         => 'Včetně daní',
-        'conditions'           => 'Podmínky dopravy',
-        'general'              => 'Obecné',
-        'logo'                 => 'Logo',
-        'payment_gateway'      => 'Platební brána',
-        'payment_provider'     => 'Poskytovatel plateb',
-        'payment_methods'      => 'Způsob platby',
-        'payment'              => 'Platba',
-        'payments'             => 'Platby',
-        'image'                => 'Obrázek',
-        'color'                => 'Barva',
-        'unit'                 => 'Jednotka',
-        'dont_group'           => '-- Neseskupovat',
-        'properties'           => 'Filtry',
-        'old_price'            => 'Stará cena',
-        'property'             => 'Filtr',
-        'property_groups'      => 'Skupiny filtrů',
-        'property_group'       => 'Skupinu filtrů',
-        'options'              => 'Možnosti',
-        'option'               => 'Možnost',
-        'catalogue'            => 'Katalog zboží',
-        'out_of_stock'         => 'Tento produkt není skladem',
-        'out_of_stock_short'   => 'Není skladem',
-        'stock_limit_reached'  => 'Nemůžete přidat více kusů do košíku, protože byl dosažen limit zásob.',
-        'deleted_at'           => 'Smazáno',
-        'sort_order'           => 'Sort order',
-        'order_states'         => 'Stavy objednávek',
-        'website'              => 'WWW',
-        'brands'               => 'Značky',
-        'brand'                => 'Značky',
-        'sorting_updated'      => 'Pořadí řazení bylo aktualizováno',
-        'not_in_use'           => 'Možnost se nepoužívá',
-        'saved_changes'        => 'Změny byly uloženy',
-        'none'                 => '-- Žádná',
-        'customers'            => 'Zákazníci',
-        'customer_groups'      => 'Skupiny zákazníků',
-        'customer_group'       => 'Skupina zakazníků',
-        'product_or_variant'   => 'Produkt/Varianta',
-        'code'                 => 'Kód',
-        'code_comment'         => 'Tento kód může být použit k identifikaci tohoto záznamu programově',
-        'checked'              => 'Označeno',
-        'unchecked'            => 'Neoznačené',
-        'notifications'        => 'Zprávy',
-        'notification'         => 'Zpráva',
-        'price_missing'        => 'Zadejte alespoň cenu pro výchozí měnu',
-        'slug_unique'          => 'WWW adresa musí být unikátní',
-        'fees'                 => 'Poplatky',
-        'value'                => 'Hodnota',
-        'action_required'      => 'Je vyžadována akce!',
-        'invalid_quantity'     => 'Vybraná hodnota není platná',
-        'addresses'            => 'Adresy',
-        'address'              => 'Adresa',
-        'reference'            => 'Reference',
-        'session_id'           => 'ID relace',
-        'message'              => 'Zpráva',
-        'payment_method'       => 'Typ platby',
-        'data'                 => 'Data',
-        'successful'           => 'Úspěšný',
-        'failed'               => 'neúspěšný',
-        'caution'              => 'Pozor',
-        'since_begin'          => 'Od začátku',
-        'weekly'               => 'Týdně',
-        'feeds'                => 'Kanály',
-        'services'             => 'Služby',
-        'service'              => 'Služba',
-        'review'               => 'Recenze',
-        'reviews'              => 'Recenze',
-        'review_categories'    => 'Recenze - kategorie',
-        'review_category'      => 'Recenze - kategorie',
-        'title'                => 'Název',
-        'version'              => 'Verze',
+    "order_state_settings" => ["description" => "Konfigurace stavu objednávek"],
+    "order_states" => [
+        "color" => "Barva",
+        "description" => "Popis",
+        "flag" => "Zvláštní značka",
+        "flags" => [
+            "cancelled" => "Nastavit stav objednávky jako \"zrušeno\"",
+            "complete" => "Nastavit stav objednávky jako \"Vyřízeno\"",
+            "new" => "Nastavit stav objednávky jako \"Nová\""
+        ],
+        "name" => "Název"
     ],
-    'variant'                  => [
-        'method' => [
-            'single'  => 'Samostatný produkt',
-            'variant' => 'Produkt s variantami',
-        ],
+    "order_status" => [
+        "cancelled" => "Zrušeno",
+        "delivered" => "Dodáno",
+        "disputed" => "Sporné",
+        "pending" => "Probíhající",
+        "processed" => "Zpracováno",
+        "shipped" => "Odesláno"
     ],
-    'properties'               => [
-        'use_for_variants'         => 'Použít pro varianty',
-        'use_for_variants_comment' => 'Tato vlastnost je různá pro různé varianty tohoto produktu',
-        'filter_type'              => 'Typ filtru',
-        'filter_types'             => [
-            'none'  => 'Bez filtru',
-            'set'   => 'Sada',
-            'range' => 'Rozmezí od do',
+    "payment_gateway_settings" => [
+        "description" => "Konfigurace platebních bran",
+        "label" => "Platební brány",
+        "paypal" => [
+            "client_id" => "PayPal Client ID",
+            "secret" => "PayPal Secret",
+            "test_mode" => "Testovaci mód",
+            "test_mode_comment" => "Všechny platby pomocí PayPal Sandbox."
         ],
+        "postfinance" => [
+            "hashing_method" => "Hash algoritmus",
+            "hashing_method_comment" => "Configuration -> Technical information -> Global security parameters",
+            "pspid" => "PSPID (Uživatelské jméno)",
+            "sha_in" => "SHA-IN podpis",
+            "sha_in_comment" => "Configuration -> Technical information -> Data and origin verification",
+            "sha_out" => "SHA-OUT podpis",
+            "sha_out_comment" => "Configuration -> Technical information -> Transaction feedback",
+            "test_mode" => "Testovací mód",
+            "test_mode_comment" => "Všechny platby budou v testovacím režimu"
+        ],
+        "stripe" => [
+            "api_key" => "Stripe API klíč",
+            "api_key_comment" => "Klíč najdeve v Stripe Dashboard",
+            "publishable_key" => "Stripe veřejný klíč",
+            "publishable_key_comment" => "klíč najdeve v  Stripe Dashboard"
+        ]
     ],
-    'custom_field_options'     => [
-        'text'       => 'Textové pole',
-        'integer'    => 'Číslo',
-        'float'      => 'Float',
-        'textarea'   => 'Více řádkové textové pole',
-        'richeditor' => 'Editor',
-        'dropdown'   => 'Rozbalovací seznam',
-        'checkbox'   => 'Zaškrtávací políčko',
-        'color'      => 'Barva',
-        'image'      => 'Obrázek',
-        'add'        => 'Přidat možnost',
-        'name'       => 'Název',
-        'price'      => 'Cena',
-        'attributes' => 'Atribut',
-        'option'     => 'Možnost',
+    "payment_log" => [
+        "code_comment" => "Tento kód byl vrácen poskytovatelem plateb",
+        "data_comment" => "Tato data byla vrácena poskytovatelem plateb",
+        "failed_only" => "Pouze neuspěšné",
+        "message_comment" => "Tuto zprávu vrátil poskytovatel plateb",
+        "order_data_comment" => "Toto jsou všechny údaje o objednávce pro tuto platbu",
+        "payment_data" => "Platební údaje"
     ],
-    'product'                  => [
-        'user_defined_id'                      => 'ID produktu',
-        'name'                                 => 'Jméno produktu',
-        'published'                            => 'Zobrazeno',
-        'published_short'                      => 'Zobr.',
-        'is_virtual'                           => 'Virtuální produkt',
-        'is_virtual_comment'                   => 'Tento produkt je virtuální (bez dopravy)',
-        'product_file'                         => 'Soubor produktu',
-        'product_files'                        => 'Soubory produktu',
-        'product_files_section_comment'        => 'Toto je virtuální produkt. Níže můžete nahrát nové verze souboru. Poslední verze bude stáhnutelná zákazníky.',
-        'product_file_version'                 => 'Verzi souboru',
-        'not_published'                        => 'Nezobrazeno',
-        'published_comment'                    => 'Tento produkt je viditelný v e-shopu',
-        'stock'                                => 'Počet ks',
-        'price'                                => 'Cena',
-        'description_short'                    => 'Krátký popis',
-        'description'                          => 'Popis',
-        'weight'                               => 'Váha (g)',
-        'length'                               => 'Délka (mm)',
-        'height'                               => 'Výška (mm)',
-        'width'                                => 'Šířka (mm)',
-        'quantity_default'                     => 'Výchozí počet ks',
-        'quantity_min'                         => 'Minimální počet ks',
-        'quantity_max'                         => 'Maximální počet ks',
-        'inventory_management_method'          => 'Způsob řízení zásob',
-        'allow_out_of_stock_purchases'         => 'Povolit objednávku při vyprodání zásob',
-        'allow_out_of_stock_purchases_comment' => 'Tento produkt může být objednán i při nulových zásobách',
-        'stackable'                            => 'Produkt v košíku',
-        'stackable_comment'                    => 'Pokud je produkt přidán do košíku vícekrát, zobrazit ho pouze jako jednu položku (změní se počet ks)',
-        'shippable'                            => 'Dodatelné',
-        'shippable_comment'                    => 'Tento produkt může být dodán',
-        'taxable'                              => 'DPH',
-        'taxable_comment'                      => 'Vypočítejte daně z tohoto produktu',
-        'add_currency'                         => 'Přidat měnu',
-        'is_taxable'                           => 'Použijte daň',
-        'is_not_taxable'                       => 'Nepoužívejte žádnou daň',
-        'currency'                             => 'Měna',
-        'general'                              => 'Obecné',
-        'duplicate_currency'                   => 'Vložili jste více cen pro stejnou měnu',
-        'property_title'                       => 'Název',
-        'property_value'                       => 'Hodnota',
-        'link_title'                           => 'Název',
-        'link_target'                          => 'Adresa www',
-        'embed_title'                          => 'Název',
-        'embed_code'                           => 'Vložit kód',
-        'properties'                           => 'Vlastnosti',
-        'links'                                => 'Odkazy',
-        'embeds'                               => 'Vložit kód',
-        'details'                              => 'Podrobnosti',
-        'price_includes_tax'                   => 'Cena zahrnuje DPH',
-        'price_includes_tax_comment'           => 'Definovaná cena zahrnuje DPH',
-        'group_by_property'                    => 'Atribut pro seskupení variant',
-        'additional_descriptions'              => 'Další popisky',
-        'additional_properties'                => 'Další vlastnosti',
-        'gtin'                                 => 'Číslo globální obchodní položky (GTIN)',
-        'mpn'                                  => 'Číslo dílu výrobce (MPN)',
-        'price_table_modal'                    => [
-            'trigger'           => 'Upravit ceny a zásoby',
-            'label'             => 'Ceny a zásoby',
-            'title'             => 'Přehled cen a zásob',
-            'currency_dropdown' => 'Měna: ',
-        ],
-        'missing_category'                     => 'Produkt nemá kategorii. Vyberte kategorii pro editaci produktu.',
-        'variant_support_header'               => 'Varianty nejsou podporovány',
-        'variant_support_text'                 => 'Vybraná kategorie nemá nadefinované varianty. Změňte způsob řízení zásob na "Samostatný produkt" nebo vyberte jinou kategorii.',
-        'filter_virtual'                       => 'Zobrazit pouze virtuální produkty',
+    "payment_method" => [
+        "fee_label" => "Poplatek",
+        "fee_label_comment" => "Tento text se zákazníkovi zobrazí při placení.",
+        "fee_percentage" => "Procentní poplatek",
+        "fee_percentage_comment" => "Procento z celkového počtu, které se přidá k celkovému objemu objednávky",
+        "instructions" => "Platební pokyny",
+        "instructions_comment" => "Podporován twig syntax. Pomocí {{ order }} nebo {{ cart }} získáte přístup k odpovídajícím informacím, jsou-li k dispozici",
+        "pdf_partial" => "příloha PDF",
+        "pdf_partial_comment" => "U všech objednávek s tímto způsobem platby bude k emailu přiložen soubor PDF",
+        "pdf_partial_none" => "Bez přílohy PDF",
+        "price" => "Pevný poplatek",
+        "price_comment" => "Částka, která se má přidat k celkové objednávce"
     ],
-    'product_file'             => [
-        'display_name_comment'       => 'Tento název bude viditelný pro zákazníka.',
-        'version_comment'            => 'Unikátní verze pomůže zákazníkovi poznat aktualizované soubory.',
-        'expires_after_days'         => 'Stahování platné po dobu dnů',
-        'expires_after_days_comment' => 'Soubor může být stáhnut pouze tento počet dnů po zakoupení. Nechte prázdné pro neomezený počet dnů.',
-        'max_download_count'         => 'Maximální počet stáhnutí',
-        'max_download_count_comment' => 'Soubor může být stáhnut pouze tolikrát. Nechte prázdné pro neomezené stahování.',
-        'session_required'           => 'Přihlášení je vyžadováno',
-        'session_required_comment'   => 'Soubor může být stáhnutý pouze pokud je zákazník přihlášen (odkaz není sdílený).',
-        'file'                       => 'Soubor',
-        'download_count'             => 'Počet stáhnutí',
-        'errors'                     => [
-            'invalid'           => 'Neplatný odkaz ke stažení',
-            'expired'           => 'Odkaz na stažení vypršel',
-            'too_many_attempts' => 'Příliš mnoho pokusů o stažení',
-            'not_found'         => 'Požadovaný soubor nelze najít, kontaktujte nás kvůli podpoře.',
-        ],
-        'hint'                       => [
-            'intro'     => 'Tento produkt nemá připojený soubor. Nezapomeňte při placení jeden přidat nebo programově gerenovat.',
-            'info_text' => 'Naleznete informace o tom, jak to provést',
-            'info_link' => 'v dokumentaci',
-        ],
+    "payment_method_settings" => ["description" => "Konfigurace platebních možností"],
+    "payment_status" => [
+        "cancelled" => "Zrušeno",
+        "charged_back" => "Naúčtováno zpět",
+        "deferred" => "Odloženo",
+        "expired" => "Vypršelo",
+        "failed" => "Selhalo",
+        "open" => "Otevřeno",
+        "paid" => "Zaplaceno",
+        "paid_deferred" => "Zaplaceno odloženo",
+        "paiddeferred" => "Zaplaceno odloženo",
+        "paidout" => "Vyplaceno",
+        "pending" => "Probíhá",
+        "refunded" => "Vráceno"
     ],
-    'image_sets'               => [
-        'is_main_set'         => 'Hlavní obrázek',
-        'is_main_set_comment' => 'Použít jako hlavní obrázek',
-        'create_new'          => 'Vytvořit novou sadu',
+    "permissions" => [
+        "manage_brands" => "",
+        "manage_categories" => "Správa kategorií",
+        "manage_customer_addresses" => "Správa adres zákazníků",
+        "manage_customer_groups" => "Správa skupin zákazníků",
+        "manage_discounts" => "Správa slev",
+        "manage_feeds" => "Správa kanálů",
+        "manage_notifications" => "Správa oznámení",
+        "manage_order_states" => "Správa stavu objednávek",
+        "manage_orders" => "Správa objednávek",
+        "manage_payment_log" => "Správa záznamů plateb",
+        "manage_price_categories" => "Správa kategorií cen",
+        "manage_products" => "Správa produktů",
+        "manage_properties" => "Správa vlastností produktu",
+        "manage_reviews" => "Správa recenzí",
+        "manage_services" => "Správa služeb",
+        "manage_shipping_methods" => "Správa dopravy",
+        "manage_taxes" => "Správa DPH",
+        "manage_wishlists" => "Správa seznamů přání",
+        "settings" => [
+            "manage_currency" => "Správa měny",
+            "manage_general" => "Správa konfigurace",
+            "manage_payment_gateways" => "Správa platebních bran",
+            "manage_payment_methods" => "Správa plateb"
+        ]
     ],
-    'category'                 => [
-        'name'                              => 'Název',
-        'code'                              => 'Kód',
-        'code_comment'                      => 'Tento kód může být použit pro identifikaci této kategorie na vaší stránce.',
-        'parent'                            => 'Nadřazená kategorie',
-        'no_parent'                         => 'bez nadřazené kategorie',
-        'inherit_property_groups'           => 'Zdědit vlastnosti nadřazené kategorie',
-        'inherit_property_groups_comment'   => 'Použijte skupiny vlastností nadřazené kategorie této kategorie',
-        'inherit_review_categories'         => 'Zdědit kategorie recenzí nadřazené kategorie',
-        'inherit_review_categories_comment' => 'Použijte kategorie recenzí této nadřazené kategorie',
+    "plugin" => ["description" => "E-shop pro October CMS", "name" => "E-shop"],
+    "price_category_settings" => [
+        "description" => "Konfigurace dalších cenových kategorií",
+        "label" => "Kategorie cen"
     ],
-    'custom_fields'            => [
-        'name'             => 'Název pole',
-        'type'             => 'Typ pole',
-        'options'          => 'Možnosti',
-        'required'         => 'Povinné',
-        'required_comment' => 'Toto pole je povinné pro vytvoření objednávky',
-        'is_required'      => 'Povinné',
-        'is_not_required'  => 'Není povinné',
+    "product" => [
+        "add_currency" => "Přidat měnu",
+        "additional_descriptions" => "Další popisky",
+        "additional_properties" => "Další vlastnosti",
+        "allow_out_of_stock_purchases" => "Povolit objednávku při vyprodání zásob",
+        "allow_out_of_stock_purchases_comment" => "Tento produkt může být objednán i při nulových zásobách",
+        "currency" => "Měna",
+        "description" => "Popis",
+        "description_short" => "Krátký popis",
+        "details" => "Podrobnosti",
+        "duplicate_currency" => "Vložili jste více cen pro stejnou měnu",
+        "embed_code" => "Vložit kód",
+        "embed_title" => "Název",
+        "embeds" => "Vložit kód",
+        "filter_virtual" => "Zobrazit pouze virtuální produkty",
+        "general" => "Obecné",
+        "group_by_property" => "Atribut pro seskupení variant",
+        "gtin" => "Číslo globální obchodní položky (GTIN)",
+        "height" => "Výška (mm)",
+        "inventory_management_method" => "Způsob řízení zásob",
+        "is_not_taxable" => "Nepoužívejte žádnou daň",
+        "is_taxable" => "Použijte daň",
+        "is_virtual" => "Virtuální produkt",
+        "is_virtual_comment" => "Tento produkt je virtuální (bez dopravy)",
+        "length" => "Délka (mm)",
+        "link_target" => "Adresa www",
+        "link_title" => "Název",
+        "links" => "Odkazy",
+        "missing_category" => "Produkt nemá kategorii. Vyberte kategorii pro editaci produktu.",
+        "mpn" => "Číslo dílu výrobce (MPN)",
+        "name" => "Jméno produktu",
+        "not_published" => "Nezobrazeno",
+        "price" => "Cena",
+        "price_includes_tax" => "Cena zahrnuje DPH",
+        "price_includes_tax_comment" => "Definovaná cena zahrnuje DPH",
+        "price_table_modal" => [
+            "currency_dropdown" => "Měna: ",
+            "label" => "Ceny a zásoby",
+            "title" => "Přehled cen a zásob",
+            "trigger" => "Upravit ceny a zásoby"
+        ],
+        "product_file" => "Soubor produktu",
+        "product_file_version" => "Verzi souboru",
+        "product_files" => "Soubory produktu",
+        "product_files_section_comment" => "Toto je virtuální produkt. Níže můžete nahrát nové verze souboru. Poslední verze bude stáhnutelná zákazníky.",
+        "properties" => "Vlastnosti",
+        "property_title" => "Název",
+        "property_value" => "Hodnota",
+        "published" => "Zobrazeno",
+        "published_comment" => "Tento produkt je viditelný v e-shopu",
+        "published_short" => "Zobr.",
+        "quantity_default" => "Výchozí počet ks",
+        "quantity_max" => "Maximální počet ks",
+        "quantity_min" => "Minimální počet ks",
+        "shippable" => "Dodatelné",
+        "shippable_comment" => "Tento produkt může být dodán",
+        "stackable" => "Produkt v košíku",
+        "stackable_comment" => "Pokud je produkt přidán do košíku vícekrát, zobrazit ho pouze jako jednu položku (změní se počet ks)",
+        "stock" => "Počet ks",
+        "taxable" => "DPH",
+        "taxable_comment" => "Vypočítejte daně z tohoto produktu",
+        "user_defined_id" => "ID produktu",
+        "variant_support_header" => "Varianty nejsou podporovány",
+        "variant_support_text" => "Vybraná kategorie nemá nadefinované varianty. Změňte způsob řízení zásob na \"Samostatný produkt\" nebo vyberte jinou kategorii.",
+        "weight" => "Váha (g)",
+        "width" => "Šířka (mm)"
     ],
-    'tax'                      => [
-        'percentage'         => 'Počet procent',
-        'countries'          => 'Přidat DPH při dopravě do těchto zemí',
-        'countries_comment'  => 'Pokud není vybrána země,  bude DPH použito celosvětově.',
-        'is_default'         => 'Výchozí',
-        'is_default_comment' => 'Toto DPH je použito, pokud ještě není známá cílová země.',
+    "product_file" => [
+        "display_name_comment" => "Tento název bude viditelný pro zákazníka.",
+        "download_count" => "Počet stáhnutí",
+        "errors" => [
+            "expired" => "Odkaz na stažení vypršel",
+            "invalid" => "Neplatný odkaz ke stažení",
+            "not_found" => "Požadovaný soubor nelze najít, kontaktujte nás kvůli podpoře.",
+            "too_many_attempts" => "Příliš mnoho pokusů o stažení"
+        ],
+        "expires_after_days" => "Stahování platné po dobu dnů",
+        "expires_after_days_comment" => "Soubor může být stáhnut pouze tento počet dnů po zakoupení. Nechte prázdné pro neomezený počet dnů.",
+        "file" => "Soubor",
+        "hint" => [
+            "info_link" => "v dokumentaci",
+            "info_text" => "Naleznete informace o tom, jak to provést",
+            "intro" => "Tento produkt nemá připojený soubor. Nezapomeňte při placení jeden přidat nebo programově gerenovat."
+        ],
+        "max_download_count" => "Maximální počet stáhnutí",
+        "max_download_count_comment" => "Soubor může být stáhnut pouze tolikrát. Nechte prázdné pro neomezené stahování.",
+        "session_required" => "Přihlášení je vyžadováno",
+        "session_required_comment" => "Soubor může být stáhnutý pouze pokud je zákazník přihlášen (odkaz není sdílený).",
+        "version_comment" => "Unikátní verze pomůže zákazníkovi poznat aktualizované soubory."
     ],
-    'discounts'                => [
-        'name'                                 => 'Název',
-        'code'                                 => 'Kód slevy',
-        'code_comment'                         => 'Nechte prázdné pro vytvoření náhodného kódu',
-        'total_to_reach'                       => 'Minimální celková částka pro uplatnění slevy',
-        'type'                                 => 'Typ slevy',
-        'trigger'                              => 'Platná pokud',
-        'rate'                                 => 'Procenta (%)',
-        'amount'                               => 'Pevná částka',
-        'max_number_of_usages'                 => 'Maximální počet použití slevy',
-        'valid_from'                           => 'Platné od',
-        'expires'                              => 'Platnost končí',
-        'number_of_usages'                     => 'počet použití slevy',
-        'shipping_description'                 => 'Jméno alternativního způsobu dopravy',
-        'shipping_price'                       => 'Cena alternativního způsobu dopravy',
-        'shipping_guaranteed_days_to_delivery' => 'Zaručené dny na doručení',
-        'section_type'                         => 'K čemu tato sleva slouží?',
-        'section_trigger'                      => 'Kdy se sleva aplikuje?',
-        'types'                                => [
-            'fixed_amount' => 'Pevná částka',
-            'rate'         => 'Procenta',
-            'shipping'     => 'Alternativní doprava',
-        ],
-        'triggers'                             => [
-            'total'   => 'Celková cena objednávky je dosažena',
-            'code'    => 'je zadán slevový kód',
-            'product' => 'Určitý produkt je v košíku',
-        ],
-        'validation'                           => [
-            'empty'               => 'Vložte kupón.',
-            'shipping'            => 'Můžete použít pouze jeden kupón, který sníží Vaši dopravu.',
-            'duplicate'           => 'Stejný kupón můžete použít pouze jednou.',
-            'expired'             => 'Tento kupón již vypršel.',
-            'not_found'           => 'Tento kupón není platný.',
-            'usage_limit_reached' => 'Tento kupón byl již použit a proto je neplatný.',
-        ],
+    "products" => ["variants_comment" => "Vytvořit různé varianty stejného produktu"],
+    "properties" => [
+        "filter_type" => "Typ filtru",
+        "filter_types" => ["none" => "Bez filtru", "range" => "Rozmezí od do", "set" => "Sada"],
+        "use_for_variants" => "Použít pro varianty",
+        "use_for_variants_comment" => "Tato vlastnost je různá pro různé varianty tohoto produktu"
     ],
-    'payment_method'           => [
-        'price'                  => 'Pevný poplatek',
-        'price_comment'          => 'Částka, která se má přidat k celkové objednávce',
-        'fee_percentage'         => 'Procentní poplatek',
-        'fee_percentage_comment' => 'Procento z celkového počtu, které se přidá k celkovému objemu objednávky',
-        'fee_label'              => 'Poplatek',
-        'fee_label_comment'      => 'Tento text se zákazníkovi zobrazí při placení.',
-        'instructions'           => 'Platební pokyny',
-        'instructions_comment'   => 'Podporován twig syntax. Pomocí {{ order }} nebo {{ cart }} získáte přístup k odpovídajícím informacím, jsou-li k dispozici',
-        'pdf_partial'            => 'příloha PDF',
-        'pdf_partial_comment'    => 'U všech objednávek s tímto způsobem platby bude k emailu přiložen soubor PDF',
-        'pdf_partial_none'       => 'Bez přílohy PDF',
+    "review_settings" => [
+        "allow_anonymous" => "Povolit anonymní recenze",
+        "allow_anonymous_comment" => "Nezaregistrovaní uživatelé mohou vytvářet recenze",
+        "description" => "Konfigurace recenzí",
+        "enabled" => "Recenze povoleny",
+        "enabled_comment" => "Zákazník může vytvářet recenze",
+        "moderated" => "Kontrola recenzí",
+        "moderated_comment" => "Nové recenze budou publikovány ručně správcem"
     ],
-    'order'                    => [
-        'order_number'                        => 'Číslo objednávky',
-        'invoice_number'                      => 'Číslo faktury',
-        'payment_hash'                        => 'Platební řetězec',
-        'customer'                            => 'Zákazník',
-        'creation_date'                       => 'Vytvořeno',
-        'modification_date'                   => 'Změněno',
-        'completion_date'                     => 'Vyřízeno',
-        'credit_card'                         => 'Kreditní karta',
-        'payment_status'                      => 'Stav platby',
-        'grand_total'                         => 'Celkem',
-        'billing_address'                     => 'Fakturační adresa',
-        'shipping_address'                    => 'Doručovací adresa',
-        'currency'                            => 'Měna',
-        'status'                              => 'Stav',
-        'email'                               => 'Email',
-        'will_be_paid_later'                  => 'Bude placeno později',
-        'shipping_address_same_as_billing'    => 'Doručovací adresa je stejná',
-        'credit_card_last4_digits'            => 'Poslední 4 čísla',
-        'tracking_number'                     => 'Sledovací číslo',
-        'tracking_url'                        => 'Sledovací www adresa ',
-        'tracking_shipped'                    => 'Označit jako odesláno',
-        'tracking_shipped_comment'            => 'Objednávka bude označená jako odeslána',
-        'tracking_completed'                  => 'Označit jako vyřízeno',
-        'tracking_completed_comment'          => 'Objednávka bude označená jako vyřízená',
-        'tracking_notification'               => 'Poslat oznámení',
-        'tracking_notification_comment'       => 'Oznámení s informacemi o stavu objednávky bude zasláno zákazníkoví',
-        'shipping_fees'                       => 'Poplatky za dopravu',
-        'shipping_provider'                   => 'Dopravce',
-        'shipping_method'                     => 'Způsob dopravy',
-        'card_holder_name'                    => 'Majitel karty',
-        'card_type'                           => 'Typ karty',
-        'payment_method'                      => 'Způsob platby',
-        'payment_gateway_used'                => 'Platba',
-        'tax_provider'                        => 'Poskytovatel daně',
-        'lang'                                => 'Jazyk',
-        'refunds_amount'                      => 'Vrácení částky',
-        'adjusted_amount'                     => 'Upravená částka',
-        'rebate_amount'                       => 'Částka slevy',
-        'total'                               => 'Cena celkem',
-        'taxes_total'                         => 'Daně celkem',
-        'items_total'                         => 'Kusy celkem',
-        'subtotal'                            => 'Mezisoučet',
-        'taxable_total'                       => 'Zdanitelný součet',
-        'total_weight'                        => 'Celková váha',
-        'total_rebate_rate'                   => 'Celková sleva',
-        'notes'                               => 'Poznámky',
-        'custom_fields'                       => 'Vlastní pole',
-        'shipping_enabled'                    => 'Přeprava povolena',
-        'payment_transaction_id'              => 'ID platební transakce',
-        'change_order_status'                 => 'Změnit stav objednávky',
-        'change_payment_status'               => 'Změnit stav platby',
-        'items'                               => 'Položky',
-        'quantity'                            => 'Množství',
-        'shipping_address_is_same_as_billing' => 'Dodací adresa je stejná jako fakturační',
-        'update_shipping_state'               => 'Aktualizovat stav dopravy',
-        'invalid_status'                      => 'Vybraný stav neexistuje.',
-        'updated'                             => 'Objednávka úspěšně aktualizována',
-        'deleted'                             => 'Objednávka úspěšně smazána',
-        'deleting'                            => 'Mazání objednávky..',
-        'delete_confirm'                      => 'Opravdu chcete smazat tuto objednávku?',
-        'update_invoice_number'               => 'Nastavit číslo faktury',
-        'shipped'                             => 'Odesláno',
-        'shipping_pending'                    => 'Čeká se na dopravu',
-        'not_shipped'                         => 'Čeká se',
-        'data'                                => 'Data objednávky',
-        'total_revenue'                       => 'Celkové příjmy',
-        'download_invoice'                    => 'Stáhnout fakturu',
-        'modal'                               => [
-            'cancel' => 'Zrušit',
-            'update' => 'Aktualizovat informace',
-        ],
-        'payment_states'                      => [
-            'pending_state'  => 'Na platbu se čeká',
-            'failed_state'   => 'Platba neúspěšná',
-            'refunded_state' => 'Platba vrácena',
-            'paid_state'     => 'Zaplaceno',
-        ],
+    "reviews" => [
+        "anonymous" => "Anonymní",
+        "approve" => "",
+        "approve_next" => "Schválit a přejít na další",
+        "approved" => "",
+        "cons" => "Negativa",
+        "no_more" => "Žadné neschválené recenze",
+        "only_unapproved" => "Zobrazit pouze neschválené",
+        "pros" => "Pozitiva",
+        "rating" => "Hodnocení",
+        "review" => "Text recenze",
+        "title" => "Název recenze"
     ],
-    'shipping_method'          => [
-        'guaranteed_delivery_days' => 'Zaručený počet dnů na doručení',
-        'available_above_total'    => 'Použít, pokuje je celková cena rovna nebo vyšší',
-        'available_below_total'    => 'Použít, pokud je celková cena nižší než',
-        'countries'                => 'Doprava dostupná do těchto zemí',
-        'countries_comment'        => 'Pokud není vybraná země, bude tento typ dostupný do všech zemí.',
-        'not_required_name'        => 'Doprava',
-        'not_required_description' => 'Košík nevyžaduje dopravu.',
+    "services" => [
+        "option" => "Možnost",
+        "options" => "Možnosti",
+        "required" => "Služba je povinná",
+        "required_comment" => "Jedna z možností této služby musí být vybrána, když je produkt přidán do košíku."
     ],
-    'payment_status'           => [
-        'paid'          => 'Zaplaceno',
-        'deferred'      => 'Odloženo',
-        'paid_deferred' => 'Zaplaceno odloženo',
-        'paiddeferred'  => 'Zaplaceno odloženo',
-        'charged_back'  => 'Naúčtováno zpět',
-        'refunded'      => 'Vráceno',
-        'paidout'       => 'Vyplaceno',
-        'failed'        => 'Selhalo',
-        'pending'       => 'Probíhá',
-        'expired'       => 'Vypršelo',
-        'cancelled'     => 'Zrušeno',
-        'open'          => 'Otevřeno',
+    "shipping_method" => [
+        "available_above_total" => "Použít, pokuje je celková cena rovna nebo vyšší",
+        "available_below_total" => "Použít, pokud je celková cena nižší než",
+        "countries" => "Doprava dostupná do těchto zemí",
+        "countries_comment" => "Pokud není vybraná země, bude tento typ dostupný do všech zemí.",
+        "guaranteed_delivery_days" => "Zaručený počet dnů na doručení",
+        "not_required_description" => "Košík nevyžaduje dopravu.",
+        "not_required_name" => "Doprava"
     ],
-    'permissions'              => [
-        'manage_products'           => 'Správa produktů',
-        'manage_categories'         => 'Správa kategorií',
-        'manage_orders'             => 'Správa objednávek',
-        'manage_discounts'          => 'Správa slev',
-        'settings'                  => [
-            'manage_general'          => 'Správa konfigurace',
-            'manage_payment_gateways' => 'Správa platebních bran',
-            'manage_currency'         => 'Správa měny',
-            'manage_payment_methods'  => 'Správa plateb',
-        ],
-        'manage_properties'         => 'Správa vlastností produktu',
-        'manage_customer_groups'    => 'Správa skupin zákazníků',
-        'manage_customer_addresses' => 'Správa adres zákazníků',
-        'manage_notifications'      => 'Správa oznámení',
-        'manage_price_categories'   => 'Správa kategorií cen',
-        'manage_order_states'       => 'Správa stavu objednávek',
-        'manage_shipping_methods'   => 'Správa dopravy',
-        'manage_taxes'              => 'Správa DPH',
-        'manage_payment_log'        => 'Správa záznamů plateb',
-        'manage_feeds'              => 'Správa kanálů',
-        'manage_wishlists'          => 'Správa seznamů přání',
-        'manage_services'           => 'Správa služeb',
-        'manage_reviews'            => 'Správa recenzí',
+    "shipping_method_rates" => ["from_weight" => "Od (Váha v gramech)", "to_weight" => "Do (Váha v gramech)"],
+    "shipping_method_settings" => ["description" => "Konfigurace dopravy"],
+    "tax" => [
+        "countries" => "Přidat DPH při dopravě do těchto zemí",
+        "countries_comment" => "Pokud není vybrána země,  bude DPH použito celosvětově.",
+        "is_default" => "Výchozí",
+        "is_default_comment" => "Toto DPH je použito, pokud ještě není známá cílová země.",
+        "percentage" => "Počet procent"
     ],
-    'components'               => [
-        'products'                   => [
-            'details'    => [
-                'name'        => 'Produkty',
-                'description' => 'Zobrazí seznam produktů',
-            ],
-            'properties' => [
-                'no_category_filter' => 'Nefiltrovat podle kategorie',
-                'use_url'            => 'Použijte slug kategorie z URL',
-                'filter_component'   => [
-                    'title'       => 'Filtrovat alias komponenty',
-                    'description' => 'Alias komponenty ProductsFilter, který tuto komponentu filtruje',
-                ],
-                'filter'             => [
-                    'title'       => 'Řetězec filtru',
-                    'description' => 'Vynucený filtr pro tuto komponentu',
-                ],
-                'include_variants'   => [
-                    'title'       => 'Zobrazit varianty produktu',
-                    'description' => 'Nezobrazovat jednotlivé produkty, ale všechny dostupné varianty produktů',
-                ],
-                'include_children'   => [
-                    'title'       => 'Zahrnout podřazené',
-                    'description' => 'Zobrazit také všechny produkty podřazených kategorií',
-                ],
-                'per_page'           => [
-                    'title'       => 'Na stránce',
-                    'description' => 'Kolik produktů se zobrazí na stránce',
-                ],
-                'paginate'           => [
-                    'title'       => 'Stránkování',
-                    'description' => 'Stránkovat výsledky (zobrazit více než jednu stránku)',
-                ],
-                'sort'               => [
-                    'title'       => 'Seřadit',
-                    'description' => 'Toto přepíše preference řazení uživatele',
-                ],
-                'set_page_title'     => [
-                    'title'       => 'Nastavit název stránky',
-                    'description' => 'Jako název stránky použijte název kategorie',
-                ],
-            ],
+    "tax_settings" => ["description" => "Konfigurace DPH"],
+    "titles" => [
+        "brands" => ["create" => "Vytvořit značku", "edit" => "Upravit značku"],
+        "categories" => [
+            "create" => "Vytvořit kategorii",
+            "preview" => "Náhled kategorie",
+            "update" => "Upravit kategorii"
         ],
-        'productsFilter'             => [
-            'details'    => [
-                'name'        => 'Filtr produktů',
-                'description' => 'Filtruje produkty z kategorie',
-            ],
-            'properties' => [
-                'showPriceFilter'     => [
-                    'title' => 'Zobrazit filtr cen',
-                ],
-                'showBrandFilter'     => [
-                    'title' => 'Zobrazit filtr značek',
-                ],
-                'showOnSaleFilter'    => [
-                    'title' => 'Zobrazit filtr AKCE',
-                ],
-                'includeChildren'     => [
-                    'title'       => 'Zahrnout podřazené',
-                    'description' => 'Zahrnout také vlastnosti a filtry z produktů z podřazených kategorií',
-                ],
-                'includeVariants'     => [
-                    'title'       => 'Zahrnout varianty',
-                    'description' => 'Zobrazit filtry pro vlastnosti variant',
-                ],
-                'includeSliderAssets' => [
-                    'title'       => 'Přidat noUI Slider',
-                    'description' => 'Přidat všechny pluginy noUI Slider skrz cdnjs',
-                ],
-                'sortOrder'           => [
-                    'title'       => 'Řazení',
-                    'description' => 'Výchozí řazení',
-                ],
-            ],
-            'sortOrder'  => [
-                'bestseller' => 'Nejčastěji kupovaný',
-                'priceLow'   => 'Nejnižší cena',
-                'priceHigh'  => 'Nejvyšší cena',
-                'latest'     => 'Nejnovější',
-                'oldest'     => 'Nejstarší',
-                'random'     => 'Náhodně',
-                'manual'     => 'Ručně',
-                'name'       => 'Název',
-                'ratings'    => 'Hodnocení',
-            ],
+        "custom_field_options" => ["edit" => "Upravit možnosti pole"],
+        "customer_groups" => ["create" => "Vytvořit skupinu", "update" => "Upravit skupinu"],
+        "discounts" => [
+            "create" => "Vytvořit slevu",
+            "preview" => "Náhled slevy",
+            "update" => "Upravit slevu"
         ],
-        'myAccount'                  => [
-            'details'    => [
-                'name'        => 'Uživatelský účet',
-                'description' => 'Zobrazuje různé formuláře, kde si zákazník může prohlížet a upravovat své údaje',
-            ],
-            'properties' => [
-                'page' => [
-                    'title' => 'Aktivní podstránka',
-                ],
-            ],
-            'pages'      => [
-                'orders'    => 'Objednávky',
-                'profile'   => 'Profil',
-                'addresses' => 'Adresy',
-            ],
+        "notifications" => ["update" => "Aktualizovat zprávu"],
+        "order_states" => [
+            "create" => "Vytvořit stav",
+            "edit" => "Upravit stav",
+            "reorder" => "Změna pořadí stavu"
         ],
-        'customerProfile'            => [
-            'details'    => [
-                'name'        => 'Profil zákazníka',
-                'description' => 'Zobrazuje formulář profilu zákazníka.',
-            ],
-            'properties' => [
-            ],
+        "orders" => ["export" => "Exportovat objednávky", "show" => "Detaily objednávky"],
+        "payment_methods" => [
+            "create" => "Vytvořit typ platby",
+            "edit" => "Upravit typ platby",
+            "reorder" => "Reorder"
         ],
-        'currencyPicker'             => [
-            'details'    => [
-                'name'        => 'Výběr měny',
-                'description' => 'Možnost výběru měny',
-            ],
-            'properties' => [
-            ],
+        "products" => [
+            "create" => "Vytvořit produkt",
+            "preview" => "Náhled produktu",
+            "update" => "Upravit produkt"
         ],
-        'dependencies'               => [
-            'details'    => [
-                'name'        => 'Frontendové závislosti',
-                'description' => 'Zahrnuje všechny potřebné závislosti frontendu',
-            ],
-            'properties' => [
-            ],
+        "properties" => ["create" => "Vytvořit vlastnosti", "edit" => "Upravit vlastnosti"],
+        "property_groups" => ["create" => "Vytvořit filtry", "edit" => "Upravit filtry"],
+        "reviews" => ["create" => "Vytvořit recenzi", "update" => "Upravit recenzi"],
+        "services" => ["create" => "Vytvořit službu", "update" => "Upravit službu"],
+        "shipping_methods" => [
+            "create" => "Vytvořit typ dopravy",
+            "preview" => "Náhled typu dopravy",
+            "update" => "Upravit typ dopravy"
         ],
-        'addressList'                => [
-            'details'    => [
-                'name'        => 'Seznam adres',
-                'description' => 'Zobrazuje seznam adres všech registrovaných zákazníků',
-            ],
-            'properties' => [
-            ],
-            'errors'     => [
-                'address_not_found'          => 'Požadovaná adresa nebyla nalezena',
-                'cannot_delete_last_address' => 'Nemůžete smazat svou poslední adresu',
-            ],
-            'messages'   => [
-                'address_deleted' => 'Adresa smazána',
-            ],
-        ],
-        'ordersList'                 => [
-            'details'    => [
-                'name'        => 'Seznam objednávek',
-                'description' => 'Zobrazuje seznam objednávek všech zákazníků',
-            ],
-            'properties' => [
-            ],
-        ],
-        'product'                    => [
-            'details'       => [
-                'name'        => 'Detaily produktu',
-                'description' => 'Zobrazuje detaily produktu',
-            ],
-            'properties'    => [
-                'redirectOnPropertyChange' => [
-                    'title'       => 'Přesměrování při změně vlastnosti',
-                    'description' => 'Přesměruje zákazníka na novou stránku detailu produktu pokud byla změněna vlastnost',
-                ],
-            ],
-            'added_to_cart' => 'Produkt byl úspěšně přidán',
-        ],
-        'productReviews'             => [
-            'details'    => [
-                'name'        => 'Recenze produktu',
-                'description' => 'Zobrazuje všechny recenze produktu',
-            ],
-            'properties' => [
-                'perPage'                   => [
-                    'title' => 'Počet recenzí na stránce',
-                ],
-                'currentVariantReviewsOnly' => [
-                    'title'       => 'Zobrazit pouze hodnocení této varianty',
-                    'description' => "Nezobrazovat recenze jiných variant tohoto produktu",
-                ],
-            ],
-        ],
-        'cart'                       => [
-            'details'    => [
-                'name'        => 'Košík',
-                'description' => 'Zobrazuje košík',
-            ],
-            'properties' => [
-                'showDiscountApplier'         => [
-                    'title' => 'Zobrazit aplikátor slev',
-                ],
-                'showShipping'                => [
-                    'title' => 'Zobrazit cenu dopravy',
-                ],
-                'showTaxes'                   => [
-                    'title' => 'Zobrazit DPH',
-                ],
-                'showProceedToCheckoutButton' => [
-                    'title' => 'Zobrazit tlačítko "přejít k pokladně',
-                ],
-            ],
-        ],
-        'checkout'                   => [
-            'details' => [
-                'name'        => 'Pokladna',
-                'description' => 'Stará se o proces platby',
-            ],
-            'errors'  => [
-                'missing_settings' => 'Prosím, vyberte způsob platby a dopravy.',
-            ],
-        ],
-        'discountApplier'            => [
-            'details'          => [
-                'name'        => 'Zadání promo kódu',
-                'description' => 'Zobrazuje vstupní pole promo kódu',
-            ],
-            'discount_applied' => 'Sleva byla úspěšně uplatněna!',
-        ],
-        'shippingMethodSelector'     => [
-            'details' => [
-                'name'        => 'Výběr způsobu přepravy',
-                'description' => 'Zobrazí seznam všech dostupných způsobů dopravy',
-            ],
-            'errors'  => [
-                'unavailable' => 'Vybraný způsob dopravy není pro vaši objednávku k dispozici.',
-            ],
-        ],
-        'paymentMethodSelector'      => [
-            'details' => [
-                'name'        => 'Výběr způsobu platby',
-                'description' => 'Zobrazí seznam všech dostupných platebních metod
-                ',
-            ],
-            'errors'  => [
-                'unavailable' => 'Vybraný způsob platby není pro vaši objednávku k dispozici.',
-            ],
-        ],
-        'addressSelector'            => [
-            'details' => [
-                'name'        => 'Výběr adres',
-                'description' => 'Zobrazí seznam všech existujících adres zákazníka',
-            ],
-            'errors'  => [
-            ],
-        ],
-        'addressForm'                => [
-            'details'    => [
-                'name'        => 'Formulář adresy',
-                'description' => 'Zobrazí formulář pro úpravu adresy uživatele',
-            ],
-            'properties' => [
-                'address'  => [
-                    'title' => 'Adresa',
-                ],
-                'redirect' => [
-                    'title' => 'Přesměrovat (po uložení)',
-                ],
-                'set'      => [
-                    'title' => 'Použít tuto adresu jako',
-                ],
-            ],
-            'redirects'  => [
-                'checkout' => 'Pokladna',
-            ],
-            'set'        => [
-                'billing'  => 'Fakturační adresa',
-                'shipping' => 'Adresa dopravy',
-            ],
-        ],
-        'signup'                     => [
-            'details'    => [
-                'name'        => 'Přihlášení',
-                'description' => 'Zobrazí formulář pro registraci a přihlášení',
-            ],
-            'properties' => [
-                'redirect' => [
-                    'name' => 'Přesměrovat po přihlášení',
-                ],
-            ],
-            'errors'     => [
-                'user_is_guest'   => 'Snažíte se přihlásit s účtem neregistrovaného zákazníka.',
-                'unknown_user'    => 'Email nebo heslo je neplatné.',
-                'not_activated'   => 'Váš účet musí být aktivován před přihlášením.',
-                'login'           => [
-                    'required' => 'Vložte emailovou adresu.',
-                    'email'    => 'Vložte správnou emailovou adresu.',
-                    'between'  => 'Vložte správnou emailovou adresu.',
-                ],
-                'password'        => [
-                    'required' => 'Vložte své heslo.',
-                    'max'      => 'Heslo je příliš dlouhé.',
-                    'min'      => 'Heslo je příliš krátké - musí mít alespoň 8 znaků. ',
-                ],
-                'password_repeat' => [
-                    'required' => 'Zopakujte své heslo.',
-                    'same'     => 'Hesla se neshodují.',
-                ],
-                'email'           => [
-                    'required'          => 'Vložte emailovou adresu.',
-                    'email'             => 'Emailová adresa je neplatná.',
-                    'unique'            => 'Zákazník s touto emailovou adresou již existuje.',
-                    'non_existing_user' => 'Zákazník s touto emailovou adresou již existuje. Použijte funkci "Zapomenuté heslo" .',
-                ],
-                'firstname'       => [
-                    'required' => 'Vložte své jméno.',
-                ],
-                'lastname'        => [
-                    'required' => 'Vložte své příjmení.',
-                ],
-                'lines'           => [
-                    'required' => 'Vložte svou adresu.',
-                ],
-                'zip'             => [
-                    'required' => 'Vložte směrovací číslo.',
-                ],
-                'city'            => [
-                    'required' => 'Vložte město.',
-                ],
-                'country_id'      => [
-                    'required' => 'Vyberte zemi.',
-                    'exists'   => 'Tato hodnota není platná.',
-                ],
-                'state_id'        => [
-                    'required' => 'Vyberte stát',
-                    'exists'   => 'Vybraná hodnota není platná.',
-                ],
-                'terms_accepted'  => [
-                    'required' => 'Přijměte podmínky.',
-                ],
-            ],
-        ],
-        'categories'                 => [
-            'details'    => [
-                'name'        => 'Kategorie',
-                'description' => 'Seznam dostupných kategorií',
-            ],
-            'properties' => [
-                'parent'       => [
-                    'title'       => 'Začít od kategorie',
-                    'description' => 'Zobrazit pouze podřazené kategorie této kategorie',
-                ],
-                'categorySlug' => [
-                    'title'       => 'Kategorie slug parametr',
-                    'description' => 'Tento parametr použijte k načtení nadřazené kategorie z adresy URL',
-                ],
-                'categoryPage' => [
-                    'title'       => 'Stránka kategorie',
-                    'description' => 'Odkazy odkazují na tuto stránku. Pokud není zadáno nic, použije se výchozí nastavení z nastavení backendu.',
-                ],
-            ],
-            'no_parent'  => 'Zobrazit všechny kategorie',
-            'by_slug'    => 'Jako nadřazenou použijte kategorii v adrese URL',
-        ],
-        'cartSummary'                => [
-            'details'    => [
-                'name'        => 'Souhrn košíku',
-                'description' => 'Zobrazí počet produktů a celkovou cenu košíku',
-            ],
-            'properties' => [
-                'showItemCount'  => [
-                    'title'       => 'Zobrazit počet produktů',
-                    'description' => 'Zobrazí počet produktů v košíku',
-                ],
-                'showTotalPrice' => [
-                    'title'       => 'Zobrazit celkovou cenu',
-                    'description' => 'Zobrazí celkovou cenu všech produktů v košíku',
-                ],
-            ],
-        ],
-        'customerDashboard'          => [
-            'details'    => [
-                'name'        => 'Hlavní panel zákazníka',
-                'description' => 'Zobrazí odkaz pro přihlášení a změny nastavení zákazníckého účtu',
-            ],
-            'properties' => [
-                'customerDashboardLabel' => [
-                    'title'       => 'Štítek hlavního panelu zákazníka',
-                    'description' => 'Text odkazu na stránku zákaznického účtu',
-                ],
-                'logoutLabel'            => [
-                    'title'       => 'Štítek odhlášení',
-                    'description' => 'Text odkazu pro odhlášení',
-                ],
-            ],
-        ],
-        'enhancedEcommerceAnalytics' => [
-            'details' => [
-                'name'        => 'Rozšířený Ecommerce (UA) komponent',
-                'description' => 'Implementuje Google Tag Manager Data Layer',
-            ],
-        ],
-        'wishlistButton'             => [
-            'details'    => [
-                'name'        => 'Tlačítko Seznam přání',
-                'description' => 'Zobrazí tlačítko Seznam přání',
-            ],
-            'properties' => [
-                'product' => [
-                    'name'        => 'Produkt',
-                    'description' => 'ID produktu',
-                ],
-                'variant' => [
-                    'name'        => 'Varianta',
-                    'description' => 'ID varianty',
-                ],
-            ],
-        ],
-        'wishlists'                  => [
-            'details' => [
-                'name'        => 'Seznamy přání',
-                'description' => 'Zobrazí správce Seznamu přání',
-            ],
-            'properties' => [
-                'showShipping' => [
-                    'name'        => 'Zobrazit dopravu',
-                    'description' => 'Zobrazí cenu dopravy',
-                ],
-            ],
-        ],
+        "taxes" => ["create" => "Vytvořit DPH", "update" => "Upravit DPH"]
     ],
-    'shipping_method_rates'    => [
-        'from_weight' => 'Od (Váha v gramech)',
-        'to_weight'   => 'Do (Váha v gramech)',
-    ],
-    'products'                 => [
-        'variants_comment' => 'Vytvořit různé varianty stejného produktu',
-    ],
-    'order_states'             => [
-        'name'        => 'Název',
-        'description' => 'Popis',
-        'color'       => 'Barva',
-        'flag'        => 'Zvláštní značka',
-        'flags'       => [
-            'new'       => 'Nastavit stav objednávky jako "Nová"',
-            'complete'  => 'Nastavit stav objednávky jako "Vyřízeno"',
-            'cancelled' => 'Nastavit stav objednávky jako "zrušeno"',
-        ],
-    ],
-    'customer_group'           => [
-        'code_comment'     => 'Tento kód může být použit na identifikaci této skupiny programově',
-        'discount_comment' => 'Dejte této skupině zákazníků určitou slevu v % na všechny produkty',
-    ],
-    'order_status'             => [
-        'processed' => 'Zpracováno',
-        'disputed'  => 'Sporné',
-        'shipped'   => 'Odesláno',
-        'delivered' => 'Dodáno',
-        'pending'   => 'Probíhající',
-        'cancelled' => 'Zrušeno',
-    ],
-    'notifications'            => [
-        'enabled'         => 'Povoleno',
-        'enabled_comment' => 'Toto oznámení je povoleno',
-        'template'        => 'Šablona emailu',
-    ],
-    'payment_log'              => [
-        'payment_data'       => 'Platební údaje',
-        'data_comment'       => 'Tato data byla vrácena poskytovatelem plateb',
-        'order_data_comment' => 'Toto jsou všechny údaje o objednávce pro tuto platbu',
-        'message_comment'    => 'Tuto zprávu vrátil poskytovatel plateb',
-        'code_comment'       => 'Tento kód byl vrácen poskytovatelem plateb',
-        'failed_only'        => 'Pouze neuspěšné',
-    ],
-    'services'                 => [
-        'options'          => 'Možnosti',
-        'option'           => 'Možnost',
-        'required'         => 'Služba je povinná',
-        'required_comment' => 'Jedna z možností této služby musí být vybrána, když je produkt přidán do košíku.',
-    ],
-    'reviews'                  => [
-        'rating'          => 'Hodnocení',
-        'review'          => 'Text recenze',
-        'title'           => 'Název recenze',
-        'pros'            => 'Pozitiva',
-        'cons'            => 'Negativa',
-        'anonymous'       => 'Anonymní',
-        'only_unapproved' => 'Zobrazit pouze neschválené',
-        'no_more'         => 'Žadné neschválené recenze',
-        'approve_next'    => 'Schválit a přejít na další',
-    ],
+    "variant" => [
+        "method" => ["single" => "Samostatný produkt", "variant" => "Produkt s variantami"]
+    ]
 ];

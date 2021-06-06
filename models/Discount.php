@@ -20,7 +20,7 @@ class Discount extends Model
         'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
-        'trigger'                              => 'in:total,code,product,customer_group',
+        'trigger'                              => 'in:total,code,product,customer_group,shipping_method',
         'types'                                => 'in:fixed_amount,rate,shipping',
         'product'                              => 'required_if:trigger,product',
         'customer_group'                       => 'required_if:trigger,customer_group',
@@ -65,12 +65,12 @@ class Discount extends Model
     public $belongsToMany = [
         'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
         'shipping_methods' => [
-            ShippingMethod::class,
-            'table'    => 'offline_mall_shipping_method_discounts',
-            'key'      => 'shipping_method_id',
-            'otherKey' => 'discount_id',
-        ],
+            ShippingMethod::class,'table' => 'offline_mall_shipping_method_discounts',
+            'key'      => 'discount_id',
+            'otherKey' => 'shipping_method_id'
+        ]
     ];
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',
