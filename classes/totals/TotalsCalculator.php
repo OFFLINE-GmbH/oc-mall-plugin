@@ -282,7 +282,7 @@ class TotalsCalculator
      */
     protected function applyTotalDiscounts($total): ?float
     {
-        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product', 'customer_group'])
+        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product', 'customer_group','shipping_method'])
             ->where(function ($q) {
                 $q->whereNull('valid_from')
                     ->orWhere('valid_from', '<=', Carbon::now());
@@ -291,10 +291,10 @@ class TotalsCalculator
                     ->orWhere('expires', '>', Carbon::now());
             })->get();
 
-        $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
+            $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
             return $item->type === 'shipping';
         });
-
+        
         $applier                = new DiscountApplier($this->input, $total);
         $this->appliedDiscounts = $applier->applyMany($discounts);
 

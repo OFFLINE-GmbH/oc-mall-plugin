@@ -30,7 +30,7 @@ class Discount extends Model
         'shipping_description'                 => 'required_if:type,shipping',
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
-    public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
+    public $with = ['shipping_prices', 'amounts', 'totals_to_reach','shipping_methods'];
     public $table = 'offline_mall_discounts';
     public $dates = ['valid_from', 'expires'];
     public $nullable = ['max_number_of_usages'];
