@@ -3,12 +3,12 @@ return [
     "category" => [
         "code" => "Codice",
         "code_comment" => "Questo codice può essere usato per identificare questa categoria nei tuoi parziali del frontend.",
-        "google_product_category_id" => "",
-        "google_product_category_id_comment" => "",
+        "google_product_category_id" => "ID della categoria di prodotto di Google",
+        "google_product_category_id_comment" => "Utilizzato per l'integrazione di Google Merchant, vedi https://support.google.com/merchants/answer/6324436",
         "inherit_property_groups" => "Eredita le proprietà dalla categoria superiore",
         "inherit_property_groups_comment" => "Usa i gruppi di proprietà della categoria superiore",
-        "inherit_review_categories" => "",
-        "inherit_review_categories_comment" => "",
+        "inherit_review_categories" => "Eredita le categorie di revisione della categoria padre",
+        "inherit_review_categories_comment" => "Usa le categorie di revisione della categoria madre di questa categoria",
         "name" => "Nome",
         "no_parent" => "Nessuna categoria superiore",
         "parent" => "Sottocategoria di"
@@ -22,7 +22,7 @@ return [
         "addresses" => "Indirizzi",
         "allowed" => "Permesso",
         "api_error" => "Impossibile salvare sconto. Errore durante l'accesso alle API di Mall.",
-        "approved_at" => "",
+        "approved_at" => "Approvato a",
         "attachments" => "Immagini/Download",
         "brand" => "Brand",
         "brands" => "Brands",
@@ -51,7 +51,7 @@ return [
         "downloads" => "Download",
         "export_orders" => "Esporta ordini",
         "failed" => "Fallito",
-        "feeds" => "",
+        "feeds" => "Feed",
         "fees" => "Tasse",
         "general" => "Generali",
         "group_name" => "Nome gruppo",
@@ -101,17 +101,17 @@ return [
         "rates" => "Aliquote",
         "reference" => "Riferimento",
         "reorder" => "Riordina voci",
-        "review" => "",
-        "review_categories" => "",
-        "review_category" => "",
-        "reviews" => "",
+        "review" => "Recensione",
+        "review_categories" => "Categorie di recensioni",
+        "review_category" => "Categoria di revisione",
+        "reviews" => "recensioni",
         "saved_changes" => "Salvato con successo",
         "select_file" => "Scegli file",
         "select_image" => "Scegli immagine",
         "select_placeholder" => "-- Per favore scegli",
         "seo" => "SEO",
-        "service" => "",
-        "services" => "",
+        "service" => "servizio",
+        "services" => "Servizi",
         "session_id" => "ID sessione",
         "shipping" => "Spedizione",
         "shipping_methods" => "Metodi di spedizione",
@@ -124,7 +124,7 @@ return [
         "stock_limit_reached" => "Non puoi aggiungere altri oggetti di questo tipo al tuo carrello perchè il limite di provvigione è stato raggiunto.",
         "successful" => "Riuscito",
         "taxes" => "Tasse",
-        "title" => "",
+        "title" => "Titolo",
         "unchecked" => "Non verificato",
         "unit" => "Unità",
         "updated_at" => "Aggiornato il",
@@ -132,7 +132,7 @@ return [
         "value" => "Valore",
         "variant" => "Variante",
         "variants" => "Varianti",
-        "version" => "",
+        "version" => "Versione",
         "website" => "Sito web",
         "weekly" => "Settimanalmente",
         "yes" => "Si"
@@ -162,8 +162,8 @@ return [
             ],
             "messages" => [
                 "address_deleted" => "Indirizzo eliminato",
-                "default_billing_address_changed" => "",
-                "default_shipping_address_changed" => ""
+                "default_billing_address_changed" => "Indirizzo di fatturazione predefinito cambiato",
+                "default_shipping_address_changed" => "Indirizzo di spedizione predefinito cambiato"
             ]
         ],
         "addressSelector" => [
@@ -175,10 +175,13 @@ return [
         "cart" => [
             "details" => ["description" => "Mostra il carrello", "name" => "Carrello"],
             "properties" => [
-                "discountCodeLimit" => ["description" => "", "title" => ""],
+                "discountCodeLimit" => [
+                    "description" => "Impostare su 0 per codici illimitati",
+                    "title" => "Limite del codice sconto"
+                ],
                 "showDiscountApplier" => ["title" => "Mostra form per applicare gli sconti"],
-                "showProceedToCheckoutButton" => ["title" => ""],
-                "showShipping" => ["title" => ""],
+                "showProceedToCheckoutButton" => ["title" => "Mostra il pulsante \"Procedi alla cassa\"."],
+                "showShipping" => ["title" => "Mostra le spese di spedizione"],
                 "showTaxes" => ["title" => "Mostra tasse"]
             ]
         ],
@@ -222,7 +225,7 @@ return [
             "errors" => [
                 "missing_settings" => "Per favore seleziona un metodo di spedizione e pagamento."
             ],
-            "properties" => ["step" => ["name" => ""]]
+            "properties" => ["step" => ["name" => "Passo di checkout attivo (è impostato automaticamente)"]]
         ],
         "currencyPicker" => [
             "details" => [
@@ -262,7 +265,12 @@ return [
             ],
             "discount_applied" => "Sconto applicato con successo!"
         ],
-        "enhancedEcommerceAnalytics" => ["details" => ["description" => "", "name" => ""]],
+        "enhancedEcommerceAnalytics" => [
+            "details" => [
+                "description" => "Implementa un Google Tag Manager Data Layer",
+                "name" => "Componente Ecommerce migliorato (UA)"
+            ]
+        ],
         "myAccount" => [
             "details" => [
                 "description" => "Mostra molteplici form dove un utente può vedere e modificare il suo profilo",
@@ -292,13 +300,24 @@ return [
                 "description" => "Mostra i dettagli di un prodotto",
                 "name" => "Dettagli prodotto"
             ],
-            "properties" => ["redirectOnPropertyChange" => ["description" => "", "title" => ""]]
+            "properties" => [
+                "redirectOnPropertyChange" => [
+                    "description" => "Reindirizzare l'utente alla nuova pagina di dettaglio se una proprietà è stata cambiata",
+                    "title" => "Reindirizzamento sul cambio di proprietà"
+                ]
+            ]
         ],
         "productReviews" => [
-            "details" => ["description" => "", "name" => ""],
+            "details" => [
+                "description" => "Visualizza tutte le recensioni di un prodotto",
+                "name" => "Recensioni sui prodotti"
+            ],
             "properties" => [
-                "currentVariantReviewsOnly" => ["description" => "", "title" => ""],
-                "perPage" => ["title" => ""]
+                "currentVariantReviewsOnly" => [
+                    "description" => "Non mostrare le recensioni di altre varianti di questo prodotto",
+                    "title" => "Mostra solo le valutazioni di questa variante"
+                ],
+                "perPage" => ["title" => "Numero di recensioni per pagina"]
             ]
         ],
         "products" => [
@@ -367,17 +386,20 @@ return [
                 "bestseller" => "Bestseller",
                 "latest" => "Ultimi arrivi",
                 "manual" => "Manuale",
-                "name" => "",
+                "name" => "Nome",
                 "oldest" => "Da più tempo nel negozio",
                 "priceHigh" => "Prezzo più alto",
                 "priceLow" => "Prezzo più basso",
                 "random" => "Casuale",
-                "ratings" => ""
+                "ratings" => "valutazioni"
             ]
         ],
         "quickCheckout" => [
-            "details" => ["description" => "", "name" => ""],
-            "errors" => ["signup_failed" => ""]
+            "details" => [
+                "description" => "Processo di checkout a pagina singola",
+                "name" => "Pagamento rapido"
+            ],
+            "errors" => ["signup_failed" => "Impossibile creare un account utente."]
         ],
         "shippingMethodSelector" => [
             "details" => [
@@ -413,7 +435,7 @@ return [
                     "email" => "Per favore, inserisci un indirizzo email valido.",
                     "required" => "Per favore, inserisci un indirizzo email."
                 ],
-                "not_activated" => "",
+                "not_activated" => "Il tuo account deve essere attivato prima di poter accedere.",
                 "password" => [
                     "max" => "La password fornita é troppo lunga.",
                     "min" => "La password fornita é troppo corta. Per favore, inserisci almeno 8 caratteri.",
@@ -427,7 +449,7 @@ return [
                     "exists" => "Il valore  selezionato non é valido.",
                     "required" => "Scegli una provincia"
                 ],
-                "terms_accepted" => ["required" => ""],
+                "terms_accepted" => ["required" => "Si prega di accettare i nostri termini e condizioni."],
                 "unknown_user" => "Le credenziali che hai inserito non sono valide.",
                 "user_is_guest" => "Stai provando ad accedere con un account ospite.",
                 "zip" => ["required" => "Per favore, inserisci il tuo CAP."]
@@ -435,15 +457,26 @@ return [
             "properties" => ["redirect" => ["name" => "Reindirizza dopo il login"]]
         ],
         "wishlistButton" => [
-            "details" => ["description" => "", "name" => ""],
+            "details" => [
+                "description" => "Visualizza un pulsante per la lista dei desideri",
+                "name" => "Pulsante Wishlist"
+            ],
             "properties" => [
-                "product" => ["description" => "", "name" => ""],
-                "variant" => ["description" => "", "name" => ""]
+                "product" => ["description" => "ID del prodotto", "name" => "Prodotto"],
+                "variant" => ["description" => "ID della variante", "name" => "Variante"]
             ]
         ],
         "wishlists" => [
-            "details" => ["description" => "", "name" => ""],
-            "properties" => ["showShipping" => ["description" => "", "name" => ""]]
+            "details" => [
+                "description" => "Visualizza il gestore della lista dei desideri",
+                "name" => "Lista dei desideri"
+            ],
+            "properties" => [
+                "showShipping" => [
+                    "description" => "Mostra le spese di spedizione e il selettore",
+                    "name" => "Mostra la spedizione"
+                ]
+            ]
         ]
     ],
     "currency_settings" => [
@@ -452,21 +485,21 @@ return [
         "currency_decimals" => "Decimali della valuta",
         "currency_format" => "Formato",
         "currency_rate" => "Tasso di cambio",
-        "currency_rounding" => "",
-        "currency_rounding_comment" => "",
+        "currency_rounding" => "Arrotondamento del totale",
+        "currency_rounding_comment" => "Il totale, tasse incluse, è arrotondato a questo valore se questa valuta è attiva.",
         "currency_symbol" => "Simbolo",
         "description" => "Imposta le tue valute",
         "is_default" => "È predefinita",
         "label" => "Valute",
-        "unknown" => ""
+        "unknown" => "Valuta sconosciuta"
     ],
     "custom_field_options" => [
         "add" => "Aggiungi opzione",
         "attributes" => "Attributo",
         "checkbox" => "Checkbox",
         "color" => "Colore",
-        "date" => "",
-        "datetime" => "",
+        "date" => "Data",
+        "datetime" => "Data ora",
         "dropdown" => "Dropdown",
         "float" => "Numero con virgola",
         "image" => "Immagine",
@@ -475,7 +508,7 @@ return [
         "option" => "Opzione",
         "price" => "Prezzo",
         "richeditor" => "Editor WYSIWYG",
-        "switch" => "",
+        "switch" => "interruttore",
         "text" => "Campo di testo",
         "textarea" => "Campo di testo multilinea"
     ],
@@ -495,7 +528,7 @@ return [
     "discounts" => [
         "amount" => "Importo fisso",
         "code" => "Codice sconto",
-        "code_comment" => "",
+        "code_comment" => "Lasciare vuoto per generare un codice casuale",
         "expires" => "Scadenza",
         "max_number_of_usages" => "Numero massimo di utilizzi",
         "name" => "Nome",
@@ -521,9 +554,9 @@ return [
             "rate" => "Tasso",
             "shipping" => "Spedizione alternativa"
         ],
-        "valid_from" => "",
+        "valid_from" => "Valido da",
         "validation" => [
-            "cart_limit_reached" => "",
+            "cart_limit_reached" => "Limite di codice promozionale raggiunto. Non è più possibile aggiungere codici promozionali per questo carrello.",
             "duplicate" => "Puoi usare lo stesso codice promozionale solo una volta.",
             "empty" => "Inserisci un codice di promozione.",
             "expired" => "Questo codice promozionale è scaduto.",
@@ -559,8 +592,8 @@ return [
         "customizations" => "Personalizzazioni",
         "customizations_comment" => "Personalizza le caratteristiche del tuo negozio",
         "description" => "Impostazioni Generali",
-        "group_search_results_by_product" => "",
-        "group_search_results_by_product_comment" => "",
+        "group_search_results_by_product" => "Raggruppa i risultati della ricerca per prodotto",
+        "group_search_results_by_product_comment" => "Includere un prodotto solo una volta nei risultati della ricerca, non visualizzare tutte le varianti corrispondenti",
         "index_driver" => "Driver per l'indicizzazione",
         "index_driver_comment" => "Se il tuo database supporta JSON usa il driver database.",
         "index_driver_database" => "Database (solo per MySQL 5.7+ o MariaDB 10.2+)",
@@ -575,10 +608,10 @@ return [
         "product_page_comment" => "Qui è dove vengono visualizzati i dettagli del prodotti",
         "redirect_to_cart" => "Reindirizza al carrello",
         "redirect_to_cart_comment" => "Reindirizza al carrello dopo che l'utente ha aggiunto un prodotto",
-        "shipping_selection_before_payment" => "",
-        "shipping_selection_before_payment_comment" => "",
-        "use_state" => "",
-        "use_state_comment" => ""
+        "shipping_selection_before_payment" => "Selezionare il metodo di spedizione PRIMA del pagamento durante il checkout",
+        "shipping_selection_before_payment_comment" => "Per impostazione predefinita, durante il checkout, all'utente viene chiesto di selezionare un metodo di pagamento prima di selezionare un metodo di spedizione; utilizzare questa opzione per invertire questa logica",
+        "use_state" => "Usa il campo Stato/Contea/Provincia",
+        "use_state_comment" => "I clienti devono selezionare uno stato/paese/provincia durante la registrazione"
     ],
     "image_sets" => [
         "create_new" => "Crea un nuovo set",
@@ -615,7 +648,7 @@ return [
         "delete_confirm" => "Sei sicuro di voler eliminare questo ordine?",
         "deleted" => "Ordine eliminato con successo",
         "deleting" => "Eliminando l'ordine...",
-        "download_invoice" => "",
+        "download_invoice" => "Scaricare la fattura",
         "email" => "Email",
         "grand_total" => "Totale",
         "invalid_status" => "Lo stato selezionato non esiste.",
@@ -627,7 +660,7 @@ return [
         "modification_date" => "Modificato il",
         "not_shipped" => "Pendente",
         "notes" => "Note",
-        "order_file_name" => "",
+        "order_file_name" => "ordine-:order",
         "order_number" => "# Ordine",
         "payment_gateway_used" => "Gateway di pagamento",
         "payment_hash" => "Hash di pagamento",
@@ -672,7 +705,7 @@ return [
         "update_invoice_number" => "Imposta il numero della fattura",
         "update_shipping_state" => "Aggiorna stato della spedizione",
         "updated" => "Ordine aggiornato con successo",
-        "virtual_product_download_hint" => "",
+        "virtual_product_download_hint" => "I link per il download saranno inviati separatamente dopo il pagamento.",
         "will_be_paid_later" => "Sarà pagato successivamente"
     ],
     "order_state_settings" => ["description" => "Configura gli stati d'ordine"],
@@ -705,15 +738,15 @@ return [
             "test_mode_comment" => "Esegue tutti i pagamenti all'interno della Sandbox di PayPal."
         ],
         "postfinance" => [
-            "hashing_method" => "",
-            "hashing_method_comment" => "",
-            "pspid" => "",
-            "sha_in" => "",
-            "sha_in_comment" => "",
-            "sha_out" => "",
-            "sha_out_comment" => "",
-            "test_mode" => "",
-            "test_mode_comment" => ""
+            "hashing_method" => "Algoritmo di hash",
+            "hashing_method_comment" => "Configurazione -> Informazioni tecniche -> Parametri globali di sicurezza",
+            "pspid" => "PSPID (nome utente)",
+            "sha_in" => "Firma SHA-IN",
+            "sha_in_comment" => "Configurazione -> Informazioni tecniche -> Verifica dei dati e dell'origine",
+            "sha_out" => "Firma SHA-OUT",
+            "sha_out_comment" => "Configurazione -> Informazioni tecniche -> Feedback sulle transazioni",
+            "test_mode" => "Modalità di prova",
+            "test_mode_comment" => "Eseguire tutti i pagamenti contro l'ambiente di prova"
         ],
         "stripe" => [
             "api_key" => "Chiave API Stripe",
@@ -737,9 +770,9 @@ return [
         "fee_percentage_comment" => "La percentuale del totale da aggiungere al totale dell'ordine",
         "instructions" => "Istruzioni di pagamento",
         "instructions_comment" => "Sintassi Twig supportata. Usa {{ order }} per accedere alle informazioni dell'ordine, se disponibili",
-        "pdf_partial" => "",
-        "pdf_partial_comment" => "",
-        "pdf_partial_none" => "",
+        "pdf_partial" => "Allegato PDF parziale",
+        "pdf_partial_comment" => "Per tutti gli ordini con questo metodo di pagamento un PDF renderizzato del parziale selezionato sarà allegato alla mail di notifica",
+        "pdf_partial_none" => "Nessun allegato PDF",
         "price" => "Tariffa fissa",
         "price_comment" => "Valore da aggiungere al totale dell'ordine"
     ],
@@ -759,12 +792,12 @@ return [
         "refunded" => "Rimborsato"
     ],
     "permissions" => [
-        "manage_brands" => "",
+        "manage_brands" => "Può gestire i marchi",
         "manage_categories" => "Può gestire le categorie",
         "manage_customer_addresses" => "Può gestire gli indirizzi dei clienti",
         "manage_customer_groups" => "Può gestire i gruppi di clienti",
         "manage_discounts" => "Può gestire gli sconti",
-        "manage_feeds" => "",
+        "manage_feeds" => "Può gestire i feed",
         "manage_notifications" => "Può gestire le notifiche",
         "manage_order_states" => "Può gestire gli stati d'ordine",
         "manage_orders" => "Può gestire gli ordini",
@@ -772,15 +805,15 @@ return [
         "manage_price_categories" => "Può gestire le categorie dei prezzi",
         "manage_products" => "Può gestire i prodotti",
         "manage_properties" => "Può modificare le proprietà dei prodotti",
-        "manage_reviews" => "",
-        "manage_services" => "",
+        "manage_reviews" => "Può gestire le recensioni",
+        "manage_services" => "Può gestire i servizi",
         "manage_shipping_methods" => "Può gestire i metodi di spedizione",
         "manage_taxes" => "Può gestire le tasse",
-        "manage_wishlists" => "",
+        "manage_wishlists" => "Può gestire le liste dei desideri",
         "settings" => [
             "manage_currency" => "Può cambiare le impostazioni di valuta del negozio",
             "manage_general" => "Può cambiare le impostazioni generali del negozio",
-            "manage_payment_gateways" => "",
+            "manage_payment_gateways" => "Può cambiare le impostazioni del gateway di pagamento",
             "manage_payment_methods" => "Può gestire i metodi di pagamento"
         ]
     ],
@@ -800,25 +833,25 @@ return [
         "description_short" => "Descrizione breve",
         "details" => "Dettagli",
         "duplicate_currency" => "Hai inserito molteplici prezzi per la stessa valuta",
-        "embed_code" => "",
-        "embed_title" => "",
-        "embeds" => "",
-        "filter_virtual" => "",
+        "embed_code" => "Incorpora il codice",
+        "embed_title" => "Titolo",
+        "embeds" => "incorpora",
+        "filter_virtual" => "Mostra solo i prodotti virtuali",
         "general" => "Generale",
         "group_by_property" => "Attributo di raggruppamento per varianti",
-        "gtin" => "",
+        "gtin" => "Numero di articolo commerciale globale (GTIN)",
         "height" => "Altezza (mm)",
         "inventory_management_method" => "Metodo di gestione dell'inventario",
         "is_not_taxable" => "Non usare tasse",
         "is_taxable" => "Usa tassa",
-        "is_virtual" => "",
-        "is_virtual_comment" => "",
+        "is_virtual" => "È virtuale",
+        "is_virtual_comment" => "Questo prodotto è virtuale (un file, nessuna spedizione)",
         "length" => "Lunghezza (mm)",
         "link_target" => "URL di riferimento",
         "link_title" => "Titolo",
         "links" => "Link",
         "missing_category" => "Il prodotto non ha associata una categoria. Per favore scegli una categoria qui sotto per modificare questo prodotto.",
-        "mpn" => "",
+        "mpn" => "Numero di parte del produttore (MPN)",
         "name" => "Nome prodotto",
         "not_published" => "Non pubblicato",
         "price" => "Prezzo",
@@ -830,10 +863,10 @@ return [
             "title" => "Panoramica prezzi e quantità",
             "trigger" => "Modifica quantità e prezzi"
         ],
-        "product_file" => "",
-        "product_file_version" => "",
-        "product_files" => "",
-        "product_files_section_comment" => "",
+        "product_file" => "Scheda prodotto",
+        "product_file_version" => "versione del file",
+        "product_files" => "File del prodotto",
+        "product_files_section_comment" => "Questo è un prodotto virtuale. Puoi caricare nuove versioni di file qui sotto. L'ultima versione sarà scaricabile dai clienti.",
         "properties" => "Proprietà",
         "property_title" => "Titolo",
         "property_value" => "Valore",
@@ -857,18 +890,27 @@ return [
         "width" => "Larghezza (mm)"
     ],
     "product_file" => [
-        "display_name_comment" => "",
-        "download_count" => "",
-        "errors" => ["expired" => "", "invalid" => "", "not_found" => "", "too_many_attempts" => ""],
-        "expires_after_days" => "",
-        "expires_after_days_comment" => "",
-        "file" => "",
-        "hint" => ["info_link" => "", "info_text" => "", "intro" => ""],
-        "max_download_count" => "",
-        "max_download_count_comment" => "",
-        "session_required" => "",
-        "session_required_comment" => "",
-        "version_comment" => ""
+        "display_name_comment" => "Questo nome sarà visibile al cliente.",
+        "download_count" => "Scaricare il conteggio",
+        "errors" => [
+            "expired" => "Link di download scaduto",
+            "invalid" => "Link di download non valido",
+            "not_found" => "Impossibile trovare il file richiesto, contattaci per il supporto.",
+            "too_many_attempts" => "Troppi tentativi di download"
+        ],
+        "expires_after_days" => "Download valido per giorni",
+        "expires_after_days_comment" => "Il file può essere scaricato solo per questo numero di giorni dopo l'acquisto. Lasciare vuoto per nessun limite.",
+        "file" => "file",
+        "hint" => [
+            "info_link" => "nella documentazione",
+            "info_text" => "Puoi trovare informazioni su come farlo",
+            "intro" => "Questo prodotto non ha un file allegato. Assicurati di aggiungerne uno o di gerenarlo programmaticamente durante il checkout."
+        ],
+        "max_download_count" => "Numero massimo di download",
+        "max_download_count_comment" => "Il file può essere scaricato solo questo numero di volte. Lasciare vuoto per nessun limite.",
+        "session_required" => "Accesso richiesto",
+        "session_required_comment" => "Il file può essere scaricato solo quando il cliente è loggato (il link di download non è condivisibile).",
+        "version_comment" => "Una versione unica aiuta il cliente a riconoscere i file aggiornati."
     ],
     "products" => ["variants_comment" => "Crea più varianti dello stesso prodotto"],
     "properties" => [
@@ -897,25 +939,30 @@ return [
         "pros" => "Aspetti positivi",
         "rating" => "Valutazione",
         "review" => "Dettagli recensione",
-        "title" => ""
+        "title" => "titolo della tua recensione"
     ],
-    "services" => ["option" => "", "options" => "", "required" => "", "required_comment" => ""],
+    "services" => [
+        "option" => "opzione",
+        "options" => "Opzioni",
+        "required" => "Il servizio è richiesto",
+        "required_comment" => "Un'opzione di questo servizio deve essere selezionata quando un prodotto viene aggiunto al carrello."
+    ],
     "shipping_method" => [
         "available_above_total" => "Disponibile se il totale é maggiore o uguale a",
         "available_below_total" => "Disponibile se il totale é inferiore a",
         "countries" => "Disponibile per le spedizioni in queste nazioni",
         "countries_comment" => "Se non si seleziona alcuna nazione, questo metodo é disponibile globalmente.",
         "guaranteed_delivery_days" => "Giorni garantiti per la consegna",
-        "not_required_description" => "",
-        "not_required_name" => ""
+        "not_required_description" => "Il carrello attuale non richiede alcuna spedizione.",
+        "not_required_name" => "Nessuna spedizione richiesta"
     ],
     "shipping_method_rates" => ["from_weight" => "Da (peso in grammi)", "to_weight" => "A (peso in grammi)"],
     "shipping_method_settings" => ["description" => "Gestisci i metodi di spedizione"],
     "tax" => [
         "countries" => "Applica le tasse solo quando spedito verso queste nazioni",
         "countries_comment" => "Se nessuna nazione è selezionata le tasse si applicano globalmente.",
-        "is_default" => "",
-        "is_default_comment" => "",
+        "is_default" => "È predefinito",
+        "is_default_comment" => "Questa tassa è usata se il paese di destinazione della spedizione non è ancora noto",
         "percentage" => "Percentuale"
     ],
     "tax_settings" => ["description" => "Gestisci le tasse"],
@@ -952,8 +999,8 @@ return [
         ],
         "properties" => ["create" => "Crea proprietà", "edit" => "Modifica proprietà"],
         "property_groups" => ["create" => "Crea gruppo", "edit" => "Modifica gruppo"],
-        "reviews" => ["create" => "", "update" => ""],
-        "services" => ["create" => "", "update" => ""],
+        "reviews" => ["create" => "Crea recensione", "update" => "Modifica recensione"],
+        "services" => ["create" => "creare un servizio", "update" => "Modifica del servizio"],
         "shipping_methods" => [
             "create" => "Crea metodo di spedizione",
             "preview" => "Anteprima metodo di spedizione",
