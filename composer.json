@@ -19,16 +19,17 @@
   "require": {
     "composer/installers": "~1.0",
     "hashids/hashids": "^4.1.0",
-    "tmarois/filebase": "^1.0",
-    "offline/jsonq": "^5.2.4",
-    "illuminate/support": "5.5.*|6.*",
-    "elasticsearch/elasticsearch": "^6.0",
-    "league/omnipay": "^3",
+    "league/omnipay": "^3.2",
     "omnipay/paypal": "^3.0",
     "omnipay/stripe": "^3.0",
-    "vitalybaev/google-merchant-feed": "^1.1",
-    "barryvdh/laravel-dompdf": "^0.9.0",
-    "bummzack/omnipay-postfinance": "dev-master"
+    "barryvdh/laravel-dompdf": "^0.9.0"
+  },
+  "suggest": {
+    "vitalybaev/google-merchant-feed": "Required to use the Google Merchant Feed integration",
+    "bummzack/omnipay-postfinance": "Required to use the PostFinance payment provider",
+    "elasticsearch/elasticsearch": "Required to use the ElasticSearch indexing support (experimental)",
+    "offline/jsonq": "Required to use the file based index",
+    "tmarois/filebase": "Required to use the file based index"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
