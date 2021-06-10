@@ -41,7 +41,7 @@ required packages using composer:
 | ------- | ------- |
 | Google Merchant Feed Integration | `vitalybaev/google-merchant-feed` |
 | PostFinance Payments | `bummzack/omnipay-postfinance` |
-| File based index (alternative if you have an older MySQL version) | `offline/jsonq tmarois/filebase` |
+| File based index <br>(alternative index if you have an older MySQL version) | `offline/jsonq tmarois/filebase` |
 
 
 
