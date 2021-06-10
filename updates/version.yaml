@@ -373,4 +373,6 @@
     - 'Fixed another October 2.0 incompatibility'
 1.13.6:
     - 'Optimized compatibility with Winter CMS, fixed various bugs'
+1.14.0:
+    - 'Added support for PHP 8 (see changelog: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.14.0.html)'
 
