@@ -7,7 +7,7 @@
 
 > E-commerce solution for October CMS
 
-[![Build Status](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.org/OFFLINE-GmbH/oc-mall-plugin)
+[![Build Status](https://travis-ci.com/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.com/github/OFFLINE-GmbH/oc-mall-plugin)
 
 `oc-mall` is a fully featured online shop solution for October CMS.
 
