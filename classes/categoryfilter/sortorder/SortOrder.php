@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\CategoryFilter\SortOrder;
 
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 
@@ -79,7 +80,7 @@ abstract class SortOrder
             'name'       => new Name(),
         ];
 
-        $extensions = \Event::fire('offline.mall.extendSortOrder');
+        $extensions = array_filter(Event::fire('offline.mall.extendSortOrder'));
         if (count($extensions) > 0) {
             foreach ($extensions as $extension) {
                 $options = array_merge($options, $extension);

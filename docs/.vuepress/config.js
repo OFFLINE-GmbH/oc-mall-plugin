@@ -77,6 +77,7 @@ module.exports = {
             {
                 title: 'Changelog',
                 children: [
+                    '/changelog/1.14.0',
                     '/changelog/1.13.0',
                     '/changelog/1.12.0',
                     '/changelog/1.11.0',
