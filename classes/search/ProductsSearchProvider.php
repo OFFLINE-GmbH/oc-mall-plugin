@@ -9,6 +9,7 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\SiteSearch\Classes\Providers\ResultsProvider;
+use RainLab\Translate\Models\Attribute;
 
 class ProductsSearchProvider extends ResultsProvider
 {
@@ -179,8 +180,7 @@ class ProductsSearchProvider extends ResultsProvider
      */
     protected function getModelIdsForQuery($modelClass)
     {
-        $results = DB::table('rainlab_translate_attributes')
-                     ->where('model_type', $modelClass)
+        $results = Attribute::where('model_type', $modelClass)
                      ->where('locale', $this->currentLocale())
                      ->where('attribute_data', 'LIKE', "%{$this->query}%")
                      ->get(['model_id']);
