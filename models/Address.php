@@ -5,6 +5,7 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use RainLab\Location\Behaviors\LocationModel;
+use System\Classes\PluginManager;
 
 class Address extends Model
 {
@@ -41,6 +42,13 @@ class Address extends Model
     public $belongsTo = [
         'customer' => Customer::class,
     ];
+
+    public function beforeValidate()
+    {
+        if (PluginManager::instance()->hasPlugin('Winter.Location')) {
+            $this->rules['country_id'] = str_replace('rainlab_', 'winter_', $this->rules['country_id']);
+        }
+    }
 
     public function getNameAttribute()
     {
