@@ -16,6 +16,7 @@ use OFFLINE\Mall\Models\Wishlist;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\UserGroup;
 use Redirect;
+use System\Classes\PluginManager;
 
 class DefaultSignUpHandler implements SignUpHandler
 {
