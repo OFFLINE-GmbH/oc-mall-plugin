@@ -73,6 +73,12 @@ class ShippingMethod extends Model
             'key'      => 'shipping_method_id',
             'otherKey' => 'tax_id',
         ],
+        'discounts'     => [
+            Discount::class,
+            'table'    => 'offline_mall_shipping_method_discount',
+            'key'      => 'shipping_method_id',
+            'otherKey' => 'discount_id',
+        ],
         'countries' => [
             RainLabCountry::class,
             'table'    => 'offline_mall_shipping_countries',
