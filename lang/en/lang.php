@@ -508,6 +508,7 @@ return [
             'total' => 'Order total is reached',
             'code' => 'Discount code is entered',
             'product' => 'A specific product is present in the cart',
+            'shipping_method' => 'The shipping method is one of the following',
             'customer_group' => 'The user belongs to a specific customer group',
         ],
         'validation' => [

@@ -375,4 +375,6 @@
     - 'Optimized compatibility with Winter CMS, fixed various bugs'
 1.14.0:
     - 'Added support for PHP 8 (see changelog: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.14.0.html)'
-
+1.14.1:
+    - 'Added possibility to apply discounts when a certain shipping method is selected (credits to @inalto)'
+    - create_offline_mall_shipping_method_discount.php

@@ -98,9 +98,9 @@ class TotalsCalculator
 
     protected function calculate()
     {
-        $this->weightTotal     = $this->calculateWeightTotal();
+        $this->weightTotal = $this->calculateWeightTotal();
         $this->productPreTaxes = $this->calculateProductPreTaxes();
-        $this->productTaxes    = $this->calculateProductTaxes();
+        $this->productTaxes = $this->calculateProductTaxes();
 
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
@@ -111,8 +111,8 @@ class TotalsCalculator
         $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
 
         $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
-        $this->paymentTaxes    = $this->filterPaymentTaxes();
-        $this->paymentTotal    = new PaymentTotal($this->input->payment_method, $this);
+        $this->paymentTaxes = $this->filterPaymentTaxes();
+        $this->paymentTotal = new PaymentTotal($this->input->payment_method, $this);
 
         $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
 
@@ -191,7 +191,7 @@ class TotalsCalculator
 
             $taxTotal = new TaxTotal($preTax, $tax);
 
-            $taxTotal->setTotal($grouped->sum(function(TaxTotal $type) use ($tax) {
+            $taxTotal->setTotal($grouped->sum(function (TaxTotal $type) use ($tax) {
                 return (new TaxTotal($type->preTax(), $tax))->total();
             }));
 
@@ -282,7 +282,9 @@ class TotalsCalculator
      */
     protected function applyTotalDiscounts($total): ?float
     {
-        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product', 'customer_group'])
+        $nonCodeTriggers = Discount
+            ::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method'])
+            ->with('shipping_methods')
             ->where(function ($q) {
                 $q->whereNull('valid_from')
                     ->orWhere('valid_from', '<=', Carbon::now());
@@ -295,7 +297,7 @@ class TotalsCalculator
             return $item->type === 'shipping';
         });
 
-        $applier                = new DiscountApplier($this->input, $total);
+        $applier = new DiscountApplier($this->input, $total);
         $this->appliedDiscounts = $applier->applyMany($discounts);
 
         return $applier->reducedTotal();
