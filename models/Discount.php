@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
 class Discount extends Model
@@ -11,6 +12,7 @@ class Discount extends Model
     use Validation;
     use PriceAccessors;
     use Nullable;
+    use HashIds;
 
     const MORPH_KEY = 'mall.discount';
 
