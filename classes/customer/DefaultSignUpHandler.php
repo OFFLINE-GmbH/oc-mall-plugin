@@ -16,6 +16,7 @@ use OFFLINE\Mall\Models\Wishlist;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\UserGroup;
 use Redirect;
+use System\Classes\PluginManager;
 
 class DefaultSignUpHandler implements SignUpHandler
 {
@@ -198,7 +199,13 @@ class DefaultSignUpHandler implements SignUpHandler
         }
 
         Event::fire('mall.customer.extendSignupRules', [&$rules, $forSignup]);
-        
+
+        if (PluginManager::instance()->hasPlugin('Winter.Location')) {
+            foreach (['billing_state_id', 'billing_country_id', 'shipping_state_id', 'shipping_country_id'] as $rule) {
+                $rules[$rule] = str_replace('rainlab_', 'winter_', $rules[$rule]);
+            }
+        }
+
         return $rules;
     }
 
