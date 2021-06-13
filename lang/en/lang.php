@@ -882,12 +882,12 @@ return [
                 ],
             ],
         ],
-        'quickCheckout'              => [
+        'quickCheckout' => [
             'details' => [
-                'name'        => 'Quick Checkout',
+                'name' => 'Quick Checkout',
                 'description' => 'Single-page checkout process',
             ],
-            'errors'  => [
+            'errors' => [
                 'signup_failed' => 'Failed to create user account.',
             ],
         ],
