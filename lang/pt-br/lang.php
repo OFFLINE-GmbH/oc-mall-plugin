@@ -876,12 +876,12 @@ return [
                 'missing_settings' => 'Por favor selecione uma forma de pagamento e um método de entrega.',
             ],
         ],
-        'quickCheckout'              => [
+        'quickCheckout' => [
             'details' => [
-                'name'        => 'Compra rápida',
+                'name' => 'Compra rápida',
                 'description' => 'Compra em uma única página',
             ],
-            'errors'  => [
+            'errors' => [
                 'signup_failed' => 'Falhou ao criar conta.',
             ],
         ],
