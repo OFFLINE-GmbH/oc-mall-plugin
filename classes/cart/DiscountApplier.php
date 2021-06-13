@@ -78,7 +78,7 @@ class DiscountApplier
             'savings'           => $savings * -1,
             'savings_formatted' => $this->money->format($savings * -1),
         ]);
-
+            
         return true;
     }
 
@@ -117,6 +117,11 @@ class DiscountApplier
         if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
             return true;
         }
+        
+        
+        if ($discount->trigger === 'shipping_method' && $this->currentDiscountHasShippingMethod()) {
+            return true;
+        }
 
         return $discount->trigger === 'code';
     }
@@ -134,4 +139,12 @@ class DiscountApplier
         }
         return $group->where('id', $customerGroupId)->exists();
     }
+
+    private function currentDiscountHasShippingMethod(): bool
+    {
+        return Discount::where('trigger', 'shipping_method')->whereHas('shipping_methods', function($q) {
+            $q->where('offline_mall_shipping_methods.id', $this->input->shipping_method->id);
+        })->exists();
+    }
+
 }
