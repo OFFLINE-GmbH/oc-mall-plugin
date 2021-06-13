@@ -872,12 +872,12 @@
                 ],
             ],
         ],
-        'quickCheckout'                   => [
+        'quickCheckout' => [
             'details' => [
-                'name'        => 'Schneller Checkout',
+                'name' => 'Schneller Checkout',
                 'description' => 'Checkout auf einer Seite',
             ],
-            'errors'  => [
+            'errors' => [
                 'signup_failed' => 'Fehler beim Erstellen Ihres Benutzerkontos.',
             ],
         ],
