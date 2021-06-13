@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Classes\Search;
 
 use Cms\Classes\Controller;
-use DB;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
@@ -180,10 +179,11 @@ class ProductsSearchProvider extends ResultsProvider
      */
     protected function getModelIdsForQuery($modelClass)
     {
-        $results = Attribute::where('model_type', $modelClass)
-                     ->where('locale', $this->currentLocale())
-                     ->where('attribute_data', 'LIKE', "%{$this->query}%")
-                     ->get(['model_id']);
+        $results = Attribute
+            ::where('model_type', $modelClass)
+            ->where('locale', $this->currentLocale())
+            ->where('attribute_data', 'LIKE', "%{$this->query}%")
+            ->get(['model_id']);
 
         return collect($results)->pluck('model_id');
     }
