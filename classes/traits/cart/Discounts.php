@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits\Cart;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Discount;
 use RainLab\User\Facades\Auth;
@@ -16,7 +17,7 @@ trait Discounts
      * where user are allowed to apply unlimited codes.
      *
      * @param Discount $discount
-     * @param int      $discountCodeLimit
+     * @param int $discountCodeLimit
      *
      * @throws \October\Rain\Exception\ValidationException
      * @throws ValidationException
@@ -97,22 +98,30 @@ trait Discounts
             $shippingDiscount['discount']->save();
         }
     }
-    
-    
+
+
+    /**
+     * Removes a specific disount from a cart.
+     *
+     * @param int $id
+     * @throws ValidationException
+     */
     public function removeDiscountCodeById(int $id)
     {
         try {
-            $discount = Discount::find($id);
-            $code = $discount->code;
-            $this->discounts()->remove($discount);
+            DB::transaction(function () use ($id) {
+                $discount = Discount::find($id);
+                $this->discounts()->remove($discount);
 
-            $this->totals()->appliedDiscounts()->each(function (array $discount) use ($code) {
-                if ($code == $discount['discount']->code) {
-                    $discount['discount']->number_of_usages--;
-                    $discount['discount']->save();
-                }
+                $code = $discount->code;
+
+                $this->totals()->appliedDiscounts()->each(function (array $discount) use ($code) {
+                    if ($code === $discount['discount']->code) {
+                        $discount['discount']->number_of_usages--;
+                        $discount['discount']->save();
+                    }
+                });
             });
-
         } catch (ModelNotFoundException $e) {
             throw new ValidationException([
                 'code' => trans('offline.mall::lang.discounts.validation.not_found'),
