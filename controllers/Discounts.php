@@ -54,10 +54,10 @@ class Discounts extends Controller
             }
             Price::updateOrCreate([
                 'price_category_id' => null,
-                'priceable_id'      => $model->id,
-                'priceable_type'    => $model::MORPH_KEY,
-                'currency_id'       => $currency,
-                'field'             => $field,
+                'priceable_id' => $model->id,
+                'priceable_type' => $model::MORPH_KEY,
+                'currency_id' => $currency,
+                'field' => $field,
             ], [
                 'price' => $value,
             ]);

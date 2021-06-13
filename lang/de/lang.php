@@ -504,6 +504,7 @@
             'total' => 'Bestimmter Bestellwert erreicht wird',
             'code' => 'Gutschein-Code eingegeben wird',
             'product' => 'Bestimmtes Produkt im Warenkorb liegt',
+            'shipping_method' => 'die Versandart eine der ausgewählten ist',
             'customer_group' => 'Der Benutzer zu einer Kundengruppe gehört',
         ],
         'validation' => [
