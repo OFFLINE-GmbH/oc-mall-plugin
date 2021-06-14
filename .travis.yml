@@ -36,6 +36,7 @@ matrix:
         - cd october
         - php artisan october:up -v
         - cd plugins/offline/mall
+        - travis_retry composer require illuminate/support ^5.5 # force Laravel 5.5 dependencies
         - travis_retry composer install --no-interaction --prefer-source
       script: ../../../vendor/bin/phpunit
 
