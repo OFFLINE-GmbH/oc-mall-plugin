@@ -286,6 +286,11 @@ class Products extends Controller
         if ($this->relationName === 'files') {
             $parent['#Form-field-Product-missing_file_hint-group'] = '';
         }
+        
+        if ($this->relationName === 'variants') {
+            $this->updateProductPrices($this->vars['formModel'], $this->relationModel);
+            (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
+        }        
 
         return $parent;
     }
