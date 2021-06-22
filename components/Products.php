@@ -20,7 +20,7 @@ use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\User\Facades\Auth;
 use Redirect;
-use Log;
+
 /**
  * The Products components displays a list of Products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -196,7 +196,7 @@ class Products extends MallComponent
     }
 
     /**
-     * Options array for the category dropdown.
+     * Options array for the pagination dropdown.
      *
      * @return array
      */
@@ -444,12 +444,9 @@ class Products extends MallComponent
     }
 
      /**
-     * Paginate the result set.
+     * Load more items and populate div
      *
-     * @param Collection $items
-     * @param int        $totalCount
-     *
-     * @return LengthAwarePaginator
+     * @return Array
      */
     protected function onLoadMore()
     {
@@ -458,11 +455,19 @@ class Products extends MallComponent
         } catch (ModelNotFoundException $e) {
             return $this->controller->run('404');
         }
-        return [
-            '#mall-loadmore' => $this->renderPartial('products/loadmore'),
-            '@#mall-products' => $this->renderPartial('products/default'),
-            
-        ];
+
+        $out=[];
+        if (count($this->items)) {
+            $out['@#mall-products'] = $this->renderPartial('products/default');
+        } else {
+            $out['@#mall-products'] = '';
+        }
+        if (count($this->items) >= $this->perPage) {
+            $out['#mall-loadmore'] = $this->renderPartial('products/loadmore');
+        } else {
+            $out['#mall-loadmore'] = '';
+        }
+        return $out;
     }
 
 
