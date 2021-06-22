@@ -702,6 +702,9 @@ return [
                     'title' => 'Название страницы',
                     'description' => 'Использовать имя категории как заголовок страницы',
                 ],
+                'paginator_none' => 'нет',
+                'paginator_full' => 'Полный',
+                'paginator_incremental' => 'Инкрементный (Ajax)',
             ],
         ],
         'productsFilter' => [

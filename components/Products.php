@@ -20,7 +20,7 @@ use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\User\Facades\Auth;
 use Redirect;
-
+use Log;
 /**
  * The Products components displays a list of Products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -184,7 +184,7 @@ class Products extends MallComponent
                 'title'       => 'offline.mall::lang.components.products.properties.paginate.title',
                 'description' => 'offline.mall::lang.components.products.properties.paginate.description',
                 'default'     => '1',
-                'type'        => 'checkbox',
+                'type'        => 'dropdown',
             ],
             'sort'            => [
                 'title'       => 'offline.mall::lang.components.products.properties.sort.title',
@@ -193,6 +193,20 @@ class Products extends MallComponent
                 'type'        => 'dropdown',
             ],
         ];
+    }
+
+    /**
+     * Options array for the category dropdown.
+     *
+     * @return array
+     */
+    public function getPaginateOptions()
+    {
+        return [
+                0 => trans('offline.mall::lang.components.products.properties.paginator_none'),
+                1 => trans('offline.mall::lang.components.products.properties.paginator_full'),
+                2 => trans('offline.mall::lang.components.products.properties.paginator_incremental'),
+            ];
     }
 
     /**
@@ -242,7 +256,7 @@ class Products extends MallComponent
 
         $this->setVar('sort', $this->property('sort'));
         $this->setVar('setPageTitle', (bool)$this->property('setPageTitle'));
-        $this->setVar('paginate', (bool)$this->property('paginate'));
+        $this->setVar('paginate', (int)$this->property('paginate'));
 
         if ($this->category) {
             $categories = collect([$this->category]);
@@ -428,6 +442,29 @@ class Products extends MallComponent
 
         return $paginator->setPath($pageUrl);
     }
+
+     /**
+     * Paginate the result set.
+     *
+     * @param Collection $items
+     * @param int        $totalCount
+     *
+     * @return LengthAwarePaginator
+     */
+    protected function onLoadMore()
+    {
+        try {
+            $this->setData();
+        } catch (ModelNotFoundException $e) {
+            return $this->controller->run('404');
+        }
+        return [
+            '#mall-loadmore' => $this->renderPartial('products/loadmore'),
+            '@#mall-products' => $this->renderPartial('products/default'),
+            
+        ];
+    }
+
 
     /**
      * Retrieve the Category by ID or from the page's :slug parameter.

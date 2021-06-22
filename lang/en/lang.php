@@ -705,6 +705,10 @@ return [
                     'title' => 'Set page title',
                     'description' => 'Use the category\'s name as page title',
                 ],
+                'paginator_none' => 'none',
+                'paginator_full' => 'Complete',
+                'paginator_incremental' => 'Incremental (Ajax)',
+
             ],
         ],
         'productsFilter' => [
