@@ -204,20 +204,13 @@ class Cart extends MallComponent
         
         if ($product != null) {
             $cart->removeProduct($product);
-
-            $this->setData();
-
-            return [
-                'item'     => $this->dataLayerArray($product->product, $product->variant),
-                'quantity' => $product->quantity,
-                'new_items_count' => optional($cart->products)->count() ?? 0,
-                'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
-            ];
         }
+        
+        $this->setData();
 
         return [
-            'item'     => (new CartProduct)->toArray(),
-            'quantity' => 0,
+            'item'     => $product ? $this->dataLayerArray($product->product, $product->variant) : (new CartProduct)->toArray(),
+            'quantity' => optional($product)->quantity ?? 0,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ];
