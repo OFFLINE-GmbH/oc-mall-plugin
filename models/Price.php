@@ -161,6 +161,10 @@ class Price extends Model
                 'rate'     => $this->currency->rate,
                 'decimals' => $this->currency->decimals,
             ],
+            'category' =>[
+                'sort_order' => $this->category->sort_order,
+                'code' => $this->category->code
+            ] 
         ];
     }
 }
