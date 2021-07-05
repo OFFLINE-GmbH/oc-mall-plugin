@@ -10,7 +10,10 @@
                 $overlay.prependTo($body).show()
 
                 // Run registered callback functions.
-                var keys = Object.keys(window.Mall.Callbacks.Checkout)
+                var keys = [];
+                if ('Mall' in window ) {
+                    var keys = Object.keys(window.Mall.Callbacks.Checkout)
+                }
                 if (keys.length > 0) {
                     var callbacks = keys.map(function (handler) {
                         return window.Mall.Callbacks.Checkout[handler]()
