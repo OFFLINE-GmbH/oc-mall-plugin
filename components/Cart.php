@@ -201,14 +201,16 @@ class Cart extends MallComponent
         $cart = CartModel::byUser(Auth::getUser());
 
         $product = $this->getProductFromCart($cart, $id);
-
-        $cart->removeProduct($product);
-
+        
+        if ($product != null) {
+            $cart->removeProduct($product);
+        }
+        
         $this->setData();
 
         return [
-            'item'     => $this->dataLayerArray($product->product, $product->variant),
-            'quantity' => $product->quantity,
+            'item'     => $product ? $this->dataLayerArray($product->product, $product->variant) : (new CartProduct)->toArray(),
+            'quantity' => optional($product)->quantity ?? 0,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ];
@@ -251,12 +253,16 @@ class Cart extends MallComponent
      */
     protected function getProductFromCart(CartModel $cart, $id)
     {
-        return CartProduct
-            ::whereHas('cart', function ($query) use ($cart) {
-                $query->where('id', $cart->id);
-            })
-            ->where('id', $id)
-            ->firstOrFail();
+        try {
+            return CartProduct
+                ::whereHas('cart', function ($query) use ($cart) {
+                    $query->where('id', $cart->id);
+                })
+                ->where('id', $id)
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
     }
 
     /**
