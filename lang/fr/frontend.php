@@ -164,4 +164,5 @@ return [
     'reviews.ratings' => 'Evaluation|Evaluations',
     'reviews.optional' => 'Optionnel, mais aide à mieux comprendre votre évaluation',
     'reviews.one_per_line' => 'Optionnel, mettre chaque entrée sur sa propre ligne',
+    'products.loadmore' => 'Afficher plus...',
 ];

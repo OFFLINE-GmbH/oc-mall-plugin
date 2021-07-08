@@ -356,7 +356,10 @@ return [
                     "description" => "Questo sovrascrive l'ordine prescelto dall'utente",
                     "title" => "Ordina"
                 ],
-                "use_url" => "Usa lo slug della categoria dall'URL"
+                "use_url" => "Usa lo slug della categoria dall'URL",
+                'paginator_none' => 'nessuno',
+                'paginator_full' => 'Completo',
+                'paginator_incremental' => 'Incrementale (Ajax)',
             ]
         ],
         "productsFilter" => [
