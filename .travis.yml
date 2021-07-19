@@ -8,19 +8,17 @@ matrix:
       php:
         - 7.2
         - 7.3
-        - nightly
+        - 7.4
+        - 8.0
       sudo: false
       before_install:
         - mysql -e 'CREATE DATABASE IF NOT EXISTS october;'
       install:
         - composer self-update
-        - travis_retry composer install --no-interaction --prefer-source
-      before_script:
         - git clone https://github.com/octobercms/october.git
         - mkdir -p ./october/plugins/offline/mall
         - cd october
         - git checkout 1.0
-        - composer self-update
         - travis_retry composer install --no-interaction --prefer-source
         - php artisan october:env
         - php artisan key:generate
@@ -33,11 +31,13 @@ matrix:
         - php artisan plugin:install RainLab.User
         - php artisan plugin:install RainLab.Location
         - cd ..
+      before_script:
         - mv !(october) october/plugins/offline/mall
         - cd october
         - php artisan october:up -v
         - cd plugins/offline/mall
-        - composer install
+        - travis_retry composer require illuminate/support ^5.5 # force Laravel 5.5 dependencies
+        - travis_retry composer install --no-interaction --prefer-source
       script: ../../../vendor/bin/phpunit
 
     - language: node_js

@@ -117,6 +117,10 @@ class DiscountApplier
         if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
             return true;
         }
+        
+        if ($discount->trigger === 'shipping_method' && $this->appliesForShippingMethod($discount)) {
+            return true;
+        }
 
         return $discount->trigger === 'code';
     }
@@ -134,4 +138,10 @@ class DiscountApplier
         }
         return $group->where('id', $customerGroupId)->exists();
     }
+
+    private function appliesForShippingMethod(Discount $discount): bool
+    {
+        return $discount->shipping_methods->contains($this->input->shipping_method->id);
+    }
+
 }

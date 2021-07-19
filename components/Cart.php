@@ -1,6 +1,5 @@
 <?php namespace OFFLINE\Mall\Components;
 
-use Auth;
 use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
@@ -8,8 +7,7 @@ use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
-use Request;
-use Session;
+use RainLab\User\Facades\Auth;
 
 /**
  * The Cart component displays a user's cart.
@@ -180,6 +178,10 @@ class Cart extends MallComponent
         $cart    = CartModel::byUser(Auth::getUser());
         $product = $this->getProductFromCart($cart, $id);
 
+	if (!$product) {
+	    return;
+	}
+
         try {
             $cart->setQuantity($product->id, (int)input('quantity'));
         } catch (OutOfStockException $e) {
@@ -203,17 +205,44 @@ class Cart extends MallComponent
         $cart = CartModel::byUser(Auth::getUser());
 
         $product = $this->getProductFromCart($cart, $id);
+        
+        if (!$product) {
+	    return [];
+        }
 
         $cart->removeProduct($product);
+        
+        $this->setData();
+
+        return [
+            'item' => $this->dataLayerArray($product->product, $product->variant),
+            'quantity' => optional($product)->quantity ?? 0,
+            'new_items_count' => optional($cart->products)->count() ?? 0,
+            'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
+        ];
+    }
+
+    /**
+     * The user removed a previously applied discount code from the cart.
+     *
+     * @return array
+     * @throws \October\Rain\Exception\ValidationException
+     */
+    public function onRemoveDiscountCode()
+    {
+        $id = $this->decode(input('id'));
+
+        $cart = CartModel::byUser(Auth::getUser());
+
+        $cart->removeDiscountCodeById($id);
 
         $this->setData();
 
         return [
-            'item'     => $this->dataLayerArray($product->product, $product->variant),
-            'quantity' => $product->quantity,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ];
+
     }
 
     /**
@@ -232,10 +261,10 @@ class Cart extends MallComponent
     {
         return CartProduct
             ::whereHas('cart', function ($query) use ($cart) {
-                $query->where('id', $cart->id);
+                 $query->where('id', $cart->id);
             })
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
     }
 
     /**

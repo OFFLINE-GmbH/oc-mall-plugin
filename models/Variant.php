@@ -112,109 +112,10 @@ class Variant extends Model
         'description_short',
     ];
 
-    public function afterSave()
-    {
-        if ( ! $this->isBackendRelationUpdate()) {
-            return;
-        }
-
-        if ($this->image_set_id === null) {
-            $this->createImageSetFromTempImages();
-        }
-
-        $this->handlePropertyValueUpdates();
-    }
-
-    /**
-     * Handle the form data form the property value form.
-     */
-    protected function handlePropertyValueUpdates()
-    {
-        $locales = Locale::isEnabled()->get();
-
-        $formData = array_wrap(post('VariantPropertyValues', []));
-        if (count($formData) < 1) {
-            PropertyValue::where('variant_id', $this->id)->delete();
-        }
-
-        $properties     = Property::whereIn('id', array_keys($formData))->get();
-        $propertyValues = PropertyValue::where('variant_id', $this->id)->get();
-
-        foreach ($formData as $id => $value) {
-            $property = $properties->find($id);
-            $pv       = $propertyValues->where('property_id', $id)->first()
-                ?? new PropertyValue([
-                    'variant_id'  => $this->id,
-                    'product_id'  => $this->product_id,
-                    'property_id' => $id,
-                ]);
-
-            $pv->value = $value;
-            foreach ($locales as $locale) {
-                $transValue = post(
-                    sprintf('RLTranslate.%s.VariantPropertyValues.%d', $locale->code, $id),
-                    post(sprintf('VariantPropertyValues.%d', $id)) // fallback
-                );
-                $transValue = $this->handleTranslatedPropertyValue(
-                    $property,
-                    $pv,
-                    $value,
-                    $transValue,
-                    $locale->code
-                );
-                $pv->setAttributeTranslated('value', $transValue, $locale->code);
-            }
-
-            if (($pv->value === null || $pv->value === '') && $pv->exists) {
-                $pv->delete();
-            } else {
-                $pv->save();
-            }
-        }
-    }
-
     public function afterDelete()
     {
         DB::table('offline_mall_property_values')->where('variant_id', $this->id)->delete();
         DB::table('offline_mall_wishlist_items')->where('variant_id', $this->id)->delete();
-    }
-
-    protected function createImageSetFromTempImages()
-    {
-        // Only run this if a variant relation has been created/updated.
-        if ( ! $this->isBackendRelationUpdate()) {
-            return;
-        }
-
-        $tempImages = $this->temp_images()
-                           ->withDeferred(post('_session_key'))
-                           ->count();
-
-        if ($tempImages < 1) {
-            return;
-        }
-
-        return DB::transaction(function () {
-            $set             = new ImageSet();
-            $set->name       = $this->name;
-            $set->product_id = $this->product_id;
-            $set->save();
-
-            $this->image_set_id = $set->id;
-            $this->save();
-
-            $this->commitDeferred(post('_session_key'));
-
-            return DB::table('system_files')
-                     ->where('attachment_type', Variant::MORPH_KEY)
-                     ->where('attachment_id', $this->id)
-                     ->where('field', 'temp_images')
-                     ->update([
-                         'attachment_type' => ImageSet::MORPH_KEY,
-                         'attachment_id'   => $set->id,
-                         'field'           => 'images',
-                     ]);
-        });
     }
 
     public function getImageSetIdOptions()
@@ -395,14 +296,5 @@ class Variant extends Model
         return [
             'items' => $items,
         ];
-    }
-
-    protected function isBackendRelationUpdate(): bool
-    {
-        return app()->runningInBackend()
-            && request('Variant')
-            && request('MallPrice')
-            && request('_relation_field') === 'variants'
-            && starts_with(request()->header('X-OCTOBER-REQUEST-HANDLER'), 'onRelationManage');
     }
 }

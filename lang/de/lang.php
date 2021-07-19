@@ -504,6 +504,7 @@
             'total' => 'Bestimmter Bestellwert erreicht wird',
             'code' => 'Gutschein-Code eingegeben wird',
             'product' => 'Bestimmtes Produkt im Warenkorb liegt',
+            'shipping_method' => 'die Versandart eine der ausgewählten ist',
             'customer_group' => 'Der Benutzer zu einer Kundengruppe gehört',
         ],
         'validation' => [
@@ -865,13 +866,18 @@
             'errors' => [
                 'missing_settings' => 'Bitte wählen Sie eine Zahlungs- und Versandmethode aus.',
             ],
+            'properties' => [
+                'step' => [
+                    'name' => 'Aktiver Schritt des Checkouts (wird automatisch gesetzt)',
+                ],
+            ],
         ],
-        'quickCheckout'                   => [
+        'quickCheckout' => [
             'details' => [
-                'name'        => 'Schneller Checkout',
+                'name' => 'Schneller Checkout',
                 'description' => 'Checkout auf einer Seite',
             ],
-            'errors'  => [
+            'errors' => [
                 'signup_failed' => 'Fehler beim Erstellen Ihres Benutzerkontos.',
             ],
         ],

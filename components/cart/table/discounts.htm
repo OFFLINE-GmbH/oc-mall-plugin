@@ -5,6 +5,13 @@
             {{ entry.discount.name }}
             {% if entry.discount.code %}
                 ({{ entry.discount.code }})
+                <br>
+                <a href="javascript:;"
+                   class="js-mall-remove-discount-code"
+                   data-id="{{ entry.discount.hash_id }}"
+                >
+                    {{ 'offline.mall::frontend.remove' | trans }}
+                </a>
             {% endif %}
         </td>
         <td class="text-right">

@@ -85,7 +85,7 @@ name = "Order table"
                     {% endif %}
                 </td>
                 <td style="text-align: right">
-                    {{ order.shipping.method.price_formatted }}
+                    {{ order.totalShippingPostTaxes() | raw }}
                 </td>
             </tr>
         {% endif %}

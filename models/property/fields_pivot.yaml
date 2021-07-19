@@ -3,7 +3,13 @@ fields:
         label: 'offline.mall::lang.properties.use_for_variants'
         comment: 'offline.mall::lang.properties.use_for_variants_comment'
         type: switch
-        span: full
+        span: auto
+    slug:
+        label: 'offline.mall::lang.common.slug'
+        span: auto
+        type: text
+        readOnly: true
+        context: update
     name:
         label: 'offline.mall::lang.common.name'
         oc.commentPosition: ''
