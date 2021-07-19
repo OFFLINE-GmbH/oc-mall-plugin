@@ -178,6 +178,10 @@ class Cart extends MallComponent
         $cart    = CartModel::byUser(Auth::getUser());
         $product = $this->getProductFromCart($cart, $id);
 
+	if (!$product) {
+	    return;
+	}
+
         try {
             $cart->setQuantity($product->id, (int)input('quantity'));
         } catch (OutOfStockException $e) {
@@ -202,14 +206,16 @@ class Cart extends MallComponent
 
         $product = $this->getProductFromCart($cart, $id);
         
-        if ($product != null) {
-            $cart->removeProduct($product);
+        if (!$product) {
+	    return [];
         }
+
+        $cart->removeProduct($product);
         
         $this->setData();
 
         return [
-            'item'     => $product ? $this->dataLayerArray($product->product, $product->variant) : (new CartProduct)->toArray(),
+            'item' => $this->dataLayerArray($product->product, $product->variant),
             'quantity' => optional($product)->quantity ?? 0,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
@@ -253,16 +259,12 @@ class Cart extends MallComponent
      */
     protected function getProductFromCart(CartModel $cart, $id)
     {
-        try {
-            return CartProduct
-                ::whereHas('cart', function ($query) use ($cart) {
-                    $query->where('id', $cart->id);
-                })
-                ->where('id', $id)
-                ->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            return null;
-        }
+        return CartProduct
+            ::whereHas('cart', function ($query) use ($cart) {
+                 $query->where('id', $cart->id);
+            })
+            ->where('id', $id)
+            ->first();
     }
 
     /**
