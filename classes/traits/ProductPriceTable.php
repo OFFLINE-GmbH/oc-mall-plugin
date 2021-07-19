@@ -20,8 +20,7 @@ trait ProductPriceTable
 {
     public function onLoadPriceTable()
     {
-        if(!isset($this->vars['pricetable']))
-        {
+        if(!isset($this->vars['pricetable'])) {
             $this->preparePriceTable();
         }
         return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
