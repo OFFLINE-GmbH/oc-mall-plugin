@@ -378,3 +378,5 @@
 1.14.1:
     - 'Added possibility to apply discounts when a certain shipping method is selected (credits to @inalto)'
     - create_offline_mall_shipping_method_discount.php
+1.14.2:
+    - 'Various minor bugfixes and improvements'
