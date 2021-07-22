@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 
 class Discount extends Model
@@ -11,6 +12,7 @@ class Discount extends Model
     use Validation;
     use PriceAccessors;
     use Nullable;
+    use HashIds;
 
     const MORPH_KEY = 'mall.discount';
 
@@ -20,7 +22,7 @@ class Discount extends Model
         'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
-        'trigger'                              => 'in:total,code,product,customer_group',
+        'trigger'                              => 'in:total,code,product,customer_group,shipping_method',
         'types'                                => 'in:fixed_amount,rate,shipping',
         'product'                              => 'required_if:trigger,product',
         'customer_group'                       => 'required_if:trigger,customer_group',
@@ -64,7 +66,9 @@ class Discount extends Model
     ];
     public $belongsToMany = [
         'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
+        'shipping_methods' => [ShippingMethod::class, 'table' => 'offline_mall_shipping_method_discount']
     ];
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $translatable = [
         'name',

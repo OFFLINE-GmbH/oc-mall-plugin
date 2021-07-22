@@ -1,13 +1,23 @@
 {% if __SELF__.showShipping %}
-    <tr class="mall-cart__shipping">
-        <td></td>
-        <td colspan="3">
-            {{ shipping.method.name }}
-        </td>
-        <td class="text-right">
-            {{ shipping.totalPostTaxes | money }}
-        </td>
-    </tr>
+    {% if shipping.method is not null %}
+        <tr class="mall-cart__shipping">
+            <td></td>
+            <td colspan="3">
+                {{ shipping.method.name }}
+            </td>
+            <td class="text-right">
+                {{ shipping.totalPostTaxes | money }}
+            </td>
+        </tr>
+    {% else %}
+        <tr class="mall-cart__shipping mall-cart__noShippingMethod">
+            <td></td>
+            <td colspan="3">
+                {{ 'offline.mall::frontend.no_shipping_method' | trans }}
+            </td>
+            <td></td>
+        </tr>
+    {% endif %}
 {% else %}
     {% partial __SELF__ ~ '::shippingexcluded' %}
 {% endif %}

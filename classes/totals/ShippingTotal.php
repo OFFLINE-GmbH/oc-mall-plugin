@@ -13,6 +13,7 @@ use OFFLINE\Mall\Models\Tax;
 class ShippingTotal implements \JsonSerializable
 {
     use Rounding;
+
     /**
      * @var TotalsCalculator
      */
@@ -52,14 +53,14 @@ class ShippingTotal implements \JsonSerializable
 
     protected function calculate()
     {
-        $this->taxes    = $this->calculateTaxes();
+        $this->taxes = $this->calculateTaxes();
         $this->preTaxes = $this->calculatePreTax();
-        $this->total    = $this->calculateTotal();
+        $this->total = $this->calculateTotal();
     }
 
     protected function calculatePreTax()
     {
-        if ( ! $this->method) {
+        if (!$this->method) {
             return 0;
         }
 
@@ -74,7 +75,7 @@ class ShippingTotal implements \JsonSerializable
 
     protected function calculateTaxes(): float
     {
-        if ( ! $this->method) {
+        if (!$this->method) {
             return 0;
         }
 
@@ -95,7 +96,7 @@ class ShippingTotal implements \JsonSerializable
 
     protected function calculateTotal(): float
     {
-        if ( ! $this->method) {
+        if (!$this->method) {
             return 0;
         }
 
@@ -145,13 +146,13 @@ class ShippingTotal implements \JsonSerializable
             return ShippingMethod::noShippingRequired();
         }
 
-        if ( ! $this->appliedDiscount) {
+        if (!$this->appliedDiscount) {
             return $this->method;
         }
 
         $method = $this->method->replicate(['id', 'name']);
 
-        $discount     = $this->appliedDiscount['discount'];
+        $discount = $this->appliedDiscount['discount'];
         $method->name = $discount->shipping_description;
         $method->setRelation('prices', $discount->shipping_prices);
 
@@ -203,10 +204,10 @@ class ShippingTotal implements \JsonSerializable
 
         // If there are special rates let's see if they need to be applied.
         if ($this->method->rates->count() > 0) {
-            $weight       = $this->totals->weightTotal();
+            $weight = $this->totals->weightTotal();
             $matchingRate = $this->method->rates->first(function (ShippingMethodRate $rate) use ($weight) {
                 $compareFrom = $rate->from_weight === null || $rate->from_weight <= $weight;
-                $compareTo   = $rate->to_weight === null || $rate->to_weight >= $weight;
+                $compareTo = $rate->to_weight === null || $rate->to_weight >= $weight;
 
                 return $compareFrom && $compareTo;
             });
@@ -228,10 +229,10 @@ class ShippingTotal implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'method'          => $this->method(),
-            'preTaxes'        => $this->preTaxes,
-            'taxes'           => $this->taxes,
-            'total'           => $this->total,
+            'method' => $this->method(),
+            'preTaxes' => $this->preTaxes,
+            'taxes' => $this->taxes,
+            'total' => $this->total,
             'appliedDiscount' => $this->appliedDiscount,
         ];
     }

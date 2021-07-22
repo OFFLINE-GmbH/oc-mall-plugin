@@ -508,6 +508,7 @@ return [
             'total' => 'Order total is reached',
             'code' => 'Discount code is entered',
             'product' => 'A specific product is present in the cart',
+            'shipping_method' => 'The shipping method is one of the following',
             'customer_group' => 'The user belongs to a specific customer group',
         ],
         'validation' => [
@@ -875,13 +876,18 @@ return [
             'errors' => [
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
+            'properties' => [
+                'step' => [
+                    'name' => 'Active checkout step (is set automatically)',
+                ],
+            ],
         ],
-        'quickCheckout'              => [
+        'quickCheckout' => [
             'details' => [
-                'name'        => 'Quick Checkout',
+                'name' => 'Quick Checkout',
                 'description' => 'Single-page checkout process',
             ],
-            'errors'  => [
+            'errors' => [
                 'signup_failed' => 'Failed to create user account.',
             ],
         ],

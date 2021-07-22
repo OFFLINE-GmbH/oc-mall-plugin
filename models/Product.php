@@ -239,11 +239,10 @@ class Product extends Model
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
-        $this->bindEvent('model.relation.beforeAttach',
-            function (string $relationName, array $attachedIdList, array $insertData) {
-                $this->forceReindex = true;
-            });
-        $this->bindEvent('model.relation.beforeDetach', function (string $relationName, array $attachedIdList) {
+        $this->bindEvent('model.relation.beforeAttach', function ($relationName, $attachedIdList, $insertData) {
+            $this->forceReindex = true;
+        });
+        $this->bindEvent('model.relation.beforeDetach', function ($relationName, $attachedIdList) {
             $this->forceReindex = true;
         });
     }

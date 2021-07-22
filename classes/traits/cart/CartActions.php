@@ -116,8 +116,7 @@ trait CartActions
                                 $q->where('product_id', $item->id);
                             })
                             ->when($item instanceof Variant, function ($q) use ($item) {
-                                $q->where('cart_id', $this->id)
-                                  ->where('product_id', $item->product_id)
+                                $q->where('product_id', $item->product_id)
                                   ->where('variant_id', $item->id);
                             });
 

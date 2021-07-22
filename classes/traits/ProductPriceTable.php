@@ -20,6 +20,9 @@ trait ProductPriceTable
 {
     public function onLoadPriceTable()
     {
+        if(!isset($this->vars['pricetable'])) {
+            $this->preparePriceTable();
+        }
         return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
     }
 
@@ -134,7 +137,7 @@ trait ProductPriceTable
     protected function persistCustomerGroupPrices($record, $currency)
     {
         $type = $record['type'] === 'product' ? Product::class : Variant::class;
-
+        $this->preparePriceTable();
         foreach ($this->vars['customerGroups'] as $group) {
             $price = $record['group__' . $group['id']] ?? false;
             if ($price === false || $price === null) {

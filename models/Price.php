@@ -150,7 +150,7 @@ class Price extends Model
 
     public function toArray()
     {
-        return [
+        $data = [
             'id'              => $this->id,
             'price'           => $this->price,
             'price_formatted' => (string)$this,
@@ -161,6 +161,16 @@ class Price extends Model
                 'rate'     => $this->currency->rate,
                 'decimals' => $this->currency->decimals,
             ],
+            'category' => null,
         ];
+        
+        if ($this->category) {
+            $data['category'] = [
+                'sort_order' => $this->category->sort_order,
+                'code' => $this->category->code,
+            ];
+        }
+
+        return $data;
     }
 }

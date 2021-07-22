@@ -441,7 +441,7 @@ class Product extends MallComponent
             $variantId = $this->decode($this->param('variant'));
             // If no URL param is present, let's use the first Variant of this Product.
             if ( ! $variantId) {
-                $variantId = optional($this->product->variants->first())->id;
+                $variantId = optional($this->product->variants->where('published', true)->first())->id;
             }
             // If no Variants are available, simply display the Product itself.
             if ( ! $variantId) {

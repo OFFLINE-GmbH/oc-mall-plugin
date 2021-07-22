@@ -1,8 +1,17 @@
-<tr class="mall-cart__shipping">
-    <td>
-        {{ shipping.method.name }}
-    </td>
-    <td class="text-right">
-        {{ shipping.totalPostTaxes | money }}
-    </td>
-</tr>
+{% if shipping.method is not null %}
+    <tr class="mall-cart__shipping">
+        <td>
+            {{ shipping.method.name }}
+        </td>
+        <td class="text-right">
+            {{ shipping.totalPostTaxes | money }}
+        </td>
+    </tr>
+{% else %}
+    <tr class="mall-cart__shipping mall-cart__noShippingMethod">
+        <td>
+            {{ 'offline.mall::frontend.no_shipping_method' | trans }}
+        </td>
+        <td></td>
+    </tr>
+{% endif %}
