@@ -328,8 +328,7 @@ class Order extends Model
     
     public function getIsCancelledAttribute()
     {
-        $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
-        return $this->order_state === $state;
+        return $this->order_state->flag === OrderState::FLAG_CANCELLED;
     }
 
     public function totalPreTaxes()
