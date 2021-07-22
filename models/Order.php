@@ -12,6 +12,7 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Jobs\SendVirtualProductFiles;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
+use OFFLINE\Mall\Models\OrderState;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
@@ -323,6 +324,12 @@ class Order extends Model
     public function getIsPaidAttribute()
     {
         return $this->payment_state === PaidState::class;
+    }
+    
+    public function getIsCancelledAttribute()
+    {
+        $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
+        return $this->order_state === $state;
     }
 
     public function totalPreTaxes()
