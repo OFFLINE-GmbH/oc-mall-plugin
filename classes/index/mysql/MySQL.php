@@ -196,7 +196,7 @@ class MySQL implements Index
             $filter = $filters->pull('category_id');
             $db->where(function ($q) use ($filter) {
                 foreach ($filter->values() as $value) {
-                    $q->orWhereRaw('JSON_CONTAINS(category_id, ?)', json_encode([$value]));
+                    $q->orWhereRaw('JSON_CONTAINS(category_id, ?)', json_encode([(int)$value]));
                 }
             });
         }
