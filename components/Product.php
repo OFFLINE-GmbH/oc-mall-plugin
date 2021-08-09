@@ -247,17 +247,17 @@ class Product extends MallComponent
      */
     public function onAddToCart()
     {
-        $product = $this->getProduct();
+        $product = $this->page['item'] = $this->getProduct();
 
         $variant = null;
         $values = $this->validateCustomFields(post('fields', []));
 
         if ($this->variantId !== null) {
             // In case a Variant is added we have to retrieve the model first by the selected props.
-            $variant = $this->getVariantByPropertyValues(post('props'));
+            $variant = $this->page['item'] = $this->getVariantByPropertyValues(post('props'));
         }
 
-        $quantity = (int)input('quantity', $product->quantity_default ?? 1);
+        $quantity = $this->page['quantity'] = (int)input('quantity', $product->quantity_default ?? 1);
         if ($quantity < 1) {
             throw new ValidationException(['quantity' => trans('offline.mall::lang.common.invalid_quantity')]);
         }
@@ -293,7 +293,7 @@ class Product extends MallComponent
      */
     public function onAddToCartWithServices()
     {
-        $product = $this->getProduct();
+        $product = $this->page['item'] = $this->getProduct();
 
         // Create validation rules for required services.
         $required = $product->services->where('pivot.required', true);
@@ -319,7 +319,10 @@ class Product extends MallComponent
 
         // Fetch the original cart data from the session.
         $variant = Variant::find(Session::pull('mall.cart.add.variant'));
-        $quantity = Session::pull('mall.cart.add.quantity');
+        if(!empty($variant)) {
+            $this->page['item'] = $variant;   
+        }
+        $quantity = $this->page['quantity'] = Session::pull('mall.cart.add.quantity');
         $values = Collection::wrap(Session::pull('mall.cart.add.values', []));
         $values = $values->map(
             function ($attributes) {
