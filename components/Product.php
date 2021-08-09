@@ -752,7 +752,7 @@ class Product extends MallComponent
         $fields = $this->mapToCustomFields(post('props', []));
         $values = $this->mapToCustomFieldValues($fields);
         $priceData = $data['item']->priceIncludingCustomFieldValues($values);
-        $data['price'] = Price::fromArray($priceData);
+        $data['price'] = $this->page['price'] = Price::fromArray($priceData);
 
         return [
             '.mall-product__price' => $this->renderPartial($this->alias . '::price', $data),
