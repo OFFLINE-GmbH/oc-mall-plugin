@@ -547,6 +547,11 @@ class Product extends MallComponent
     protected function addToCart(ProductModel $product, $quantity, $variant, $values, array $serviceOptions = [])
     {
         $cart = Cart::byUser(Auth::getUser());
+        $cartProduct = CartProduct::where('product_id', '=', $product->id);
+        if(!empty($variant)) {
+            $cartProduct = $cartProduct->where('variant_id', '=', $variant->id);
+        }
+        $cartProduct = $cartProduct->first();
 
         $serviceOptions = array_filter($serviceOptions);
 
@@ -568,6 +573,8 @@ class Product extends MallComponent
         return [
             'product' => $product->only($this->getPublicAttributes()),
             'variant' => optional($variant)->only($this->getPublicAttributes()),
+            'cart' => $cart,
+            'cart_product' => $cartProduct,
             'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
