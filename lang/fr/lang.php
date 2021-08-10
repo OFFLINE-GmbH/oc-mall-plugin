@@ -695,9 +695,6 @@
                     'title' => 'Définir le titre de la page',
                     'description' => 'Utiliser le nom de la catégorie comme titre de la page',
                 ],
-                'paginator_none' => 'aucun',
-                'paginator_full' => 'Complet',
-                'paginator_incremental' => 'Incrémentielle (Ajax)',
             ],
         ],
         'productsFilter' => [

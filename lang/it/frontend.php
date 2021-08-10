@@ -165,7 +165,5 @@ return [
     "wishlists.addtocart" => "Aggiungi tutti gli articoli al tuo carrello",
     "wishlists.none" => "Non hai ancora creato nessuna lista dei desideri.",
     "wishlists.pdf_download" => "Scaricare come PDF",
-    "wishlists.stockmissing" => "Alcuni articoli non sono in stock e non sono stati aggiunti al carrello.",
-    "products.loadmore" => 'Vedi altri...',
-
+    "wishlists.stockmissing" => "Alcuni articoli non sono in stock e non sono stati aggiunti al carrello."
 ];

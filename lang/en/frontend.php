@@ -165,5 +165,4 @@ return [
     'reviews.optional' => 'Optional, but helps to understand your rating better',
     'reviews.one_per_line' => 'Optional, put every entry on its own line',
     'no_shipping_method' => 'No shipping selected',
-    'products.loadmore' => 'Show more...',
 ];

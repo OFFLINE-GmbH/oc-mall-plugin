@@ -1,17 +1,4 @@
-<div class="mall-products" id="mall-products">
+<div class="mall-products">
     {% partial __SELF__ ~ '::entries' %}
 </div>
-{% if __SELF__.paginate %}
-    <div class="mall-pagination mall-pagination--products">
-        {% if paginate == '1' %}
-        {{ items | raw }}
-        {% endif %}
-        {% if paginate == '2' %}
-        <div id="mall-loadmore">
-            {% partial __SELF__ ~ '::loadmore' %}
-        </div>
-        {% endif %}
-    </div>
-{% endif %}
 {% partial __SELF__ ~ '::scripts' %}
-

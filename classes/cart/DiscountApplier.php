@@ -141,7 +141,6 @@ class DiscountApplier
 
     private function appliesForShippingMethod(Discount $discount): bool
     {
-        if (empty($this->input->shipping_method)) return 0;
         return $discount->shipping_methods->contains($this->input->shipping_method->id);
     }
 
