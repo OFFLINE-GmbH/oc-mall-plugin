@@ -165,4 +165,6 @@ return [
     'reviews.optional' => 'Optional, hilft aber Deine Bewertung besser zu verstehen',
     'reviews.one_per_line' => 'Optional, ein Punkt pro Zeile',
     'no_shipping_method' => 'Keine Versandmethode ausgewählt',
+    "products.loadmore" => "Mehr sehen"    
+
 ];
