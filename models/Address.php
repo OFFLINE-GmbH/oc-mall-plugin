@@ -36,6 +36,14 @@ class Address extends Model
         'state_id',
         'details',
     ];
+    public $hidden = [
+        'id',
+        'customer_id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+    public $appends = ['hash_id'];
 
     public $table = 'offline_mall_addresses';
 
@@ -111,10 +119,6 @@ class Address extends Model
             'country_id'  => $this->country_id,
             'country'     => $this->country,
             'details'     => $this->details,
-            'customer_id' => $this->customer_id,
-            'created_at'  => $this->created_at,
-            'updated_at'  => $this->updated_at,
-            'deleted_at'  => $this->deleted_at,
         ];
     }
 }

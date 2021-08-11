@@ -18,6 +18,19 @@ class CartProduct extends Model
     public $table = 'offline_mall_cart_products';
     public $fillable = ['quantity', 'product_id', 'variant_id', 'weight', 'price'];
     public $jsonable = ['price'];
+    public $hidden = [
+        'id',
+        'cart_id',
+        'session_id',
+        'customer_id',
+        'shipping_address_id',
+        'product_id',
+        'variant_id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+    public $appends = ['hashid'];
     public $casts = [
         'quantity'   => 'integer',
         'id'         => 'integer',
