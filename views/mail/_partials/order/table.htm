@@ -36,7 +36,7 @@ name = "Order table"
                     </div>
                     <div class="attributes">
                         {% for field in item.custom_field_values %}
-                            {% if field.custom_field.type === 'color' %}
+                            {% if field.custom_field.type == 'color' %}
                                 {{ field.custom_field.name }}: {{ field.display_value | raw }}<br />
                             {% else %}
                                 {{ field.custom_field.name }}: {{ field.display_value }}<br />

@@ -551,7 +551,7 @@ class Product extends MallComponent
         $serviceOptions = array_filter($serviceOptions);
 
         try {
-            $cart->addProduct($product, $quantity, $variant, $values, $serviceOptions);
+            $cartProduct = $cart->addProduct($product, $quantity, $variant, $values, $serviceOptions);
         } catch (OutOfStockException $e) {
             throw new ValidationException(['quantity' => trans('offline.mall::lang.common.stock_limit_reached')]);
         }
@@ -573,6 +573,8 @@ class Product extends MallComponent
             'quantity' => $quantity,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
+            'cart' => $cart,
+            'cart_product' => $cartProduct,
             'added' => true,
         ];
     }
