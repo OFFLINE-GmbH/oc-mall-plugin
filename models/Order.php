@@ -130,6 +130,11 @@ class Order extends Model
     {
         return $this->shipped_at !== null;
     }
+    
+    public function getIsCancelledAttribute()
+    {
+        return $this->order_state->flag === OrderState::FLAG_CANCELLED;
+    }
 
     public static function byCustomer(Customer $customer)
     {
