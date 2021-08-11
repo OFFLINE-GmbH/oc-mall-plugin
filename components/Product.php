@@ -264,7 +264,7 @@ class Product extends MallComponent
 
         // In case this product does not have any services attached, add it to the cart directly.
         if ($product->services->count() === 0) {
-            return $this->addToCart($product, $quantity, $variant, $values);
+            return $this->page['added'] = $this->addToCart($product, $quantity, $variant, $values);
         }
 
         // Temporarily store the current cart data to the session. We will re-fetch this data
@@ -329,7 +329,7 @@ class Product extends MallComponent
 
         $serviceOptionIds = collect(post('service', []))->values()->flatten()->toArray();
 
-        return $this->addToCart($product, $quantity, $variant, $values, $serviceOptionIds);
+        return $this->page['added'] = $this->addToCart($product, $quantity, $variant, $values, $serviceOptionIds);
     }
 
     /**
