@@ -196,15 +196,15 @@ class Order extends Model
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
-            
-            Event::fire('mall.order.afterCreate', [$order, $cart]);
-
+   
             $cart
                 ->loadMissing(['products.product.brand'])
                 ->products
                 ->each(function (CartProduct $entry) use ($order) {
                     $entry->moveToOrder($order);
                 });
+         
+            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart->updateDiscountUsageCount();
 
