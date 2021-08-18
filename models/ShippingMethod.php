@@ -154,13 +154,20 @@ class ShippingMethod extends Model
         }
 
         $total = $cart->totals()->productPostTaxes();
-
+        
+        $country_id = null;
+        if(post('country_id')) {
+            $country_id = post('country_id');
+        } elseif($cart->shipping_address) {
+            $country_id = $cart->shipping_address->country_id;
+        }
+        
         return self
             ::orderBy('sort_order')
-            ->when($cart->shipping_address, function ($q) use ($cart) {
+            ->when($country_id, function ($q) use ($cart, $country_id) {
                 $q->whereDoesntHave('countries')
-                  ->orWhereHas('countries', function ($q) use ($cart) {
-                      $q->where('country_id', $cart->shipping_address->country_id);
+                  ->orWhereHas('countries', function ($q) use ($cart, $country_id) {
+                      $q->where('country_id', $country_id);
                   });
             })
             ->get()
