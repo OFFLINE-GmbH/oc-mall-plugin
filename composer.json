@@ -22,7 +22,8 @@
     "league/omnipay": "^3.2",
     "omnipay/paypal": "^3.0",
     "omnipay/stripe": "^3.0",
-    "barryvdh/laravel-dompdf": "^0.9.0"
+    "barryvdh/laravel-dompdf": "^0.9.0",
+    "rainlab/user-plugin": "^1.6"
   },
   "suggest": {
     "vitalybaev/google-merchant-feed": "Required to use the Google Merchant Feed integration",
