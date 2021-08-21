@@ -380,3 +380,5 @@
     - create_offline_mall_shipping_method_discount.php
 1.14.2:
     - 'Various minor bugfixes and improvements'
+1.14.3:
+    - 'Fixed various Bugs in the QuickCheckout component'
