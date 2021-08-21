@@ -60,6 +60,17 @@
             $('.js-mall-toggle-signup-terms').on('click', function () {
                 $('.js-mall-checkout').prop('disabled', ! this.checked);
             });
+            $.subscribe('mall.address.update', function() {
+                var useCountry = $('#billing_country_id')
+                if ($('.js-mall-toggle-shipping-address').prop('checked')) {
+                    useCountry = $('#shipping_country_id')
+                }
+
+                $.request('{{ __SELF__ }}::onRun', {
+                    data: { country_id: useCountry.val() },
+                    update: {'{{ __SELF__ }}::shippingmethod': '.mall-quick-checkout__shipping-methods'}
+                })
+            })
             $body.on('click', '.mall-quick-checkout__payment-methods .mall-quick-checkout__toggle-option', function() {
                 window.Mall.Callbacks.Checkout = {}
             })
