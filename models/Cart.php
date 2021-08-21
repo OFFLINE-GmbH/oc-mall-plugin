@@ -31,15 +31,6 @@ class Cart extends Model
     protected $dates = ['deleted_at'];
     protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
     public $rules = [];
-    public $hidden = [
-        'id',
-        'customer_id',
-        'shipping_address_id',
-        'billing_address_id',
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     public $table = 'offline_mall_carts';
     public $hasMany = [
         'products' => [CartProduct::class, 'deleted' => true],

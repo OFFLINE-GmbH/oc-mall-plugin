@@ -132,13 +132,6 @@ class Product extends Model
         'file_max_download_count',
         'file_session_required',
     ];
-    public $hidden = [
-        'id',
-        'sales_count',
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     public $appends = ['hash_id'];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
