@@ -566,15 +566,15 @@ class Product extends MallComponent
         Flash::success(trans('offline.mall::frontend.cart.added'));
 
         return [
-            'product' => $product->only($this->getPublicAttributes()),
-            'variant' => optional($variant)->only($this->getPublicAttributes()),
+            'product' => $product->only($this->getPublicProductAttributes()),
+            'variant' => optional($variant)->only($this->getPublicProductAttributes()),
             'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
-            'cart' => $cart,
-            'cart_product' => $cartProduct,
+            'cart' => $cart->only($this->getPublicCartAttributes()),
+            'cart_product' => $cartProduct->only($this->getPublicCartProductAttributes()),
             'added' => true,
         ];
     }
@@ -584,10 +584,42 @@ class Product extends MallComponent
      *
      * @return string[]
      */
-    protected function getPublicAttributes(): array
+    protected function getPublicProductAttributes(): array
     {
-        return ['hash_id', 'user_defined_id', 'name', 'slug', 'description_short', 'description', 'is_virtual', 'images', 'main_image', 'all_images'];
+        return [
+            'hash_id',
+            'user_defined_id',
+            'name',
+            'slug',
+            'description_short',
+            'description',
+            'is_virtual',
+            'images',
+            'main_image',
+            'all_images'
+        ];
     }
+
+    /**
+     * Defines what cart attributes are returned as JSON when a product was added to the cart.
+     *
+     * @return string[]
+     */
+    protected function getPublicCartAttributes(): array
+    {
+        return ['products', 'discounts', 'shipping_method', 'customer', 'payment_method', 'shipping_address'];
+    }
+
+    /**
+     * Defines what cart product attributes are returned as JSON when a product was added to the cart.
+     *
+     * @return string[]
+     */
+    protected function getPublicCartProductAttributes(): array
+    {
+        return ['quantity', 'weight', 'price', 'hashid'];
+    }
+
 
     /**
      * Get the PropertyValue this Variant is grouped by.
