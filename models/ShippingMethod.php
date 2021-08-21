@@ -155,12 +155,19 @@ class ShippingMethod extends Model
 
         $total = $cart->totals()->productPostTaxes();
 
+        $countryId = optional($cart->shipping_address)->country_id;
+
+        // Use the Country ID from the post data, if availalb.e
+        if (post('country_id')) {
+            $countryId = post('country_id');
+        }
+
         return self
             ::orderBy('sort_order')
-            ->when($cart->shipping_address, function ($q) use ($cart) {
+            ->when($countryId, function ($q) use ($countryId) {
                 $q->whereDoesntHave('countries')
-                  ->orWhereHas('countries', function ($q) use ($cart) {
-                      $q->where('country_id', $cart->shipping_address->country_id);
+                  ->orWhereHas('countries', function ($q) use ($countryId) {
+                      $q->where('country_id', $countryId);
                   });
             })
             ->get()
