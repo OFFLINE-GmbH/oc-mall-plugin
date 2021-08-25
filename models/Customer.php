@@ -31,6 +31,14 @@ class Customer extends Model
         'orders'          => Order::class,
         'payment_methods' => CustomerPaymentMethod::class,
     ];
+    public $hidden = [
+        'id',
+        'user_id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'stripe_customer_id',
+    ];
 
     public function getNameAttribute()
     {

@@ -15,6 +15,7 @@
         emptyOption: ('offline.mall::frontend.select' | trans ),
         'data-request': 'onInit',
         'data-request-data' : ("type: '" ~ type ~ "'"),
+        'data-request-success': '$.publish("mall.address.update")',
         'data-request-update': {
             (__SELF__ ~ '::countrystate'): ('#countryState_' ~ type)
         }

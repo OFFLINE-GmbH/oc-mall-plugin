@@ -130,6 +130,11 @@ class Order extends Model
     {
         return $this->shipped_at !== null;
     }
+    
+    public function getIsCancelledAttribute()
+    {
+        return $this->order_state->flag === OrderState::FLAG_CANCELLED;
+    }
 
     public static function byCustomer(Customer $customer)
     {
@@ -191,15 +196,15 @@ class Order extends Model
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
-            
-            Event::fire('mall.order.afterCreate', [$order, $cart]);
-
+   
             $cart
                 ->loadMissing(['products.product.brand'])
                 ->products
                 ->each(function (CartProduct $entry) use ($order) {
                     $entry->moveToOrder($order);
                 });
+         
+            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart->updateDiscountUsageCount();
 

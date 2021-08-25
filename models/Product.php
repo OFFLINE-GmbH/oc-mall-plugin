@@ -132,6 +132,7 @@ class Product extends Model
         'file_max_download_count',
         'file_session_required',
     ];
+    public $appends = ['hash_id'];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
     public $attachMany = [
@@ -604,7 +605,8 @@ class Product extends Model
      * the form does not crash if a user programmatically removes
      * a field.
      */
-    protected function hideField($fields, string $field) {
+    protected function hideField($fields, string $field)
+    {
         if (property_exists($fields, $field)) {
             $fields->$field->hidden = true;
         }

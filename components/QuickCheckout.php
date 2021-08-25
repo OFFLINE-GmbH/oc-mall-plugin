@@ -366,7 +366,29 @@ class QuickCheckout extends MallComponent
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ]);
     }
+    
+    /**
+     * The user removed a previously applied discount code from the cart.
+     *
+     * @return array
+     * @throws \October\Rain\Exception\ValidationException
+     */
+    public function onRemoveDiscountCode()
+    {
+        $id = $this->decode(input('id'));
 
+        $cart = Cart::byUser(Auth::getUser());
+
+        $cart->removeDiscountCodeById($id);
+
+        $this->setData();
+
+        return $this->updateForm([
+            'new_items_count' => optional($cart->products)->count() ?? 0,
+            'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
+        ]);
+
+    }
 
     /**
      * Fetch the item from the user's cart.

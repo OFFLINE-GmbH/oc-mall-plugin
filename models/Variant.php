@@ -41,6 +41,7 @@ class Variant extends Model
     public $dates = ['deleted_at'];
     public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $appends = ['hashid'];
     public $translatable = [
         'name',
         'description_short',
