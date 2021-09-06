@@ -134,6 +134,8 @@ class WishlistButton extends MallComponent
         if ($v->fails()) {
             throw new ValidationException($v);
         }
+        
+        $this->decodeIds();
 
         Wishlist::findOrFail($this->decode(post('wishlist_id')))->delete();
 
