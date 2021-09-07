@@ -139,6 +139,7 @@ return [
     'wishlist.count' => 'یک محصول|:count محصولات',
     'wishlist.create' => 'ایجاد یک لیست علاقه مندی جدید',
     'wishlist.create_placeholder' => 'یک نام برای لیست علاقه مندی وارد کنید',
+    'wishlist.deleted' => 'لیست دلخواه حذف شد',
     'wishlist.rename' => 'تغییر نام',
     'wishlist.renamed' => 'لیست تغییر نام شد',
     'wishlist.empty' => 'لیست علاقه مندی شما خالی است',

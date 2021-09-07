@@ -140,6 +140,7 @@ return [
     'wishlist.count' => ':count termék',
     'wishlist.create' => 'Kívánságlista létrehozása',
     'wishlist.create_placeholder' => 'Add meg a kívánságlista nevét',
+    'wishlist.deleted' => 'Kívánságlista törölve',
     'wishlist.rename' => 'Átnevezés',
     'wishlist.renamed' => 'Kívánságlista átnevezve',
     'wishlist.empty' => 'Kívánságlistád üres',

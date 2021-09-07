@@ -139,6 +139,7 @@ return [
     'wishlist.count' => 'One product|:count products',
     'wishlist.create' => 'Create a new wishlist',
     'wishlist.create_placeholder' => 'Enter the name of your wishlist',
+    'wishlist.deleted' => 'Wishlist deleted',
     'wishlist.rename' => 'Rename',
     'wishlist.renamed' => 'Wishlist renamed',
     'wishlist.empty' => 'Your wishlist is empty',

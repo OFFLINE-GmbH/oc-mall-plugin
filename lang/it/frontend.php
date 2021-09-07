@@ -158,6 +158,7 @@ return [
     "wishlist.create_placeholder" => "Inserisci il nome della tua lista dei desideri",
     "wishlist.default_name" => "La tua lista dei desideri",
     "wishlist.empty" => "La tua lista dei desideri è vuota",
+    'wishlist.deleted' => 'Lista dei desideri eliminata',
     "wishlist.rename" => "Rinominare",
     "wishlist.renamed" => "Lista dei desideri rinominata",
     "wishlists" => "Lista dei desideri",
