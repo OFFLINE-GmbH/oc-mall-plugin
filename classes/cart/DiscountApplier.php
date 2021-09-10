@@ -78,7 +78,7 @@ class DiscountApplier
             'savings'           => $savings * -1,
             'savings_formatted' => $this->money->format($savings * -1),
         ]);
-
+            
         return true;
     }
 
@@ -117,6 +117,7 @@ class DiscountApplier
         if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
             return true;
         }
+        
         
         if ($discount->trigger === 'shipping_method' && $this->appliesForShippingMethod($discount)) {
             return true;
