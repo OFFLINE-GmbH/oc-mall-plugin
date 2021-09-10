@@ -513,7 +513,7 @@ class Product extends MallComponent
             return collect();
         }
 
-        $variants = $this->product->variants->reject(
+        $variants = $this->product->variants->where('published')->reject(
             function (Variant $variant) {
                 // Only display "other" Variants, so remove the currently displayed.
                 return $variant->id === $this->variantId;
