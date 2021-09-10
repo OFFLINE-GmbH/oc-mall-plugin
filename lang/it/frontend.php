@@ -71,6 +71,7 @@ return [
     "guest_upgrade.callout" => "Hai effettuato l'accesso come ospite. Inserisci una password per aggioranre il tuo account.",
     "labels" => "Etichette",
     "no_additional_charges" => "Nessuna spesa aggiuntiva",
+    "no_shipping_method" => "",
     "onsale_label" => "In promozione",
     "order.order_state" => "Stato dell'ordine",
     "order.payment_state" => "Stato del pagamento",
@@ -95,8 +96,16 @@ return [
     "price_filter_description" => "Mostra solo prodotti che corrispondono al tuo budget",
     "proceed_to_checkout" => "Procedere",
     "product" => "Prodotto",
+    "products.loadmore" => "Vedi altri",
     "profile" => "Profilo",
     "quantity" => "Quantità",
+    "quickcheckout" => [
+        "already" => "Hai già un account?",
+        "customer_informations" => "Informazioni cliente",
+        "payment" => "Tipo di pagamento",
+        "shipping" => "Modalità di consegna",
+        "your_cart" => "Il tuo carrello"
+    ],
     "remove" => "Rimuovi",
     "reset.filter" => "Cancella i filtri",
     "reviews.callout" => "Grazie per la vostra recensione!",
@@ -165,6 +174,5 @@ return [
     "wishlists.addtocart" => "Aggiungi tutti gli articoli al tuo carrello",
     "wishlists.none" => "Non hai ancora creato nessuna lista dei desideri.",
     "wishlists.pdf_download" => "Scaricare come PDF",
-    "wishlists.stockmissing" => "Alcuni articoli non sono in stock e non sono stati aggiunti al carrello.",
-    "products.loadmore" => "Vedi altri"
+    "wishlists.stockmissing" => "Alcuni articoli non sono in stock e non sono stati aggiunti al carrello."
 ];
