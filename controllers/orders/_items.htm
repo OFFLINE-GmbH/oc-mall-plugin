@@ -23,13 +23,15 @@
         </th>
     </tr>
     </thead>
-    <tbody>
+    <tbody>        
     <?php foreach ($order['products'] as $item): ?>
     <tr>
         <td>
             <a href="<?= $productUpdate . '/' . e($item['product_id']); ?>">
                 <?= e($item['name']) ?><br/>
             </a>
+            <small><?= $item->product->mpn ?></small>
+            <small><?= $item->product->gtin ?></small>
             <?= $item['variant_name'] ?>
             <div class="attributes">
                 <?php if($item['custom_field_values']): ?>
