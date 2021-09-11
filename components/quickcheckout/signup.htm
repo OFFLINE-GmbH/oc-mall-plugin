@@ -5,7 +5,7 @@
         <div data-validate-for="email"></div>
     </div>
     <p class="mall-quick-checkout__sign-in-link">
-        Already have an account?
+        {{ 'offline.mall::frontend.quickcheckout.already' | trans }}
         <a href="{{ __SELF__.loginPage | page }}?redirect={{ __SELF__.currentPage }}">Sign in</a>
     </p>
     <div class="mall-two-fields">
