@@ -14,5 +14,7 @@
         data-request-success="$(this).prop('disabled', true)"
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
+
+        <?= $this->fireViewEvent('offline.mall.extendProductsToolbar') ?>
     </button>
 </div>
