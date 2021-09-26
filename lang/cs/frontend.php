@@ -139,6 +139,7 @@ return [
     'wishlist.count' => 'Jeden kus|:count kusů',
     'wishlist.create' => 'Vytvořit nový seznam přání',
     'wishlist.create_placeholder' => 'Vložte jméno Vašeho seznamu přání',
+    'wishlist.deleted' => 'Seznam přání odstraněn',
     'wishlist.rename' => 'Přejmenovat',
     'wishlist.renamed' => 'Seznam přání přejmenován',
     'wishlist.empty' => 'Váš seznam přání je prázdný',

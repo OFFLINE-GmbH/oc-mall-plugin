@@ -139,6 +139,7 @@ return [
     'wishlist.count' => '1 producto|:count productos',
     'wishlist.create' => 'Crear nueva lista de deseos',
     'wishlist.create_placeholder' => 'Ingresa el nombre de tu lista de deseos',
+    'wishlist.deleted' => 'Lista eliminada',
     'wishlist.rename' => 'Renombrar',
     'wishlist.renamed' => 'Lista renombrada',
     'wishlist.empty' => 'Tu lista de deseos está vacía',

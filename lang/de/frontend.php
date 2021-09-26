@@ -139,6 +139,7 @@ return [
     'wishlist.added' => 'Produkt hinzugefügt',
     'wishlist.create' => 'Neue Merkliste erstellen',
     'wishlist.create_placeholder' => 'Name für Merkliste eingebgen',
+    'wishlist.deleted' => 'Merkliste gelöscht',
     'wishlist.rename' => 'Umbenennen',
     'wishlist.renamed' => 'Merkliste umbenannt',
     'wishlist.empty' => 'Deine Merkliste ist leer',

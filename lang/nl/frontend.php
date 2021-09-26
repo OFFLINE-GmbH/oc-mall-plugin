@@ -141,6 +141,7 @@ return [
     'wishlist.count' => ':count product|:count producten',
     'wishlist.create' => 'Maak een nieuwe verlanglijst',
     'wishlist.create_placeholder' => 'Voer de naam van uw verlanglijst in',
+    'wishlist.deleted' => 'Verlanglijst verwijderd',
     'wishlist.rename' => 'Wijzig naam',
     'wishlist.renamed' => 'De naam van de verlanglijst is gewijzigd',
     'wishlist.empty' => 'Uw verlanglijst is leeg',
