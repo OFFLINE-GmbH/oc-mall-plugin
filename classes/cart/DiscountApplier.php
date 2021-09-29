@@ -122,6 +122,10 @@ class DiscountApplier
             return true;
         }
 
+        if ($discount->trigger === 'payment_method' && $this->checkPaymentMethod($discount->payment_method_id)) {
+            return true;
+        }
+
         return $discount->trigger === 'code';
     }
 
@@ -142,6 +146,12 @@ class DiscountApplier
     private function appliesForShippingMethod(Discount $discount): bool
     {
         return $discount->shipping_methods->contains($this->input->shipping_method->id);
+    }
+
+    private function checkPaymentMethod(int $method_id) {
+        if(isset($this->input->payment_method)) {
+            return $method_id == $this->input->payment_method->id;
+        }
     }
 
 }

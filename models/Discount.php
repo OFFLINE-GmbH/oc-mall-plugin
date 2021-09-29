@@ -22,7 +22,7 @@ class Discount extends Model
         'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
-        'trigger'                              => 'in:total,code,product,customer_group,shipping_method',
+        'trigger'                              => 'in:total,code,product,customer_group,shipping_method,payment_method',
         'types'                                => 'in:fixed_amount,rate,shipping',
         'product'                              => 'required_if:trigger,product',
         'customer_group'                       => 'required_if:trigger,customer_group',
@@ -62,7 +62,8 @@ class Discount extends Model
     ];
     public $belongsTo = [
         'product' => [Product::class],
-        'customer_group' => [CustomerGroup::class]
+        'customer_group' => [CustomerGroup::class],
+        'payment_method' => [PaymentMethod::class],
     ];
     public $belongsToMany = [
         'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
