@@ -64,12 +64,12 @@ class DiscountApplier
         }
 
         if ($discount->type === 'fixed_amount') {
-            $savings            = $discount->amount()->integer;
+            $savings            = $this->calculateSaving($discount);
             $this->reducedTotal -= $savings;
         }
 
         if ($discount->type === 'rate') {
-            $savings            = $this->total * ($discount->rate / 100);
+            $savings            = $this->calculateSaving($discount);
             $this->reducedTotal -= $savings;
         }
 
@@ -80,6 +80,44 @@ class DiscountApplier
         ]);
 
         return true;
+    }
+    
+    protected function calculateSaving(Discount $discount): float {
+        $total = 0;
+        $quantity = 0;
+        
+        if($discount->products->isNotEmpty()) {
+            foreach($this->input->products as $cartProduct) {
+                if(in_array($cartProduct->product_id, $discount->products->pluck('product_id')->toArray())) {
+                    $total += $cartProduct->price()->integer * $cartProduct->quantity;
+                    $quantity += $cartProduct->quantity;
+                }
+            }
+        }
+        
+        if($discount->variants->isNotEmpty()) {
+            foreach($this->input->products as $cartProduct) {
+                if(in_array($cartProduct->variant_id, $discount->variants->pluck('variant_id')->toArray())) {
+                    $total += $cartProduct->price()->integer * $cartProduct->quantity;
+                    $quantity += $cartProduct->quantity;
+                }
+            }
+        }
+        
+        if($discount->categories->isNotEmpty()) {
+            foreach($this->input->products as $cartProduct) {
+                foreach($cartProduct->product->categories as $category) {
+                    if(in_array($category->id, $discount->categories->pluck('id')->toArray())) {
+                        $total += $cartProduct->price()->integer * $cartProduct->quantity;
+                        $quantity += $cartProduct->quantity;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if($discount->type == 'rate') return $total * ($discount->rate / 100);
+        if($discount->type == 'fixed_amount') return $discount->amount()->integer * $quantity;
     }
 
     public function applyMany(Collection $discounts): Collection
