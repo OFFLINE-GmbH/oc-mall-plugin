@@ -83,10 +83,12 @@ class DiscountApplier
     }
     
     protected function calculateSaving(Discount $discount): float {
-        $total = 0;
-        $quantity = 0;
+        $total = $this->total;
+        $quantity = 1;
         
         if($discount->products->isNotEmpty()) {
+            $total = 0;
+            $quantity = 0;
             foreach($this->input->products as $cartProduct) {
                 if(in_array($cartProduct->product_id, $discount->products->pluck('product_id')->toArray())) {
                     $total += $cartProduct->price()->integer * $cartProduct->quantity;
@@ -96,6 +98,8 @@ class DiscountApplier
         }
         
         if($discount->variants->isNotEmpty()) {
+            $total = 0;
+            $quantity = 0;
             foreach($this->input->products as $cartProduct) {
                 if(in_array($cartProduct->variant_id, $discount->variants->pluck('variant_id')->toArray())) {
                     $total += $cartProduct->price()->integer * $cartProduct->quantity;
@@ -105,6 +109,8 @@ class DiscountApplier
         }
         
         if($discount->categories->isNotEmpty()) {
+            $total = 0;
+            $quantity = 0;
             foreach($this->input->products as $cartProduct) {
                 foreach($cartProduct->product->categories as $category) {
                     if(in_array($category->id, $discount->categories->pluck('id')->toArray())) {
