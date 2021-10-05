@@ -57,6 +57,12 @@ class ProductFileGrant extends Model
      */
     public static function fromOrderProduct(OrderProduct $orderProduct)
     {
+        
+        // Do not create a file grant if the product does not have a file associated to it
+        if (!$orderProduct->product->latest_file) {
+            return;
+        }
+        
         $expires = null;
         if ($days = $orderProduct->product->file_expires_after_days) {
             $expires = Carbon::now()->addDays($days);
