@@ -671,6 +671,13 @@ class Product extends MallComponent
             function (Property $property) use ($valueMap) {
                 $filteredValues = optional($valueMap->get($property->id))->reject(
                     function ($value) {
+                        
+                        // remove properties of unpublished variants
+                        $variant = Variant::findOrFail($value->variant_id);
+                        if( ! $variant->published ){
+                            return true; 
+                        }
+                        
                         return $this->variant && $value->variant_id === null;
                     }
                 );
