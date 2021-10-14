@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Cart;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
-use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Discount;
 
 class DiscountApplier
@@ -81,39 +80,43 @@ class DiscountApplier
 
         return true;
     }
-    
-    protected function calculateSaving(Discount $discount): float {
+
+    protected function calculateSaving(Discount $discount): float
+    {
         $total = $this->total;
         $quantity = 1;
-        
-        if($discount->products->isNotEmpty()) {
+
+        if ($discount->products->isNotEmpty()) {
             $total = 0;
             $quantity = 0;
-            foreach($this->input->products as $cartProduct) {
-                if(in_array($cartProduct->product_id, $discount->products->pluck('product_id')->toArray())) {
+            $productIds = $discount->products->pluck('product_id');
+            foreach ($this->input->products as $cartProduct) {
+                if ($productIds->contains($cartProduct->product_id)) {
                     $total += $cartProduct->price()->integer * $cartProduct->quantity;
                     $quantity += $cartProduct->quantity;
                 }
             }
         }
-        
-        if($discount->variants->isNotEmpty()) {
+
+        if ($discount->variants->isNotEmpty()) {
             $total = 0;
             $quantity = 0;
-            foreach($this->input->products as $cartProduct) {
-                if(in_array($cartProduct->variant_id, $discount->variants->pluck('variant_id')->toArray())) {
+            $variantIds = $discount->variants->pluck('variant_id');
+            foreach ($this->input->products as $cartProduct) {
+                if ($variantIds->contains($cartProduct->variant_id)) {
                     $total += $cartProduct->price()->integer * $cartProduct->quantity;
                     $quantity += $cartProduct->quantity;
                 }
             }
         }
-        
-        if($discount->categories->isNotEmpty()) {
+
+        if ($discount->categories->isNotEmpty()) {
             $total = 0;
             $quantity = 0;
-            foreach($this->input->products as $cartProduct) {
-                foreach($cartProduct->product->categories as $category) {
-                    if(in_array($category->id, $discount->categories->pluck('id')->toArray())) {
+            $categoryIds = $discount->categories->pluck('id');
+            foreach ($this->input->products as $cartProduct) {
+                foreach ($cartProduct->product->categories as $category) {
+                    if ($categoryIds->contains($category->id)) {
                         $total += $cartProduct->price()->integer * $cartProduct->quantity;
                         $quantity += $cartProduct->quantity;
                         break;
@@ -121,9 +124,16 @@ class DiscountApplier
                 }
             }
         }
-        
-        if($discount->type == 'rate') return $total * ($discount->rate / 100);
-        if($discount->type == 'fixed_amount') return $discount->amount()->integer * $quantity;
+
+        if ($discount->type === 'rate') {
+            return $total * ($discount->rate / 100);
+        }
+
+        if ($discount->type === 'fixed_amount') {
+            return $discount->amount()->integer * $quantity;
+        }
+
+        return 0;
     }
 
     public function applyMany(Collection $discounts): Collection
@@ -161,7 +171,7 @@ class DiscountApplier
         if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
             return true;
         }
-        
+
         if ($discount->trigger === 'shipping_method' && $this->appliesForShippingMethod($discount)) {
             return true;
         }
