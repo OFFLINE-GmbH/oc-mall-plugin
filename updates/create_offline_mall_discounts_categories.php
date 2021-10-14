@@ -7,7 +7,7 @@ class CreateOfflineMallDiscountsCategories extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_discounts_categories', function ($table) {
+        Schema::create('offline_mall_discount_category', function ($table) {
             $table->engine = 'InnoDB';
             $table->integer('discount_id')->unsigned();
             $table->integer('category_id')->unsigned();
@@ -16,6 +16,6 @@ class CreateOfflineMallDiscountsCategories extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('offline_mall_discounts_categories');
+        Schema::dropIfExists('offline_mall_discount_category');
     }
 }

@@ -7,7 +7,7 @@ class CreateOfflineMallDiscountsProducts extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_discounts_products', function ($table) {
+        Schema::create('offline_mall_discount_product', function ($table) {
             $table->engine = 'InnoDB';
             $table->integer('discount_id')->unsigned();
             $table->integer('product_id')->unsigned();
@@ -16,6 +16,6 @@ class CreateOfflineMallDiscountsProducts extends Migration
     
     public function down()
     {
-        Schema::dropIfExists('offline_mall_discounts_products');
+        Schema::dropIfExists('offline_mall_discount_product');
     }
 }
