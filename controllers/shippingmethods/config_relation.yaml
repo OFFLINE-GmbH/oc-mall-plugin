@@ -15,7 +15,7 @@ rates:
     label: 'offline.mall::lang.common.rates'
     view:
         list: $/offline/mall/models/shippingmethodrate/columns.yaml
-        toolbarButtons: create|remove
+        toolbarButtons: create|delete
     manage:
         form: $/offline/mall/models/shippingmethodrate/fields.yaml
         recordsPerPage: 10
