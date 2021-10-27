@@ -18,6 +18,7 @@ return [
     'cart.add' => 'Add to cart',
     'cart.empty' => 'Your cart is empty!',
     'cart.added' => 'Added product to cart',
+    'cart.products_unavailable' => 'Some products in your cart are no longer available. Reload this page to see the updated cart.',
     'quantity' => 'Quantity',
     'product' => 'Product',
     'price' => 'Price',

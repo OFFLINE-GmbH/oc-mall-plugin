@@ -1,7 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Carbon\Carbon;
-use Cookie;
 use DB;
 use Event;
 use Illuminate\Support\Collection;
@@ -191,6 +190,24 @@ class Cart extends Model
         }
 
         return $query->count() > 0;
+    }
+
+    /**
+     * Remove all products that are no longer published.
+     * Returns all removed products.
+     *
+     * @return \October\Rain\Support\Collection
+     * @throws \Exception
+     */
+    public function removeUnpublishedProducts()
+    {
+        return $this->products->map(function (CartProduct $product) {
+            if (!$product->item->published) {
+                $product->delete();
+                return $product;
+            }
+            return null;
+        })->filter();
     }
 
     /**

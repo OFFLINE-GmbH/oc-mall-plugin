@@ -2,4 +2,5 @@
     {{ 'offline.mall::frontend.cart.empty' | trans }}
 {% else %}
     {% partial __SELF__ ~ '::carttable/base' %}
+    <div data-validate-for="cart"></div>
 {% endif %}

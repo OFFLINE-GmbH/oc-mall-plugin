@@ -243,9 +243,7 @@ class Checkout extends MallComponent
         $gateway->init($paymentMethod, $paymentData);
 
         // Create the order first.
-        $order = DB::transaction(function () {
-            return Order::fromCart($this->cart);
-        });
+        $order = Order::fromCart($this->cart);
 
         // If the order was created successfully proceed with the payment.
         $paymentService = new PaymentService(

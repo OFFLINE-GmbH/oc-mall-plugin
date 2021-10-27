@@ -18,6 +18,7 @@ return [
     'cart.add' => 'In den Warenkorb',
     'cart.empty' => 'Ihr Warenkorb ist leer!',
     'cart.added' => 'Artikel zum Warenkorb hinzugefügt',
+    'cart.products_unavailable' => 'Einige Produkte in Ihrem Warenkorb sind nicht mehr verfügbar. Laden Sie diese Seite neu um den neuen Warenkorb zu sehen.',
     'quantity' => 'Anzahl',
     'product' => 'Produkt',
     'price' => 'Preis',
