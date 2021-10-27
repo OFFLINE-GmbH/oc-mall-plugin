@@ -702,12 +702,9 @@ class Product extends MallComponent
             ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
-            ->when(
-                $groupedValue > 0,
-                function ($q) use ($groupedValue) {
-                    $q->where('value', '<>', $groupedValue);
-                }
-            )
+            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
+                $q->where('value', '<>', $groupedValue);
+            })
             ->get()
             ->groupBy('property_id');
     }
