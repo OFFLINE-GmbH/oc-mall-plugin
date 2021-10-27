@@ -60,6 +60,7 @@ return [
     'billing_address' => 'Rechnungsadresse',
     'shipping_address' => 'Versandadresse',
     'no_additional_charges' => 'Keine zusätzlichen Kosten',
+    'select_for_shipping_total' => 'Auswählen für Preisangabe',
     'payment_method' => 'Zahlungsart',
     'payment_method.choose' => 'Bitte wählen Sie eine Zahlungsart.',
     'payment_method.button_label' => 'Diese Methode verwenden',

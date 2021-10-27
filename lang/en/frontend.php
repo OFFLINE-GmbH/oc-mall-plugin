@@ -60,6 +60,7 @@ return [
     'billing_address' => 'Billing address',
     'shipping_address' => 'Shipping address',
     'no_additional_charges' => 'No additional charges',
+    'select_for_shipping_total' => 'Select to see price',
     'payment_method' => 'Payment method',
     'payment_method.choose' => 'Please select a payment method.',
     'payment_method.button_label' => 'Use this method',
