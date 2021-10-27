@@ -25,6 +25,7 @@ use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
+use RainLab\Translate\Behaviors\TranslatableModel;
 use RainLab\Translate\Models\Locale;
 
 class Products extends Controller
@@ -164,6 +165,15 @@ class Products extends Controller
         $data  = $this->optionFormWidget->getSaveData();
         $model = CustomFieldOption::findOrNew(post('edit_id'));
         $model->fill($data);
+
+        if ($model->isClassExtendedWith(TranslatableModel::class) && $translations = post('RLTranslate')) {
+            foreach($translations as $locale => $attributes) {
+                foreach($attributes as $key => $value) {
+                    $model->setAttributeTranslated($key, $value, $locale);
+                }
+            }
+        }
+
         $model->save(null, $this->optionFormWidget->getSessionKey());
 
         $this->updatePrices($model);
@@ -178,8 +188,8 @@ class Products extends Controller
     {
         $recordId = post('record_id');
         $model    = CustomFieldOption::find($recordId);
-        $order    = $this->getCustomFieldModel();
-        $order->custom_field_options()->remove($model, $this->optionFormWidget->getSessionKey());
+        $field    = $this->getCustomFieldModel();
+        $field->custom_field_options()->remove($model, $this->optionFormWidget->getSessionKey());
 
         return $this->refreshOptionsList();
     }
