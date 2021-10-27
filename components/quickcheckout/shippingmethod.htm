@@ -32,9 +32,20 @@
                         {% endif %}
                     </div>
                     <div class="mall-quick-checkout__toggle-option-price">
-                        {{ method.price().integer > 0
-                        ? (method.price().string | raw)
-                        : ('offline.mall::frontend.no_additional_charges' | trans) }}
+                        {#
+                           If a shipping method has rates, we only display the price once it is selected.
+                           This way we can re-use the TotalCalculator's logic and display the effective
+                           price the user has to pay including the special rates.
+                        #}
+                        {% if method.rates.count > 0 %}
+                            {{ isActiveMethod
+                            ? (__SELF__.cart.totals.shippingTotal.totalPostTaxes | money )
+                            : ( 'offline.mall::frontend.select_for_shipping_total' | trans ) }}
+                        {% else %}
+                            {{ method.price().integer > 0
+                            ? (method.price().string | raw)
+                            : ('offline.mall::frontend.no_additional_charges' | trans) }}
+                        {% endif %}
                     </div>
                 </div>
                 {% if method.logo %}

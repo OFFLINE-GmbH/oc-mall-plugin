@@ -75,11 +75,9 @@ trait CartSession
     {
         $shippingId = $customer->default_shipping_address_id ?? $customer->default_billing_address_id;
 
-        // If there is an old Cart from this customer, merge the contents of the current
-        // cart with the old contents.
+        // Remove any old active cart by this customer.
         $existing = Cart::where('customer_id', $customer->id)->whereNull('session_id')->first();
         if ($existing) {
-            CartProduct::where('cart_id', $existing->id)->update(['cart_id' => $this->id]);
             $existing->delete();
         }
 

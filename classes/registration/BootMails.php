@@ -18,6 +18,7 @@ trait BootMails
             'offline.mall::mail.payment.refunded',
             'offline.mall::mail.admin.checkout_succeeded',
             'offline.mall::mail.admin.checkout_failed',
+            'offline.mall::mail.admin.payment_paid',
         ];
     }
 

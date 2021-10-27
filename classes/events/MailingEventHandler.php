@@ -6,12 +6,15 @@ use Backend\Facades\Backend;
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
+use October\Rain\Mail\Mailable;
 use OFFLINE\Mall\Classes\Jobs\SendOrderConfirmationToCustomer;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\RefundedState;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Notification;
+use OFFLINE\Mall\Models\Order;
+use RainLab\Translate\Classes\Translator;
 use RainLab\User\Models\Settings as UserSettings;
 
 class MailingEventHandler
@@ -82,6 +85,9 @@ class MailingEventHandler
         ];
 
         Mail::queue($this->template('offline.mall::customer.created'), $data, function ($message) use ($user) {
+            if (class_exists(Translator::class)) {
+                $message->locale(Translator::instance()->getLocale());
+            }
             $message->to($user->email, $user->customer->name);
         });
     }
@@ -142,7 +148,8 @@ class MailingEventHandler
 
         // Notify the customer
         if ($this->enabledNotifications->has('offline.mall::checkout.failed')) {
-            Mail::queue($this->template('offline.mall::checkout.failed'), $data, function ($message) use ($result) {
+            Mail::queue($this->template('offline.mall::checkout.failed'), $data, function ($message) use ($result, $data) {
+                $this->handleLocale($message, $data['order']);
                 $message->to($result->order->customer->user->email, $result->order->customer->name);
             });
         }
@@ -175,9 +182,11 @@ class MailingEventHandler
         ];
 
         Mail::queue($this->template('offline.mall::order.state.changed'), $data, function ($message) use ($order) {
+            $this->handleLocale($message, $order);
             $message->to($order->customer->user->email, $order->customer->name);
         });
     }
+
 
     /**
      * The order has been shipped.
@@ -198,6 +207,7 @@ class MailingEventHandler
         ];
 
         Mail::queue($this->template('offline.mall::order.shipped'), $data, function ($message) use ($order) {
+            $this->handleLocale($message, $order);
             $message->to($order->customer->user->email, $order->customer->name);
         });
     }
@@ -246,9 +256,20 @@ class MailingEventHandler
             $this->template('offline.mall::payment.' . $view),
             $data,
             function ($message) use ($order) {
+                $this->handleLocale($message, $order);
                 $message->to($order->customer->user->email, $order->customer->name);
             }
         );
+
+        // Notify the admin about succeeded payments.
+        $failedBecamePaid = $order->getOriginal($attr) === FailedState::class && $order->getAttribute($attr) === PaidState::class;
+
+        if ($failedBecamePaid && $adminMail = GeneralSettings::get('admin_email')) {
+            Mail::queue('offline.mall::mail.admin.payment_paid', $data,
+                function ($message) use ($adminMail) {
+                    $message->to($adminMail);
+                });
+        }
     }
 
     /**
@@ -286,5 +307,18 @@ class MailingEventHandler
     protected function getBackendOrderUrl($order): string
     {
         return Backend::url('offline/mall/orders/show/' . $order->id);
+    }
+
+    /**
+     * Set the locale on the message, based on the order.
+     *
+     * @param Mailable $message
+     * @param Order $order
+     */
+    protected function handleLocale(Mailable $message, Order $order)
+    {
+        if ($order->lang) {
+            $message->locale($order->lang);
+        }
     }
 }

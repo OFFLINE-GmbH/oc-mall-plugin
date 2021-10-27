@@ -51,7 +51,7 @@ columns:
         path: $/offline/mall/models/order/_payment_state.htm
         sortable: true
         searchable: false
-    shipped:
+    shipped_at:
         label: 'offline.mall::lang.order.shipped'
         type: partial
         path: $/offline/mall/models/order/_shipped.htm

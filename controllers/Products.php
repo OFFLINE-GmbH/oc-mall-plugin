@@ -5,6 +5,7 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
+use Backend\FormWidgets\Relation;
 use BackendMenu;
 use DB;
 use Event;
@@ -24,6 +25,7 @@ use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
+use RainLab\Translate\Behaviors\TranslatableModel;
 use RainLab\Translate\Models\Locale;
 
 class Products extends Controller
@@ -163,6 +165,15 @@ class Products extends Controller
         $data  = $this->optionFormWidget->getSaveData();
         $model = CustomFieldOption::findOrNew(post('edit_id'));
         $model->fill($data);
+
+        if ($model->isClassExtendedWith(TranslatableModel::class) && $translations = post('RLTranslate')) {
+            foreach($translations as $locale => $attributes) {
+                foreach($attributes as $key => $value) {
+                    $model->setAttributeTranslated($key, $value, $locale);
+                }
+            }
+        }
+
         $model->save(null, $this->optionFormWidget->getSessionKey());
 
         $this->updatePrices($model);
@@ -177,8 +188,8 @@ class Products extends Controller
     {
         $recordId = post('record_id');
         $model    = CustomFieldOption::find($recordId);
-        $order    = $this->getCustomFieldModel();
-        $order->custom_field_options()->remove($model, $this->optionFormWidget->getSessionKey());
+        $field    = $this->getCustomFieldModel();
+        $field->custom_field_options()->remove($model, $this->optionFormWidget->getSessionKey());
 
         return $this->refreshOptionsList();
     }
@@ -275,7 +286,7 @@ class Products extends Controller
 
     public function onRelationManageCreate()
     {
-        $parent = parent::onRelationManageCreate();
+        $this->asExtension(RelationController::class)->onRelationManageCreate();
 
         // Store the pricing information with the custom fields.
         if ($this->relationName === 'custom_fields') {
@@ -289,15 +300,18 @@ class Products extends Controller
         
         if ($this->relationName === 'variants') {
             $this->updateProductPrices($this->vars['formModel'], $this->relationModel);
+            $this->createImageSetFromTempImages($this->relationModel);
+            $this->handlePropertyValueUpdates($this->relationModel);
+
             (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }        
 
-        return $parent;
+        return $this->asExtension(RelationController::class)->relationRefresh();
     }
 
     public function onRelationManageUpdate()
     {
-        $parent = parent::onRelationManageUpdate();
+        $this->asExtension(RelationController::class)->onRelationManageUpdate();
 
         // Store the pricing information with the custom fields.
         if ($this->relationName === 'custom_fields') {
@@ -317,7 +331,7 @@ class Products extends Controller
             (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }
 
-        return $parent;
+        return $this->asExtension(RelationController::class)->relationRefresh();
     }
 
     /**
@@ -325,7 +339,10 @@ class Products extends Controller
      */
     protected function handlePropertyValueUpdates(Variant $variant)
     {
-        $locales = Locale::isEnabled()->get();
+        $locales = [];
+        if (class_exists(Locale::class)) {
+            $locales = Locale::isEnabled()->get();
+        }
 
         $formData = array_wrap(post('VariantPropertyValues', []));
         if (count($formData) < 1) {

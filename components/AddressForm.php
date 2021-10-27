@@ -220,31 +220,15 @@ class AddressForm extends MallComponent
      */
     protected function getRedirectUrl()
     {
-        $url      = '';
-        $redirect = $this->property('redirect');
-
-        if ($redirect === 'checkout') {
-            $url = $this->controller->pageUrl(
-                GeneralSettings::get('checkout_page'),
-                ['step' => 'confirm']
-            );
-        } elseif ($redirect === 'quickCheckout') {
-            $url = $this->controller->pageUrl(
-                GeneralSettings::get('checkout_page'),
-                ['step' => 'overview']
-            );
-        } elseif ($redirect === 'account') {
-            $url = $this->controller->pageUrl(
-                GeneralSettings::get('account_page'),
-                ['page' => 'addresses']
-            );
-        } elseif ($redirect === 'payment') {
-            $url = $this->controller->pageUrl(
-                GeneralSettings::get('checkout_page'),
-                ['page' => 'payment']
-            );
+        switch ($this->property('redirect')) {
+            case 'payment':
+                return $this->controller->pageUrl(GeneralSettings::get('checkout_page'), ['page' => 'payment']);
+            case 'quickCheckout':
+                return $this->controller->pageUrl(GeneralSettings::get('checkout_page'), ['step' => 'overview']);
+            case 'account':
+                return $this->controller->pageUrl(GeneralSettings::get('account_page'), ['page' => 'addresses']);
+            default:
+                return $this->controller->pageUrl(GeneralSettings::get('checkout_page'), ['step' => 'confirm']);
         }
-
-        return $url;
     }
 }

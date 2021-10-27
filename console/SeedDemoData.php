@@ -95,7 +95,14 @@ class SeedDemoData extends Command
     protected function cleanup()
     {
         $this->output->writeln('Resetting plugin data...');
-        Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall']);
+
+        // October 2.0
+        if (class_exists(\Editor\ServiceProvider::class)) {
+            Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall', '--force' => true]);
+        } else {
+            Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall']);
+        }
+
         Artisan::call('cache:clear');
 
         DB::table('system_files')

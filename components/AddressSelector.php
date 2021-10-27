@@ -54,12 +54,6 @@ class AddressSelector extends MallComponent
      * @var string
      */
     public $addressPage;
-    /**
-     * The redirect parameter for the address edit form.
-     *
-     * @var string
-     */
-    public $redirect = 'checkout';
 
     /**
      * Component details.
@@ -116,7 +110,6 @@ class AddressSelector extends MallComponent
     {
         $user = Auth::getUser();
         $this->setVar('cart', Cart::byUser($user));
-        $this->setVar('redirect', $this->property('redirect'));
     }
 
     /**

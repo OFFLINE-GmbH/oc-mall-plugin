@@ -12,7 +12,7 @@
                 if (this.value === 'new') {
                     document.location.href = '{{ __SELF__.addressPage | page({
                         address: "new",
-                        redirect: "checkout",
+                        redirect: __SELF__.property('redirect'),
                         set: __SELF__.type,
                     }) }}'
                 }

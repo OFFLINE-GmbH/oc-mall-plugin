@@ -16,14 +16,10 @@ fields:
             type: slug
 tabs:
     lazy:
-#        - 'offline.mall::lang.product.description'
-#        - 'offline.mall::lang.product.details'
         - 'offline.mall::lang.common.attachments'
         - 'offline.mall::lang.common.taxes'
-#        - 'offline.mall::lang.common.shipping'
         - 'offline.mall::lang.common.cart'
         - 'offline.mall::lang.common.accessories'
-#        - 'offline.mall::lang.common.seo'
         - 'offline.mall::lang.common.reviews'
     fields:
         published:
@@ -287,6 +283,13 @@ tabs:
                         type: codeeditor
                         size: small
                         language: html
+        shippable:
+            label: 'offline.mall::lang.product.shippable'
+            comment: 'offline.mall::lang.product.shippable_comment'
+            oc.commentPosition: ''
+            span: full
+            type: checkbox
+            tab: 'offline.mall::lang.common.shipping'
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''
