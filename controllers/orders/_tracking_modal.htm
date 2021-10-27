@@ -21,13 +21,10 @@
                                class="form-control"/>
                     </div>
 
-                    <div class="form-group checkboxlist-field span-full">
+                    <div class="form-group span-full">
                         <div class="checkbox custom-checkbox">
-                            <input id="mark-as-shipped" name="shipped" value="1"
-                                   type="checkbox"
-                                   checked
-                            >
-                            <label class="choice" for="mark-as-shipped">
+                            <input id="mark-as-shipped" name="shipped" value="1" type="checkbox" checked>
+                            <label class="choice storm-icon-pseudo" for="mark-as-shipped">
                                 <?= e(trans('offline.mall::lang.order.tracking_shipped'))?>
                             </label>
                             <p class="help-block">
@@ -35,11 +32,8 @@
                             </p>
                         </div>
                         <div class="checkbox custom-checkbox">
-                            <input id="mark-as-completed" name="completed" value="1"
-                                   type="checkbox"
-                                   checked
-                            >
-                            <label class="choice" for="mark-as-completed">
+                            <input id="mark-as-completed" name="completed" value="1" type="checkbox" checked>
+                            <label class="choice storm-icon-pseudo" for="mark-as-completed">
                                 <?= e(trans('offline.mall::lang.order.tracking_completed'))?>
                             </label>
                             <p class="help-block">
@@ -47,11 +41,8 @@
                             </p>
                         </div>
                         <div class="checkbox custom-checkbox">
-                            <input id="send-notification" name="notification" value="1"
-                                   type="checkbox"
-                                   <?= $order->is_shipped ? '' : 'checked' ?>
-                            >
-                            <label class="choice" for="send-notification">
+                            <input id="send-notification" name="notification" value="1" type="checkbox" <?= $order->is_shipped ? '' : 'checked' ?>>
+                            <label class="choice storm-icon-pseudo" for="send-notification">
                                 <?= e(trans('offline.mall::lang.order.tracking_notification'))?>
                             </label>
                             <p class="help-block">
