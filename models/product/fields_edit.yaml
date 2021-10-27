@@ -283,6 +283,13 @@ tabs:
                         type: codeeditor
                         size: small
                         language: html
+        shippable:
+            label: 'offline.mall::lang.product.shippable'
+            comment: 'offline.mall::lang.product.shippable_comment'
+            oc.commentPosition: ''
+            span: full
+            type: checkbox
+            tab: 'offline.mall::lang.common.shipping'
         weight:
             label: 'offline.mall::lang.product.weight'
             oc.commentPosition: ''
