@@ -8,6 +8,8 @@ use OFFLINE\Mall\Models\Category;
 
 trait Properties
 {
+    private $inheritedPropertyGroupsCache;
+
     public function getInheritedPropertyGroupsAttribute()
     {
         return $this->inherit_property_groups ? $this->getInheritedPropertyGroups() : $this->property_groups;
@@ -15,10 +17,14 @@ trait Properties
 
     /**
      * Returns the property groups of the first parent
-     * that does not inherit them.
+     * that does not inherit any.
      */
     public function getInheritedPropertyGroups()
     {
+        if ($this->inheritedPropertyGroupsCache) {
+            return $this->inheritedPropertyGroupsCache;
+        }
+
         $groups = $this->getParents()->first(function (Category $category) {
             return ! $category->inherit_property_groups;
         })->property_groups;
@@ -27,7 +33,7 @@ trait Properties
             $groups->load('properties');
         }
 
-        return $groups ?? new Collection();
+        return $this->inheritedPropertyGroupsCache = $groups ?? new Collection();
     }
 
     /**
@@ -37,7 +43,7 @@ trait Properties
      */
     public function getPropertiesAttribute()
     {
-        return $this->load('property_groups.properties')->inherited_property_groups->map->properties->flatten();
+        return $this->loadMissing('property_groups.properties')->inherited_property_groups->map->properties->flatten();
     }
 
     /**

@@ -450,16 +450,7 @@ class Product extends MallComponent
         }
         $this->setVar('variantId', $variantId);
 
-        $variantModel = Variant::published()->with(
-            [
-                'property_values.translations',
-                'property_values.property.property_groups',
-                'product_property_values.property.property_groups',
-                'image_sets',
-            ]
-        );
-
-        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($this->variantId);
+        return $this->variant = Variant::published()->where('product_id', $this->product->id)->findOrFail($this->variantId);
     }
 
     /**
@@ -668,32 +659,24 @@ class Product extends MallComponent
             return $valueMap;
         }
 
-        return $this->product->categories->flatMap->properties->map(
-            function (Property $property) use ($valueMap) {
-                $filteredValues = optional($valueMap->get($property->id))->reject(
-                    function ($value) {
-                        return $this->variant && $value->variant_id === null;
-                    }
-                );
+        return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
+            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
+                return $this->variant && $value->variant_id === null;
+            });
 
-                return (object)[
-                    'property' => $property,
-                    'values' => optional($filteredValues)->unique('value'),
-                ];
+            return (object)[
+                'property' => $property,
+                'values' => optional($filteredValues)->unique('value'),
+            ];
+        })->filter(function ($collection) {
+            if ($this->variant && (bool)$collection->property->pivot->use_for_variants !== true) {
+                return false;
             }
-        )->filter(
-            function ($collection) {
-                if ($this->variant && $collection->property->pivot->use_for_variants != true) {
-                    return false;
-                }
 
-                return $collection->values && $collection->values->count() > 0;
-            }
-        )->keyBy(
-            function ($value) {
-                return $value->property->id;
-            }
-        );
+            return $collection->values && $collection->values->count() > 0;
+        })->keyBy(function ($value) {
+            return $value->property->id;
+        });
     }
 
     /**
