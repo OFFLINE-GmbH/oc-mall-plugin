@@ -382,3 +382,5 @@
     - 'Various minor bugfixes and improvements'
 1.14.3:
     - 'Fixed various Bugs in the QuickCheckout component'
+#1.14.4:
+#    - add_payment_method_id_to_discounts_table.php

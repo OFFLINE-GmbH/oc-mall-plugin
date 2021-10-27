@@ -116,7 +116,7 @@ fields:
             condition: value[customer_group]
     payment_method:
         label: 'offline.mall::lang.discounts.payment_method_description'
-        span: auto
+        span: right
         type: recordfinder
         list: ~/plugins/offline/mall/models/discount/columns.yaml
         nameFrom: name
