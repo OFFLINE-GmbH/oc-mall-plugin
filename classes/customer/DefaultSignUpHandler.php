@@ -201,7 +201,10 @@ class DefaultSignUpHandler implements SignUpHandler
         Event::fire('mall.customer.extendSignupRules', [&$rules, $forSignup]);
 
         if (PluginManager::instance()->hasPlugin('Winter.Location')) {
-            foreach (['billing_state_id', 'billing_country_id', 'shipping_state_id', 'shipping_country_id'] as $rule) {
+            $translatedRules = array_where($rules, function ($value, $key) {
+                return (is_string($value) && str_contains($value, 'rainlab_'));
+            });
+            foreach (array_keys($translatedRules) as $rule) {
                 $rules[$rule] = str_replace('rainlab_', 'winter_', $rules[$rule]);
             }
         }

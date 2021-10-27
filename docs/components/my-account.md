@@ -14,13 +14,18 @@ By changing the `page` property a different child component is displayed.
 The currently active page. This property should be populated via URL parameters. Possible values are `orders`, 
 `profile` and `addresses`.
 
+### `order` (string, optional)
+
+The hashed ID of an order. This will automatically open the order details in the overview.
+
+
 ## Example implementations
 
 ### Display the my account page
 
 ```ini
 title = "Account"
-url = "/account/:page?"
+url = "/account/:page?/:order?"
 
 [session]
 security = "user"

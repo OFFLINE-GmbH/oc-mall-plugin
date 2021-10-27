@@ -8,7 +8,7 @@
             <th class="text-right">{{ 'offline.mall::frontend.total' | trans }}</th>
         </tr>
         {% for order in orders %}
-            <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }}">
+            <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }} {{ this.param.order == order.hash_id ? 'is-open' : '' }}">
                 <td>{{ order.order_number }}</td>
                 <td>{% partial __SELF__ ~ '::created_at' order=order %}</td>
                 <td>{{ order.order_state_label }}</td>

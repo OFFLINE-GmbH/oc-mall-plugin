@@ -139,6 +139,7 @@ return [
     'wishlist.count' => 'Количество продуктов: :count',
     'wishlist.create' => 'Создать новый список желаний',
     'wishlist.create_placeholder' => 'Введите название списка желаний',
+    'wishlist.deleted' => 'Список пожеланий удален',
     'wishlist.rename' => 'Переименовать',
     'wishlist.renamed' => 'Список пожеланий переименован',
     'wishlist.empty' => 'Ваш список пожеланий пуст',

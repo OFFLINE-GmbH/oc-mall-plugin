@@ -125,6 +125,9 @@ class ProductsSearchProvider extends ResultsProvider
                     ->orWhere('description', 'like', "%{$this->query}%")
                     ->orWhere('description_short', 'like', "%{$this->query}%")
                     ->orWhere('user_defined_id', 'like', "%{$this->query}%")
+                    ->orWhereHas('categories', function ($q) {
+                        $q->where('name', 'like', "%{$this->query}%");
+                    })
                     ->orWhereHas('brand', function ($q) {
                         $q->where('name', 'like', "%{$this->query}%");
                     });

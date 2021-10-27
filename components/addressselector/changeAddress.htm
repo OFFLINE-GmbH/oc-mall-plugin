@@ -22,7 +22,7 @@
                 type="submit">
             {{ 'offline.mall::frontend.apply' | trans }}
         </button>
-        <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: __SELF__.redirect}) }}"
+        <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: __SELF__.property('redirect')}) }}"
            class="mall-btn mall-btn--link mall-btn--sm">
             {{ 'offline.mall::frontend.address_selector.edit' | trans }}
         </a>

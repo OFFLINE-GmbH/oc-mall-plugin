@@ -37,7 +37,7 @@ trait PropertyValues
                 // Fallback to the first property group that is assigned.
                 return $category ? $category->inherited_property_groups->contains($group) : true;
             });
-        })->unique();
+        })->unique()->filter();
 
         if ($groups->count() < 1) {
             return new Collection();

@@ -78,7 +78,7 @@ class DiscountApplier
             'savings'           => $savings * -1,
             'savings_formatted' => $this->money->format($savings * -1),
         ]);
-            
+
         return true;
     }
 
@@ -118,8 +118,11 @@ class DiscountApplier
             return true;
         }
         
-        
         if ($discount->trigger === 'shipping_method' && $this->appliesForShippingMethod($discount)) {
+            return true;
+        }
+
+        if ($discount->trigger === 'payment_method' && $this->checkPaymentMethod($discount->payment_method_id)) {
             return true;
         }
 
@@ -143,6 +146,12 @@ class DiscountApplier
     private function appliesForShippingMethod(Discount $discount): bool
     {
         return $discount->shipping_methods->contains($this->input->shipping_method->id);
+    }
+
+    private function checkPaymentMethod(int $method_id) {
+        if(isset($this->input->payment_method)) {
+            return $method_id == $this->input->payment_method->id;
+        }
     }
 
 }

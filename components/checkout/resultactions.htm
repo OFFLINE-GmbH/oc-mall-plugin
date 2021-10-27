@@ -1,6 +1,5 @@
-
 <div class="mall-checkout-result__actions">
-    <a href="{{ __SELF__.accountPage | page({page: 'orders'}) }}" class="mall-btn mall-btn--primary">
+    <a href="{{ __SELF__.accountPage | page({page: 'orders', order:  __SELF__.order.hash_id}) }}" class="mall-btn mall-btn--primary">
         {{ 'offline.mall::frontend.order_overview.visit' | trans }}
     </a>
 </div>

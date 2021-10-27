@@ -450,16 +450,7 @@ class Product extends MallComponent
         }
         $this->setVar('variantId', $variantId);
 
-        $variantModel = Variant::published()->with(
-            [
-                'property_values.translations',
-                'property_values.property.property_groups',
-                'product_property_values.property.property_groups',
-                'image_sets',
-            ]
-        );
-
-        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($this->variantId);
+        return $this->variant = Variant::published()->where('product_id', $this->product->id)->findOrFail($this->variantId);
     }
 
     /**
@@ -513,7 +504,7 @@ class Product extends MallComponent
             return collect();
         }
 
-        $variants = $this->product->variants->reject(
+        $variants = $this->product->variants->where('published')->reject(
             function (Variant $variant) {
                 // Only display "other" Variants, so remove the currently displayed.
                 return $variant->id === $this->variantId;
@@ -596,7 +587,8 @@ class Product extends MallComponent
             'is_virtual',
             'images',
             'main_image',
-            'all_images'
+            'all_images',
+            'properties_description',
         ];
     }
 
@@ -617,7 +609,7 @@ class Product extends MallComponent
      */
     protected function getPublicCartProductAttributes(): array
     {
-        return ['quantity', 'weight', 'price', 'hashid'];
+        return ['quantity', 'weight', 'price', 'hashid', 'custom_field_value_description'];
     }
 
 
@@ -667,32 +659,24 @@ class Product extends MallComponent
             return $valueMap;
         }
 
-        return $this->product->categories->flatMap->properties->map(
-            function (Property $property) use ($valueMap) {
-                $filteredValues = optional($valueMap->get($property->id))->reject(
-                    function ($value) {
-                        return $this->variant && $value->variant_id === null;
-                    }
-                );
+        return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
+            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
+                return $this->variant && $value->variant_id === null;
+            });
 
-                return (object)[
-                    'property' => $property,
-                    'values' => optional($filteredValues)->unique('value'),
-                ];
+            return (object)[
+                'property' => $property,
+                'values' => optional($filteredValues)->unique('value'),
+            ];
+        })->filter(function ($collection) {
+            if ($this->variant && (bool)$collection->property->pivot->use_for_variants !== true) {
+                return false;
             }
-        )->filter(
-            function ($collection) {
-                if ($this->variant && $collection->property->pivot->use_for_variants != true) {
-                    return false;
-                }
 
-                return $collection->values && $collection->values->count() > 0;
-            }
-        )->keyBy(
-            function ($value) {
-                return $value->property->id;
-            }
-        );
+            return $collection->values && $collection->values->count() > 0;
+        })->keyBy(function ($value) {
+            return $value->property->id;
+        });
     }
 
     /**
@@ -718,12 +702,9 @@ class Product extends MallComponent
             ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
-            ->when(
-                $groupedValue > 0,
-                function ($q) use ($groupedValue) {
-                    $q->where('value', '<>', $groupedValue);
-                }
-            )
+            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
+                $q->where('value', '<>', $groupedValue);
+            })
             ->get()
             ->groupBy('property_id');
     }

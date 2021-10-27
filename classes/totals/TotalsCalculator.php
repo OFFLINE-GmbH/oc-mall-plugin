@@ -283,7 +283,7 @@ class TotalsCalculator
     protected function applyTotalDiscounts($total): ?float
     {
         $nonCodeTriggers = Discount
-            ::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method'])
+            ::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method', 'payment_method'])
             ->with('shipping_methods')
             ->where(function ($q) {
                 $q->whereNull('valid_from')

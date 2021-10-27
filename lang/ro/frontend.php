@@ -139,6 +139,7 @@ return [
     'wishlist.count' => 'un singur produs|:count Produse',
     'wishlist.create' => 'Crearea unei liste de dorințe noi',
     'wishlist.create_placeholder' => 'Numele listei de dorințe a fost modificat',
+    'wishlist.deleted' => 'Lista de dorințe a fost ștearsă',
     'wishlist.rename' => 'Modificarea numelui',
     'wishlist.renamed' => 'Numele listei de dorințe a fost modificat',
     'wishlist.empty' => 'Lista de dorințe este goală',

@@ -1,6 +1,9 @@
 function initializeSorting () {
     if (typeof Sortable === 'undefined') return;
     var $tbody = $('.drag-handle').parents('table.data tbody');
+    if (!$tbody.length) {
+        return
+    }
     Sortable.create($tbody[0], {
         handle: '.drag-handle',
         animation: 150,

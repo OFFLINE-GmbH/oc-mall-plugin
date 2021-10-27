@@ -254,11 +254,7 @@ class QuickCheckout extends MallComponent
 
         if ( ! $this->order) {
             // Create the order first.
-            $this->order = DB::transaction(
-                function () {
-                    return Order::fromCart($this->cart);
-                }
-            );
+            $this->order = Order::fromCart($this->cart);
         }
 
         // If the order was created successfully proceed with the payment.
