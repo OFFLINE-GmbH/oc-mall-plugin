@@ -77,5 +77,9 @@
             'not_processed' => 'The following order could not be processed correctly. It is possible that you have to contact the customer.',
             'error_details' => 'Error details',
         ],
+        'payment_paid' => [
+            'subject' => 'Payment for order #:number successful',
+            'message' => 'The previously failed payment for this order succeeded on a subsequent attempt.',
+        ],
     ],
 ];

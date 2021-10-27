@@ -77,5 +77,9 @@
             'payment_id' => 'Zahlungs-ID',
             'error' => 'Fehlermeldung',
         ],
+        'payment_paid' => [
+            'subject' => 'Zahlung für Bestellung #:number erfolgreich',
+            'message' => 'Die zuvor fehlgeschlagene Zahlung für die Bestellung wurde erfolgreich nachgeholt.',
+        ],
     ],
 ];

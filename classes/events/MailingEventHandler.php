@@ -260,6 +260,16 @@ class MailingEventHandler
                 $message->to($order->customer->user->email, $order->customer->name);
             }
         );
+
+        // Notify the admin about succeeded payments.
+        $failedBecamePaid = $order->getOriginal($attr) === FailedState::class && $order->getAttribute($attr) === PaidState::class;
+
+        if ($failedBecamePaid && $adminMail = GeneralSettings::get('admin_email')) {
+            Mail::queue('offline.mall::mail.admin.payment_paid', $data,
+                function ($message) use ($adminMail) {
+                    $message->to($adminMail);
+                });
+        }
     }
 
     /**
