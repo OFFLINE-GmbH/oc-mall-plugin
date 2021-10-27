@@ -5,6 +5,7 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
+use Backend\FormWidgets\Relation;
 use BackendMenu;
 use DB;
 use Event;
@@ -275,7 +276,7 @@ class Products extends Controller
 
     public function onRelationManageCreate()
     {
-        $parent = parent::onRelationManageCreate();
+        $this->asExtension(RelationController::class)->onRelationManageCreate();
 
         // Store the pricing information with the custom fields.
         if ($this->relationName === 'custom_fields') {
@@ -289,15 +290,18 @@ class Products extends Controller
         
         if ($this->relationName === 'variants') {
             $this->updateProductPrices($this->vars['formModel'], $this->relationModel);
+            $this->createImageSetFromTempImages($this->relationModel);
+            $this->handlePropertyValueUpdates($this->relationModel);
+
             (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }        
 
-        return $parent;
+        return $this->asExtension(RelationController::class)->relationRefresh();
     }
 
     public function onRelationManageUpdate()
     {
-        $parent = parent::onRelationManageUpdate();
+        $this->asExtension(RelationController::class)->onRelationManageUpdate();
 
         // Store the pricing information with the custom fields.
         if ($this->relationName === 'custom_fields') {
@@ -317,7 +321,7 @@ class Products extends Controller
             (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
         }
 
-        return $parent;
+        return $this->asExtension(RelationController::class)->relationRefresh();
     }
 
     /**
@@ -325,7 +329,10 @@ class Products extends Controller
      */
     protected function handlePropertyValueUpdates(Variant $variant)
     {
-        $locales = Locale::isEnabled()->get();
+        $locales = [];
+        if (class_exists(Locale::class)) {
+            $locales = Locale::isEnabled()->get();
+        }
 
         $formData = array_wrap(post('VariantPropertyValues', []));
         if (count($formData) < 1) {

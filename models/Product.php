@@ -326,7 +326,10 @@ class Product extends Model
      */
     public function handlePropertyValueUpdates()
     {
-        $locales = Locale::isEnabled()->get();
+        $locales = [];
+        if (class_exists(Locale::class)) {
+            $locales = Locale::isEnabled()->get();
+        }
 
         $formData = array_wrap(post('PropertyValues', []));
         if (count($formData) < 1) {
