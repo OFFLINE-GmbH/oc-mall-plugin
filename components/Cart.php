@@ -151,7 +151,7 @@ class Cart extends MallComponent
     public function setData()
     {
         $cart = CartModel::byUser(Auth::getUser());
-        $cart->load(['products', 'products.custom_field_values', 'discounts']);
+        $cart->loadMissing(['products', 'products.custom_field_values', 'discounts']);
         if ($cart->shipping_method_id === null) {
             $cart->setShippingMethod(ShippingMethod::getDefault());
         }
