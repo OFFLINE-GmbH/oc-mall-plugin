@@ -385,3 +385,6 @@
 1.15.0:
     - 'Fixed many bugs, added discounts for payment methods, optimized performance of product page, optimized October 2.0 compatibility'
     - add_payment_method_id_to_discounts_table.php
+1.15.1:
+    - 'Fixed many bugs, added discounts for payment methods, optimized performance of product page, optimized October 2.0 compatibility'
+
