@@ -596,7 +596,8 @@ class Product extends MallComponent
             'is_virtual',
             'images',
             'main_image',
-            'all_images'
+            'all_images',
+            'properties_description',
         ];
     }
 
@@ -617,7 +618,7 @@ class Product extends MallComponent
      */
     protected function getPublicCartProductAttributes(): array
     {
-        return ['quantity', 'weight', 'price', 'hashid'];
+        return ['quantity', 'weight', 'price', 'hashid', 'custom_field_value_description'];
     }
 
 
