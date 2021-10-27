@@ -389,4 +389,6 @@
     - 'Fixed many bugs, added discounts for payment methods, optimized performance of product page, optimized October 2.0 compatibility'
 1.15.2:
     - 'Fixed invalid migration file'
+1.15.3:
+    - 'Optimized compatibility with October 1.0 releases'
 

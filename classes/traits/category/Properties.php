@@ -30,7 +30,7 @@ trait Properties
         })->property_groups;
 
         if ($groups) {
-            $groups->loadMissing('properties');
+            $groups->load('properties');
         }
 
         return $this->inheritedPropertyGroupsCache = $groups ?? new Collection();
