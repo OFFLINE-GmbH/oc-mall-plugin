@@ -85,7 +85,7 @@ class MailingEventHandler
         ];
 
         Mail::queue($this->template('offline.mall::customer.created'), $data, function ($message) use ($user) {
-            if (class_exists(Translator::class)) {
+            if (class_exists(Translator::class) && method_exists($message, 'locale')) {
                 $message->locale(Translator::instance()->getLocale());
             }
             $message->to($user->email, $user->customer->name);
@@ -317,7 +317,7 @@ class MailingEventHandler
      */
     protected function handleLocale(Mailable $message, Order $order)
     {
-        if ($order->lang) {
+        if ($order->lang && method_exists($message, 'locale')) {
             $message->locale($order->lang);
         }
     }
