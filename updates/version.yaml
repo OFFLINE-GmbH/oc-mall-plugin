@@ -391,4 +391,6 @@
     - 'Fixed invalid migration file'
 1.15.3:
     - 'Optimized compatibility with October 1.0 releases'
+1.15.4:
+    - 'Further October 1.0 fixes'
 
