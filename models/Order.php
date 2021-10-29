@@ -269,7 +269,7 @@ class Order extends Model
 
         $start = $numbers->max;
 
-        if ($start === 0) {
+        if (is_null($start) || $start === 0) {
             $start = (int)GeneralSettings::get('order_start');
         }
 
