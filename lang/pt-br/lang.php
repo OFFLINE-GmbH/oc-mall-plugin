@@ -508,7 +508,9 @@ return [
             'total' => 'Valor total do pedido alcançado',
             'code' => 'Código de desconto digitado',
             'product' => 'Produto específico esta no carrinho',
+            'shipping_method' => 'O método de envio é um dos seguintes',
             'customer_group' => 'O cliente pertence à um grupo de clientes',
+            'payment_method' => 'Dependendo da forma de pagamento',
         ],
         'validation' => [
             'empty' => 'Digite o código promocional.',
