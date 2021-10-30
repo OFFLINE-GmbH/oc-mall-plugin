@@ -500,6 +500,9 @@
             'total' => 'Celková cena objednávky je dosažena',
             'code' => 'je zadán slevový kód',
             'product' => 'Určitý produkt je v košíku',
+            'shipping_method' => 'Způsob dopravy je jeden z následujících',
+            'customer_group' => 'Uživatel patří do určité skupiny zákazníků',
+            'payment_method' => 'V závislosti na způsobu platby',
         ],
         'validation' => [
             'empty' => 'Vložte kupón.',
