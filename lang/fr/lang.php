@@ -503,6 +503,9 @@
             'total' => 'Le total de la commande est atteint',
             'code' => 'Le code de réduction est entré',
             'product' => 'Un produit spécifique est présent dans le panier',
+            'shipping_method' => 'La méthode d’expédition est l’une des suivantes',
+            'customer_group' => 'L’utilisateur appartient à un groupe de clients spécifique',
+            'payment_method' => 'En fonction du mode de paiement',
         ],
         'validation' => [
             'empty' => 'Entrez un code promo.',
