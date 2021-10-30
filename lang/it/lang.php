@@ -542,11 +542,12 @@ return [
         "total_to_reach" => "Totale d'ordine minimo affinchè lo sconto sia valido",
         "trigger" => "Valido se",
         "triggers" => [
+            "total" => "Il totale dell'ordine è stato raggiunto",
             "code" => "Il codice sconto è stato inserito",
-            "customer_group" => "Il cliente fa parte del gruppo",
             "product" => "Un prodotto specifico è presente nel carrello",
             "shipping_method" => "Il metodo di spedizione è uno dei seguenti",
-            "total" => "Il totale dell'ordine è stato raggiunto"
+            "customer_group" => "Il cliente fa parte del gruppo",
+            'payment_method' => 'A seconda del metodo di pagamento',
         ],
         "type" => "Tipo di sconto",
         "types" => [
