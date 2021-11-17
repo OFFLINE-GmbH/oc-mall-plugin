@@ -217,8 +217,8 @@ class Cart extends MallComponent
         return [
             'item' => $this->dataLayerArray($product->product, $product->variant),
             'quantity' => optional($product)->quantity ?? 0,
-            'new_items_count' => optional($cart->products)->count() ?? 0,
-            'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
+            'new_items_count' => optional($this->cart->products)->count() ?? 0,
+            'new_items_quantity' => optional($this->cart->products)->sum('quantity') ?? 0,
         ];
     }
 
