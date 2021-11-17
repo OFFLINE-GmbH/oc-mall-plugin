@@ -179,6 +179,7 @@ class MailingEventHandler
 
         $data = [
             'order' => $order->load(['order_state']),
+            'account_url' => $this->getAccountUrl(),
         ];
 
         Mail::queue($this->template('offline.mall::order.state.changed'), $data, function ($message) use ($order) {
