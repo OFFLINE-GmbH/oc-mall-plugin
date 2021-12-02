@@ -131,6 +131,11 @@ class Order extends Model
         return $this->shipped_at !== null;
     }
 
+    public function getIsCancelledAttribute()
+    {
+        return $this->order_state->flag === OrderState::FLAG_CANCELLED;
+    }
+
     public static function byCustomer(Customer $customer)
     {
         return static::where('customer_id', $customer->id);
@@ -138,9 +143,16 @@ class Order extends Model
 
     public static function fromCart(Cart $cart): self
     {
-        Event::fire('mall.order.beforeCreate', [$cart]);
+        $cart->loadMissing(['products.product.brand']);
+
+        // Make sure all products in the cart are still published.
+        $removed = $cart->removeUnpublishedProducts();
+        if ($removed->count() > 0) {
+            throw new ValidationException(['cart' => trans('offline.mall::frontend.cart.products_unavailable')]);
+        }
 
         $order = DB::transaction(function () use ($cart) {
+            Event::fire('mall.order.beforeCreate', [$cart]);
 
             $initialOrderStatus = OrderState::where('flag', OrderState::FLAG_NEW)->first();
             if ( ! $initialOrderStatus) {
@@ -191,15 +203,14 @@ class Order extends Model
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
             $order->save();
-            
-            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart
-                ->loadMissing(['products.product.brand'])
                 ->products
                 ->each(function (CartProduct $entry) use ($order) {
                     $entry->moveToOrder($order);
                 });
+
+            Event::fire('mall.order.afterCreate', [$order, $cart]);
 
             $cart->updateDiscountUsageCount();
 
@@ -258,7 +269,7 @@ class Order extends Model
 
         $start = $numbers->max;
 
-        if ($start === 0) {
+        if (is_null($start) || $start === 0) {
             $start = (int)GeneralSettings::get('order_start');
         }
 

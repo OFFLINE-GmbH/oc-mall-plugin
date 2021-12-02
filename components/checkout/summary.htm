@@ -1,5 +1,5 @@
 <div class="mall-cart-summary">
-    <div class="mall-cart-summary__info">
+    <form class="mall-cart-summary__info">
         <div class="mall-cart-summary__billing-address">
             <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.billing_address' | trans }}</h4>
             {% component 'billingAddressSelector' %}
@@ -20,5 +20,5 @@
                 {% partial __SELF__ ~ '::shippingmethod' %}
             </div>
         </div>
-    </div>
+    </form>
 </div>

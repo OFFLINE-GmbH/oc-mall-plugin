@@ -4,6 +4,7 @@ use Auth;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
+use OFFLINE\Mall\Models\OrderState;
 
 /**
  * The OrdersList component displays a list of all the user's orders.
@@ -82,5 +83,19 @@ class OrdersList extends MallComponent
         $page = GeneralSettings::get('checkout_page');
 
         return $this->controller->pageUrl($page, ['step' => 'payment']);
+    }
+
+    public function onCancelOrder()
+    {
+        $user = Auth::getUser();
+        if ( ! $user) {
+            return;
+        }
+
+        $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
+
+        $order = Order::byCustomer($user->customer)->findOrFail(post('id'));
+        $order->order_state = $state;
+        $order->save();
     }
 }

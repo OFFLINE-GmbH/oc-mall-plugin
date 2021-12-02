@@ -46,7 +46,7 @@ class WishlistButton extends MallComponent
 
     public function init()
     {
-        $this->items = $this->getWishlists();
+        $this->items = $this->page['items'] = $this->getWishlists();
     }
 
     /**
@@ -94,6 +94,8 @@ class WishlistButton extends MallComponent
         ]);
 
         Flash::success(trans('offline.mall::frontend.wishlist.added'));
+        
+        $this->page['items'] = $this->getWishlists();
 
         return [
             '.mall-wishlists' => $this->renderPartial($this->alias . '::list', [
@@ -132,6 +134,8 @@ class WishlistButton extends MallComponent
         if ($v->fails()) {
             throw new ValidationException($v);
         }
+        
+        $this->decodeIds();
 
         Wishlist::findOrFail($this->decode(post('wishlist_id')))->delete();
 
@@ -154,6 +158,7 @@ class WishlistButton extends MallComponent
      */
     protected function refreshList(): array
     {
+        $this->page['items'] = $this->getWishlists();
         return [
             '.mall-wishlists' => $this->renderPartial($this->alias . '::list', ['items' => $this->getWishlists()]),
         ];

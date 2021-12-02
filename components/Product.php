@@ -264,7 +264,7 @@ class Product extends MallComponent
 
         // In case this product does not have any services attached, add it to the cart directly.
         if ($product->services->count() === 0) {
-            return $this->addToCart($product, $quantity, $variant, $values);
+            return $this->page['added'] = $this->addToCart($product, $quantity, $variant, $values);
         }
 
         // Temporarily store the current cart data to the session. We will re-fetch this data
@@ -329,7 +329,7 @@ class Product extends MallComponent
 
         $serviceOptionIds = collect(post('service', []))->values()->flatten()->toArray();
 
-        return $this->addToCart($product, $quantity, $variant, $values, $serviceOptionIds);
+        return $this->page['added'] = $this->addToCart($product, $quantity, $variant, $values, $serviceOptionIds);
     }
 
     /**
@@ -441,7 +441,7 @@ class Product extends MallComponent
             $variantId = $this->decode($this->param('variant'));
             // If no URL param is present, let's use the first Variant of this Product.
             if ( ! $variantId) {
-                $variantId = optional($this->product->variants->first())->id;
+                $variantId = optional($this->product->variants->where('published', true)->first())->id;
             }
             // If no Variants are available, simply display the Product itself.
             if ( ! $variantId) {
@@ -450,16 +450,7 @@ class Product extends MallComponent
         }
         $this->setVar('variantId', $variantId);
 
-        $variantModel = Variant::published()->with(
-            [
-                'property_values.translations',
-                'property_values.property.property_groups',
-                'product_property_values.property.property_groups',
-                'image_sets',
-            ]
-        );
-
-        return $this->variant = $variantModel->where('product_id', $this->product->id)->findOrFail($this->variantId);
+        return $this->variant = Variant::published()->where('product_id', $this->product->id)->findOrFail($this->variantId);
     }
 
     /**
@@ -513,7 +504,7 @@ class Product extends MallComponent
             return collect();
         }
 
-        $variants = $this->product->variants->reject(
+        $variants = $this->product->variants->where('published', true)->reject(
             function (Variant $variant) {
                 // Only display "other" Variants, so remove the currently displayed.
                 return $variant->id === $this->variantId;
@@ -551,7 +542,7 @@ class Product extends MallComponent
         $serviceOptions = array_filter($serviceOptions);
 
         try {
-            $cart->addProduct($product, $quantity, $variant, $values, $serviceOptions);
+            $cartProduct = $cart->addProduct($product, $quantity, $variant, $values, $serviceOptions);
         } catch (OutOfStockException $e) {
             throw new ValidationException(['quantity' => trans('offline.mall::lang.common.stock_limit_reached')]);
         }
@@ -566,13 +557,15 @@ class Product extends MallComponent
         Flash::success(trans('offline.mall::frontend.cart.added'));
 
         return [
-            'product' => $product->only($this->getPublicAttributes()),
-            'variant' => optional($variant)->only($this->getPublicAttributes()),
+            'product' => $product->only($this->getPublicProductAttributes()),
+            'variant' => optional($variant)->only($this->getPublicProductAttributes()),
             'item' => $this->dataLayerArray($product, $variant),
             'currency' => optional(Currency::activeCurrency())->only('symbol', 'code', 'rate', 'decimals'),
             'quantity' => $quantity,
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
+            'cart' => $cart->only($this->getPublicCartAttributes()),
+            'cart_product' => $cartProduct->only($this->getPublicCartProductAttributes()),
             'added' => true,
         ];
     }
@@ -582,10 +575,43 @@ class Product extends MallComponent
      *
      * @return string[]
      */
-    protected function getPublicAttributes(): array
+    protected function getPublicProductAttributes(): array
     {
-        return ['hash_id', 'user_defined_id', 'name', 'slug', 'description_short', 'description', 'is_virtual', 'images', 'main_image', 'all_images'];
+        return [
+            'hash_id',
+            'user_defined_id',
+            'name',
+            'slug',
+            'description_short',
+            'description',
+            'is_virtual',
+            'images',
+            'main_image',
+            'all_images',
+            'properties_description',
+        ];
     }
+
+    /**
+     * Defines what cart attributes are returned as JSON when a product was added to the cart.
+     *
+     * @return string[]
+     */
+    protected function getPublicCartAttributes(): array
+    {
+        return ['products', 'discounts', 'shipping_method', 'customer', 'payment_method', 'shipping_address'];
+    }
+
+    /**
+     * Defines what cart product attributes are returned as JSON when a product was added to the cart.
+     *
+     * @return string[]
+     */
+    protected function getPublicCartProductAttributes(): array
+    {
+        return ['quantity', 'weight', 'price', 'hashid', 'custom_field_value_description'];
+    }
+
 
     /**
      * Get the PropertyValue this Variant is grouped by.
@@ -633,32 +659,24 @@ class Product extends MallComponent
             return $valueMap;
         }
 
-        return $this->product->categories->flatMap->properties->map(
-            function (Property $property) use ($valueMap) {
-                $filteredValues = optional($valueMap->get($property->id))->reject(
-                    function ($value) {
-                        return $this->variant && $value->variant_id === null;
-                    }
-                );
+        return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
+            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
+                return $this->variant && $value->variant_id === null;
+            });
 
-                return (object)[
-                    'property' => $property,
-                    'values' => optional($filteredValues)->unique('value'),
-                ];
+            return (object)[
+                'property' => $property,
+                'values' => optional($filteredValues)->unique('value'),
+            ];
+        })->filter(function ($collection) {
+            if ($this->variant && (bool)$collection->property->pivot->use_for_variants !== true) {
+                return false;
             }
-        )->filter(
-            function ($collection) {
-                if ($this->variant && $collection->property->pivot->use_for_variants != true) {
-                    return false;
-                }
 
-                return $collection->values && $collection->values->count() > 0;
-            }
-        )->keyBy(
-            function ($value) {
-                return $value->property->id;
-            }
-        );
+            return $collection->values && $collection->values->count() > 0;
+        })->keyBy(function ($value) {
+            return $value->property->id;
+        });
     }
 
     /**
@@ -684,12 +702,9 @@ class Product extends MallComponent
             ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
-            ->when(
-                $groupedValue > 0,
-                function ($q) use ($groupedValue) {
-                    $q->where('value', '<>', $groupedValue);
-                }
-            )
+            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
+                $q->where('value', '<>', $groupedValue);
+            })
             ->get()
             ->groupBy('property_id');
     }
@@ -752,7 +767,7 @@ class Product extends MallComponent
         $fields = $this->mapToCustomFields(post('props', []));
         $values = $this->mapToCustomFieldValues($fields);
         $priceData = $data['item']->priceIncludingCustomFieldValues($values);
-        $data['price'] = Price::fromArray($priceData);
+        $data['price'] = $this->page['price'] = Price::fromArray($priceData);
 
         return [
             '.mall-product__price' => $this->renderPartial($this->alias . '::price', $data),

@@ -25,8 +25,11 @@ class PropertyRemovalUpdate
             ::with(['product', 'variant'])
             ->orderBy('id')
             ->whereIn('property_id', $data['properties'] ?? [])
-            ->whereIn('product_id', $data['products'] ?? [])
-            ->orWhereIn('variant_id', $data['variants'] ?? [])
+            ->where(function($query) use ($data) {
+                $query
+                    ->whereIn('product_id', $data['products'] ?? [])
+                    ->orWhereIn('variant_id', $data['variants'] ?? []);
+            })
             ->chunk(100, function ($values) {
                 // Tiggers a re-index via the PropertyValueObserver.
                 $values->each->delete();

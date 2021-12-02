@@ -19,7 +19,7 @@ class RemovePaymentDataColumnFromOrdersTable extends Migration
     public function down()
     {
         Schema::table('offline_mall_orders', function ($table) {
-            $table->mediumText('payment_data');
+            $table->mediumText('payment_data')->nullable();
         });
     }
 }

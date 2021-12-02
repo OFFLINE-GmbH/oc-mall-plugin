@@ -5,6 +5,7 @@
     {% if __SELF__.showDiscountApplier %}
         {% partial __SELF__ ~ '::discountapplier' %}
     {% endif %}
+    <div data-validate-for="cart"></div>
 {% endif %}
 
 {% if __SELF__.showProceedToCheckoutButton and cart.products.count > 0 %}

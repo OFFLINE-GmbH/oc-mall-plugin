@@ -17,6 +17,7 @@ class Currency extends Model
     public const CURRENCY_SESSION_KEY = 'mall.currency.active';
     public const CURRENCIES_CACHE_KEY = 'mall.currencies';
     public const DEFAULT_CURRENCY_CACHE_KEY = 'mall.currency.default';
+    public const JSON_PRICE_CACHE_KEY = 'mall.jsonPrice.currencies';
 
     public static $defaultCurrency;
 
@@ -63,6 +64,7 @@ class Currency extends Model
     {
         Cache::forget(self::DEFAULT_CURRENCY_CACHE_KEY);
         Cache::forget(self::CURRENCIES_CACHE_KEY);
+        Cache::forget(self::JSON_PRICE_CACHE_KEY);
         Session::forget(static::CURRENCY_SESSION_KEY);
     }
 
@@ -73,6 +75,7 @@ class Currency extends Model
         DB::table('offline_mall_customer_group_prices')->where('currency_id', $this->id)->delete();
         Cache::forget(self::CURRENCIES_CACHE_KEY);
         Cache::forget(self::DEFAULT_CURRENCY_CACHE_KEY);
+        Cache::forget(self::JSON_PRICE_CACHE_KEY);
         Session::forget(static::CURRENCY_SESSION_KEY);
     }
 

@@ -117,6 +117,14 @@ class DiscountApplier
         if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
             return true;
         }
+        
+        if ($discount->trigger === 'shipping_method' && $this->appliesForShippingMethod($discount)) {
+            return true;
+        }
+
+        if ($discount->trigger === 'payment_method' && $this->checkPaymentMethod($discount->payment_method_id)) {
+            return true;
+        }
 
         return $discount->trigger === 'code';
     }
@@ -134,4 +142,16 @@ class DiscountApplier
         }
         return $group->where('id', $customerGroupId)->exists();
     }
+
+    private function appliesForShippingMethod(Discount $discount): bool
+    {
+        return $discount->shipping_methods->contains($this->input->shipping_method->id);
+    }
+
+    private function checkPaymentMethod(int $method_id) {
+        if(isset($this->input->payment_method)) {
+            return $method_id == $this->input->payment_method->id;
+        }
+    }
+
 }

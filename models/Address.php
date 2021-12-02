@@ -5,6 +5,7 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use RainLab\Location\Behaviors\LocationModel;
+use System\Classes\PluginManager;
 
 class Address extends Model
 {
@@ -35,12 +36,27 @@ class Address extends Model
         'state_id',
         'details',
     ];
+    public $hidden = [
+        'id',
+        'customer_id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+    public $appends = ['hash_id'];
 
     public $table = 'offline_mall_addresses';
 
     public $belongsTo = [
         'customer' => Customer::class,
     ];
+
+    public function beforeValidate()
+    {
+        if (PluginManager::instance()->hasPlugin('Winter.Location')) {
+            $this->rules['country_id'] = str_replace('rainlab_', 'winter_', $this->rules['country_id']);
+        }
+    }
 
     public function getNameAttribute()
     {
@@ -103,10 +119,6 @@ class Address extends Model
             'country_id'  => $this->country_id,
             'country'     => $this->country,
             'details'     => $this->details,
-            'customer_id' => $this->customer_id,
-            'created_at'  => $this->created_at,
-            'updated_at'  => $this->updated_at,
-            'deleted_at'  => $this->deleted_at,
         ];
     }
 }

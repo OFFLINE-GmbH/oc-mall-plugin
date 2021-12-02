@@ -15,4 +15,6 @@
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
     </button>
+
+    <?= $this->fireViewEvent('offline.mall.extendProductsToolbar') ?>
 </div>

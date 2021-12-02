@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Parse\Twig;
@@ -155,9 +156,15 @@ abstract class PaymentProvider
             $this->paymentFormPartial()
         ));
 
-        return file_exists($fallback)
-            ? (new Twig)->parse(file_get_contents($fallback), ['cart' => $cartOrOrder])
-            : '';
+        $controller = Controller::getController() ?? new Controller();
+        $twig = $controller->getTwig();
+
+        if (!file_exists($fallback)) {
+            return '';
+        }
+
+        $template = $twig->createTemplate(file_get_contents($fallback));
+        return $template->render(['cart' => $cartOrOrder]);
     }
 
     /**

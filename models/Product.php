@@ -132,6 +132,7 @@ class Product extends Model
         'file_max_download_count',
         'file_session_required',
     ];
+    public $appends = ['hash_id'];
     public $table = 'offline_mall_products';
     public $with = ['image_sets', 'prices'];
     public $attachMany = [
@@ -325,7 +326,10 @@ class Product extends Model
      */
     public function handlePropertyValueUpdates()
     {
-        $locales = Locale::isEnabled()->get();
+        $locales = [];
+        if (class_exists(Locale::class)) {
+            $locales = Locale::isEnabled()->get();
+        }
 
         $formData = array_wrap(post('PropertyValues', []));
         if (count($formData) < 1) {
@@ -604,7 +608,8 @@ class Product extends Model
      * the form does not crash if a user programmatically removes
      * a field.
      */
-    protected function hideField($fields, string $field) {
+    protected function hideField($fields, string $field)
+    {
         if (property_exists($fields, $field)) {
             $fields->$field->hidden = true;
         }

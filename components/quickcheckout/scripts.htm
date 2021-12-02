@@ -31,7 +31,8 @@
                             $overlay.hide();
                             if (jqXHR.status === 406) {
                                 var data = jqXHR.responseJSON
-                                $form.trigger('ajaxValidation', [{}, data['X_OCTOBER_ERROR_MESSAGE'], data['X_OCTOBER_ERROR_FIELDS']])
+                                var platform = data.hasOwnProperty('X_OCTOBER_ERROR_MESSAGE') ? 'OCTOBER' : 'WINTER'
+                                $form.trigger('ajaxValidation', [{}, data['X_' + platform + '_ERROR_MESSAGE'], data['X_' + platform + '_ERROR_FIELDS']])
                                 return handleError()
                             }
                             this.error(jqXHR)
@@ -59,9 +60,33 @@
             $('.js-mall-toggle-signup-terms').on('click', function () {
                 $('.js-mall-checkout').prop('disabled', ! this.checked);
             });
+            $.subscribe('mall.address.update', function() {
+                var useCountry = $('#billing_country_id')
+                if ($('.js-mall-toggle-shipping-address').prop('checked')) {
+                    useCountry = $('#shipping_country_id')
+                }
+
+                $.request('{{ __SELF__ }}::onRun', {
+                    data: { country_id: useCountry.val() },
+                    update: {'{{ __SELF__ }}::shippingmethod': '.mall-quick-checkout__shipping-methods'}
+                })
+            })
             $body.on('click', '.mall-quick-checkout__payment-methods .mall-quick-checkout__toggle-option', function() {
                 window.Mall.Callbacks.Checkout = {}
             })
+            $body.on('click', '.js-mall-remove-product', function () {
+                $.request('{{ __SELF__ }}::onRemoveProduct', {
+                    data: {id: this.dataset.id},
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    loading: $.oc.stripeLoadIndicator,
+                    confirm: '{{ 'offline.mall::frontend.confirm' | trans }}',
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                        $.publish('mall.cart.productRemoved', data)
+                    }
+                })
+            });
         })
     </script>
 {% endput %}

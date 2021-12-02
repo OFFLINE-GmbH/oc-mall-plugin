@@ -11,6 +11,8 @@ use October\Rain\Parse\Twig;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use System\Models\File;
+use Auth;
+use OFFLINE\Mall\Classes\Totals\PaymentTotal;
 
 class PaymentMethod extends Model
 {
@@ -130,5 +132,11 @@ class PaymentMethod extends Model
         $provider = $gateway->getProviderById($this->payment_provider);
 
         return $provider->getSettings();
+    }
+    
+    public function priceForCart()
+    {
+        $cart    = Cart::byUser(Auth::getUser());
+        return new PaymentTotal($this, $cart->totals);
     }
 }

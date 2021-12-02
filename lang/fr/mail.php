@@ -34,7 +34,7 @@
         ],
         'state_changed' => [
             'subject' => 'Le statut de votre commande a changé',
-            'message' => 'Nous voulions juste vous faire savoir que votre commande **#:numéro** a été mise à jour avec le nouveau statut: **:state**',
+            'message' => 'Nous voulions juste vous faire savoir que votre commande **n°:number** a été mise à jour avec le nouveau statut: **:state**',
         ],
         'shipped' => [
             'subject' => 'Votre commande a été expédiée',

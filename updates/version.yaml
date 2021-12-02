@@ -371,4 +371,26 @@
     - 'Optimized October 2.0 compatibility'
 1.13.5:
     - 'Fixed another October 2.0 incompatibility'
+1.13.6:
+    - 'Optimized compatibility with Winter CMS, fixed various bugs'
+1.14.0:
+    - 'Added support for PHP 8 (see changelog: https://offline-gmbh.github.io/oc-mall-plugin/changelog/1.14.0.html)'
+1.14.1:
+    - 'Added possibility to apply discounts when a certain shipping method is selected (credits to @inalto)'
+    - create_offline_mall_shipping_method_discount.php
+1.14.2:
+    - 'Various minor bugfixes and improvements'
+1.14.3:
+    - 'Fixed various Bugs in the QuickCheckout component'
+1.15.0:
+    - 'Fixed many bugs, added discounts for payment methods, optimized performance of product page, optimized October 2.0 compatibility'
+    - add_payment_method_id_to_discounts_table.php
+1.15.1:
+    - 'Fixed many bugs, added discounts for payment methods, optimized performance of product page, optimized October 2.0 compatibility'
+1.15.2:
+    - 'Fixed invalid migration file'
+1.15.3:
+    - 'Optimized compatibility with October 1.0 releases'
+1.15.4:
+    - 'Further October 1.0 fixes'
 

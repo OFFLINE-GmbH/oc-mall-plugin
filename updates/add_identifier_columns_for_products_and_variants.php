@@ -20,12 +20,10 @@ class AddIdentifierColumnsForProductsAndVariants extends Migration
     public function down()
     {
         Schema::table('offline_mall_products', function ($table) {
-            $table->dropColumn(['mpn']);
-            $table->dropColumn(['gtin']);
+            $table->dropColumn(['mpn', 'gtin']);
         });
         Schema::table('offline_mall_product_variants', function ($table) {
-            $table->dropColumn(['mpn']);
-            $table->dropColumn(['gtin']);
+            $table->dropColumn(['mpn', 'gtin']);
         });
     }
 }

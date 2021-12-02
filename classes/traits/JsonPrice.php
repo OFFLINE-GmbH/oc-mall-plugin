@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use Illuminate\Support\Facades\Cache;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
@@ -22,7 +23,10 @@ trait JsonPrice
     {
         parent::__construct(...$args);
 
-        $currencies           = Currency::orderBy('is_default', 'DESC')->get();
+        $currencies = Currency::hydrate(Cache::rememberForever(Currency::JSON_PRICE_CACHE_KEY, function () {
+            return Currency::orderBy('is_default', 'DESC')->get()->toArray();
+        }));
+
         $this->currencies     = $currencies->keyBy('code');
         $this->baseCurrency   = $currencies->first();
         $this->activeCurrency = Currency::activeCurrency();

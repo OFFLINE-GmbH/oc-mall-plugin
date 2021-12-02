@@ -37,7 +37,7 @@ trait PropertyValues
                 // Fallback to the first property group that is assigned.
                 return $category ? $category->inherited_property_groups->contains($group) : true;
             });
-        })->unique();
+        })->unique()->filter();
 
         if ($groups->count() < 1) {
             return new Collection();
@@ -97,7 +97,7 @@ trait PropertyValues
     /**
      * Apply transforms to the translated value field of a PropertyValue.
      */
-    protected function handleTranslatedPropertyValue(
+    public function handleTranslatedPropertyValue(
         Property $property,
         PropertyValue $propertyValue,
         $originalValue,

@@ -16,6 +16,7 @@ use OFFLINE\Mall\Models\Wishlist;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\UserGroup;
 use Redirect;
+use System\Classes\PluginManager;
 
 class DefaultSignUpHandler implements SignUpHandler
 {
@@ -157,13 +158,18 @@ class DefaultSignUpHandler implements SignUpHandler
 
     protected function renameExistingGuestAccounts(array $data, $user)
     {
-        $newEmail = sprintf('%s_%s%s', $data['email'], 'old_', date('Y-m-d_His'));
+        // Add a "mall-guest_2021-05-31_075100" suffix to the already registered email.
+        $parts = explode('@', $data['email']);
+        $suffix = 'mall-guest_' . date('Y-m-d_His');
+
+        $newEmail = sprintf('%s+%s@%s', $parts[0], $suffix, $parts[1]);
+
         User::where('id', '<>', $user->id)
             ->where('email', $data['email'])
             ->whereHas('customer', function ($q) {
                 $q->where('is_guest', 1);
             })
-            ->update(['email' => $newEmail]);
+            ->update(['email' => $newEmail, 'username' => $newEmail]);
     }
 
     public static function rules($forSignup = true): array
@@ -193,7 +199,16 @@ class DefaultSignUpHandler implements SignUpHandler
         }
 
         Event::fire('mall.customer.extendSignupRules', [&$rules, $forSignup]);
-        
+
+        if (PluginManager::instance()->hasPlugin('Winter.Location')) {
+            $translatedRules = array_where($rules, function ($value, $key) {
+                return (is_string($value) && str_contains($value, 'rainlab_'));
+            });
+            foreach (array_keys($translatedRules) as $rule) {
+                $rules[$rule] = str_replace('rainlab_', 'winter_', $rules[$rule]);
+            }
+        }
+
         return $rules;
     }
 

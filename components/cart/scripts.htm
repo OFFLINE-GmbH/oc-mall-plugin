@@ -41,6 +41,18 @@
                     }
                 })
             });
+            $body.on('click', '.js-mall-remove-discount-code', function () {
+                $.request('{{ __SELF__ }}::onRemoveDiscountCode', {
+                    data: {id: this.dataset.id},
+                    update: {'{{ __SELF__ }}::cart': '.mall-cart'},
+                    loading: $.oc.stripeLoadIndicator,
+                    confirm: '{{ 'offline.mall::frontend.confirm' | trans }}',
+                    success: function (data) {
+                        this.success(data)
+                        $.publish('mall.cart.update', data)
+                    }
+                })
+            });
         })
     </script>
 {% endput %}

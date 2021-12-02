@@ -31,6 +31,20 @@ php artisan plugin:install rainlab.pages
 php artisan plugin:install offline.sitesearch
 ```   
 
+## Optional packages
+
+For certain features of the plugin, you need to install additional composer packages
+to make everything work. If you use one of the following features, install the
+required packages using composer:
+
+| Feature | Package |
+| ------- | ------- |
+| Google Merchant Feed Integration | `vitalybaev/google-merchant-feed` |
+| PostFinance Payments | `bummzack/omnipay-postfinance` |
+| File based index <br>(alternative index if you have an older MySQL version) | `offline/jsonq tmarois/filebase` |
+
+
+
 ### Check your installation
 
 After the plugin has been successfully installed you can run the `mall:check` command to validate your installation. 

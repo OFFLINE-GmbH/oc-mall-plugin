@@ -3,12 +3,12 @@
 namespace OFFLINE\Mall\Classes\Search;
 
 use Cms\Classes\Controller;
-use DB;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\SiteSearch\Classes\Providers\ResultsProvider;
+use RainLab\Translate\Models\Attribute;
 
 class ProductsSearchProvider extends ResultsProvider
 {
@@ -125,6 +125,9 @@ class ProductsSearchProvider extends ResultsProvider
                     ->orWhere('description', 'like', "%{$this->query}%")
                     ->orWhere('description_short', 'like', "%{$this->query}%")
                     ->orWhere('user_defined_id', 'like', "%{$this->query}%")
+                    ->orWhereHas('categories', function ($q) {
+                        $q->where('name', 'like', "%{$this->query}%");
+                    })
                     ->orWhereHas('brand', function ($q) {
                         $q->where('name', 'like', "%{$this->query}%");
                     });
@@ -179,11 +182,11 @@ class ProductsSearchProvider extends ResultsProvider
      */
     protected function getModelIdsForQuery($modelClass)
     {
-        $results = DB::table('rainlab_translate_attributes')
-                     ->where('model_type', $modelClass)
-                     ->where('locale', $this->currentLocale())
-                     ->where('attribute_data', 'LIKE', "%{$this->query}%")
-                     ->get(['model_id']);
+        $results = Attribute
+            ::where('model_type', $modelClass)
+            ->where('locale', $this->currentLocale())
+            ->where('attribute_data', 'LIKE', "%{$this->query}%")
+            ->get(['model_id']);
 
         return collect($results)->pluck('model_id');
     }

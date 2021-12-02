@@ -72,7 +72,7 @@
             {{ order.shipping.method.name }}
         </td>
         <td class="text-right">
-            {{ order.shipping.method.price_formatted | raw }}
+            {{ order.totalShippingPostTaxes() | raw }}
         </td>
     </tr>
     {% for entry in order.discounts %}

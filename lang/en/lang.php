@@ -495,6 +495,7 @@ return [
         'expires' => 'Expires',
         'number_of_usages' => 'Number of usages',
         'shipping_description' => 'Name of alternative shipping method',
+        'payment_method_description' => 'Choose a payment method',
         'shipping_price' => 'Price of alternative shipping method',
         'shipping_guaranteed_days_to_delivery' => 'Guaranteed days to delivery',
         'section_type' => 'What does this discount do?',
@@ -508,7 +509,9 @@ return [
             'total' => 'Order total is reached',
             'code' => 'Discount code is entered',
             'product' => 'A specific product is present in the cart',
+            'shipping_method' => 'The shipping method is one of the following',
             'customer_group' => 'The user belongs to a specific customer group',
+            'payment_method' => 'Depending on the payment method',
         ],
         'validation' => [
             'empty' => 'Enter a promo code.',
@@ -875,13 +878,18 @@ return [
             'errors' => [
                 'missing_settings' => 'Please select a payment and shipping method.',
             ],
+            'properties' => [
+                'step' => [
+                    'name' => 'Active checkout step (is set automatically)',
+                ],
+            ],
         ],
-        'quickCheckout'              => [
+        'quickCheckout' => [
             'details' => [
-                'name'        => 'Quick Checkout',
+                'name' => 'Quick Checkout',
                 'description' => 'Single-page checkout process',
             ],
-            'errors'  => [
+            'errors' => [
                 'signup_failed' => 'Failed to create user account.',
             ],
         ],
