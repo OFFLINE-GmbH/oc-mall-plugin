@@ -54,7 +54,7 @@ class Tax extends Model
             'table'      => 'offline_mall_country_tax',
             'key'        => 'tax_id',
             'otherKey'   => 'country_id',
-            'conditions' => 'is_enabled = 1',
+            'conditions' => 'is_enabled = true',
         ],
     ];
 
