@@ -28,6 +28,7 @@ class Currency extends Model
         'format'   => 'required',
     ];
     public $fillable = [
+        'id',
         'code',
         'symbol',
         'rate',
