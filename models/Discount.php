@@ -114,12 +114,31 @@ class Discount extends Model
 
     public function getTypeOptions()
     {
-        return trans('offline.mall::lang.discounts.types');
+        $keys = [
+            'fixed_amount',
+            'rate',
+            'shipping',
+        ];
+
+        return collect($keys)->mapWithKeys(function ($key) {
+            return [$key => trans('offline.mall::lang.discounts.types.' . $key)];
+        });
     }
 
     public function getTriggerOptions()
     {
-        return trans('offline.mall::lang.discounts.triggers');
+        $keys = [
+            'total',
+            'code',
+            'product',
+            'shipping_method',
+            'customer_group',
+            'payment_method',
+        ];
+
+        return collect($keys)->mapWithKeys(function ($key) {
+            return [$key => trans('offline.mall::lang.discounts.triggers.' . $key)];
+        });
     }
 
     public function amount($currency = null)
