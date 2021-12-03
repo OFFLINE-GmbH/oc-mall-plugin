@@ -57,12 +57,6 @@ class ProductFileGrant extends Model
      */
     public static function fromOrderProduct(OrderProduct $orderProduct)
     {
-        
-        // Do not create a file grant if the product does not have a file associated to it
-        if (!$orderProduct->product->latest_file) {
-            return;
-        }
-        
         $expires = null;
         if ($days = $orderProduct->product->file_expires_after_days) {
             $expires = Carbon::now()->addDays($days);
@@ -70,15 +64,21 @@ class ProductFileGrant extends Model
 
         // Create a grant for each product * quantity.
         for ($i = 0; $i < $orderProduct->quantity; $i++) {
-            $grant = self::create([
-                'order_product_id'   => $orderProduct->id,
+            $grant = self::make([
+                'order_product_id' => $orderProduct->id,
                 'max_download_count' => $orderProduct->product->file_max_download_count,
-                'download_key'       => str_random(64),
-                'expires_at'         => $expires,
+                'download_key' => str_random(64),
+                'expires_at' => $expires,
             ]);
+
             // Trigger the created event. The site admin can implement custom file attachements
             // for the grants this way.
             Event::fire('mall.product.file_grant.created', [$grant, $orderProduct->product]);
+
+            // Only create the grant if there is a file attached.
+            if ($orderProduct->product->latest_file || $grant->file) {
+                $grant->save();
+            }
         }
     }
 }
