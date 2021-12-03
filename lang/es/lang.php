@@ -502,7 +502,9 @@
             'total' => 'Se llega al total del pedido',
             'code' => 'Se ingresa el código de descuento',
             'product' => 'Un producto específico se encuentra en el carro',
-            'customer_group' => 'El usuario pertenece a un grupo de clientes',
+            'shipping_method' => 'El método de envío es uno de los siguientes',
+            'customer_group' => 'El usuario pertenece a un grupo de clientes específico',
+            'payment_method' => 'Según la forma de pago',
         ],
         'validation' => [
             'empty' => 'Ingresa un código de promoción.',
