@@ -393,4 +393,6 @@
     - 'Optimized compatibility with October 1.0 releases'
 1.15.4:
     - 'Further October 1.0 fixes'
+1.15.5:
+    - 'Various bug fixes'
 
