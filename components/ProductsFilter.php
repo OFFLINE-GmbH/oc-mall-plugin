@@ -414,7 +414,7 @@ class ProductsFilter extends MallComponent
             ->load('filterable_properties.translations')
             ->reject(function (PropertyGroup $group) {
                 return $group->filterable_properties->count() < 1;
-            })->sortBy('pivot.sort_order');
+            })->sortBy('pivot.relation_sort_order');
     }
 
     /**
