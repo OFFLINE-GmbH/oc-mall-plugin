@@ -407,8 +407,8 @@
         'group_by_property' => 'Attribut pour groupement de variantes',
         'additional_descriptions' => 'Descriptions supplémentaires',
         'additional_properties' => 'Propriétés supplémentaires',
-        'gtin' => 'Global Trade Item Number (GTIN)',
-        'mpn' => 'Manufacturer Part Number (MPN)',
+        'gtin' => 'Code article international (GTIN)',
+        'mpn' => 'Référence fabricant (MPN)',
         'price_table_modal' => [
             'trigger' => 'Modifier les valeurs de stock et de prix',
             'label' => 'Prix et stock',
