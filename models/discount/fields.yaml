@@ -142,3 +142,50 @@ fields:
             field: type
             condition: value[shipping]
         type: mall.price
+    section_targets:
+        label: 'offline.mall::lang.discounts.section_targets'
+        span: full
+        trigger:
+            action: show
+            field: type
+            condition: 'value[rate], value[fixed_amount]'
+        type: section
+    products:
+        label: Products
+        mode: relation
+        separator: comma
+        customTags: 0
+        nameFrom: name
+        useKey: false
+        span: auto
+        trigger:
+            action: show
+            field: type
+            condition: 'value[rate], value[fixed_amount]'
+        type: taglist
+    variants:
+        label: Variants
+        mode: relation
+        separator: comma
+        customTags: 0
+        nameFrom: name
+        useKey: false
+        span: auto
+        trigger:
+            action: show
+            field: type
+            condition: 'value[rate], value[fixed_amount]'
+        type: taglist
+    categories:
+        label: Categories
+        mode: relation
+        separator: comma
+        customTags: 0
+        nameFrom: name
+        useKey: false
+        span: auto
+        trigger:
+            action: show
+            field: type
+            condition: 'value[rate], value[fixed_amount]'
+        type: taglist
