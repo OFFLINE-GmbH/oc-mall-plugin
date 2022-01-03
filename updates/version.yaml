@@ -395,4 +395,8 @@
     - 'Further October 1.0 fixes'
 1.15.5:
     - 'Various bug fixes'
-
+1.15.6:
+    - 'Create table for discount relations'
+    - create_offline_mall_discounts_products.php
+    - create_offline_mall_discounts_variants.php
+    - create_offline_mall_discounts_categories.php

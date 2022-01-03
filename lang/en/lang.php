@@ -500,6 +500,7 @@ return [
         'shipping_guaranteed_days_to_delivery' => 'Guaranteed days to delivery',
         'section_type' => 'What does this discount do?',
         'section_trigger' => 'When is this discount applicable?',
+        'section_targets' => 'Apply the discount to products respecting following conditions',
         'types' => [
             'fixed_amount' => 'Fixed amount',
             'rate' => 'Rate',
