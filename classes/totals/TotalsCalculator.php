@@ -231,7 +231,12 @@ class TotalsCalculator
     {
         return $this->totalTaxes;
     }
-
+    
+    public function totalDiscounts(): float
+    {
+        return $this->totalDiscounts;
+    }
+    
     public function totalPrePayment(): float
     {
         return $this->totalPrePayment;
