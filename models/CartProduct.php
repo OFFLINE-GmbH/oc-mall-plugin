@@ -54,15 +54,6 @@ class CartProduct extends Model
             'otherKey' => 'service_option_id',
         ],
     ];
-    public $with = [
-        'product',
-        'product.taxes',
-        'service_options.service.taxes',
-        'service_options.prices',
-        'custom_field_values',
-        'custom_field_values.custom_field',
-        'custom_field_values.custom_field_option',
-    ];
 
     public static function boot()
     {

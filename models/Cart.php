@@ -28,7 +28,6 @@ class Cart extends Model
     use ShippingMethods;
 
     protected $dates = ['deleted_at'];
-    protected $with = ['products', 'products.data', 'discounts', 'shipping_method', 'customer'];
     public $rules = [];
     public $table = 'offline_mall_carts';
     public $hasMany = [

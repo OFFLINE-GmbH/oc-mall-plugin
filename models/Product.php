@@ -134,7 +134,6 @@ class Product extends Model
     ];
     public $appends = ['hash_id'];
     public $table = 'offline_mall_products';
-    public $with = ['image_sets', 'prices'];
     public $attachMany = [
         'downloads'      => File::class,
         'initial_images' => File::class,

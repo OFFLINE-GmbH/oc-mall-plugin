@@ -39,7 +39,6 @@ class Variant extends Model
     public $nullable = ['image_set_id'];
     public $table = 'offline_mall_product_variants';
     public $dates = ['deleted_at'];
-    public $with = ['product.additional_prices', 'image_sets', 'prices', 'additional_prices'];
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
     public $appends = ['hashid'];
     public $translatable = [
