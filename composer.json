@@ -38,5 +38,10 @@
     "squizlabs/php_codesniffer": "*",
     "phpmd/phpmd": "^2.6",
     "mockery/mockery": "^1.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
   }
 }
