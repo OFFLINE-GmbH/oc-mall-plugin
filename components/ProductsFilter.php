@@ -478,7 +478,7 @@ class ProductsFilter extends MallComponent
     {
         $fallback = optional($this->productsComponentSort)->key() ?? SortOrder::default();
 
-        return input('sort', $fallback);
+        return post('sort', get('sort', $fallback));
     }
 
     /**
