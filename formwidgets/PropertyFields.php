@@ -259,7 +259,7 @@ class PropertyFields extends FormWidgetBase
             return [$value => $value];
         })->toArray();
 
-        $widget = $this->makePartial('modules/backend/widgets/form/partials/field_dropdown',
+        $widget = $this->makePartial('modules/backend/widgets/form/partials/field_dropdown.htm',
             ['field' => $formField, 'value' => $escapedValue]
         );
 
@@ -275,7 +275,7 @@ class PropertyFields extends FormWidgetBase
             return [$i['value'], $i['value']];
         })->toArray();
 
-        return $this->makePartial('modules/backend/widgets/form/partials/field_checkbox',
+        return $this->makePartial('modules/backend/widgets/form/partials/field_checkbox.htm',
             ['field' => $formField, 'value' => $value->value]
         );
     }
@@ -289,7 +289,7 @@ class PropertyFields extends FormWidgetBase
             return [$i['value'], $i['value']];
         })->toArray();
 
-        return $this->makePartial('modules/backend/widgets/form/partials/field_switch',
+        return $this->makePartial('modules/backend/widgets/form/partials/field_switch.htm',
             ['field' => $formField, 'value' => $value->value]
         );
     }
