@@ -54,6 +54,7 @@ class VariantByPropertyValuesQuery
                 'offline_mall_product_variants.id'
             )
             ->whereNull('offline_mall_product_variants.deleted_at')
+            ->where('offline_mall_product_variants.published', true)
             ->where('offline_mall_product_variants.product_id', $this->product->id)
             ->select(DB::raw('variant_id, count(*) as matching_attributes'))
             ->groupBy(['variant_id'])
