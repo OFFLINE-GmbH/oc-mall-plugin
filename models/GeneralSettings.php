@@ -44,7 +44,8 @@ class GeneralSettings extends Model
             ::listInTheme( Theme::getActiveTheme(), true)
             ->mapWithKeys(function($page) {
                 return [$page->baseFileName => $page->title];
-            });
+            })
+            ->toArray();
     }
 
     public function getProductPageOptions()
