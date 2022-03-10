@@ -1,6 +1,7 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Closure;
+use Event;
 use Illuminate\Support\Facades\Session;
 use Model;
 use October\Rain\Database\Collection;
@@ -162,27 +163,12 @@ class ShippingMethod extends Model
             $countryId = post('country_id');
         }
 
-        return self
-            ::orderBy('sort_order')
-            ->when($countryId, function ($q) use ($countryId) {
-                $q->whereDoesntHave('countries')
-                  ->orWhereHas('countries', function ($q) use ($countryId) {
-                      $q->where('country_id', $countryId);
-                  });
-            })
-            ->get()
-            ->filter(function (ShippingMethod $method) use ($total) {
-                $below = $method->availableBelowTotal()->integer;
-                $above = $method->availableAboveTotal()->integer;
-
-                return ($below === null || $below > $total)
-                    && ($above === null || $above <= $total);
-            });
+        return self::getAvailability($countryId, $total, $cart, null);
     }
 
     public static function getAvailableByWishlist(?Wishlist $wishlist)
     {
-        if ( ! $wishlist) {
+        if (! $wishlist) {
             return new Collection();
         }
 
@@ -190,8 +176,12 @@ class ShippingMethod extends Model
 
         $countryId = $wishlist->getCartCountryId();
 
-        return self
-            ::orderBy('sort_order')
+        return self::getAvailability($countryId, $total, null, $wishlist);
+    }
+
+    public static function getAvailability($countryId, $total, $cart = null, $whishlist = null)
+    {
+        $availableShippingMethods = self::orderBy('sort_order')
             ->when($countryId, function ($q) use ($countryId) {
                 $q->whereDoesntHave('countries')
                   ->orWhereHas('countries', function ($q) use ($countryId) {
@@ -206,6 +196,10 @@ class ShippingMethod extends Model
                 return ($below === null || $below > $total)
                     && ($above === null || $above <= $total);
             });
+
+        Event::fire('mall.shipping.methods.availability', [&$availableShippingMethods, $cart, $whishlist]);
+
+        return $availableShippingMethods;
     }
 
     public function availableBelowTotal($currency = null)
