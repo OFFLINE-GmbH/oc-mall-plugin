@@ -125,14 +125,12 @@ class DefaultSignUpHandler implements SignUpHandler
 
     protected function createUser($data, $requiresConfirmation): User
     {
-        $data = [
-            'name'                  => $data['firstname'],
-            'surname'               => $data['lastname'],
-            'email'                 => $data['email'],
-            'password'              => $data['password'],
-            'password_confirmation' => $data['password_repeat'],
-        ];
-
+        $data['name']                  = $data['firstname'];
+        $data['surname']               = $data['lastname'];
+        $data['email']                 = $data['email'];
+        $data['password']              = $data['password'];
+        $data['password_confirmation'] = $data['password_repeat'];
+        
         $user = Auth::register($data, ! $requiresConfirmation);
         if ($this->asGuest && $user && $group = UserGroup::getGuestGroup()) {
             $user->groups()->sync($group);
