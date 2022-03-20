@@ -10,6 +10,7 @@ class Price extends Model
     use Nullable;
 
     public $nullable = ['price'];
+    public $with = ['currency'];
     public $rules = [
     ];
     public $table = 'offline_mall_prices';

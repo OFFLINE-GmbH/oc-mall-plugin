@@ -111,6 +111,7 @@ class Variant extends Model
         'description',
         'description_short',
     ];
+    public $with = ['product', 'prices'];
 
     public function afterDelete()
     {
