@@ -91,6 +91,16 @@ argument.
 This event is emitted when there was a problem during the checkout process. It receives a `PaymentResult` as a single 
 argument.
 
+## Shipping
+
+### `mall.shipping.methods.availability`
+
+This event is emitted immediately after the shipping methods have been filtered according to their availability by country and the total amount of the cart. It receives the following arguments:
+
+* `ShippingMethod` collection of all available shipping methods
+* `Cart` the current cart 
+* `Whishlist` the current whishlist
+
 ## Review
 
 ### `mall.review.created`
