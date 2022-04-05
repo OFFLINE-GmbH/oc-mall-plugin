@@ -259,7 +259,8 @@ class PropertyFields extends FormWidgetBase
             return [$value => $value];
         })->toArray();
 
-        $widget = $this->makePartial('modules/backend/widgets/form/partials/field_dropdown.htm',
+        $widget = $this->makePartial(
+            $this->backendPartial('field_dropdown'),
             ['field' => $formField, 'value' => $escapedValue]
         );
 
@@ -275,7 +276,8 @@ class PropertyFields extends FormWidgetBase
             return [$i['value'], $i['value']];
         })->toArray();
 
-        return $this->makePartial('modules/backend/widgets/form/partials/field_checkbox.htm',
+        return $this->makePartial(
+            $this->backendPartial('field_checkbox'),
             ['field' => $formField, 'value' => $value->value]
         );
     }
@@ -289,7 +291,8 @@ class PropertyFields extends FormWidgetBase
             return [$i['value'], $i['value']];
         })->toArray();
 
-        return $this->makePartial('modules/backend/widgets/form/partials/field_switch.htm',
+        return $this->makePartial(
+            $this->backendPartial('field_switch'),
             ['field' => $formField, 'value' => $value->value]
         );
     }
@@ -331,4 +334,15 @@ class PropertyFields extends FormWidgetBase
         return $this->formField->config['fieldPrefix'] ?? 'PropertyValues';
     }
 
+    protected function backendPartial(string $partial)
+    {
+        $path = sprintf('modules/backend/widgets/form/partials/%s', $partial);
+
+        // October 2.0, add .htm extension.
+        if (class_exists('System')) {
+            $path .= '.htm';
+        } 
+
+        return $path;
+    }
 }
