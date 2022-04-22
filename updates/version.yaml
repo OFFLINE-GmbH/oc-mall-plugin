@@ -399,4 +399,6 @@
     - 'Added Support for October 2.2'
 1.16.1:
     - 'Fixed compatibility issue with October 1'
+1.16.2:
+    - 'Fixed bug where properties are displayed multiple times on the product detail page'
 
