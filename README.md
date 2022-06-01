@@ -29,6 +29,10 @@
 * Easily extendable with custom features
 * [Google Tag Manager and Google Merchant Center integrations](https://offline-gmbh.github.io/oc-mall-plugin/digging-deeper/analytics.html)
 
+#### Compatibility
+
+For October 1, use version 1.x of this plugin. For October 2+ use the latest version.
+
 #### Documentation
 The documentation of this plugin can be found here:
 [https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
@@ -53,10 +57,11 @@ For support and development requests please file an issue on GitHub.
 The easiest way to get you started is by using the command line:
 
 ```bash
-php artisan plugin:install rainlab.user
-php artisan plugin:install rainlab.location
-php artisan plugin:install rainlab.translate
-php artisan plugin:install offline.mall
+composer require \
+   rainlab/user-plugin \
+   rainlab/location-plugin \
+   rainlab/translate-plugin \
+   offline/oc-mall-plugin
 ``` 
 
 Once the plugin is installed take a look at

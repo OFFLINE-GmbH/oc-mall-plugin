@@ -19,9 +19,11 @@ You can find a demo of this plugin on [mall.offline.swiss](https://mall.offline.
 
 ## Requirements
 
-* PHP7.2+
-* October Build 444+
+* PHP 8.0+
+* October v2
 * For best performance use MySQL 5.7+ or MariaDB 10.2+
+
+If you want to use the plugin on October 1, use version 1.x.
 
 ## Links
 

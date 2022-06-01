@@ -16,19 +16,21 @@ and `RainLab.Translate`.
 The easiest way to get you started is by using the command line:
 
 ```bash
-php artisan plugin:install rainlab.user
-php artisan plugin:install rainlab.location
-php artisan plugin:install rainlab.translate
-php artisan plugin:install offline.mall
+composer require \
+   rainlab/user-plugin \
+   rainlab/location-plugin \
+   rainlab/translate-plugin \
+   offline/oc-mall-plugin
 ```
 
 If you plan to use our [demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) make sure to also
- install `RainLab.Pages` and `OFFLINE.SiteSearch`. These are dependencies of the demo theme, not the plugin itself.
+ install `rainlab/pages-plugin` and `offline/oc-site-search-plugin`. These are dependencies of the demo theme, not the plugin itself.
 
 ```bash
 # For the demo theme only!
-php artisan plugin:install rainlab.pages
-php artisan plugin:install offline.sitesearch
+composer require \
+    rainlab/pages-plugin \
+    offline/oc-site-search-plugin
 ```   
 
 ## Optional packages
