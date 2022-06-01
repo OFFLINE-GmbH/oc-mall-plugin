@@ -96,7 +96,9 @@ class PropertyGroup extends Model
 
     public function getDisplayNameAttribute()
     {
-        if ($this->getOriginal('display_name')) {
+        $method = method_exists($this, 'getRawOriginal') ? 'getRawOriginal' : 'getOriginal';
+
+        if ($this->{$method}('display_name')) {
             return $this->getAttributeTranslated('display_name');
         }
 
