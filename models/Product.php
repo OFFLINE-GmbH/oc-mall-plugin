@@ -621,4 +621,9 @@ class Product extends Model
             'variant' => 'offline.mall::lang.variant.method.variant',
         ];
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return new \Carbon\Carbon($value);
+    }
 }
