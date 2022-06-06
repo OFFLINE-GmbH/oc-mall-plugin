@@ -47,11 +47,11 @@ columns:
         searchable: true
         invisible: true
         sortable: true
-    customer_id:
+    customer_name:
         label: 'offline.mall::lang.order.customer'
         type: text
         sortable: true
-        select: name
+        select: concat(firstname, ' ', lastname)
         relation: customer
     created_at:
         label: 'offline.mall::lang.common.created_at'
