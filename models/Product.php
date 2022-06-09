@@ -622,7 +622,7 @@ class Product extends Model
         ];
     }
 
-    public function getCreatedAtAttribute($value)
+    public function setCreatedAtAttribute($value)
     {
         return new \Carbon\Carbon($value);
     }
