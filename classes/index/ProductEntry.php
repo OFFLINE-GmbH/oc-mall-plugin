@@ -22,7 +22,7 @@ class ProductEntry implements Entry
         // Make sure variants inherit product data again.
         session()->forget('mall.variants.disable-inheritance');
 
-        $data                = $product->attributesToArray();
+        $data                = $product->getAttributes();
         $data['index']       = self::INDEX;
         $data['on_sale']     = $product->on_sale;
         $data['category_id'] = $product->categories->pluck('id');
