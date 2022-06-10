@@ -35,6 +35,7 @@ class CustomerGroups extends Controller
 
     public function relationExtendConfig($config, $field, $model)
     {
+        // Keep compatibility with Winter CMS
         if ($field === 'users' && PluginManager::instance()->hasPlugin('Winter.Location')) {
             $config->view['list']   = '$/winter/user/models/user/columns.yaml';
             $config->manage['list'] = '$/winter/user/models/user/columns.yaml';
