@@ -7,6 +7,8 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ReorderController;
 
+use System\Classes\PluginManager;
+
 class CustomerGroups extends Controller
 {
     public $implement = [
@@ -29,5 +31,14 @@ class CustomerGroups extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('RainLab.User', 'user', 'customer_groups');
+    }
+
+    public function relationExtendConfig($config, $field, $model)
+    {
+        if ($field === 'users' && PluginManager::instance()->hasPlugin('Winter.Location')) {
+            $config->view['list']   = '$/winter/user/models/user/columns.yaml';
+            $config->manage['list'] = '$/winter/user/models/user/columns.yaml';
+            $config->manage['form'] = '$/winter/user/models/user/fields.yaml';
+        }
     }
 }
