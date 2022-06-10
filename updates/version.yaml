@@ -403,4 +403,6 @@
     - 'Fixed bug where properties are displayed multiple times on the product detail page'
 2.0.0:
     - '!!! This plugin now requires October 2+. If you have installed the plugin from the marketplace, we suggest to migrate to Composer and track the ^1.0 version. V1 will continue to receive bugfixes but no new features will be backported.'
+2.0.1:
+    - 'Bugfixes for October 2+, optimized Winter CMS compatibility (thanks to @mjauvin)'
 
