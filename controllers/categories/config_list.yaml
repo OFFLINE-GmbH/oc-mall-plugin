@@ -10,5 +10,14 @@ toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
-showTree: 1
-treeExpanded: 1
+
+# Legacy (v1)
+showTree: true
+treeExpanded: true
+
+# Reordering
+structure:
+    showTree: true
+    showReorder: true
+    treeExpanded: true
+    maxDepth: 0
