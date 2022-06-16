@@ -25,7 +25,12 @@ class Services extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-services');
-        $this->addJs('/plugins/offline/mall/assets/Sortable.js');
+
+        // Legacy (v1)
+        if (!class_exists('System')) {
+            $this->addJs('/plugins/offline/mall/assets/Sortable.js');
+        }
+
         $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
