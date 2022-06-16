@@ -60,7 +60,7 @@ class Address extends Model
 
     public function getNameAttribute()
     {
-        return $this->getOriginal('name') ?: optional($this->customer)->name;
+        return $this->getRawOriginal('name') ?: optional($this->customer)->name;
     }
 
     public function getOneLinerAttribute(): string
