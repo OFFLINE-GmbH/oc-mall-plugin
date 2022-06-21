@@ -702,7 +702,7 @@ class Product extends MallComponent
             ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
-            ->when($groupedValue > 0, function ($q) use ($groupedValue) {
+            ->when($groupedValue > 0 && $this->redirectOnPropertyChange, function ($q) use ($groupedValue) {
                 $q->where('value', '<>', $groupedValue);
             })
             ->get()
