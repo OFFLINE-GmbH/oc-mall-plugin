@@ -127,6 +127,12 @@ tabs:
             type: partial
             tab: 'offline.mall::lang.product.general'
             dependsOn: categories
+        property_groups:
+            span: full
+            path: $/offline/mall/controllers/products/_property_groups.htm
+            context: update
+            type: partial
+            tab: 'offline.mall::lang.common.property_groups'
         description_short:
             label: 'offline.mall::lang.product.description_short'
             size: small
@@ -211,7 +217,7 @@ tabs:
             span: full
             type: mall.propertyfields
             tab: 'offline.mall::lang.common.properties'
-            dependsOn: [categories, inventory_management_method]
+            dependsOn: [property_groups, categories, inventory_management_method]
         price_includes_tax:
             label: 'offline.mall::lang.product.price_includes_tax'
             span: auto

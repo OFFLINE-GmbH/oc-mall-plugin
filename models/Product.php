@@ -19,6 +19,7 @@ use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
+use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use RainLab\Translate\Models\Locale;
@@ -40,6 +41,7 @@ class Product extends Model
     use Nullable;
     use PriceAccessors;
     use ProductPriceAccessors;
+    use SortableRelation;
     use StockAndQuantity;
     use FilteredTaxes;
 
@@ -221,6 +223,13 @@ class Product extends Model
             'key'      => 'product_id',
             'otherKey' => 'service_id',
             'pivot'    => ['required'],
+        ],
+        'property_groups'   => [
+            PropertyGroup::class,
+            'table'    => 'offline_mall_product_property_group',
+            'key'      => 'product_id',
+            'otherKey' => 'property_group_id',
+            'pivot'    => ['relation_sort_order'],
         ],
     ];
 

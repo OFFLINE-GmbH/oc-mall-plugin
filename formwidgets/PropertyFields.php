@@ -47,6 +47,9 @@ class PropertyFields extends FormWidgetBase
                 ->flatMap->inherited_property_groups
         )->unique('id');
 
+        $product_properties = collect($this->controller->vars['formModel']->property_groups);
+        $groups = $groups->merge($product_properties);
+
         if ($this->controller->vars['formModel']->inventory_management_method !== 'single') {
             $useForVariants = $this->useVariantSpecificPropertiesOnly();
             $groups         = PropertyGroup::with([
