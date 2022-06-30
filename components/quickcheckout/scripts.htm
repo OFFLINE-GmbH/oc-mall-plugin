@@ -68,7 +68,10 @@
 
                 $.request('{{ __SELF__ }}::onRun', {
                     data: { country_id: useCountry.val() },
-                    update: {'{{ __SELF__ }}::shippingmethod': '.mall-quick-checkout__shipping-methods'}
+                    update: {
+                       '{{ __SELF__ }}::cart': '.mall-quick-checkout__cart',
+                       '{{ __SELF__ }}::shippingmethod': '.mall-quick-checkout__shipping-methods'
+                    }
                 })
             })
             $body.on('click', '.mall-quick-checkout__payment-methods .mall-quick-checkout__toggle-option', function() {
