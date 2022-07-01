@@ -15,5 +15,7 @@
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
     </button>
-    <a href="<?= Backend::url('offline/mall/categories/reorder') ?>" class="btn btn-default oc-icon-sort"><?= e(trans('offline.mall::lang.common.reorder')) ?></a>
+    <?php if (!class_exists('System')): ?>
+        <a href="<?= Backend::url('offline/mall/categories/reorder') ?>" class="btn btn-default oc-icon-sort"><?= e(trans('offline.mall::lang.common.reorder')) ?></a>
+    <?php endif ?>
 </div>

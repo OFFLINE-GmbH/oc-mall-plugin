@@ -2,11 +2,11 @@
 
 namespace OFFLINE\Mall\Classes\Index\MySQL;
 
+use Schema;
 use Cache;
 use DB;
 use Illuminate\Support\Collection;
 use October\Rain\Database\Schema\Blueprint;
-use October\Rain\Support\Facades\Schema;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;

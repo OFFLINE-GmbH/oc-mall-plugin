@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Cache;
 use Model;
+use Schema;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
-use October\Rain\Support\Facades\Schema;
 
 class Notification extends Model
 {

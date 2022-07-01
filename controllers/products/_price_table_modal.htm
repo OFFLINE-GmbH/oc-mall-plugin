@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header flex-row-reverse">
     <button type="button" class="close" data-dismiss="popup">×</button>
     <h4 class="modal-title">
         <?= e(trans('offline.mall::lang.product.price_table_modal.title')) ?>
@@ -10,12 +10,18 @@
 </div>
 
 <div class="modal-footer">
-    <div class="pull-left text-left">
+    <button type="submit" class="btn btn-primary js-persist">
+        <?= e(trans('backend::lang.form.save')) ?>
+    </button>
+    <button type="button" class="btn btn-default js-cancel" data-dismiss="popup">
+        <?= e(trans('backend::lang.form.cancel')) ?>
+    </button>
+    <div class="pull-right">
         <div class="dropdown price-table-currency-selector">
             <a
-                    href="javascript:;"
-                    data-toggle="dropdown"
-                    class="btn btn-link oc-icon-angle-down">
+                href="javascript:;"
+                data-toggle="dropdown"
+                class="btn btn-link oc-icon-angle-down">
                 <?= e(trans('offline.mall::lang.product.price_table_modal.currency_dropdown')) ?>
                 <span class="currency-label"><?= $currencies->first()->code ?></span>
             </a>
@@ -34,12 +40,6 @@
             </ul>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary js-persist">
-        <?= e(trans('backend::lang.form.save')) ?>
-    </button>
-    <button type="button" class="btn btn-default js-cancel" data-dismiss="popup">
-        <?= e(trans('backend::lang.form.cancel')) ?>
-    </button>
 </div>
 
 <script>
