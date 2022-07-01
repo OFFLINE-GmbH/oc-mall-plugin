@@ -609,8 +609,8 @@ class Product extends Model
      */
     protected function hideField($fields, string $field)
     {
-        if (property_exists($fields, $field)) {
-            $fields->$field->hidden = true;
+        if (array_key_exists($field, $fields->config)) {
+            $fields->config[$field]->hidden = true;
         }
     }
 
