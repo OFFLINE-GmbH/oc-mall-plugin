@@ -609,8 +609,12 @@ class Product extends Model
      */
     protected function hideField($fields, string $field)
     {
-        if (array_key_exists($field, $fields->config)) {
+        $isElementHolder = $fields instanceof \October\Rain\Element\ElementHolder::class;
+        
+        if ($isElementHolder && array_key_exists($field, $fields->config)) {
             $fields->config[$field]->hidden = true;
+        } elseif (property_exists($fields, $field)) {
+            $fields->$field->hidden = true;
         }
     }
 
