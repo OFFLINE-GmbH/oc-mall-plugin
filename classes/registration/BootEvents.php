@@ -2,7 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-use Illuminate\Support\Facades\Event;
+use Event;
 use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
 use OFFLINE\Mall\Models\Brand;
@@ -40,7 +40,7 @@ trait BootEvents
     protected function registerGenericEvents()
     {
         $this->app->bind('MailingEventHandler', MailingEventHandler::class);
-        Event::subscribe('MailingEventHandler');
+        $this->app['events']->subscribe('MailingEventHandler');
     }
 
     protected function registerStaticPagesEvents()

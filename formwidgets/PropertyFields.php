@@ -344,7 +344,7 @@ class PropertyFields extends FormWidgetBase
         // October 2.0, add .htm extension.
         if (class_exists('System')) {
             $path .= '.htm';
-        } 
+        }
 
         return $path;
     }

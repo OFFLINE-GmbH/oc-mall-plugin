@@ -33,11 +33,11 @@ fields:
         trigger:
             action: show
             field: _type_dropdown
-            condition: value[dropdown] or value[image] or value[color]
+            condition: value[dropdown][image][color]
 
     type:
         label: 'offline.mall::lang.custom_fields.type'
         oc.commentPosition: ''
         span: auto
         type: text
-        cssClass: 'hide'
+        cssClass: 'hide oc-hide'

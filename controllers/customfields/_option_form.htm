@@ -3,7 +3,7 @@
 <input type="hidden" name="manage_id" value="<?= $customFieldId ?>" />
 <input type="hidden" name="edit_id" value="<?= $customFieldOptionId ?? '' ?>" />
 <input type="hidden" name="type" value="<?= $type ?? '' ?>" />
-<div class="modal-header">
+<div class="modal-header flex-row-reverse">
     <button type="button" class="close" data-dismiss="popup">&times;</button>
     <h4 class="modal-title"><?= e(trans('offline.mall::lang.titles.custom_field_options.edit')) ?></h4>
 </div>

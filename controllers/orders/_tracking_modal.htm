@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form class="form-elements" role="form">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header flex-row-reverse">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">
                         <?= e(trans('offline.mall::lang.order.update_shipping_state')) ?>
@@ -27,7 +27,7 @@
                             <label class="choice storm-icon-pseudo" for="mark-as-shipped">
                                 <?= e(trans('offline.mall::lang.order.tracking_shipped'))?>
                             </label>
-                            <p class="help-block">
+                            <p class="help-block form-text">
                                 <?= e(trans('offline.mall::lang.order.tracking_shipped_comment')) ?>
                             </p>
                         </div>
@@ -36,7 +36,7 @@
                             <label class="choice storm-icon-pseudo" for="mark-as-completed">
                                 <?= e(trans('offline.mall::lang.order.tracking_completed'))?>
                             </label>
-                            <p class="help-block">
+                            <p class="help-block form-text">
                                 <?= e(trans('offline.mall::lang.order.tracking_completed_comment')) ?>
                             </p>
                         </div>
@@ -45,7 +45,7 @@
                             <label class="choice storm-icon-pseudo" for="send-notification">
                                 <?= e(trans('offline.mall::lang.order.tracking_notification'))?>
                             </label>
-                            <p class="help-block">
+                            <p class="help-block form-text">
                                 <?= e(trans('offline.mall::lang.order.tracking_notification_comment')) ?>
                             </p>
                         </div>
