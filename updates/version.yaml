@@ -407,4 +407,6 @@
     - 'Bugfixes for October 2+, optimized Winter CMS compatibility (thanks to @mjauvin)'
 2.0.2:
     - 'October 3 compatibility update'
+2.0.3:
+    - 'Bugfix release'
 
