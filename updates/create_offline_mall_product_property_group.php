@@ -1,7 +1,7 @@
-<?php namespace StudioAzura\Tweaks\Updates;
+<?php namespace OFFLINE\Mall\Updates;
 
 use Schema;
-use Winter\Storm\Database\Updates\Migration;
+use October\Rain\Database\Updates\Migration;
 
 class CreateOfflineMallProductPropertyGroup extends Migration
 {
