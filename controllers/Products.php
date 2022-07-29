@@ -65,6 +65,22 @@ class Products extends Controller
                 $this->preparePriceTable();
             }
         }
+
+        // Legacy (v1)
+        if (!class_exists('System')) {
+            $this->addJs('/plugins/offline/mall/assets/Sortable.js');
+        }
+
+        $this->addJs('/plugins/offline/mall/assets/backend.js');
+    }
+
+    public function onReorderRelation()
+    {
+        $records = request()->input('rcd');
+        $model   = Product::findOrFail($this->params[0]);
+        $model->setRelationOrder('property_groups', $records, range(1, count($records)), 'relation_sort_order');
+
+        Flash::success(trans('offline.mall::lang.common.sorting_updated'));
     }
 
     public function update($id)
