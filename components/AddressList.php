@@ -6,6 +6,7 @@ use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Cart;
 
 /**
  * Display a list of user addresses.
@@ -120,7 +121,10 @@ class AddressList extends MallComponent
     {
 
         $id = $this->decode(post('id'));
-        $customer = Auth::getUser()->customer;
+        $user = Auth::getUser();
+        $customer = $user->customer;
+        $cart = Cart::byUser($user);
+
         $address = Address::byCustomer($customer)->find($id);
 
         if (!$address) {
@@ -129,9 +133,13 @@ class AddressList extends MallComponent
 
         if ($type === 'billing') {
             $this->defaultBillingAddressId = $customer->default_billing_address_id = $id;
+            $cart->setBillingAddress($address);
         } elseif ($type === 'shipping') {
             $this->defaultShippingAddressId = $customer->default_shipping_address_id = $id;
+            $cart->setShippingAddress($address);
         }
+
+        $cart->save();
 
         return $customer->save();
     }
@@ -146,7 +154,9 @@ class AddressList extends MallComponent
     public function onDelete()
     {
         $id = $this->decode(post('id'));
-        $customer = Auth::getUser()->customer;
+        $user = Auth::getUser();
+        $customer = $user->customer;
+        $cart = Cart::byUser($user);
         $address = Address::byCustomer($customer)->find($id);
 
         if (!$address) {
@@ -164,12 +174,15 @@ class AddressList extends MallComponent
 
         if ($customer->default_shipping_address_id === $address->id) {
             $customer->default_shipping_address_id = $defaultAddress->id;
+            $cart->setShippingAddress($defaultAddress);
+            $customer->save();
         }
+        
         if ($customer->default_billing_address_id === $address->id) {
             $customer->default_billing_address_id = $defaultAddress->id;
+            $cart->setBillingAddress($defaultAddress);
+            $customer->save();
         }
-
-        $customer->save();
 
         Flash::success(trans('offline.mall::lang.components.addressList.messages.address_deleted'));
 

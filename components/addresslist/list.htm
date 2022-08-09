@@ -19,12 +19,12 @@
                 <div class="mall-switcher__outer">
                     <div class="mall-switcher">
                         <a href="javascript:;" data-request="onChangeDefaultBillingAddress"
-                           data-request-data="id: '{{ address.hashId }}'"
+                           data-request-data="id: '{{ address.hashId }}'" data-request-flash
                            class="mall-switcher__item {{ __SELF__.defaultBillingAddressId == address.id ? 'mall-switcher__item--active' }}">
                             {{ 'offline.mall::frontend.billing_address' | trans }}
                         </a>
                         <a href="javascript:;" data-request="onChangeDefaultShippingAddress"
-                           data-request-data="id: '{{ address.hashId }}'"
+                           data-request-data="id: '{{ address.hashId }}'" data-request-flash
                            class="mall-switcher__item {{ __SELF__.defaultShippingAddressId == address.id ? 'mall-switcher__item--active' }}">
                             {{ 'offline.mall::frontend.shipping_address' | trans }}
                         </a>
@@ -38,7 +38,7 @@
                 </a>
                 {% if __SELF__.addresses.count > 1 %}
                     <a href="javascript:;" data-request="onDelete" data-request-data="id: '{{ address.hashId }}'"
-                       data-request-confirm="{{ 'offline.mall::frontend.are_you_sure' | trans }}"
+                       data-request-confirm="{{ 'offline.mall::frontend.are_you_sure' | trans }}" data-request-flash
                        class="mall-btn mall-btn--sm">
                         {{ 'offline.mall::frontend.delete' | trans }}
                     </a>
