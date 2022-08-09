@@ -28,6 +28,7 @@ class VariantEntry implements Entry
         $this->defaultCurrency = Currency::defaultCurrency();
 
         $data              = $variant->attributesToArray();
+        $data['created_at'] = optional($variant->created_at)->format('Y-m-d H:i:s');
         $data['published'] = $variant->published && $product->published;
         $data['on_sale']   = $variant->on_sale;
 
