@@ -401,4 +401,7 @@
     - 'Fixed compatibility issue with October 1'
 1.16.2:
     - 'Fixed bug where properties are displayed multiple times on the product detail page'
+1.16.3:
+    - 'Fixed customer name display in backend address list'
+
 
