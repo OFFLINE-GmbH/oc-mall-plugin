@@ -175,14 +175,14 @@ class AddressList extends MallComponent
         if ($customer->default_shipping_address_id === $address->id) {
             $customer->default_shipping_address_id = $defaultAddress->id;
             $cart->setShippingAddress($defaultAddress);
-            $customer->save();
         }
         
         if ($customer->default_billing_address_id === $address->id) {
             $customer->default_billing_address_id = $defaultAddress->id;
             $cart->setBillingAddress($defaultAddress);
-            $customer->save();
         }
+
+        $customer->save();
 
         Flash::success(trans('offline.mall::lang.components.addressList.messages.address_deleted'));
 
