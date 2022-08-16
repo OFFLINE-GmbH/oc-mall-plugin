@@ -234,7 +234,7 @@ class ShippingMethod extends Model
         return $this->priceAccessorPriceRelation($currency, $relation, $filter);
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize()
     {
         $base = parent::jsonSerialize();
         $this->prices->load('currency');
