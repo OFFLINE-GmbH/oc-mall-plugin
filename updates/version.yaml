@@ -413,4 +413,6 @@
     - 'Minor Bugfix release'
 2.0.5:
     - 'Fixed demo seeder in October 3'
+2.0.6:
+    - 'Fixed compatibility with PHP 7.4'
 
