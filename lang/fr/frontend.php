@@ -48,7 +48,7 @@ return [
     'form.company' => 'Société',
     'form.company_placeholder' => 'Laisser vide si personne privée',
     'form.recipient' => 'Nom du destinataire',
-    'form.recipient_placeholder' => 'Laisse vide si c\'est toi',
+    'form.recipient_placeholder' => 'Laisser vide si c\'est vous',
     'form.address_lines' => 'Adresse',
     'form.zip' => 'Code postal',
     'form.city' => 'Ville',
