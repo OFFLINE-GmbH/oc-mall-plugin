@@ -17,7 +17,7 @@ class ProductsSearchProvider extends ResultsProvider
         $matchingProducts = $this->searchProducts();
         $matchingVariants = $this->searchVariants();
 
-        $controller  = Controller->getController();
+        $controller  = Controller::getController();
         $productPage = GeneralSettings::get('product_page');
 
         $groupByProducts = GeneralSettings::get('group_search_results_by_product', false);
