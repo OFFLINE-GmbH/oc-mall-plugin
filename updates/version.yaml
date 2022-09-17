@@ -417,4 +417,6 @@
     - 'Fixed compatibility with PHP 7.4'
 2.0.8:
     - 'Further compatibility fixes'
+2.0.9:
+    - 'Optimized OFFLINE.SiteSearch integration'
 
