@@ -419,4 +419,6 @@
     - 'Further compatibility fixes'
 2.0.9:
     - 'Optimized OFFLINE.SiteSearch integration'
+2.0.10:
+    - 'Added PDFMaker trait to product model'
 
