@@ -21,8 +21,10 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
+use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use RainLab\Translate\Models\Locale;
 use System\Models\File;
+
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -42,6 +44,7 @@ class Product extends Model
     use ProductPriceAccessors;
     use StockAndQuantity;
     use FilteredTaxes;
+    use PDFMaker;
 
     const MORPH_KEY = 'mall.product';
 
