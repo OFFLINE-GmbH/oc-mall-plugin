@@ -129,7 +129,7 @@ trait MenuItems
             );
         }
 
-        $controller = new Controller();
+        $controller = Controller::getController() ?: new Controller;
         $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug], false);
 
         $result             = [];

@@ -201,7 +201,8 @@ class MyAccount extends MallComponent
      */
     private function cartRedirect()
     {
-        $url = (new Controller())->pageUrl(GeneralSettings::get('cart_page'));
+        $controller = Controller::getController() ?: new Controller;
+        $url = $controller->pageUrl(GeneralSettings::get('cart_page'));
 
         return redirect()->to($url);
     }
