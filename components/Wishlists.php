@@ -87,7 +87,11 @@ class Wishlists extends MallComponent
         /** @var Collection<Wishlist>|Wishlist[] items */
         /** @var Wishlist currentItem */
         $this->items       = $this->getWishlists();
-        $this->currentItem = $this->items->first();
+        $this->currentItem = $this->items->find($this->decode($this->param('id')));
+
+        if (! $this->currentItem) {
+            $this->currentItem = $this->items->first();
+        }
 
         $this->handleShipping();
 
