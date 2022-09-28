@@ -90,7 +90,8 @@ class SendVirtualProductFiles
      */
     protected function getAccountUrl($page = 'orders'): string
     {
-        return (new Controller())->pageUrl(
+        $controller = Controller::getController() ?: new Controller;
+        return $controller->pageUrl(
             GeneralSettings::get('account_page'), ['page' => $page]
         );
     }
