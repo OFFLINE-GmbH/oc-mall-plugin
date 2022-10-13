@@ -196,4 +196,9 @@ class Currency extends Model
 
         return $currency;
     }
+
+    public function getDateFormat()
+    {
+        return 'Y-m-d H:i:s';
+    }
 }
