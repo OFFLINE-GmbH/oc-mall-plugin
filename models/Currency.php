@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Models;
 
+use DateTimeInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -42,6 +43,17 @@ class Currency extends Model
     ];
     public $table = 'offline_mall_currencies';
 
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+    
     public function getRoundingOptions()
     {
         return [
