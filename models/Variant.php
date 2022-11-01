@@ -16,7 +16,7 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 use System\Models\File;
 
 class Variant extends Model

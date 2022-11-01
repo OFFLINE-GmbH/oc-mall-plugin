@@ -26,7 +26,7 @@ use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Translate\Behaviors\TranslatableModel;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 
 class Products extends Controller
 {
