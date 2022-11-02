@@ -330,7 +330,7 @@ class Product extends Model
     {
         $locales = [];
         if (class_exists(Locale::class)) {
-            $locales = Locale::isEnabled()->get();
+            $locales = Locale::listLocales()->where('is_enabled', true)->all();
         }
 
         $formData = array_wrap(post('PropertyValues', []));
