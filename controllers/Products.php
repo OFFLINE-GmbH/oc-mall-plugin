@@ -26,7 +26,7 @@ use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Translate\Behaviors\TranslatableModel;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 
 class Products extends Controller
 {
@@ -341,7 +341,7 @@ class Products extends Controller
     {
         $locales = [];
         if (class_exists(Locale::class)) {
-            $locales = Locale::isEnabled()->get();
+            $locales = Locale::listLocales()->where('is_enabled', true)->all();
         }
 
         $formData = array_wrap(post('VariantPropertyValues', []));

@@ -5,12 +5,10 @@ use Backend\Classes\FormWidgetBase;
 use Backend\FormWidgets\ColorPicker;
 use Backend\FormWidgets\FileUpload;
 use Backend\FormWidgets\DatePicker;
+use Backend\FormWidgets\RichEditor;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
-use RainLab\Translate\FormWidgets\MLRichEditor;
-use RainLab\Translate\FormWidgets\MLText;
-use RainLab\Translate\FormWidgets\MLTextarea;
 
 /**
  * PropertyFields Form Widget
@@ -121,46 +119,19 @@ class PropertyFields extends FormWidgetBase
         $textFormField->value     = $value->value['name'] ?? '';
         $textFormField->valueFrom = 'value';
 
-
         $colorWidget             = new ColorPicker($this->controller, $colorFormField, $config);
         $colorWidget->allowEmpty = true;
         $colorWidget->bindToController();
 
-        $textWidget             = new MLText($this->controller, $textFormField, $config);
-        $textWidget->allowEmpty = true;
-        $textWidget->bindToController();
-
         return $this->makePartial(
             'colorpicker',
-            ['field' => $property, 'colorWidget' => $colorWidget, 'textWidget' => $textWidget]
+            ['field' => $property, 'colorWidget' => $colorWidget, 'textFormField' => $textFormField]
         );
     }
 
     private function textfield($property, PropertyValue $value, $type = 'text')
     {
-        // Number inputs don't have to be translatable.
-        if ($type !== 'text') {
-            return $this->makePartial('textfield', ['field' => $property, 'value' => $value, 'type' => $type]);
-        }
-
-        // For text inputs, use the MLText form widget.
-        $config = $this->makeConfig([
-            'model' => $value,
-            'type'  => $type,
-        ]);
-
-        $formField            = $this->newFormField($property);
-        $formField->value     = $value->value;
-        $formField->valueFrom = 'value';
-
-        $widget             = new MLText($this->controller, $formField, $config);
-        $widget->allowEmpty = true;
-        $widget->bindToController();
-
-        return $this->makePartial(
-            'textfield',
-            ['field' => $property, 'widget' => $widget, 'value' => $value->value]
-        );
+        return $this->makePartial('textfield', ['field' => $property, 'value' => $value, 'type' => $type]);
     }
 
     private function textarea($property, PropertyValue $value)
@@ -173,13 +144,9 @@ class PropertyFields extends FormWidgetBase
         $formField->value     = $value->value;
         $formField->valueFrom = 'value';
 
-        $widget             = new MLTextarea($this->controller, $formField, $config);
-        $widget->allowEmpty = true;
-        $widget->bindToController();
-
         return $this->makePartial(
             'textfield',
-            ['field' => $property, 'widget' => $widget, 'value' => $value->value]
+            ['field' => $property, 'value' => $value->value]
         );
     }
 
@@ -193,7 +160,7 @@ class PropertyFields extends FormWidgetBase
         $formField->value     = $value->value;
         $formField->valueFrom = 'value';
 
-        $widget             = new MLRichEditor($this->controller, $formField, $config);
+        $widget             = new RichEditor($this->controller, $formField, $config);
         $widget->allowEmpty = true;
         $widget->bindToController();
 

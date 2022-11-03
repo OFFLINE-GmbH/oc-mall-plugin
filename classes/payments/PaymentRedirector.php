@@ -31,7 +31,7 @@ class PaymentRedirector
      */
     public function __construct(string $page)
     {
-        $this->controller = new Controller();
+        $this->controller = Controller::getController() ?: new Controller;
         $this->page       = $page;
     }
 
