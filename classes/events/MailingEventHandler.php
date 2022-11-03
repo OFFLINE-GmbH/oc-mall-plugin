@@ -36,15 +36,15 @@ class MailingEventHandler
         $eventMap = [
             'offline.mall::customer.created'    => [
                 'event'   => 'mall.customer.afterSignup',
-                'handler' => 'MailingEventHandler@customerCreated',
+                'handler' => '\offline\mall\classes\events\MailingEventHandler@customerCreated',
             ],
             'offline.mall::order.state.changed' => [
                 'event'   => 'mall.order.state.changed',
-                'handler' => 'MailingEventHandler@orderStateChanged',
+                'handler' => '\offline\mall\classes\events\MailingEventHandler@orderStateChanged',
             ],
             'offline.mall::order.shipped'       => [
                 'event'   => 'mall.order.shipped',
-                'handler' => 'MailingEventHandler@orderShipped',
+                'handler' => '\offline\mall\classes\events\MailingEventHandler@orderShipped',
             ],
         ];
 
@@ -54,9 +54,9 @@ class MailingEventHandler
             }
         }
 
-        $events->listen('mall.order.payment_state.changed', 'MailingEventHandler@orderPaymentStateChanged');
-        $events->listen('mall.checkout.succeeded', 'MailingEventHandler@checkoutSucceeded');
-        $events->listen('mall.checkout.failed', 'MailingEventHandler@checkoutFailed');
+        $events->listen('mall.order.payment_state.changed', '\offline\mall\classes\events\MailingEventHandler@orderPaymentStateChanged');
+        $events->listen('mall.checkout.succeeded', '\offline\mall\classes\events\MailingEventHandler@checkoutSucceeded');
+        $events->listen('mall.checkout.failed', '\offline\mall\classes\events\MailingEventHandler@checkoutFailed');
     }
 
     /**
