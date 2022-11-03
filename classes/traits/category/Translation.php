@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits\Category;
 
 use Cache;
 use OFFLINE\Mall\Models\Category;
+use RainLab\Translate\Classes\Locale;
 use System\Classes\PluginManager;
 
 trait Translation
@@ -99,7 +100,7 @@ trait Translation
     {
         $locales = [Category::DEFAULT_LOCALE];
         if ($this->rainlabTranslateInstalled()) {
-            $locales = \RainLab\Translate\Models\Locale::get(['code'])->pluck('code')->toArray();
+            $locales = Locale::listLocales()->pluck('code')->toArray();
         }
 
         return $locales;
