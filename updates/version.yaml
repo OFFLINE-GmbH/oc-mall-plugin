@@ -427,4 +427,6 @@
     - 'Introduced RainLab.Translate v2 support'
 3.0.1:
     - 'Fixed product filter problem in October 3'
+3.0.2:
+    - 'Fixed mailing event handler not firing in October 3'
 
