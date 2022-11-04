@@ -425,4 +425,6 @@
     - 'Update to Version 3 of this plugin to get RainLab.Translate v2 support'
 3.0.0:
     - 'Introduced RainLab.Translate v2 support'
+3.0.1:
+    - 'Fixed product filter problem in October 3'
 
