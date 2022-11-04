@@ -425,3 +425,5 @@
     - 'Update to Version 3 of this plugin to get RainLab.Translate v2 support'
 2.0.12:
     - 'Fixed bug in product filter with new October JS framework'
+2.0.13:
+    - 'Added support to load Wishlist using a component parameter'
