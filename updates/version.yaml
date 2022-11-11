@@ -429,4 +429,6 @@
     - 'Fixed product filter problem in October 3'
 3.0.2:
     - 'Fixed mailing event handler not firing in October 3'
+3.0.3:
+    - 'Fixed handling of Currency model timestamps'
 
