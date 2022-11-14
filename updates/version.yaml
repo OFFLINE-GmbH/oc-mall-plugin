@@ -427,5 +427,5 @@
     - 'Fixed bug in product filter with new October JS framework'
 2.0.13:
     - 'Added support to load Wishlist using a component parameter'
-2.0.14:
+2.0.15:
     - 'Fixed handling of Currency model timestamps'
