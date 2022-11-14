@@ -40,6 +40,10 @@ class Currency extends Model
         'is_default' => 'boolean',
         'rate'       => 'float',
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     public $table = 'offline_mall_currencies';
 
     public function getRoundingOptions()
