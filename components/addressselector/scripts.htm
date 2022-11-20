@@ -4,7 +4,7 @@
             var $body = $('body');
             $body.on('click', '.mall-address-selector--{{ __SELF__.type }} .js-change-address', function () {
                 $.request('{{ __SELF__ }}::onChangeAddress', {
-                    update: {'{{ __SELF__ }}::changeAddress': $(this).closest('.mall-address')},
+                    update: {'{{ __SELF__ }}::changeAddress': '#' + $(this).closest('.mall-address').attr('id')},
                     loading: $.oc.stripeLoadIndicator,
                 })
             });
