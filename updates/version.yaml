@@ -431,4 +431,6 @@
     - 'Fixed mailing event handler not firing in October 3'
 3.0.3:
     - 'Fixed handling of Currency model timestamps'
+3.0.4:
+    - 'Fixed bug in addressSelector component. If you did override any of the component partials, make sure to include the following change in your own partials: https://github.com/OFFLINE-GmbH/oc-mall-plugin/commit/8e66134b35e03bf373e2a7a91d09c190a3a7e8c4'
 
