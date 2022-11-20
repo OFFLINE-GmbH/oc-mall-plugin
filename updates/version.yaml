@@ -427,8 +427,8 @@
     - 'Fixed bug in product filter with new October JS framework'
 2.0.13:
     - 'Added support to load Wishlist using a component parameter'
-2.0.14:
-    - 'Fixed handling of Currency model timestamps'
 2.0.15:
+    - 'Fixed handling of Currency model timestamps'
+2.0.16:
     - 'Fixed bug in addressSelector component. If you did override any of the component partials, make sure to include the following change in your own partials: https://github.com/OFFLINE-GmbH/oc-mall-plugin/commit/8e66134b35e03bf373e2a7a91d09c190a3a7e8c4'
 
