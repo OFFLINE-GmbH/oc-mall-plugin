@@ -435,4 +435,6 @@
     - 'Cleaned up the return values of the Product::onAddToCart component method'
 2.0.18:
     - 'Fixed handling of recipient name for billing addresses'
+2.0.19:
+    - 'Fixed handling of recipient name for shipping addresses'
 
