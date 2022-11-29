@@ -70,7 +70,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
                 $shipping = new Address();
                 $shipping->fill($addressData);
-                $shipping->name        = $addressData['address_name'] ?? $fullname;
+                $shipping->name        = $addressData['address_name'] ?: $fullname;
                 $shipping->customer_id = $customer->id;
                 $shipping->save();
                 $customer->default_shipping_address_id = $shipping->id;
