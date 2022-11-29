@@ -60,7 +60,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
             $billing = new Address();
             $billing->fill($addressData);
-            $billing->name        = $addressData['address_name'] ?? $fullname;
+            $billing->name        = $addressData['address_name'] ?: $fullname;
             $billing->customer_id = $customer->id;
             $billing->save();
             $customer->default_billing_address_id = $billing->id;
