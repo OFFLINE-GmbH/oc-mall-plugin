@@ -435,4 +435,6 @@
     - 'Fixed bug in addressSelector component. If you did override any of the component partials, make sure to include the following change in your own partials: https://github.com/OFFLINE-GmbH/oc-mall-plugin/commit/8e66134b35e03bf373e2a7a91d09c190a3a7e8c4'
 3.0.5:
     - 'Cleaned up the return values of the Product::onAddToCart component method'
+3.0.6:
+    - 'Fixed handling of recipient name in shipping addresses'
 
