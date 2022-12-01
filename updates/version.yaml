@@ -439,4 +439,6 @@
     - 'Fixed handling of recipient name in shipping addresses'
 3.0.7:
     - 'Fixed handling of recipient name in billing addresses'
+3.0.8:
+    - 'Fixed soft deletion support in offline_mall_payments_log'    
 
