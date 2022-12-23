@@ -67,12 +67,7 @@ class MySQL implements Index
 
         $published = $data['published'] ?? false;
 
-        $this->db()->updateOrCreate([
-            'index'      => $index,
-            'product_id' => $productId,
-            'variant_id' => $isGhost ? null : $variantId,
-            'is_ghost'   => $isGhost,
-        ], [
+        $indexData = [
             'name'                  => $data['name'] ?? '',
             'brand'                 => $data['brand']['slug'] ?? '',
             'stock'                 => $data['stock'],
@@ -87,7 +82,20 @@ class MySQL implements Index
             'parent_prices'         => $data['parent_prices'] ?? [],
             'customer_group_prices' => $data['customer_group_prices'] ?? [],
             'created_at'            => $data['created_at'] ?? now(),
-        ]);
+        ];
+        
+        // Allow the index data to be extended with custom information
+        $customIndexData = Event::fire('mall.index.extendData', [$data]);
+        if(!empty($customIndexData)) {
+            $indexData = array_merge($indexData,$customIndexData[0]);
+        }
+        
+        $this->db()->updateOrCreate([
+            'index'      => $index,
+            'product_id' => $productId,
+            'variant_id' => $isGhost ? null : $variantId,
+            'is_ghost'   => $isGhost,
+        ], $indexData);
     }
 
     public function delete(string $index, $id)
@@ -141,6 +149,10 @@ class MySQL implements Index
                 );
                 $table->index(['index', 'published'], 'idx_published_index');
             });
+            
+            // Allow the index table to be extended with custom columns
+            Event::fire('mall.index.mysql.extendTable', [$table]);
+            
         } catch (Throwable $e) {
             if ($this->jsonUnsupported($e)) {
                 throw new IndexNotSupportedException();
