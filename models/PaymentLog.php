@@ -1,11 +1,13 @@
 <?php namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 
 class PaymentLog extends Model
 {
     use Validation;
+    use SoftDelete;
 
     public $jsonable = ['data', 'order_data', 'payment_method'];
     public $table = 'offline_mall_payments_log';

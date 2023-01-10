@@ -441,4 +441,7 @@
     - 'Fixed handling of recipient name in billing addresses'
 3.0.8:
     - 'Added mall.index.extendData event to extend the indexed data (thanks to @chocolata)'
+3.0.9:
+    - 'Made PaymentLog model soft-deletable'
+    - 'add_deleted_at_column_to_payments_log_table.php'
 
