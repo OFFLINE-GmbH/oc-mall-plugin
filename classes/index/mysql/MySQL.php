@@ -18,6 +18,7 @@ use OFFLINE\Mall\Classes\Index\IndexNotSupportedException;
 use OFFLINE\Mall\Classes\Index\IndexResult;
 use OFFLINE\Mall\Models\Currency;
 use Throwable;
+use Event;
 
 class MySQL implements Index
 {
