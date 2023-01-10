@@ -36,12 +36,6 @@ tabs:
             span: right
             type: relation
             tab: 'offline.mall::lang.product.general'
-        stock:
-            label: 'offline.mall::lang.product.stock'
-            oc.commentPosition: ''
-            span: left
-            type: number
-            tab: 'offline.mall::lang.product.general'            
         allow_out_of_stock_purchases:
             label: 'offline.mall::lang.product.allow_out_of_stock_purchases'
             span: left
