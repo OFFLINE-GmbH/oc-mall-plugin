@@ -43,7 +43,10 @@ class ProductsSearchProvider extends ResultsProvider
                 $results->put($match->id, $match);
             }
         }
-
+        
+        // clean any null values from the results collection
+        $results = $results->filter();
+        
         // Build the OFFLINE.SiteSearch results collection.
         foreach ($results as $match) {
             $url = $controller->pageUrl($productPage, [
