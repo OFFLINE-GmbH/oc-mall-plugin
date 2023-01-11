@@ -87,7 +87,7 @@ class MySQL implements Index
         
         // Allow the index data to be extended with custom information
         $customIndexData = Event::fire('mall.index.extendData', [$data]);
-        if(!empty($customIndexData && !empty($customIndexData[0]))) {
+        if(!empty($customIndexData) && is_array($customIndexData[0])) {
             $indexData = array_merge($indexData,$customIndexData[0]);
         }
         
