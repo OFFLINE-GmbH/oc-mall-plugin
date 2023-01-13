@@ -444,4 +444,5 @@
 3.0.9:
     - 'Made PaymentLog model soft-deletable'
     - 'add_deleted_at_column_to_payments_log_table.php'
-
+3.0.10:
+    - 'Minor bugfixes'
