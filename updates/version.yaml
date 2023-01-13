@@ -439,4 +439,6 @@
     - 'Fixed handling of recipient name for shipping addresses'
 2.0.20:
     - 'Added mall.index.extendData event to extend the indexed data (thanks to @chocolata)'
+2.0.21:
+    - 'Minor bugfixes'
 
