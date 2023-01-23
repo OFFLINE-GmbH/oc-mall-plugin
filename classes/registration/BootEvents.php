@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
+use Carbon\Carbon;
 use Event;
 use OFFLINE\Mall\Classes\Events\MailingEventHandler;
 use OFFLINE\Mall\Classes\Search\ProductsSearchProvider;
@@ -9,6 +10,7 @@ use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Customer;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\Product;
@@ -128,5 +130,24 @@ trait BootEvents
                 ],
             ];
         });
+    }
+
+    public function registerSchedule($schedule)
+    {
+        $schedule->call(function () {
+            $six_hours_ago = Carbon::now()->subHours(6);
+            $ten_hours_ago = Carbon::now()->subHours(10);
+
+            $discounts = Discount::whereHas('carts', function ($query) use ($ten_hours_ago, $six_hours_ago) {
+                $query->whereBetween('created_at', [$ten_hours_ago, $six_hours_ago]);
+            })->get();
+
+            foreach ($discounts as $discount) {
+                $discount->number_of_usages--;
+                $discount->save();
+                $discount->carts()->detach();
+            }
+
+        })->hourly();
     }
 }

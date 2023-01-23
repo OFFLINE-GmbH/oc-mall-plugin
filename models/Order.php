@@ -212,8 +212,6 @@ class Order extends Model
 
             Event::fire('mall.order.afterCreate', [$order, $cart]);
 
-            $cart->updateDiscountUsageCount();
-
             $cart->delete(); // We can empty the cart once the order is created.
 
             return $order;

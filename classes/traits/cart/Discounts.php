@@ -60,6 +60,8 @@ trait Discounts
         }
 
         $this->discounts()->save($discount);
+		
+        $cart->updateDiscountUsageCount();
     }
 
     public function applyDiscountByCode(string $code, int $discountCodeLimit)
@@ -111,7 +113,6 @@ trait Discounts
         try {
             DB::transaction(function () use ($id) {
                 $discount = Discount::find($id);
-                $this->discounts()->remove($discount);
 
                 $code = $discount->code;
 
@@ -121,6 +122,13 @@ trait Discounts
                         $discount['discount']->save();
                     }
                 });
+
+                if ($shippingDiscount = $this->totals()->shippingTotal()->appliedDiscount()) {
+                    $shippingDiscount['discount']->number_of_usages++;
+                    $shippingDiscount['discount']->save();
+                }
+
+                $this->discounts()->remove($discount);
             });
         } catch (ModelNotFoundException $e) {
             throw new ValidationException([
