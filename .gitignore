@@ -1,3 +1,4 @@
 vendor
 composer.lock
 docs/.vuepress/dist
+.DS_Store

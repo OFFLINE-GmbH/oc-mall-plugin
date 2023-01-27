@@ -12,4 +12,5 @@
         <?= e(optional($address['state'])['name']) ?><br/>
         <?= e(optional($address['country'])['name']) ?>
     </p>
+    <?= $this->fireViewEvent('backend.Orders.extendCustomerDetails', [$order->customer_id]); ?>
 </div>
