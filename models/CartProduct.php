@@ -133,7 +133,7 @@ class CartProduct extends Model
     public function convertCustomFieldValues()
     {
         return $this->custom_field_values
-            ->load(['custom_field', 'custom_field_option'])
+            ->load(['custom_field', 'custom_field_option', 'custom_field_option.image'])
             ->map(function (CustomFieldValue $value) {
                 $data                  = $value->toArray();
                 $data['display_value'] = $value->displayValue;

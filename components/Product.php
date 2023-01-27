@@ -599,7 +599,7 @@ class Product extends MallComponent
      */
     protected function getPublicCartAttributes(): array
     {
-        return ['products', 'discounts', 'shipping_method', 'customer', 'payment_method', 'shipping_address'];
+        return ['customer', 'payment_method', 'shipping_address'];
     }
 
     /**
