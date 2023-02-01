@@ -1,6 +1,6 @@
 fields:
     customer:
-        label: Customer
+        label: 'offline.mall::lang.order.customer'
         type: recordfinder
         list: ~/plugins/rainlab/user/models/user/columns.yaml
         recordsPerPage: 10
