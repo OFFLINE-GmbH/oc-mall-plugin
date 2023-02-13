@@ -124,7 +124,7 @@ trait Discounts
                 });
 
                 if ($shippingDiscount = $this->totals()->shippingTotal()->appliedDiscount()) {
-                    $shippingDiscount['discount']->number_of_usages++;
+                    $shippingDiscount['discount']->number_of_usages--;
                     $shippingDiscount['discount']->save();
                 }
 
