@@ -140,23 +140,23 @@ abstract class PaymentProvider
      */
     public function renderPaymentForm($cartOrOrder): string
     {
-        $templatePath = themes_path(
+        $formPartial = themes_path(
             "{$this->activeThemeCode()}/partials/mall/payments/{$this->identifier()}/{$this->paymentFormPartial()}.htm"
         );
 
-        if (! file_exists($templatePath)) {
-            $templatePath = plugins_path(
+        if (! file_exists($formPartial)) {
+            $formPartial = plugins_path(
                 "offline/mall/classes/payments/{$this->identifier()}/{$this->paymentFormPartial()}.htm"
             );
         }
 
-        if (! file_exists($templatePath)) return '';
+        if (! file_exists($formPartial)) return '';
 
         $controller = Controller::getController() ?? new Controller();
 
         $twig = $controller->getTwig();
 
-        $template = $twig->createTemplate(file_get_contents($templatePath));
+        $template = $twig->createTemplate(file_get_contents($formPartial));
 
         return $template->render(['cart' => $cartOrOrder]);
     }
