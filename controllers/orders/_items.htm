@@ -27,6 +27,7 @@
     <?php foreach ($order['products'] as $item): ?>
     <tr>
         <td>
+            <?= $this->fireViewEvent('mall.backend.orders.extendItemDetails', [$item, $order]); ?>
             <a href="<?= $productUpdate . '/' . e($item['product_id']); ?>">
                 <?= e($item['name']) ?><br/>
             </a>
