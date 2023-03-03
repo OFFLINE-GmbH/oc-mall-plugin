@@ -448,3 +448,5 @@
     - 'Minor bugfixes'
 3.0.11:
     - 'Added view events `mall.backend.orders.extendCustomerDetails` and `mall.backend.orders.extendItemDetails` to extend backend order view'
+3.0.12:
+    - 'Fixed Stripe integration when changing payment methods during checkout'
