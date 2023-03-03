@@ -433,4 +433,18 @@
     - 'Fixed handling of Currency model timestamps'
 3.0.4:
     - 'Fixed bug in addressSelector component. If you did override any of the component partials, make sure to include the following change in your own partials: https://github.com/OFFLINE-GmbH/oc-mall-plugin/commit/8e66134b35e03bf373e2a7a91d09c190a3a7e8c4'
-
+3.0.5:
+    - 'Cleaned up the return values of the Product::onAddToCart component method'
+3.0.6:
+    - 'Fixed handling of recipient name in shipping addresses'
+3.0.7:
+    - 'Fixed handling of recipient name in billing addresses'
+3.0.8:
+    - 'Added mall.index.extendData event to extend the indexed data (thanks to @chocolata)'
+3.0.9:
+    - 'Made PaymentLog model soft-deletable'
+    - 'add_deleted_at_column_to_payments_log_table.php'
+3.0.10:
+    - 'Minor bugfixes'
+3.0.11:
+    - 'Added view events `mall.backend.orders.extendCustomerDetails` and `mall.backend.orders.extendItemDetails` to extend backend order view'
