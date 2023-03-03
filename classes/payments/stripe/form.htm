@@ -20,6 +20,12 @@
 
             document.head.appendChild(s)
 
+            $.subscribe('mall.cart.paymentMethodChanged', function (e, data) {
+                if (data.method.code === '{{ cart.payment_method.code }}') {
+                    initStripe();
+                }
+            });
+
             function initStripe() {
                 var stripe = Stripe('{{ cart.payment_method.settings.stripe_publishable_key }}');
                 var elements = stripe.elements();
