@@ -100,11 +100,7 @@ class PaymentRedirector
         }
 
         if ($result->successful) {
-            // Only trigger the checkout succeeded event for the checkout flow (not for later payments)
-            $flow = session()->get('mall.checkout.flow');
-            if ($flow === 'checkout') {
-                Event::fire('mall.checkout.succeeded', [$result]);
-            }
+            Event::fire('mall.checkout.succeeded', [$result]);
 
             return $this->finalRedirect('successful');
         }
