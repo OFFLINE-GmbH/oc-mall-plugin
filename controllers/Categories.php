@@ -54,4 +54,9 @@ class Categories extends Controller
         parent::onReorder();
         (new Category())->purgeCache();
     }
+
+    public function listAfterReorder($record, $definition = null)
+    {
+        (new Category())->purgeCache();
+    }
 }
