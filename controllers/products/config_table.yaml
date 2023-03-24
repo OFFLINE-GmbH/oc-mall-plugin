@@ -6,6 +6,10 @@ deleting: false
 searching: false
 alias: pricetable
 columns:
+    type:
+        title: 'type'
+    original_id:
+        title: 'original_id'
     name:
         title: offline.mall::lang.common.product_or_variant
         readOnly: true

@@ -93,6 +93,12 @@ table.table.data tbody tr.orderfooter-taxes td {
     text-align: right;
 }
 
+.price-table-modal #Table-pricetable .table-container th:nth-child(-n+2),
+.price-table-modal #Table-pricetable [data-column="type"],
+.price-table-modal #Table-pricetable [data-column="original_id"] {
+    display: none !important;
+}
+
 .price-table-currency-selector .btn-link {
     padding-left: 0;
 }
