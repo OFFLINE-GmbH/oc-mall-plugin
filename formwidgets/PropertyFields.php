@@ -303,7 +303,12 @@ class PropertyFields extends FormWidgetBase
 
     protected function backendPartial(string $partial)
     {
-        $path = sprintf('modules/backend/widgets/form/partials/%s', $partial);
+        // October 2.0, add _ prefix.
+        if (class_exists('System')) {
+            $partial = '_' . $partial;
+        }
+
+        $path = sprintf('~/modules/backend/widgets/form/partials/%s', $partial);
 
         // October 2.0, add .htm extension.
         if (class_exists('System')) {
