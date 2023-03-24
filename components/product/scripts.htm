@@ -50,7 +50,7 @@
             {# Reload pricing information when a custom field is changed #}
             $body.on('change', '[data-mall-custom-field]', function () {
                 $.request('onChangeConfiguration', {
-                    form: $form,
+                    form: $form.get(0),
                     loading: $.oc.stripeLoadIndicator
                 })
             });
