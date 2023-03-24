@@ -3,11 +3,12 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use JsonSerializable;
+use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Tax;
 
-class TaxTotal implements JsonSerializable
+class TaxTotal implements JsonSerializable, CallsAnyMethod
 {
     use Rounding;
     /**

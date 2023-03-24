@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
+use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\Discount;
@@ -10,7 +11,7 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 
-class ShippingTotal implements \JsonSerializable
+class ShippingTotal implements \JsonSerializable, CallsAnyMethod
 {
     use Rounding;
 

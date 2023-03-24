@@ -450,3 +450,5 @@
     - 'Added view events `mall.backend.orders.extendCustomerDetails` and `mall.backend.orders.extendItemDetails` to extend backend order view'
 3.0.12:
     - 'Fixed Stripe integration when changing payment methods during checkout'
+3.0.13:
+    - 'Added exceptions for new October v3 Twig Security Policy'

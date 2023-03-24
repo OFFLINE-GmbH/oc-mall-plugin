@@ -2,10 +2,11 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\PaymentMethod;
 
-class PaymentTotal implements \JsonSerializable
+class PaymentTotal implements \JsonSerializable, CallsAnyMethod
 {
     use Rounding;
     /**

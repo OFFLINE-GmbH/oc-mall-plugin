@@ -4,9 +4,10 @@ namespace OFFLINE\Mall\Classes\CategoryFilter\SortOrder;
 
 use Event;
 use Illuminate\Support\Collection;
+use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Models\Currency;
 
-abstract class SortOrder
+abstract class SortOrder implements CallsAnyMethod
 {
     /**
      * The currently active currency.

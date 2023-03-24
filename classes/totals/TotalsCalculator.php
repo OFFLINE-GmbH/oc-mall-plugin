@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\Rounding;
@@ -15,7 +16,7 @@ use OFFLINE\Mall\Models\WishlistItem;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class TotalsCalculator
+class TotalsCalculator implements CallsAnyMethod
 {
     use FilteredTaxes, Rounding;
 
