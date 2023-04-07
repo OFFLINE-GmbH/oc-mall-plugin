@@ -458,3 +458,5 @@
     - 'Minor bugfixes for October 3'
 3.0.16:
     - 'Added product duplication feature to products list view'
+3.0.17:
+    - 'Improved setup of the MailingEventHandler'
