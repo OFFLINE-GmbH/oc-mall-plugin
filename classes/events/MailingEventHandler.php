@@ -6,6 +6,7 @@ use Backend\Facades\Backend;
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
+use October\Rain\Database\Collection;
 use October\Rain\Mail\Mailable;
 use OFFLINE\Mall\Classes\Jobs\SendOrderConfirmationToCustomer;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
@@ -16,6 +17,7 @@ use OFFLINE\Mall\Models\Notification;
 use OFFLINE\Mall\Models\Order;
 use RainLab\Translate\Classes\Translator;
 use RainLab\User\Models\Settings as UserSettings;
+use PDOException;
 
 class MailingEventHandler
 {
@@ -23,7 +25,13 @@ class MailingEventHandler
 
     public function __construct()
     {
-        $this->enabledNotifications = Notification::getEnabled();
+        try {
+            $this->enabledNotifications = Notification::getEnabled();
+        } catch (PDOException $e) {
+            // The database connection might not be available depending on the
+            // current application state.
+            $this->enabledNotifications = new Collection();
+        }
     }
 
     /**

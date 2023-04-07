@@ -39,8 +39,11 @@ trait BootEvents
 
     protected function registerGenericEvents()
     {
-        $this->app->bind('MailingEventHandler', MailingEventHandler::class);
-        $this->app['events']->subscribe('MailingEventHandler');
+        $this->app->bind(MailingEventHandler::class, function() {
+            return new MailingEventHandler();
+        });
+
+        $this->app['events']->subscribe(MailingEventHandler::class);
     }
 
     protected function registerStaticPagesEvents()
