@@ -319,6 +319,8 @@
         'review_category' => 'Review-Kategorie',
         'title' => 'Titel',
         'version' => 'Version',
+        'duplicate_selected' => 'Markierte duplizieren',
+        'duplicated' => 'Erfolgreich dupliziert',
     ],
     'variant' => [
         'method' => [

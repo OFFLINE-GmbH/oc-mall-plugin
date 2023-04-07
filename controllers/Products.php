@@ -334,6 +334,19 @@ class Products extends Controller
         return $this->asExtension(RelationController::class)->relationRefresh();
     }
 
+    public function onDuplicateProducts()
+    {
+        Product::query()
+            ->whereIn('id', post('checked', []))
+            ->get()
+            ->each
+            ->duplicate();
+
+        Flash::success(trans('offline.mall::lang.common.duplicated'));
+
+        return $this->asExtension(ListController::class)->listRefresh();
+    }
+
     /**
      * Handle the form data form the property value form.
      */

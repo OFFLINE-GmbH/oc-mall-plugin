@@ -142,10 +142,11 @@ class Product extends Model
         'initial_images' => File::class,
     ];
     public $belongsTo = [
-        'brand'             => Brand::class,
+        'brand'             => [Brand::class, 'replicate' => false],
         'group_by_property' => [
             Property::class,
-            'key' => 'group_by_property_id',
+            'key'       => 'group_by_property_id',
+            'replicate' => false,
         ],
     ];
     public $hasManyThrough = [
@@ -163,17 +164,17 @@ class Product extends Model
     public $hasMany = [
         'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
         'variants'               => Variant::class,
-        'cart_products'          => CartProduct::class,
-        'order_products'         => OrderProduct::class,
+        'cart_products'          => [CartProduct::class, 'replicate' => false],
+        'order_products'         => [OrderProduct::class, 'replicate' => false],
         'image_sets'             => ImageSet::class,
         'property_values'        => PropertyValue::class,
-        'reviews'                => Review::class,
-        'discounts'              => Discount::class,
-        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null'],
+        'reviews'                => [Review::class, 'replicate' => false],
+        'discounts'              => [Discount::class, 'replicate' => false],
+        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null', 'replicate' => false],
         'files'                  => [ProductFile::class],
     ];
     public $hasOne = [
-        'latest_file' => [ProductFile::class, 'order' => 'created_at DESC'],
+        'latest_file' => [ProductFile::class, 'order' => 'created_at DESC', 'replicate' => false],
     ];
     public $belongsToMany = [
         'categories'      => [
@@ -217,6 +218,7 @@ class Product extends Model
             'deleted'    => true,
             'pivot'      => ['id', 'quantity', 'price'],
             'pivotModel' => CartProduct::class,
+            'replicate'  => false,
         ],
         'services'        => [
             Service::class,
@@ -321,6 +323,18 @@ class Product extends Model
         DB::table('offline_mall_product_custom_field')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_category_product')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_wishlist_items')->where('product_id', $this->id)->delete();
+    }
+
+    public function duplicate(): self
+    {
+        $duplicate = $this->replicateWithRelations();
+        $duplicate->sales_count = 0;
+        $duplicate->name .= ' (copy)';
+        $duplicate->slug .= '-copy';
+        $duplicate->published = false;
+        $duplicate->save();
+
+        return $duplicate;
     }
 
     /**

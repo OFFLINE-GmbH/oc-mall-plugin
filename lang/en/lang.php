@@ -321,6 +321,8 @@ return [
         'review_category' => 'Review category',
         'title' => 'Title',
         'version' => 'Version',
+        'duplicate_selected' => 'Duplicate selected',
+        'duplicated' => 'Duplicated successfully',
     ],
     'variant' => [
         'method' => [
