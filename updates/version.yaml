@@ -456,3 +456,5 @@
     - 'Fixed Category cache in October 3 when sorting categories (thanks to @matteo-palazzo)'
 3.0.15:
     - 'Minor bugfixes for October 3'
+3.0.16:
+    - 'Added product duplication feature to products list view'
