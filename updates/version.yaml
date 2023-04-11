@@ -460,3 +460,5 @@
     - 'Added product duplication feature to products list view'
 3.0.17:
     - 'Improved setup of the MailingEventHandler'
+3.0.18:
+    - 'Added PL language (thanks to @adamo)'
