@@ -1,0 +1,55 @@
+columns:
+    sort_order_handle:
+            label: " "
+            type: partial
+            path: $/offline/mall/partials/_reorder_handle.htm
+            sortable: false
+            width: 20px
+    user_defined_id:
+        label: 'offline.mall::lang.product.user_defined_id'
+        type: text
+        searchable: true
+        sortable: true
+    name:
+        label: 'offline.mall::lang.product.name'
+        type: text
+        searchable: true
+        sortable: true
+    description:
+        label: 'offline.mall::lang.product.description'
+        searchable: true
+        sortable: true
+        invisible: true
+    published:
+        label: 'offline.mall::lang.product.published'
+        type: partial
+        path: $/offline/mall/models/product/_published.htm
+        sortable: true
+    is_virtual:
+        label: 'offline.mall::lang.product.is_virtual'
+        type: switch
+        sortable: true
+    categories:
+        label: 'offline.mall::lang.common.category'
+        relation: categories
+        select: name
+        sortable: true
+        searchable: true
+    price:
+        label: 'offline.mall::lang.product.price'
+        type: partial
+        path: $/offline/mall/models/product/_price.htm
+        searchable: false
+        sortable: false
+        align: right
+    stock:
+        label: 'offline.mall::lang.product.stock'
+        type: number
+        invisible: true
+    price_includes_tax:
+        label: 'offline.mall::lang.product.taxable'
+        type: partial
+        path: $/offline/mall/models/product/_taxable.htm
+        sortable: true
+        invisible: true
+
