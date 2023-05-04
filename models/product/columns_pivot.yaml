@@ -5,6 +5,10 @@ columns:
             path: $/offline/mall/partials/_reorder_handle.htm
             sortable: false
             width: 20px
+    pivot[sort_order]:
+        invisible: true
+        type: number
+        sortable: true
     user_defined_id:
         label: 'offline.mall::lang.product.user_defined_id'
         type: text
