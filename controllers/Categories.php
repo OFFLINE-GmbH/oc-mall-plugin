@@ -8,6 +8,7 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
 use OFFLINE\Mall\Models\Category;
+use Request;
 
 class Categories extends Controller
 {
@@ -40,13 +41,20 @@ class Categories extends Controller
         $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
-    public function onReorderRelation()
+    public function onReorderRelation($id)
     {
-        $records = request()->input('rcd');
-        $model   = Category::findOrFail($this->params[0]);
-        $model->setRelationOrder('property_groups', $records, range(1, count($records)), 'relation_sort_order');
+        $model = Category::findOrFail($id);
+        if ($model and $fieldName = Request::input('fieldName')) {
+            $records = Request::input('rcd');
+            $sortKey = array_get($model->getRelationDefinition($fieldName), 'sortKey', 'sort_order');
 
-        Flash::success(trans('offline.mall::lang.common.sorting_updated'));
+            $model->setRelationOrder($fieldName, $records, range(1, count($records)), $sortKey);
+
+            Flash::success(trans('offline.mall::lang.common.sorting_updated'));
+
+            $this->initRelation($model, $fieldName);
+            return $this->relationRefresh($fieldName);
+        }
     }
 
     public function onReorder()

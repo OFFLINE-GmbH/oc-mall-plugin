@@ -102,6 +102,7 @@ class Category extends Model
             'key'      => 'category_id',
             'otherKey' => 'property_group_id',
             'pivot'    => ['relation_sort_order'],
+            'sortKey'  => 'relation_sort_order',
         ],
         'review_categories' => [
             ReviewCategory::class,

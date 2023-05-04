@@ -5,9 +5,10 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use BackendMenu;
-use October\Rain\Support\Facades\Flash;
+use Flash;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Service;
+use Request;
 
 class Services extends Controller
 {
@@ -34,13 +35,20 @@ class Services extends Controller
         $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
-    public function onReorderRelation()
+    public function onReorderRelation($id)
     {
-        $records = request()->input('rcd');
-        $model   = Service::findOrFail($this->params[0]);
-        $model->setRelationOrder('options', $records, range(1, count($records)));
+        $model = Service::findOrFail($id);
+        if ($model && $fieldName = Request::input('fieldName')) {
+            $records = Request::input('rcd');
+            $sortKey = array_get($model->getRelationDefinition($fieldName), 'sortKey', 'sort_order');
 
-        Flash::success(trans('offline.mall::lang.common.sorting_updated'));
+            $model->setRelationOrder($fieldName, $records, range(1, count($records)), $sortKey);
+
+            Flash::success(trans('offline.mall::lang.common.sorting_updated'));
+
+            $this->initRelation($model, $fieldName);
+            return $this->relationRefresh($fieldName);
+        }
     }
 
     public function onRelationManageCreate()

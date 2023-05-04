@@ -19,10 +19,13 @@ property_groups:
 products:
     label: 'offline.mall::lang.common.product'
     view:
-        list: $/offline/mall/models/product/columns.yaml
+        list: $/offline/mall/models/product/columns_pivot.yaml
         recordsPerPage: 10
         recordUrl: offline/mall/products/update/:id
         toolbarPartial: products_relation_partial
+        defaultSort:
+            column: pivot[sort_order]
+            direction: asc
 
 review_categories:
     label: 'offline.mall::lang.common.review_category'
