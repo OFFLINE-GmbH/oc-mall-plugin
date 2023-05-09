@@ -9,3 +9,8 @@ columns:
         type: text
         searchable: true
         sortable: true
+    code:
+        label: 'offline.mall::lang.category.code'
+        type: text
+        searchable: true
+        sortable: true
