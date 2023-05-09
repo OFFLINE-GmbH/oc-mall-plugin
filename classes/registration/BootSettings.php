@@ -40,7 +40,7 @@ trait BootSettings
                 'icon'        => 'icon-pie-chart',
                 'url'         => Backend::url('offline/mall/pricecategories'),
                 'order'       => 20,
-                'permissions' => ['offline.mall.settings.manage_price_categories'],
+                'permissions' => ['offline.mall.manage_price_categories'],
                 'keywords'    => 'shop store mall currency price categories',
             ],
             'tax_settings'              => [
