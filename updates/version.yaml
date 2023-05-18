@@ -441,4 +441,6 @@
     - 'Added mall.index.extendData event to extend the indexed data (thanks to @chocolata)'
 2.0.21:
     - 'Minor bugfixes'
+2.0.22:
+    - 'Cleanup sortable relations code (thanks to @mjauvin)'
 
