@@ -21,13 +21,17 @@ trait SortableRelation
             throw new Exception('Invalid setRelationOrder call - count of itemIds do not match count of itemOrders');
         }
 
+        $relation = $this->{$relationName}();
+
         foreach ($itemIds as $index => $id) {
-            $order    = $itemOrders[$index];
-            $relation = $this->getRelationDefinition($relationName);
-            DB::table($relation['table'])
-              ->where($relation['key'], $this->id)
-              ->where($relation['otherKey'], $id)
-              ->update([$sortKey => $order]);
+            $order    = (int)$itemOrders[$index] ?? $relation->getRelated()->count();
+            if (method_exists($relation, 'updateExistingPivot')) {
+                $relation->updateExistingPivot($id, [ $sortKey => $order ]);
+            } else {
+                $record = $relation->getRelated()->find($id);
+                $record->{$sortKey} = $order;
+                $record->save();
+            }
         }
     }
 }

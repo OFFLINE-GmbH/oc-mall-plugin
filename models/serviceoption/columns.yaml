@@ -2,7 +2,7 @@ columns:
     sort_order_handle:
         label: " "
         type: partial
-        path: $/offline/mall/models/serviceoption/_reorder_handle.htm
+        path: $/offline/mall/partials/_reorder_handle.htm
         sortable: false
         width: 20px
     name:
