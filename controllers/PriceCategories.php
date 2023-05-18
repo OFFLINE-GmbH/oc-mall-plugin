@@ -23,7 +23,7 @@ class PriceCategories extends Controller
     public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = [
-        'offline.mall.settings.manage_price_categories',
+        'offline.mall.manage_price_categories',
     ];
 
     public function __construct()
