@@ -14,6 +14,7 @@ use October\Rain\Database\Model;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
+use OFFLINE\Mall\Classes\Traits\ReorderRelation;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\ImageSet;
@@ -27,11 +28,11 @@ use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Translate\Behaviors\TranslatableModel;
 use RainLab\Translate\Models\Locale;
-use Request;
 
 class Products extends Controller
 {
     use ProductPriceTable;
+    use ReorderRelation;
 
     public $implement = [
         ListController::class,
@@ -340,22 +341,6 @@ class Products extends Controller
         }
 
         return $this->asExtension(RelationController::class)->relationRefresh();
-    }
-
-    public function onReorderRelation($id)
-    {
-        $model = Product::findOrFail($id);
-        if ($model and $fieldName = Request::input('fieldName')) {
-            $records = Request::input('rcd');
-            $sortKey = array_get($model->getRelationDefinition($fieldName), 'sortKey', 'sort_order');
-
-            $model->setRelationOrder($fieldName, $records, range(1, count($records)), $sortKey);
-
-            Flash::success(trans('offline.mall::lang.common.sorting_updated'));
-
-            $this->initRelation($model, $fieldName);
-            return $this->relationRefresh($fieldName);
-        }
     }
 
     /**

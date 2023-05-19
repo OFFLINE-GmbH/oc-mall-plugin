@@ -7,11 +7,13 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ReorderController;
 use Flash;
+use OFFLINE\Mall\Classes\Traits\ReorderRelation;
 use OFFLINE\Mall\Models\PropertyGroup;
-use Request;
 
 class PropertyGroups extends Controller
 {
+    use ReorderRelation;
+
     public $implement = [
         ListController::class,
         FormController::class,
@@ -39,21 +41,5 @@ class PropertyGroups extends Controller
         }
 
         $this->addJs('/plugins/offline/mall/assets/backend.js');
-    }
-
-    public function onReorderRelation($id)
-    {
-        $model = PropertyGroup::findOrFail($id);
-        if ($model and $fieldName = Request::input('fieldName')) {
-            $records = Request::input('rcd');
-            $sortKey = array_get($model->getRelationDefinition($fieldName), 'sortKey', 'sort_order');
-
-            $model->setRelationOrder($fieldName, $records, range(1, count($records)), $sortKey);
-
-            Flash::success(trans('offline.mall::lang.common.sorting_updated'));
-
-            $this->initRelation($model, $fieldName);
-            return $this->relationRefresh($fieldName);
-        }
     }
 }
