@@ -27,6 +27,7 @@ use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Translate\Behaviors\TranslatableModel;
 use RainLab\Translate\Models\Locale;
+use Request;
 
 class Products extends Controller
 {
@@ -65,6 +66,13 @@ class Products extends Controller
                 $this->preparePriceTable();
             }
         }
+
+        // Legacy (v1)
+        if (!class_exists('System')) {
+            $this->addJs('/plugins/offline/mall/assets/Sortable.js');
+        }
+
+        $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
     public function update($id)
@@ -332,6 +340,22 @@ class Products extends Controller
         }
 
         return $this->asExtension(RelationController::class)->relationRefresh();
+    }
+
+    public function onReorderRelation($id)
+    {
+        $model = Product::findOrFail($id);
+        if ($model and $fieldName = Request::input('fieldName')) {
+            $records = Request::input('rcd');
+            $sortKey = array_get($model->getRelationDefinition($fieldName), 'sortKey', 'sort_order');
+
+            $model->setRelationOrder($fieldName, $records, range(1, count($records)), $sortKey);
+
+            Flash::success(trans('offline.mall::lang.common.sorting_updated'));
+
+            $this->initRelation($model, $fieldName);
+            return $this->relationRefresh($fieldName);
+        }
     }
 
     /**

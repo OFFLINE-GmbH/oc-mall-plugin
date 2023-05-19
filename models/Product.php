@@ -16,12 +16,13 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
+use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
+use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
-use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use RainLab\Translate\Models\Locale;
 use System\Models\File;
 
@@ -42,6 +43,7 @@ class Product extends Model
     use Nullable;
     use PriceAccessors;
     use ProductPriceAccessors;
+    use SortableRelation;
     use StockAndQuantity;
     use FilteredTaxes;
     use PDFMaker;
