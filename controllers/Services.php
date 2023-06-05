@@ -6,12 +6,14 @@ use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
+use OFFLINE\Mall\Classes\Traits\ReorderRelation;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Service;
-use Request;
 
 class Services extends Controller
 {
+    use ReorderRelation;
+
     public $implement = [ListController::class, FormController::class, RelationController::class];
 
     public $listConfig = 'config_list.yaml';
@@ -33,22 +35,6 @@ class Services extends Controller
         }
 
         $this->addJs('/plugins/offline/mall/assets/backend.js');
-    }
-
-    public function onReorderRelation($id)
-    {
-        $model = Service::findOrFail($id);
-        if ($model && $fieldName = Request::input('fieldName')) {
-            $records = Request::input('rcd');
-            $sortKey = array_get($model->getRelationDefinition($fieldName), 'sortKey', 'sort_order');
-
-            $model->setRelationOrder($fieldName, $records, range(1, count($records)), $sortKey);
-
-            Flash::success(trans('offline.mall::lang.common.sorting_updated'));
-
-            $this->initRelation($model, $fieldName);
-            return $this->relationRefresh($fieldName);
-        }
     }
 
     public function onRelationManageCreate()

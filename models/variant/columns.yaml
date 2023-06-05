@@ -1,4 +1,14 @@
 columns:
+    sort_order_handle:
+        label: " "
+        type: partial
+        path: $/offline/mall/partials/_reorder_handle.htm
+        sortable: false
+        width: 20px
+    pivot[sort_order]:
+        invisible: true
+        type: number
+        sortable: true
     published:
         label: 'offline.mall::lang.product.published_short'
         type: partial

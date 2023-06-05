@@ -443,4 +443,6 @@
     - 'Minor bugfixes'
 2.0.22:
     - 'Cleanup sortable relations code (thanks to @mjauvin)'
-
+2.0.23:
+    - 'Make Product variants sortable'
+    - add_product_variants_sort_order.php

@@ -14,6 +14,7 @@ use October\Rain\Database\Model;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
+use OFFLINE\Mall\Classes\Traits\ReorderRelation;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\ImageSet;
@@ -31,6 +32,7 @@ use RainLab\Translate\Models\Locale;
 class Products extends Controller
 {
     use ProductPriceTable;
+    use ReorderRelation;
 
     public $implement = [
         ListController::class,
@@ -65,6 +67,13 @@ class Products extends Controller
                 $this->preparePriceTable();
             }
         }
+
+        // Legacy (v1)
+        if (!class_exists('System')) {
+            $this->addJs('/plugins/offline/mall/assets/Sortable.js');
+        }
+
+        $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
     public function update($id)
