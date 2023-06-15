@@ -303,6 +303,6 @@ class MySQL implements Index
     protected function jsonUnsupported(Throwable $e): bool
     {
         return $e->getCode() === '42000'
-            && str_contains($e->getMessage(), ['SQL syntax', 'near \'json']);
+            && str_contains($e->getMessage(), 'SQL syntax', 'near \'json');
     }
 }

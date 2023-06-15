@@ -462,3 +462,5 @@
     - 'Improved setup of the MailingEventHandler'
 3.0.18:
     - 'Added PL language (thanks to @adamo)'
+3.0.19:
+    - 'Fixed error handing in MySQL indexer'
