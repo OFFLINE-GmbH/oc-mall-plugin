@@ -464,3 +464,5 @@
     - 'Added PL language (thanks to @adamo)'
 3.0.19:
     - 'Fixed error handing in MySQL indexer'
+3.0.20:
+    - 'Fixed error handing in MySQL indexer (2)'
