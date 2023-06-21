@@ -446,3 +446,5 @@
 2.0.23:
     - 'Make Product variants sortable (thanks to @mjauvin)'
     - add_product_variants_sort_order.php
+2.0.24:
+    - 'Fixed migration'
