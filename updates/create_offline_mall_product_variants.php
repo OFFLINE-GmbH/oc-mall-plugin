@@ -31,6 +31,8 @@ class CreateOfflineMallProductVariants extends Migration
 
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('offline_mall_product_variants');
+        Schema::enableForeignKeyConstraints();
     }
 }
