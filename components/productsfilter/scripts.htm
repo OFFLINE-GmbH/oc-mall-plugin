@@ -40,7 +40,7 @@
                     loading: $.oc.stripeLoadIndicator,
                     complete: function (response) {
                         $.oc.stripeLoadIndicator.hide()
-                        var data = response.hasOwnProperty('reponseJSON') ? response.reponseJSON : response
+                        var data = response.hasOwnProperty('responseJSON') ? response.reponseJSON : response
 
                         if (data.hasOwnProperty('queryString')) {
                             history.replaceState(null, '', '?' + data.queryString)
