@@ -223,7 +223,7 @@ class ProductsFilter extends MallComponent
      */
     public function getCategoryOptions()
     {
-        return [':slug' => trans('offline.mall::lang.components.category.properties.use_url')]
+        return [':slug' => trans('offline.mall::lang.components.products.properties.use_url')]
             + Category::get()->pluck('name', 'id')->toArray();
     }
 
