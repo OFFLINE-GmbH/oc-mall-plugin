@@ -466,3 +466,5 @@
     - 'Fixed error handing in MySQL indexer'
 3.0.20:
     - 'Fixed error handing in MySQL indexer (2)'
+3.0.21:
+    - 'Fixed translation strings (thanks to @andezer)'
