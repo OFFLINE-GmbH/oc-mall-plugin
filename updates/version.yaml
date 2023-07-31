@@ -468,3 +468,5 @@
     - 'Fixed error handing in MySQL indexer (2)'
 3.0.21:
     - 'Fixed translation strings (thanks to @andezer)'
+3.0.22:
+    - 'Added support for RainLab.User 2.0'
