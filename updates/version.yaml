@@ -470,3 +470,5 @@
     - 'Fixed translation strings (thanks to @andezer)'
 3.0.22:
     - 'Added support for RainLab.User 2.0'
+3.0.23:
+    - 'Fixed compatibility with latest October version'
