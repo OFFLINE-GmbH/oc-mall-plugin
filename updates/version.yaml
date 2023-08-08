@@ -474,3 +474,5 @@
     - 'Fixed compatibility with latest October version'
 3.0.24:
     - 'Fixed QuickCheckout component in October 3.0'
+3.0.25:
+    - 'Fixed Stripe only working when it is the default payment method'
