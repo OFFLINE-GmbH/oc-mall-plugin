@@ -472,3 +472,5 @@
     - 'Added support for RainLab.User 2.0'
 3.0.23:
     - 'Fixed compatibility with latest October version'
+3.0.24:
+    - 'Fixed QuickCheckout component in October 3.0'
