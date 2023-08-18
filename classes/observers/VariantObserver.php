@@ -29,7 +29,7 @@ class VariantObserver
     {
         // Skip the re-index for the backend relation updates. The re-index will
         // be triggered manually for performance reasons.
-        if ($this->isBackendRelationUpdate()) {
+        if (!$variant->product || $this->isBackendRelationUpdate()) {
             return;
         }
         (new ProductObserver($this->index))->updated($variant->product);
