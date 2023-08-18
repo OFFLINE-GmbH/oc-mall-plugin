@@ -164,7 +164,7 @@ class Product extends Model
     ];
     public $hasMany = [
         'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
-        'variants'               => Variant::class,
+        'variants'               => [Variant::class, 'softDelete' => true],
         'cart_products'          => CartProduct::class,
         'order_products'         => OrderProduct::class,
         'image_sets'             => ImageSet::class,
@@ -315,7 +315,6 @@ class Product extends Model
     {
         $this->prices()->delete();
         $this->additional_prices()->delete();
-        $this->variants()->delete();
         $this->property_values()->delete();
         DB::table('offline_mall_product_accessory')->where('product_id', $this->id)->delete();
         DB::table('offline_mall_product_tax')->where('product_id', $this->id)->delete();
