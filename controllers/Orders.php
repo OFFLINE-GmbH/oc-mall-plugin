@@ -119,8 +119,6 @@ class Orders extends Controller
 
         $order->shippingNotification = $notification;
 
-        Event::fire('mall.order.shipped', [$order]);
-
         return [
             '#shipped_at'  => $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-',
             '#order_state' => e($order->order_state->name),
