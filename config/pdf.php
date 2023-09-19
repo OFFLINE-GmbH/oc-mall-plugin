@@ -4,7 +4,7 @@
 return [
     'show_warnings' => false,
     'orientation'   => 'portrait',
-    'defines'       => [
+    'options'       => [
         'font_dir'               => storage_path('fonts/'),
         'font_cache'             => storage_path('fonts/'),
         'temp_dir'               => sys_get_temp_dir(),
