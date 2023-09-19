@@ -4,9 +4,9 @@
 namespace OFFLINE\Mall\Classes\Traits;
 
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Cms\Classes\CmsException;
 use Cms\Classes\Controller;
-use PDF;
 
 trait PDFMaker
 {
@@ -53,7 +53,7 @@ trait PDFMaker
      */
     public function makePDFFromString(string $contents)
     {
-        return PDF::loadHTML($contents);
+        return Pdf::loadHTML($contents);
     }
 
 }
