@@ -476,3 +476,5 @@
     - 'Fixed QuickCheckout component in October 3.0'
 3.0.25:
     - 'Fixed Stripe only working when it is the default payment method'
+3.0.26:
+    - 'Added support for DomPDF 2.x and Laravel 10 (thanks to @Pindagus)'
