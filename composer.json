@@ -22,7 +22,7 @@
     "league/omnipay": "^3.2",
     "omnipay/paypal": "^3.0",
     "omnipay/stripe": "^3.0",
-    "barryvdh/laravel-dompdf": "^0.9|^1.0",
+    "barryvdh/laravel-dompdf": "^0.9|^1.0|^2.0",
     "rainlab/user-plugin": "^1.6|^2.0",
     "rainlab/location-plugin": "^1.1.5",
     "rainlab/translate-plugin": "^2.0"
