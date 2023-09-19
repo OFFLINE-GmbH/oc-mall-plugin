@@ -92,7 +92,7 @@ trait BootServiceContainer
         AliasLoader::getInstance()->alias('PDF', Facade::class);
 
         $this->app->bind('dompdf.options', function () {
-            if ($defines = $this->app['config']->get('offline.mall::pdf.options')) {
+            if ($defines = $this->app['config']->get('offline.mall::pdf.defines')) {
                 $options = [];
                 foreach ($defines as $key => $value) {
                     $key           = strtolower(str_replace('DOMPDF_', '', $key));
