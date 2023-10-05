@@ -115,9 +115,7 @@ class Orders extends Controller
             }
         }
 
-        $order = $this->updateOrder($data, false);
-
-        $order->shippingNotification = $notification;
+        $order = $this->updateOrder($data, false, $notification);
 
         return [
             '#shipped_at'  => $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-',
@@ -157,13 +155,14 @@ class Orders extends Controller
         return Backend::redirect('offline/mall/orders');
     }
 
-    protected function updateOrder(array $attributes, bool $stateNotification = true)
+    protected function updateOrder(array $attributes, bool $stateNotification = true, bool $shippingNotification = false)
     {
         $order = Order::findOrFail(input('id'));
         $order->forceFill($attributes);
 
         // When updating the shipping information we don't care about the state change notification.
         $order->stateNotification = $stateNotification;
+        $order->shippingNotification = $shippingNotification;
 
         $order->save();
         Flash::success(trans('offline.mall::lang.order.updated'));
