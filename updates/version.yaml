@@ -448,5 +448,5 @@
     - add_product_variants_sort_order.php
 2.0.24:
     - 'Fixed migration'
-2.0.25:
+2.0.26:
     - 'Various small bug fixes'
