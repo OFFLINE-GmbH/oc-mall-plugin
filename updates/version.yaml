@@ -480,3 +480,5 @@
     - 'Added support for DomPDF 2.x and Laravel 10 (thanks to @Pindagus)'
 3.0.27:
     - 'Fixed handling of shipping notification'
+3.0.28:
+    - 'Added support for tax calculations for unregistered users in QuickCheckout component'

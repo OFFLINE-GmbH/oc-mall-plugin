@@ -59,6 +59,7 @@ trait FilteredTaxes
             return null;
         }
 
-        return optional($cart->shipping_address)->country_id;
+        return optional($cart->shipping_address)->country_id
+            ?? $cart->getFallbackShippingCountryId();
     }
 }
