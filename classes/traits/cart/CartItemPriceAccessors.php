@@ -256,7 +256,8 @@ trait CartItemPriceAccessors
 
     public function getCartCountryId()
     {
-        return optional(optional($this->cart)->shipping_address)->country_id;
+        return optional(optional($this->cart)->shipping_address)->country_id
+            ?? optional($this->cart)->getFallbackShippingCountryId();
     }
 
 }

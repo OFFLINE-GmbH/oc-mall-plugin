@@ -98,7 +98,7 @@ class SeedDemoData extends Command
 
         // October 2.0
         if (class_exists(\Editor\ServiceProvider::class)) {
-            Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall', '--force' => true]);
+            Artisan::call('plugin:refresh', ['namespace' => 'OFFLINE.Mall', '--force' => true]);
         } else {
             Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall']);
         }

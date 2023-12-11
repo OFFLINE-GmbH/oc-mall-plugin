@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits\Category;
 
-use Cache;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Category;
 
@@ -30,7 +29,9 @@ trait Properties
         })->property_groups;
 
         if ($groups) {
-            $groups->load('properties');
+            $groups->load(['properties' => function($q) {
+                $q->withPivot(['use_for_variants', 'filter_type', 'sort_order']);
+            }]);
         }
 
         return $this->inheritedPropertyGroupsCache = $groups ?? new Collection();
