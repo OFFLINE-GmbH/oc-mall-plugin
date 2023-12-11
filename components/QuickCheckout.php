@@ -464,10 +464,22 @@ class QuickCheckout extends MallComponent
         $this->setVar('accountPage', GeneralSettings::get('account_page'));
 
         $this->setVar('user', Auth::getUser());
+
         $cart = Cart::byUser($this->user);
         if ( ! $cart->payment_method_id) {
             $cart->setPaymentMethod(PaymentMethod::getDefault());
         }
+
+        if ($this->user) {
+            $cart->forgetFallbackShippingCountryId();
+        } else {
+            $shippingCountry = post('billing_country_id');
+            if (post('use_different_shipping')) {
+                $shippingCountry = post('shipping_country_id');
+            }
+            $cart->setFallbackShippingCountryId($shippingCountry);
+        }
+
         $this->setVar('cart', $cart);
 
         $paymentMethod = PaymentMethod::find($cart->payment_method_id);
@@ -477,7 +489,6 @@ class QuickCheckout extends MallComponent
         }
         $this->setVar('paymentMethods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('customerPaymentMethods', $this->getCustomerMethods());
-
 
 //        $this->setVar('dataLayer', $this->handleDataLayer());
 

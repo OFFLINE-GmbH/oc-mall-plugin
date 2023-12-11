@@ -20,6 +20,8 @@ use Session;
  */
 class Cart extends Model
 {
+    const FALLBACK_SHIPPING_COUNTRY_KEY = 'mall.fallback_shipping_country_id';
+
     use Validation;
     use SoftDelete;
     use CartSession;
@@ -86,6 +88,8 @@ class Cart extends Model
     public function setCustomer(Customer $customer)
     {
         $this->customer_id = $customer->id;
+
+        $this->forgetFallbackShippingCountryId();
     }
 
     public function setBillingAddress(Address $address)
@@ -96,6 +100,8 @@ class Cart extends Model
     public function setShippingAddress(Address $address)
     {
         $this->shipping_address_id = $address->id;
+
+        $this->forgetFallbackShippingCountryId();
     }
 
     public function getTotalsAttribute()
@@ -207,6 +213,27 @@ class Cart extends Model
             }
             return null;
         })->filter();
+    }
+
+    /**
+     * This is the country ID that is used for carts that do not have
+     * a shipping address yet.
+     */
+    public function getFallbackShippingCountryId()
+    {
+        return Session::get(self::FALLBACK_SHIPPING_COUNTRY_KEY);
+    }
+
+    public function setFallbackShippingCountryId($value)
+    {
+        if ($value) {
+            Session::put(self::FALLBACK_SHIPPING_COUNTRY_KEY, $value);
+        }
+    }
+
+    public function forgetFallbackShippingCountryId()
+    {
+        Session::forget(self::FALLBACK_SHIPPING_COUNTRY_KEY);
     }
 
     /**

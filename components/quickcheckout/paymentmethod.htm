@@ -40,6 +40,9 @@
                 <div class="mall-quick-checkout__payment-method-form">
                     {{ __SELF__.renderPaymentForm() | raw }}
                 </div>
+                {% if this.request.ajax %}
+                    {% scripts %}
+                {% endif %}
             {% endif %}
         {% else %}
             <p>No method available.</p>

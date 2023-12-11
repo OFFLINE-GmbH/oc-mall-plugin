@@ -57,7 +57,8 @@ class TotalsCalculatorInput
         $input->shipping_method     = $cart->shipping_method;
         $input->payment_method      = $cart->payment_method;
         $input->discounts           = $cart->discounts;
-        $input->shipping_country_id = optional(optional($cart)->shipping_address)->country_id;
+        $input->shipping_country_id = optional(optional($cart)->shipping_address)->country_id
+            ?? $cart->getFallbackShippingCountryId();
 
         return $input;
     }
