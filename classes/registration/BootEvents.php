@@ -48,16 +48,16 @@ trait BootEvents
 
     protected function registerStaticPagesEvents()
     {
-        Event::listen('pages.menuitem.listTypes', function () {
+        $listTypes = function () {
             return [
-                'mall-category'       => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
+                'mall-category' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
                 'all-mall-categories' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_categories'),
-                'all-mall-products'   => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
-                'all-mall-variants'   => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
+                'all-mall-products' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
+                'all-mall-variants' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
             ];
-        });
+        };
 
-        Event::listen('pages.menuitem.getTypeInfo', function ($type) {
+        $getTypeInfo = function ($type) {
             if ($type === 'all-mall-categories' || $type === 'mall-category') {
                 return Category::getMenuTypeInfo($type);
             }
@@ -66,9 +66,10 @@ trait BootEvents
                     'dynamicItems' => true,
                 ];
             }
-        });
+            return null;
+        };
 
-        Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
+        $resolveItem = function ($type, $item, $url, $theme) {
             if ($type === 'all-mall-categories') {
                 return Category::resolveCategoriesItem($item, $url, $theme);
             }
@@ -81,7 +82,18 @@ trait BootEvents
             if ($type === 'all-mall-variants') {
                 return Variant::resolveItem($item, $url, $theme);
             }
-        });
+            return null;
+        };
+
+        // RainLab.Pages
+        Event::listen('pages.menuitem.listTypes', $listTypes);
+        Event::listen('pages.menuitem.getTypeInfo', $getTypeInfo);
+        Event::listen('pages.menuitem.resolveItem', $resolveItem);
+
+        // October 3 CMS Module
+        Event::listen('cms.pageLookup.listTypes', $listTypes);
+        Event::listen('cms.pageLookup.getTypeInfo', $getTypeInfo);
+        Event::listen('cms.pageLookup.resolveItem', $resolveItem);
 
         // Translate slugs
         Event::listen('translate.localePicker.translateParams', function ($page, $params, $oldLocale, $newLocale) {
