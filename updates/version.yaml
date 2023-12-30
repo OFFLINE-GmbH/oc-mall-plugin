@@ -482,3 +482,5 @@
     - 'Fixed handling of shipping notification'
 3.0.28:
     - 'Added support for tax calculations for unregistered users in QuickCheckout component'
+3.0.29:
+    - 'Added support for the new page finder widget'
