@@ -1,5 +1,6 @@
 <?php namespace OFFLINE\Mall\Updates;
 
+use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
@@ -7,7 +8,7 @@ class CreateOfflineMallProducts extends Migration
 {
     public function up()
     {
-        Schema::create('offline_mall_products', function ($table) {
+        Schema::create('offline_mall_products', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('category_id')->nullable();
@@ -50,6 +51,8 @@ class CreateOfflineMallProducts extends Migration
 
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('offline_mall_products');
+        Schema::enableForeignKeyConstraints();
     }
 }
