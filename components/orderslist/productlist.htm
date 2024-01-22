@@ -1,24 +1,24 @@
 <table class="mall-table">
-    {% for product in products %}
+    {% for product in products|default([]) %}
         <tr>
             <td>
                 {{ product.name }}
-                {% if product.service_options %}
+                {% if product.service_options|default(null) %}
                     {% for option in product.service_options %}
                         <br/>
                         <span class="text-muted">
-                        <strong>{{ 'offline.mall::lang.common.service' | trans }}</strong>:
+                        <strong>{{ 'offline.mall::lang.common.service'|trans }}</strong>:
                         {{ option.name }}
                     </span>
                     {% endfor %}
                 {% endif %}
-                {% if product.variant %}
+                {% if product.variant|default(null) %}
                     <br/>
                     <span class="text-muted">
                         {{ product.variant.properties_description|raw }}
                     </span>
                 {% endif %}
-                {% if product.custom_field_values %}
+                {% if product.custom_field_values|default(null) %}
                     <br/>
                     <span class="text-muted">
                         {{ product.custom_field_value_description|raw }}
@@ -29,22 +29,22 @@
                     {% for grant in product.product_file_grants %}
                         <br/>
                         <a href="{{ grant.download_link }}">
-                            Download {{ grant.display_name }}
+                            {{ 'offline.mall::frontend.download_file'|trans({ file: grant.display_name }) }}
                             {{ loop.length > 1 ? ('#' ~ loop.index) }}
                         </a>
                         {% if grant.expires_at %}
-                            <br>valid until {{ grant.expires_at.toDateString() }}
+                            <br />{{ 'offline.mall::frontend.download_valid_until'|trans({ date: grant.expires_at.toDateString() }) }}
                         {% endif %}
                         {% if grant.max_download_count %}
-                            <br>max. {{ grant.max_download_count }} downloads
+                            <br />{{ 'offline.mall::frontend.download_count'|trans({ count: grant.max_download_count }) }}
                         {% endif %}
                     {% endfor %}
                 {% endif %}
             </td>
             <td>{{ product.quantity }}</td>
             <td class="text-right">
-                {{ product.pricePostTaxes() | raw }}
-                {% if product.service_options %}
+                {{ product.pricePostTaxes()|raw }}
+                {% if product.service_options|default(null) %}
                     {% for option in product.service_options %}
                         <div class="text-muted" title="{{ option.name }}">
                             + {{ option.price_formatted }}
@@ -75,7 +75,7 @@
             {{ order.totalShippingPostTaxes()|raw }}
         </td>
     </tr>
-    {% for entry in order.discounts %}
+    {% for entry in order.discounts|default([]) %}
         <tr class="mall-cart__discount">
             <td></td>
             <td colspan="2">
@@ -89,7 +89,7 @@
             </td>
         </tr>
     {% endfor %}
-    {% if order.payment and order.payment.total > 0 %}
+    {% if order.payment and order.payment.total|default(0) > 0 %}
         <tr class="mall-cart__payment">
             <td></td>
             <td colspan="2">

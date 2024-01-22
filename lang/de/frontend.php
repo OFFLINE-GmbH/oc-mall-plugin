@@ -175,5 +175,8 @@ return [
     'reviews.one_per_line' => 'Optional, ein Punkt pro Zeile',
     'no_shipping_method' => 'Keine Versandmethode ausgewählt',
     'no_shipping_method_available' => 'Keine Versandmethode verfügbar.',
-    'no_payment_method_available' => 'Keine Zahlungsmethode verfügbar.'
+    'no_payment_method_available' => 'Keine Zahlungsmethode verfügbar.',
+    'download_file' => ':file herunterladen',
+    'download_valid_until' => 'gültig bis :date',
+    'download_count' => 'max. :count downloadbar'
 ];

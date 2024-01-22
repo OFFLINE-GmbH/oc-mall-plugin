@@ -1,4 +1,14 @@
-{% if not url %}
+{% if url is defined and url != null %}
+    <script>
+        var redirect = function () {
+            document.location = '{{ url }}'
+        }
+        window.dataLayerData.eventCallback = redirect
+        setTimeout(redirect, 500)
+
+        dataLayer.push(window.dataLayerData)
+    </script>
+{% else %}
     {% set activeMethod = __SELF__.activeMethod.only('code', 'name') %}
     <script>
         $(function () {
@@ -15,14 +25,4 @@
         })
     </script>
     <div id="mall-datalayer"></div>
-{% else %}
-    <script>
-        var redirect = function () {
-            document.location = '{{ url }}'
-        }
-        window.dataLayerData.eventCallback = redirect
-        setTimeout(redirect, 500)
-
-        dataLayer.push(window.dataLayerData)
-    </script>
 {% endif %}

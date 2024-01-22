@@ -16,9 +16,11 @@
                             </div>
                         {% endif %}
                         <br/>
-                        <a href="{{ __SELF__.paymentLink }}?order={{ order.hashId }}">
-                            {{ 'offline.mall::frontend.payment_method.pay_now'|trans }}
-                        </a>
+                        {% if __SELF__.paymentLink is defined %}
+                            <a href="{{ __SELF__.paymentLink }}?order={{ order.hashId }}">
+                                {{ 'offline.mall::frontend.payment_method.pay_now'|trans }}
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -54,11 +56,15 @@
             <div class="mall-order-details__row">
                 <div class="mall-order-details__detail">
                     <h5>{{ 'offline.mall::frontend.shipping_address'|trans }}</h5>
-                    {% partial __SELF__ ~ '::address' address=order.shipping_address %}
+                    {% if order.shipping_address is defined %}
+                        {% partial __SELF__ ~ '::address' address=order.shipping_address %}
+                    {% endif %}
                 </div>
                 <div class="mall-order-details__detail">
                     <h5>{{ 'offline.mall::frontend.billing_address'|trans }}</h5>
-                    {% partial __SELF__ ~ '::address' address=order.billing_address %}
+                    {% if order.billing_address is defined %}
+                        {% partial __SELF__ ~ '::address' address=order.billing_address %}
+                    {% endif %}
                 </div>
             </div>
 

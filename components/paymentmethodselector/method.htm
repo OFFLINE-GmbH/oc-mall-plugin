@@ -28,7 +28,7 @@
                             {{ __SELF__.renderPaymentForm()|raw }}
                         {% endif %}
                     </div>
-                    {% set customerMethods = __SELF__.customerMethods[method.id] %}
+                    {% set customerMethods = __SELF__.customerMethods[method.id]|default(null) %}
                     {% if customerMethods %}
                         <div class="mall-payment-method__customer-methods">
                             {% partial __SELF__ ~ '::customermethods' methods=customerMethods %}
