@@ -34,7 +34,7 @@
         </div>
     </td>
     <td class="text-right">
-        {% partial __SELF__ ~ '::table/quantitydropdown' product=product %}
+        {% partial 'cart::table/quantitydropdown' product=product %}
     </td>
     <td class="text-right">
         {{ product.price()|raw }}

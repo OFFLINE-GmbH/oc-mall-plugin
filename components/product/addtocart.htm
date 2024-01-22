@@ -9,7 +9,7 @@
         {% endif %}
     </div>
 {% endif %}
-{% if stock > 0 or item.allow_out_of_stock_purchases %}
+{% if stock|default(0) > 0 or item.allow_out_of_stock_purchases %}
     <div class="mall-product__add-to-cart-form">
         <div class="mall-form-control">
             <label for="quantity">{{ 'offline.mall::frontend.quantity'|trans }}</label>

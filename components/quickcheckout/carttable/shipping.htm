@@ -1,4 +1,4 @@
-{% if shipping.method is not null %}
+{% if shipping.method|default(null) is not null %}
     <tr class="mall-cart__shipping">
         <td>
             {{ shipping.method.name }}

@@ -81,6 +81,7 @@ return [
     'change' => 'Ändern',
     'select' => '-- Bitte wählen',
     'checkout.checkout' => 'Kostenpflichtig bestellen',
+    'checkout.your_cart' => 'Dein Warenkorb',
     'apply' => 'Übernehmen',
     'address_selector.create' => 'Neue Adresse erfassen',
     'address_selector.edit' => 'Bearbeiten',

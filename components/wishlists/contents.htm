@@ -29,7 +29,7 @@
 
 {% if __SELF__.currentItem.items.count|default(0) > 0 %}
 <div class="mall-wishlists-manager__actions">
-    {% if __SELF__.allowPDFDownload %}
+    {% if __SELF__.allowPDFDownload|default(false) %}
     <a class="mall-btn mall-btn--default"
        href="?download={{ __SELF__.currentItem.hashId }}"
         target="_blank">

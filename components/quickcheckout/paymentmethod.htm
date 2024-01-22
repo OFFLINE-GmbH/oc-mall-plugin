@@ -1,7 +1,9 @@
 <header class="mall-quick-checkout__collapsible-header">
     <h2 class="mall-quick-checkout__heading">{{ 'offline.mall::frontend.payment'|trans }}</h2>
     <div class="mall-quick-checkout__collapsible-summary">
-        {{ cart.payment_method.name }}
+        {% if cart.payment_method is defined %}
+            {{ cart.payment_method.name|default(null) }}
+        {% endif %}
     </div>
 </header>
 <section class="mall-quick-checkout__collapsible-content">
@@ -24,7 +26,7 @@
                     <div class="mall-quick-checkout__toggle-option-meta">
                         {% if method.description|default(null) %}
                             <div>
-                                {{ method.description | raw }}
+                                {{ method.description|raw }}
                             </div>
                         {% endif %}
                     </div>
@@ -38,7 +40,7 @@
             </a>
             {% if isActiveMethod %}
                 <div class="mall-quick-checkout__payment-method-form">
-                    {{ __SELF__.renderPaymentForm() | raw }}
+                    {{ __SELF__.renderPaymentForm()|raw }}
                 </div>
                 {% if this.request.ajax %}
                     {% scripts %}

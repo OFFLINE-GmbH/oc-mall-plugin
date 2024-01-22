@@ -5,7 +5,7 @@
     {% set url = null %}
 {% endif %}
 
-{% set image = product.variant ? product.variant.image : product.data.image %}
+{% set image = product.variant|default(null) ? product.variant.image : product.data.image %}
 <tr class="mall-cart__product">
     <td>
         {% if url %}
@@ -45,7 +45,7 @@
     </td>
 </tr>
 
-{% for option in product.service_options %}
+{% for option in product.service_options|default([]) %}
     <tr class="mall-cart__services {{ loop.first ? 'mall-cart__services--first' }} {{ loop.last ? 'mall-cart__services--last' }}">
         <td></td>
         <td colspan="2">

@@ -81,6 +81,7 @@ return [
     'change' => 'Change',
     'select' => '-- Select',
     'checkout.checkout' => 'Place order',
+    'checkout.your_cart' => 'Your Cart',
     'address_selector.create' => 'Create new address',
     'address_selector.edit' => 'Edit',
     'address_selector.select' => 'Use this address',

@@ -6,7 +6,7 @@
 </header>
 <section class="mall-quick-checkout__collapsible-content">
     <div class="mall-quick-checkout__collapsible-inner">
-        {% if __SELF__.user %}
+        {% if __SELF__.user|default(null) %}
             <div class="mall-cart-summary">
                 <div class="mall-cart-summary__info mall-cart-summary__info--two-columns">
                     <div class="mall-cart-summary__billing-address">

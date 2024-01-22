@@ -6,12 +6,12 @@
     <h3>{{ 'offline.mall::frontend.services.modal_title'|trans }}</h3>
 
     <div class="mall-product-services">
-        {% for service in services %}
+        {% for service in services|default([]) %}
         <div class="mall-product-service">
             <h4 class="mall-product-service__name">{{ service.name }}</h4>
             {% if service.description %}
             <div class="mall-product-service__description">
-                {{ html_clean(service.description | raw) }}
+                {{ html_clean(service.description|raw) }}
             </div>
             {% endif %}
             {% if service.pivot.required %}
@@ -68,7 +68,6 @@
         </div>
     </div>
 </form>
-
 
 <script>
     window.Mall.Modal.addClass('mall-modal--visible')

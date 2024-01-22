@@ -3,8 +3,7 @@
         <input class="js-mall-toggle-signup-terms"
                type="checkbox"
                name="terms_accepted"
-               value="1"
-        >
+               value="1" />
         <span>
             {% partial __SELF__ ~ '::termslabel' %}
             <div data-validate-for="terms_accepted"></div>
@@ -13,9 +12,9 @@
 </div>
 
 {% put scripts %}
+    {# Disable the signup  button until the terms are accepted #}
     <script>
         $(function () {
-            {# Disable the signup  button until the terms are accepted #}
             $('.mall-btn-signup').prop('disabled', true)
             $('.js-mall-toggle-signup-terms').on('click', function () {
                 $('.mall-btn-signup').prop('disabled', ! this.checked);

@@ -1,4 +1,4 @@
-{% for wishlist in items %}
+{% for wishlist in items|default([]) %}
     {% partial __SELF__ ~ '::item'
         name=wishlist.name
         count=wishlist.items.count|default(0)

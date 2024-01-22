@@ -25,7 +25,7 @@
                 <div class="mall-quick-checkout__toggle-option-text">
                     <h4 class="mall-quick-checkout__toggle-option-name">{{ method.name }}</h4>
                     <div class="mall-quick-checkout__toggle-option-meta">
-                        {% if method.guaranteed_delivery_days %}
+                        {% if method.guaranteed_delivery_days|default(null) %}
                             <p>
                                 {% set days = method.guaranteed_delivery_days %}
                                 {{ 'offline.mall::frontend.shipping_method.guaranteed_delivery_days'|transchoice(days, {days: days}) }}
@@ -44,7 +44,7 @@
                             : ( 'offline.mall::frontend.select_for_shipping_total'|trans ) }}
                         {% else %}
                             {{ method.price().integer > 0
-                            ? (method.price().string | raw)
+                            ? (method.price().string|raw)
                             : ('offline.mall::frontend.no_additional_charges'|trans) }}
                         {% endif %}
                     </div>
