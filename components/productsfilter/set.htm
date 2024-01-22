@@ -1,5 +1,5 @@
 <div class="mall-filter mall-filter--set">
-    {% set selected = filter[property.slug].values %}
+    {% set selected = filter[property.slug].values|default([]) %}
     {% for value in values %}
         {% set isSelected = value.index_value in selected %}
         <div class="js-mall-filter mall-filter__option {{ isSelected ? 'mall-filter__option--selected' : '' }}">

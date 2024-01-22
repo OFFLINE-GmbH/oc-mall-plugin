@@ -7,7 +7,7 @@
     document.querySelector('.mall-wishlist-button__popup').classList.remove('mall-wishlist-button__popup--visible');
    "
    data-request-data="
-         wishlist_id: '{{ list_id }}',
+         wishlist_id: '{{ list_id|default() }}',
          product_id: '{{ __SELF__.encode(product_id) }}',
          variant_id: '{{ __SELF__.encode(variant_id) }}'
     ">

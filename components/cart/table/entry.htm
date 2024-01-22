@@ -4,7 +4,7 @@
     <td>
         {% if image %}
             <a href="{{ url }}">
-                <img src="{{ image.thumb(100, auto) }}" alt=""/>
+                <img src="{{ image.thumb(100, auto|default()) }}" alt=""/>
             </a>
         {% endif %}
     </td>

@@ -3,7 +3,7 @@
             <input type="checkbox" class="mall-input-checkbox" id="mall-on-sale"
                    name="filter[on_sale]"
                    value="✓"
-                   {{ filter.on_sale ? 'checked' }}
+                   {{ (filter['on_sale']|default(false)) ? 'checked' : '' }}
             >
             {{ 'offline.mall::frontend.onsale_label' | trans }}
         </label>
