@@ -24,6 +24,30 @@ class Wishlists extends MallComponent
      */
     public $items;
     /**
+     * Default minimum quantity.
+     *
+     * @var int
+     */
+    public $defaultMinQuantity = 1;
+    /**
+     * Default maximum quantity.
+     *
+     * @var int
+     */
+    public $defaultMaxQuantity = 100;
+    /**
+     * Display the DiscountApplier component.
+     *
+     * @var bool
+     */
+    public $showDiscountApplier = true;
+    /**
+     * Display a tax summary at the end of the cart.
+     *
+     * @var bool
+     */
+    public $showTaxes = true;
+    /**
      * The currently displayed wishlist.
      *
      * @var Wishlist
