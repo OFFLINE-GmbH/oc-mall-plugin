@@ -2,10 +2,10 @@
     <table class="mall-orders-list__table mall-table">
         <tr>
             <th>#</th>
-            <th>{{ 'offline.mall::frontend.created_at' | trans }}</th>
-            <th>{{ 'offline.mall::frontend.order.order_state' | trans }}</th>
-            <th>{{ 'offline.mall::frontend.order.payment_state' | trans }}</th>
-            <th class="text-right">{{ 'offline.mall::frontend.total' | trans }}</th>
+            <th>{{ 'offline.mall::frontend.created_at'|trans }}</th>
+            <th>{{ 'offline.mall::frontend.order.order_state'|trans }}</th>
+            <th>{{ 'offline.mall::frontend.order.payment_state'|trans }}</th>
+            <th class="text-right">{{ 'offline.mall::frontend.total'|trans }}</th>
         </tr>
         {% for order in orders %}
             <tr class="mall-orders-list__order {{ order.isPaid ? '' : 'mall-orders-list__order--unpaid' }} {{ this.param.order == order.hash_id ? 'is-open' : '' }}">
@@ -21,7 +21,7 @@
                         </a>
                     {% endif %}
                 </td>
-                <td class="text-right">{{ order.totalPostTaxes() | raw }}</td>
+                <td class="text-right">{{ order.totalPostTaxes()|raw }}</td>
             </tr>
             {% partial __SELF__ ~ '::details' order=order %}
         {% endfor %}

@@ -8,29 +8,29 @@
         {% if product.variant %}
             <br/>
             <span class="text-muted">
-                {{ product.variant.properties_description | raw }}
+                {{ product.variant.properties_description|raw }}
             </span>
         {% endif %}
         {% if product.custom_field_values %}
             <br/>
             <span class="text-muted">
-                {{ product.custom_field_value_description | raw }}
+                {{ product.custom_field_value_description|raw }}
             </span>
         {% endif %}
         <div class="text-muted">
-            {{ 'offline.mall::frontend.quantity' | trans }}: {{ product.quantity }}
+            {{ 'offline.mall::frontend.quantity'|trans }}: {{ product.quantity }}
         </div>
         <div>
             <a href="javascript:;"
                class="js-mall-remove-product"
                data-id="{{ product.hashId }}"
             >
-                {{ 'offline.mall::frontend.remove' | trans }}
+                {{ 'offline.mall::frontend.remove'|trans }}
             </a>
         </div>
     </td>
     <td class="text-right">
-        {{ product.totalPostTaxes | money }}
+        {{ product.totalPostTaxes|money }}
     </td>
 </tr>
 

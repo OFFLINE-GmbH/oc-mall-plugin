@@ -20,7 +20,7 @@
 
         {% if review.description %}
             <div class="mall-review__content">
-                {{ review.description | nl2br }}
+                {{ review.description|nl2br }}
             </div>
         {% endif %}
 
@@ -50,12 +50,12 @@
     </div>
 {% else %}
     <div class="mall-callout mall-callout--neutral">
-        {{ 'offline.mall::frontend.reviews.none' | trans }}
+        {{ 'offline.mall::frontend.reviews.none'|trans }}
     </div>
 {% endfor %}
 
 {% if __SELF__.reviews.hasPages %}
     <div class="mall-pagination mall-pagination--reviews">
-        {{ __SELF__.reviews | raw }}
+        {{ __SELF__.reviews|raw }}
     </div>
 {% endif %}

@@ -5,13 +5,13 @@
 >
     <div class="mall-wishlist-item__data">
         <div class="mall-wishlist-item__name">
-            {{ name | default('offline.mall::frontend.wishlist.default_name' | trans) }}
+            {{ name|default('offline.mall::frontend.wishlist.default_name'|trans) }}
         </div>
         <div class="mall-wishlist-item__description">
-            {{ 'offline.mall::frontend.wishlist.count' | transchoice(count | default(0)) }}
+            {{ 'offline.mall::frontend.wishlist.count'|transchoice(count|default(0)) }}
         </div>
     </div>
     <div class="mall-wishlist-item__meta">
-        {{ (total | default(0)) | money }}
+        {{ (total|default(0))|money }}
     </div>
 </a>

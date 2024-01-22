@@ -15,13 +15,13 @@
                 {% if product.variant %}
                     <br/>
                     <span class="text-muted">
-                        {{ product.variant.properties_description | raw }}
+                        {{ product.variant.properties_description|raw }}
                     </span>
                 {% endif %}
                 {% if product.custom_field_values %}
                     <br/>
                     <span class="text-muted">
-                        {{ product.custom_field_value_description | raw }}
+                        {{ product.custom_field_value_description|raw }}
                     </span>
                 {% endif %}
                 {% if product.product_file_grants.count > 0 %}
@@ -53,17 +53,17 @@
                 {% endif %}
             </td>
             <td class="text-right">
-                {{ product.totalPostTaxes() | raw }}
+                {{ product.totalPostTaxes()|raw }}
             </td>
         </tr>
     {% endfor %}
     <tr class="mall-cart__total">
         <td></td>
         <td colspan="2">
-            {{ 'offline.mall::frontend.total' | trans }}
+            {{ 'offline.mall::frontend.total'|trans }}
         </td>
         <td class="text-right">
-            {{ order.totalProductPostTaxes() | raw }}
+            {{ order.totalProductPostTaxes()|raw }}
         </td>
     </tr>
     <tr class="mall-cart__shipping">
@@ -72,7 +72,7 @@
             {{ order.shipping.method.name }}
         </td>
         <td class="text-right">
-            {{ order.totalShippingPostTaxes() | raw }}
+            {{ order.totalShippingPostTaxes()|raw }}
         </td>
     </tr>
     {% for entry in order.discounts %}
@@ -93,20 +93,20 @@
         <tr class="mall-cart__payment">
             <td></td>
             <td colspan="2">
-                {{ order.payment_method.fee_label | default(order.payment_method.name) }}
+                {{ order.payment_method.fee_label|default(order.payment_method.name) }}
             </td>
             <td class="text-right">
-                {{ order.payment.total | money }}
+                {{ order.payment.total|money }}
             </td>
         </tr>
     {% endif %}
     <tr class="mall-cart__grand-total">
         <td></td>
         <td colspan="2">
-            {{ 'offline.mall::frontend.grand_total' | trans }}
+            {{ 'offline.mall::frontend.grand_total'|trans }}
         </td>
         <td class="text-right">
-            {{ order.totalPostTaxes() | raw }}
+            {{ order.totalPostTaxes()|raw }}
         </td>
     </tr>
 </table>

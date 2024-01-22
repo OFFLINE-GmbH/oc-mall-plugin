@@ -14,18 +14,18 @@
             </div>
             {% if method.description %}
                 <div class="mall-payment-method__description">
-                    {{ method.description | raw }}
+                    {{ method.description|raw }}
                 </div>
             {% endif %}
             {% if isActiveMethod %}
                 <div class="mall-payment-method__instructions">
-                    {{ method.renderInstructions(__SELF__.order, __SELF__.cart) | raw }}
+                    {{ method.renderInstructions(__SELF__.order, __SELF__.cart)|raw }}
                 </div>
                 <div class="mall-payment-method__toggle"
                      style="{% if not isActiveMethod %}display: none{% endif %}">
                     <div class="mall-payment-method__data">
                         {% if method.payment_provider %}
-                            {{ __SELF__.renderPaymentForm() | raw }}
+                            {{ __SELF__.renderPaymentForm()|raw }}
                         {% endif %}
                     </div>
                     {% set customerMethods = __SELF__.customerMethods[method.id] %}
@@ -53,7 +53,7 @@
                     data-request="{{ __SELF__ }}::onChangeMethod"
                     data-request-success="$.publish('mall.cart.paymentMethodChanged', data)"
                     data-request-data="id: '{{ method.id }}'">
-                {{ 'offline.mall::frontend.payment_method.button_label' | trans }}
+                {{ 'offline.mall::frontend.payment_method.button_label'|trans }}
             </button>
         {% endif %}
     </div>

@@ -2,13 +2,13 @@
     {% set activeMethod = __SELF__.activeMethod.only('code', 'name') %}
     <script>
         $(function () {
-            window.dataLayerData = dataWithMethod({{ activeMethod | json_encode | raw }})
+            window.dataLayerData = dataWithMethod({{ activeMethod|json_encode|raw }})
             $.subscribe('mall.cart.paymentMethodChanged', function (e, data) {
                 window.dataLayerData = dataWithMethod(data.method)
             })
 
             function dataWithMethod (method) {
-                var dl = {{ dataLayer | json_encode | raw }};
+                var dl = {{ dataLayer|json_encode|raw }};
                 dl.ecommerce.checkout.actionField = {step: 1, method: method.code}
                 return dl
             }

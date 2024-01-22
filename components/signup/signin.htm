@@ -1,19 +1,19 @@
-<h3 class="mall-signup__heading">{{ 'offline.mall::frontend.signup.signin' | trans }}</h3>
+<h3 class="mall-signup__heading">{{ 'offline.mall::frontend.signup.signin'|trans }}</h3>
 <form data-request="onSignin" data-request-validate data-request-flash>
     <div class="mall-form-control">
-        <label for="signin_email">{{ 'offline.mall::frontend.form.email' | trans }}</label>
+        <label for="signin_email">{{ 'offline.mall::frontend.form.email'|trans }}</label>
         <input id="signin_email" name="login" type="text" placeholder="email@example.com">
         <div data-validate-for="login"></div>
     </div>
     <div class="mall-form-control">
-        <label for="signin_password">{{ 'offline.mall::frontend.form.password' | trans }}</label>
+        <label for="signin_password">{{ 'offline.mall::frontend.form.password'|trans }}</label>
         <input id="signin_password" type="password" placeholder="******************"
                name="password">
         <div data-validate-for="password"></div>
     </div>
     <div class="mall-form-actions">
         <button class="mall-btn mall-btn--primary" type="submit">
-            {{ 'offline.mall::frontend.form.signin' | trans }}
+            {{ 'offline.mall::frontend.form.signin'|trans }}
         </button>
         {% partial __SELF__ ~ '::reset_password' %}
     </div>

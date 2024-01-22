@@ -1,5 +1,5 @@
 <div class="mall-product-reviews__info-name">
-    {{ 'offline.mall::frontend.reviews.overall_rating' | trans }}
+    {{ 'offline.mall::frontend.reviews.overall_rating'|trans }}
 </div>
 <div class="mall-product-reviews__info-content">
     <div class="mall-product-reviews__overall-ratings">
@@ -8,7 +8,7 @@
             {% set label = count ~ ' ' ~ ('offline.mall::frontend.reviews.ratings' | transchoice(count | default(0))) %}
             {% partial __SELF__ ~ '::stars' rating=__SELF__.product.reviews_rating label=label variant="big" %}
             <div class="mall-product-reviews__summary">
-                {{ 'offline.mall::frontend.reviews.overall_rating_summary' | trans({value: __SELF__.product.reviews_rating}) }}
+                {{ 'offline.mall::frontend.reviews.overall_rating_summary'|trans({value: __SELF__.product.reviews_rating}) }}
             </div>
         </div>
         <div>

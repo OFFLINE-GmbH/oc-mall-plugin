@@ -1,4 +1,4 @@
-{% for entry in discounts %}
+{% for entry in discounts|default([]) %}
     <tr class="mall-cart__discount">
         <td></td>
         <td colspan="3">

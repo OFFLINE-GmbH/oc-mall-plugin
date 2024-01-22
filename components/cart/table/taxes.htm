@@ -9,7 +9,7 @@
                 {{ entry.tax.percentage }} %
             </td>
             <td class="text-right">
-                {{ entry.total | money }}
+                {{ entry.total|money }}
             </td>
         </tr>
     {% endfor %}
@@ -18,11 +18,11 @@
         <tr class="mall-cart__taxes-total">
             <td colspan="2"></td>
             <td class="text-right">
-                {{ 'offline.mall::frontend.total.taxes' | trans }}
+                {{ 'offline.mall::frontend.total.taxes'|trans }}
             </td>
             <td></td>
             <td class="text-right">
-                {{ totals.totalTaxes | money }}
+                {{ totals.totalTaxes|money }}
             </td>
         </tr>
     {% endif %}

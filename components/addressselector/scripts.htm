@@ -10,7 +10,7 @@
             });
             $body.on('change', '.mall-address-selector--{{ __SELF__.type }} #mall_address_id', function () {
                 if (this.value === 'new') {
-                    document.location.href = '{{ __SELF__.addressPage | page({
+                    document.location.href = '{{ __SELF__.addressPage|page({
                         address: "new",
                         redirect: __SELF__.property('redirect'),
                         set: __SELF__.type,

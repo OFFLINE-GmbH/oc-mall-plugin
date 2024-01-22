@@ -1,13 +1,13 @@
 {% if not url %}
     <script>
         $(function () {
-            window.dataLayerData = dataWithMethod({{ cart.shipping_method | json_encode | raw }})
+            window.dataLayerData = dataWithMethod({{ cart.shipping_method|json_encode|raw }})
             $.subscribe('mall.cart.shippingMethodChanged', function (e, data) {
                 window.dataLayerData = dataWithMethod(data.method)
             })
 
             function dataWithMethod (method) {
-                var dl = {{ dataLayer | json_encode | raw }};
+                var dl = {{ dataLayer|json_encode|raw }};
                 dl.ecommerce.checkout.actionField = {step: 2, method: method.name}
                 return dl
             }

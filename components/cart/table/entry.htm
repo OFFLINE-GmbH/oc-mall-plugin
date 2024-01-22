@@ -1,5 +1,5 @@
-{% set url = (productPage | page({slug: product.data.slug, variant: product.variant.hashId})) %}
-{% set image = product.variant ? product.variant.image : product.data.image %}
+{% set url = (productPage|page({ slug: product.data.slug, variant: product.variant.hashId })) %}
+{% set image = product.variant|default(null) ? product.variant.image : product.data.image %}
 <tr class="mall-cart__product">
     <td>
         {% if image %}
@@ -15,13 +15,13 @@
         {% if product.variant %}
             <br/>
             <span class="text-muted">
-                {{ product.variant.properties_description | raw }}
+                {{ product.variant.properties_description|raw }}
             </span>
         {% endif %}
         {% if product.custom_field_values %}
             <br/>
             <span class="text-muted">
-                {{ product.custom_field_value_description | raw }}
+                {{ product.custom_field_value_description|raw }}
             </span>
         {% endif %}
         <div>
@@ -29,7 +29,7 @@
                class="js-mall-remove-product"
                data-id="{{ product.hashId }}"
             >
-                {{ 'offline.mall::frontend.remove' | trans }}
+                {{ 'offline.mall::frontend.remove'|trans }}
             </a>
         </div>
     </td>
@@ -40,12 +40,12 @@
         {{ product.price() | raw }}
         {% if product.service_options.count|default(0) > 0 %}
             <div class="mall-cart__price-additions">
-                + {{ product.servicePostTaxes | money }}
+                + {{ product.servicePostTaxes|money }}
             </div>
         {% endif %}
     </td>
     <td class="text-right">
-        {{ product.totalPostTaxes | money }}
+        {{ product.totalPostTaxes|money }}
     </td>
 </tr>
 
@@ -56,7 +56,7 @@
             {{ option.name }}
         </td>
         <td class="text-right">
-            {{ option.price().integer | money }}
+            {{ option.price().integer|money }}
         </td>
         <td></td>
     </tr>
