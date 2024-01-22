@@ -6,7 +6,7 @@
     <div class="mall-field-image-selector">
         {% for option in field.custom_field_options %}
             <a class="mall-option-selector" data-target="#{{ fieldId }}" data-value="{{ option.hashId }}">
-                <img src="{{ option.image.thumb(90, 90, 'auto') }}" alt=""/>
+                <img src="{{ option.image.thumb(90, 90, null) }}" alt=""/>
             </a>
         {% endfor %}
     </div>

@@ -4,7 +4,7 @@
      data-id="{{ method.id }}">
     <div class="mall-payment-method__logo">
         {% if method.logo %}
-            <img class="mall-payment-method__logo" src="{{ method.logo.thumb(120, 'auto') }}" alt=""/>
+            <img class="mall-payment-method__logo" src="{{ method.logo.thumb(120, null) }}" alt=""/>
         {% endif %}
     </div>
     <div class="mall-payment-method__text">
