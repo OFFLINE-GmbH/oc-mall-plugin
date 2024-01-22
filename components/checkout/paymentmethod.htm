@@ -1,5 +1,5 @@
 <div class="mall-cart-summary__method-logo">
-    {% if __SELF__.cart.payment_method.logo %}
+    {% if __SELF__.cart.payment_method.logo|default(null) %}
         <img src="{{ __SELF__.cart.payment_method.logo.thumb(150, null) }}" alt=""/>
     {% else %}
         {{ __SELF__.cart.payment_method.name }}

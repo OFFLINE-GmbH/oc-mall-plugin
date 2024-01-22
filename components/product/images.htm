@@ -1,4 +1,4 @@
-{% if images %}
+{% if images|default(null) %}
     <div class="mall-product__images">
         {% for image in images %}
             <a class="mall-product__image" href="{{ image.path }}"

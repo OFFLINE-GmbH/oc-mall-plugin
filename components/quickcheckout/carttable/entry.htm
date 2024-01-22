@@ -1,6 +1,6 @@
 
 {% if productPage is defined %}
-    {% set url = (productPage|page({slug: product.data.slug, variant: product.variant.hashId})) %}
+    {% set url = (productPage|page({slug: product.data.slug, variant: product.variant.hashId|default(null) })) %}
 {% else %}
     {% set url = null %}
 {% endif %}
@@ -10,10 +10,10 @@
     <td>
         {% if url %}
             <a href="{{ url }}">
-                {{ product.variant.name ?: product.data.name }}
+                {{ product.variant.name|default(product.data.name) }}
             </a>
         {% else %}
-            {{ product.variant.name ?: product.data.name }}
+            {{ product.variant.name|default(product.data.name) }}
         {% endif %}
 
         {% if product.variant %}

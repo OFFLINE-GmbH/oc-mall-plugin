@@ -47,7 +47,7 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if method.logo %}
+                {% if method.logo|default(null) %}
                     <div class="mall-quick-checkout__toggle-option-logo">
                         <img class="mall-quick-checkout__toggle-option-image"
                              src="{{ method.logo.thumb(75, 75) }}" alt=""/>

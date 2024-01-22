@@ -9,9 +9,13 @@
             {% for value, variant in variants %}
                 {% set variant = variant.first() %}
                 <div class="mall-product__variant">
-                    <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId}) }}"
+                    <a href="{{ this.page.fileName|page({slug: this.param.slug, variant: variant.hashId|default(null) }) }}"
                        title="{{ variant.name }}">
-                        <img src="{{ variant.main_image.thumb(80, null) }}" alt="{{ variant.name }}"/>
+                        {% if variant.main_image|default(null) %}
+                            <img src="{{ variant.main_image.thumb(80, null) }}" alt="{{ variant.name }}"/>
+                        {% else %}
+                            {{ variant.name }}
+                        {% endif %}
                     </a>
                 </div>
             {% endfor %}

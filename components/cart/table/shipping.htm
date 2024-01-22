@@ -1,5 +1,5 @@
 {% if __SELF__.showShipping %}
-    {% if shipping.method is not null %}
+    {% if shipping.method|default(null) is not null %}
         <tr class="mall-cart__shipping">
             <td></td>
             <td colspan="3">

@@ -3,7 +3,7 @@
      {{ isActiveMethod ? 'mall-payment-method__entry--active' : '' }}"
      data-id="{{ method.id }}">
     <div class="mall-payment-method__logo">
-        {% if method.logo %}
+        {% if method.logo|default(null) %}
             <img class="mall-payment-method__logo" src="{{ method.logo.thumb(120, null) }}" alt=""/>
         {% endif %}
     </div>

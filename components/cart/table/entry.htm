@@ -1,8 +1,8 @@
-{% set url = (productPage|page({ slug: product.data.slug, variant: product.variant.hashId })) %}
+{% set url = (productPage|page({ slug: product.data.slug, variant: product.variant.hashId|default(null) })) %}
 {% set image = product.variant|default(null) ? product.variant.image : product.data.image %}
 <tr class="mall-cart__product">
     <td>
-        {% if image %}
+        {% if image|default(null) %}
             <a href="{{ url }}">
                 <img src="{{ image.thumb(100, null) }}" alt=""/>
             </a>
@@ -10,7 +10,7 @@
     </td>
     <td>
         <a href="{{ url }}">
-            {{ product.variant.name ?: product.data.name }}
+            {{ product.variant.name|default(product.data.name) }}
         </a>
         {% if product.variant %}
             <br/>
@@ -37,7 +37,7 @@
         {% partial __SELF__ ~ '::table/quantitydropdown' product=product %}
     </td>
     <td class="text-right">
-        {{ product.price() | raw }}
+        {{ product.price()|raw }}
         {% if product.service_options.count|default(0) > 0 %}
             <div class="mall-cart__price-additions">
                 + {{ product.servicePostTaxes|money }}

@@ -1,4 +1,4 @@
-{% if cart.payment_method_id != null and payment.totalPostTaxes > 0 %}
+{% if cart.payment_method_id|default(null) != null and payment.totalPostTaxes|default(0) > 0 %}
     <tr class="mall-cart__payment">
         <td></td>
         <td colspan="3">
