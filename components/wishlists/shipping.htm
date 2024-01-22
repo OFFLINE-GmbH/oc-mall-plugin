@@ -1,7 +1,7 @@
 <tr class="mall-cart__shipping">
     <td></td>
     <td colspan="3">
-        {% if __SELF__.shippingMethods.count > 1 %}
+        {% if __SELF__.shippingMethods.count|default(0) > 1 %}
             <label for="mall-shipping-method-select">
                 {{ 'offline.mall::lang.order.shipping_method'|trans }}
             </label>

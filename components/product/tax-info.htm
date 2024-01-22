@@ -1,4 +1,4 @@
-{% if item.filteredTaxes.count > 0 %}
+{% if item.filteredTaxes.count|default(0) > 0 %}
     {% if item.price_includes_tax %}
         {{ 'offline.mall::frontend.tax.inclusive'|trans }}
     {% else %}

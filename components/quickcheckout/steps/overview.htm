@@ -21,7 +21,7 @@
             {% partial __SELF__ ~ '::cart' %}
         </div>
 
-        {% if __SELF__.cart.products.count > 0 %}
+        {% if __SELF__.cart.products.count|default(0) > 0 %}
             <div class="mall-signup-terms">
                 <label class="mall-checkbox">
                     <input class="js-mall-toggle-signup-terms"

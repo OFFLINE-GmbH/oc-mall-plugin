@@ -14,7 +14,7 @@
         </tr>
     {% endfor %}
 
-    {% if totals.taxes.count > 1 %}
+    {% if totals.taxes.count|default(0) > 1 %}
         <tr class="mall-cart__taxes-total">
             <td colspan="2"></td>
             <td class="text-right">

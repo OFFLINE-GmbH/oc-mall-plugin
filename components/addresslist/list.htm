@@ -36,7 +36,7 @@
                    class="mall-btn mall-btn--sm">
                     {{ 'offline.mall::frontend.edit'|trans }}
                 </a>
-                {% if __SELF__.addresses.count > 1 %}
+                {% if __SELF__.addresses.count|default(0) > 1 %}
                     <a href="javascript:;" data-request="onDelete" data-request-data="id: '{{ address.hashId }}'"
                        data-request-confirm="{{ 'offline.mall::frontend.are_you_sure'|trans }}" data-request-flash
                        class="mall-btn mall-btn--sm">

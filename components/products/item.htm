@@ -24,7 +24,7 @@
                     {% if price.official %}
                         {{ price.official.string|raw }}
                     {% else %}
-                        {{ item.oldPrice.count > 0 ? item.oldPrice().string|raw }}
+                        {{ item.oldPrice.count|default(0) > 0 ? item.oldPrice().string|raw }}
                     {% endif %}
                 </div>
             </div>

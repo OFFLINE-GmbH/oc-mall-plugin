@@ -24,7 +24,7 @@
                         {{ product.custom_field_value_description|raw }}
                     </span>
                 {% endif %}
-                {% if product.product_file_grants.count > 0 %}
+                {% if product.product_file_grants.count|default(0) > 0 %}
                     <br/>
                     {% for grant in product.product_file_grants %}
                         <br/>

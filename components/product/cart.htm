@@ -3,7 +3,7 @@
       data-request-validate
       data-request-flash
       id="mall-add-to-cart">
-    {% if variants.count > 0 %}
+    {% if variants.count|default(0) > 0 %}
         <h5 class="mall-product__variants-heading">{{ 'offline.mall::frontend.variants'|trans }}</h5>
         <div class="mall-product__variants">
             {% for value, variant in variants %}
@@ -18,13 +18,13 @@
         </div>
     {% endif %}
 
-    {% if props.count > 0 and item.inventory_management_method == 'variant' %}
+    {% if props.count|default(0) > 0 and item.inventory_management_method == 'variant' %}
         <div class="mall-product__variant-properties">
             {% partial __SELF__ ~ '::properties' props=props %}
         </div>
     {% endif %}
 
-    {% if item.custom_fields.count > 0 %}
+    {% if item.custom_fields.count|default(0) > 0 %}
         <div class="mall-product__custom-fields">
             {% partial __SELF__ ~ '::customfields' fields=item.custom_fields %}
         </div>
