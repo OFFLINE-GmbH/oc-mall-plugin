@@ -500,6 +500,8 @@ class QuickCheckout extends MallComponent
             $orderId = $this->decode($orderId);
             $this->setVar('order', Order::byCustomer($this->user->customer)->find($orderId));
         }
+        
+        $this->setVar('productPage', GeneralSettings::get('product_page'));
     }
 
     /**

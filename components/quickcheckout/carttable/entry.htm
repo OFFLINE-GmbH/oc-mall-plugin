@@ -1,10 +1,21 @@
-{% set url = (productPage | page({slug: product.data.slug, variant: product.variant.hashId})) %}
+
+{% if productPage is defined %}
+    {% set url = (productPage|page({slug: product.data.slug, variant: product.variant.hashId})) %}
+{% else %}
+    {% set url = null %}
+{% endif %}
+
 {% set image = product.variant ? product.variant.image : product.data.image %}
 <tr class="mall-cart__product">
     <td>
-        <a href="{{ url }}">
+        {% if url %}
+            <a href="{{ url }}">
+                {{ product.variant.name ?: product.data.name }}
+            </a>
+        {% else %}
             {{ product.variant.name ?: product.data.name }}
-        </a>
+        {% endif %}
+
         {% if product.variant %}
             <br/>
             <span class="text-muted">
