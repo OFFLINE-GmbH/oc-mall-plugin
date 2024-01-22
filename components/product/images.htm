@@ -4,7 +4,7 @@
             <a class="mall-product__image" href="{{ image.path }}"
                data-fancybox="product"
                data-caption="{{ image.title }}">
-                <img src="{{ image.thumb(240, auto|default()) }}" alt="{{ image.title }}"/>
+                <img src="{{ image.thumb(240, 'auto') }}" alt="{{ image.title }}"/>
             </a>
         {% endfor %}
     </div>

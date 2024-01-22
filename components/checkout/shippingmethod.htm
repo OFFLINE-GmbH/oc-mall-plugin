@@ -6,14 +6,14 @@
             {{ __SELF__.cart.shipping_method.name }}
         {% endif %}
     {% else %}
-        <p>{{ 'offline.mall::lang.shipping_method.not_required_name' | trans }}</p>
+        <p>{{ 'offline.mall::lang.shipping_method.not_required_name'|trans }}</p>
     {% endif %}
 </div>
 
 {% if not __SELF__.cart.is_virtual %}
     <p class="mall-cart-summary__action">
         <a href="{{ __SELF__.stepUrl('shipping') }}">
-            {{ 'offline.mall::frontend.change' | trans }}
+            {{ 'offline.mall::frontend.change'|trans }}
         </a>
     </p>
 {% endif %}

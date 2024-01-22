@@ -27,7 +27,7 @@
     {% partial __SELF__ ~ '::cart' %}
 </div>
 
-{% if __SELF__.currentItem.items.count > 0 %}
+{% if __SELF__.currentItem.items.count|default(0) > 0 %}
 <div class="mall-wishlists-manager__actions">
     {% if __SELF__.allowPDFDownload %}
     <a class="mall-btn mall-btn--default"

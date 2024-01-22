@@ -4,7 +4,7 @@
     <td>
         {% if image %}
             <a href="{{ url }}">
-                <img src="{{ image.thumb(100, auto|default()) }}" alt=""/>
+                <img src="{{ image.thumb(100, 'auto') }}" alt=""/>
             </a>
         {% endif %}
     </td>
@@ -38,7 +38,7 @@
     </td>
     <td class="text-right">
         {{ product.price() | raw }}
-        {% if product.service_options.count > 0 %}
+        {% if product.service_options.count|default(0) > 0 %}
             <div class="mall-cart__price-additions">
                 + {{ product.servicePostTaxes | money }}
             </div>

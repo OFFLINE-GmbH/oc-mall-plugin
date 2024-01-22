@@ -1,4 +1,4 @@
-{% if __SELF__.currentItem.items.count < 1 %}
+{% if __SELF__.currentItem.items.count|default(0) < 1 %}
     {% partial __SELF__ ~ '::empty' %}
 {% else %}
 

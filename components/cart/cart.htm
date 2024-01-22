@@ -1,4 +1,4 @@
-{% if cart.products.count < 1 %}
+{% if cart.products.count|default(0) < 1 %}
     {% partial __SELF__ ~ '::empty' %}
 {% else %}
     {% partial __SELF__ ~ '::table/base' %}
