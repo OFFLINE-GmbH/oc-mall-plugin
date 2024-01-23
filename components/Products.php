@@ -509,11 +509,13 @@ class Products extends MallComponent
             return;
         }
 
+        /** @var LengthAwarePaginator */
+        $items = $this->items;
+
         $dataLayer = [
             'ecommerce' => [
                 'currencyCode' => Currency::activeCurrency()->code,
-                'impressions'  => $this->items->map(function ($item, $index) {
-                    dd($item);
+                'impressions'  => $items->map(function ($item, $index) {
                     $name    = $item instanceof Product ? $item->product : $item->product->name;
                     $variant = $item instanceof Product ? null : $item->name;
 
