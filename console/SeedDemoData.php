@@ -105,6 +105,8 @@ class SeedDemoData extends Command
             } catch (\Exception $exc) {
                 if ($exc->getMessage() == 'The "namespace" argument does not exist.') {
                     Artisan::call('plugin:refresh', ['name' => 'OFFLINE.Mall', '--force' => true]);
+                } else {
+                    throw $exc;
                 }
             }
         } else {
