@@ -1,7 +1,8 @@
-<?php return [
+<?php 
+return [
     'plugin' => [
         'name' => 'Mall',
-        'description' => 'Ecommerce-Plattform für October CMS',
+        'description' => 'E-Commerce-Plattform für October CMS',
     ],
     'titles' => [
         'products' => [
@@ -172,12 +173,13 @@
         'links_comment' => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
         'customizations' => 'Optionen',
         'customizations_comment' => 'Globale Konfigurationseinstellungen für deinen Shop',
+        'category_page_comment' => 'Füge die Komponente "products" zu dieser Seite hinzu.',
         'order_number_start' => 'Beginn Bestellungsnummerierung',
         'order_number_start_comment' => 'Die erste Bestellung erhält diese Nummer',
         'index_driver' => 'Index-Treiber',
         'index_driver_comment' => 'Wenn deine Datenbank JSON unterstützt wird der Datenbank-Treiber empfohlen.',
         'index_driver_filesystem' => 'Dateisystem',
-        'index_driver_database' => 'Datenbank (nur für MySQL 5.7+ oder MariaDB 10.2+)',
+        'index_driver_database' => 'Datenbank (MySQL 5.7+, MariaDB 10.2+, SQLite 3.19+)',
         'index_driver_hint' => 'Nachdem diese Option geändert wurde muss "php artisan mall:reindex" auf der Konsole ausgeführt werden!',
     ],
     'feed_settings' => [
@@ -348,6 +350,7 @@
         'checkbox' => 'Checkbox',
         'color' => 'Farbe',
         'image' => 'Bild/Motiv',
+        'switch' => 'Switch',
         'add' => 'Option hinzufügen',
         'name' => 'Name',
         'price' => 'Aufpreis',
@@ -490,9 +493,11 @@
         'rate' => 'Rabatt (%)',
         'amount' => 'Rabatt-Betrag',
         'max_number_of_usages' => 'Maximale Anzahl Anwendungen',
+        'valid_from' => 'Gültig von',
         'expires' => 'Gültig bis',
         'number_of_usages' => 'Anzahl Anwendungen',
         'shipping_description' => 'Name für alternative Versand-Methode',
+        'payment_method_description' => 'Wähle eine Zahlungsmethode',
         'shipping_price' => 'Preis für alternative Versand-Methode',
         'shipping_guaranteed_days_to_delivery' => 'Garantierte Lieferung in Tagen',
         'section_type' => 'Was bewirkt der Gutschein?',
@@ -517,6 +522,7 @@
             'expired' => 'Der verwendete Gutschein ist nicht mehr gültig.',
             'not_found' => 'Der verwendete Gutschein ist nicht gültig.',
             'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
+            'cart_limit_reached' => 'Promo-Code-Limit erreicht. Du kannst keine weiteren Promo-Codes zu diesem Warenkorb hinzufügen.',
         ],
     ],
     'payment_method' => [
@@ -825,6 +831,7 @@
                     'description' => 'Leite den Besucher zur neuen Detailseite um wenn eine Eigenschaft geändert wird',
                 ],
             ],
+            'added_to_cart' => 'Produkt erfolgreich hinzugefügt.',
         ],
         'productReviews' => [
             'details' => [
@@ -849,6 +856,10 @@
             'properties' => [
                 'showDiscountApplier' => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
+                ],
+                'discountCodeLimit' => [
+                    'title' => 'Rabatt-Code-Limit',
+                    'description' => 'Setze auf 0 für eine unbegrenzte Anzahl.',
                 ],
                 'showShipping' => [
                     'title' => 'Versandkosten anzeigen',
