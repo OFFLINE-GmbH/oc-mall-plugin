@@ -24,7 +24,6 @@ use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
-use RainLab\Translate\Classes\Locale;
 use System\Models\File;
 
 
@@ -345,8 +344,10 @@ class Product extends Model
     public function handlePropertyValueUpdates()
     {
         $locales = [];
-        if (class_exists(Locale::class)) {
-            $locales = Locale::listLocales()->where('is_enabled', true)->all();
+        if (class_exists(\RainLab\Translate\Classes\Locale::class)) {
+            $locales = \RainLab\Translate\Classes\Locale::listLocales()->where('is_enabled', true)->all();
+        } else if (class_exists(\RainLab\Translate\Models\Locale::class)) {
+            $locales = \RainLab\Translate\Models\Locale::isEnabled()->get();
         }
 
         $formData = array_wrap(post('PropertyValues', []));

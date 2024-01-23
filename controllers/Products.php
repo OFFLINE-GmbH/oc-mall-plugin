@@ -26,7 +26,6 @@ use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Translate\Behaviors\TranslatableModel;
-use RainLab\Translate\Classes\Locale;
 
 class Products extends Controller
 {
@@ -353,8 +352,10 @@ class Products extends Controller
     protected function handlePropertyValueUpdates(Variant $variant)
     {
         $locales = [];
-        if (class_exists(Locale::class)) {
-            $locales = Locale::listLocales()->where('is_enabled', true)->all();
+        if (class_exists(\RainLab\Translate\Classes\Locale::class)) {
+            $locales = \RainLab\Translate\Classes\Locale::listLocales()->where('is_enabled', true)->all();
+        } else if (class_exists(\RainLab\Translate\Models\Locale::class)) {
+            $locales = \RainLab\Translate\Models\Locale::isEnabled()->get();
         }
 
         $formData = array_wrap(post('VariantPropertyValues', []));
