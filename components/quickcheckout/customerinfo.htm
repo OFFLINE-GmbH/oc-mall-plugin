@@ -1,7 +1,7 @@
 <header class="mall-quick-checkout__collapsible-header">
     <h2 class="mall-quick-checkout__heading">{{ 'offline.mall::frontend.customer_information'|trans }}</h2>
     <div class="mall-quick-checkout__collapsible-summary">
-        {{ __SELF__.cart.shipping_address.one_liner }}
+        {{ __SELF__.cart.shipping_address.one_liner|default(null) }}
     </div>
 </header>
 <section class="mall-quick-checkout__collapsible-content">
