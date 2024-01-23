@@ -1,8 +1,10 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Carbon\Carbon;
+namespace OFFLINE\Mall\Models;
+
 use DB;
 use Model;
+use Carbon\Carbon;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use RainLab\User\Models\User;

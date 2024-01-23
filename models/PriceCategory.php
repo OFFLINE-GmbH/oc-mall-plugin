@@ -1,10 +1,12 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Models;
+
+use DB;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
-use DB;
 
 class PriceCategory extends Model
 {

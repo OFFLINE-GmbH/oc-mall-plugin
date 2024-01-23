@@ -1,6 +1,7 @@
-<?php namespace OFFLINE\Mall\Console;
+<?php declare(strict_types=1);
 
-use DB;
+namespace OFFLINE\Mall\Console;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;

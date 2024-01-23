@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Model;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;

@@ -1,12 +1,21 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
-use Backend\Classes\Controller;
+namespace OFFLINE\Mall\Controllers;
+
 use BackendMenu;
+use Backend\Classes\Controller;
 use System\Classes\SettingsManager;
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\ReorderController;
 
 class Currencies extends Controller
 {
-    public $implement = [        'Backend\Behaviors\ListController',        'Backend\Behaviors\FormController',        'Backend\Behaviors\ReorderController'    ];
+    public $implement = [
+        ListController::class,
+        FormController::class,
+        ReorderController::class,
+    ];
     
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -19,6 +19,7 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\User;
+use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country;
 use RainLab\User\Facades\Auth as FrontendAuth;
 use Validator;
@@ -544,10 +545,13 @@ class QuickCheckout extends MallComponent
     private function dataLayerArray($product = null, $variant = null)
     {
         $item = $variant ?? $product;
+        if (!($item instanceof Product || $item instanceof Variant)) {
+            return [];
+        }
 
         return [
             'id' => $item->prefixedId,
-            'name' => $product->name,
+            'name' => $product ? $product->name : $item->name,
             'price' => $item->price()->decimal,
             'brand' => optional($item->brand)->name,
             'category' => optional($item->categories->first())->name,

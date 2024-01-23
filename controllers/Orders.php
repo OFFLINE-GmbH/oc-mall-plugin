@@ -1,10 +1,11 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Controllers;
 
 use Backend;
-use Backend\Classes\Controller;
 use BackendMenu;
-use Event;
 use Flash;
+use Backend\Classes\Controller;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Stats\OrdersStats;
 use OFFLINE\Mall\Classes\Utils\Money;

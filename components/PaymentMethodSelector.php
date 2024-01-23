@@ -1,6 +1,9 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Auth;
+use Validator;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
@@ -13,7 +16,6 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Symfony\Component\HttpFoundation\Response;
-use Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -292,8 +294,8 @@ class PaymentMethodSelector extends MallComponent
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $gateway
-     * @param                                    $data
+     * @param PaymentGateway $gateway
+     * @param                $data
      *
      * @return Response|array
      * @throws \Cms\Classes\CmsException

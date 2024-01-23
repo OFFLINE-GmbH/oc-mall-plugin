@@ -1,10 +1,12 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
-use BackendMenu;
 
 class CustomFields extends Controller
 {

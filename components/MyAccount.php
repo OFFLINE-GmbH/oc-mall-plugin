@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
 
-use Cms\Classes\Controller;
+namespace OFFLINE\Mall\Components;
+
 use Exception;
+use Cms\Classes\Controller;
 use Illuminate\Http\RedirectResponse;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;

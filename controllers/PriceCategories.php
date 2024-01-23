@@ -1,9 +1,10 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
-use Backend\Classes\Controller;
+namespace OFFLINE\Mall\Controllers;
+
 use BackendMenu;
+use Backend\Classes\Controller;
 use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\PriceCategory;
 use System\Classes\SettingsManager;
 use Backend\Behaviors\ListController;

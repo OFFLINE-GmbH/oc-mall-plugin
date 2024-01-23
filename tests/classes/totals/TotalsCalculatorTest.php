@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Tests\Classes\Totals;
 
-use Auth;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Models\Address;
@@ -25,7 +24,7 @@ class TotalsCalculatorTest extends PluginTestCase
 {
     protected $address;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

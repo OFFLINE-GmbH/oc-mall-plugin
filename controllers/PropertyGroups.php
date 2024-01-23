@@ -1,12 +1,14 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
+use Flash;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
-use BackendMenu;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ReorderController;
-use Flash;
 use OFFLINE\Mall\Models\PropertyGroup;
 
 class PropertyGroups extends Controller

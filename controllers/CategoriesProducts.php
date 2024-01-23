@@ -1,17 +1,17 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
-use Backend\Behaviors\ReorderController;
-use Backend\Classes\Controller;
+namespace OFFLINE\Mall\Controllers;
+
 use BackendMenu;
 use Cache;
 use DB;
-use Flash;
 use Lang;
+use Backend\Behaviors\ReorderController;
+use Backend\Classes\Controller;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Product;
-use Queue;
 
 class CategoriesProducts extends Controller
 {

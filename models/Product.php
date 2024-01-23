@@ -1,9 +1,11 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Cache;
-use Cms\Classes\Page;
 use DB;
 use Model;
+use Cms\Classes\Page;
 use October\Rain\Database\Models\DeferredBinding;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;

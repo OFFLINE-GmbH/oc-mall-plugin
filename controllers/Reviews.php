@@ -1,8 +1,10 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
-use BackendMenu;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Review;

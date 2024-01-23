@@ -1,16 +1,16 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
+use DB;
+use Event;
+use Flash;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
-use Backend\FormWidgets\Relation;
-use BackendMenu;
-use DB;
-use Event;
-use Flash;
-use October\Rain\Database\Model;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;

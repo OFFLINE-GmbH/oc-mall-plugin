@@ -1,10 +1,12 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Cms\Classes\Page;
+namespace OFFLINE\Mall\Models;
+
 use DB;
 use Html;
-use Illuminate\Support\Collection;
 use Model;
+use Cms\Classes\Page;
+use Illuminate\Support\Collection;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -16,7 +18,6 @@ use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
-use RainLab\Translate\Classes\Locale;
 use System\Models\File;
 
 class Variant extends Model

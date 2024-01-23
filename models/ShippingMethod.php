@@ -1,9 +1,11 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Closure;
 use Event;
-use Illuminate\Support\Facades\Session;
 use Model;
+use Illuminate\Support\Facades\Session;
 use October\Rain\Database\Collection;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;

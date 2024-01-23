@@ -1,13 +1,18 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
-use Backend\Classes\Controller;
+namespace OFFLINE\Mall\Controllers;
+
 use BackendMenu;
+use Backend\Classes\Controller;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
 
 class PaymentLogs extends Controller
 {
-    public $implement = [ListController::class, FormController::class];
+    public $implement = [
+        ListController::class, 
+        FormController::class
+    ];
     
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';

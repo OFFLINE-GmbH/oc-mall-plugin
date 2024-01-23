@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;

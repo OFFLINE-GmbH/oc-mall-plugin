@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use October\Rain\Support\Facades\Flash;

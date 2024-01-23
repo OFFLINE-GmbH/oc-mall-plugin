@@ -1,12 +1,14 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
+use Flash;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
-use BackendMenu;
-use Flash;
 use OFFLINE\Mall\Models\Category;
 
 class Categories extends Controller

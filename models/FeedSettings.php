@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Model;
-use Session;
 
 class FeedSettings extends Model
 {

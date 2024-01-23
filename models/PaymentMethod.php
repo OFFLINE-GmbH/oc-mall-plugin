@@ -1,7 +1,10 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Cms\Classes\Theme;
+namespace OFFLINE\Mall\Models;
+
+use Auth;
 use Model;
+use Cms\Classes\Theme;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -10,9 +13,8 @@ use October\Rain\Database\Traits\Validation;
 use October\Rain\Parse\Twig;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
-use System\Models\File;
-use Auth;
 use OFFLINE\Mall\Classes\Totals\PaymentTotal;
+use System\Models\File;
 
 class PaymentMethod extends Model
 {

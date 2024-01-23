@@ -11,7 +11,7 @@ class PluginTestCase extends \PluginTestCase
 {
     use DatabaseTransactions;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -24,7 +24,7 @@ class PluginTestCase extends \PluginTestCase
         });
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
