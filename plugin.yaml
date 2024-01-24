@@ -8,7 +8,7 @@ navigation:
     mall-orders:
         label: 'offline.mall::lang.common.orders'
         url: offline/mall/orders
-        iconSvg: plugins/offline/mall/assets/images/orders-alt-icon.svg
+        iconSvg: plugins/offline/mall/assets/images/orders-icon.svg
         order: 801
         permissions:
             - 'offline.mall.*'
