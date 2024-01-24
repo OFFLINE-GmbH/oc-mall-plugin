@@ -10,7 +10,7 @@ class CategoryTest extends PluginTestCase
     public $child;
     public $nestedChild;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $parent       = new Category();

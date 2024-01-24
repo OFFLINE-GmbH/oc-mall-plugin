@@ -1,3 +1,11 @@
-vendor
+.DS_Store
+.idea
+.env
+.phpunit.result.cache
+.vscode
 composer.lock
 docs/.vuepress/dist
+nbproject
+node_modules
+package-lock.json
+vendor

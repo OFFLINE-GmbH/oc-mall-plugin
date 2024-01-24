@@ -25,7 +25,7 @@ class TotalsCalculatorTest extends PluginTestCase
 {
     protected $address;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

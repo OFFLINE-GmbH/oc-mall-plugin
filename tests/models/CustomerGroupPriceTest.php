@@ -11,7 +11,7 @@ use OFFLINE\Mall\Tests\PluginTestCase;
 
 class CustomerGroupPriceTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $variant             = new Variant();
