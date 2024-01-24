@@ -72,6 +72,10 @@
             'create' => 'Review erstellen',
             'update' => 'Review bearbeiten',
         ],
+        'currencies' => [
+            'create' => 'Währung erstellen',
+            'update' => 'Währung bearbeiten',
+        ]
     ],
     'menu_items' => [
         'all_categories' => 'Alle Shop-Kategorien',

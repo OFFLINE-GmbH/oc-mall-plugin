@@ -73,6 +73,10 @@ return [
             'create' => 'Create review',
             'update' => 'Edit review',
         ],
+        'currencies' => [
+            'create' => 'New Currency',
+            'update' => 'Update Currency',
+        ]
     ],
     'menu_items' => [
         'all_categories' => 'All shop categories',
