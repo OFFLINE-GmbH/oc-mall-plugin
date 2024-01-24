@@ -7,6 +7,11 @@ use October\Rain\Database\Updates\Migration;
 
 return new class extends Migration
 {
+    /**
+     * Install Migration
+     *
+     * @return void
+     */
     public function up()
     {   
         DB::beginTransaction();
@@ -72,6 +77,11 @@ return new class extends Migration
         }
     }
 
+    /**
+     * Uninstall Migration
+     *
+     * @return void
+     */
     public function down()
     {
     }

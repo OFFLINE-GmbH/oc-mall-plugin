@@ -53,7 +53,7 @@ class CurrencyPicker extends MallComponent
      */
     public function onRun()
     {
-        $this->setVar('currencies', Currency::orderBy('sort_order', 'ASC')->get());
+        $this->setVar('currencies', Currency::enabled()->orderBy('sort_order', 'ASC')->get());
         $this->setVar('activeCurrency', Currency::activeCurrency());
     }
 
@@ -68,7 +68,7 @@ class CurrencyPicker extends MallComponent
             return;
         }
 
-        Currency::setActiveCurrency(Currency::findOrFail($currency));
+        Currency::setActiveCurrency(Currency::enabled()->findOrFail($currency));
 
         $pageUrl = $this->getUrl();
 

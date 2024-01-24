@@ -1,14 +1,13 @@
 <?php namespace OFFLINE\Mall\Controllers;
 
-use Backend\Classes\Controller;
 use BackendMenu;
-use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Models\Currency;
-use OFFLINE\Mall\Models\PriceCategory;
-use System\Classes\SettingsManager;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ReorderController;
+use Backend\Classes\Controller;
+use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Models\PriceCategory;
+use System\Classes\SettingsManager;
 
 class PriceCategories extends Controller
 {

@@ -1,4 +1,4 @@
-name: Currencies
+name: offline.mall::lang.currency_settings.label
 modelClass: OFFLINE\Mall\Models\Currency
 form: $/offline/mall/models/currency/fields.yaml
 defaultRedirect: offline/mall/currencies
