@@ -75,6 +75,7 @@
         'currencies' => [
             'create' => 'Währung erstellen',
             'update' => 'Währung bearbeiten',
+            'reorder' => 'Währungen sortieren',
         ]
     ],
     'menu_items' => [

@@ -1,4 +1,4 @@
-title: offline.mall::lang.currency_settings.label
+title: offline.mall::lang.titles.currencies.reorder
 modelClass: OFFLINE\Mall\Models\Currency
 nameFrom: code
 toolbar:

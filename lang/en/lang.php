@@ -76,6 +76,7 @@ return [
         'currencies' => [
             'create' => 'New Currency',
             'update' => 'Update Currency',
+            'reorder' => 'Reorder Currencies',
         ]
     ],
     'menu_items' => [
