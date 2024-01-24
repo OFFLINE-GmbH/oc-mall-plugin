@@ -481,3 +481,5 @@ v3.1.0:
     - 030_02-alter_offline_mall_currencies.php
     - 'Added new navigation icons for catalogue and orders.'
     - 'Added new <grp>_<idx>_<action>_<name>.php migration file naming for an improved overview.'
+    - 'Added new enabled-state to currency + minor changes.'
+    - 'Fixed missing translation strings.'
