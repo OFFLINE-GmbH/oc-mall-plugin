@@ -105,13 +105,28 @@ class Currency extends Model
     public function beforeSave()
     {
         // Disabled currencies cannot be the default ones.
-        if (!$this->is_enabled && $this->is_default) {
+        if ($this->is_enabled === false && $this->is_default) {
             $this->is_default = false;
         }
 
         // Enforce a single default currency.
         if ($this->is_default) {
-            DB::table($this->table)->where('id', '<>', $this->id)->update(['is_default' => false]);
+            Currency::where('id', '<>', $this->id)->update(['is_default' => false]);
+        }
+        
+        // Enforce one default currency.
+        if (!$this->is_default && $this->isDirty('is_default')) {
+            $count = Currency::where('id', '<>', $this->id)->where('is_default', true)->count();
+
+            if ($count === 0) {
+                $default = Currency::enabled()->where('id', '<>', $this->id)->first();
+                if (empty($default)) {
+                    throw new \Exception('No currency could be changed to the default currency.');
+                } else {
+                    $default->is_default = true;
+                    $default->save();
+                }
+            }
         }
     }
 
