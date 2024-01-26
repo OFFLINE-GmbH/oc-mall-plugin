@@ -77,6 +77,11 @@ return [
             'create' => 'New Currency',
             'update' => 'Update Currency',
             'reorder' => 'Reorder Currencies',
+        ],
+        'price_categories' => [
+            'create' => 'New Price Category',
+            'update' => 'Update Price Category',
+            'reorder' => 'Reorder Price Categories',
         ]
     ],
     'menu_items' => [
@@ -144,6 +149,7 @@ return [
     'price_category_settings' => [
         'label' => 'Price categories',
         'description' => 'Configure additional price categories',
+        'is_enabled' => 'Enabled',
     ],
     'order_state_settings' => [
         'description' => 'Configure order states',

@@ -1,4 +1,4 @@
-title: PriceCategories
+title: offline.mall::lang.price_category_settings.label
 modelClass: OFFLINE\Mall\Models\PriceCategory
 list: $/offline/mall/models/pricecategory/columns.yaml
 recordUrl: 'offline/mall/pricecategories/update/:id'

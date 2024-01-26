@@ -477,9 +477,11 @@ v3.0.30:
     - 'Made order state flags easier to extend (thanks to @SamBrishes)'
 v3.1.0:
     - '[NEXT] Work in Progress'
-    - 030_01-update_system_plugin_history.php
-    - 030_02-alter_offline_mall_currencies.php
     - 'Added new navigation icons for catalogue and orders.'
     - 'Added new <grp>_<idx>_<action>_<name>.php migration file naming for an improved overview.'
     - 'Added new enabled-state to currency + minor changes.'
+    - 'Added new enabled-state to price category + minor changes.'
     - 'Fixed missing translation strings.'
+    - 030_01-update_system_plugin_history.php
+    - 030_02-alter_offline_mall_currencies.php
+    - 030_03-alter_offline_mall_price_categories.php

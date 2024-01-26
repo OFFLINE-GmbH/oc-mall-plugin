@@ -12,8 +12,8 @@ use October\Rain\Database\Traits\Validation;
 
 class Currency extends Model
 {
-    use Validation;
     use Sortable;
+    use Validation;
 
     public const CURRENCY_SESSION_KEY = 'mall.currency.active';
     public const CURRENCIES_CACHE_KEY = 'mall.currencies';
@@ -39,7 +39,7 @@ class Currency extends Model
     ];
 
     /**
-     * The table associated with the model.
+     * The table associated with this model.
      * @var string
      */
     public $table = 'offline_mall_currencies';
@@ -49,10 +49,11 @@ class Currency extends Model
      * @var array
      */
     public $rules = [
-        'code'     => 'required|unique:offline_mall_currencies,code',
-        'rate'     => 'required',
-        'decimals' => 'required',
-        'format'   => 'required',
+        'code'          => 'required|unique:offline_mall_currencies,code',
+        'rate'          => 'required',
+        'decimals'      => 'required',
+        'format'        => 'required',
+        'is_enabled'    => 'nullable|boolean'
     ];
 
     /**

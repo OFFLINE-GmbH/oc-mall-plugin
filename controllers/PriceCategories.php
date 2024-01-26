@@ -34,7 +34,8 @@ class PriceCategories extends Controller
 
     public function index_onDelete()
     {
-        if (in_array(PriceCategory::OLD_PRICE_CATEGORY_ID, post('checked', []))) {
+        $oldPrice = PriceCategory::enabled()->where('code', 'old_price')->first();
+        if ($oldPrice && in_array($oldPrice->id, post('checked', []))) {
             throw new ValidationException(['checked' => 'The old price category cannot be deleted.']);
         }
 

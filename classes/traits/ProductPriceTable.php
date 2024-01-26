@@ -30,7 +30,7 @@ trait ProductPriceTable
     {
         $config = $this->makeConfig($this->productPriceTableConfig);
 
-        $additionalPriceCategories = PriceCategory::orderBy('sort_order', 'ASC')->get();
+        $additionalPriceCategories = PriceCategory::enabled()->orderBy('sort_order', 'ASC')->get();
         $additionalPriceCategories->each(function (PriceCategory $category) use ($config) {
             $config->columns['additional__' . $category->id] = ['title' => $category->name];
         });

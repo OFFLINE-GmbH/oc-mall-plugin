@@ -76,6 +76,11 @@
             'create' => 'Währung erstellen',
             'update' => 'Währung bearbeiten',
             'reorder' => 'Währungen sortieren',
+        ],
+        'price_categories' => [
+            'create' => 'Preiskategorie erstellen',
+            'update' => 'Preiskategorie bearbeiten',
+            'reorder' => 'Preiskategorien sortieren',
         ]
     ],
     'menu_items' => [
@@ -143,6 +148,7 @@
     'price_category_settings' => [
         'label' => 'Preiskategorien',
         'description' => 'Zusätzliche Preiskategorien verwalten',
+        'is_enabled' => 'Aktiv',
     ],
     'order_state_settings' => [
         'description' => 'Mögliche Status für Bestellungen verwalten',

@@ -11,3 +11,7 @@ columns:
     code:
         label: 'offline.mall::lang.common.code'
         type: text
+    is_enabled:
+        label: 'offline.mall::lang.price_category_settings.is_enabled'
+        type: switch
+        searchable: true
