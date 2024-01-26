@@ -14,9 +14,6 @@ return new class extends Migration
      */
     public function up()
     {   
-        DB::beginTransaction();
-
-        // Select rows
         $rows = DB::table('system_plugin_history')
             ->select('*')
             ->from('system_plugin_history')
@@ -30,6 +27,7 @@ return new class extends Migration
         if (empty($test)) {
             return;
         }
+        DB::beginTransaction();
 
         // Loop Rows
         $grp = 0;
