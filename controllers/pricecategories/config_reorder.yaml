@@ -1,5 +1,0 @@
-title: offline.mall::lang.titles.price_categories.reorder
-modelClass: OFFLINE\Mall\Models\PriceCategory
-nameFrom: name
-toolbar:
-    buttons: reorder_toolbar
