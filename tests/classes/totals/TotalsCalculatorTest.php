@@ -29,7 +29,7 @@ class TotalsCalculatorTest extends PluginTestCase
     {
         parent::setUp();
 
-        $this->address = Address::first();
+        $this->address = Address::factory()->create();
     }
 
     public function test_it_works_for_a_single_product()

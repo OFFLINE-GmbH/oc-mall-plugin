@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Seeders;
+namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Price;
@@ -8,10 +8,14 @@ use OFFLINE\Mall\Models\ShippingMethod;
 
 class ShippingMethodTableSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     * @return void
+     */
     public function run()
     {
-        $method             = new ShippingMethod();
-        $method->name       = 'Default';
+        $method = new ShippingMethod();
+        $method->name = 'Default';
         $method->sort_order = 1;
         $method->save();
 

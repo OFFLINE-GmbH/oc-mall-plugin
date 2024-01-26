@@ -1,15 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Seeders;
+namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Category;
 
 class CategoryTableSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     * @return void
+     */
     public function run()
     {
-        $category       = new Category();
+        $category = new Category();
         $category->name = 'Example category';
         $category->slug = 'example';
         $category->save();

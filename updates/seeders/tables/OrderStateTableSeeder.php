@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Seeders;
+namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\OrderState;
@@ -8,6 +8,10 @@ use System\Classes\PluginManager;
 
 class OrderStateTableSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     * @return void
+     */
     public function run()
     {
         $isTranslatable = PluginManager::instance()->hasPlugin('RainLab.Translate');

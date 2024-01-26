@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Seeders;
+namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Category;
@@ -9,29 +9,33 @@ use OFFLINE\Mall\Models\PropertyGroup;
 
 class PropertyTableSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     * @return void
+     */
     public function run()
     {
-        $method       = new Property();
+        $method = new Property();
         $method->name = 'Height';
         $method->type = 'text';
         $method->unit = 'mm';
         $method->save();
 
-        $method       = new Property();
+        $method = new Property();
         $method->name = 'Width';
         $method->type = 'text';
         $method->unit = 'mm';
         $method->save();
 
-        $method       = new Property();
+        $method = new Property();
         $method->name = 'Depth';
         $method->type = 'text';
         $method->unit = 'mm';
         $method->save();
 
-        $method          = new Property();
-        $method->name    = 'Size';
-        $method->type    = 'dropdown';
+        $method = new Property();
+        $method->name = 'Size';
+        $method->type = 'dropdown';
         $method->options = [
             ['value' => 'XS'],
             ['value' => 'S'],
