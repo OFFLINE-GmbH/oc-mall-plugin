@@ -499,8 +499,10 @@
         'percentage' => 'Prozent',
         'countries' => 'Steuer gilt nur für Versand in diese Länder',
         'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
-        'is_default' => 'Ist Standard',
-        'is_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Ist Standard',
+        'set_as_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
+        'is_enabled' => 'Aktiv',
     ],
     'discounts' => [
         'name' => 'Name',

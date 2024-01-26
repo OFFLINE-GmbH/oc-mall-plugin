@@ -481,7 +481,9 @@ v3.1.0:
     - 'Added new <grp>_<idx>_<action>_<name>.php migration file naming for an improved overview.'
     - 'Added new enabled-state to currency + minor changes.'
     - 'Added new enabled-state to price category + minor changes.'
+    - 'Added new enabled-state to taxes + minor changes.'
     - 'Fixed missing translation strings.'
     - 030_01-update_system_plugin_history.php
     - 030_02-alter_offline_mall_currencies.php
     - 030_03-alter_offline_mall_price_categories.php
+    - 030_04-alter_offline_mall_taxes.php

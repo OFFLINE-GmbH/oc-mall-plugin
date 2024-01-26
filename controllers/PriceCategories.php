@@ -6,8 +6,6 @@ use BackendMenu;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
 use Backend\Classes\Controller;
-use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Models\PriceCategory;
 use System\Classes\SettingsManager;
 
 class PriceCategories extends Controller
