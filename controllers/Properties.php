@@ -9,18 +9,38 @@ use Backend\Classes\Controller;
 
 class Properties extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
-        ListController::class,
         FormController::class,
+        ListController::class,
     ];
 
-    public $listConfig = 'config_list.yaml';
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
 
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.manage_properties',
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();

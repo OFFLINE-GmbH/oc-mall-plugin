@@ -10,17 +10,37 @@ use Backend\Classes\Controller;
 
 class CustomFields extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
-        ListController::class,
         FormController::class,
+        ListController::class,
         RelationController::class,
     ];
 
-    public $listConfig = 'config_list.yaml';
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
+
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
+     * The configuration file for the relation controller implementation.
+     * @var string
+     */
     public $relationConfig = 'config_relation.yaml';
 
-
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();

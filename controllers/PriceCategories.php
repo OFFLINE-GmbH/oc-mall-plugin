@@ -3,8 +3,8 @@
 namespace OFFLINE\Mall\Controllers;
 
 use BackendMenu;
-use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use System\Classes\SettingsManager;
 
@@ -15,21 +15,21 @@ class PriceCategories extends Controller
      * @var array
      */
     public $implement = [
-        ListController::class,
         FormController::class,
+        ListController::class,
     ];
-
-    /**
-     * The configuration file for the list controller implementation.
-     * @var string
-     */
-    public $listConfig = 'config_list.yaml';
 
     /**
      * The configuration file for the form controller implementation.
      * @var string
      */
     public $formConfig = 'config_form.yaml';
+
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
 
     /**
      * Required admin permission to access this page.
