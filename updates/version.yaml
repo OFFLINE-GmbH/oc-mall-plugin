@@ -476,14 +476,21 @@ v3.0.29:
 v3.0.30:
     - 'Made order state flags easier to extend (thanks to @SamBrishes)'
 v3.1.0:
-    - '[NEXT] Work in Progress'
+    - '[NEXT] Feature Release - Work in Progress'
     - 'Added new navigation icons for catalogue and orders.'
     - 'Added new <grp>_<idx>_<action>_<name>.php migration file naming for an improved overview.'
     - 'Added new enabled-state to currency + minor changes.'
     - 'Added new enabled-state to price category + minor changes.'
     - 'Added new enabled-state to taxes + minor changes.'
+    - 'Added new enabled-state to payment methods + minor changes.'
+    - 'Added new enabled-state to shipping methods + minor changes.'
+    - 'Added a new HasDefault database model trait.'
+    - 'Increase PHP requirement from 7.2 to 7.4.'
+    - 'Replaced old ReorderController behavior with ListController configuration.'
     - 'Fixed missing translation strings.'
     - 030_01-update_system_plugin_history.php
     - 030_02-alter_offline_mall_currencies.php
     - 030_03-alter_offline_mall_price_categories.php
     - 030_04-alter_offline_mall_taxes.php
+    - 030_05-alter_offline_mall_payment_methods.php
+    - 030_06-alter_offline_mall_shipping_methods.php

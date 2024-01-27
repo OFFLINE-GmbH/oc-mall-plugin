@@ -68,7 +68,7 @@ class Tax extends Model
 
     /**
      * The belongsToMany relationships of this model.
-     * @var array<string>
+     * @var array
      */
     public $belongsToMany = [
         'products'         => [
@@ -99,6 +99,30 @@ class Tax extends Model
     ];
 
     /**
+     * Returns the default taxes.
+     * @return Collection<Tax>|Tax[]
+     */
+    static public function defaultTaxes(): Collection
+    {
+        $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
+            $columns = [ 'id',  'name',  'percentage',  'is_default', 'is_enabled'];
+            $taxes = static::enabled()->where('is_default', true)->get($columns);
+            if (!$taxes) {
+                return [];
+            } else {
+                // Make sure the "translations" relation is not cached.
+                return $taxes->map->only($columns)->toArray();
+            }
+        });
+
+        if (!$taxes) {
+            return new Collection();
+        } else {
+            return self::hydrate($taxes);
+        }
+    }
+
+    /**
      * Hook after model has been saved.
      * @return void
      */
@@ -123,29 +147,5 @@ class Tax extends Model
     public function getPercentageDecimalAttribute()
     {
         return (float)$this->percentage / 100;
-    }
-
-    /**
-     * Returns the default taxes.
-     * @return Collection<Tax>|Tax[]
-     */
-    public static function defaultTaxes(): Collection
-    {
-        $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
-            $columns = [ 'id',  'name',  'percentage',  'is_default', 'is_enabled'];
-            $taxes = static::enabled()->where('is_default', true)->get($columns);
-            if (!$taxes) {
-                return [];
-            } else {
-                // Make sure the "translations" relation is not cached.
-                return $taxes->map->only($columns)->toArray();
-            }
-        });
-
-        if (!$taxes) {
-            return new Collection();
-        } else {
-            return self::hydrate($taxes);
-        }
     }
 }

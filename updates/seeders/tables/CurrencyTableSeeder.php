@@ -36,5 +36,6 @@ class CurrencyTableSeeder extends Seeder
             'symbol'     => '$',
             'rate'       => 1.02,
         ]);
+        return true;
     }
 }

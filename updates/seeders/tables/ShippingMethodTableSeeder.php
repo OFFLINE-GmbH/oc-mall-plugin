@@ -17,6 +17,7 @@ class ShippingMethodTableSeeder extends Seeder
         $method = new ShippingMethod();
         $method->name = 'Default';
         $method->sort_order = 1;
+        $method->is_default = 1;
         $method->save();
 
         (new Price([

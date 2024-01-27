@@ -14,8 +14,13 @@ class PriceCategoryTableSeeder extends Seeder
     public function run()
     {
         PriceCategory::create([
+            'code' => 'old_price',
+            'name' => 'Old Price',
+        ]);
+        PriceCategory::create([
             'code' => 'msrp',
             'name' => 'Manufacturer\'s suggested retail price',
         ]);
+        return true;
     }
 }

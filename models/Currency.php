@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\HasDefault;
 
 class Currency extends Model
 {
+    use HasDefault;
     use Sortable;
     use Validation;
 
@@ -91,43 +93,120 @@ class Currency extends Model
     ];
 
     /**
-     * Get available order state flag options.
-     * @return array
+     * Returns an array with all currency information.
+     * @return mixed
      */
-    public function getRoundingOptions()
+    static public function getAll()
     {
-        return self::$availableRoundingOptions;
+        return Currency::hydrate(Cache::rememberForever(static::CURRENCIES_CACHE_KEY, function () {
+            return Currency::get(['id', 'rate', 'symbol', 'code'])->keyBy('id')->toArray();
+        }));
     }
 
     /**
-     * Hook before model is saved.
-     * @return void
+     * Returns the default currency.
+     * @return Currency
      */
-    public function beforeSave()
+    static public function defaultCurrency()
     {
-        // Disabled currencies cannot be the default ones.
-        if ($this->is_enabled === false && $this->is_default) {
-            $this->is_default = false;
+        if (static::$defaultCurrency) {
+            return static::$defaultCurrency;
         }
 
-        // Enforce a single default currency.
-        if ($this->is_default) {
-            Currency::where('id', '<>', $this->id)->update(['is_default' => false]);
-        }
-        
-        // Enforce one default currency.
-        if (!$this->is_default && $this->isDirty('is_default')) {
-            $count = Currency::where('id', '<>', $this->id)->where('is_default', true)->count();
+        $currency = Cache::rememberForever(static::DEFAULT_CURRENCY_CACHE_KEY, function () {
+            $currency = static::enabled()->orderBy('is_default', 'DESC')->first();
+            static::guardMissingCurrency($currency);
+            return $currency->toArray();
+        });
 
-            if ($count === 0) {
-                $default = Currency::enabled()->where('id', '<>', $this->id)->first();
-                if (empty($default)) {
-                    throw new \Exception('No currency could be changed to the default currency.');
-                } else {
-                    $default->is_default = true;
-                    $default->save();
-                }
-            }
+        static::$defaultCurrency = (new Currency)->newFromBuilder($currency);
+        return static::$defaultCurrency;
+    }
+
+    /**
+     * Returns the currently active currency from the session.
+     * @return Currency
+     * @throws \RuntimeException
+     */
+    static public function activeCurrency()
+    {
+        if (!Session::has(static::CURRENCY_SESSION_KEY)) {
+            $currency = static::enabled()->orderBy('is_default', 'DESC')->first();
+            static::guardMissingCurrency($currency);
+            static::setActiveCurrency($currency);
+        } else {
+            return (new Currency)->newFromBuilder(Session::get(static::CURRENCY_SESSION_KEY));
+        }
+    }
+
+    /**
+     * Sets the currently active currency in the session.
+     * @param Currency $currency
+     * @return string
+     */
+    static public function setActiveCurrency(Currency $currency)
+    {
+        return Session::put(static::CURRENCY_SESSION_KEY, $currency->toArray());
+    }
+
+    /**
+     * Return a dummy currency for unknown inputs.
+     * @return Currency
+     */
+    static public function unknown($currency = null): self
+    {
+        Log::error(
+            '[OFFLINE.Mall] Unknown currency was requested',
+            ['currency' => $currency, 'url' => request()->url()]
+        );
+
+        return new self([
+            'code'       => '???',
+            'symbol'     => trans('offline.mall::lang.currency_settings.unknown'),
+            'rate'       => 1,
+            'decimals'   => 2,
+            'format'     => '{{ price|number_format(currency.decimals, " ", ",") }} ({{ currency.symbol }})',
+            'is_default' => false,
+        ]);
+    }
+
+    /**
+     * Turns a currency id or code into a currency model.
+     * @return Currency
+     */
+    static public function resolve($input = null): self
+    {
+        if ($input instanceof self) {
+            return $input;
+        }
+        if ($input === null) {
+            $currency = self::activeCurrency();
+        }
+        if (is_string($input)) {
+            $currency = self::whereCode($input)->first();
+        }
+        if (is_int($input)) {
+            $currency = self::whereId($input)->first();
+        }
+        if ( ! isset($currency) || ! $currency) {
+            return self::unknown($input);
+        }
+        return $currency;
+    }
+
+    /**
+     * Additional guard when no currency is configured.
+     *
+     * @param mixed $currency
+     * @return void
+     * @throws \RuntimeException
+     */
+    static protected function guardMissingCurrency($currency)
+    {
+        if (!$currency) {
+            throw new \RuntimeException(
+                '[mall] Please configure at least one currency via the backend settings.'
+            );
         }
     }
 
@@ -157,131 +236,13 @@ class Currency extends Model
         Cache::forget(self::JSON_PRICE_CACHE_KEY);
         Session::forget(static::CURRENCY_SESSION_KEY);
     }
-
+    
     /**
-     * Returns the currently active currency from the session.
-     * @return Currency
-     * @throws \RuntimeException
+     * Get available order state flag options.
+     * @return array
      */
-    public static function activeCurrency()
+    public function getRoundingOptions()
     {
-        if (!Session::has(static::CURRENCY_SESSION_KEY)) {
-            $currency = static::enabled()->orderBy('is_default', 'DESC')->first();
-            static::guardMissingCurrency($currency);
-            static::setActiveCurrency($currency);
-        } else {
-            return (new Currency)->newFromBuilder(Session::get(static::CURRENCY_SESSION_KEY));
-        }
-    }
-
-    /**
-     * Returns the default currency.
-     * @return Currency
-     */
-    public static function defaultCurrency()
-    {
-        if (static::$defaultCurrency) {
-            return static::$defaultCurrency;
-        }
-
-        $currency = Cache::rememberForever(static::DEFAULT_CURRENCY_CACHE_KEY, function () {
-            $currency = static::enabled()->orderBy('is_default', 'DESC')->first();
-            static::guardMissingCurrency($currency);
-            return $currency->toArray();
-        });
-
-        static::$defaultCurrency = (new Currency)->newFromBuilder($currency);
-        return static::$defaultCurrency;
-    }
-
-    /**
-     * Returns an array with all currency information.
-     * @return mixed
-     */
-    public static function getAll()
-    {
-        return Currency::hydrate(Cache::rememberForever(static::CURRENCIES_CACHE_KEY, function () {
-            return Currency::get(['id', 'rate', 'symbol', 'code'])->keyBy('id')->toArray();
-        }));
-    }
-
-    /**
-     * Additional guard when no currency is configured.
-     *
-     * @param mixed $currency
-     * @return void
-     * @throws \RuntimeException
-     */
-    protected static function guardMissingCurrency($currency)
-    {
-        if (!$currency) {
-            throw new \RuntimeException(
-                '[mall] Please configure at least one currency via the backend settings.'
-            );
-        }
-    }
-
-    /**
-     * Custom scope to retrieve only enabled currencies.
-     * @return mixed
-     */
-    public function scopeEnabled($query)
-    {
-        return $query->where('is_enabled', 1);
-    }
-
-    /**
-     * Sets the currently active currency in the session.
-     * @param Currency $currency
-     * @return string
-     */
-    public static function setActiveCurrency(Currency $currency)
-    {
-        return Session::put(static::CURRENCY_SESSION_KEY, $currency->toArray());
-    }
-
-    /**
-     * Return a dummy currency for unknown inputs.
-     * @return Currency
-     */
-    public static function unknown($currency = null): self
-    {
-        Log::error(
-            '[OFFLINE.Mall] Unknown currency was requested',
-            ['currency' => $currency, 'url' => request()->url()]
-        );
-
-        return new self([
-            'code'       => '???',
-            'symbol'     => trans('offline.mall::lang.currency_settings.unknown'),
-            'rate'       => 1,
-            'decimals'   => 2,
-            'format'     => '{{ price|number_format(currency.decimals, " ", ",") }} ({{ currency.symbol }})',
-            'is_default' => false,
-        ]);
-    }
-
-    /**
-     * Turns a currency id or code into a currency model.
-     * @return Currency
-     */
-    public static function resolve($input = null): self
-    {
-        if ($input instanceof self) {
-            return $input;
-        }
-        if ($input === null) {
-            $currency = self::activeCurrency();
-        }
-        if (is_string($input)) {
-            $currency = self::whereCode($input)->first();
-        }
-        if (is_int($input)) {
-            $currency = self::whereId($input)->first();
-        }
-        if ( ! isset($currency) || ! $currency) {
-            return self::unknown($input);
-        }
-        return $currency;
+        return self::$availableRoundingOptions;
     }
 }

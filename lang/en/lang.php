@@ -36,7 +36,6 @@ return [
         'payment_methods' => [
             'create' => 'Create payment method',
             'edit' => 'Edit payment method',
-            'reorder' => 'Reorder',
         ],
         'custom_field_options' => [
             'edit' => 'Edit field options',
@@ -156,9 +155,15 @@ return [
     ],
     'payment_method_settings' => [
         'description' => 'Manage payment methods',
+        'is_default' => 'Default',
+        'set_as_default' => 'Set as default payment method',
+        'is_enabled' => 'Enabled',
     ],
     'shipping_method_settings' => [
         'description' => 'Manage shipping methods',
+        'is_default' => 'Default',
+        'set_as_default' => 'Set as default shipping method',
+        'is_enabled' => 'Enabled',
     ],
     'tax_settings' => [
         'description' => 'Manage taxes',

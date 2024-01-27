@@ -80,7 +80,7 @@ class PriceCategory extends Model
 
     /**
      * The hasMany relationships of this model.
-     * @var array<string>
+     * @var array
      */
     public $hasMany = [
         'prices' => [

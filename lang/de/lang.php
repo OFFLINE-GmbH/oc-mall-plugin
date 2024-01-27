@@ -35,7 +35,6 @@
         'payment_methods' => [
             'create' => 'Zahlungsmethode erstellen',
             'edit' => 'Zahlungsmethode bearbeiten',
-            'reorder' => 'Sortieren',
         ],
         'custom_field_options' => [
             'edit' => 'Feldoptionen bearbeiten',
@@ -155,9 +154,15 @@
     ],
     'payment_method_settings' => [
         'description' => 'Zahlungsmethoden verwalten',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Zahlungsmethode festlegen',
+        'is_enabled' => 'Aktiv',
     ],
     'shipping_method_settings' => [
         'description' => 'Versandmethoden verwalten',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Versandmethode festlegen',
+        'is_enabled' => 'Aktiv',
     ],
     'tax_settings' => [
         'description' => 'Steuern verwalten',

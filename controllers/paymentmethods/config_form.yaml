@@ -1,4 +1,4 @@
-name: PaymentMethods
+name: offline.mall::lang.common.payment_methods
 modelClass: OFFLINE\Mall\Models\PaymentMethod
 form: $/offline/mall/models/paymentmethod/fields.yaml
 defaultRedirect: offline/mall/paymentmethods

@@ -25,18 +25,20 @@ class MallDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PriceCategoryTableSeeder::class);
-        $this->call(CurrencyTableSeeder::class);
-        $this->call(CategoryTableSeeder::class);
-        $this->call(TaxTableSeeder::class);
-        $this->call(PaymentMethodTableSeeder::class);
-        $this->call(ProductTableSeeder::class);
-        $this->call(CustomFieldTableSeeder::class);
-        $this->call(ShippingMethodTableSeeder::class);
-        $this->call(CustomerGroupTableSeeder::class);
-        $this->call(CustomerTableSeeder::class);
-        $this->call(PropertyTableSeeder::class);
-        $this->call(OrderStateTableSeeder::class);
-        $this->call(NotificationTableSeeder::class);
+        $this->call([
+            PriceCategoryTableSeeder::class,
+            CurrencyTableSeeder::class,
+            CategoryTableSeeder::class,
+            TaxTableSeeder::class,
+            PaymentMethodTableSeeder::class,
+            ProductTableSeeder::class,
+            CustomFieldTableSeeder::class,
+            ShippingMethodTableSeeder::class,
+            CustomerGroupTableSeeder::class,
+            CustomerTableSeeder::class,
+            PropertyTableSeeder::class,
+            OrderStateTableSeeder::class,
+            NotificationTableSeeder::class            ,
+        ]);
     }
 }

@@ -14,9 +14,10 @@ class PaymentMethodTableSeeder extends Seeder
     public function run()
     {
         $method = new PaymentMethod();
-        $method->name = 'Stripe';
-        $method->payment_provider = 'stripe';
+        $method->name = 'Invoice';
+        $method->payment_provider = 'offline';
         $method->sort_order = 1;
+        $method->is_default = 1;
         $method->save();
         
         $method = new PaymentMethod();
@@ -26,8 +27,8 @@ class PaymentMethodTableSeeder extends Seeder
         $method->save();
 
         $method = new PaymentMethod();
-        $method->name = 'Invoice';
-        $method->payment_provider = 'offline';
+        $method->name = 'Stripe';
+        $method->payment_provider = 'stripe';
         $method->sort_order = 3;
         $method->save();
     }

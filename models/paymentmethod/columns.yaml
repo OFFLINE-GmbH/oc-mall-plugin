@@ -18,3 +18,11 @@ columns:
     payment_provider:
         label: 'offline.mall::lang.common.payment_provider'
         type: text
+    is_default:
+        label: 'offline.mall::lang.payment_method_settings.is_default'
+        type: switch
+        searchable: true
+    is_enabled:
+        label: 'offline.mall::lang.payment_method_settings.is_enabled'
+        type: switch
+        searchable: true

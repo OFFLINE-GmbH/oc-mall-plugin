@@ -13,9 +13,9 @@ class CategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        $category = new Category();
-        $category->name = 'Example category';
-        $category->slug = 'example';
-        $category->save();
+        Category::create([
+            'name' => 'Example category',
+            'slug' => 'example2',
+        ]);
     }
 }
