@@ -18,20 +18,22 @@ trait HashIds
     }
 
     /**
+     * Decode string value.
+     * @param string $value
      * @return mixed
      */
-    public function decode($value)
+    public function decode(string $value)
     {
-        $value = app(Hasher::class)->decode($value ?? '');
-
-        return $value[0] ?? null;
+        return app(Hasher::class)->decode($value) ?? null;
     }
 
     /**
+     * Encode numeric value(s).
+     * @param int|int[] $value
      * @return mixed
      */
-    public function encode($value)
+    public function encode(mixed $value)
     {
-        return app(Hasher::class)->encode($value ?? '');
+        return app(Hasher::class)->encode($value);
     }
 }

@@ -2,9 +2,10 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
+use DB;
+use PDO;
 use Barryvdh\DomPDF\Facade;
 use Barryvdh\DomPDF\PDF;
-use DB;
 use Dompdf\Dompdf;
 use Hashids\Hashids;
 use Illuminate\Foundation\AliasLoader;
@@ -27,7 +28,6 @@ use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\GeneralSettings;
-use PDO;
 
 trait BootServiceContainer
 {
