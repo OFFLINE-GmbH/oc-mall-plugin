@@ -15,7 +15,7 @@ class VariantTest extends PluginTestCase
     public $product;
     public $variant;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -23,7 +23,7 @@ use RainLab\User\Facades\Auth;
 
 class OrderTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -61,7 +61,7 @@ class ProductEntry implements Entry
     protected function mapPrices(Product $product): Collection
     {
         return $product->withForcedPriceInheritance(function() use ($product) {
-            return Currency::getAll()->mapWithKeys(function ($currency) use ($product) {
+            return Currency::enabled()->get()->mapWithKeys(function ($currency) use ($product) {
                 return [$currency->code => $product->price($currency)->integer];
             });
         });
@@ -71,7 +71,7 @@ class ProductEntry implements Entry
     {
         return CustomerGroup::get()->mapWithKeys(function ($group) use ($model) {
             return [
-                $group->id => Currency::getAll()->mapWithKeys(function ($currency) use ($model, $group) {
+                $group->id => Currency::enabled()->get()->mapWithKeys(function ($currency) use ($model, $group) {
                     $price = $model->groupPrice($group, $currency);
                     if ($price) {
                         return [$price->currency->code => $price->integer];

@@ -83,6 +83,9 @@ trait PriceAccessors
     public function mapCurrencyPrices($items)
     {
         return $items->mapWithKeys(function ($price) {
+            if ($price->currency == null) {
+                dd($price);
+            }
             $code = $price->currency->code;
 
             $product = null;
@@ -138,7 +141,7 @@ trait PriceAccessors
             Price::updateOrCreate([
                 'priceable_id'   => $this->id,
                 'priceable_type' => self::MORPH_KEY,
-                'currency_id'    => Currency::where('code', $currency)->firstOrFail()->id,
+                'currency_id'    => Currency::enabled()->where('code', $currency)->firstOrFail()->id,
                 'field'          => $field,
             ], [
                 'price' => $price,

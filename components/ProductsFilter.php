@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Components;
 
-use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
@@ -17,8 +16,6 @@ use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
-use Session;
-use Validator;
 
 /**
  * The ProductsFilter component is used to filter items of
@@ -35,120 +32,140 @@ class ProductsFilter extends MallComponent
      * @var Category
      */
     public $category;
+
     /**
      * A Collection of all subcategories.
      *
      * @var Collection
      */
     public $categories;
+
     /**
      * All items in this category.
      *
      * @var Collection<Product|Variant>
      */
     public $items;
+
     /**
      * All available property values.
      *
      * @var Collection
      */
     public $values;
+
     /**
      * All available property filters.
      *
      * @var Collection
      */
     public $propertyGroups;
+
     /**
      * A collection of available Property models.
      *
      * @var Collection
      */
     public $props;
+
     /**
      * All active Filters.
      *
      * @var Collection
      */
     public $filter;
+
     /**
      * Query string representation of the active filter.
      *
      * @var string
      */
     public $queryString;
+
     /**
      * Show the price range filter.
      *
      * @var boolean
      */
     public $showPriceFilter;
+
     /**
      * Show the brand filter.
      *
      * @var boolean
      */
     public $showBrandFilter;
+
     /**
      * Show the on sale filter.
      *
      * @var boolean
      */
     public $showOnSaleFilter;
+
     /**
      * All available brands.
      *
      * @var Collection<Brand>
      */
     public $brands;
+
     /**
      * Include all items from child categories.
      *
      * @var boolean
      */
     public $includeChildren;
+
     /**
      * Also filter Variant properties.
      *
      * @var boolean
      */
     public $includeVariants;
+
     /**
      * The min and max values of the price range.
      *
      * @var array
      */
     public $priceRange;
+
     /**
      * The active Currency.
      *
      * @var Currency
      */
     public $currency;
+
     /**
      * The active sort order.
      *
      * @var string
      */
     public $sortOrder;
+
     /**
      * All available sort Options.
      *
      * @var array
      */
     public $sortOptions;
+
     /**
      * Sort order of the products component.
      *
      * @var string
      */
     public $productsComponentSort;
+
     /**
      * Category of the products component.
      *
      * @var Category
      */
     public $productsComponentCategory;
+    
     /**
      * An instance of the money formatter class.
      *

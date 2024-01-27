@@ -30,7 +30,7 @@ trait ProductPriceTable
     {
         $config = $this->makeConfig($this->productPriceTableConfig);
 
-        $additionalPriceCategories = PriceCategory::orderBy('sort_order', 'ASC')->get();
+        $additionalPriceCategories = PriceCategory::enabled()->orderBy('sort_order', 'ASC')->get();
         $additionalPriceCategories->each(function (PriceCategory $category) use ($config) {
             $config->columns['additional__' . $category->id] = ['title' => $category->name];
         });
@@ -61,7 +61,7 @@ trait ProductPriceTable
         }
 
         $this->vars['pricetable']      = $widget;
-        $this->vars['currencies']      = Currency::orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
+        $this->vars['currencies']      = Currency::enabled()->orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
         $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
     }
 
@@ -69,7 +69,7 @@ trait ProductPriceTable
     {
         \DB::transaction(function () {
             $state                     = post('state', []);
-            $currencies                = Currency::get()->keyBy('code');
+            $currencies                = Currency::enabled()->get()->keyBy('code');
             $hasPriceInDefaultCurrency = false;
 
             $this->removeOldPricingInformation($state, $currencies);

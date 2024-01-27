@@ -3,43 +3,49 @@
 namespace OFFLINE\Mall\Controllers;
 
 use BackendMenu;
-use Backend\Classes\Controller;
-use October\Rain\Exception\ValidationException;
-use OFFLINE\Mall\Models\PriceCategory;
-use System\Classes\SettingsManager;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
-use Backend\Behaviors\ReorderController;
+use Backend\Classes\Controller;
+use System\Classes\SettingsManager;
 
 class PriceCategories extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
         ListController::class,
         FormController::class,
-        ReorderController::class,
     ];
 
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
     public $listConfig = 'config_list.yaml';
-    public $formConfig = 'config_form.yaml';
-    public $reorderConfig = 'config_reorder.yaml';
 
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
+    public $formConfig = 'config_form.yaml';
+
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.manage_price_categories',
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'price_categories_settings');
-    }
-
-    public function index_onDelete()
-    {
-        if (in_array(PriceCategory::OLD_PRICE_CATEGORY_ID, post('checked', []))) {
-            throw new ValidationException(['checked' => 'The old price category cannot be deleted.']);
-        }
-
-        parent::index_onDelete();
     }
 }

@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Models;
 
 use Closure;
+use DB;
 use Event;
 use Model;
 use Illuminate\Support\Facades\Session;
@@ -23,21 +24,42 @@ class ShippingMethod extends Model
 
     const MORPH_KEY = 'mall.shipping_method';
 
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-    public $with = ['prices'];
-    public $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    /**
+     * Implement behaviors for this model.
+     * @var array
+     */
+    public $implement = [
+        '@RainLab.Translate.Behaviors.TranslatableModel'
+    ];
+    
+    /**
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_shipping_methods';
+
+    /**
+     * The translatable attributes of this model.
+     * @var array
+     */
     public $translatable = [
         'name',
         'description',
     ];
+
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
     public $rules = [
-        'name' => 'required',
+        'name'          => 'required',
+        'is_enabled'    => 'nullable|boolean'
     ];
-    public $casts = [
-        'price_includes_tax' => 'boolean',
-    ];
-    public $table = 'offline_mall_shipping_methods';
-    public $appends = ['price_formatted'];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
     public $fillable = [
         'name',
         'description',
@@ -45,6 +67,46 @@ class ShippingMethod extends Model
         'price_includes_tax',
         'sort_order',
     ];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    public $casts = [
+        'price_includes_tax'    => 'boolean',
+        'is_enabled'            => 'boolean',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     * @var array<string>
+     */
+    public $hidden = [
+        'created_at', 
+        'updated_at', 
+        'deleted_at'
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     * @var array
+     */
+    public $appends = [
+        'price_formatted'
+    ];
+
+    /**
+     * The relations to eager load on every query.
+     * @var array
+     */
+    public $with = [
+        'prices'
+    ];
+
+    /**
+     * The morphMany relationships of this model.
+     * @var array
+     */
     public $morphMany = [
         'prices'                 => [
             Price::class,
@@ -62,13 +124,28 @@ class ShippingMethod extends Model
             'conditions' => "price_category_id is null and field = 'available_above_totals'",
         ],
     ];
+
+    /**
+     * The hasMany relationships of this model.
+     * @var array
+     */
     public $hasMany = [
         'carts' => Cart::class,
         'rates' => ShippingMethodRate::class,
     ];
+
+    /**
+     * The attachOne relationships of this model.
+     * @var array
+     */
     public $attachOne = [
         'logo' => File::class,
     ];
+
+    /**
+     * The belongsToMany relationships of this model.
+     * @var array
+     */
     public $belongsToMany = [
         'taxes'     => [
             Tax::class,
@@ -91,12 +168,11 @@ class ShippingMethod extends Model
     ];
 
     /**
-     * This method can be used when no shipping is required
-     * for example when there are only virtual products in a cart.
-     *
+     * This method can be used when no shipping is required, for example when there are only virtual 
+     * products in a cart.
      * @return ShippingMethod
      */
-    public static function noShippingRequired()
+    static public function noShippingRequired(): self
     {
         return new self([
             'name'        => trans('offline.mall::lang.shipping_method.not_required_name'),
@@ -104,84 +180,64 @@ class ShippingMethod extends Model
         ]);
     }
 
-    public function afterDelete()
-    {
-        \DB::table('offline_mall_prices')
-           ->where('priceable_type', self::MORPH_KEY)
-           ->where('priceable_id', $this->id)
-           ->delete();
-    }
-
-    public static function getDefault(): self
+    /**
+     * Get the first shipping method.
+     * @return null|self
+     */
+    static public function getDefault(): ?self
     {
         return ShippingMethod::first();
     }
 
-    public function getPriceFormattedAttribute()
+    /**
+     * Get shipping methods by cart.
+     * @param Cart $cart
+     * @return Collection|self[]
+     */
+    static public function getAvailableByCart(Cart $cart)
     {
-        return $this->price()->string;
-    }
-
-    public function getNameAttribute()
-    {
-        $enforcedKey = sprintf('mall.shipping.enforced.%s.name', $this->id);
-        if ($this->useEnforcedValues() && $enforced = Session::get($enforcedKey)) {
-            return $enforced;
+        if ($cart->is_virtual) {
+            // Virtual carts cannot be shipped.
+            return collect([]);
+        } else {
+            $total = $cart->totals()->productPostTaxes();
+            $countryId = optional($cart->shipping_address)->country_id;
+    
+            // Use the Country ID from the post data, if availalb.e
+            if (post('country_id')) {
+                $countryId = post('country_id');
+            }
+    
+            return self::getAvailability($countryId, $total, $cart, null);
         }
-
-        return $this->getAttributeTranslated('name');
     }
 
     /**
-     * Check if enforced shipping price/name should be used.
-     * The values are ignored if a ShippingMethodSelector component
-     * is present on the current page.
-     *
-     * @return bool
+     * Get shipping methods by wishlist.
+     * @param null|Wishlist $wishlist
+     * @return Collection|self[]
      */
-    protected function useEnforcedValues()
+    static public function getAvailableByWishlist(?Wishlist $wishlist = null)
     {
-        // Never use enforced values in the backend.
-        if (app()->runningInBackend() === true) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function getAvailableByCart(Cart $cart)
-    {
-        // Virtual carts cannot be shipped.
-        if ($cart->is_virtual) {
-            return collect([]);
-        }
-
-        $total = $cart->totals()->productPostTaxes();
-
-        $countryId = optional($cart->shipping_address)->country_id;
-
-        // Use the Country ID from the post data, if availalb.e
-        if (post('country_id')) {
-            $countryId = post('country_id');
-        }
-
-        return self::getAvailability($countryId, $total, $cart, null);
-    }
-
-    public static function getAvailableByWishlist(?Wishlist $wishlist)
-    {
-        if (! $wishlist) {
+        if (!$wishlist) {
             return new Collection();
+        } else {
+            $total = $wishlist->totals()->productPostTaxes();
+            $countryId = $wishlist->getCartCountryId();
+            return self::getAvailability($countryId, $total, null, $wishlist);
         }
-
-        $total = $wishlist->totals()->productPostTaxes();
-
-        $countryId = $wishlist->getCartCountryId();
-
-        return self::getAvailability($countryId, $total, null, $wishlist);
     }
 
-    public static function getAvailability($countryId, $total, $cart = null, $whishlist = null)
+    /**
+     * Get shipping methods by details.
+     *
+     * @param int $countryId
+     * @param int $total
+     * @param null|Cart $cart
+     * @param null|Wishlist $wishlist
+     * @return Collection|self[]
+     */
+    static public function getAvailability($countryId, $total, $cart = null, $wishlist = null)
     {
         $availableShippingMethods = self::orderBy('sort_order')
             ->when($countryId, function ($q) use ($countryId) {
@@ -198,27 +254,84 @@ class ShippingMethod extends Model
                 return ($below === null || $below > $total)
                     && ($above === null || $above <= $total);
             });
-
-        Event::fire('mall.shipping.methods.availability', [&$availableShippingMethods, $cart, $whishlist]);
-
+        Event::fire('mall.shipping.methods.availability', [&$availableShippingMethods, $cart, $wishlist]);
         return $availableShippingMethods;
     }
 
+    /**
+     * Hook after model has been deleted.
+     * @return void
+     */
+    public function afterDelete()
+    {
+        DB::table('offline_mall_prices')
+           ->where('priceable_type', self::MORPH_KEY)
+           ->where('priceable_id', $this->id)
+           ->delete();
+    }
+
+    /**
+     * Get formatted price attribute.
+     * @return string
+     */
+    public function getPriceFormattedAttribute(): string
+    {
+        return $this->price()->string;
+    }
+
+    /**
+     * Get name attribute.
+     * @return null|string
+     */
+    public function getNameAttribute(): null|string
+    {
+        $enforcedKey = sprintf('mall.shipping.enforced.%s.name', $this->id);
+        if ($this->useEnforcedValues() && $enforced = Session::get($enforcedKey)) {
+            return $enforced;
+        } else {
+            return $this->getAttributeTranslated('name');
+        }
+    }
+
+    /**
+     * Check if enforced shipping price/name should be used.The values are ignored if a 
+     * ShippingMethodSelector component is present on the current page.
+     * @return bool
+     */
+    protected function useEnforcedValues()
+    {
+        // Never use enforced values in the backend.
+        return app()->runningInBackend() !== true;
+    }
+    
+    /**
+     * Get price by ???
+     * @param mixed $currency
+     * @return mixed
+     */
     public function availableBelowTotal($currency = null)
     {
         return $this->price($currency, 'available_below_totals');
     }
-
+    
+    /**
+     * Get price by ???
+     * @param mixed $currency
+     * @return mixed
+     */
     public function availableAboveTotal($currency = null)
     {
         return $this->price($currency, 'available_above_totals');
     }
 
-    protected function priceRelation(
-        $currency = null,
-        $relation = 'prices',
-        ?Closure $filter = null
-    ) {
+    /**
+     * Price Relation
+     * @param mixed $currency
+     * @param string $relation
+     * @param null|Closure $filter
+     * @return mixed
+     */
+    protected function priceRelation($currency = null, $relation = 'prices', ?Closure $filter = null) {
         $checkEnforced = $relation === 'prices' && $this->useEnforcedValues();
         $enforcedKey   = sprintf('mall.shipping.enforced.%s.price', $this->id);
 
@@ -236,15 +349,16 @@ class ShippingMethod extends Model
         return $this->priceAccessorPriceRelation($currency, $relation, $filter);
     }
 
+    /**
+     * JSON serialize class.
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $base = parent::jsonSerialize();
         $this->prices->load('currency');
         unset($base['price']);
-        $base['price'] = $this->prices->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price];
-        });
-
+        $base['price'] = $this->prices->mapWithKeys(fn($price) => [$price->currency->code => $price]);
         return $base;
     }
 }

@@ -36,7 +36,6 @@ return [
         'payment_methods' => [
             'create' => 'Zahlungsmethode erstellen',
             'edit' => 'Zahlungsmethode bearbeiten',
-            'reorder' => 'Sortieren',
         ],
         'custom_field_options' => [
             'edit' => 'Feldoptionen bearbeiten',
@@ -73,6 +72,16 @@ return [
             'create' => 'Review erstellen',
             'update' => 'Review bearbeiten',
         ],
+        'currencies' => [
+            'create' => 'Währung erstellen',
+            'update' => 'Währung bearbeiten',
+            'reorder' => 'Währungen sortieren',
+        ],
+        'price_categories' => [
+            'create' => 'Preiskategorie erstellen',
+            'update' => 'Preiskategorie bearbeiten',
+            'reorder' => 'Preiskategorien sortieren',
+        ]
     ],
     'menu_items' => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -91,8 +100,19 @@ return [
         'currency_format' => 'Formatierung',
         'currency_symbol' => 'Symbol',
         'currency_rate' => 'Kurs zu Basiswährung',
-        'is_default' => 'Ist Standard',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Währung festlegen',
+        'is_enabled' => 'Aktiv',
         'unknown' => 'Unbekannte Währung',
+        'help_title' => 'Hilfe mit der Formatierung der Währung',
+        'help_default_label' => 'Die Standard-Formatierung der Währung ist:',
+        'help_variables_label' => 'Folgende Variablen können genutzt werden:',
+        'help_variable_price_label' => 'Der gesamte Preis des Produkts als float (bsp. <code>1500.42</code>).',
+        'help_variable_integers_label' => 'Der Preis ohne Nachkommastellen (bsp. <code>1500</code>).',
+        'help_variable_decimals_label' => 'Die reinen Nachkommastellen des Preises (bsp. <code>42</code>).',
+        'help_variable_currency_label' => 'Die Währungsdaten die du festgelegt hast (bsp. <code>{code: "EUR", rate: 1, symbol: "€", decimals: 2}</code>).',
+        'help_variable_product_label' => 'Das Produkt-Model von dem der Preis stammt (bsp. eine vollständige <code>Product</code> Model-Instanz).',
+        'help_plugin_docs_link' => 'Auf <a href=":link" target="_blank">der Plugin-Dokumentationsseite</a> findest du weitere Beispiele.',
     ],
     'payment_gateway_settings' => [
         'label' => 'Zahlungsanbieter',
@@ -128,15 +148,22 @@ return [
     'price_category_settings' => [
         'label' => 'Preiskategorien',
         'description' => 'Zusätzliche Preiskategorien verwalten',
+        'is_enabled' => 'Aktiv',
     ],
     'order_state_settings' => [
         'description' => 'Mögliche Status für Bestellungen verwalten',
     ],
     'payment_method_settings' => [
         'description' => 'Zahlungsmethoden verwalten',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Zahlungsmethode festlegen',
+        'is_enabled' => 'Aktiv',
     ],
     'shipping_method_settings' => [
         'description' => 'Versandmethoden verwalten',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Versandmethode festlegen',
+        'is_enabled' => 'Aktiv',
     ],
     'tax_settings' => [
         'description' => 'Steuern verwalten',
@@ -480,8 +507,10 @@ return [
         'percentage' => 'Prozent',
         'countries' => 'Steuer gilt nur für Versand in diese Länder',
         'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
-        'is_default' => 'Ist Standard',
-        'is_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Ist Standard',
+        'set_as_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
+        'is_enabled' => 'Aktiv',
     ],
     'discounts' => [
         'name' => 'Name',

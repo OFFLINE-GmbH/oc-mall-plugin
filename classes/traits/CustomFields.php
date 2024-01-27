@@ -21,7 +21,7 @@ trait CustomFields
      */
     public function priceIncludingCustomFieldValues(?Collection $values = null): array
     {
-        $currencies = Currency::get();
+        $currencies = Currency::enabled()->get();
         if ( ! $values || count($values) < 1) {
             return $currencies->mapWithKeys(function (Currency $currency) {
                 return [$currency->code => $this->price($currency)->integer];

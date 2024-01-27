@@ -1,47 +1,55 @@
 {
-  "name": "offline/oc-mall-plugin",
-  "type": "october-plugin",
-  "description": "E-commerce solution for October CMS",
-  "keywords": [
-    "october",
-    "cms",
-    "e-commerce",
-    "shop",
-    "plugin"
-  ],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Tobias Kündig",
-      "email": "tobias@offline.ch"
+    "name": "offline/oc-mall-plugin",
+    "type": "october-plugin",
+    "description": "E-commerce solution for October CMS",
+    "keywords": [
+        "october",
+        "cms",
+        "e-commerce",
+        "shop",
+        "plugin"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tobias Kündig",
+            "email": "tobias@offline.ch"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0",
+        "hashids/hashids": "^4.1.0",
+        "league/omnipay": "^3.2",
+        "omnipay/paypal": "^3.0",
+        "omnipay/stripe": "^3.0",
+        "barryvdh/laravel-dompdf": "^0.9|^1.0|^2.0",
+        "rainlab/user-plugin": "^1.6|^2.0",
+        "rainlab/location-plugin": "^1.1.5",
+        "rainlab/translate-plugin": "^1.9|^2.0"
+    },
+    "suggest": {
+        "vitalybaev/google-merchant-feed": "Required to use the Google Merchant Feed integration",
+        "bummzack/omnipay-postfinance": "Required to use the PostFinance payment provider",
+        "elasticsearch/elasticsearch": "Required to use the ElasticSearch indexing support (experimental)",
+        "offline/jsonq": "Required to use the file based index",
+        "tmarois/filebase": "Required to use the file based index"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23",
+        "mockery/mockery": "^1.6",
+        "phpmd/phpmd": "^2.6",
+        "phpunit/phpunit": "^8.5|^9.0",
+        "pestphp/pest": "^1.23",
+        "squizlabs/php_codesniffer": "*"
+    },
+    "scripts": {
+        "test": [
+            "../../../vendor/bin/phpunit ./tests --stop-on-failure --testdox"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
-  ],
-  "require": {
-    "composer/installers": "~1.0",
-    "hashids/hashids": "^4.1.0",
-    "league/omnipay": "^3.2",
-    "omnipay/paypal": "^3.0",
-    "omnipay/stripe": "^3.0",
-    "barryvdh/laravel-dompdf": "^0.9|^1.0|^2.0",
-    "rainlab/user-plugin": "^1.6|^2.0",
-    "rainlab/location-plugin": "^1.1.5",
-    "rainlab/translate-plugin": "^1.9|^2.0"
-  },
-  "suggest": {
-    "vitalybaev/google-merchant-feed": "Required to use the Google Merchant Feed integration",
-    "bummzack/omnipay-postfinance": "Required to use the PostFinance payment provider",
-    "elasticsearch/elasticsearch": "Required to use the ElasticSearch indexing support (experimental)",
-    "offline/jsonq": "Required to use the file based index",
-    "tmarois/filebase": "Required to use the file based index"
-  },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "*",
-    "phpmd/phpmd": "^2.6",
-    "mockery/mockery": "^1.0"
-  },
-  "config": {
-    "allow-plugins": {
-      "composer/installers": true
-    }
-  }
 }

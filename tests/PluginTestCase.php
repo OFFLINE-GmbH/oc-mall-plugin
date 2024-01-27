@@ -2,22 +2,24 @@
 
 namespace OFFLINE\Mall\Tests;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\Noop;
-use System\Classes\PluginManager;
 
 class PluginTestCase extends \PluginTestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $pluginManager = PluginManager::instance();
-        $pluginManager->registerAll(true);
-        $pluginManager->bootAll(true);
+        $this->artisan('plugin:seed', [
+            'namespace' => 'OFFLINE.Mall',
+            'class'     => 'OFFLINE\Mall\Updates\Seeders\MallDatabaseSeeder'
+        ]);
 
         app()->bind(Index::class, function() {
             return new Noop();
@@ -27,8 +29,5 @@ class PluginTestCase extends \PluginTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-
-        $pluginManager = PluginManager::instance();
-        $pluginManager->unregisterAll();
     }
 }

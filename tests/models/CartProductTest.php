@@ -22,7 +22,7 @@ class CartProductTest extends PluginTestCase
     public $customFieldValueA;
     protected $address;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

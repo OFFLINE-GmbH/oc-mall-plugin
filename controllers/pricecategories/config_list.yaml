@@ -1,4 +1,4 @@
-title: PriceCategories
+title: offline.mall::lang.price_category_settings.label
 modelClass: OFFLINE\Mall\Models\PriceCategory
 list: $/offline/mall/models/pricecategory/columns.yaml
 recordUrl: 'offline/mall/pricecategories/update/:id'
@@ -13,3 +13,8 @@ toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
+structure:
+    showTree: false
+    showReorder: true
+    showSorting: true
+    maxDepth: 1

@@ -29,26 +29,26 @@
 * Easily extendable with custom features
 * [Google Tag Manager and Google Merchant Center integrations](https://offline-gmbh.github.io/oc-mall-plugin/digging-deeper/analytics.html)
 
-#### Compatibility
+## Compatibility
 
 For October 1, use version 1.x of this plugin. For October 2+ use the latest version.
 
-#### Documentation
+## Documentation
 The documentation of this plugin can be found here:
 [https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
 
-#### Requirements
+## Requirements
 
-* PHP7.2+
+* PHP7.4+
 * October Build 444+
 * For best performance use MySQL 5.7+ or MariaDB 10.2+
 
-#### Demo
+## Demo
 
 A live demo of the plugin can be found here:
 [https://mall.offline.swiss](https://mall.offline.swiss)
 
-#### Support
+## Support
 
 For support and development requests please file an issue on GitHub.
 
@@ -112,16 +112,18 @@ the plugin performs install it yourself and give it a go!
 
 ### Documentation
 
-The raw documentation for this plugin is stored in the docs directory. It is written in markdown and built with 
-[VuePress](https://vuepress.vuejs.org/).
+The raw documentation for this plugin is stored in the docs directory. It is written in markdown and 
+built with [VitePress](https://vitepress.dev).
 
-For a live preview of the docs install `vuepress` locally and run `vuepress dev` from the docs directory.
+For a live preview of the docs visit the `plugins/offline/mall` directory and install the necessary 
+dependencies using `npm i`. Now you can run the local development server with `npm run docs:dev`.
 
-### Bugs and feature requests
+## Bugs and feature requests
 
 If you found a bug or want to request a feature please file a GitHub issue.
 
-### Pull requests
+## Pull requests
 
 PRs are always welcome! Open them against the `develop` branch.
-If you plan a time consuming contribution please open an issue first and describe what changes you have in mind. 
+If you plan a time consuming contribution please open an issue first and describe what changes you 
+have in mind. 

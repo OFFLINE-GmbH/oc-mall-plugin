@@ -1,4 +1,4 @@
-title: Currencies
+title: offline.mall::lang.currency_settings.label
 modelClass: OFFLINE\Mall\Models\Currency
 list: $/offline/mall/models/currency/columns.yaml
 recordUrl: 'offline/mall/currencies/update/:id'
@@ -13,3 +13,8 @@ toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
+structure:
+    showTree: false
+    showReorder: true
+    showSorting: true
+    maxDepth: 1

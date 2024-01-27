@@ -1,5 +1,6 @@
-<?php namespace OFFLINE\Mall;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall;
 
 use Illuminate\Support\Facades\View;
 use OFFLINE\Mall\Classes\Registration\BootComponents;

@@ -1,5 +1,0 @@
-title: 'offline.mall::lang.common.shipping_methods'
-modelClass: OFFLINE\Mall\Models\ShippingMethod
-nameFrom: name
-toolbar:
-    buttons: reorder_toolbar

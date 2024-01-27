@@ -6,7 +6,6 @@ use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
-use Backend\Behaviors\ReorderController;
 use Backend\Classes\Controller;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\ShippingMethod;
@@ -14,22 +13,45 @@ use System\Classes\SettingsManager;
 
 class ShippingMethods extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
         ListController::class,
         FormController::class,
-        ReorderController::class,
         RelationController::class,
     ];
 
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
     public $listConfig = 'config_list.yaml';
+
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
-    public $reorderConfig = 'config_reorder.yaml';
+
+    /**
+     * The configuration file for the relation controller implementation.
+     * @var string
+     */
     public $relationConfig = 'config_relation.yaml';
 
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.manage_shipping_methods',
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -37,6 +59,11 @@ class ShippingMethods extends Controller
         SettingsManager::setContext('OFFLINE.Mall', 'shipping_method_settings');
     }
 
+    /**
+     * Hook after form created.
+     * @param ShippingMethod $model
+     * @return void
+     */
     public function formAfterCreate(ShippingMethod $model)
     {
         $this->updatePrices($model);
@@ -44,6 +71,11 @@ class ShippingMethods extends Controller
         $this->updatePrices($model, 'available_above_totals', '_available_above_totals');
     }
 
+    /**
+     * Hook after form updated.
+     * @param ShippingMethod $model
+     * @return void
+     */
     public function formAfterUpdate(ShippingMethod $model)
     {
         $this->updatePrices($model);
@@ -51,24 +83,32 @@ class ShippingMethods extends Controller
         $this->updatePrices($model, 'available_above_totals', '_available_above_totals');
     }
 
-    public function onRelationManageUpdate()
-    {
-        $parent = parent::onRelationManageUpdate();
-
-        $this->checkRelationPriceUpdate();
-
-        return $parent;
-    }
-
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function onRelationManageCreate()
     {
         $parent = parent::onRelationManageCreate();
-
         $this->checkRelationPriceUpdate();
-
         return $parent;
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
+    public function onRelationManageUpdate()
+    {
+        $parent = parent::onRelationManageUpdate();
+        $this->checkRelationPriceUpdate();
+        return $parent;
+    }
+
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     protected function checkRelationPriceUpdate()
     {
         if ($this->relationName === 'rates') {
@@ -85,6 +125,13 @@ class ShippingMethods extends Controller
         }
     }
 
+    /**
+     * Update Prices
+     * @param mixed $model
+     * @param mixed $field
+     * @param string $key
+     * @return void
+     */
     protected function updatePrices($model, $field = null, $key = '_prices')
     {
         $data = post('MallPrice', []);
