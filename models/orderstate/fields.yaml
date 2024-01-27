@@ -1,14 +1,19 @@
 fields:
+    is_enabled:
+        type: switch
+        label: offline.mall::lang.order_state_settings.is_enabled
+        span: left
+        default: true
     name:
         label: 'offline.mall::lang.order_states.name'
         oc.commentPosition: ''
-        span: auto
+        span: left
         type: text
     flag:
         label: 'offline.mall::lang.order_states.flag'
         oc.commentPosition: ''
         emptyOption: '--'
-        span: auto
+        span: right
         type: dropdown
     description:
         label: 'offline.mall::lang.product.description'

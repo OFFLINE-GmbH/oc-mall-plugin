@@ -152,6 +152,7 @@ return [
     ],
     'order_state_settings' => [
         'description' => 'Configure order states',
+        'is_enabled' => 'Enabled',
     ],
     'payment_method_settings' => [
         'description' => 'Manage payment methods',

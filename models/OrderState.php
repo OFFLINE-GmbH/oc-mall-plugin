@@ -19,18 +19,6 @@ class OrderState extends Model
     public const FLAG_COMPLETE = 'COMPLETE';
 
     /**
-     * The database table used by this model.
-     * @var string
-     */
-    public $table = 'offline_mall_order_states';
-
-    /**
-     * Behaviors implemented by this model.
-     * @var array
-     */
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-
-    /**
      * The available order state flag options.
      * @var array
      */
@@ -41,21 +29,21 @@ class OrderState extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * Implement behaviors for this model.
      * @var array
      */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The applied validation rules.
-     * @var array
-     */
-    public $rules = [
-        'name' => 'required',
+    public $implement = [
+        '@RainLab.Translate.Behaviors.TranslatableModel'
     ];
 
     /**
-     * Attributes that support translation, if available.
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_order_states';
+
+    /**
+     * The translatable attributes of this model.
      * @var array
      */
     public $translatable = [
@@ -64,7 +52,34 @@ class OrderState extends Model
     ];
 
     /**
-     * Implement hasMany relationships.
+     * The validation rules for the single attributes.
+     * @var array
+     */
+    public $rules = [
+        'name'          => 'required',
+        'is_enabled'    => 'nullable|boolean'
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
+    public $fillable = [
+        'name',
+        'is_enabled',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    public $casts = [
+        'is_enabled'    => 'boolean',
+        'deleted_at'    => 'datetime',
+    ];
+
+    /**
+     * The hasMany relationships of this model.
      * @var array
      */
     public $hasMany = [
@@ -81,5 +96,14 @@ class OrderState extends Model
         return array_map(function (string $val) {
             return Lang::get($val);
         }, static::$availableFlagOptions);
+    }
+
+    /**
+     * Custom scope to retrieve only enabled taxes.
+     * @return mixed
+     */
+    public function scopeEnabled($query)
+    {
+        return $query->where('is_enabled', 1);
     }
 }

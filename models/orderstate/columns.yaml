@@ -16,6 +16,10 @@ columns:
         label: 'offline.mall::lang.order_states.flag'
         type: partial
         path: $/offline/mall/models/orderstate/_flag.htm
+    is_enabled:
+        label: 'offline.mall::lang.order_state_settings.is_enabled'
+        type: switch
+        searchable: true
     created_at:
         label: 'offline.mall::lang.common.created_at'
         type: datetime

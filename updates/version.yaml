@@ -484,9 +484,11 @@ v3.1.0:
     - 'Added new enabled-state to taxes + minor changes.'
     - 'Added new enabled-state to payment methods + minor changes.'
     - 'Added new enabled-state to shipping methods + minor changes.'
+    - 'Added new enabled-state to order states + minor changes.'
     - 'Added a new HasDefault database model trait.'
     - 'Increase PHP requirement from 7.2 to 7.4.'
     - 'Replaced old ReorderController behavior with ListController configuration.'
+    - 'Removed legacy v1 code.'
     - 'Fixed missing translation strings.'
     - 030_01-update_system_plugin_history.php
     - 030_02-alter_offline_mall_currencies.php
@@ -494,3 +496,4 @@ v3.1.0:
     - 030_04-alter_offline_mall_taxes.php
     - 030_05-alter_offline_mall_payment_methods.php
     - 030_06-alter_offline_mall_shipping_methods.php
+    - 030_07-alter_offline_mall_order_states.php
