@@ -4,9 +4,8 @@
 .phpunit.result.cache
 .vscode
 composer.lock
-docs/.vuepress/dist
-docs/.vitepress/cache
-docs/.vitepress/dist
+resources/docs/.vitepress/cache
+resources/docs/.vitepress/dist
 nbproject
 node_modules
 package-lock.json
