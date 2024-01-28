@@ -6,6 +6,13 @@ export default defineConfig({
     description: "The all-inclusive e-commerce solution for OctoberCMS.",
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
+        editLink: {
+            pattern: 'https://github.com/OFFLINE-GmbH/oc-mall-plugin/edit/develop/resources/docs/:path',
+            text: 'Edit this page on GitHub'
+        },
+        lastUpdated: {
+            text: 'Last updated:'
+        },
         nav: [
             { text: 'Home', link: '/' },
             { text: 'Guide', link: '/guide/' },

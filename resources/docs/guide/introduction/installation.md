@@ -1,57 +1,92 @@
 ---
-sidebarDepth: 3
-next: /getting-started/theme-setup
+title: Installation
+editLink: true
 ---
 
-# Getting started
+# Installation
 
-## Installation
+**Mall** can be found on the official [October CMS Marketplace](https://octobercms.com/plugin/offline-mall). 
 
-The plugin can be found on the official [October CMS Marketplace](https://octobercms.com/plugin/offline-mall). You 
-can install it via the Projects feature of the Marketplace itself or via your installation's backend settings.
 
-The `OFFLINE.Mall` plugin depends on `RainLab.User`, `RainLab.Location`
-and `RainLab.Translate`.
+## Using Marketplace
 
-The easiest way to get you started is by using the command line:
+The easiest way to install **Mall** is via the official Marketplace. There you can add the plugin to 
+your project and install it by executing the following artisan command in the root directory of your 
+website:
 
-```bash
-composer require \
-   rainlab/user-plugin \
-   rainlab/location-plugin \
-   rainlab/translate-plugin \
-   offline/oc-mall-plugin
+```sh
+php artisan project:sync
 ```
 
-If you plan to use our [demo theme](https://github.com/OFFLINE-GmbH/oc-mall-theme) make sure to also
- install `rainlab/pages-plugin` and `offline/oc-site-search-plugin`. These are dependencies of the demo theme, not the plugin itself.
-
-```bash
-# For the demo theme only!
-composer require \
-    rainlab/pages-plugin \
-    offline/oc-site-search-plugin
-```   
-
-## Optional packages
-
-For certain features of the plugin, you need to install additional composer packages
-to make everything work. If you use one of the following features, install the
-required packages using composer:
-
-| Feature | Package |
-| ------- | ------- |
-| Google Merchant Feed Integration | `vitalybaev/google-merchant-feed` |
-| PostFinance Payments | `bummzack/omnipay-postfinance` |
-| File based index <br>(alternative index if you have an older MySQL version) | `offline/jsonq tmarois/filebase` |
+During this installation, all dependencies are downloaded and installed automatically.
 
 
+## Manual Installation
 
-### Check your installation
+You can install **Mall** also manually like any other OctoberCMS plugin. However, make sure that you 
+install the dependencies up-front. Visit the root directory of your OctoberCMS website and execute 
+the following commands
 
-After the plugin has been successfully installed you can run the `mall:check` command to validate your installation. 
+```sh
+php artisan plugin:install RainLab.User
+php artisan plugin:install RainLab.Location
+php artisan plugin:install RainLab.Translate
+php artisan plugin:install OFFLINE.Mall
+```
 
-```bash
+You can also use composer to install the plugins, however, keep in mind that you've to install 
+and migrate the dependent packages first before installing and migrating Mall itself.
+
+```sh
+composer require rainlab/user-plugin
+composer require rainlab/location-plugin
+composer require rainlab/translate-plugin
+```
+
+```sh
+php artisan october:migrate
+```
+
+```sh
+composer require offline/oc-mall-plugin
+```
+
+```sh
+php artisan october:migrate
+```
+
+Both ways will automatically install all composer packages required by the **Mall** plugin, at least 
+on OctoberCMS v3 installations. 
+
+
+## Optional Dependencies
+
+Certain features of the **Mall** plugin requires you to install additional composer packages to 
+make everything work. 
+
+| Feature                      | Package |
+| ---------------------------- | ------- |
+| File-Based Index             | [`offline/jsonq`](https://packagist.org/packages/offline/jsonq)<br />[`tmarois/filebase`](https://packagist.org/packages/tmarois/filebase) |
+| Google Merchant Feed         | [`vitalybaev/google-merchant-feed`](https://packagist.org/packages/vitalybaev/google-merchant-feed) |
+| PostFinance Payment Provider | [`bummzack/omnipay-postfinance`](https://packagist.org/packages/bummzack/omnipay-postfinance) |
+
+
+Simple use the following command in the root directory of your OctoberCMS website to install the 
+desired package.
+
+```sh
+composer require <$package_name>
+```
+
+## Check your Installation
+
+After you successfully installed all plugins and packages, you can run the `mall:check` artisan 
+command to validate your installation. 
+
+**Don't panic!** After the initial installation there will be some items that are marked as FAIL. 
+This is because we didn't configure the plugin yet.
+
+```sh
 php artisan mall:check
 ```
 
@@ -59,48 +94,59 @@ php artisan mall:check
 You can run this command at any time in the future to make sure everything is set up correctly.
 :::
 
-**Don't panic!** After the initial installation there will be some items that are marked as `FAIL`. This is because 
-we didn't configure the plugin yet.  
 
-## Demo data
+## Seed initial data
 
-To get a feeling for how `oc-mall` works, you can run the following command to pre-populate your installation with 
-demo data. 
+Since version 3.1, **Mall** no longer inserts any data automatically during the installation. You 
+can use the following command to seed the initial data, as happened before.
 
-```bash
-php artisan mall:seed-demo
+```sh
+php artisan plugin:seed OFFLINE.Mall OFFLINE\Mall\Updates\Seeders\MallDatabaseSeeder
 ```
 
-::: warning
-This will erase all shop data and reset all settings! Do not run this command if you have already configured your 
-installation. 
-:::
+However, we **highly recommend** using the following command instead, which allows you to customize 
+the desired data.
 
-You can always revert back to a blank installation by running
-
-```bash
-php artisan plugin:refresh offline.mall
+```sh
+php artisan mall:seed
 ```
 
-## Demo theme
-
-To make getting started with `oc-mall `as easy as possible, you can find a demo implementation of a shop
-theme on GitHub: [https://github.com/OFFLINE-GmbH/oc-mall-theme](https://github.com/OFFLINE-GmbH/oc-mall-theme)
-
-::: warning
-If you use the demo theme you should still apply the steps mentioned in the "Configuration" section.
+::: danger
+Please note that this command **deletes** all existing store data and resets all setting. You should 
+therefore not run this command on an already configured installations.
 :::
 
-* <input type="checkbox"> Simply clone the theme to `<your installation>/themes/mall` and select it as your active theme.
+You can also simple reset the whole **Mall** installation by running the following command.
 
-* <input type="checkbox"> The demo theme requires `OFFLINE.SiteSearch` and `RainLab.Pages` to be installed. Make sure 
-these plugins are available as well.
+```sh
+php artisan plugin:refresh OFFLINE.Mall
+```
 
-If you want to start with a blank slate just follow the instructions on this and the [Theme Setup](./theme-setup.md) 
-page to get everything up and running.
- 
+
+## Setup Demo-Theme
+
+We also provide a simple demonstration theme to make getting started with our **Mall** plugin as 
+easy as possible. You can find this theme on the official [October CMS Marketplace](https://octobercms.com/theme/offline-oc-mall-theme) 
+as well as on [GitHub](https://github.com/OFFLINE-GmbH/oc-mall-theme).
+
+To install the theme, make sure you've installed the dependent packages first
+
+```sh
+php artisan plugin:install RainLab.Pages
+php artisan plugin:install OFFLINE.SiteSearch
+```
+
+After that, you can download and extract the theme inside the `themes/mala` folder of your 
+OctoberCMS website and select it as your active theme.
+
+
+
+
+
 
 ## Configuration
+
+_WiP_
 
 Once your installation is complete, follow the configuration steps below.
 
@@ -165,3 +211,10 @@ Visit `Backend settings -> Mall: General -> Taxes`. Here you find a list of all 
 Create, edit or delete them as you need. 
 
 You can find detailed documentation on taxes in the [Taxes Section](../digging-deeper/taxes.md).
+
+<style module>
+table {
+    width: 100%;
+    disable: table;
+}
+</style>

@@ -17,14 +17,14 @@
         }
     ],
     "require": {
-        "barryvdh/laravel-dompdf": "^0.9|^1.0|^2.0",
+        "barryvdh/laravel-dompdf": "^1.0|^2.0",
         "composer/installers": "~1.0",
         "hashids/hashids": "^5.0",
         "league/omnipay": "^3.2",
         "omnipay/paypal": "^3.0",
         "omnipay/stripe": "^3.0",
         "rainlab/user-plugin": "^1.6|^2.0",
-        "rainlab/location-plugin": "^1.1.5",
+        "rainlab/location-plugin": "^1.2",
         "rainlab/translate-plugin": "^1.9|^2.0"
     },
     "suggest": {
@@ -39,7 +39,6 @@
         "mockery/mockery": "^1.6",
         "phpmd/phpmd": "^2.6",
         "phpunit/phpunit": "^8.5|^9.0",
-        "pestphp/pest": "^1.23",
         "squizlabs/php_codesniffer": "*"
     },
     "scripts": {
