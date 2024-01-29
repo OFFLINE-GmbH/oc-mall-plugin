@@ -37,13 +37,13 @@ of our demonstration theme for some guidance.
 
 ### Components
 
-Mall requires at east 2 components
+The **Mall** plugin relies on 2 components that ensure the basic functionality of the environment:
 
 1. The `[mallDependencies]` component includes the most-basic required front-end assets. You need to 
 add the component within the `ini` configuration section of your theme and include it with the 
 familiar TWIG-Syntax inside the `<head>` area of your layout.
-2. The `[session]` component, provided by the RainLab.Users plugin, ensures that the user remains 
-logged in while browsing your store. It only must be included within the `init` section.
+2. The `[session]` component, provided by the *RainLab.Users* plugin, ensures that the user remains 
+logged in while browsing your store. It only must be included within the `ini` section.
 
 ```ini{3,4}
 description = "Default Layout"
@@ -63,7 +63,7 @@ description = "Default Layout"
 <!DOCTYPE html>
 <html>
 <head>  // [!code focus]
-    <!-- ... -->// [!code focus]
+    <!-- ... -->
     {% component 'mallDependencies' %}  // [!code focus]
 </head>  // [!code focus]
 <body>
@@ -108,68 +108,46 @@ The **Mall** plugin expects some predefined pages from your theme to handle the 
 These pages are usually recognized automatically, but can be selected in the backend settings page,
 under `Mall: General` -> `Configuration`.
 
-The following pages are required for this, of course you can name them as you please.
+The following pages represent the minimum requirement to ensure a complete implementation of the 
+**Mall** plugins. Of course, you're free to change and rename them as you please, just make sure 
+to keep the structure of the `url`parameter.
 
-- `product.htm` - Single Product
-    - URL scheme: `/product/:slug/:variant?`
-- `category.htm` - Category
-    - URL scheme: `/category/:slug*`
-- `address.htm` - Configure Customer Address
-    - URL scheme: `/address/:address?/:redirect?/:set?`
-- `checkout.htm` - (Quick) Checkout
-    - URL scheme: `/checkout/:step?`
-- `myaccount.htm` - Customer Account
-    - URL scheme: `/account/:page?`
-- `cart.htm` - Current Cart
-    - URL scheme: `/cart`
-- `login.htm` - User Login Page
-    - URL scheme: `/login`
+- [`product.htm`](#product-htm) - Single Product
+- [`category.htm`](#category-htm) - Category
+- [`cart.htm`](#cart-htm) - Current Cart
+- [`checkout.htm`](#checkout-htm) - (Quick) Checkout
+- [`myaccount.htm`](#myaccount-htm) - Customer Account
+- [`address.htm`](#address-htm) - Configure Customer Address
+- [`login.htm`](#login-htm) - User Login Page
 
-
-
-
-_WiP_
-
-
----------------
-
-## Pages
-
-In this section you can find a minimal demo implementation of each CMS page `oc-mall` needs.
-
-You are free to change them as you wish. Just make sure to keep the required `url` parameters.
-
-::: tip
-To get started quickly simply copy and paste the markup to the respective cms page file.
-:::
 
 ### product.htm
 
-The product page displays a single product using the [Product component](../components/product.md).
+The product page displays a single product using the [`Product` component](/guide/components/product).
 
-
-```twig
-title = "Product"
+```ini
 url = "/product/:slug/:variant?"
+title = "Product"
 layout = "default"
 
 [product]
 product = ":slug"
 variant = ":slug"
-==
+```
+
+```twig
 {% component 'product' %}
-``` 
+```
 
 ### category.htm
 
-The category page displays all products in a category using the [Products component](../components/products.md). The 
-products can be filtered using the [ProductsFilter component](../components/products-filter.md).
+The category page displays all products in a category using the [`Products` component](/guide/components/products). 
+The products can be additionally filtered using the [`ProductsFilter` component](/guide/components/products-filter).
 
-```twig
-title = "Category"
+```ini
 url = "/category/:slug*"
+title = "Category"
 layout = "default"
-is_hidden = 0
 
 [products]
 category = ":slug"
@@ -181,7 +159,9 @@ perPage = 9
 [productsFilter]
 category = ":slug"
 showPriceFilter = 1
-==
+```
+
+```twig
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-4">
@@ -193,21 +173,22 @@ showPriceFilter = 1
         </div>
     </div>
 </div>
-``` 
+```
 
 ### cart.htm
 
-The cart displays the cart to the user using the [Cart component](../components/cart.md). 
+This page displays the cart of the current user or guest using the [`Cart` component](/guide/components/cart). 
 
-```twig
-title = "Cart"
+```ini
 url = "/cart"
+title = "Cart"
 layout = "default"
-is_hidden = 0
 
 [cart]
 showTaxes = 0
-==
+```
+
+```twig
 {% component 'cart' %}
 
 {% if cart.products.count > 0 %}
@@ -219,18 +200,21 @@ showTaxes = 0
 
 ### checkout.htm
 
-The checkout page hosts the complete checkout process. 
+The checkout page hosts the complete checkout process, using the [`Checkout` component](/guide/components/checkout). 
+The **Mall** plugin also provides an alternative version with the [`QuickCheckout` component](/guide/components/quick-checkout),
+which combines all steps directly on one single page.
 
-```twig
-title = "Checkout"
+```ini
 url = "/checkout/:step?"
+title = "Checkout"
 layout = "default"
-is_hidden = 0
 
 [signUp]
 [checkout]
 step = "{{ :step }}"
-==
+```
+
+```twig
 {% if not user %}
     {% component 'signUp' %}
 {% else %}
@@ -240,14 +224,14 @@ step = "{{ :step }}"
 
 ### myaccount.htm
 
-The my account page displays an account overview to the user using the
-[myAccount component](../components/my-account.md). 
+The my-account page displays an general account overview of the current logged-in user, using the 
+[`MyAccount` component](/guide/components/my-account). We also provide additional attributes to the 
+`session` component, provided by the _RainLab.User_ plugin.
 
-```twig
-title = "Account"
+```ini
 url = "/account/:page?"
+title = "Account"
 layout = "default"
-is_hidden = 0
 
 [session]
 security = "user"
@@ -255,20 +239,21 @@ redirect = "login"
 
 [myAccount]
 page = "{{ :page }}"
-==
+```
+
+```twig
 {% component 'myAccount' %}
 ``` 
 
 ### address.htm
 
-The address page displays an edit form for a user's address using the
-[AddressForm component](../components/address-form.md). 
+The address page displays an form for a specific address of the current logged-in user, using the 
+[`AddressForm` component](/guide/components/address-form). 
 
-```twig
-title = "Address"
+```ini
 url = "/address/:address?/:redirect?/:set?"
+title = "Address"
 layout = "default"
-is_hidden = 0
 
 [session]
 security = "user"
@@ -278,51 +263,32 @@ redirect = "home"
 address = "{{ :address }}"
 redirect = "{{ :redirect }}"
 set = "{{ :set }}"
-==
+```
+
+```twig
 {% component 'addressForm' %}
 ``` 
 
 ### login.htm
 
-The login form displays a signup form for unregistered users using the
-[signUp component](../components/sign-up.md). 
+The login form displays a sign-up form for guests using the [`signUp` component](/guide/components/sign-up).
 
-```twig
-title = "Login"
+```ini
 url = "/login"
+title = "Login"
 layout = "default"
-is_hidden = 0
 
 [signUp]
 redirect = "/account"
-==
+```
+
+```twig
 {% component 'signUp' %}
 ``` 
 
-## Take a look around
+## Finish Configuration
 
-At this point your shop is configured and set up correctly. 
+Everything settled up and working? Really? Execute `php artisan mall:check` again and see if the 
+plugin shares your opinion.
 
-::: tip
-Run `php artisan mall:check` again to make sure there are no problems left.
-:::
-
-::: tip
-In case you missed it: You can seed the shop with demo data.
-Visit the [Installation Page](./installation.md) to find out more.
-::: 
-
-If you don't have a navigation in your theme yet, simply visit some of
-these URLs to get a first impression of your new online store.
-
-
-::: tip INFO
-The following URLs only work if you copied the default URL structure.
-Adapt the links to your custom URLs if you made any changes.
-::: 
-
-* http://example.test/category/bikes
-* http://example.test/product/cruiser-1500
-* http://example.test/login
-* http://example.test/cart
-
+If yes, check out our [`Going Live advice`](/guide/usage/going-live) and enjoy selling!
