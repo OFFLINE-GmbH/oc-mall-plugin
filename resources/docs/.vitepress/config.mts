@@ -26,7 +26,7 @@ export default defineConfig({
                     items: [
                         { text: 'Getting Started', link: '/guide/' },
                         { text: 'Installation', link: '/guide/introduction/installation' },
-                        { text: 'Theme Setup', link: '/guide/introduction/theme-setup' }
+                        { text: 'Configuration', link: '/guide/introduction/configuration' }
                     ]
                 },
                 {
@@ -40,9 +40,9 @@ export default defineConfig({
                         { text: 'Reviews', link: '/guide/usage/reviews' },
                         { text: 'Services', link: '/guide/usage/services' },
                         { text: 'Currencies', link: '/guide/usage/currencies' },
-                        { text: 'Shipping Methods', link: '/guide/usage/shipping-methods' },
-                        { text: 'Payment Methods', link: '/guide/usage/payment' },
                         { text: 'Taxes', link: '/guide/usage/taxes' },
+                        { text: 'Payment Methods', link: '/guide/usage/payment-methods' },
+                        { text: 'Shipping Methods', link: '/guide/usage/shipping-methods' },
                         { text: 'Analytics', link: '/guide/usage/analytics' },
                         { text: 'Going Live', link: '/guide/usage/going-live' },
                     ]

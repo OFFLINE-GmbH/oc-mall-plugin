@@ -215,6 +215,6 @@ You can find detailed documentation on taxes in the [Taxes Section](../digging-d
 <style module>
 table {
     width: 100%;
-    disable: table;
+    display: table;
 }
 </style>

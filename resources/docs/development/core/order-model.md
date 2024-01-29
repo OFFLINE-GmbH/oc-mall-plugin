@@ -26,7 +26,7 @@ The `payment_hash` is presented to the shop admin on the orders backend page.
 Any payment instructions are by default rendered in the confirmation mails
 via the `payment_state` mail partial.
 
-See [Payment methods](./../digging-deeper/payments.md#specifying-payment-instructions)
+See [Payment methods](./../digging-deeper/payments-methods#specifying-payment-instructions)
  for further information on how to use payment instructions.
 
 ## Access pricing information
@@ -56,7 +56,7 @@ To download a PDF invoice for an Order, use the `getPDFInvoice` method to
 get a `Barryvdh\DomPDF\PDF` instance.
 
 Beware that only orders that have a [payment method with a
-valid `pdf_partial` assigned](./../digging-deeper/payments.md#pdf-invoices) will support this feature.
+valid `pdf_partial` assigned](./../digging-deeper/payments-methods#pdf-invoices) will support this feature.
 
 ```php
 $pdf = $order->getPDFInvoice();
