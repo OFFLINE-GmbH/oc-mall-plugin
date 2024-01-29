@@ -49,7 +49,7 @@ export default defineConfig({
                 },
                 {
                     text: 'Components',
-                    collapsed: false,
+                    collapsed: true,
                     items: [
                         { text: 'MallDependencies', link: '/guide/components/mall-dependencies' },
                         { text: 'Product', link: '/guide/components/product' },
