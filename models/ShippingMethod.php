@@ -66,6 +66,8 @@ class ShippingMethod extends Model
         'guaranteed_delivery_days',
         'price_includes_tax',
         'sort_order',
+        'is_default',
+        'is_enabled',
     ];
 
     /**

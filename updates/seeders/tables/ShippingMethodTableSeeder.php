@@ -14,31 +14,51 @@ class ShippingMethodTableSeeder extends Seeder
      */
     public function run()
     {
-        $method = new ShippingMethod();
-        $method->name = 'Default';
-        $method->sort_order = 1;
-        $method->is_default = 1;
-        $method->save();
+        $method = ShippingMethod::create([
+            'name'          => 'Standard',
+            'sort_order'    => 1,
+            'is_default'    => true,
+        ]);
+        $method->prices()->saveMany([
+            new Price([
+                'price'          => 10,
+                'currency_id'    => 1,
+                'priceable_type' => ShippingMethod::MORPH_KEY,
+            ]),
+            new Price([
+                'price'          => 12,
+                'currency_id'    => 1,
+                'priceable_type' => ShippingMethod::MORPH_KEY,
+            ]),
+            new Price([
+                'price'          => 15,
+                'currency_id'    => 1,
+                'priceable_type' => ShippingMethod::MORPH_KEY,
+            ])
+        ]);
 
-        (new Price([
-            'price'          => 10,
-            'currency_id'    => 1,
-            'priceable_type' => ShippingMethod::MORPH_KEY,
-            'priceable_id'   => $method->id,
-        ]))->save();
-
-        (new Price([
-            'price'          => 12,
-            'currency_id'    => 2,
-            'priceable_type' => ShippingMethod::MORPH_KEY,
-            'priceable_id'   => $method->id,
-        ]))->save();
-
-        (new Price([
-            'price'          => 15,
-            'currency_id'    => 3,
-            'priceable_type' => ShippingMethod::MORPH_KEY,
-            'priceable_id'   => $method->id,
-        ]))->save();
+        $method = ShippingMethod::create([
+            'name'                      => 'Express',
+            'sort_order'                => 1,
+            'is_default'                => false,
+            'guaranteed_delivery_days'  => 3
+        ]);
+        $method->prices()->saveMany([
+            new Price([
+                'price'          => 20,
+                'currency_id'    => 1,
+                'priceable_type' => ShippingMethod::MORPH_KEY,
+            ]),
+            new Price([
+                'price'          => 24,
+                'currency_id'    => 1,
+                'priceable_type' => ShippingMethod::MORPH_KEY,
+            ]),
+            new Price([
+                'price'          => 30,
+                'currency_id'    => 1,
+                'priceable_type' => ShippingMethod::MORPH_KEY,
+            ])
+        ]);
     }
 }

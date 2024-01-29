@@ -15,7 +15,7 @@ class CategoryTableSeeder extends Seeder
     {
         Category::create([
             'name' => 'Example category',
-            'slug' => 'example2',
+            'slug' => 'example',
         ]);
     }
 }

@@ -2,8 +2,24 @@
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use OFFLINE\Mall\Classes\Customer\AuthManager;
+use OFFLINE\Mall\Models\Address;
+use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\Customer;
+use OFFLINE\Mall\Models\CustomField;
+use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\CustomFieldValue;
+use OFFLINE\Mall\Models\Order;
+use OFFLINE\Mall\Models\OrderState;
+use OFFLINE\Mall\Models\PaymentMethod;
+use OFFLINE\Mall\Models\Price;
+use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ShippingMethod;
+use OFFLINE\Mall\Models\Tax;
+use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Tests\PluginTestCase;
+use RainLab\User\Facades\Auth;
 
 class CurrencyTest extends PluginTestCase
 {
@@ -14,13 +30,18 @@ class CurrencyTest extends PluginTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        app()->singleton('user.auth', function () {
+            return AuthManager::instance();
+        });
+        Auth::login(User::first());
     }
 
     /**
      * Check if Table-Seeder sets default currency correctly.
      * @return void
      */
-    public function testHasOneDefaultCurrency()
+    public function test_has_one_default_currency()
     {
         $cur = Currency::where('is_default', 1)->count();
         $this->assertEquals($cur, 1);
@@ -31,7 +52,7 @@ class CurrencyTest extends PluginTestCase
      * Only one currency can be the default currency.
      * @return void
      */
-    public function testOnlyOneDefaultCurrency()
+    public function test_only_one_default_currency()
     {
         $currency = Currency::where('is_default', 0)->first();
         $currency->is_default = true;
@@ -44,7 +65,7 @@ class CurrencyTest extends PluginTestCase
      * Disabled currencies cannot be the default currency.
      * @return void
      */
-    public function testDisabledCurrenciesCannotBeDefault()
+    public function test_disabled_currencies_cannot_be_default()
     {
         $currency = Currency::where('is_default', 0)->first();
         $currency->is_enabled = false;
@@ -61,7 +82,7 @@ class CurrencyTest extends PluginTestCase
      * Disabled currencies cannot be the default currency.
      * @return void
      */
-    public function testDisableDefaultCurrency()
+    public function test_disable_default_currency()
     {
         $currency = Currency::where('is_default', 1)->first();
         $currency->is_default = false;

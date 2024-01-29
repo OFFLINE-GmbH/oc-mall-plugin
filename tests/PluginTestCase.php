@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests;
 
@@ -12,6 +12,10 @@ class PluginTestCase extends \PluginTestCase
     use RefreshDatabase;
     use WithFaker;
 
+    /**
+     * Setup the test environment.
+     * @return void
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -26,6 +30,10 @@ class PluginTestCase extends \PluginTestCase
         });
     }
 
+    /**
+     * Tear down the test environment.
+     * @return void
+     */
     public function tearDown(): void
     {
         parent::tearDown();
