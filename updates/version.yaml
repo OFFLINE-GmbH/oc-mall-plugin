@@ -476,6 +476,8 @@ v3.0.29:
 v3.0.30:
     - 'Made order state flags easier to extend (thanks to @SamBrishes)'
 v3.1.0:
+    - '!!! PHP 8.0 is now required to run this plugin. General code cleanup (thanks to @SamBrishes)'
+v3.2.0:
     - '[NEXT] Feature Release - Work in Progress'
     - 'Added new navigation icons for catalogue and orders.'
     - 'Added new <grp>_<idx>_<action>_<name>.php migration file naming for an improved overview.'

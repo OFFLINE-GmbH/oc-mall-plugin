@@ -17,6 +17,7 @@
         }
     ],
     "require": {
+        "php": "^8.0",
         "barryvdh/laravel-dompdf": "^1.0|^2.0",
         "composer/installers": "~1.0",
         "hashids/hashids": "^5.0",
@@ -35,17 +36,9 @@
         "tmarois/filebase": "Required to use the file based index"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.23",
-        "mockery/mockery": "^1.6",
+        "squizlabs/php_codesniffer": "*",
         "phpmd/phpmd": "^2.6",
-        "phpunit/phpunit": "^8.5|^9.0",
-        "squizlabs/php_codesniffer": "*"
-    },
-    "scripts": {
-        "test": [
-            "Composer\\Config::disableProcessTimeout",
-            "../../../vendor/bin/phpunit ./tests --stop-on-failure --testdox"
-        ]
+        "mockery/mockery": "^1.0"
     },
     "config": {
         "allow-plugins": {
