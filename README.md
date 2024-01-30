@@ -29,19 +29,18 @@
 * Easily extendable with custom features
 * [Google Tag Manager and Google Merchant Center integrations](https://offline-gmbh.github.io/oc-mall-plugin/digging-deeper/analytics.html)
 
-#### Compatibility
-
-For October 1, use version 1.x of this plugin. For October 2+ use the latest version.
-
 #### Documentation
+
 The documentation of this plugin can be found here:
 [https://offline-gmbh.github.io/oc-mall-plugin/](https://offline-gmbh.github.io/oc-mall-plugin/)
 
 #### Requirements
 
-* PHP7.2+
-* October Build 444+
+* PHP 8.0
+* October 2.0+
 * For best performance use MySQL 5.7+ or MariaDB 10.2+
+
+There is a legacy 1.0 version of this plugin available that works with October 1.
 
 #### Demo
 
