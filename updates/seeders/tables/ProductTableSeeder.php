@@ -20,20 +20,20 @@ class ProductTableSeeder extends Seeder
             return;
         }
 
-        $product = new Product();
-        $product->name = 'Test';
-
-        $product->slug = 'test';
-        $product->stock = 20;
-        $product->save();
+        $product = Product::create([
+            'name' => 'Test',
+            'slug' => 'test',
+            'stock' => 20,
+            'published' => true,
+        ]);
         $product->price = ['CHF' => 20, 'EUR' => 30];
 
-        $product = new Product();
-        $product->name = 'Test 2';
-
-        $product->slug = 'test-2';
-        $product->stock = 90;
-        $product->save();
+        $product = Product::create([
+            'name' => 'Test 2',
+            'slug' => 'test-2',
+            'stock' => 90,
+            'published' => true,
+        ]);
         $product->price = ['CHF' => 30, 'EUR' => 40];
     }
 }

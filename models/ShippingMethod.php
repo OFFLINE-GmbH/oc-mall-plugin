@@ -274,9 +274,9 @@ class ShippingMethod extends Model
 
     /**
      * Get formatted price attribute.
-     * @return string
+     * @return null|string
      */
-    public function getPriceFormattedAttribute(): string
+    public function getPriceFormattedAttribute(): null|string
     {
         return $this->price()->string;
     }
