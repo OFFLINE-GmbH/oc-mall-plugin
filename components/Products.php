@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use ArrayAccess;
 use Flash;
@@ -352,7 +354,7 @@ class Products extends MallComponent
         // Every id that is not an int is a "ghosted" variant, with an id like
         // product-1. These ids have to be fetched separately. This enables us to
         // query variants and products that don't have any variants from the same index.
-        $itemIds  = array_filter($result->ids, 'is_int');
+        $itemIds  = array_map('intval', array_filter($result->ids, 'is_numeric'));
         $ghostIds = array_diff($result->ids, $itemIds);
 
         $models = $model->with($this->productIncludes())->find($itemIds);
@@ -366,8 +368,8 @@ class Products extends MallComponent
 
         // Insert the Ghost models back at their old position so the sort order remains.
         $resultSet = collect($result->ids)->map(function ($id) use ($models, $ghosts) {
-            return is_int($id)
-                ? $models->find($id)
+            return is_numeric($id)
+                ? $models->find(intval($id))
                 : $ghosts->find(str_replace('product-', '', $id));
         });
 
@@ -503,14 +505,17 @@ class Products extends MallComponent
      */
     private function handleDataLayer()
     {
-        if ( ! $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+        if (!$this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
             return;
         }
+
+        /** @var LengthAwarePaginator */
+        $items = $this->items;
 
         $dataLayer = [
             'ecommerce' => [
                 'currencyCode' => Currency::activeCurrency()->code,
-                'impressions'  => $this->items->map(function ($item, $index) {
+                'impressions'  => $items->map(function ($item, $index) {
                     $name    = $item instanceof Product ? $item->product : $item->product->name;
                     $variant = $item instanceof Product ? null : $item->name;
 

@@ -22,7 +22,7 @@ trait HashIds
      */
     public function decode($value)
     {
-        $value = app(Hasher::class)->decode($value);
+        $value = app(Hasher::class)->decode($value ?? '');
 
         return $value[0] ?? null;
     }
@@ -32,6 +32,6 @@ trait HashIds
      */
     public function encode($value)
     {
-        return app(Hasher::class)->encode($value);
+        return app(Hasher::class)->encode($value ?? '');
     }
 }

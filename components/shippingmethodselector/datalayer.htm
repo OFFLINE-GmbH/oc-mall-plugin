@@ -1,20 +1,4 @@
-{% if not url %}
-    <script>
-        $(function () {
-            window.dataLayerData = dataWithMethod({{ cart.shipping_method | json_encode | raw }})
-            $.subscribe('mall.cart.shippingMethodChanged', function (e, data) {
-                window.dataLayerData = dataWithMethod(data.method)
-            })
-
-            function dataWithMethod (method) {
-                var dl = {{ dataLayer | json_encode | raw }};
-                dl.ecommerce.checkout.actionField = {step: 2, method: method.name}
-                return dl
-            }
-        })
-    </script>
-    <div id="mall-datalayer"></div>
-{% else %}
+{% if url is defined and url != null %}
     <script>
         var redirect = function() {
             document.location = '{{ url }}'
@@ -24,4 +8,20 @@
 
         dataLayer.push(window.dataLayerData)
     </script>
+{% else %}
+    <script>
+        $(function () {
+            window.dataLayerData = dataWithMethod({{ cart.shipping_method|json_encode|raw }})
+            $.subscribe('mall.cart.shippingMethodChanged', function (e, data) {
+                window.dataLayerData = dataWithMethod(data.method)
+            })
+
+            function dataWithMethod (method) {
+                var dl = {{ dataLayer|json_encode|raw }};
+                dl.ecommerce.checkout.actionField = {step: 2, method: method.name}
+                return dl
+            }
+        })
+    </script>
+    <div id="mall-datalayer"></div>
 {% endif %}

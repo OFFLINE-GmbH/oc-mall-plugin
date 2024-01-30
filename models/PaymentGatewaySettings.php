@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Illuminate\Support\Collection;
 use Model;
+use Illuminate\Support\Collection;
 use October\Rain\Database\Traits\Encryptable;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
-use Session;
 
 class PaymentGatewaySettings extends Model
 {

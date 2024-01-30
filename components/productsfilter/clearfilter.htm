@@ -2,7 +2,7 @@
     <a class="js-mall-clear-filter"
        href="javascript:;"
        data-filter="{{ id }}"
-       style="{% if not filter[id] %}display: none{% endif %}">
-        {{ 'offline.mall::frontend.reset.filter' | trans }}
+       style="{% if not filter[id]|default(false) %}display: none{% endif %}">
+        {{ 'offline.mall::frontend.reset.filter'|trans }}
     </a>
 </div>

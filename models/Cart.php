@@ -1,10 +1,13 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Carbon\Carbon;
+namespace OFFLINE\Mall\Models;
+
 use DB;
 use Event;
-use Illuminate\Support\Collection;
 use Model;
+use Session;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
@@ -13,7 +16,6 @@ use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
 use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
 use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
 use OFFLINE\Mall\Classes\Traits\ShippingMethods;
-use Session;
 
 /**
  * @property TotalsCalculator totals

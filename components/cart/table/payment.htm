@@ -1,11 +1,11 @@
-{% if cart.payment_method_id != null and payment.totalPostTaxes > 0 %}
+{% if cart.payment_method_id|default(null) != null and payment.totalPostTaxes|default(0) > 0 %}
     <tr class="mall-cart__payment">
         <td></td>
         <td colspan="3">
-            {{ cart.payment_method.fee_label | default(cart.payment_method.name) }}
+            {{ cart.payment_method.fee_label|default(cart.payment_method.name) }}
         </td>
         <td class="text-right">
-            {{ payment.totalPostTaxes | money }}
+            {{ payment.totalPostTaxes|money }}
         </td>
     </tr>
 {% endif %}

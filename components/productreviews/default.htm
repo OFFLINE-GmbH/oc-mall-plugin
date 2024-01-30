@@ -1,9 +1,9 @@
 <div class="mall-product-reviews">
     <h3 class="mall-product-reviews__heading">
-        {{ 'offline.mall::frontend.reviews.heading' | trans }}
+        {{ 'offline.mall::frontend.reviews.heading'|trans }}
     </h3>
 
-    {% if __SELF__.allReviews.count > 0 %}
+    {% if __SELF__.allReviews.count|default(0) > 0 %}
         <div class="mall-product-reviews__info">
             {% partial __SELF__ ~ '::overall' %}
         </div>

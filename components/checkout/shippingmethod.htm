@@ -1,19 +1,19 @@
 <div class="mall-cart-summary__method-logo">
     {% if not __SELF__.cart.is_virtual %}
-        {% if __SELF__.cart.shipping_method.logo %}
-            <img src="{{ __SELF__.cart.shipping_method.logo.thumb(150, 'auto') }}" alt=""/>
+        {% if __SELF__.cart.shipping_method.logo|default(null) %}
+            <img src="{{ __SELF__.cart.shipping_method.logo.thumb(150, null) }}" alt=""/>
         {% else %}
             {{ __SELF__.cart.shipping_method.name }}
         {% endif %}
     {% else %}
-        <p>{{ 'offline.mall::lang.shipping_method.not_required_name' | trans }}</p>
+        <p>{{ 'offline.mall::lang.shipping_method.not_required_name'|trans }}</p>
     {% endif %}
 </div>
 
 {% if not __SELF__.cart.is_virtual %}
     <p class="mall-cart-summary__action">
         <a href="{{ __SELF__.stepUrl('shipping') }}">
-            {{ 'offline.mall::frontend.change' | trans }}
+            {{ 'offline.mall::frontend.change'|trans }}
         </a>
     </p>
 {% endif %}

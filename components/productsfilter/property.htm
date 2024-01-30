@@ -1,5 +1,5 @@
 {% set values = __SELF__.values[property.id] %}
-{% if values.count > 0 %}
+{% if values.count|default(0) > 0 %}
     <div class="mall-property">
         <div class="mall-property__label">
             <div>{{ property.name }}</div>
@@ -15,7 +15,7 @@
             id  = property.id
             slug = property.slug
             values = values
-            min = min
-            max = max %}
+            min = min|default()
+            max = max|default() %}
     </div>
 {% endif %}

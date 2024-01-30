@@ -21,12 +21,12 @@
                         <a href="javascript:;" data-request="onChangeDefaultBillingAddress"
                            data-request-data="id: '{{ address.hashId }}'" data-request-flash
                            class="mall-switcher__item {{ __SELF__.defaultBillingAddressId == address.id ? 'mall-switcher__item--active' }}">
-                            {{ 'offline.mall::frontend.billing_address' | trans }}
+                            {{ 'offline.mall::frontend.billing_address'|trans }}
                         </a>
                         <a href="javascript:;" data-request="onChangeDefaultShippingAddress"
                            data-request-data="id: '{{ address.hashId }}'" data-request-flash
                            class="mall-switcher__item {{ __SELF__.defaultShippingAddressId == address.id ? 'mall-switcher__item--active' }}">
-                            {{ 'offline.mall::frontend.shipping_address' | trans }}
+                            {{ 'offline.mall::frontend.shipping_address'|trans }}
                         </a>
                     </div>
                 </div>
@@ -34,13 +34,13 @@
             <td class="mall-address-list__table-actions">
                 <a href="{{ __SELF__.addressPage | page({address: address.hashId, redirect: 'account'}) }}"
                    class="mall-btn mall-btn--sm">
-                    {{ 'offline.mall::frontend.edit' | trans }}
+                    {{ 'offline.mall::frontend.edit'|trans }}
                 </a>
-                {% if __SELF__.addresses.count > 1 %}
+                {% if __SELF__.addresses.count|default(0) > 1 %}
                     <a href="javascript:;" data-request="onDelete" data-request-data="id: '{{ address.hashId }}'"
-                       data-request-confirm="{{ 'offline.mall::frontend.are_you_sure' | trans }}" data-request-flash
+                       data-request-confirm="{{ 'offline.mall::frontend.are_you_sure'|trans }}" data-request-flash
                        class="mall-btn mall-btn--sm">
-                        {{ 'offline.mall::frontend.delete' | trans }}
+                        {{ 'offline.mall::frontend.delete'|trans }}
                     </a>
                 {% endif %}
             </td>

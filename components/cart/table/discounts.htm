@@ -1,21 +1,21 @@
-{% for entry in discounts %}
+{% for entry in discounts|default([]) %}
     <tr class="mall-cart__discount">
         <td></td>
         <td colspan="3">
             {{ entry.discount.name }}
-            {% if entry.discount.code %}
+            {% if entry.discount.code|default(null) %}
                 ({{ entry.discount.code }})
                 <br>
                 <a href="javascript:;"
                    class="js-mall-remove-discount-code"
                    data-id="{{ entry.discount.hash_id }}"
                 >
-                    {{ 'offline.mall::frontend.remove' | trans }}
+                    {{ 'offline.mall::frontend.remove'|trans }}
                 </a>
             {% endif %}
         </td>
         <td class="text-right">
-            {{ entry.savings | money }}
+            {{ entry.savings|money }}
         </td>
     </tr>
 {% endfor %}

@@ -14,14 +14,14 @@
     </div>
     <aside class="mall-quick-checkout__cart-column">
         <h2 class="mall-quick-checkout__heading">
-            Your Cart
+            {{ 'offline.mall::frontend.checkout.your_cart'|trans }}
         </h2>
 
         <div class="mall-quick-checkout__cart">
             {% partial __SELF__ ~ '::cart' %}
         </div>
 
-        {% if __SELF__.cart.products.count > 0 %}
+        {% if __SELF__.cart.products.count|default(0) > 0 %}
             <div class="mall-signup-terms">
                 <label class="mall-checkbox">
                     <input class="js-mall-toggle-signup-terms"
@@ -38,7 +38,7 @@
 
             <div class="mall-quick-checkout__actions">
                 <button class="js-mall-checkout mall-btn-checkout mall-btn mall-btn--secondary">
-                    {{ 'offline.mall::frontend.checkout.checkout' | trans }}
+                    {{ 'offline.mall::frontend.checkout.checkout'|trans }}
                 </button>
             </div>
         {% endif %}

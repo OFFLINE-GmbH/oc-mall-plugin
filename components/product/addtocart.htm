@@ -1,18 +1,18 @@
 {% if not item.allow_out_of_stock_purchases %}
     <div class="mall-product__property-stock text-{{ stock > 0 ? 'green' : 'red' }}">
         {% if stock > 10 %}
-            {{ 'offline.mall::frontend.stock.many_available' | trans }}
+            {{ 'offline.mall::frontend.stock.many_available'|trans }}
         {% elseif stock > 0 %}
-            {{ 'offline.mall::frontend.stock.available' | transchoice(stock, {stock: stock}) }}
+            {{ 'offline.mall::frontend.stock.available'|transchoice(stock, {stock: stock}) }}
         {% else %}
-            {{ 'offline.mall::frontend.stock.unavailable' | trans }}
+            {{ 'offline.mall::frontend.stock.unavailable'|trans }}
         {% endif %}
     </div>
 {% endif %}
-{% if stock > 0 or item.allow_out_of_stock_purchases %}
+{% if stock|default(0) > 0 or item.allow_out_of_stock_purchases %}
     <div class="mall-product__add-to-cart-form">
         <div class="mall-form-control">
-            <label for="quantity">{{ 'offline.mall::frontend.quantity' | trans }}</label>
+            <label for="quantity">{{ 'offline.mall::frontend.quantity'|trans }}</label>
             <input type="number"
                    id="quantity"
                    class="mall-input"
@@ -21,7 +21,7 @@
             <div data-validate-for="quantity"></div>
         </div>
         <button type="submit" class="mall-add-to-cart-button" data-attach-loading>
-            {{ 'offline.mall::frontend.cart.add' | trans }}
+            {{ 'offline.mall::frontend.cart.add'|trans }}
         </button>
     </div>
 {% endif %}

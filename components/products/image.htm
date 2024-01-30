@@ -1,1 +1,3 @@
-<img src="{{ item.image.thumb('auto', 240) }}" alt="{{ item.name }}"/>
+{% if item.image|default(null) %}
+    <img src="{{ item.image.thumb(null, 240) }}" alt="{{ item.name|default('') }}"/>
+{% endif %}

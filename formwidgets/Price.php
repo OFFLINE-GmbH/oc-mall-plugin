@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\FormWidgets;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 use October\Rain\Exception\ValidationException;
@@ -102,9 +104,9 @@ class Price extends FormWidgetBase
         $value = $this->getLoadValue();
         if ( ! $value) {
             return $this->value;
+        } else {
+            return $value->where('currency_id', $currency)->first()->decimal ?? false;
         }
-
-        return $value->where('currency_id', $currency)->first()->decimal ?? false;
     }
 
     public function getLoadValue()

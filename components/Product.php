@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
 use Auth;
-use DB;
 use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;

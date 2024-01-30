@@ -2,11 +2,14 @@
 
 namespace OFFLINE\Mall\Classes\Exceptions;
 
+use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\Variant;
+
 class OutOfStockException extends \RuntimeException
 {
     public $product;
 
-    public function __construct($product)
+    public function __construct(Product|Variant $product)
     {
         $this->product = $product;
         parent::__construct(

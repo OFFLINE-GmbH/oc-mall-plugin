@@ -1,13 +1,15 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Models;
+
+use Model;
+use RuntimeException;
+use Session;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Model;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
-use RuntimeException;
-use Session;
 
 class Currency extends Model
 {

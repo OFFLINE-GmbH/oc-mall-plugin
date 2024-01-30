@@ -1,11 +1,14 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Auth;
+use Validator;
 use Illuminate\Support\Collection;
+use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
-use Validator;
 
 /**
  * The ShippingMethodSelector component displays available shipping

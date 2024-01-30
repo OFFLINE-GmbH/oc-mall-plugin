@@ -1,8 +1,10 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Illuminate\Support\Facades\Cache;
+namespace OFFLINE\Mall\Models;
+
 use Model;
 use Schema;
+use Illuminate\Support\Facades\Cache;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 

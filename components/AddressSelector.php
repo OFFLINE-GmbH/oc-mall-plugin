@@ -1,5 +1,8 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Components;
+
+use Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -9,7 +12,6 @@ use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\User\Facades\Auth;
-use Validator;
 
 /**
  * The AddressSelector component displays a dropdown

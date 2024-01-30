@@ -1,9 +1,12 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Carbon\Carbon;
+namespace OFFLINE\Mall\Models;
+
 use Cookie;
-use Illuminate\Support\Collection;
 use Model;
+use Session;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
@@ -13,7 +16,6 @@ use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Traits\ShippingMethods;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User;
-use Session;
 
 class Wishlist extends Model
 {

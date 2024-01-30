@@ -1,9 +1,11 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
-use BackendMenu;
 use Illuminate\Support\Facades\Cache;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Notification;

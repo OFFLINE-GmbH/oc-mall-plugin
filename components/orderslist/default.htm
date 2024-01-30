@@ -1,5 +1,5 @@
 <div class="mall-orders-list">
-    {% if __SELF__.orders.count > 0 %}
+    {% if __SELF__.orders.count|default(0) > 0 %}
         {% partial __SELF__ ~ '::orderlist' orders=__SELF__.orders %}
     {% else %}
         {% partial __SELF__ ~ '::empty' %}

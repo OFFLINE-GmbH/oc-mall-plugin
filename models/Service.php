@@ -1,11 +1,13 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Models;
+
+use DB;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\SortableRelation;
-use DB;
 
 class Service extends Model
 {

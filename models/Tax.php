@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Illuminate\Support\Facades\Cache;
+namespace OFFLINE\Mall\Models;
+
 use Model;
+use Illuminate\Support\Facades\Cache;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Database\Collection;
 use Rainlab\Location\Models\Country as RainLabCountry;

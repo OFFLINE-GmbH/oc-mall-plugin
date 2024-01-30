@@ -1,5 +1,5 @@
 {% if __SELF__.showTaxes %}
-    {% for entry in totals.taxes %}
+    {% for entry in totals.taxes|default([]) %}
         <tr class="mall-cart__taxes mall-cart__taxes--{{ loop.index }}">
             <td colspan="2"></td>
             <td class="text-right">
@@ -9,20 +9,20 @@
                 {{ entry.tax.percentage }} %
             </td>
             <td class="text-right">
-                {{ entry.total | money }}
+                {{ entry.total|money }}
             </td>
         </tr>
     {% endfor %}
 
-    {% if totals.taxes.count > 1 %}
+    {% if totals.taxes.count|default(0) > 1 %}
         <tr class="mall-cart__taxes-total">
             <td colspan="2"></td>
             <td class="text-right">
-                {{ 'offline.mall::frontend.total.taxes' | trans }}
+                {{ 'offline.mall::frontend.total.taxes'|trans }}
             </td>
             <td></td>
             <td class="text-right">
-                {{ totals.totalTaxes | money }}
+                {{ totals.totalTaxes|money }}
             </td>
         </tr>
     {% endif %}

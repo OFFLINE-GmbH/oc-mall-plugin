@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Registration;
 
 use Barryvdh\DomPDF\Facade;
 use Barryvdh\DomPDF\PDF;
+use DB;
 use Dompdf\Dompdf;
 use Hashids\Hashids;
 use Illuminate\Foundation\AliasLoader;
@@ -26,6 +27,7 @@ use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\GeneralSettings;
+use PDO;
 
 trait BootServiceContainer
 {
@@ -61,15 +63,30 @@ trait BootServiceContainer
                 if ($driver === null) {
                     GeneralSettings::set('index_driver', 'database');
                 }
-
                 return $driver;
             });
             try {
                 if ($driver === 'filesystem') {
                     return new Filebase();
+                } else {
+                    $pdo = DB::connection()->getPdo();
+                    if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+                        $pdo->sqliteCreateFunction('JSON_CONTAINS', function ($json, $val, $path = null) {
+                            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                            $val = trim($val, '"');
+                            if (strpos($val, '[') == 0 && strrpos($val, ']') == strlen($val)-1) {
+                                $val = json_decode($val, true)[0];
+                            }
+                            if ($path) {
+                                return $array[$path] == $val;
+                            } else {
+                                return in_array($val, $array, true);
+                            }
+                        });
+                    }
+                    return new MySQL();
                 }
 
-                return new MySQL();
             } catch (IndexNotSupportedException $e) {
                 logger()->error(
                     '[OFFLINE.Mall] Your database does not support JSON data. Your index driver has been switched to "Filesystem". Update your database to make use of database indexing.'

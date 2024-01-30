@@ -27,7 +27,7 @@
             });
 
             function initStripe() {
-                var stripe = Stripe('{{ cart.payment_method.settings.stripe_publishable_key }}');
+                var stripe = Stripe('{{ cart.payment_method.settings.stripe_publishable_key|default('') }}');
                 var elements = stripe.elements();
 
                 var card = elements.create('card');

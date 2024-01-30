@@ -1,9 +1,10 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Cache;
+namespace OFFLINE\Mall\Models;
+
 use DB;
-use Illuminate\Support\Facades\Queue;
 use Model;
+use Illuminate\Support\Facades\Queue;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;

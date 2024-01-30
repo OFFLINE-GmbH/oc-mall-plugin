@@ -1,5 +1,5 @@
 <div class="mall-wishlists-manager">
-    {% if __SELF__.items.count > 0 %}
+    {% if __SELF__.items.count|default(0) > 0 %}
         <div class="mall-wishlists-manager__lists">
             <div class="mall-wishlists">
                 {% partial __SELF__ ~ '::list' items=__SELF__.items %}

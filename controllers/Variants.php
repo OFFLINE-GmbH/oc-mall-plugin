@@ -1,9 +1,10 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Controllers;
 
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
-use BackendMenu;
 
 class Variants extends Controller
 {

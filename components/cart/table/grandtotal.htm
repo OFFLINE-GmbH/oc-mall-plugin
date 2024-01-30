@@ -2,16 +2,16 @@
     <td></td>
     <td colspan="3">
         {% if __SELF__.showShipping %}
-            {{ 'offline.mall::frontend.grand_total' | trans }}
+            {{ 'offline.mall::frontend.grand_total'|trans }}
         {% else %}
-            {{ 'offline.mall::frontend.total' | trans }}
+            {{ 'offline.mall::frontend.total'|trans }}
         {% endif %}
     </td>
     <td class="text-right">
         {% if __SELF__.showShipping %}
-            {{ totals.totalPostTaxes | money }}
+            {{ totals.totalPostTaxes|money }}
         {% else %}
-            {{ totals.productPostTaxes | money }}
+            {{ totals.productPostTaxes|money }}
         {% endif %}
     </td>
 </tr>

@@ -1,20 +1,20 @@
 <header class="mall-quick-checkout__collapsible-header">
-    <h2 class="mall-quick-checkout__heading">Customer information</h2>
+    <h2 class="mall-quick-checkout__heading">{{ 'offline.mall::frontend.customer_information'|trans }}</h2>
     <div class="mall-quick-checkout__collapsible-summary">
-        {{ __SELF__.cart.shipping_address.one_liner }}
+        {{ __SELF__.cart.shipping_address.one_liner|default(null) }}
     </div>
 </header>
 <section class="mall-quick-checkout__collapsible-content">
     <div class="mall-quick-checkout__collapsible-inner">
-        {% if __SELF__.user %}
+        {% if __SELF__.user|default(null) %}
             <div class="mall-cart-summary">
                 <div class="mall-cart-summary__info mall-cart-summary__info--two-columns">
                     <div class="mall-cart-summary__billing-address">
-                        <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.billing_address' | trans }}</h4>
+                        <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.billing_address'|trans }}</h4>
                         {% component 'billingAddressSelector' %}
                     </div>
                     <div class="mall-cart-summary__shipping-address">
-                        <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.shipping_address' | trans }}</h4>
+                        <h4 class="mall-cart-summary__heading">{{ 'offline.mall::frontend.shipping_address'|trans }}</h4>
                         {% component 'shippingAddressSelector' %}
                     </div>
                 </div>

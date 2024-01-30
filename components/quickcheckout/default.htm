@@ -1,4 +1,6 @@
-{% partial __SELF__ ~ ('::steps/' ~ __SELF__.step) %}
+{% if __SELF__.step %}
+    {% partial __SELF__ ~ ('::steps/' ~ __SELF__.step) %}
+{% endif %}
 
 {% partial __SELF__ ~ '::overlay' %}
 {% partial __SELF__ ~ '::scripts' %}

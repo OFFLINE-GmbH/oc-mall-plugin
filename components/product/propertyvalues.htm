@@ -1,12 +1,12 @@
 <div class="mall-product__properties">
-    {% for entry in item.grouped_properties %}
+    {% for entry in item.grouped_properties|default([]) %}
         <h3 class="mall-product__properties-heading">{{ entry.group.name }}</h3>
         <div class="mall-three-columns">
-            {% for value in entry.values %}
+            {% for value in entry.values|default([]) %}
                 <div class="mall-column">
                     <p>
-                        <strong>{{ value.property.name }}</strong><br>
-                        {{ value.display_value | raw }} {{ value.property.unit }}
+                        <strong>{{ value.property.name }}</strong><br />
+                        {{ value.display_value|raw }} {{ value.property.unit }}
                     </p>
                 </div>
             {% endfor %}

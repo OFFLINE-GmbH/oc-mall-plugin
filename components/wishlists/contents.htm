@@ -7,11 +7,11 @@
                 data-attach-loading
                 data-request-flash
                 data-request-validate>
-            {{ 'offline.mall::frontend.wishlist.rename' | trans }}
+            {{ 'offline.mall::frontend.wishlist.rename'|trans }}
         </button>
         <button class="mall-btn mall-wishlists-manager__action-button"
                 data-request="onDelete"
-                data-request-confirm="{{ 'offline.mall::frontend.confirm' | trans }}"
+                data-request-confirm="{{ 'offline.mall::frontend.confirm'|trans }}"
                 data-attach-loading
                 data-request-flash
                 data-request-validate>
@@ -27,13 +27,13 @@
     {% partial __SELF__ ~ '::cart' %}
 </div>
 
-{% if __SELF__.currentItem.items.count > 0 %}
+{% if __SELF__.currentItem.items.count|default(0) > 0 %}
 <div class="mall-wishlists-manager__actions">
-    {% if __SELF__.allowPDFDownload %}
+    {% if __SELF__.allowPDFDownload|default(false) %}
     <a class="mall-btn mall-btn--default"
        href="?download={{ __SELF__.currentItem.hashId }}"
         target="_blank">
-        {{ 'offline.mall::frontend.wishlists.pdf_download' | trans }}
+        {{ 'offline.mall::frontend.wishlists.pdf_download'|trans }}
     </a>
     {% endif %}
     <button class="mall-btn mall-btn--primary"
@@ -42,7 +42,7 @@
             data-attach-loading
             data-request-flash
             data-request-validate>
-        {{ 'offline.mall::frontend.wishlists.addtocart' | trans }}
+        {{ 'offline.mall::frontend.wishlists.addtocart'|trans }}
     </button>
 </div>
 {% endif %}
@@ -61,7 +61,7 @@
             $.request('{{ __SELF__ }}::onRemove', {
                 data: {item_id: this.dataset.id, id: '{{ __SELF__.currentItem.hashId }}'},
                 loading: $.oc.stripeLoadIndicator,
-                confirm: '{{ 'offline.mall::frontend.confirm' | trans }}',
+                confirm: '{{ 'offline.mall::frontend.confirm'|trans }}',
                 success: function (data) {
                     this.success(data)
                     $.publish('mall.wishlist.productRemoved', data);

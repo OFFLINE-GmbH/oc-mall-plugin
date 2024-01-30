@@ -1,7 +1,7 @@
 {% for wishlist in items %}
     {% partial __SELF__ ~ '::item'
         name=wishlist.name
-        count=wishlist.items.count
+        count=wishlist.items.count|default(0)
         total=wishlist.totals.totalPostTaxes
         list_id=wishlist.hash_id
         product_id=__SELF__.property('product')

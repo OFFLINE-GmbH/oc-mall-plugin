@@ -3,20 +3,20 @@
       data-request-success="window.Mall.Modal.removeClass('mall-modal--visible'); $.publish('mall.cart.productAdded', data);"
       data-request-validate
       data-request-flash>
-    <h3>{{ 'offline.mall::frontend.services.modal_title' | trans }}</h3>
+    <h3>{{ 'offline.mall::frontend.services.modal_title'|trans }}</h3>
 
     <div class="mall-product-services">
-        {% for service in services %}
+        {% for service in services|default([]) %}
         <div class="mall-product-service">
             <h4 class="mall-product-service__name">{{ service.name }}</h4>
             {% if service.description %}
             <div class="mall-product-service__description">
-                {{ html_clean(service.description | raw) }}
+                {{ html_clean(service.description|raw) }}
             </div>
             {% endif %}
             {% if service.pivot.required %}
                 <div class="mall-product-service__required visible" data-validate-for="service.{{ service.id }}">
-                    {{ 'offline.mall::frontend.services.required' | trans }}
+                    {{ 'offline.mall::frontend.services.required'|trans }}
                 </div>
             {% endif %}
             <div class="mall-product-service-options">
@@ -26,7 +26,7 @@
                         <input type="radio" name="service[{{ service.id }}][]" value="" id="service-none-{{ service.id }}" checked>
                     </span>
                     <span class="mall-product-service-option__name">
-                        {{ 'offline.mall::frontend.services.none' | trans }}
+                        {{ 'offline.mall::frontend.services.none'|trans }}
                     </span>
                 </label>
                 {% endif %}
@@ -39,11 +39,11 @@
                             {{ option.name }}
                         </span>
                         <span class="mall-product-service-option__price">
-                            {{ html_clean(option.price().string | raw) }}
+                            {{ html_clean(option.price().string|raw) }}
                         </span>
                         {% if option.description %}
                             <span class="mall-product-service-option__description">
-                                {{ html_clean(option.description | raw) }}
+                                {{ html_clean(option.description|raw) }}
                             </span>
                         {% endif %}
                     </label>
@@ -58,17 +58,16 @@
     <div class="mall-modal__actions">
         <div>
             <a href="javascript:;" onclick="window.Mall.Modal.removeClass('mall-modal--visible');" class="mall-btn">
-                {{ 'offline.mall::frontend.cancel' | trans }}
+                {{ 'offline.mall::frontend.cancel'|trans }}
             </a>
         </div>
         <div>
         <button class="mall-btn mall-btn--primary" data-attach-loading>
-            {{ 'offline.mall::frontend.cart.add' | trans }}
+            {{ 'offline.mall::frontend.cart.add'|trans }}
         </button>
         </div>
     </div>
 </form>
-
 
 <script>
     window.Mall.Modal.addClass('mall-modal--visible')

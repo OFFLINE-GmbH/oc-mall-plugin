@@ -4,9 +4,9 @@
     <input type="hidden" data-mall-custom-field id="{{ fieldId }}" name="fields[{{ field.hashId }}]"
            data-id="{{ item.property.hashId }}">
     <div class="mall-field-image-selector">
-        {% for option in field.custom_field_options %}
+        {% for option in field.custom_field_options|default([]) %}
             <a class="mall-option-selector" data-target="#{{ fieldId }}" data-value="{{ option.hashId }}">
-                <img src="{{ option.image.thumb(90, 90, 'auto') }}" alt=""/>
+                <img src="{{ option.image.thumb(90, 90, null) }}" alt=""/>
             </a>
         {% endfor %}
     </div>

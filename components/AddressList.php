@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Auth;
 use Illuminate\Support\Collection;
@@ -7,6 +9,7 @@ use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Cart;
+use RainLab\User\Classes\AuthManager;
 
 /**
  * Display a list of user addresses.

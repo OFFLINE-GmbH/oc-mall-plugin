@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Cms\Classes\Theme;
 use Illuminate\Support\Collection;
@@ -23,6 +25,30 @@ class Wishlists extends MallComponent
      * @var Collection<Wishlist>
      */
     public $items;
+    /**
+     * Default minimum quantity.
+     *
+     * @var int
+     */
+    public $defaultMinQuantity = 1;
+    /**
+     * Default maximum quantity.
+     *
+     * @var int
+     */
+    public $defaultMaxQuantity = 100;
+    /**
+     * Display the DiscountApplier component.
+     *
+     * @var bool
+     */
+    public $showDiscountApplier = true;
+    /**
+     * Display a tax summary at the end of the cart.
+     *
+     * @var bool
+     */
+    public $showTaxes = true;
     /**
      * The currently displayed wishlist.
      *
