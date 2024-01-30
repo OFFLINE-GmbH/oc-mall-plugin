@@ -44,6 +44,7 @@
     },
     "scripts": {
         "test": [
+            "Composer\\Config::disableProcessTimeout",
             "../../../vendor/bin/phpunit ./tests --stop-on-failure --testdox"
         ]
     },
