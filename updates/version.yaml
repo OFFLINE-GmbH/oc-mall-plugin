@@ -486,3 +486,5 @@
     - 'Added support for the new page finder widget'
 3.0.30:
     - 'Made order state flags easier to extend (thanks to @SamBrishes)'
+3.1.0:
+    - '!!! PHP 8.0 is now required to run this plugin. General code cleanup (thanks to @SamBrishes)'
