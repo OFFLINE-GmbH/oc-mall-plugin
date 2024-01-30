@@ -83,9 +83,6 @@ trait PriceAccessors
     public function mapCurrencyPrices($items)
     {
         return $items->mapWithKeys(function ($price) {
-            if ($price->currency == null) {
-                dd($price);
-            }
             $code = $price->currency->code;
 
             $product = null;
