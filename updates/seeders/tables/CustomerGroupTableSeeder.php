@@ -14,7 +14,7 @@ class CustomerGroupTableSeeder extends Seeder
      */
     public function run(bool $useDemo = false)
     {
-        if (!$useDemo) {
+        if (!$useDemo && config('app.env') != 'testing') {
             return;
         }
         

@@ -4,12 +4,13 @@ namespace OFFLINE\Mall\Models;
 
 use Model;
 use October\Rain\Database\Traits\Nullable;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Utils\Money;
 
 class Price extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
     use Nullable;
+    use Validation;
 
     public $nullable = ['price'];
     public $with = ['currency'];

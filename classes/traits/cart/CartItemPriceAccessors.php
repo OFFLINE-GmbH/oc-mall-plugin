@@ -11,8 +11,8 @@ use OFFLINE\Mall\Models\Tax;
 
 trait CartItemPriceAccessors
 {
-
     use FilteredTaxes;
+
     /**
      * Cached tax factor.
      * @var int
@@ -55,9 +55,9 @@ trait CartItemPriceAccessors
     {
         if ($this->data->price_includes_tax) {
             return $this->price()->integer / (1 + $this->productTaxFactor());
+        } else {
+            return $this->price()->integer;
         }
-
-        return $this->price()->integer;
     }
 
     /**

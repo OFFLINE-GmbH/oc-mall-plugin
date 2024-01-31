@@ -24,7 +24,7 @@ class PaymentMethodTest extends PluginTestCase
         $method->payment_provider = 'stripe';
         $method->save();
         $method->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 0.30,
         ]));
 
@@ -50,7 +50,7 @@ class PaymentMethodTest extends PluginTestCase
         $method->payment_provider = 'stripe';
         $method->save();
         $method->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 0.30,
         ]));
         $method->taxes()->save(new Tax([
@@ -97,7 +97,7 @@ class PaymentMethodTest extends PluginTestCase
         $method->payment_provider = 'stripe';
         $method->save();
         $method->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 0.30,
         ]));
         $countryTax = new Tax([

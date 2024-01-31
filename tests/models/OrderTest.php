@@ -212,7 +212,7 @@ class OrderTest extends PluginTestCase
         $discount->save();
 
         $discount->shipping_prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 10,
             'field'       => 'shipping_prices',
         ]));
@@ -240,12 +240,12 @@ class OrderTest extends PluginTestCase
         $discount1->save();
 
         $discount1->shipping_prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 10,
             'field'       => 'shipping_price',
         ]));
         $discount1->totals_to_reach()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 0,
             'field'       => 'total_to_reach',
         ]));
@@ -259,7 +259,7 @@ class OrderTest extends PluginTestCase
         $discount2->save();
 
         $discount2->amounts()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 20,
             'field'       => 'amount',
         ]));
@@ -321,7 +321,7 @@ class OrderTest extends PluginTestCase
         $sizeA->save();
         $sizeA->prices()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
         ]));
 
         $sizeB             = new CustomFieldOption();
@@ -330,7 +330,7 @@ class OrderTest extends PluginTestCase
         $sizeB->save();
         $sizeB->prices()->save(new Price([
             'price'       => 200,
-            'currency_id' => 1,
+            'currency_id' => 2,
         ]));
 
         $field       = new CustomField();

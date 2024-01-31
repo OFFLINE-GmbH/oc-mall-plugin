@@ -21,14 +21,14 @@ class ShippingMethodTest extends PluginTestCase
         $availableMethod = $this->getMethod();
         $availableMethod->available_below_totals()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_below_totals',
         ]));
 
         $unavailableMethod = $this->getMethod();
         $unavailableMethod->available_below_totals()->save(new Price([
             'price'       => 50,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_below_totals',
         ]));
 
@@ -48,14 +48,14 @@ class ShippingMethodTest extends PluginTestCase
         $availableMethod = $this->getMethod();
         $availableMethod->available_above_totals()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_above_totals',
         ]));
 
         $unavailableMethod = $this->getMethod();
         $unavailableMethod->available_above_totals()->save(new Price([
             'price'       => 200,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_above_totals',
         ]));
 
@@ -75,24 +75,24 @@ class ShippingMethodTest extends PluginTestCase
         $availableMethod = $this->getMethod();
         $availableMethod->available_below_totals()->save(new Price([
             'price'       => 200,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_below_totals',
         ]));
         $availableMethod->available_above_totals()->save(new Price([
             'price'       => 50,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_above_totals',
         ]));
 
         $unavailableMethod = $this->getMethod();
         $unavailableMethod->available_below_totals()->save(new Price([
             'price'       => 120,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_below_totals',
         ]));
         $unavailableMethod->available_above_totals()->save(new Price([
             'price'       => 110,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'available_above_totals',
         ]));
 
@@ -158,7 +158,7 @@ class ShippingMethodTest extends PluginTestCase
         $method->save();
         $method->prices()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
         ]));
         $method->taxes()->save(new Tax([
             'name'       => 'Shipping Tax 1',
@@ -203,7 +203,7 @@ class ShippingMethodTest extends PluginTestCase
         $method->save();
         $method->prices()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
         ]));
         $method->taxes()->save(new Tax([
             'name'       => 'Shipping Tax 1',
@@ -232,7 +232,7 @@ class ShippingMethodTest extends PluginTestCase
 
         $availableMethod->prices()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
             'field'       => 'price',
         ]));
 

@@ -49,7 +49,7 @@ class CartProductTest extends PluginTestCase
         $sizeA->sort_order = 1;
         $sizeA->save();
         $sizeA->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 100,
         ]));
 
@@ -64,7 +64,7 @@ class CartProductTest extends PluginTestCase
         $field2->save();
 
         $field2->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 300,
         ]));
 
@@ -132,7 +132,7 @@ class CartProductTest extends PluginTestCase
 
         $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
         $option->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 100,
         ]));
 
@@ -176,7 +176,7 @@ class CartProductTest extends PluginTestCase
 
         $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
         $option->prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 100,
         ]));
 

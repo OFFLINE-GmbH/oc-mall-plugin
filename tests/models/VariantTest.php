@@ -143,7 +143,7 @@ class VariantTest extends PluginTestCase
     public function test_price_accessors()
     {
         $priceInt       = ['CHF' => 2050, 'EUR' => 8050];
-        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80,50€'];
 
         $variant             = new Variant();
         $variant->name       = 'ABC';
@@ -164,7 +164,7 @@ class VariantTest extends PluginTestCase
     public function test_price_accessors_are_inherited()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
-        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80,50€'];
 
         $this->product->price = $price;
         $this->product->save();
@@ -197,7 +197,7 @@ class VariantTest extends PluginTestCase
         $variant->price = ['CHF' => 11000, 'EUR' => null];
 
         $variant = Variant::find($variant->id);
-        $this->assertEquals(125, (int)$variant->price('EUR')->decimal);
+        $this->assertEquals(90, (int)$variant->price('EUR')->decimal);
         $this->assertEquals(110.00, $variant->price('CHF')->decimal);
     }
 
@@ -223,7 +223,7 @@ class VariantTest extends PluginTestCase
     public function test_explicit_null_price_accessors_are_inherited()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
-        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80,50€'];
 
         $this->product->price = $price;
         $this->product->save();
@@ -247,7 +247,7 @@ class VariantTest extends PluginTestCase
     public function test_price_accessors_are_inherited_by_currency()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
-        $priceFormatted = ['EUR' => '50.00€'];
+        $priceFormatted = ['EUR' => '50,00€'];
 
         $this->product->price = $price;
         $this->product->save();
@@ -262,15 +262,15 @@ class VariantTest extends PluginTestCase
         $variant = Variant::find($variant->id);
         $this->assertEquals($priceFormatted, $variant->price->toArray());
         $this->assertEquals(50, $variant->price('EUR')->decimal);
-        $this->assertEquals(20.50, $variant->price()->decimal);
-        $this->assertEquals(2050, $variant->price('CHF')->integer);
+        $this->assertEquals(47.00, $variant->price()->decimal);
+        $this->assertEquals(4700, $variant->price('CHF')->integer);
         $this->assertEquals(5000, $variant->price('EUR')->integer);
     }
 
     public function test_alternative_price_accessors()
     {
         $price          = ['CHF' => 20.50, 'EUR' => 80.50];
-        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80.50€'];
+        $priceFormatted = ['CHF' => 'CHF 20.50', 'EUR' => '80,50€'];
 
         $this->product->price = $price;
         $this->product->save();
@@ -283,12 +283,12 @@ class VariantTest extends PluginTestCase
         $variant->additional_prices()->save(new Price([
             'price'             => 20.50,
             'price_category_id' => 1,
-            'currency_id'       => 1,
+            'currency_id'       => 2,
         ]));
         $variant->additional_prices()->save(new Price([
             'price'             => 80.50,
             'price_category_id' => 1,
-            'currency_id'       => 2,
+            'currency_id'       => 1,
         ]));
         
         $variant->load('additional_prices');

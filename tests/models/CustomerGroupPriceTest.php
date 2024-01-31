@@ -29,8 +29,8 @@ class CustomerGroupPriceTest extends PluginTestCase
     {
         $price                    = new CustomerGroupPrice();
         $price->price             = 50;
-        $price->currency_id       = 1;
-        $price->customer_group_id = CustomerGroup::first()->id;
+        $price->currency_id       = 2;
+        $price->customer_group_id = CustomerGroup::where('code', 'gold')->first()->id;
 
         $product = Product::first();
         $product->customer_group_prices()->add($price);
@@ -44,30 +44,31 @@ class CustomerGroupPriceTest extends PluginTestCase
 
     public function test_price_is_loaded_correctly()
     {
-        $this->markTestSkipped('Some issue ahead.');
         $price                    = new CustomerGroupPrice();
-        $price->customer_group_id = CustomerGroup::first()->id;
+        $price->customer_group_id = CustomerGroup::where('code', 'gold')->first()->id;
         $price->price             = 50;
-        $price->currency_id       = 1;
+        $price->currency_id       = 2;
 
         $product = Product::first();
         $product->customer_group_prices()->add($price);
 
         $price                    = new CustomerGroupPrice();
-        $price->customer_group_id = CustomerGroup::first()->id;
+        $price->customer_group_id = CustomerGroup::where('code', 'gold')->first()->id;
         $price->price             = 74.00;
-        $price->currency_id       = 2;
+        $price->currency_id       = 1;
         $product->customer_group_prices()->add($price);
 
         $this->assertEquals(2000, $product->price()->integer);
 
-        Auth::login(User::find(1)); // Is in customer group
+        // Is in customer group
+        Auth::login(User::where('email', 'gold_customer@example.tld')->first());
 
         $this->assertEquals(5000, $product->price()->integer);
         $this->assertEquals(50.00, $product->price()->decimal);
         $this->assertEquals('CHF 50.00', (string)$product->price());
 
-        Auth::login(User::find(2)); // Is not in customer group
+        // Is not in customer group
+        Auth::login(User::where('email', '<>', 'gold_customer@example.tld')->first());
 
         $product->customer_group_prices()->add($price);
         $this->assertEquals(2000, $product->price()->integer);
