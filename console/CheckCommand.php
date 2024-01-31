@@ -8,57 +8,69 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 
-class SystemCheck extends Command
+class CheckCommand extends Command
 {
+    /**
+     * The name and signature of the console command.
+     * @var string
+     */
+    protected $signature = 'mall:check';
+
+    /**
+     * The console command name.
+     * @var string
+     */
     protected $name = 'mall:check';
+
+    /**
+     * The console command description.
+     * @var string|null
+     */
     protected $description = 'Check if your setup is complete';
 
+    /**
+     * Execute the console command.
+     * @return void
+     */
     public function handle()
     {
+        $this->output->newLine();
         $checks = [
             [
                 'title' => 'CMS pages are linked',
-                'check' => function () {
-                    return $this->checkCMSPages();
-                },
+                'check' => fn() => $this->checkCMSPages()
             ],
             [
                 'title' => 'A base currency is set',
                 'check' => function () {
                     if (Currency::where('is_default', 1)->count() < 1) {
                         return 'You can set this via Backend Settings -> Mall: General -> Currencies';
+                    } else {
+                        return true;
                     }
-
-                    return true;
                 },
             ],
             [
                 'title' => 'A admin e-mail is set',
                 'check' => function () {
-                    if ( ! GeneralSettings::get('admin_email')) {
+                    if (!GeneralSettings::get('admin_email')) {
                         return 'You can set this via Backend Settings -> Mall: General -> Configuration';
+                    } else {
+                        return true;
                     }
-
-                    return true;
                 },
             ],
             [
                 'title' => 'All products have a price in the default currency',
-                'check' => function () {
-                    return $this->checkProducts();
-                },
+                'check' => fn () => $this->checkProducts()
             ],
             [
                 'title' => 'All products have a category',
-                'check' => function () {
-                    return $this->checkProductCategories();
-                },
+                'check' => fn () => $this->checkProductCategories()
             ],
             [
                 'title' => 'All shipping methods have a price in the default currency',
-                'check' => function () {
-                    return $this->checkShippingMethods();
-                },
+                'check' => fn () => $this->checkShippingMethods()
             ],
         ];
 
@@ -79,6 +91,7 @@ class SystemCheck extends Command
         ], $rows);
 
         if (count($hints) < 1) {
+            $this->output->newLine();
             return $this->output->success('All checks passed!');
         }
 

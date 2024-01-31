@@ -17,6 +17,7 @@ return new class extends Migration
     {
         Schema::table('offline_mall_price_categories', function (Blueprint $table) {
             $table->boolean('is_enabled')->default(true)->after('sort_order');
+            $table->string('title')->default('')->after('name');
         });
     }
 
@@ -29,6 +30,9 @@ return new class extends Migration
     {
         if (Schema::hasColumn('offline_mall_price_categories', 'is_enabled')) {
             Schema::dropColumns('offline_mall_price_categories', 'is_enabled');
+        }
+        if (Schema::hasColumn('offline_mall_price_categories', 'title')) {
+            Schema::dropColumns('offline_mall_price_categories', 'title');
         }
     }
 };

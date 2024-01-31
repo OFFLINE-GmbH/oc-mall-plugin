@@ -9,18 +9,27 @@ class PriceCategoryTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
-        PriceCategory::create([
-            'code' => 'old_price',
-            'name' => 'Old Price',
+        if ($useDemo) {
+            return;
+        }
+        
+        $category = PriceCategory::create([
+            'code'      => 'old_price',
+            'name'      => trans('offline.mall::demo.price_categories.old_price_name'),
+            'title'     => trans('offline.mall::demo.price_categories.old_price_label'),
         ]);
-        PriceCategory::create([
-            'code' => 'msrp',
-            'name' => 'Manufacturer\'s suggested retail price',
+        $category->translateContext('de');
+
+        $category = PriceCategory::create([
+            'code'      => 'msrp',
+            'name'      => trans('offline.mall::demo.price_categories.msrp_price_name'),
+            'title'     => trans('offline.mall::demo.price_categories.msrp_price_label'),
         ]);
-        return true;
+        $category->translateContext('de');
     }
 }

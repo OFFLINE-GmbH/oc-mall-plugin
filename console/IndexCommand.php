@@ -9,72 +9,101 @@ use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Product;
-use Symfony\Component\Console\Input\InputOption;
 
-class ReindexProducts extends Command
+class IndexCommand extends Command
 {
-    protected $name = 'mall:reindex';
-    protected $description = 'Recreate the products index';
+    /**
+     * The name and signature of the console command.
+     * @var string
+     */
+    protected $signature = '
+        mall:index 
+        {--force : Don\'t ask before erasing the index records} 
+    ';
+
+    /**
+     * The console command name.
+     * @var string
+     */
+    protected $name = 'mall:index';
+
+    /**
+     * The console command description.
+     * @var string|null
+     */
+    protected $description = 'Recreate the general product index';
+
     /**
      * @var Index
      */
     protected $index;
+
     /**
      * @var ProductObserver
      */
     protected $observer;
 
+    /**
+     * Execute the console command.
+     * @return void
+     */
     public function handle(Index $index)
     {
         $this->index = $index;
 
         $question = 'The current index will be dropped. Your product data will not be modified. Do you want to proceed?';
-        if ( ! $this->option('force') && ! $this->output->confirm($question, false)) {
+        if (!$this->option('force') && ! $this->output->confirm($question, false)) {
             return 0;
         }
 
         $this->observer = new ProductObserver($this->index);
 
-        $this->cleanup();
-        $this->reindex();
+        // Clean Index
+        $this->warn(' Purge and Create Index...');
+        try {
+            $this->cleanup();
+            $this->info('Re-Created Index successful.');
+        } catch (\Exception $exc) {
+            $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
+            $this->error($exc->getMessage());
+            return 0;
+        }
+        $this->output->newLine();
+
+        // Re-Index Products
+        $this->warn(' Index Products...');
+        try {
+            $this->reindex();
+            $this->info('Indexing successful.');
+        } catch (\Exception $exc) {
+            $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
+            $this->error($exc->getMessage());
+            return 0;
+        }
+        $this->output->newLine();
+
+        // Finish
+        $this->alert('Index has been created!');
     }
 
     /**
-     * Get the console command arguments.
-     * @return array
+     * Cleanup Index
+     * @return void
      */
-    protected function getArguments()
-    {
-        return [];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['force', null, InputOption::VALUE_NONE, 'Don\'t ask before deleting the data.', null],
-        ];
-    }
-
     protected function cleanup()
     {
-        $this->output->writeln('Dropping existing index...');
-
         $this->index->drop(ProductEntry::INDEX);
         $this->index->drop(VariantEntry::INDEX);
-
         $this->index->create(ProductEntry::INDEX);
         $this->index->create(VariantEntry::INDEX);
     }
 
+    /**
+     * Create Index
+     * @return void
+     */
     protected function reindex()
     {
-        $this->output->writeln('Reindexing products...');
-        $this->output->writeln('');
-
         $bar = $this->output->createProgressBar(Product::count());
         Product::orderBy('id')->with([
             'variants.prices.currency',
@@ -90,5 +119,6 @@ class ReindexProducts extends Command
             });
         });
         $bar->finish();
+        $bar->clear();
     }
 }

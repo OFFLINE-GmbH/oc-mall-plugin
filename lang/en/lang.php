@@ -149,6 +149,8 @@ return [
         'label' => 'Price categories',
         'description' => 'Configure additional price categories',
         'is_enabled' => 'Enabled',
+        'title_label' => 'Label',
+        'title_description' => 'A descriptive label, which can be shown on the front-end.'
     ],
     'order_state_settings' => [
         'description' => 'Configure order states',

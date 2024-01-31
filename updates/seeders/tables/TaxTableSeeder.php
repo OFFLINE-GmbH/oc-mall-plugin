@@ -9,13 +9,46 @@ class TaxTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
-        $method = new Tax();
-        $method->name = 'Default';
-        $method->percentage = 8;
-        $method->save();
+        if ($useDemo) {
+            return;
+        }
+        
+        $country = 'de';
+        if ($country == 'de') {
+            Tax::create([
+                'name'          => trans('offline.mall::demo.taxes.standard'),
+                'percentage'    => 19,
+            ]);
+    
+            Tax::create([
+                'name'          => trans('offline.mall::demo.taxes.reduced'),
+                'percentage'    => 7,
+            ]);
+        } else if ($country == 'at') {
+            Tax::create([
+                'name'          => trans('offline.mall::demo.taxes.standard'),
+                'percentage'    => 20,
+            ]);
+    
+            Tax::create([
+                'name'          => trans('offline.mall::demo.taxes.reduced'),
+                'percentage'    => 10,
+            ]);
+        } else if ($country == 'ch') {
+            Tax::create([
+                'name'          => trans('offline.mall::demo.taxes.standard'),
+                'percentage'    => 8.1,
+            ]);
+    
+            Tax::create([
+                'name'          => trans('offline.mall::demo.taxes.reduced'),
+                'percentage'    => 2.6,
+            ]);
+        }
     }
 }

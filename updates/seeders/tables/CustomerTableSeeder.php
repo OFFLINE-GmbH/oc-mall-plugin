@@ -14,57 +14,83 @@ class CustomerTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
-        if (app()->environment() != 'testing') {
+        if (!$useDemo) {
             return;
         }
+        
         config()->set('rainlab.user::minPasswordLength', 8);
-        $this->createUser('test@test.com', CustomerGroup::first()->id);
-        $this->createUser('test2@test2.com');
+
+        $this->createUser(
+            'normal_customer@example.tld',
+            trans('offline.mall::demo.customers.normal'),
+        );
+        
+        $this->createUser(
+            'gold_customer@example.tld', 
+            trans('offline.mall::demo.customers.gold'),
+            CustomerGroup::where('code', 'gold')->first()->id
+        );
+        
+        $this->createUser(
+            'diamond_customer@example.tld', 
+            trans('offline.mall::demo.customers.diamond'),
+            CustomerGroup::where('code', 'diamond')->first()->id
+        );
     }
 
     /**
      * Create new user.
+     * @param string $email
+     * @param string $name
+     * @param integer|null $customerGroupId
      * @return void
      */
-    protected function createUser($email, $customerGroupId = null)
+    protected function createUser(string $email, string $name, ?int $customerGroupId = null)
     {
-        $user = new User();
-        $user->email = $email;
-        $user->username = $email;
-        $user->password = '12345678';
-        $user->password_confirmation = '12345678';
-        $user->name = 'Float';
-        $user->surname = 'McFloatface';
-        $user->is_activated = true;
-        $user->offline_mall_customer_group_id = $customerGroupId;
-        $user->save();
+        [$firstname, $lastname] = explode(' ', $name);
 
-        $customer = new Customer();
-        $customer->firstname = 'Float';
-        $customer->lastname = 'McFloatface';
-        $customer->user_id = $user->id;
-        $customer->save();
+        $user = User::firstOrCreate([
+            'email'                             => $email,
+            'username'                          => $email,
+        ], [
+            'password'                          => '12345678',
+            'password_confirmation'             => '12345678',
+            'name'                              => $firstname,
+            'surname'                           => $lastname,
+            'is_activated'                      => true,
+            'offline_mall_customer_group_id'    => $customerGroupId,
+        ]);
+        $customer = Customer::create([
+            'firstname' => $firstname,
+            'lastname'  => $lastname,
+            'user_id'   => $user->id,
+        ]);
 
-        $shippingAddress = new Address();
-        $shippingAddress->name = 'Float McFloatface';
-        $shippingAddress->lines = 'Street 12';
-        $shippingAddress->zip = '6000';
-        $shippingAddress->city = 'Lucerne';
-        $shippingAddress->state_id = State::where('name', 'Luzern')->first()->id;
-        $shippingAddress->country_id = Country::where('code', 'CH')->first()->id;
+        $shippingAddress = Address::create([
+            'name'          => $name,
+            'lines'         => 'Street 12',
+            'zip'           => '6000',
+            'city'          => 'Lucerne',
+            'state_id'      => State::where('name', 'Luzern')->first()->id,
+            'country_id'    => Country::where('code', 'CH')->first()->id,
+            'customer_id'   => $customer->id
+        ]);
         $customer->addresses()->save($shippingAddress);
 
-        $billingAddress = new Address();
-        $billingAddress->name = 'Float McFloatface';
-        $billingAddress->lines = 'Billing 12';
-        $billingAddress->zip = '6000';
-        $billingAddress->city = 'Lucerne';
-        $billingAddress->state_id = State::where('name', 'Luzern')->first()->id;
-        $billingAddress->country_id = Country::where('code', 'CH')->first()->id;
+        $billingAddress = Address::create([
+            'name'          => $name,
+            'lines'         => 'Street 12',
+            'zip'           => '6000',
+            'city'          => 'Lucerne',
+            'state_id'      => State::where('name', 'Luzern')->first()->id,
+            'country_id'    => Country::where('code', 'CH')->first()->id,
+            'customer_id'   => $customer->id
+        ]);
         $customer->addresses()->save($billingAddress);
     }
 }

@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
 use OFFLINE\Mall\Models\Review;
@@ -12,13 +12,13 @@ class Cruiser5000 extends DemoProduct
         return [
             'brand_id'                     => $this->brand('cruiser-bikes')->id,
             'user_defined_id'              => 'MTB001',
-            'name'                         => 'Cruiser 5000',
             'slug'                         => 'cruiser-5000',
-            'description_short'            => 'The ideal beginner bike',
-            'description'                  => '<p>Find your passion for mountain biking on Cruisers’ Model 5000. Whether you want to ride enduro, all-mountain, or downhill - and there\'s nothing stopping you from trying them all - this fun and friendly Cruiser Suspension Bike will help you climb and descend. This carbon mountain bike comes with fun guaranteed.</p>',
-            'meta_title'                   => 'Cruiser 5000 Mountainbike',
-            'meta_description'             => 'Whether you want to ride enduro, all-mountain, or downhill this fun and friendly Cruiser Suspension Bike will help you climb and descend.',
-            'meta_keywords'                => 'mtb, mountainbike, curiser, bike',
+            'name'                         => 'Cruiser 5000',
+            'description'                  => trans('offline.mall::demo.products.cruiser_5000.description'),
+            'description_short'            => trans('offline.mall::demo.products.cruiser_5000.description_short'),
+            'meta_title'                   => trans('offline.mall::demo.products.cruiser_5000.meta_title'),
+            'meta_description'             => trans('offline.mall::demo.products.cruiser_5000.meta_description'),
+            'meta_keywords'                => 'mtb, mountainbike, cruiser, bike',
             'weight'                       => 14000,
             'inventory_management_method'  => 'variant',
             'quantity_default'             => 1,
@@ -51,11 +51,14 @@ class Cruiser5000 extends DemoProduct
     protected function properties(): array
     {
         return [
-            'color'       => ['name' => 'Devil\'s red', 'hex' => '#e74c3c'],
+            'color'       => [
+                'name'  => trans('offline.mall::demo.products.properties.devils_red'),
+                'hex'   => '#e74c3c'
+            ],
             'rear-travel' => '155',
             'fork-travel' => '160',
-            'material'    => 'Carbon',
-            'gender'      => 'Unisex',
+            'material'    => trans('offline.mall::demo.products.properties.carbon'),
+            'gender'      => trans('offline.mall::demo.products.properties.unisex'),
         ];
     }
 
@@ -125,7 +128,7 @@ class Cruiser5000 extends DemoProduct
     {
         return [
             [
-                'name'     => 'Include bike assembly guide',
+                'name'     =>  trans('offline.mall::demo.products.fields.include_bike_assembly'),
                 'type'     => 'checkbox',
                 'price'    => ['USD' => 490, 'EUR' => 200, 'CHF' => 5900],
                 'required' => false,
@@ -137,9 +140,9 @@ class Cruiser5000 extends DemoProduct
     {
         return [
             [
-                'name'        => 'Main images',
-                'is_main_set' => true,
-                'images'      => [
+                'name'          =>  trans('offline.mall::demo.products.images.main'),
+                'is_main_set'   => true,
+                'images'        => [
                     realpath(__DIR__ . '/images/cruiser-5000-1.jpg'),
                     realpath(__DIR__ . '/images/cruiser-5000-2.jpg'),
                 ],
@@ -162,8 +165,8 @@ class Cruiser5000 extends DemoProduct
             ],
             [
                 'review'           => new Review([
-                    'title'       => 'Very bad build quality',
-                    'description' => "The bike is okay but after a few rides parts started to fall off!",
+                    'title'       => trans('offline.mall::demo.products.cruiser_5000.reviews.title'),
+                    'description' => trans('offline.mall::demo.products.cruiser_5000.reviews.description'),
                     'rating'      => 3,
                 ]),
                 'category_reviews' => [

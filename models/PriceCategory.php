@@ -39,7 +39,8 @@ class PriceCategory extends Model
      * @var array
      */
     public $translatable = [
-        'name'
+        'name',
+        'title'
     ];
 
     /**
@@ -49,6 +50,7 @@ class PriceCategory extends Model
     public $rules = [
         'name'          => 'required',
         'code'          => 'required',
+        'title'         => 'nullable',
         'is_enabled'    => 'nullable|boolean'
     ];
 
@@ -59,6 +61,7 @@ class PriceCategory extends Model
     public $fillable = [
         'name',
         'code',
+        'title',
         'is_enabled'
     ];
 

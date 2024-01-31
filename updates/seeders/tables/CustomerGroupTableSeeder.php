@@ -9,22 +9,28 @@ class CustomerGroupTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
-        if (app()->environment() != 'testing') {
+        if (!$useDemo) {
             return;
         }
+        
+        CustomerGroup::create([
+            'name' => trans('offline.mall::demo.customer_groups.silver.name'),
+            'code' => 'silver',
+        ]);
 
-        $group = new CustomerGroup();
-        $group->name = 'Gold Partners';
-        $group->code = 'gold';
-        $group->save();
-
-        $group = new CustomerGroup();
-        $group->name = 'Silver Partners';
-        $group->code = 'silver';
-        $group->save();
+        CustomerGroup::create([
+            'name' => trans('offline.mall::demo.customer_groups.gold.name'),
+            'code' => 'gold',
+        ]);
+        
+        CustomerGroup::create([
+            'name' => trans('offline.mall::demo.customer_groups.diamond.name'),
+            'code' => 'diamond',
+        ]);
     }
 }

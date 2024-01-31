@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
 
@@ -11,11 +11,11 @@ class RedShirt extends DemoProduct
         return [
             'brand_id'                     => null,
             'user_defined_id'              => 'SHIRT001',
-            'name'                         => 'Red Shirt',
             'slug'                         => 'red-shirt',
-            'description_short'            => 'Unisex',
-            'description'                  => '<p>This is just a generic shirt. Brandless and cheap.</p>',
-            'meta_title'                   => 'Red Shirt',
+            'name'                         => trans('offline.mall::demo.products.red_shirt.name'),
+            'description'                  => trans('offline.mall::demo.products.red_shirt.description'),
+            'description_short'            => trans('offline.mall::demo.products.red_shirt.description_short'),
+            'meta_title'                   => trans('offline.mall::demo.products.red_shirt.meta_title'),
             'meta_keywords'                => 'shirt, red',
             'weight'                       => 100,
             'inventory_management_method'  => 'variant',
@@ -49,8 +49,8 @@ class RedShirt extends DemoProduct
     protected function properties(): array
     {
         return [
-            'material' => 'Cotton',
-            'gender'   => 'Unisex',
+            'material'  => trans('offline.mall::demo.products.properties.cotton'),
+            'gender'    => trans('offline.mall::demo.products.properties.unisex'),
         ];
     }
 
@@ -65,27 +65,36 @@ class RedShirt extends DemoProduct
     {
         return [
             [
-                'name'       => 'Red Shirt S',
+                'name'       => trans('offline.mall::demo.products.red_shirt.variants.s_name'),
                 'stock'      => 2,
                 'properties' => [
                     'size'  => 'S',
-                    'color' => ['name' => 'Red', 'hex' => '#ff0000'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.red'), 
+                        'hex' => '#ff0000'
+                    ],
                 ],
             ],
             [
-                'name'       => 'Red Shirt M',
+                'name'       => trans('offline.mall::demo.products.red_shirt.variants.m_name'),
                 'stock'      => 200,
                 'properties' => [
                     'size'  => 'M',
-                    'color' => ['name' => 'Red', 'hex' => '#ff0000'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.red'), 
+                        'hex' => '#ff0000'
+                    ],
                 ],
             ],
             [
-                'name'       => 'Red Shirt L',
+                'name'       => trans('offline.mall::demo.products.red_shirt.variants.l_name'),
                 'stock'      => 0,
                 'properties' => [
                     'size'  => 'L',
-                    'color' => ['name' => 'Red', 'hex' => '#ff0000'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.red'), 
+                        'hex' => '#ff0000'
+                    ],
                 ],
             ],
         ];
@@ -102,7 +111,7 @@ class RedShirt extends DemoProduct
     {
         return [
             [
-                'name'        => 'Main images',
+                'name'        => trans('offline.mall::demo.products.images.main'),
                 'is_main_set' => true,
                 'images'      => [
                     realpath(__DIR__ . '/images/red-shirt.jpg'),

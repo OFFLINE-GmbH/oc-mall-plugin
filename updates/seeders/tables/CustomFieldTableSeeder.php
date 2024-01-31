@@ -15,25 +15,23 @@ class CustomFieldTableSeeder extends Seeder
      */
     public function run()
     {
-        if (app()->environment() != 'testing') {
-            return;
-        }
-        $field = new CustomField();
-        $field->name = 'Test';
-        $field->type = 'dropdown';
-        $field->save();
+        $field = CustomField::create([
+            'name' => 'Test',
+            'type' => 'dropdown',
+        ]);
 
-        $option = new CustomFieldOption();
-        $option->name = 'Test';
-        $option->option_value = 'test';
-        $option->sort_order = 1;
+        $option = CustomFieldOption::create([
+            'name' => 'Test',
+            'option_value' => 'test',
+            'sort_order' => 1,
+        ]);
         $field->custom_field_options()->save($option);
 
-        $option = new CustomFieldOption();
-        $option->name = 'Test2';
-        $option->option_value = 'test2';
-        $option->sort_order = 2;
+        $option = CustomFieldOption::create([
+            'name' => 'Test2',
+            'option_value' => 'test2',
+            'sort_order' => 2,
+        ]);
         $field->custom_field_options()->save($option);
-        $field->products()->attach(Product::first()->id);
     }
 }

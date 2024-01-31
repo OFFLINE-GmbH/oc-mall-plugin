@@ -101,14 +101,14 @@ Since version 3.1, **Mall** no longer inserts any data automatically during the 
 can use the following command to seed the initial data, as happened before.
 
 ```sh
-php artisan plugin:seed OFFLINE.Mall OFFLINE\Mall\Updates\Seeders\MallDatabaseSeeder
+php artisan plugin:seed OFFLINE.Mall OFFLINE\Mall\Updates\Seeders\MallSeeder
 ```
 
 However, we **highly recommend** using the following command instead, which allows you to customize 
 the desired data.
 
 ```sh
-php artisan mall:seed
+php artisan mall:seed --help
 ```
 
 ::: danger

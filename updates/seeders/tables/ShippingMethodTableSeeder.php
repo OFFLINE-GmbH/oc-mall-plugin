@@ -10,12 +10,17 @@ class ShippingMethodTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
+        if ($useDemo) {
+            return;
+        }
+        
         $method = ShippingMethod::create([
-            'name'          => 'Standard',
+            'name'          => trans('offline.mall::demo.shipping_methods.standard'),
             'sort_order'    => 1,
             'is_default'    => true,
         ]);
@@ -27,18 +32,18 @@ class ShippingMethodTableSeeder extends Seeder
             ]),
             new Price([
                 'price'          => 12,
-                'currency_id'    => 1,
+                'currency_id'    => 2,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
             ]),
             new Price([
                 'price'          => 15,
-                'currency_id'    => 1,
+                'currency_id'    => 3,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
             ])
         ]);
-
+        
         $method = ShippingMethod::create([
-            'name'                      => 'Express',
+            'name'                      => trans('offline.mall::demo.shipping_methods.express'),
             'sort_order'                => 1,
             'is_default'                => false,
             'guaranteed_delivery_days'  => 3
@@ -51,12 +56,12 @@ class ShippingMethodTableSeeder extends Seeder
             ]),
             new Price([
                 'price'          => 24,
-                'currency_id'    => 1,
+                'currency_id'    => 2,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
             ]),
             new Price([
                 'price'          => 30,
-                'currency_id'    => 1,
+                'currency_id'    => 3,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
             ])
         ]);

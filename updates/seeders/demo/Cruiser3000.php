@@ -1,23 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
+use OFFLINE\Mall\Models\Review;
 
-class Cruiser3500 extends DemoProduct
+class Cruiser3000 extends DemoProduct
 {
     protected function attributes(): array
     {
         return [
             'brand_id'                     => $this->brand('cruiser-bikes')->id,
-            'user_defined_id'              => 'MTB003',
-            'name'                         => 'Cruiser 3500',
-            'slug'                         => 'cruiser-3500',
-            'description_short'            => 'Hard tail bike',
-            'description'                  => '<p>Find your passion for mountain biking on Cruisers’ Model 3500. Whether you want to ride enduro, all-mountain, or downhill - and there\'s nothing stopping you from trying them all - this fun and friendly Cruiser Suspension Bike will help you climb and descend. This carbon mountain bike comes with fun guaranteed.</p>',
-            'meta_title'                   => 'Cruiser 3500 Mountainbike',
-            'meta_description'             => 'Whether you want to ride enduro, all-mountain, or downhill this fun and friendly Cruiser Suspension Bike will help you climb and descend.',
-            'meta_keywords'                => 'mtb, mountainbike, curiser, bike',
+            'user_defined_id'              => 'MTB002',
+            'slug'                         => 'cruiser-3000',
+            'name'                         => 'Cruiser 3000',
+            'description'                  => trans('offline.mall::demo.products.cruiser_3000.description'),
+            'description_short'            => trans('offline.mall::demo.products.cruiser_3000.description_short'),
+            'meta_title'                   => trans('offline.mall::demo.products.cruiser_3000.meta_title'),
+            'meta_description'             => trans('offline.mall::demo.products.cruiser_3000.meta_description'),
+            'meta_keywords'                => 'mtb, mountainbike, cruiser, bike',
             'weight'                       => 14000,
             'inventory_management_method'  => 'variant',
             'quantity_default'             => 1,
@@ -27,7 +28,7 @@ class Cruiser3500 extends DemoProduct
             'stackable'                    => true,
             'shippable'                    => true,
             'price_includes_tax'           => true,
-            'mpn'                          => 'CRUISER3500',
+            'mpn'                          => 'CRUISER3000',
             'group_by_property_id'         => $this->property('wheel-size')->id,
             'published'                    => true,
         ];
@@ -50,11 +51,14 @@ class Cruiser3500 extends DemoProduct
     protected function properties(): array
     {
         return [
-            'color'       => ['name' => 'Darker red', 'hex' => '#c22a29'],
+            'color'       => [
+                'name'  => trans('offline.mall::demo.products.properties.heavens_blue'), 
+                'hex'   => '#02bbe6'
+            ],
             'rear-travel' => '0',
             'fork-travel' => '130',
-            'material'    => 'Aluminium',
-            'gender'      => 'Unisex',
+            'material'    => trans('offline.mall::demo.products.properties.aluminium'),
+            'gender'      => trans('offline.mall::demo.products.properties.unisex'),
         ];
     }
 
@@ -69,7 +73,7 @@ class Cruiser3500 extends DemoProduct
     {
         return [
             [
-                'name'       => 'Cruiser 3500 27.5" S',
+                'name'       => 'Cruiser 3000 27.5" S',
                 'stock'      => 4,
                 'prices'     => $this->prices(),
                 'properties' => [
@@ -78,7 +82,7 @@ class Cruiser3500 extends DemoProduct
                 ],
             ],
             [
-                'name'       => 'Cruiser 3500 27.5" M',
+                'name'       => 'Cruiser 3000 27.5" M',
                 'stock'      => 2,
                 'properties' => [
                     'frame-size' => 'M (43cm / 17")',
@@ -86,7 +90,7 @@ class Cruiser3500 extends DemoProduct
                 ],
             ],
             [
-                'name'       => 'Cruiser 3500 27.5" L',
+                'name'       => 'Cruiser 3000 27.5" L',
                 'stock'      => 0,
                 'properties' => [
                     'frame-size' => 'L (48cm / 19")',
@@ -94,7 +98,7 @@ class Cruiser3500 extends DemoProduct
                 ],
             ],
             [
-                'name'       => 'Cruiser 3500 29" S',
+                'name'       => 'Cruiser 3000 29" S',
                 'stock'      => 1,
                 'properties' => [
                     'frame-size' => 'S (38cm / 15")',
@@ -102,7 +106,7 @@ class Cruiser3500 extends DemoProduct
                 ],
             ],
             [
-                'name'       => 'Cruiser 3500 29" M',
+                'name'       => 'Cruiser 3000 29" M',
                 'stock'      => 8,
                 'properties' => [
                     'frame-size' => 'M (43cm / 17")',
@@ -110,7 +114,7 @@ class Cruiser3500 extends DemoProduct
                 ],
             ],
             [
-                'name'       => 'Cruiser 3500 29" L',
+                'name'       => 'Cruiser 3000 29" L',
                 'stock'      => 5,
                 'properties' => [
                     'frame-size' => 'L (48cm / 19")',
@@ -124,7 +128,7 @@ class Cruiser3500 extends DemoProduct
     {
         return [
             [
-                'name'     => 'Include bike assembly guide',
+                'name'     =>  trans('offline.mall::demo.products.fields.include_bike_assembly'),
                 'type'     => 'checkbox',
                 'price'    => ['USD' => 490, 'EUR' => 200, 'CHF' => 5900],
                 'required' => false,
@@ -136,10 +140,10 @@ class Cruiser3500 extends DemoProduct
     {
         return [
             [
-                'name'        => 'Main images',
-                'is_main_set' => true,
-                'images'      => [
-                    realpath(__DIR__ . '/images/cruiser-3500-1.jpg'),
+                'name'          =>  trans('offline.mall::demo.products.images.main'),
+                'is_main_set'   => true,
+                'images'        => [
+                    realpath(__DIR__ . '/images/cruiser-3000-1.jpg'),
                     realpath(__DIR__ . '/images/cruiser-5000-2.jpg'),
                 ],
             ],

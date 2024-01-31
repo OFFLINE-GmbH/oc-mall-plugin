@@ -9,33 +9,40 @@ class CurrencyTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
+        if ($useDemo) {
+            return;
+        }
+        
         Currency::create([
+            'code'       => 'EUR',
+            'format'     => '{{ price|number_format(2, ",", ".") }}{{ currency.symbol }}',
+            'decimals'   => 2,
+            'symbol'     => '€',
+            'rate'       => 1.0,
             'is_default' => true,
+        ]);
+
+        Currency::create([
             'code'       => 'CHF',
             'format'     => '{{ currency.code }} {{ price|number_format(2, ".", "\'") }}',
             'decimals'   => 2,
-            'rate'       => 1,
-        ]);
-        Currency::create([
+            'symbol'     => '₣',
+            'rate'       => 0.94,
             'is_default' => false,
-            'code'       => 'EUR',
-            'format'     => '{{ price|number_format(2, ".", "\'") }}{{ currency.symbol }}',
-            'decimals'   => 2,
-            'symbol'     => '€',
-            'rate'       => 1.14,
         ]);
+        
         Currency::create([
-            'is_default' => false,
             'code'       => 'USD',
-            'format'     => '{{ currency.symbol }} {{ price|number_format(2, ".", "\'") }}',
+            'format'     => '{{ currency.symbol }} {{ price|number_format(2, ".", ",") }}',
             'decimals'   => 2,
             'symbol'     => '$',
-            'rate'       => 1.02,
+            'rate'       => 1.08,
+            'is_default' => false,
         ]);
-        return true;
     }
 }

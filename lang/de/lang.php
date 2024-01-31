@@ -149,6 +149,8 @@ return [
         'label' => 'Preiskategorien',
         'description' => 'Zusätzliche Preiskategorien verwalten',
         'is_enabled' => 'Aktiv',
+        'title_label' => 'Bezeichnung',
+        'title_description' => 'Eine ausführlichere Bezeichnung, welche im Front-End verwendet werden kann.'
     ],
     'order_state_settings' => [
         'description' => 'Mögliche Status für Bestellungen verwalten',

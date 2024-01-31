@@ -477,17 +477,19 @@ v3.0.30:
     - 'Made order state flags easier to extend (thanks to @SamBrishes)'
 v3.1.0:
     - '!!! PHP 8.0 is now required to run this plugin. General code cleanup (thanks to @SamBrishes)'
-v3.1.1:
+v3.2.0:
     - 'Feature Release'
     - 'Added new navigation icons for catalogue and orders menus.'
     - 'Added new <grp>_<idx>_<action>_<name>.php migration file naming for a better overview.'
     - 'Added new enabled-state to currency + minor changes + tests.'
-    - 'Added new enabled-state to price category + minor changes.'
+    - 'Added new enabled-state and additional title property to price category + minor changes.'
     - 'Added new enabled-state to taxes + minor changes.'
-    - 'Added new enabled-state to payment methods + minor changes.'
-    - 'Added new enabled-state to shipping methods + minor changes.'
+    - 'Added new enabled and default-states to payment methods + minor changes.'
+    - 'Added new enabled and default-states to shipping methods + minor changes.'
     - 'Added new enabled-state to order states + minor changes.'
     - 'Added a new HasDefault database model trait.'
+    - 'Updated console commands and database seeders.'
+    - 'Updated demonstration content (+ add support for german translations).'
     - 'Updated available rounding options on Currency model to support extensions.'
     - 'Catch errors on HashIds trait + add typings.'
     - 'General code cleanup, especially on backend controllers and models.'

@@ -8,6 +8,11 @@ fields:
         label: 'offline.mall::lang.common.name'
         span: left
         type: text
+    title:
+        label: 'offline.mall::lang.price_category_settings.title_label'
+        span: left
+        type: text
+        description: 'offline.mall::lang.price_category_settings.title_description'
     code:
         label: 'offline.mall::lang.common.code'
         span: right

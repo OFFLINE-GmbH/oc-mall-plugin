@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use October\Rain\Support\Arr;
 use OFFLINE\Mall\Models\Brand;
@@ -164,6 +164,11 @@ abstract class DemoProduct
 
     protected function property($slug)
     {
-        return Property::whereSlug($slug)->firstOrFail();
+        try {
+            $prop = Property::whereSlug($slug)->firstOrFail();
+        } catch(\Exception $exc) {
+            throw new \Exception('e -' . $slug);
+        }
+        return $prop;
     }
 }

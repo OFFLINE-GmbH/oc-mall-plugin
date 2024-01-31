@@ -9,27 +9,32 @@ class PaymentMethodTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
-        $method = new PaymentMethod();
-        $method->name = 'Invoice';
-        $method->payment_provider = 'offline';
-        $method->sort_order = 1;
-        $method->is_default = 1;
-        $method->save();
+        if ($useDemo) {
+            return;
+        }
         
-        $method = new PaymentMethod();
-        $method->name = 'PayPal';
-        $method->payment_provider = 'paypal-rest';
-        $method->sort_order = 2;
-        $method->save();
+        PaymentMethod::create([
+            'name'              => trans('offline.mall::demo.payment_methods.invoice'),
+            'payment_provider'  => 'offline',
+            'sort_order'        => 1,
+            'is_default'        => true
+        ]);
+        
+        PaymentMethod::create([
+            'name'              => 'PayPal',
+            'payment_provider'  => 'paypal-rest',
+            'sort_order'        => 2,
+        ]);
 
-        $method = new PaymentMethod();
-        $method->name = 'Stripe';
-        $method->payment_provider = 'stripe';
-        $method->sort_order = 3;
-        $method->save();
+        PaymentMethod::create([
+            'name'              => 'Stripe',
+            'payment_provider'  => 'stripe',
+            'sort_order'        => 3,
+        ]);
     }
 }

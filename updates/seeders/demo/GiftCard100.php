@@ -1,25 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
 
-class GiftCard200 extends DemoProduct
+class GiftCard100 extends DemoProduct
 {
     protected function attributes(): array
     {
         return [
             'brand_id'                     => null,
-            'user_defined_id'              => 'GIFTCARD200',
-            'name'                         => '200 € Gift Card',
-            'slug'                         => 'gift-card-200',
-            'description_short'            => 'Valid for this store',
-            'description'                  => '<p>This is a custom gift card for you to print at home.</p>',
-            'meta_title'                   => '200 € Gift Card',
+            'user_defined_id'              => 'GIFTCARD100',
+            'slug'                         => 'gift-card-100',
+            'name'                         => trans('offline.mall::demo.products.gift_card_100.name'),
+            'description'                  => trans('offline.mall::demo.products.gift_card_100.description'),
+            'description_short'            => trans('offline.mall::demo.products.gift_card_100.description_short'),
+            'meta_title'                   => trans('offline.mall::demo.products.gift_card_100.meta_title'),
             'meta_keywords'                => 'gift, card',
             'weight'                       => 0,
             'inventory_management_method'  => 'product',
-            'stock'                        => 200,
+            'stock'                        => 100,
             'quantity_default'             => 1,
             'quantity_max'                 => 5,
             'allow_out_of_stock_purchases' => true,
@@ -28,7 +28,7 @@ class GiftCard200 extends DemoProduct
             'shippable'                    => true,
             'price_includes_tax'           => true,
             'is_virtual'                   => true,
-            'mpn'                          => 'GIFTCARD200',
+            'mpn'                          => 'GIFTCARD100',
             'published'                    => true,
         ];
     }
@@ -36,9 +36,9 @@ class GiftCard200 extends DemoProduct
     protected function prices(): array
     {
         return [
-            new ProductPrice(['currency_id' => 1, 'price' => 190.00]),
-            new ProductPrice(['currency_id' => 2, 'price' => 200.00]),
-            new ProductPrice(['currency_id' => 3, 'price' => 210.00]),
+            new ProductPrice(['currency_id' => 1, 'price' => 80.00]),
+            new ProductPrice(['currency_id' => 2, 'price' => 100.00]),
+            new ProductPrice(['currency_id' => 3, 'price' => 120.00]),
         ];
     }
 
@@ -53,7 +53,7 @@ class GiftCard200 extends DemoProduct
     {
         return [
             [
-                'name'        => 'Gift Card',
+                'name'        =>  trans('offline.mall::demo.products.images.gift'),
                 'is_main_set' => true,
                 'images'      => [
                     realpath(__DIR__ . '/images/gift-card.jpg'),

@@ -4,48 +4,46 @@ namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\OrderState;
-use System\Classes\PluginManager;
 
 class OrderStateTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param bool $useDemo
      * @return void
      */
-    public function run()
+    public function run(bool $useDemo = false)
     {
-        $isTranslatable = PluginManager::instance()->hasPlugin('RainLab.Translate');
-        $states         = [
-            ['name' => 'New', 'flag' => OrderState::FLAG_NEW, 'color' => '#3498db', 'german_name' => 'Neu'],
-            ['name' => 'In Progress', 'color' => '#f1c40f', 'german_name' => 'Wird bearbeitet'],
-            ['name' => 'Disputed', 'color' => '#d30000', 'german_name' => 'Reklamiert'],
-            [
-                'name'        => 'Cancelled',
-                'flag'        => OrderState::FLAG_CANCELLED,
-                'color'       => '#5e667f',
-                'german_name' => 'Storniert',
-            ],
-            [
-                'name'        => 'Complete',
-                'flag'        => OrderState::FLAG_COMPLETE,
-                'color'       => '#189e51',
-                'german_name' => 'Abgeschlossen',
-            ],
-        ];
-        foreach ($states as $state) {
-            $s = new OrderState();
-            if ($isTranslatable) {
-                $s->translateContext('en');
-            }
-
-            $s->forceFill(array_except($state, 'german_name'));
-            $s->save();
-
-            if ($isTranslatable) {
-                $s->translateContext('de');
-                $s->name = $state['german_name'];
-                $s->save();
-            }
+        if ($useDemo) {
+            return;
         }
+        
+        OrderState::create([
+            'name'  => trans('offline.mall::demo.order_states.new'),
+            'flag'  => OrderState::FLAG_NEW,
+            'color' => '#3498db',
+        ]);
+        
+        OrderState::create([
+            'name'  => trans('offline.mall::demo.order_states.in_progress'),
+            'color' => '#f1c40f',
+        ]);
+        
+        OrderState::create([
+            'name'  => trans('offline.mall::demo.order_states.disputed'),
+            'color' => '#d30000',
+        ]);
+        
+        OrderState::create([
+            'name'  => trans('offline.mall::demo.order_states.cancelled'),
+            'flag'  => OrderState::FLAG_CANCELLED,
+            'color' => '#5e667f',
+        ]);
+        
+        OrderState::create([
+            'name'  => trans('offline.mall::demo.order_states.complete'),
+            'flag'  => OrderState::FLAG_COMPLETE,
+            'color' => '#189e51',
+        ]);
     }
 }

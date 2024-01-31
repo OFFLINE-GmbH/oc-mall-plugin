@@ -8,6 +8,9 @@ columns:
     name:
         label: 'offline.mall::lang.common.name'
         type: text
+    title:
+        label: 'offline.mall::lang.price_category_settings.title_label'
+        type: text
     code:
         label: 'offline.mall::lang.common.code'
         type: text

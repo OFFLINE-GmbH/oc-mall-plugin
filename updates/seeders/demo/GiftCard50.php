@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
 
@@ -11,11 +11,11 @@ class GiftCard50 extends DemoProduct
         return [
             'brand_id'                     => null,
             'user_defined_id'              => 'GIFTCARD50',
-            'name'                         => '50 € Gift Card',
             'slug'                         => 'gift-card-50',
-            'description_short'            => 'Valid for this store',
-            'description'                  => '<p>This is a custom gift card for you to print at home.</p>',
-            'meta_title'                   => '50 € Gift Card',
+            'name'                         => trans('offline.mall::demo.products.gift_card_50.name'),
+            'description'                  => trans('offline.mall::demo.products.gift_card_50.description'),
+            'description_short'            => trans('offline.mall::demo.products.gift_card_50.description_short'),
+            'meta_title'                   => trans('offline.mall::demo.products.gift_card_50.meta_title'),
             'meta_keywords'                => 'gift, card',
             'weight'                       => 0,
             'inventory_management_method'  => 'product',
@@ -53,7 +53,7 @@ class GiftCard50 extends DemoProduct
     {
         return [
             [
-                'name'        => 'Gift Card',
+                'name'        =>  trans('offline.mall::demo.products.images.gift'),
                 'is_main_set' => true,
                 'images'      => [
                     realpath(__DIR__ . '/images/gift-card.jpg'),

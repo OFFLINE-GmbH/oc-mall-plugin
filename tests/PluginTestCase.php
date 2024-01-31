@@ -22,7 +22,12 @@ class PluginTestCase extends \PluginTestCase
 
         $this->artisan('plugin:seed', [
             'namespace' => 'OFFLINE.Mall',
-            'class'     => 'OFFLINE\Mall\Updates\Seeders\MallDatabaseSeeder'
+            'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder'
+        ]);
+
+        $this->artisan('plugin:seed', [
+            'namespace' => 'OFFLINE.Mall',
+            'class'     => 'OFFLINE\Mall\Updates\Seeders\DemoSeeder'
         ]);
 
         app()->bind(Index::class, function() {

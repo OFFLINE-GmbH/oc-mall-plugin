@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace OFFLINE\Mall\Classes\Demo\Products;
+namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
 
@@ -11,11 +11,11 @@ class Jersey extends DemoProduct
         return [
             'brand_id'                     => null,
             'user_defined_id'              => 'SHIRT002',
-            'name'                         => 'Stormrider Jersey Men',
             'slug'                         => 'stormrider-jersey',
-            'description_short'            => 'Polyester',
-            'description'                  => '<p>The fast-drying and breathable materials of the Stormrider Jersey ensure the perfect balance between durability, abrasion resistance and comfort. </p>',
-            'meta_title'                   => 'Stormrider Jersey Men',
+            'name'                         => trans('offline.mall::demo.products.jersey.name'),
+            'description'                  => trans('offline.mall::demo.products.jersey.description'),
+            'description_short'            => trans('offline.mall::demo.products.jersey.description_short'),
+            'meta_title'                   => trans('offline.mall::demo.products.jersey.meta_title'),
             'meta_keywords'                => 'jersey, mtb, stormrider',
             'weight'                       => 120,
             'inventory_management_method'  => 'variant',
@@ -49,8 +49,8 @@ class Jersey extends DemoProduct
     protected function properties(): array
     {
         return [
-            'material' => 'Polyester',
-            'gender'   => 'Male',
+            'material'  => trans('offline.mall::demo.products.properties.polyester'),
+            'gender'    => trans('offline.mall::demo.products.properties.male'),
         ];
     }
 
@@ -65,85 +65,112 @@ class Jersey extends DemoProduct
     {
         return [
             [
-                'name'         => 'Stormrider Jersey Men black/red/gray XS',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.brg_xs_name'),
                 'stock'        => 5,
                 'properties'   => [
                     'size'  => 'XS',
-                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.brg'), 
+                        'hex' => '#413f40'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/red/gray S',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.brg_s_name'),
                 'stock'        => 5,
                 'properties'   => [
                     'size'  => 'S',
-                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.brg'), 
+                        'hex' => '#413f40'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/red/gray M',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.brg_m_name'),
                 'stock'        => 3,
                 'properties'   => [
                     'size'  => 'M',
-                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.brg'), 
+                        'hex' => '#413f40'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/red/gray L',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.brg_l_name'),
                 'stock'        => 3,
                 'properties'   => [
                     'size'  => 'L',
-                    'color' => ['name' => 'black/red/gray', 'hex' => '#413f40'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.brg'), 
+                        'hex' => '#413f40'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
             ],
 
 
             [
-                'name'         => 'Stormrider Jersey Men black/blue/white XS',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.bbw_xs_name'),
                 'stock'        => 5,
                 'properties'   => [
                     'size'  => 'XS',
-                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
+                        'hex' => '#09d2bf'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/blue/white S',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.bbw_s_name'),
                 'stock'        => -2,
                 'properties'   => [
                     'size'  => 'S',
-                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
+                        'hex' => '#09d2bf'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/blue/white M',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.bbw_m_name'),
                 'stock'        => 3,
                 'properties'   => [
                     'size'  => 'M',
-                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
+                        'hex' => '#09d2bf'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/blue/white L',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.bbw_l_name'),
                 'stock'        => 3,
                 'properties'   => [
                     'size'  => 'L',
-                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
+                        'hex' => '#09d2bf'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
             ],
             [
-                'name'         => 'Stormrider Jersey Men black/blue/white XL',
+                'name'         => trans('offline.mall::demo.products.jersey.variants.bbw_xl_name'),
                 'stock'        => 8,
                 'properties'   => [
                     'size'  => 'XL',
-                    'color' => ['name' => 'black/blue/white', 'hex' => '#09d2bf'],
+                    'color' => [
+                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
+                        'hex' => '#09d2bf'
+                    ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
             ],
@@ -161,14 +188,14 @@ class Jersey extends DemoProduct
     {
         return [
             [
-                'name'        => 'Jersey red',
+                'name'        => trans('offline.mall::demo.products.images.jersey_red'),
                 'is_main_set' => true,
                 'images'      => [
                     realpath(__DIR__ . '/images/jersey-red-1.jpg'),
                 ],
             ],
             [
-                'name'        => 'Jersey blue',
+                'name'        => trans('offline.mall::demo.products.images.jersey_blue'),
                 'is_main_set' => false,
                 'images'      => [
                     realpath(__DIR__ . '/images/jersey-blue-1.jpg'),

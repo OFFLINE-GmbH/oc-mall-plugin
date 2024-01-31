@@ -8,16 +8,12 @@ use OFFLINE\Mall\Updates\Seeders\Tables\CurrencyTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\CategoryTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\TaxTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\PaymentMethodTableSeeder;
-use OFFLINE\Mall\Updates\Seeders\Tables\ProductTableSeeder;
-use OFFLINE\Mall\Updates\Seeders\Tables\CustomFieldTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\ShippingMethodTableSeeder;
-use OFFLINE\Mall\Updates\Seeders\Tables\CustomerGroupTableSeeder;
-use OFFLINE\Mall\Updates\Seeders\Tables\CustomerTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\PropertyTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\OrderStateTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\NotificationTableSeeder;
 
-class MallDatabaseSeeder extends Seeder
+class MallSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -31,14 +27,10 @@ class MallDatabaseSeeder extends Seeder
             CategoryTableSeeder::class,
             TaxTableSeeder::class,
             PaymentMethodTableSeeder::class,
-            ProductTableSeeder::class,
-            CustomFieldTableSeeder::class,
             ShippingMethodTableSeeder::class,
-            CustomerGroupTableSeeder::class,
-            CustomerTableSeeder::class,
             PropertyTableSeeder::class,
             OrderStateTableSeeder::class,
-            NotificationTableSeeder::class            ,
+            NotificationTableSeeder::class,
         ]);
     }
 }
