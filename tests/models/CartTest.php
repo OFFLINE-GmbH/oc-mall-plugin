@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Tests\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Tests\Models;
 
 use DB;
 use October\Rain\Exception\ValidationException;

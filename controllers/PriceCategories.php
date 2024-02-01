@@ -6,6 +6,7 @@ use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
+use October\Rain\Database\Builder;
 use System\Classes\SettingsManager;
 
 class PriceCategories extends Controller
@@ -47,5 +48,25 @@ class PriceCategories extends Controller
         parent::__construct();
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'price_categories_settings');
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function formExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function listExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
     }
 }

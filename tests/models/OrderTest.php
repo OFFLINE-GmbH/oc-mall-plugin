@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Tests\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Tests\Models;
 
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
@@ -19,7 +21,6 @@ use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
-use PHPUnit\Framework\SkippedTest;
 use RainLab\User\Facades\Auth;
 
 class OrderTest extends PluginTestCase

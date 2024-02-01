@@ -102,7 +102,7 @@ class Price extends FormWidgetBase
     {
         $this->vars['defaultCurrency'] = $this->defaultCurrency;
         $this->vars['defaultValue'] = $this->getPriceValue($this->defaultCurrency->id);
-        $this->vars['currencies'] = Currency::enabled()->orderBy('sort_order', 'ASC')->get();
+        $this->vars['currencies'] = Currency::orderBy('sort_order', 'ASC')->get();
         $this->vars['field'] = $this->formField;
     }
 

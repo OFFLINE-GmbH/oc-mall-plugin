@@ -7,9 +7,11 @@ use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Database\IsStates;
 
 class PriceCategory extends Model
 {
+    use IsStates;
     use Sluggable;
     use Sortable;
     use Validation;
@@ -19,6 +21,18 @@ class PriceCategory extends Model
      * @deprecated
      */
     const OLD_PRICE_CATEGORY_ID = 1;
+
+    /**
+     * Disable `is_default` handler on IsStates trait.
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
 
     /**
      * Implement behaviors for this model.
@@ -99,14 +113,5 @@ class PriceCategory extends Model
     public function afterDelete()
     {
         DB::table('offline_mall_prices')->where('price_category_id', $this->id)->delete();
-    }
-
-    /**
-     * Custom scope to retrieve only enabled price categories.
-     * @return mixed
-     */
-    public function scopeEnabled($query)
-    {
-        return $query->where('is_enabled', 1);
     }
 }

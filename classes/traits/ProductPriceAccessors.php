@@ -57,7 +57,7 @@ trait ProductPriceAccessors
 
     public function oldPriceRelations()
     {
-        $oldPrice = PriceCategory::enabled()->where('code', 'old_price')->first();
+        $oldPrice = PriceCategory::where('code', 'old_price')->first();
         if ($oldPrice) {
             return $this->additional_prices->where('price_category_id', $oldPrice->id);
         } else {
@@ -67,7 +67,7 @@ trait ProductPriceAccessors
 
     public function oldPrice($currency = null)
     {
-        $oldPrice = PriceCategory::enabled()->where('code', 'old_price')->first();
+        $oldPrice = PriceCategory::where('code', 'old_price')->first();
         if ($oldPrice) {
             return $this->additionalPrice($oldPrice, $currency);
         } else {

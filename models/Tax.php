@@ -6,13 +6,33 @@ use Model;
 use Illuminate\Support\Facades\Cache;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Database\Collection;
+use OFFLINE\Mall\Classes\Database\IsStates;
 use Rainlab\Location\Models\Country as RainLabCountry;
 
 class Tax extends Model
 {
+    use IsStates;
     use Validation;
 
+    /**
+     * Default cache key for the queries taxes.
+     * @var string
+     */
     public const DEFAULT_TAX_CACHE_KEY = 'mall.taxes.default';
+
+    /**
+     * Disable `is_default` handler on IsStates trait. Even if Tax uses a default value, the
+     * current IsStates trait does not support multiple defaults, especially when using an 
+     * additional linking table (`offline_mall_country_tax`).
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
 
     /**
      * Implement behaviors for this model.
@@ -106,7 +126,7 @@ class Tax extends Model
     {
         $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
             $columns = [ 'id',  'name',  'percentage',  'is_default', 'is_enabled'];
-            $taxes = static::enabled()->where('is_default', true)->get($columns);
+            $taxes = static::where('is_default', true)->get($columns);
             if (!$taxes) {
                 return [];
             } else {
@@ -129,15 +149,6 @@ class Tax extends Model
     public function afterSave()
     {
         Cache::forget(self::DEFAULT_TAX_CACHE_KEY);
-    }
-
-    /**
-     * Custom scope to retrieve only enabled taxes.
-     * @return mixed
-     */
-    public function scopeEnabled($query)
-    {
-        return $query->where('is_enabled', 1);
     }
 
     /**

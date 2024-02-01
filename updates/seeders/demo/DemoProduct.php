@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use October\Rain\Support\Arr;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Brand;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\CategoryReview;
@@ -96,7 +97,7 @@ abstract class DemoProduct
 
             if (isset($variant['old_price'])) {
                 foreach ($variant['old_price'] as $currency => $price) {
-                    Price::create([
+                    Price::withoutGlobalScope(new IsStatesScope)->create([
                         'currency_id'       => Currency::resolve($currency)->id,
                         'price'             => $price,
                         'priceable_id'      => $v->id,

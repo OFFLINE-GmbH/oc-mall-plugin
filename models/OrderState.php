@@ -7,15 +7,43 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Database\IsStates;
 
 class OrderState extends Model
 {
-    use Validation;
+    use IsStates;
     use SoftDelete;
     use Sortable;
+    use Validation;
 
+    /**
+     * Disable `is_default` handler on IsStates trait.
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
+
+    /**
+     * Default NEW order state flag
+     * @var string
+     */
     public const FLAG_NEW = 'NEW';
+
+    /**
+     * Default CANCELLED order state flag
+     * @var string
+     */
     public const FLAG_CANCELLED = 'CANCELLED';
+
+    /**
+     * Default COMPLETE order state flag
+     * @var string
+     */
     public const FLAG_COMPLETE = 'COMPLETE';
 
     /**
@@ -98,12 +126,10 @@ class OrderState extends Model
         }, static::$availableFlagOptions);
     }
 
-    /**
-     * Custom scope to retrieve only enabled taxes.
-     * @return mixed
-     */
-    public function scopeEnabled($query)
+    public function beforeDelete()
     {
-        return $query->where('is_enabled', 1);
+        if (!empty($this->flag)) {
+            throw new \Exception('You cannot delete a flagged order state.');
+        }
     }
 }

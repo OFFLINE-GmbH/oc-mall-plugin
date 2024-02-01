@@ -128,7 +128,7 @@ class AddressList extends MallComponent
         $customer = $user->customer;
         $cart = Cart::byUser($user);
 
-        $address = Address::byCustomer($customer)->find($id);
+        $address = Address::byCustomer($customer)->where('id', $id)->first();
 
         if (!$address) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
@@ -160,7 +160,7 @@ class AddressList extends MallComponent
         $user = Auth::getUser();
         $customer = $user->customer;
         $cart = Cart::byUser($user);
-        $address = Address::byCustomer($customer)->find($id);
+        $address = Address::byCustomer($customer)->where('id', $id)->first();
 
         if (!$address) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);

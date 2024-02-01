@@ -64,7 +64,10 @@ class GeneralSettings extends Model
 
     public function getCheckoutPageOptions()
     {
-        return $this->getPagesByComponent('checkout');
+        return array_merge(
+            $this->getPagesByComponent('checkout'),
+            $this->getPagesByComponent('quickCheckout'),
+        );
     }
 
     public function getAccountPageOptions()

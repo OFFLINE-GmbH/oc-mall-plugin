@@ -7,6 +7,8 @@ use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use October\Rain\Database\Builder;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\Price;
 use System\Classes\SettingsManager;
@@ -58,6 +60,26 @@ class PaymentMethods extends Controller
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'payment_method_settings');
     }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function formExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function listExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
 
     /**
      * Hook after form created.
@@ -94,7 +116,7 @@ class PaymentMethods extends Controller
             if ($value === '') {
                 $value = null;
             }
-            Price::updateOrCreate([
+            Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
                 'price_category_id' => null,
                 'priceable_id'      => $model->id,
                 'priceable_type'    => $model::MORPH_KEY,

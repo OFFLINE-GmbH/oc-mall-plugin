@@ -17,57 +17,53 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * The Checkout component orchestrates the checkout process.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Checkout extends MallComponent
 {
     /**
      * The user's cart.
-     *
      * @var Cart
      */
     public $cart;
+
     /**
      * The error massage received from the PaymentProvider.
-     *
      * @var string
      */
     public $paymentError;
+
     /**
      * The currently active step.
-     *
      * @var string
      */
     public $step;
+
     /**
      * The order that was created during checkout.
-     *
      * @var Order
      */
     public $order;
+
     /**
      * The name of the my account page.
-     *
      * @var string
      */
     public $accountPage;
+
     /**
      * Google Tag Manager dataLayer code.
-     *
      * @var array
      */
     public $dataLayer;
+
     /**
      * Backend setting whether shipping should be before payment.
-     *
      * @var bool
      */
     public $shippingSelectionBeforePayment = false;
 
     /**
      * Component details.
-     *
      * @return array
      */
     public function componentDetails()
@@ -80,7 +76,6 @@ class Checkout extends MallComponent
 
     /**
      * Properties of this component.
-     *
      * @return array
      */
     public function defineProperties()
@@ -95,7 +90,6 @@ class Checkout extends MallComponent
 
     /**
      * Options array for the step dropdown.
-     *
      * @return array
      */
     public function getStepOptions()
@@ -112,9 +106,7 @@ class Checkout extends MallComponent
 
     /**
      * The component is initialized.
-     *
      * All child components get added.
-     *
      * @return void
      */
     public function init()
@@ -143,7 +135,6 @@ class Checkout extends MallComponent
 
     /**
      * This method sets all variables needed for this component to work.
-     *
      * @return void
      */
     protected function setData()
@@ -159,7 +150,7 @@ class Checkout extends MallComponent
         }
         $this->setVar('cart', $cart);
 
-        $paymentMethod = PaymentMethod::find($cart->payment_method_id);
+        $paymentMethod = PaymentMethod::where('id', $cart->payment_method_id)->first();
         if ( ! $paymentMethod) {
             $paymentMethod = PaymentMethod::getDefault();
             $cart->setPaymentMethod($paymentMethod);
@@ -175,7 +166,7 @@ class Checkout extends MallComponent
 
         if ($orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
-            $this->setVar('order', Order::byCustomer($user->customer)->find($orderId));
+            $this->setVar('order', Order::byCustomer($user->customer)->where('id', $orderId)->first());
         }
 
         $this->setVar('dataLayer', $this->handleDataLayer());
@@ -183,7 +174,6 @@ class Checkout extends MallComponent
 
     /**
      * The component is executed.
-     *
      * @return RedirectResponse|void
      * @throws \Cms\Classes\CmsException
      */
@@ -212,7 +202,6 @@ class Checkout extends MallComponent
 
     /**
      * Handle the checkout process.
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws ValidationException
      * @throws \Cms\Classes\CmsException
@@ -234,8 +223,8 @@ class Checkout extends MallComponent
             $paymentData = [];
         }
 
-        $paymentMethod = PaymentMethod::findOrFail($this->cart->payment_method_id);
-
+        $paymentMethod = PaymentMethod::where('id', $this->cart->payment_method_id)->firstOrFail();
+        
         // Grab the PaymentGateway from the Service Container.
         $gateway = app(PaymentGateway::class);
         $gateway->init($paymentMethod, $paymentData);
@@ -306,7 +295,6 @@ class Checkout extends MallComponent
         }
 
         $useModel = $this->step === 'done' ? $this->order : $this->cart;
-
         $data = [
             'event'     => 'checkout',
             'ecommerce' => [

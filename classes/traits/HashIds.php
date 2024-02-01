@@ -24,7 +24,12 @@ trait HashIds
      */
     public function decode(string $value)
     {
-        return app(Hasher::class)->decode($value) ?? null;
+        $result = app(Hasher::class)->decode($value) ?? null;
+        if (is_array($result) && count($result) === 1) {
+            return $result[0];
+        } else {
+            return $result;
+        }
     }
 
     /**

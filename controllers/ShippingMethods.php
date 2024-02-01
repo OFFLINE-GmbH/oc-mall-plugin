@@ -7,6 +7,8 @@ use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use October\Rain\Database\Builder;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\ShippingMethod;
 use System\Classes\SettingsManager;
@@ -57,6 +59,26 @@ class ShippingMethods extends Controller
         parent::__construct();
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'shipping_method_settings');
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function formExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function listExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
     }
 
     /**
@@ -140,7 +162,7 @@ class ShippingMethods extends Controller
             if ($value === '') {
                 $value = null;
             }
-            Price::updateOrCreate([
+            Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
                 'price_category_id' => null,
                 'priceable_id'      => $model->id,
                 'priceable_type'    => $model::MORPH_KEY,

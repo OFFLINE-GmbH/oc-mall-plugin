@@ -10,19 +10,39 @@ use Illuminate\Support\Facades\Session;
 use October\Rain\Database\Collection;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Database\IsStates;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use Rainlab\Location\Models\Country as RainLabCountry;
 use System\Models\File;
 
 class ShippingMethod extends Model
 {
-    use Validation;
-    use Sortable;
+    use IsStates;
     use PriceAccessors {
         priceRelation as priceAccessorPriceRelation;
     }
+    use Sortable;
+    use Validation;
 
+    /**
+     * Morph key as used on the respective relationships.
+     * @var string
+     */
     const MORPH_KEY = 'mall.shipping_method';
+
+    /**
+     * Disable `is_default` handler on IsStates trait. Even if ShippingMethod uses a default value, 
+     * the current IsStates trait does not support multiple defaults, especially by using an 
+     * additional linking table (`offline_mall_shipping_country`).
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
 
     /**
      * Implement behaviors for this model.

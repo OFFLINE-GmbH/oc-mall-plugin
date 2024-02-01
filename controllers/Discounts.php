@@ -6,6 +6,7 @@ use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Price;
 
@@ -96,7 +97,7 @@ class Discounts extends Controller
             if ($value === '') {
                 $value = null;
             }
-            Price::updateOrCreate([
+            Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
                 'price_category_id' => null,
                 'priceable_id' => $model->id,
                 'priceable_type' => $model::MORPH_KEY,

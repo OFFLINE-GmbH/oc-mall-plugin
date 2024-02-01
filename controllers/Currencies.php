@@ -6,6 +6,8 @@ use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
+use October\Rain\Database\Builder;
+use October\Rain\Database\QueryBuilder;
 use System\Classes\SettingsManager;
 
 class Currencies extends Controller
@@ -48,5 +50,25 @@ class Currencies extends Controller
 
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'currency_settings');
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function formExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function listExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
     }
 }

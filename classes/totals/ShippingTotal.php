@@ -87,9 +87,9 @@ class ShippingTotal implements \JsonSerializable, CallsAnyMethod
         $totalTax = $this->totals->shippingTaxes->sum(function (Tax $tax) use ($price, $totalTaxPercentage) {
             if ($this->method->price_includes_tax) {
                 return $price / (1 + $totalTaxPercentage) * $tax->percentageDecimal;
+            } else {
+                return $price * $tax->percentageDecimal;
             }
-
-            return $price * $tax->percentageDecimal;
         });
 
         return $this->round($totalTax);

@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Traits\HasDefault;
+use OFFLINE\Mall\Classes\Database\IsStates;
 
 class Currency extends Model
 {
-    use HasDefault;
+    use IsStates;
     use Sortable;
     use Validation;
 
@@ -21,6 +21,18 @@ class Currency extends Model
     public const CURRENCIES_CACHE_KEY = 'mall.currencies';
     public const DEFAULT_CURRENCY_CACHE_KEY = 'mall.currency.default';
     public const JSON_PRICE_CACHE_KEY = 'mall.jsonPrice.currencies';
+
+    /**
+     * Enable `is_default` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_DEFAULT = 'is_default';
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
 
     /**
      * The default set currency model.
@@ -114,7 +126,7 @@ class Currency extends Model
         }
 
         $currency = Cache::rememberForever(static::DEFAULT_CURRENCY_CACHE_KEY, function () {
-            $currency = static::enabled()->orderBy('is_default', 'DESC')->first();
+            $currency = static::orderBy('is_default', 'DESC')->first();
             static::guardMissingCurrency($currency);
             return $currency->toArray();
         });
@@ -131,7 +143,7 @@ class Currency extends Model
     static public function activeCurrency()
     {
         if (!Session::has(static::CURRENCY_SESSION_KEY)) {
-            $currency = static::enabled()->orderBy('is_default', 'DESC')->first();
+            $currency = static::orderBy('is_default', 'DESC')->first();
             static::guardMissingCurrency($currency);
             static::setActiveCurrency($currency);
         } else {

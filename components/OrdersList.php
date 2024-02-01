@@ -96,7 +96,7 @@ class OrdersList extends MallComponent
 
         $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
 
-        $order = Order::byCustomer($user->customer)->findOrFail(post('id'));
+        $order = Order::byCustomer($user->customer)->where('id', post('id'))->firstOrFail();
         $order->order_state = $state;
         $order->save();
     }

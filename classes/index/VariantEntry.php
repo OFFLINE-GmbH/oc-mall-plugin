@@ -69,7 +69,7 @@ class VariantEntry implements Entry
     protected function mapPrices($variant): Collection
     {
         return $variant->withForcedPriceInheritance(function () use ($variant) {
-            return Currency::enabled()->get()->mapWithKeys(function ($currency) use ($variant) {
+            return Currency::get()->mapWithKeys(function ($currency) use ($variant) {
                 return [$currency->code => $variant->price($currency)->integer];
             });
         });
@@ -79,7 +79,7 @@ class VariantEntry implements Entry
     {
         return CustomerGroup::get()->mapWithKeys(function ($group) use ($model) {
             return [
-                $group->id => Currency::enabled()->get()->mapWithKeys(function ($currency) use ($model, $group) {
+                $group->id => Currency::get()->mapWithKeys(function ($currency) use ($model, $group) {
                     $price = $model->groupPrice($group, $currency);
                     if ($price) {
                         return [$price->currency->code => $price->integer];

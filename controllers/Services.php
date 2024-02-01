@@ -9,6 +9,7 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use October\Rain\Support\Facades\Flash;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Service;
 
@@ -124,7 +125,7 @@ class Services extends Controller
                     $value = null;
                 }
 
-                Price::updateOrCreate([
+                Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
                     'price_category_id' => null,
                     'priceable_id'      => $model->id,
                     'priceable_type'    => $model::MORPH_KEY,

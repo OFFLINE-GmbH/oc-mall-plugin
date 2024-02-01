@@ -24,7 +24,7 @@ trait JsonPrice
         parent::__construct(...$args);
 
         $currencies = Currency::hydrate(Cache::rememberForever(Currency::JSON_PRICE_CACHE_KEY, function () {
-            return Currency::enabled()->orderBy('is_default', 'DESC')->get()->toArray();
+            return Currency::orderBy('is_default', 'DESC')->get()->toArray();
         }));
 
         $this->currencies     = $currencies->keyBy('code');
@@ -100,7 +100,7 @@ trait JsonPrice
             $currency = Currency::activeCurrency();
         }
         if (is_string($currency)) {
-            $currency = Currency::enabled()->whereCode($currency)->firstOrFail();
+            $currency = Currency::whereCode($currency)->firstOrFail();
         }
 
         return new Price([

@@ -11,6 +11,7 @@ use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\ProductPriceTable;
@@ -561,7 +562,7 @@ class Products extends Controller
                     $value = null;
                 }
 
-                Price::updateOrCreate([
+                Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
                     'price_category_id' => null,
                     'priceable_id'      => $model->id,
                     'priceable_type'    => $model::MORPH_KEY,

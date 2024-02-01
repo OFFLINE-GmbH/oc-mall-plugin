@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Backend\Widgets\Table;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Currency;
@@ -30,7 +31,7 @@ trait ProductPriceTable
     {
         $config = $this->makeConfig($this->productPriceTableConfig);
 
-        $additionalPriceCategories = PriceCategory::enabled()->orderBy('sort_order', 'ASC')->get();
+        $additionalPriceCategories = PriceCategory::orderBy('sort_order', 'ASC')->get();
         $additionalPriceCategories->each(function (PriceCategory $category) use ($config) {
             $config->columns['additional__' . $category->id] = ['title' => $category->name];
         });
@@ -61,7 +62,7 @@ trait ProductPriceTable
         }
 
         $this->vars['pricetable']      = $widget;
-        $this->vars['currencies']      = Currency::enabled()->orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
+        $this->vars['currencies']      = Currency::orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
         $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
     }
 
@@ -69,7 +70,7 @@ trait ProductPriceTable
     {
         \DB::transaction(function () {
             $state                     = post('state', []);
-            $currencies                = Currency::enabled()->get()->keyBy('code');
+            $currencies                = Currency::get()->keyBy('code');
             $hasPriceInDefaultCurrency = false;
 
             $this->removeOldPricingInformation($state, $currencies);
@@ -162,7 +163,7 @@ trait ProductPriceTable
             if ($price === false || $price === null) {
                 continue;
             }
-            Price::create([
+            Price::withoutGlobalScope(new IsStatesScope)->create([
                 'price_category_id' => $group['id'],
                 'priceable_type'    => $type::MORPH_KEY,
                 'priceable_id'      => $record['original_id'],

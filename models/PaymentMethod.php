@@ -12,15 +12,15 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Parse\Twig;
+use OFFLINE\Mall\Classes\Database\IsStates;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Totals\PaymentTotal;
-use OFFLINE\Mall\Classes\Traits\HasDefault;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use System\Models\File;
 
 class PaymentMethod extends Model
 {
-    use HasDefault;
+    use IsStates;
     use Nullable;
     use PriceAccessors;
     use Sluggable;
@@ -28,7 +28,23 @@ class PaymentMethod extends Model
     use Sortable;
     use Validation;
 
+    /**
+     * Morph key as used on the respective relationships.
+     * @var string
+     */
     const MORPH_KEY = 'mall.payment_method';
+
+    /**
+     * Enable `is_default` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
 
     /**
      * Implement behaviors for this model.
@@ -72,6 +88,8 @@ class PaymentMethod extends Model
     public $fillable = [
         'name',
         'code',
+        'payment_provider',
+        'fee_percentage',
         'is_enabled',
         'is_default'
     ];
@@ -176,9 +194,9 @@ class PaymentMethod extends Model
      */
     static public function getDefault(): ?self
     {
-        $default = static::enabled()->where('is_default', 1)->first();
+        $default = static::where('is_default', 1)->first();
         if (empty($default)) {
-            $default = static::enabled()->orderBy('sort_order', 'ASC')->first();
+            $default = static::orderBy('sort_order', 'ASC')->first();
         }
         return $default;
     }

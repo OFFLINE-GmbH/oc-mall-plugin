@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Classes\Totals;
 
@@ -6,7 +6,6 @@ use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
-use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
@@ -55,7 +54,10 @@ class TotalsCalculatorTest extends PluginTestCase
         $service = Service::create(['name' => 'Test']);
         $service->taxes()->attach($tax1->id);
 
-        $option = ServiceOption::create(['name' => 'Test Option', 'service_id' => $service->id]);
+        $option = ServiceOption::create([
+            'name' => 'Test Option', 
+            'service_id' => $service->id
+        ]);
         $option->prices()->save(new Price([
             'currency_id' => 2,
             'price'       => 100,
@@ -366,9 +368,9 @@ class TotalsCalculatorTest extends PluginTestCase
         $shippingMethod = ShippingMethod::first();
         $shippingMethod->save();
         $shippingMethod->price = ['CHF' => 100, 'EUR' => 150];
-
+        
         $shippingMethod->taxes()->attach($tax1);
-
+        
         $cart->setShippingMethod($shippingMethod);
 
         $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));

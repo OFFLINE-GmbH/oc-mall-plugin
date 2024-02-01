@@ -23,6 +23,7 @@ class TaxTableSeeder extends Seeder
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.standard'),
                 'percentage'    => 19,
+                'is_default'    => true
             ]);
     
             Tax::create([
@@ -33,6 +34,7 @@ class TaxTableSeeder extends Seeder
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.standard'),
                 'percentage'    => 20,
+                'is_default'    => true
             ]);
     
             Tax::create([
@@ -43,6 +45,7 @@ class TaxTableSeeder extends Seeder
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.standard'),
                 'percentage'    => 8.1,
+                'is_default'    => true
             ]);
     
             Tax::create([

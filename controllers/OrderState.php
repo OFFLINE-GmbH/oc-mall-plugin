@@ -6,6 +6,7 @@ use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
+use October\Rain\Database\Builder;
 use System\Classes\SettingsManager;
 
 class OrderState extends Controller
@@ -31,7 +32,6 @@ class OrderState extends Controller
      */
     public $listConfig = 'config_list.yaml';
 
-
     /**
      * Required admin permission to access this page.
      * @var array
@@ -48,6 +48,26 @@ class OrderState extends Controller
         parent::__construct();
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'order_state_settings');
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function formExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function listExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
     }
 
     /**
