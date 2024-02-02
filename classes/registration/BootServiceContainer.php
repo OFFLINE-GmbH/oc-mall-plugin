@@ -74,14 +74,16 @@ trait BootServiceContainer
                         $pdo->sqliteCreateFunction('JSON_CONTAINS', function ($json, $val, $path = null) {
                             $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
                             $val = trim($val, '"');
+
+                            if (!empty($path) && str_starts_with($path, '$.')) {
+                                $path = trim(ltrim($path, '$.'), '"');
+                                $array = $array[$path] ?? [];
+                            }
+
                             if (strpos($val, '[') == 0 && strrpos($val, ']') == strlen($val)-1) {
                                 $val = json_decode($val, true)[0];
                             }
-                            if ($path) {
-                                return $array[$path] == $val;
-                            } else {
-                                return in_array($val, $array, true);
-                            }
+                            return in_array($val, $array, true);
                         });
                     }
                     return new MySQL();
