@@ -30,15 +30,15 @@ trait IsStates
 
     /**
      * Receive default model
-     * @return null|static
+     * @return null|self
      */
-    static public function default(): ?static
+    static public function default(): ?self
     {
-        $defaultColumn = (new static)->getIsDefaultColumnName();
+        $defaultColumn = (new self)->getIsDefaultColumnName();
         if (empty($defaultColumn)) {
             return null; // is_default behavior has been disabled by the model.
         } else {
-            return static::where('is_default', 1)->first();
+            return self::where('is_default', 1)->first();
         }
     }
 
@@ -86,7 +86,7 @@ trait IsStates
      * Get the name of the 'is_default' column.
      * @return null|string
      */
-    public function getIsDefaultColumnName(): string|null
+    public function getIsDefaultColumnName(): ?string
     {
         /** @ignore @disregard model constant */
         return defined('static::IS_DEFAULT') ? static::IS_DEFAULT : 'is_default';
@@ -96,7 +96,7 @@ trait IsStates
      * Get the name of the 'is_enabled' column or null if disabled manually.
      * @return null|string
      */
-    public function getIsEnabledColumnName(): string|null
+    public function getIsEnabledColumnName(): ?string
     {
         /** @ignore @disregard model constant */
         return defined('static::IS_ENABLED') ? static::IS_ENABLED : 'is_enabled';
