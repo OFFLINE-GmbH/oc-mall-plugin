@@ -240,7 +240,7 @@ return [
         'unisex' => 'Unisex',
         'material' => 'Material',
         'color' => 'Color',
-        'bike_sizes' => 'Bike Sizes',
+        'bike_size' => 'Bike Sizes',
         'frame_size' => 'Frame size',
         'wheel_size' => 'Wheel size',
         'suspension' => 'Suspension',

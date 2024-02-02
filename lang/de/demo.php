@@ -240,7 +240,7 @@ return [
         'unisex' => 'Unisex',
         'material' => 'Material',
         'color' => 'Farbe',
-        'bike_sizes' => 'Fahrrad Größe',
+        'bike_size' => 'Fahrrad Größe',
         'frame_size' => 'Rahmengröße',
         'wheel_size' => 'Reifengröße',
         'suspension' => 'Federung',
