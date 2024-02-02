@@ -152,7 +152,11 @@ class Variant extends Model
      */
     public $belongsTo = [
         'product'    => Product::class,
-        'image_sets' => [ImageSet::class, 'key' => 'image_set_id'],
+        'image_sets' => [
+            ImageSet::class, 
+            'key' => 'image_set_id',
+            'replicate' => false
+        ],
     ];
     
     /**
@@ -163,7 +167,7 @@ class Variant extends Model
         'prices'                  => ProductPrice::class,
         'property_values'         => [
             PropertyValue::class, 
-            'key' => 'variant_id', 
+            'key' => 'variant_id',
             'otherKey' => 'id',
         ],
         'reviews'                 => [
@@ -178,9 +182,10 @@ class Variant extends Model
         'order_products'          => OrderProduct::class,
         'product_property_values' => [
             PropertyValue::class,
-            'key'      => 'product_id',
-            'otherKey' => 'product_id',
-            'scope'    => 'productOnly'
+            'key'       => 'product_id',
+            'otherKey'  => 'product_id',
+            'scope'     => 'productOnly',
+            'replicate' => false
         ],
     ];
     

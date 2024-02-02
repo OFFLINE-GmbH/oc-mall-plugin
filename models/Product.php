@@ -241,11 +241,11 @@ class Product extends Model
      */
     public $hasMany = [
         'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
-        'variants'               => Variant::class,
+        'variants'               => [Variant::class],
         'cart_products'          => [CartProduct::class, 'replicate' => false],
         'order_products'         => [OrderProduct::class, 'replicate' => false],
-        'image_sets'             => ImageSet::class,
-        'property_values'        => PropertyValue::class,
+        'image_sets'             => [ImageSet::class],
+        'property_values'        => [PropertyValue::class, 'conditions' => 'variant_id is null'],
         'reviews'                => [Review::class, 'replicate' => false],
         'discounts'              => [Discount::class, 'replicate' => false],
         'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null', 'replicate' => false],
