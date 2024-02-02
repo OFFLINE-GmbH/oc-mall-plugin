@@ -98,7 +98,9 @@ class VariantEntry implements Entry
         }
 
         return $input->groupBy('property_id')->map(function ($value) {
-            return $value->pluck('index_value')->unique()->filter()->values();
+            return $value->pluck('index_value')->unique()->filter(function ($item) {
+                return ! empty($item) || $item === 0 || $item === '0';
+            })->values();
         })->filter();
     }
 }
