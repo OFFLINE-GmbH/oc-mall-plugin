@@ -359,6 +359,9 @@ return [
             'single' => 'Article',
             'variant' => 'Article variants',
         ],
+        'create' => 'Create Variant',
+        'delete' => 'Delete Selected',
+        'delete_confirm' => 'Do you really want to remove the selected variants? This action cannot be made undone.'
     ],
     'properties' => [
         'use_for_variants' => 'Use for variants',

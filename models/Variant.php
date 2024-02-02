@@ -36,28 +36,32 @@ class Variant extends Model
 
     const MORPH_KEY = 'mall.variant';
 
-    public $slugs = [];
-    public $nullable = ['image_set_id'];
-    public $table = 'offline_mall_product_variants';
-    public $dates = ['deleted_at'];
+    /**
+     * Implement behaviors for this model.
+     * @var array
+     */
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-    public $appends = ['hashid'];
+
+    /**
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_product_variants';
+
+    /**
+     * The translatable attributes of this model.
+     * @var array
+     */
     public $translatable = [
         'name',
         'description_short',
         'description',
     ];
-    public $casts = [
-        'published'                    => 'boolean',
-        'allow_out_of_stock_purchases' => 'boolean',
-        'id'                           => 'integer',
-        'stock'                        => 'integer',
-        'sales_count'                  => 'integer',
-        'weight'                       => 'integer',
-        'height'                       => 'integer',
-        'length'                       => 'integer',
-        'width'                        => 'integer',
-    ];
+
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
     public $rules = [
         'name'                         => 'required',
         'product_id'                   => 'required',
@@ -69,32 +73,11 @@ class Variant extends Model
         'published'                    => 'boolean',
         'allow_out_of_stock_purchases' => 'boolean',
     ];
-    public $attachMany = [
-        'temp_images' => File::class,
-        'downloads'   => File::class,
-    ];
-    public $belongsTo = [
-        'product'    => Product::class,
-        'image_sets' => [ImageSet::class, 'key' => 'image_set_id'],
-    ];
-    public $hasMany = [
-        'prices'                  => ProductPrice::class,
-        'property_values'         => [PropertyValue::class, 'key' => 'variant_id', 'otherKey' => 'id'],
-        'reviews'                 => [Review::class],
-        'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'product_id is null'],
-        'cart_products'           => CartProduct::class,
-        'order_products'          => OrderProduct::class,
-        'product_property_values' => [
-            PropertyValue::class,
-            'key'      => 'product_id',
-            'otherKey' => 'product_id',
-            'scope'    => 'productOnly',
-        ],
-    ];
-    public $morphMany = [
-        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
-        'additional_prices'     => [Price::class, 'name' => 'priceable'],
-    ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
     protected $fillable = [
         'product_id',
         'user_defined_id',
@@ -112,7 +95,103 @@ class Variant extends Model
         'description',
         'description_short',
     ];
+
+    /**
+     * Attributes which should be set to null, when empty.
+     * @var array
+     */
+    public $nullable = ['image_set_id'];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    public $casts = [
+        'published'                     => 'boolean',
+        'allow_out_of_stock_purchases'  => 'boolean',
+        'id'                            => 'integer',
+        'stock'                         => 'integer',
+        'sales_count'                   => 'integer',
+        'weight'                        => 'integer',
+        'height'                        => 'integer',
+        'length'                        => 'integer',
+        'width'                         => 'integer',
+        'deleted_at'                    => 'datetime'
+    ];
+
+    /**
+     * Automatically generate unique URL names for the passed attributes.
+     * @var array
+     */
+    public $slugs = [];
+    
+    /**
+     * The accessors to append to the model's array form.
+     * @var array
+     */
+    public $appends = ['hashid'];
+
+    /**
+     * The relations to eager load on every query.
+     * @var array
+     */
     public $with = ['product', 'prices'];
+    
+    /**
+     * The attachMany relationships of this model.
+     * @var array
+     */
+    public $attachMany = [
+        'temp_images' => File::class,
+        'downloads'   => File::class,
+    ];
+    
+    /**
+     * The belongsTo relationships of this model.
+     * @var array
+     */
+    public $belongsTo = [
+        'product'    => Product::class,
+        'image_sets' => [ImageSet::class, 'key' => 'image_set_id'],
+    ];
+    
+    /**
+     * The hasMany relationships of this model.
+     * @var array
+     */
+    public $hasMany = [
+        'prices'                  => ProductPrice::class,
+        'property_values'         => [
+            PropertyValue::class, 
+            'key' => 'variant_id', 
+            'otherKey' => 'id',
+        ],
+        'reviews'                 => [
+            Review::class,
+            'replicate' => false
+        ],
+        'category_review_totals'  => [
+            CategoryReviewTotal::class, 
+            'conditions' => 'product_id is null'
+        ],
+        'cart_products'           => CartProduct::class,
+        'order_products'          => OrderProduct::class,
+        'product_property_values' => [
+            PropertyValue::class,
+            'key'      => 'product_id',
+            'otherKey' => 'product_id',
+            'scope'    => 'productOnly'
+        ],
+    ];
+    
+    /**
+     * The morphMany relationships of this model.
+     * @var array
+     */
+    public $morphMany = [
+        'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
+        'additional_prices'     => [Price::class, 'name' => 'priceable'],
+    ];
 
     public function afterDelete()
     {

@@ -358,6 +358,9 @@ return [
             'single' => 'Artikel',
             'variant' => 'Artikelvarianten',
         ],
+        'create' => 'Variante erstellen',
+        'delete' => 'Ausgewählte löschen',
+        'delete_confirm' => 'Willst du die ausgewählten Artikelvarianten wirklich entfernen? Diese Aktion kann nicht rückgängig gemacht werden.'
     ],
     'properties' => [
         'use_for_variants' => 'Verwende für Varianten',
