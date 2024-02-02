@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall;
 
 use Illuminate\Support\Facades\View;
-use Locale;
 use OFFLINE\Mall\Classes\Registration\BootComponents;
 use OFFLINE\Mall\Classes\Registration\BootEvents;
 use OFFLINE\Mall\Classes\Registration\BootExtensions;

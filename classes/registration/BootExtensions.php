@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Registration;
 use App;
 use Backend\Widgets\Form;
 use Illuminate\Support\Facades\Event;
+use October\Rain\Database\Builder;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomerGroup;
@@ -46,7 +47,7 @@ trait BootExtensions
             return \OFFLINE\Mall\Classes\Customer\AuthManager::instance();
         });
 
-        RainLabUser::extend(function ($model) {
+        RainLabUser::extend(function (RainLabUser $model) {
             $model->hasOne['customer']          = Customer::class;
             $model->belongsTo['customer_group'] = [CustomerGroup::class, 'key' => 'offline_mall_customer_group_id'];
             $model->hasManyThrough['addresses']        = [
@@ -57,6 +58,11 @@ trait BootExtensions
             ];
             $model->rules['surname']            = 'required';
             $model->rules['name']               = 'required';
+
+            $model->addDynamicMethod('scopeCustomer', function (Builder $builder) {
+                $builder->whereHas('customer');
+                return $builder;
+            });
         });
 
         RainLabUsersController::extend(function (RainLabUsersController $users) {

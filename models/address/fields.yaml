@@ -3,6 +3,9 @@ fields:
         label: 'offline.mall::lang.order.customer'
         type: recordfinder
         list: ~/plugins/rainlab/user/models/user/columns.yaml
+        useRelation: false
+        modelClass: RainLab\User\Models\User
+        scope: customer
         recordsPerPage: 10
         title: Find Record
         nameFrom: name
