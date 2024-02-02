@@ -358,7 +358,7 @@ class ProductsFilter extends MallComponent
             }
 
             // Remove empty set values
-            $values = array_filter(array_wrap($values), 'strlen'));
+            $values = array_filter(array_wrap($values), 'strlen');
 
             return count($values) ? [$id => new SetFilter($property, $values)] : [];
         });
