@@ -296,7 +296,7 @@ class ShippingMethod extends Model
      * Get formatted price attribute.
      * @return null|string
      */
-    public function getPriceFormattedAttribute(): null|string
+    public function getPriceFormattedAttribute(): ?string
     {
         return $this->price()->string;
     }
@@ -305,7 +305,7 @@ class ShippingMethod extends Model
      * Get name attribute.
      * @return null|string
      */
-    public function getNameAttribute(): null|string
+    public function getNameAttribute(): ?string
     {
         $enforcedKey = sprintf('mall.shipping.enforced.%s.name', $this->id);
         if ($this->useEnforcedValues() && $enforced = Session::get($enforcedKey)) {

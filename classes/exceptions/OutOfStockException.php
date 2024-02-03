@@ -9,7 +9,11 @@ class OutOfStockException extends \RuntimeException
 {
     public $product;
 
-    public function __construct(Product|Variant $product)
+    /**
+     * Undocumented function
+     * @param Product|Variant $product
+     */
+    public function __construct($product)
     {
         $this->product = $product;
         parent::__construct(
