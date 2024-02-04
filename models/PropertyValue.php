@@ -56,7 +56,8 @@ class PropertyValue extends Model
     {
         $value = $this->attributes['value'] ?? '';
         if ($this->isColor()) {
-            $value = $this->jsonDecodeValue()['name'] ?? '';
+            $decoded = $this->jsonDecodeValue();
+            $value = $decoded['name'] ?? $decoded['hex'] ?? '';
         }
         $this->index_value = str_slug($value);
     }
