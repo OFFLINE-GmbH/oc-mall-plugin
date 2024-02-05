@@ -1,16 +1,27 @@
 fields:
-    name:
-        label: 'offline.mall::lang.common.name'
-        oc.commentPosition: ''
-        span: auto
-        type: text
-    guaranteed_delivery_days:
-        label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
-        oc.commentPosition: ''
-        span: auto
-        type: number
+    is_enabled:
+        type: switch
+        label: offline.mall::lang.shipping_method_settings.is_enabled
+        span: left
+        default: true
+    is_default:
+        type: switch
+        label: offline.mall::lang.shipping_method_settings.set_as_default
+        span: right
 tabs:
     fields:
+        name:
+            label: 'offline.mall::lang.common.name'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'offline.mall::lang.common.general'
+        guaranteed_delivery_days:
+            label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'offline.mall::lang.common.general'
         description:
             label: 'offline.mall::lang.product.description'
             size: huge

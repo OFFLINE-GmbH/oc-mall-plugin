@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -7,6 +9,7 @@ use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
+use OFFLINE\Mall\Models\Variant;
 use RainLab\User\Facades\Auth;
 
 /**
@@ -184,9 +187,8 @@ class Cart extends MallComponent
 
         try {
             $cart->setQuantity($product->id, (int)input('quantity'));
-        } catch (OutOfStockException $e) {
-            Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $e->product->stock]));
-
+        } catch (OutOfStockException $exc) {
+            Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $exc->product->stock]));
             return;
         } finally {
             $this->setData();
@@ -278,10 +280,13 @@ class Cart extends MallComponent
     private function dataLayerArray($product = null, $variant = null)
     {
         $item = $variant ?? $product;
+        if (!($item instanceof Product || $item instanceof Variant)) {
+            return [];
+        }
 
         return [
             'id'       => $item->prefixedId,
-            'name'     => $product->name,
+            'name'     => $product ? $product->name : $item->name,
             'price'    => $item->price()->decimal,
             'brand'    => optional($item->brand)->name,
             'category' => optional($item->categories->first())->name,

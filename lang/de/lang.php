@@ -1,7 +1,8 @@
-<?php return [
+<?php 
+return [
     'plugin' => [
         'name' => 'Mall',
-        'description' => 'Ecommerce-Plattform für October CMS',
+        'description' => 'E-Commerce-Plattform für October CMS',
     ],
     'titles' => [
         'products' => [
@@ -35,7 +36,6 @@
         'payment_methods' => [
             'create' => 'Zahlungsmethode erstellen',
             'edit' => 'Zahlungsmethode bearbeiten',
-            'reorder' => 'Sortieren',
         ],
         'custom_field_options' => [
             'edit' => 'Feldoptionen bearbeiten',
@@ -72,6 +72,16 @@
             'create' => 'Review erstellen',
             'update' => 'Review bearbeiten',
         ],
+        'currencies' => [
+            'create' => 'Währung erstellen',
+            'update' => 'Währung bearbeiten',
+            'reorder' => 'Währungen sortieren',
+        ],
+        'price_categories' => [
+            'create' => 'Preiskategorie erstellen',
+            'update' => 'Preiskategorie bearbeiten',
+            'reorder' => 'Preiskategorien sortieren',
+        ]
     ],
     'menu_items' => [
         'all_categories' => 'Alle Shop-Kategorien',
@@ -90,8 +100,19 @@
         'currency_format' => 'Formatierung',
         'currency_symbol' => 'Symbol',
         'currency_rate' => 'Kurs zu Basiswährung',
-        'is_default' => 'Ist Standard',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Währung festlegen',
+        'is_enabled' => 'Aktiv',
         'unknown' => 'Unbekannte Währung',
+        'help_title' => 'Hilfe mit der Formatierung der Währung',
+        'help_default_label' => 'Die Standard-Formatierung der Währung ist:',
+        'help_variables_label' => 'Folgende Variablen können genutzt werden:',
+        'help_variable_price_label' => 'Der gesamte Preis des Produkts als float (bsp. <code>1500.42</code>).',
+        'help_variable_integers_label' => 'Der Preis ohne Nachkommastellen (bsp. <code>1500</code>).',
+        'help_variable_decimals_label' => 'Die reinen Nachkommastellen des Preises (bsp. <code>42</code>).',
+        'help_variable_currency_label' => 'Die Währungsdaten die du festgelegt hast (bsp. <code>{code: "EUR", rate: 1, symbol: "€", decimals: 2}</code>).',
+        'help_variable_product_label' => 'Das Produkt-Model von dem der Preis stammt (bsp. eine vollständige <code>Product</code> Model-Instanz).',
+        'help_plugin_docs_link' => 'Auf <a href=":link" target="_blank">der Plugin-Dokumentationsseite</a> findest du weitere Beispiele.',
     ],
     'payment_gateway_settings' => [
         'label' => 'Zahlungsanbieter',
@@ -127,15 +148,24 @@
     'price_category_settings' => [
         'label' => 'Preiskategorien',
         'description' => 'Zusätzliche Preiskategorien verwalten',
+        'is_enabled' => 'Aktiv',
+        'title_label' => 'Bezeichnung',
+        'title_description' => 'Eine ausführlichere Bezeichnung, welche im Front-End verwendet werden kann.'
     ],
     'order_state_settings' => [
         'description' => 'Mögliche Status für Bestellungen verwalten',
     ],
     'payment_method_settings' => [
         'description' => 'Zahlungsmethoden verwalten',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Zahlungsmethode festlegen',
+        'is_enabled' => 'Aktiv',
     ],
     'shipping_method_settings' => [
         'description' => 'Versandmethoden verwalten',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Als Standard-Versandmethode festlegen',
+        'is_enabled' => 'Aktiv',
     ],
     'tax_settings' => [
         'description' => 'Steuern verwalten',
@@ -172,12 +202,13 @@
         'links_comment' => 'Wähle aus, auf welche Seiten für dein Shop verwendet werden sollen',
         'customizations' => 'Optionen',
         'customizations_comment' => 'Globale Konfigurationseinstellungen für deinen Shop',
+        'category_page_comment' => 'Füge die Komponente "products" zu dieser Seite hinzu.',
         'order_number_start' => 'Beginn Bestellungsnummerierung',
         'order_number_start_comment' => 'Die erste Bestellung erhält diese Nummer',
         'index_driver' => 'Index-Treiber',
         'index_driver_comment' => 'Wenn deine Datenbank JSON unterstützt wird der Datenbank-Treiber empfohlen.',
         'index_driver_filesystem' => 'Dateisystem',
-        'index_driver_database' => 'Datenbank (nur für MySQL 5.7+ oder MariaDB 10.2+)',
+        'index_driver_database' => 'Datenbank (MySQL 5.7+, MariaDB 10.2+, SQLite 3.19+)',
         'index_driver_hint' => 'Nachdem diese Option geändert wurde muss "php artisan mall:reindex" auf der Konsole ausgeführt werden!',
     ],
     'feed_settings' => [
@@ -327,6 +358,9 @@
             'single' => 'Artikel',
             'variant' => 'Artikelvarianten',
         ],
+        'create' => 'Variante erstellen',
+        'delete' => 'Ausgewählte löschen',
+        'delete_confirm' => 'Willst du die ausgewählten Artikelvarianten wirklich entfernen? Diese Aktion kann nicht rückgängig gemacht werden.'
     ],
     'properties' => [
         'use_for_variants' => 'Verwende für Varianten',
@@ -348,6 +382,7 @@
         'checkbox' => 'Checkbox',
         'color' => 'Farbe',
         'image' => 'Bild/Motiv',
+        'switch' => 'Switch',
         'add' => 'Option hinzufügen',
         'name' => 'Name',
         'price' => 'Aufpreis',
@@ -477,8 +512,10 @@
         'percentage' => 'Prozent',
         'countries' => 'Steuer gilt nur für Versand in diese Länder',
         'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
-        'is_default' => 'Ist Standard',
-        'is_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
+        'is_default' => 'Standard',
+        'set_as_default' => 'Ist Standard',
+        'set_as_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
+        'is_enabled' => 'Aktiv',
     ],
     'discounts' => [
         'name' => 'Name',
@@ -490,9 +527,11 @@
         'rate' => 'Rabatt (%)',
         'amount' => 'Rabatt-Betrag',
         'max_number_of_usages' => 'Maximale Anzahl Anwendungen',
+        'valid_from' => 'Gültig von',
         'expires' => 'Gültig bis',
         'number_of_usages' => 'Anzahl Anwendungen',
         'shipping_description' => 'Name für alternative Versand-Methode',
+        'payment_method_description' => 'Wähle eine Zahlungsmethode',
         'shipping_price' => 'Preis für alternative Versand-Methode',
         'shipping_guaranteed_days_to_delivery' => 'Garantierte Lieferung in Tagen',
         'section_type' => 'Was bewirkt der Gutschein?',
@@ -517,6 +556,7 @@
             'expired' => 'Der verwendete Gutschein ist nicht mehr gültig.',
             'not_found' => 'Der verwendete Gutschein ist nicht gültig.',
             'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
+            'cart_limit_reached' => 'Promo-Code-Limit erreicht. Du kannst keine weiteren Promo-Codes zu diesem Warenkorb hinzufügen.',
         ],
     ],
     'payment_method' => [
@@ -825,6 +865,7 @@
                     'description' => 'Leite den Besucher zur neuen Detailseite um wenn eine Eigenschaft geändert wird',
                 ],
             ],
+            'added_to_cart' => 'Produkt erfolgreich hinzugefügt.',
         ],
         'productReviews' => [
             'details' => [
@@ -849,6 +890,10 @@
             'properties' => [
                 'showDiscountApplier' => [
                     'title' => 'Rabatt-Code-Feld anzeigen',
+                ],
+                'discountCodeLimit' => [
+                    'title' => 'Rabatt-Code-Limit',
+                    'description' => 'Setze auf 0 für eine unbegrenzte Anzahl.',
                 ],
                 'showShipping' => [
                     'title' => 'Versandkosten anzeigen',

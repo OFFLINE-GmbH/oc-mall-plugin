@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\FormWidgets;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\FormWidgets;
 
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;

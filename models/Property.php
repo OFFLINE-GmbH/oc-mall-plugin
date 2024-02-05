@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Illuminate\Support\Facades\Queue;
+namespace OFFLINE\Mall\Models;
+
 use Model;
+use Illuminate\Support\Facades\Queue;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;

@@ -1,6 +1,9 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Factories\HasFactory;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -9,9 +12,10 @@ use System\Classes\PluginManager;
 
 class Address extends Model
 {
-    use Validation;
-    use SoftDelete;
+    use HasFactory;
     use HashIds;
+    use SoftDelete;
+    use Validation;
 
     public $implement = [LocationModel::class];
 

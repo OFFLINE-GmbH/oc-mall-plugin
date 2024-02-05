@@ -1,27 +1,46 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
-use Backend\Classes\Controller;
+namespace OFFLINE\Mall\Controllers;
+
 use BackendMenu;
-use Backend\Behaviors\ListController;
 use Backend\Behaviors\FormController;
-use Backend\Behaviors\ReorderController;
+use Backend\Behaviors\ListController;
+use Backend\Classes\Controller;
 
 class Brands extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
-        ListController::class,
         FormController::class,
-        ReorderController::class,
+        ListController::class,
     ];
 
-    public $listConfig = 'config_list.yaml';
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
-    public $reorderConfig = 'config_reorder.yaml';
 
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.manage_brands',
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();

@@ -1,11 +1,11 @@
 {% partial __SELF__ ~ '::loader' %}
 
-{% if __SELF__.items.count %}
+{% if __SELF__.items.count|default(0) %}
     {% partial __SELF__ ~ '::items' items=__SELF__.items %}
 {% else %}
     {% partial __SELF__ ~ '::empty' %}
 {% endif %}
 
-{% if __SELF__.dataLayer %}
+{% if __SELF__.dataLayer|default(false) %}
     {% partial __SELF__ ~ '::datalayer' %}
 {% endif %}

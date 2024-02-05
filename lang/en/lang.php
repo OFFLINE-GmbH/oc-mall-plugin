@@ -36,7 +36,6 @@ return [
         'payment_methods' => [
             'create' => 'Create payment method',
             'edit' => 'Edit payment method',
-            'reorder' => 'Reorder',
         ],
         'custom_field_options' => [
             'edit' => 'Edit field options',
@@ -73,6 +72,16 @@ return [
             'create' => 'Create review',
             'update' => 'Edit review',
         ],
+        'currencies' => [
+            'create' => 'New Currency',
+            'update' => 'Update Currency',
+            'reorder' => 'Reorder Currencies',
+        ],
+        'price_categories' => [
+            'create' => 'New Price Category',
+            'update' => 'Update Price Category',
+            'reorder' => 'Reorder Price Categories',
+        ]
     ],
     'menu_items' => [
         'all_categories' => 'All shop categories',
@@ -91,8 +100,19 @@ return [
         'currency_format' => 'Format',
         'currency_symbol' => 'Symbol',
         'currency_rate' => 'Rate',
-        'is_default' => 'Is default',
+        'is_default' => 'Default',
+        'set_as_default' => 'Set as default currency',
+        'is_enabled' => 'Enabled',
         'unknown' => 'Unknown Currency',
+        'help_title' => 'Help with currency formatting',
+        'help_default_label' => 'The default currency format is:',
+        'help_variables_label' => 'The following variables are available:',
+        'help_variable_price_label' => 'The full price of the product as a float (ex. <code>1500.42</code>).',
+        'help_variable_integers_label' => 'The price without decimals (ex. <code>1500</code>).',
+        'help_variable_decimals_label' => 'Only the decimals of the price (ex. <code>42</code>).',
+        'help_variable_currency_label' => 'The currency data you specified (ex. <code>{code: "EUR", rate: 1, symbol: "€", decimals: 2}</code>).',
+        'help_variable_product_label' => 'The product model this price is from. (ex. a full <code>Product</code> model instance).',
+        'help_plugin_docs_link' => 'Visit <a href=":link" target="_blank">the plugin\'s documentation</a> for more examples.',
     ],
     'payment_gateway_settings' => [
         'label' => 'Payment gateways',
@@ -128,15 +148,25 @@ return [
     'price_category_settings' => [
         'label' => 'Price categories',
         'description' => 'Configure additional price categories',
+        'is_enabled' => 'Enabled',
+        'title_label' => 'Label',
+        'title_description' => 'A descriptive label, which can be shown on the front-end.'
     ],
     'order_state_settings' => [
         'description' => 'Configure order states',
+        'is_enabled' => 'Enabled',
     ],
     'payment_method_settings' => [
         'description' => 'Manage payment methods',
+        'is_default' => 'Default',
+        'set_as_default' => 'Set as default payment method',
+        'is_enabled' => 'Enabled',
     ],
     'shipping_method_settings' => [
         'description' => 'Manage shipping methods',
+        'is_default' => 'Default',
+        'set_as_default' => 'Set as default shipping method',
+        'is_enabled' => 'Enabled',
     ],
     'tax_settings' => [
         'description' => 'Manage taxes',
@@ -179,7 +209,7 @@ return [
         'index_driver' => 'Index driver',
         'index_driver_comment' => 'If your database supports JSON use the database driver.',
         'index_driver_filesystem' => 'Filesystem',
-        'index_driver_database' => 'Database (only for MySQL 5.7+ or MariaDB 10.2+)',
+        'index_driver_database' => 'Database (MySQL 5.7+, MariaDB 10.2+, SQLite 3.19+)',
         'index_driver_hint' => 'If you change this option make sure to run "php artisan mall:reindex" on the command line to re-index your products!',
     ],
     'feed_settings' => [
@@ -329,6 +359,9 @@ return [
             'single' => 'Article',
             'variant' => 'Article variants',
         ],
+        'create' => 'Create Variant',
+        'delete' => 'Delete Selected',
+        'delete_confirm' => 'Do you really want to remove the selected variants? This action cannot be made undone.'
     ],
     'properties' => [
         'use_for_variants' => 'Use for variants',
@@ -480,8 +513,10 @@ return [
         'percentage' => 'Percent',
         'countries' => 'Only apply tax when shipping to these countries',
         'countries_comment' => 'If no country is selected the tax is applied worldwide.',
-        'is_default' => 'Is default',
-        'is_default_comment' => 'This tax is used if the shipping destination country is not known yet',
+        'is_default' => 'Default',
+        'set_as_default' => 'Set as default tax',
+        'set_as_default_comment' => 'This tax is used if the shipping destination country is not known yet',
+        'is_enabled' => 'Enabled',
     ],
     'discounts' => [
         'name' => 'Name',

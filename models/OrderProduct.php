@@ -1,19 +1,30 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Traits\Validation;
+use October\Rain\Database\Traits\SoftDelete;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 
 class OrderProduct extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
-    use \October\Rain\Database\Traits\SoftDelete;
-
     use JsonPrice {
         useCurrency as fallbackCurrency;
     }
+    use SoftDelete;
+    use Validation;
 
-    protected $dates = ['deleted_at'];
+    /**
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_order_products';
 
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
     public $rules = [
         'name'             => 'required',
         'order_id'         => 'required',
@@ -34,18 +45,27 @@ class OrderProduct extends Model
         'shippable'        => 'boolean',
     ];
 
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
     public $casts = [
-        'weight'       => 'integer',
-        'width'        => 'integer',
-        'length'       => 'integer',
-        'height'       => 'integer',
-        'total_weight' => 'integer',
-        'stackable'    => 'boolean',
-        'shippable'    => 'boolean',
-        'taxable'      => 'boolean',
-        'is_virtual'   => 'boolean',
+        'weight'        => 'integer',
+        'width'         => 'integer',
+        'length'        => 'integer',
+        'height'        => 'integer',
+        'total_weight'  => 'integer',
+        'stackable'     => 'boolean',
+        'shippable'     => 'boolean',
+        'taxable'       => 'boolean',
+        'is_virtual'    => 'boolean',
+        'deleted_at'    => 'datetime'
     ];
 
+    /**
+     * Attribute names that are json encoded and decoded from the database.
+     * @var array 
+     */
     public $jsonable = [
         'taxes',
         'item',
@@ -55,22 +75,37 @@ class OrderProduct extends Model
         'service_options',
     ];
 
-    public $table = 'offline_mall_order_products';
-
+    /**
+     * The belongsTo relationships of this model.
+     * @var array
+     */
     public $belongsTo = [
         'variant' => Variant::class,
         'product' => Product::class,
         'order'   => Order::class,
     ];
+
+    /**
+     * The hasMany relationships of this model.
+     * @var array
+     */
     public $hasMany = [
         'product_file_grants' => ProductFileGrant::class,
     ];
 
+    /**
+     * Add virtual query scope.
+     * @var array
+     */
     public function scopeVirtual($query)
     {
         return $query->where('is_virtual', true);
     }
 
+    /**
+     * Get price columns
+     * @return void
+     */
     public function getPriceColumns()
     {
         return [
@@ -83,40 +118,70 @@ class OrderProduct extends Model
         ];
     }
 
+    /**
+     * Set used Currency
+     * @return Currency
+     */
     protected function useCurrency()
     {
         if ($this->currency) {
             return new Currency($this->currency);
+        } else if ($this->order->currency) {
+            return new Currency($this->order->currency);
+        } else {
+            return $this->fallbackCurrency();
         }
-
-        return $this->fallbackCurrency();
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function pricePreTaxes()
     {
         return $this->toPriceModel('price_pre_taxes');
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function priceTaxes()
     {
         return $this->toPriceModel('price_taxes');
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function pricePostTaxes()
     {
         return $this->toPriceModel('price_post_taxes');
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function totalPreTaxes()
     {
         return $this->toPriceModel('total_pre_taxes');
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function totalTaxes()
     {
         return $this->toPriceModel('total_taxes');
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function totalPostTaxes()
     {
         return $this->toPriceModel('total_post_taxes');
@@ -124,15 +189,20 @@ class OrderProduct extends Model
 
     /**
      * Return the id with a 'product/variant' prefix.
+     * @return mixed
      */
     public function getPrefixedIdAttribute()
     {
         $kind      = $this->variant_id ? 'variant' : 'product';
         $attribute = $this->variant_id ? 'variant_id' : 'product_id';
-
         return $kind . '-' . $this->{$attribute};
     }
 
+    /**
+     * Undocumented function
+     * @param string $key
+     * @return mixed
+     */
     protected function toPriceModel(string $key): Price
     {
         return new Price([
@@ -141,6 +211,10 @@ class OrderProduct extends Model
         ]);
     }
 
+    /**
+     * Undocumented function
+     * @return mixed
+     */
     public function getCustomFieldValueDescriptionAttribute()
     {
         return collect($this->custom_field_values)->map(function (array $value) {

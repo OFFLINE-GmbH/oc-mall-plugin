@@ -2,6 +2,6 @@
     {% partial __SELF__ ~ '::selector' %}
 </div>
 
-{% if dataLayer %}
+{% if dataLayer|default(false) %}
     {% partial __SELF__ ~ '::datalayer' %}
 {% endif %}

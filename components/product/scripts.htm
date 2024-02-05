@@ -18,7 +18,7 @@
                     return props[this.dataset.id] = this.value
                 });
 
-                $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'offline.mall::frontend.stock.checking' | trans }}</div>');
+                $addToCart.html('<div class="mall-product__property-stock mall-product__property-stock--checking">{{ 'offline.mall::frontend.stock.checking'|trans }}</div>');
 
                 $.request('onChangeProperty', {
                     data: {values: values, props: props, initial: isInitial},

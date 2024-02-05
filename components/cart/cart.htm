@@ -1,4 +1,4 @@
-{% if cart.products.count < 1 %}
+{% if cart.products.count|default(0) < 1 %}
     {% partial __SELF__ ~ '::empty' %}
 {% else %}
     {% partial __SELF__ ~ '::table/base' %}
@@ -8,6 +8,6 @@
     <div data-validate-for="cart"></div>
 {% endif %}
 
-{% if __SELF__.showProceedToCheckoutButton and cart.products.count > 0 %}
+{% if __SELF__.showProceedToCheckoutButton and cart.products.count|default(0) > 0 %}
     {% partial __SELF__ ~ '::proceedtocheckout' %}
 {% endif %}

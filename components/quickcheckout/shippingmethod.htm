@@ -1,7 +1,9 @@
 <header class="mall-quick-checkout__collapsible-header">
-    <h2 class="mall-quick-checkout__heading">Shipping</h2>
+    <h2 class="mall-quick-checkout__heading">{{ 'offline.mall::frontend.shipping'|trans }}</h2>
     <div class="mall-quick-checkout__collapsible-summary">
-        {{ cart.shipping_method.name }}
+        {% if cart.shipping_method is defined %}
+            {{ cart.shipping_method.name|default(null) }}
+        {% endif %}
     </div>
 </header>
 <section class="mall-quick-checkout__collapsible-content">
@@ -23,11 +25,10 @@
                 <div class="mall-quick-checkout__toggle-option-text">
                     <h4 class="mall-quick-checkout__toggle-option-name">{{ method.name }}</h4>
                     <div class="mall-quick-checkout__toggle-option-meta">
-                        {% if method.guaranteed_delivery_days %}
+                        {% if method.guaranteed_delivery_days|default(null) %}
                             <p>
                                 {% set days = method.guaranteed_delivery_days %}
-                                {{ 'offline.mall::frontend.shipping_method.guaranteed_delivery_days'
-                                | transchoice(days, {days: days}) }}
+                                {{ 'offline.mall::frontend.shipping_method.guaranteed_delivery_days'|transchoice(days, {days: days}) }}
                             </p>
                         {% endif %}
                     </div>
@@ -37,18 +38,18 @@
                            This way we can re-use the TotalCalculator's logic and display the effective
                            price the user has to pay including the special rates.
                         #}
-                        {% if method.rates.count > 0 %}
+                        {% if method.rates.count|default(0) > 0 %}
                             {{ isActiveMethod
-                            ? (__SELF__.cart.totals.shippingTotal.totalPostTaxes | money )
-                            : ( 'offline.mall::frontend.select_for_shipping_total' | trans ) }}
+                            ? (__SELF__.cart.totals.shippingTotal.totalPostTaxes|money )
+                            : ( 'offline.mall::frontend.select_for_shipping_total'|trans ) }}
                         {% else %}
                             {{ method.price().integer > 0
-                            ? (method.price().string | raw)
-                            : ('offline.mall::frontend.no_additional_charges' | trans) }}
+                            ? (method.price().string|raw)
+                            : ('offline.mall::frontend.no_additional_charges'|trans) }}
                         {% endif %}
                     </div>
                 </div>
-                {% if method.logo %}
+                {% if method.logo|default(null) %}
                     <div class="mall-quick-checkout__toggle-option-logo">
                         <img class="mall-quick-checkout__toggle-option-image"
                              src="{{ method.logo.thumb(75, 75) }}" alt=""/>
@@ -56,7 +57,7 @@
                 {% endif %}
             </a>
         {% else %}
-            <p>No method available.</p>
+            <p>{{ 'offline.mall::frontend.no_shipping_method_available'|trans }} </p>
         {% endfor %}
     </div>
 </section>

@@ -1,41 +1,70 @@
-<?php namespace OFFLINE\Mall\Controllers;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Controllers;
+
+use BackendMenu;
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
-use BackendMenu;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Review;
 
 class Reviews extends Controller
 {
-    public $implement = ['Backend\Behaviors\ListController', 'Backend\Behaviors\FormController'];
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
+    public $implement = [
+        FormController::class,
+        ListController::class
+    ];
 
-    public $listConfig = 'config_list.yaml';
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
 
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.manage_reviews',
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-reviews');
     }
 
+    /**
+     * Ajax handler on review has been approved.
+     * @return mixed
+     */
     public function onApprove()
     {
         Review::findOrFail(post('id'))->approve();
-
         $next = Review::orderBy('created_at')->whereNull('approved_at')->first(['id']);
 
         if ($next) {
             return Redirect::to(Backend::url('offline/mall/reviews/update/' . $next->id));
+        } else {
+            Flash::success(trans('offline.mall::lang.reviews.no_more'));
+            return Redirect::to(Backend::url('offline/mall/reviews'));
         }
-
-        Flash::success(trans('offline.mall::lang.reviews.no_more'));
-
-        return Redirect::to(Backend::url('offline/mall/reviews'));
     }
 }

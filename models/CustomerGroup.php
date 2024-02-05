@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Model;
 use October\Rain\Database\Traits\Sluggable;
@@ -40,6 +42,6 @@ class CustomerGroup extends Model
             $currency = Currency::whereCode($currency)->firstOrFail()->id;
         }
 
-        return $this->prices->where('currency_id', $currency)->first() ?? $this->nullPrice();
+        return $this->prices->where('currency_id', $currency)->first() ?? $this->nullPrice($currency, $this->prices);
     }
 }

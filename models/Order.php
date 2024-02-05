@@ -1,11 +1,15 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Barryvdh\DomPDF\PDF;
-use Carbon\Carbon;
+namespace OFFLINE\Mall\Models;
+
 use DB;
 use Event;
-use Illuminate\Support\Facades\Queue;
 use Model;
+use RuntimeException;
+use Session;
+use Barryvdh\DomPDF\PDF;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Queue;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
@@ -16,8 +20,6 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Utils\Money;
-use RuntimeException;
-use Session;
 use System\Classes\PluginManager;
 
 /**

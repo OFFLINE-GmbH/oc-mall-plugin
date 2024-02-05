@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -19,6 +19,7 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\User;
+use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country;
 use RainLab\User\Facades\Auth as FrontendAuth;
 use Validator;
@@ -242,7 +243,7 @@ class QuickCheckout extends MallComponent
 
         $model = $this->order ?? $this->cart;
 
-        $paymentMethod = PaymentMethod::findOrFail($model->payment_method_id);
+        $paymentMethod = PaymentMethod::where('id', $model->payment_method_id)->firstOrFail();
 
         // Grab the PaymentGateway from the Service Container.
         $gateway = app(PaymentGateway::class);
@@ -296,7 +297,7 @@ class QuickCheckout extends MallComponent
             );
         }
 
-        $method = ShippingMethod::find($id);
+        $method = ShippingMethod::where('id', $id)->first();
         $this->cart->setShippingMethod($method);
         $this->cart->validateShippingMethod();
         $this->setData();
@@ -327,7 +328,7 @@ class QuickCheckout extends MallComponent
 
         $id = post('id');
 
-        $method = PaymentMethod::find($id);
+        $method = PaymentMethod::where('id', $id)->first();
         $this->cart->setPaymentMethod($method);
         $this->setData();
 
@@ -482,7 +483,7 @@ class QuickCheckout extends MallComponent
 
         $this->setVar('cart', $cart);
 
-        $paymentMethod = PaymentMethod::find($cart->payment_method_id);
+        $paymentMethod = PaymentMethod::where('id', $cart->payment_method_id)->first();
         if ( ! $paymentMethod) {
             $paymentMethod = PaymentMethod::getDefault();
             $cart->setPaymentMethod($paymentMethod);
@@ -498,8 +499,10 @@ class QuickCheckout extends MallComponent
         $this->setVar('shippingMethods', ShippingMethod::getAvailableByCart($cart));
         if ($this->user && $orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
-            $this->setVar('order', Order::byCustomer($this->user->customer)->find($orderId));
+            $this->setVar('order', Order::byCustomer($this->user->customer)->where('id', $orderId)->first());
         }
+        
+        $this->setVar('productPage', GeneralSettings::get('product_page'));
     }
 
     /**
@@ -542,10 +545,13 @@ class QuickCheckout extends MallComponent
     private function dataLayerArray($product = null, $variant = null)
     {
         $item = $variant ?? $product;
+        if (!($item instanceof Product || $item instanceof Variant)) {
+            return [];
+        }
 
         return [
             'id' => $item->prefixedId,
-            'name' => $product->name,
+            'name' => $product ? $product->name : $item->name,
             'price' => $item->price()->decimal,
             'brand' => optional($item->brand)->name,
             'category' => optional($item->categories->first())->name,

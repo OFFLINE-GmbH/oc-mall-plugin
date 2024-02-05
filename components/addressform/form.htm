@@ -1,40 +1,41 @@
-{% if type %}
+{% set type = type|default('') %}
+{% if type|length > 0 %}
     {% set type = (type ~ '_') %}
 {% endif %}
 <div class="mall-form-control">
-    <label for="{{ type }}company">{{ 'offline.mall::frontend.form.company' | trans }}</label>
+    <label for="{{ type }}company">{{ 'offline.mall::frontend.form.company'|trans }}</label>
     <input id="{{ type }}company" type="text"
-           value="{{ address.company }}"
-           placeholder="{{ 'offline.mall::frontend.form.company_placeholder' | trans }}" name="{{ type }}company">
+           value="{{ address.company|default('') }}"
+           placeholder="{{ 'offline.mall::frontend.form.company_placeholder'|trans }}" name="{{ type }}company">
     <div data-validate-for="{{ type }}company"></div>
 </div>
 <div class="mall-form-control">
-    <label for="{{ type }}address_name">{{ 'offline.mall::frontend.form.recipient' | trans }}</label>
+    <label for="{{ type }}address_name">{{ 'offline.mall::frontend.form.recipient'|trans }}</label>
     <input id="{{ type }}address_name" type="text"
-           value="{{ address.name }}"
-           placeholder="{{ 'offline.mall::frontend.form.recipient_placeholder' | trans }}"
+           value="{{ address.name|default('') }}"
+           placeholder="{{ 'offline.mall::frontend.form.recipient_placeholder'|trans }}"
            name="{{ type }}address_name">
     <div data-validate-for="{{ type }}address_name"></div>
 </div>
 <div class="mall-form-control">
-    <label for="{{ type }}lines">{{ 'offline.mall::frontend.form.address_lines' | trans }}</label>
-    <textarea id="{{ type }}lines" type="text" name="{{ type }}lines">{{ address.lines }}</textarea>
+    <label for="{{ type }}lines">{{ 'offline.mall::frontend.form.address_lines'|trans }}</label>
+    <textarea id="{{ type }}lines" type="text" name="{{ type }}lines">{{ address.lines|default('') }}</textarea>
     <div data-validate-for="{{ type }}lines"></div>
 </div>
 <div class="mall-two-fields">
     <div class="mall-form-control">
-        <label for="{{ type }}zip">{{ 'offline.mall::frontend.form.zip' | trans }}</label>
+        <label for="{{ type }}zip">{{ 'offline.mall::frontend.form.zip'|trans }}</label>
         <input id="{{ type }}zip" name="{{ type }}zip" type="text"
-               value="{{ address.zip }}">
+               value="{{ address.zip|default('') }}">
         <div data-validate-for="{{ type }}zip"></div>
     </div>
     <div class="mall-form-control">
-        <label for="{{ type }}city">{{ 'offline.mall::frontend.form.city' | trans }}</label>
+        <label for="{{ type }}city">{{ 'offline.mall::frontend.form.city'|trans }}</label>
         <input id="{{ type }}city" name="{{ type }}city" type="text"
-               value="{{ address.city }}">
+               value="{{ address.city|default('') }}">
         <div data-validate-for="{{ type }}city"></div>
     </div>
 </div>
 <div class="{{ __SELF__.useState ? 'mall-two-fields' }}" id="countryState">
-    {% partial __SELF__ ~ '::countrystate' type=type countryId=address.country_id stateId=address.state_id %}
+    {% partial __SELF__ ~ '::countrystate' type=type countryId=address.country_id|default(0) stateId=address.state_id|default(0) %}
 </div>

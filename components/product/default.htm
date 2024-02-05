@@ -9,6 +9,6 @@
 
 {% partial __SELF__ ~ '::scripts' %}
 
-{% if __SELF__.dataLayer %}
+{% if dataLayer|default(false) %}
     {% partial __SELF__ ~ '::datalayer' %}
 {% endif %}

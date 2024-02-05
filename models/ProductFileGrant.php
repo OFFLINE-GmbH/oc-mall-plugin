@@ -1,9 +1,11 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Event;
+use Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
-use Model;
 use System\Models\File;
 
 class ProductFileGrant extends Model

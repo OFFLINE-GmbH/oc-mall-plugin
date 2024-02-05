@@ -5,7 +5,7 @@
                 {% partial __SELF__ ~ '::table/header' %}
             </thead>
             <tbody>
-                {% for product in cart.products %}
+                {% for product in cart.products|default([]) %}
                     {% partial __SELF__ ~ '::table/entry' product=product %}
                 {% endfor %}
             </tbody>

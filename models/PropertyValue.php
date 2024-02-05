@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Model;
 use October\Rain\Database\Traits\Validation;
@@ -162,9 +164,9 @@ class PropertyValue extends Model
      * Handle special array property values.
      * @param $value
      *
-     * @return string|null
+     * @return mixed
      */
-    public function handleArrayValue($value): ?string
+    public function handleArrayValue($value): mixed
     {
         if ($this->isColor()) {
             $name = $value['name'] ?? false;

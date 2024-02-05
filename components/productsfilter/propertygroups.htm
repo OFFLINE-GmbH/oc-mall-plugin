@@ -1,7 +1,7 @@
-{% if __SELF__.showBrandFilter %}
+{% if __SELF__.showBrandFilter|default(false) %}
     {% partial __SELF__ ~ '::brands' %}
 {% endif %}
-{% if __SELF__.showPriceFilter or __SELF__.showOnSaleFilter %}
+{% if __SELF__.showPriceFilter|default(false) or __SELF__.showOnSaleFilter|default(false) %}
     {% partial __SELF__ ~ '::price' %}
 {% endif %}
 {% partial __SELF__ ~ '::labels' %}

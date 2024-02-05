@@ -1,6 +1,9 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Auth;
+use Validator;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
@@ -13,7 +16,6 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Symfony\Component\HttpFoundation\Response;
-use Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -116,7 +118,7 @@ class PaymentMethodSelector extends MallComponent
             $orderId = $this->decode($orderId);
 
             try {
-                $order = Order::byCustomer($user->customer)->findOrFail($orderId);
+                $order = Order::byCustomer($user->customer)->where('id', $orderId)->firstOrFail();
                 $this->order          = $order;
                 $this->workingOnModel = $order;
             } catch (ModelNotFoundException $e) {
@@ -124,7 +126,7 @@ class PaymentMethodSelector extends MallComponent
             }
         }
 
-        $method = PaymentMethod::find($this->order->payment_method_id ?? $this->cart->payment_method_id);
+        $method = PaymentMethod::where('id', $this->order->payment_method_id ?? $this->cart->payment_method_id)->first();
 
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('customerMethods', $this->getCustomerMethods());
@@ -205,7 +207,7 @@ class PaymentMethodSelector extends MallComponent
 
         return [
             '.mall-payment-method-selector' => $this->renderPartial($this->alias . '::selector'),
-            'method'                        => PaymentMethod::find($id),
+            'method'                        => PaymentMethod::where('id', $id)->first(),
         ];
     }
 
@@ -218,7 +220,7 @@ class PaymentMethodSelector extends MallComponent
         $id = $this->decode(post('id'));
 
         $method = CustomerPaymentMethod::where('customer_id', $this->workingOnModel->customer->id)
-                                       ->find($id);
+                                       ->where('id', $id)->first();
 
         if ( ! $method) {
             throw new ValidationException([
@@ -292,8 +294,8 @@ class PaymentMethodSelector extends MallComponent
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $gateway
-     * @param                                    $data
+     * @param PaymentGateway $gateway
+     * @param                $data
      *
      * @return Response|array
      * @throws \Cms\Classes\CmsException
@@ -338,6 +340,6 @@ class PaymentMethodSelector extends MallComponent
      */
     protected function getPaymentMethod()
     {
-        return PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
+        return PaymentMethod::where('id', $this->workingOnModel->payment_method_id)->firstOrFail();
     }
 }

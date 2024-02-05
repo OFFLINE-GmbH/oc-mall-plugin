@@ -1,32 +1,50 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Lang;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Database\IsStates;
 
 class OrderState extends Model
 {
-    use Validation;
+    use IsStates;
     use SoftDelete;
     use Sortable;
-
-    public const FLAG_NEW = 'NEW';
-    public const FLAG_CANCELLED = 'CANCELLED';
-    public const FLAG_COMPLETE = 'COMPLETE';
+    use Validation;
 
     /**
-     * The database table used by this model.
+     * Disable `is_default` handler on IsStates trait.
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
+
+    /**
+     * Default NEW order state flag
      * @var string
      */
-    public $table = 'offline_mall_order_states';
+    public const FLAG_NEW = 'NEW';
 
     /**
-     * Behaviors implemented by this model.
-     * @var array
+     * Default CANCELLED order state flag
+     * @var string
      */
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public const FLAG_CANCELLED = 'CANCELLED';
+
+    /**
+     * Default COMPLETE order state flag
+     * @var string
+     */
+    public const FLAG_COMPLETE = 'COMPLETE';
 
     /**
      * The available order state flag options.
@@ -39,21 +57,21 @@ class OrderState extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * Implement behaviors for this model.
      * @var array
      */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The applied validation rules.
-     * @var array
-     */
-    public $rules = [
-        'name' => 'required',
+    public $implement = [
+        '@RainLab.Translate.Behaviors.TranslatableModel'
     ];
 
     /**
-     * Attributes that support translation, if available.
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_order_states';
+
+    /**
+     * The translatable attributes of this model.
      * @var array
      */
     public $translatable = [
@@ -62,7 +80,34 @@ class OrderState extends Model
     ];
 
     /**
-     * Implement hasMany relationships.
+     * The validation rules for the single attributes.
+     * @var array
+     */
+    public $rules = [
+        'name'          => 'required',
+        'is_enabled'    => 'nullable|boolean'
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
+    public $fillable = [
+        'name',
+        'is_enabled',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    public $casts = [
+        'is_enabled'    => 'boolean',
+        'deleted_at'    => 'datetime',
+    ];
+
+    /**
+     * The hasMany relationships of this model.
      * @var array
      */
     public $hasMany = [
@@ -79,5 +124,12 @@ class OrderState extends Model
         return array_map(function (string $val) {
             return Lang::get($val);
         }, static::$availableFlagOptions);
+    }
+
+    public function beforeDelete()
+    {
+        if (!empty($this->flag)) {
+            throw new \Exception('You cannot delete a flagged order state.');
+        }
     }
 }

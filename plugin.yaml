@@ -8,7 +8,7 @@ navigation:
     mall-orders:
         label: 'offline.mall::lang.common.orders'
         url: offline/mall/orders
-        icon: icon-shopping-cart
+        iconSvg: plugins/offline/mall/assets/images/orders-icon.svg
         order: 801
         permissions:
             - 'offline.mall.*'
@@ -34,7 +34,7 @@ navigation:
     mall-catalogue:
         label: 'offline.mall::lang.common.catalogue'
         url: offline/mall/products
-        icon: icon-book
+        iconSvg: plugins/offline/mall/assets/images/catalogue-icon.svg
         order: 800
         permissions:
             - offline.mall.manage_products

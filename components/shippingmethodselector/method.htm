@@ -4,8 +4,8 @@
      data-id="{{ method.id }}"
 >
     <div class="mall-shipping-method__logo">
-        {% if method.logo %}
-            <img class="mall-shipping-method__logo" src="{{ method.logo.thumb(120, 'auto') }}" alt=""/>
+        {% if method.logo|default(null) %}
+            <img class="mall-shipping-method__logo" src="{{ method.logo.thumb(120, null) }}" alt=""/>
         {% endif %}
     </div>
     <div class="mall-shipping-method__text">
@@ -23,8 +23,8 @@
                     {% endif %}
                     <div class="mall-shipping-method__price">
                         {{ method.price().integer > 0
-                        ? (method.price().string | raw)
-                        : ('offline.mall::frontend.no_additional_charges' | trans) }}
+                        ? (method.price().string|raw)
+                        : ('offline.mall::frontend.no_additional_charges'|trans) }}
                     </div>
                 </div>
             </div>
@@ -32,12 +32,12 @@
                  style="{% if not isActiveMethod %}display: none{% endif %}">
                 {% if method.description %}
                     <div class="mall-shipping-method__description">
-                        {{ method.description | raw }}
+                        {{ method.description|raw }}
                     </div>
                 {% endif %}
                 <div class="mall-shipping-method__submit">
                     <button class="mall-btn mall-btn--primary" type="submit" data-attach-loading>
-                        {{ 'offline.mall::frontend.shipping_method.proceed' | trans }}
+                        {{ 'offline.mall::frontend.shipping_method.proceed'|trans }}
                     </button>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     data-request="{{ __SELF__ }}::onChangeMethod"
                     data-request-success="$.publish('mall.cart.shippingMethodChanged', data)"
                     data-request-data="id: '{{ method.id }}'">
-                {{ 'offline.mall::frontend.shipping_method.button_label' | trans }}
+                {{ 'offline.mall::frontend.shipping_method.button_label'|trans }}
             </button>
         {% endif %}
     </div>

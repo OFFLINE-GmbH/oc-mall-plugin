@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Cms\Classes\Theme;
 use Illuminate\Support\Collection;
@@ -23,6 +25,30 @@ class Wishlists extends MallComponent
      * @var Collection<Wishlist>
      */
     public $items;
+    /**
+     * Default minimum quantity.
+     *
+     * @var int
+     */
+    public $defaultMinQuantity = 1;
+    /**
+     * Default maximum quantity.
+     *
+     * @var int
+     */
+    public $defaultMaxQuantity = 100;
+    /**
+     * Display the DiscountApplier component.
+     *
+     * @var bool
+     */
+    public $showDiscountApplier = true;
+    /**
+     * Display a tax summary at the end of the cart.
+     *
+     * @var bool
+     */
+    public $showTaxes = true;
     /**
      * The currently displayed wishlist.
      *
@@ -87,7 +113,7 @@ class Wishlists extends MallComponent
         /** @var Collection<Wishlist>|Wishlist[] items */
         /** @var Wishlist currentItem */
         $this->items       = $this->getWishlists();
-        $this->currentItem = $this->items->find($this->decode($this->param('id'))) ?: $this->items->first();
+        $this->currentItem = $this->items->where('id', $this->decode($this->param('id') ?? ''))->first() ?: $this->items->first();
 
         $this->handleShipping();
 
@@ -156,7 +182,7 @@ class Wishlists extends MallComponent
             return $this->controller->run('404');
         }
 
-        $this->currentItem->setShippingMethod(ShippingMethod::find($method));
+        $this->currentItem->setShippingMethod(ShippingMethod::where('id', $method)->first());
 
         $this->setCurrentItem();
 
@@ -227,7 +253,7 @@ class Wishlists extends MallComponent
         $wishlists = Wishlist::byUser(Auth::getUser());
 
         /** @var Wishlist $wishlist */
-        $wishlist = $wishlists->find($id);
+        $wishlist = $wishlists->where('id', $id)->first();
 
         if ( ! $wishlist) {
             return $this->controller->run('404');
@@ -264,7 +290,7 @@ class Wishlists extends MallComponent
     protected function setCurrentItem(): void
     {
         $this->items       = $this->getWishlists();
-        $this->currentItem = $this->items->find($this->decode(post('id')));
+        $this->currentItem = $this->items->where('id', $this->decode(post('id')))->first();
 
         if ( ! $this->currentItem) {
             throw new ValidationException(['id' => 'Invalid wishlist ID specified']);

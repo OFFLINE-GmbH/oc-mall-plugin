@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Auth;
 use Illuminate\Support\Collection;
@@ -7,6 +9,7 @@ use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Cart;
+use RainLab\User\Classes\AuthManager;
 
 /**
  * Display a list of user addresses.
@@ -125,7 +128,7 @@ class AddressList extends MallComponent
         $customer = $user->customer;
         $cart = Cart::byUser($user);
 
-        $address = Address::byCustomer($customer)->find($id);
+        $address = Address::byCustomer($customer)->where('id', $id)->first();
 
         if (!$address) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);
@@ -157,7 +160,7 @@ class AddressList extends MallComponent
         $user = Auth::getUser();
         $customer = $user->customer;
         $cart = Cart::byUser($user);
-        $address = Address::byCustomer($customer)->find($id);
+        $address = Address::byCustomer($customer)->where('id', $id)->first();
 
         if (!$address) {
             throw new ValidationException(['id' => trans('offline.mall::lang.components.addressList.errors.address_not_found')]);

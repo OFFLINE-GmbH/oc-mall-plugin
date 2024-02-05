@@ -1,35 +1,95 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Illuminate\Support\Facades\Cache;
+namespace OFFLINE\Mall\Models;
+
 use Model;
+use Illuminate\Support\Facades\Cache;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Database\Collection;
+use OFFLINE\Mall\Classes\Database\IsStates;
 use Rainlab\Location\Models\Country as RainLabCountry;
 
-/**
- * @mixin \Illuminate\Database\Eloquent\Builder
- */
 class Tax extends Model
 {
+    use IsStates;
     use Validation;
 
+    /**
+     * Default cache key for the queries taxes.
+     * @var string
+     */
     public const DEFAULT_TAX_CACHE_KEY = 'mall.taxes.default';
 
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    /**
+     * Disable `is_default` handler on IsStates trait. Even if Tax uses a default value, the
+     * current IsStates trait does not support multiple defaults, especially when using an 
+     * additional linking table (`offline_mall_country_tax`).
+     * @var null|string
+     */
+    public const IS_DEFAULT = null;
+
+    /**
+     * Enable `is_enabled` handler on IsStates trait, by passing the column name.
+     * @var null|string
+     */
+    public const IS_ENABLED = 'is_enabled';
+
+    /**
+     * Implement behaviors for this model.
+     * @var array
+     */
+    public $implement = [
+        '@RainLab.Translate.Behaviors.TranslatableModel'
+    ];
+    
+    /**
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_taxes';
+    
+    /**
+     * The translatable attributes of this model.
+     * @var array
+     */
     public $translatable = [
         'name',
     ];
+
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
     public $rules = [
-        'name'       => 'required',
-        'percentage' => 'numeric|min:0|max:100',
+        'name'          => 'required',
+        'percentage'    => 'numeric|min:0|max:100',
+        'is_enabled'    => 'nullable|boolean'
     ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
     public $fillable = [
         'name',
         'percentage',
         'is_default',
+        'is_enabled',
     ];
-    public $table = 'offline_mall_taxes';
-    public $casts = ['is_default' => 'boolean'];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    public $casts = [
+        'is_default' => 'boolean',
+        'is_enabled' => 'boolean',
+    ];
+
+    /**
+     * The belongsToMany relationships of this model.
+     * @var array
+     */
     public $belongsToMany = [
         'products'         => [
             Product::class,
@@ -58,37 +118,45 @@ class Tax extends Model
         ],
     ];
 
-    public function getPercentageDecimalAttribute()
+    /**
+     * Returns the default taxes.
+     * @return Collection<Tax>|Tax[]
+     */
+    static public function defaultTaxes(): Collection
     {
-        return (float)$this->percentage / 100;
+        $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
+            $columns = [ 'id',  'name',  'percentage',  'is_default', 'is_enabled'];
+            $taxes = static::where('is_default', true)->get($columns);
+            if (!$taxes) {
+                return [];
+            } else {
+                // Make sure the "translations" relation is not cached.
+                return $taxes->map->only($columns)->toArray();
+            }
+        });
+
+        if (!$taxes) {
+            return new Collection();
+        } else {
+            return self::hydrate($taxes);
+        }
     }
 
+    /**
+     * Hook after model has been saved.
+     * @return void
+     */
     public function afterSave()
     {
         Cache::forget(self::DEFAULT_TAX_CACHE_KEY);
     }
 
     /**
-     * Returns the default taxes.
-     *
-     * @return Collection<Tax>|Tax[]
+     * Get percentage decimal attribute.
+     * @return float
      */
-    public static function defaultTaxes(): Collection
+    public function getPercentageDecimalAttribute()
     {
-        $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
-            $taxes = static::where('is_default', true)->get(['id', 'name', 'percentage', 'is_default']);
-            if ( ! $taxes) {
-                return [];
-            }
-
-            // Make sure the "translations" relation is not cached.
-            return $taxes->map->only('id', 'name', 'percentage', 'is_default')->toArray();
-        });
-
-        if ( ! $taxes) {
-            return new Collection();
-        }
-
-        return self::hydrate($taxes);
+        return (float)$this->percentage / 100;
     }
 }

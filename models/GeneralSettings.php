@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Cms\Classes\Page;
-use Illuminate\Support\Facades\Cache;
 use Model;
+use Cms\Classes\Page;
 use Cms\Classes\Theme;
-use Session;
+use Illuminate\Support\Facades\Cache;
 
 class GeneralSettings extends Model
 {
@@ -65,7 +64,10 @@ class GeneralSettings extends Model
 
     public function getCheckoutPageOptions()
     {
-        return $this->getPagesByComponent('checkout');
+        return array_merge(
+            $this->getPagesByComponent('checkout'),
+            $this->getPagesByComponent('quickCheckout'),
+        );
     }
 
     public function getAccountPageOptions()

@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
+use DB;
+use PDO;
 use Barryvdh\DomPDF\Facade;
 use Barryvdh\DomPDF\PDF;
 use Dompdf\Dompdf;
@@ -61,15 +63,32 @@ trait BootServiceContainer
                 if ($driver === null) {
                     GeneralSettings::set('index_driver', 'database');
                 }
-
                 return $driver;
             });
             try {
                 if ($driver === 'filesystem') {
                     return new Filebase();
+                } else {
+                    $pdo = DB::connection()->getPdo();
+                    if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+                        $pdo->sqliteCreateFunction('JSON_CONTAINS', function ($json, $val, $path = null) {
+                            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                            $val = trim($val, '"');
+
+                            if (!empty($path) && str_starts_with($path, '$.')) {
+                                $path = trim(ltrim($path, '$.'), '"');
+                                $array = $array[$path] ?? [];
+                            }
+
+                            if (strpos($val, '[') == 0 && strrpos($val, ']') == strlen($val)-1) {
+                                $val = json_decode($val, true)[0];
+                            }
+                            return in_array($val, $array, true);
+                        });
+                    }
+                    return new MySQL();
                 }
 
-                return new MySQL();
             } catch (IndexNotSupportedException $e) {
                 logger()->error(
                     '[OFFLINE.Mall] Your database does not support JSON data. Your index driver has been switched to "Filesystem". Update your database to make use of database indexing.'

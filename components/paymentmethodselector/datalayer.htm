@@ -1,21 +1,4 @@
-{% if not url %}
-    {% set activeMethod = __SELF__.activeMethod.only('code', 'name') %}
-    <script>
-        $(function () {
-            window.dataLayerData = dataWithMethod({{ activeMethod | json_encode | raw }})
-            $.subscribe('mall.cart.paymentMethodChanged', function (e, data) {
-                window.dataLayerData = dataWithMethod(data.method)
-            })
-
-            function dataWithMethod (method) {
-                var dl = {{ dataLayer | json_encode | raw }};
-                dl.ecommerce.checkout.actionField = {step: 1, method: method.code}
-                return dl
-            }
-        })
-    </script>
-    <div id="mall-datalayer"></div>
-{% else %}
+{% if url is defined and url != null %}
     <script>
         var redirect = function () {
             document.location = '{{ url }}'
@@ -25,4 +8,21 @@
 
         dataLayer.push(window.dataLayerData)
     </script>
+{% else %}
+    {% set activeMethod = __SELF__.activeMethod.only('code', 'name') %}
+    <script>
+        $(function () {
+            window.dataLayerData = dataWithMethod({{ activeMethod|json_encode|raw }})
+            $.subscribe('mall.cart.paymentMethodChanged', function (e, data) {
+                window.dataLayerData = dataWithMethod(data.method)
+            })
+
+            function dataWithMethod (method) {
+                var dl = {{ dataLayer|json_encode|raw }};
+                dl.ecommerce.checkout.actionField = {step: 1, method: method.code}
+                return dl
+            }
+        })
+    </script>
+    <div id="mall-datalayer"></div>
 {% endif %}

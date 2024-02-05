@@ -1,9 +1,9 @@
 <tr class="mall-cart__shipping">
     <td></td>
     <td colspan="3">
-        {% if __SELF__.shippingMethods.count > 1 %}
+        {% if __SELF__.shippingMethods.count|default(0) > 1 %}
             <label for="mall-shipping-method-select">
-                {{ 'offline.mall::lang.order.shipping_method' | trans }}
+                {{ 'offline.mall::lang.order.shipping_method'|trans }}
             </label>
 
             <select id="mall-shipping-method-select"
@@ -23,6 +23,6 @@
         {% endif %}
     </td>
     <td class="text-right">
-        {{ shipping.totalPostTaxes | money }}
+        {{ shipping.totalPostTaxes|money }}
     </td>
 </tr>

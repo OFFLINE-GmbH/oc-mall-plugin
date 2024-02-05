@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Models;
 
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
@@ -30,7 +32,11 @@ class ServiceOption extends Model
         'description',
     ];
     public $morphMany = [
-        'prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'price_category_id is null'],
+        'prices' => [
+            Price::class, 
+            'name' => 'priceable', 
+            'conditions' => 'price_category_id is null'
+        ],
     ];
     public $belongsTo = [
         'service' => [Service::class],

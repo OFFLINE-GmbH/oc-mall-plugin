@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Components;
+<?php declare(strict_types=1);
+
+namespace OFFLINE\Mall\Components;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
@@ -68,7 +70,7 @@ class CurrencyPicker extends MallComponent
             return;
         }
 
-        Currency::setActiveCurrency(Currency::findOrFail($currency));
+        Currency::setActiveCurrency(Currency::where('id', $currency)->firstOrFail());
 
         $pageUrl = $this->getUrl();
 

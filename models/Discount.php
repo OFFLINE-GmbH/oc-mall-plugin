@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Models;
+<?php declare(strict_types=1);
 
-use Carbon\Carbon;
+namespace OFFLINE\Mall\Models;
+
 use Model;
+use Carbon\Carbon;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -40,9 +42,21 @@ class Discount extends Model
         'number_of_usages' => 'integer',
     ];
     public $morphMany = [
-        'shipping_prices' => [Price::class, 'name' => 'priceable', 'conditions' => "field = 'shipping_prices'"],
-        'amounts'         => [Price::class, 'name' => 'priceable', 'conditions' => "field = 'amounts'"],
-        'totals_to_reach' => [Price::class, 'name' => 'priceable', 'conditions' => "field = 'totals_to_reach'"],
+        'shipping_prices' => [
+            Price::class, 
+            'name' => 'priceable', 
+            'conditions' => "field = 'shipping_prices'"
+        ],
+        'amounts' => [
+            Price::class, 
+            'name' => 'priceable', 
+            'conditions' => "field = 'amounts'"
+        ],
+        'totals_to_reach' => [
+            Price::class, 
+            'name' => 'priceable', 
+            'conditions' => "field = 'totals_to_reach'"
+        ],
     ];
     public $fillable = [
         'name',
@@ -85,7 +99,7 @@ class Discount extends Model
             }
         });
         static::saving(function (self $discount) {
-            $discount->code = strtoupper($discount->code);
+            $discount->code = strtoupper($discount->code ?? '');
             if ($discount->trigger !== 'product') {
                 $discount->product_id = null;
             }

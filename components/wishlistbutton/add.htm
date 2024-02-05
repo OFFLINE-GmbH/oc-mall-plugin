@@ -1,7 +1,7 @@
 <div class="mall-wishlist-button__new">
     <input type="text" class="mall-wishlist-button__name-input">
     <div class="mall-wishlist-button__new-label">
-        {{ 'offline.mall::frontend.wishlist.create' | trans }}
+        {{ 'offline.mall::frontend.wishlist.create'|trans }}
     </div>
 </div>
 <script>
@@ -36,7 +36,7 @@
         })
         nameInput.addEventListener('focus', function () {
             nameLabel.style.display = 'none'
-            this.placeholder = '{{ 'offline.mall::frontend.wishlist.create_placeholder' | trans }}'
+            this.placeholder = '{{ 'offline.mall::frontend.wishlist.create_placeholder'|trans }}'
         })
         nameInput.addEventListener('blur', function () {
             if (this.value === '') {
