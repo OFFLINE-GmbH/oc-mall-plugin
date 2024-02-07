@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Totals;
 
@@ -6,13 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
+use OFFLINE\Mall\Classes\Pricing\PriceBag;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
 /**
- * @SuppressWarnings(PHPMD.TooManyFields)
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * system with the PriceBag class construct instead.
  */
 class TotalsCalculator implements CallsAnyMethod
 {
@@ -87,40 +89,55 @@ class TotalsCalculator implements CallsAnyMethod
      */
     public $paymentTaxes;
 
+    /**
+     * Primary PriceBag instance.
+     * @var PriceBag
+     */
+    protected PriceBag $bag;
+
+    /**
+     * Create a new totalsCalculator instance.
+     * @param TotalsCalculatorInput $input
+     */
     public function __construct(TotalsCalculatorInput $input)
     {
         $this->input = $input;
         $this->taxes = new Collection();
+        $this->bag = PriceBag::fromTotalsCalculatorInput($input);
 
         $this->calculate();
     }
 
+    /**
+     * Calculate totals.
+     * @return void
+     */
     protected function calculate()
     {
-        $this->weightTotal = $this->calculateWeightTotal();
-        $this->productPreTaxes = $this->calculateProductPreTaxes();
-        $this->productTaxes = $this->calculateProductTaxes();
+        $this->weightTotal = $this->bag->productsWeight();          // $this->calculateWeightTotal();
 
-        $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
+        $this->productPreTaxes = $this->bag->totalExclusive();      // $this->calculateProductPreTaxes();
+        $this->productTaxes = $this->bag->totalTax();               // $this->calculateProductTaxes();
+        $this->productPostTaxes = $this->bag->totalInclusive();     // $this->productPreTaxes + $this->productTaxes;
 
-        $this->shippingTaxes = $this->filterShippingTaxes();
-        $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
-        $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
+        $this->shippingTaxes = $this->bag->shippingTax();           // $this->filterShippingTaxes();
+        $this->shippingTotal = $this->bag->shippingInclusive();     // new ShippingTotal($this->input->shipping_method, $this);
 
-        $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
+        $this->totalPreTaxes = $this->bag->totalExclusive();        // $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
+        $this->totalDiscounts = $this->bag->totalDiscount();        // $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
 
-        $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
-        $this->paymentTaxes = $this->filterPaymentTaxes();
-        $this->paymentTotal = new PaymentTotal($this->input->payment_method, $this);
+        $this->totalPrePayment = null;                              // $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
+        $this->paymentTaxes = $this->bag->paymentTaxes();           // $this->filterPaymentTaxes();
+        $this->paymentTotal = $this->bag->paymentTotal();           // new PaymentTotal($this->input->payment_method, $this);
 
-        $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
+        $this->totalPostTaxes = $this->bag->totalInclusive();       // $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
 
         // The grand total should never be negative.
         if ($this->totalPostTaxes < 0) {
             $this->totalPostTaxes = 0;
         }
 
-        $this->taxes = $this->getTaxTotals();
+        $this->taxes = $this->totalTaxes();                         // $this->getTaxTotals();
     }
 
     protected function calculateProductPreTaxes(): float
@@ -199,6 +216,10 @@ class TotalsCalculator implements CallsAnyMethod
         })->values();
     }
 
+    /**
+     * Calculate total weight of all products.
+     * @return integer
+     */
     protected function calculateWeightTotal(): int
     {
         return $this->input->products->sum(function ($product) {

@@ -146,6 +146,7 @@ class Currency extends Model
             $currency = static::orderBy('is_default', 'DESC')->first();
             static::guardMissingCurrency($currency);
             static::setActiveCurrency($currency);
+            return $currency;
         } else {
             return (new Currency)->newFromBuilder(Session::get(static::CURRENCY_SESSION_KEY));
         }
