@@ -138,7 +138,6 @@ trait PriceBagCreators
                 $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
             }
         }
-        $bag->dd();
 
         return $bag;
     }
