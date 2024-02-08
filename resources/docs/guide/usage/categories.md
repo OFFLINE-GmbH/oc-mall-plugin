@@ -1,5 +1,9 @@
 # Categories
 
+> [!DANGER] Work in Progress
+> We are currently revising our documentation and the page you are currently looking at has not yet 
+> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 Categories are used to organize [Products](./products.md) in your store. They also define the [Properties](
 ./properties.md) that will be available for all related Products.
 

@@ -1,5 +1,9 @@
 # AddressList
 
+> [!DANGER] Work in Progress
+> We are currently revising our documentation and the page you are currently looking at has not yet 
+> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 The `AddressList` component displays a list of a user's addresses.
 
 It generates edit links for the [AddressForm](./address-form.md) component

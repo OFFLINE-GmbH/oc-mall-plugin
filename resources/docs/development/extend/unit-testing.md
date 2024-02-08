@@ -1,6 +1,11 @@
+<script setup>
+    import BadgeStd from '../../.vitepress/components/BadgeStd.vue'
+import SpoilerStd from '../../.vitepress/components/SpoilerStd.vue'
+</script>
+
 # Unit Testing
 
-_Work in Progress_
+<BadgeStd label="Page is Work in Progress" color="danger" />
 
 ## 1. Install packages
 

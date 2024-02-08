@@ -4,6 +4,7 @@ import SpoilerStd from '../../.vitepress/components/SpoilerStd.vue'
 </script>
 
 # Price Bag
+<BadgeStd label="Page is Work in Progress" color="danger" />
 <BadgeStd label="New in 3.2.0" color="warning" />
 
 The **PriceBag** construct is the new system for calculating and evaluating the applied (customer) 

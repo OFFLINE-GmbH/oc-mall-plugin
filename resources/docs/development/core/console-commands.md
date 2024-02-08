@@ -1,5 +1,9 @@
 # Console commands
 
+> [!DANGER] Work in Progress
+> We are currently revising our documentation and the page you are currently looking at has not yet 
+> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 ## `mall:check`
 
 The `php artisan mall:check` console command runs a set of checks on your October installation and makes sure that 

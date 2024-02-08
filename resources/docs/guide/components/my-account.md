@@ -1,5 +1,9 @@
 # MyAccount
 
+> [!DANGER] Work in Progress
+> We are currently revising our documentation and the page you are currently looking at has not yet 
+> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 The `MyAccount` component displays an overview of the user's account.
 
 It pulls together the [OrdersList](./orders-list.md), [CustomerProfile](./customer-profile.md) and [AddressList](

@@ -1,5 +1,9 @@
 # Variant model
 
+> [!DANGER] Work in Progress
+> We are currently revising our documentation and the page you are currently looking at has not yet 
+> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 A `Variant` model always belongs to a parent [Product model](./product-model.md).
 
 Variant models by default inherit most of the data from their parent Product model.
