@@ -122,7 +122,7 @@ class ProductReviews extends ComponentBase
             })
             ->first();
 
-        $pageNumber    = input('page', 1);
+        $pageNumber    = (int)input('page', 1);
         $perPage       = (int)$this->property('perPage', 5);
         $slice         = $this->allReviews->slice(($pageNumber - 1) * $perPage, $perPage);
         $this->reviews = new LengthAwarePaginator($slice, $this->allReviews->count(), $perPage, $pageNumber);
