@@ -511,3 +511,5 @@ v3.2.0:
     - 030_05-alter_offline_mall_payment_methods.php
     - 030_06-alter_offline_mall_shipping_methods.php
     - 030_07-alter_offline_mall_order_states.php
+v3.2.1:
+    - 'Fix Release Number'

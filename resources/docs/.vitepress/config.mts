@@ -105,16 +105,10 @@ export default defineConfig({
                     text: 'Changelog',
                     collapsed: true,
                     items: [
-                        { text: 'v1.14.0', link: '/development/changelog/1.14.0' },
-                        { text: 'v1.13.0', link: '/development/changelog/1.13.0' },
-                        { text: 'v1.12.0', link: '/development/changelog/1.12.0' },
-                        { text: 'v1.11.0', link: '/development/changelog/1.11.0' },
-                        { text: 'v1.10.0', link: '/development/changelog/1.10.0' },
-                        { text: 'v1.9.0', link: '/development/changelog/1.9.0' },
-                        { text: 'v1.8.0', link: '/development/changelog/1.8.0' },
-                        { text: 'v1.7.0', link: '/development/changelog/1.7.0' },
-                        { text: 'v1.6.0', link: '/development/changelog/1.6.0' },
-                        { text: 'v1.5.0', link: '/development/changelog/1.5.0' },
+                        { text: 'Latest Release', link: '/development/changelog/latest' },
+                        { text: 'Version 3', link: '/development/changelog/v3' },
+                        { text: 'Version 2', link: '/development/changelog/v2' },
+                        { text: 'Version 1', link: '/development/changelog/v1' },
                     ]
                 }
             ],
