@@ -646,4 +646,57 @@ class PriceBagTest extends PluginTestCase
             $bag->totalInclusive()->integer()
         );
     }
+
+    /**
+     * Calculate Shipping Costs
+     * @return void
+     */
+    public function test_calculate_shipping_costs()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        // Create Product
+        $product = $this->getProduct(10000);
+        $product->price_includes_tax = true;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        // Create Shipping Method
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 10000, 'EUR' => 15000];
+        $shippingMethod->taxes()->attach($tax1);
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+        $cart->setShippingMethod($shippingMethod);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertCount(
+            2,
+            $bag->productsTaxes()[0]['taxes']
+        );
+        $this->assertEquals(
+            2448, 
+            $bag->productsTaxes()[0]['taxes'][0]->getMinorAmount()->toInt()
+        );
+        $this->assertEquals(
+            3077, 
+            $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
+        );
+        $this->assertEquals(
+            5524,
+            $bag->totalTax()->getAmount()->toInt()
+        );
+        $this->assertEquals(
+            30000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
 }

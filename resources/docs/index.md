@@ -16,10 +16,11 @@ hero:
       target: _blank
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Your (digital) Stock
+    details: Mall supports product and variant management, adding additional services as well as digital and virtual goods.
+  - title: PayPal and Stripe
+    details: The payment service providers PayPal and Stripe are directly on board and can be used immediately after configuration.
+  - title: Much more, directly included
+    details: Multi-Currency, Multi-Language, Wishlists, Reviews, Customer Groups, Price Management, E-Mail notification, ...
 ---
+

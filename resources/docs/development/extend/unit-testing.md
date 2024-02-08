@@ -18,7 +18,7 @@ composer require --dev "fakerphp/faker:^1.23" "mockery/mockery:^1.6"
 
 You can either use Octobers `plugin:test OFFLINE.Mall` console command, or you can visit the 
 `plugins/offline/mall` plugins root directory and run the whole test suite using the composer 
-command `composer run test`.
+command `composer test`.
 
 You can also use the PHPUnits `--filter` option to test only specific classes or methods. Visit 
 [the official documentation](https://docs.phpunit.de/en/9.6/textui.html) for more information.
@@ -26,6 +26,9 @@ You can also use the PHPUnits `--filter` option to test only specific classes or
 Examples:
 
 ```sh
-composer run test -- --filter 'OFFLINE\\Mall\\Tests\\TestClass'                 # To run a single class
-composer run test -- --filter 'OFFLINE\\Mall\\Tests\\TestClass::methodName'     # To run a single method
+# To run a single class
+composer test -- --filter 'OFFLINE\\Mall\\Tests\\TestClass'
+
+# To run a single method
+composer test -- --filter 'OFFLINE\\Mall\\Tests\\TestClass::methodName'
 ```

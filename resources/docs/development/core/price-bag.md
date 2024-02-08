@@ -1,5 +1,6 @@
 <script setup>
 import BadgeStd from '../../.vitepress/components/BadgeStd.vue'
+import SpoilerStd from '../../.vitepress/components/SpoilerStd.vue'
 </script>
 
 # Price Bag
@@ -51,7 +52,7 @@ discounts.
 5. `discounts`: The bag-global discounts, which can be calculated on the net-total of all products 
 or services, on the payment fees, the shipping costs or the gross amount of the cart.
 
-and calculates them using this order:
+and calculates them in this order:
 
 ```
 + Products
@@ -162,10 +163,24 @@ returns them as a collection array.
 
 The following methods do only calculate the respective totals of the `products` stack!
 
+```php
+$bag->productsExclusive(): PriceValue
+$bag->productsDiscount(): MoneyValue
+$bag->productsVat(bool $detailed = false): array|MoneyValue
+$bag->productsTax(bool $detailed = false): array|MoneyValue
+$bag->productsTaxes(bool $detailed = false): array|MoneyValue
+$bag->productsInclusive(): PriceValue
+$bag->productsWeight(): int|float
+```
+
+<SpoilerStd label="Details">
+
+<br />
+
 #### Exclusive
 
-Calculates and returns the exclusive price value (prices without discount, vat or any other tax
-applied) of the whole `products` stack.
+Calculates and returns exclusive price value for all `products` (prices without discount, vat or 
+taxes applied). Returns a `PriceValue` instance.
 
 ```php
 $bag->productsExclusive(): PriceValue;
@@ -173,19 +188,29 @@ $bag->productsExclusive(): PriceValue;
 
 #### Discount
 
-Calculates and returns the sum of all applied discounts for all `products` combined.
+Calculates and returns the sum of all doscounts for all `products` combined. Returns a `MoneyValue` 
+instance.
 
 ```php
-$bag->productsDiscount(): AbstractMoney;
+$bag->productsDiscount(): MoneyValue;
 ```
 
 #### VAT
 
-Calculcates and returns VAT only, based on the original net-price minus discounts for all `products`
-combined. Passing `true` groups the sum of all VATs according to the applied factor.
+Calculates and returns the vat for all `products`, based on the original net-price minus discount, 
+without the other taxes applied. Passing `true` as first parameter, groups the sum of all VATs 
+according to the applied factor.
 
 ```php
-$bag->productsVat(bool $grouped = false): AbstractMoney|AbstractMoney[];
+$bag->productsVat(bool $detailed = false): array|MoneyValue;
+```
+
+```php
+[
+    '10%'   => MoneyValue,
+    '20%'   => MoneyValue,
+    'total' => MoneyValue
+]
 ```
 
 #### Taxes
@@ -198,120 +223,4 @@ adding an additional `taxes` key providing the sum of all other applied taxes.
 $bag->productsTax(bool $grouped = false): AbstractMoney|AbstractMoney[];
 ```
 
-
-
-    public function productsTax(): null|AbstractMoney
-    {
-
-    }
-    public function productsInclusive(): PriceValue
-    {
-
-    }
-    public function productsWeight(): PriceValue
-    {
-
-    }
-
-    /**
-     * Return exclusive price value for all services (prices without discount, vat or taxes applied).
-     * @return PriceValue
-     */
-    public function serviceExclusive(): PriceValue
-    {
-
-    }
-
-    /**
-     * Return sum of all discounts for all services combined.
-     * @return null|AbstractMoney
-     */
-    public function serviceDiscount(): null|AbstractMoney
-    {
-
-    }
-
-    /**
-     * Return only vat based on the original net-price minus discount for all products combined.
-     * @return null|AbstractMoney
-     */
-    public function serviceVat(): null|AbstractMoney
-    {
-
-    }
-    public function serviceTax(): null|AbstractMoney
-    {
-
-    }
-    public function serviceInclusive(): PriceValue
-    {
-
-    }
-    
-    /**
-     * Return all applied Payment Fees.
-     * @return AbstractMoney[]
-     */
-    public function paymentFees(): array
-    {
-
-    }
-    
-    /**
-     * Return all applied Payment Discounts.
-     * @return AbstractMoney[]
-     */
-    public function paymentDiscounts(): null|AbstractMoney
-    {
-
-    }
-
-    /**
-     * Return exclusive price value for all shipping methods (prices without discount, vat or taxes applied).
-     * @return PriceValue
-     */
-    public function shippingExclusive(): PriceValue
-    {
-
-    }
-    public function shippingVat(): null|AbstractMoney
-    {
-
-    }
-    public function shippingTax(): null|AbstractMoney
-    {
-
-    }
-    public function shippingInclusive(): PriceValue
-    {
-
-    }
-    public function shippingDiscount(): null|AbstractMoney
-    {
-
-    }
-
-    /**
-     * Return total price of all stacks (prices without discount, vat or taxes applied).
-     * @return PriceValue
-     */
-    public function totalExclusive(): PriceValue
-    {
-
-    }
-    public function totalVat(): null|AbstractMoney
-    {
-
-    }
-    public function totalTax(): null|AbstractMoney
-    {
-
-    }
-    public function totalDiscount(): null|AbstractMoney
-    {
-
-    }
-    public function totalInclusive(): PriceValue
-    {
-
-    }
+</SpoilerStd>

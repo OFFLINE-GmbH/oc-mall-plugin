@@ -4,6 +4,11 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
     title: "Mall OctoberCMS Plugin",
     description: "The all-inclusive e-commerce solution for OctoberCMS.",
+    vite: {
+        server: {
+            port: 3003
+        }
+    },
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         editLink: {
