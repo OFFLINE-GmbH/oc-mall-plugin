@@ -103,7 +103,7 @@ class TotalsCalculator implements CallsAnyMethod
     {
         $this->input = $input;
         $this->taxes = new Collection();
-        $this->bag = PriceBag::fromTotalsCalculatorInput($input);
+        //$this->bag = PriceBag::fromTotalsCalculatorInput($input);
 
         $this->calculate();
     }
