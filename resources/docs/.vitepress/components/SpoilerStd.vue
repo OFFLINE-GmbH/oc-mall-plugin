@@ -66,7 +66,7 @@ watch(active, newValue => {
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
-    transition: background-color 300ms ease-in-out;
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
     border-radius: 0.35rem;
 
     &:hover {
@@ -78,12 +78,17 @@ watch(active, newValue => {
     }
 
     .active & {
+        color: var(--vp-c-bg);
         background-color: var(--vp-c-brand-3);
 
         & svg {
             transform: rotate(90deg);
         }
     }
+}
+
+.dark .spoiler.active .spoiler-label {
+    color: var(--vp-c-white);
 }
 
 .spoiler-content {
