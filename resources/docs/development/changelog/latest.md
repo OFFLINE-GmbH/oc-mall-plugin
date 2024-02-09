@@ -23,7 +23,8 @@ towards the rising sun.
 
 ### New navigation icons
 
-Using custom vectors graphics instead of FontAwesome / October Icons. Created with Affinity Designer, the source files are located in theresources directory.
+Using custom vectors graphics instead of FontAwesome / October Icons. Created with Affinity Designer, 
+the source files are located in theresources directory.
 
 <table><tr>
     <td style="padding:2rem;"><CatalogueIcon /></td>
@@ -32,7 +33,7 @@ Using custom vectors graphics instead of FontAwesome / October Icons. Created wi
 
 ### New documentation page
 
-The new documentation site, which you're probably currently looking at, is now based on VitePress, 
+The new documentation page, which you are probably reading right now, is now based on VitePress, 
 the (in)direct successor to VuePress, and therefore also comes with a completely new look. While 
 most of the documentation pages are still work in progress, progress is being made at breakneck 
 speed.
