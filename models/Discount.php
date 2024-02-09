@@ -67,6 +67,7 @@ class Discount extends Model
         'trigger',
         'types',
         'product',
+        'product_id',
         'customer_group',
         'type',
         'rate',

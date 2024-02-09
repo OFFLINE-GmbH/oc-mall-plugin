@@ -15,6 +15,7 @@ use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use OFFLINE\Mall\Models\Currency;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
 use Whitecube\Price\Price;
@@ -202,7 +203,7 @@ class PriceBag
 
     /**
      * Add discount to price bag.
-     * @param string $type The type of discount, which should be applied to this bag:
+     * @param string|Discount $type The type of discount, which should be applied to this bag:
      *               - 'products', product-specific discounts
      *               - 'services', service-specific discounts
      *               - 'shipping', shipping-costs discounts
@@ -212,7 +213,7 @@ class PriceBag
      * @param boolean $isFactor
      * @return DiscountRecord
      */
-    public function addDiscount(string $type, int|float|string|AmountValue|FactorValue|Price $amount, bool $isFactor = false)
+    public function addDiscount(string|Discount $type, int|float|string|AmountValue|FactorValue|Price $amount, bool $isFactor = false)
     {
         $record = new DiscountRecord($this->currency, $amount, $isFactor);
         $record->setAssoc($this, $type);

@@ -9,6 +9,7 @@ use OFFLINE\Mall\Classes\Pricing\BaseValue;
 use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
+use OFFLINE\Mall\Models\Discount;
 use Whitecube\Price\Price;
 
 class DiscountRecord extends BaseRecord
@@ -57,7 +58,15 @@ class DiscountRecord extends BaseRecord
      */
     public function type(): null|string
     {
-        return $this->model;
+        if (empty($this->model)) {
+            return null;
+        } else if (is_string($this->model)) {
+            return $this->model;
+        } else {
+            /** @var Discount $model */
+            $model = $this->model;
+            return ($model->type == 'shipping') ? 'shipping' : 'products';
+        }
     }
 
     /**

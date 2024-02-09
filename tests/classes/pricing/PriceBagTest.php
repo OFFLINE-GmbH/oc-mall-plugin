@@ -1047,7 +1047,7 @@ class PriceBagTest extends PluginTestCase
      * Test is variant costs are calculated correctly.
      * @return void
      */
-    public function test_calculates_variant_cost()
+    public function test_calculate_variant_cost()
     {
 
         // Create Product
@@ -1081,4 +1081,613 @@ class PriceBagTest extends PluginTestCase
         );
     }
 
+    /**
+     * Test if custom field costs are calculates correctly.
+     * @return void
+     */
+    public function test_calculate_custom_fields_costs()
+    {
+
+        // Create Custom Field Options
+        $sizeA = CustomFieldOption::create([
+            'name'       => 'Size A',
+            'sort_order' => 1,
+        ]);
+        $sizeA->price = ['CHF' => 100, 'EUR' => 150];
+
+        $sizeB = CustomFieldOption::create([
+            'name'       => 'Size B',
+            'sort_order' => 2,
+        ]);
+        $sizeB->price = ['CHF' => 200, 'EUR' => 150];
+
+        // Create Custom Field
+        $field = CustomField::create([
+            'name' => 'Size',
+            'type' => 'dropdown',
+        ]);
+        $field->custom_field_options()->save($sizeA);
+        $field->custom_field_options()->save($sizeB);
+
+        // Create Product
+        $product = $this->getProduct(['CHF' => 200, 'EUR' => 150]);
+        $product->custom_fields()->attach($field);
+
+        // Create Custom Field Values
+        $customFieldValueA = CustomFieldValue::create([
+
+            'custom_field_id'        => $field->id,
+            'custom_field_option_id' => $sizeA->id,
+        ]);
+        $customFieldValueB = CustomFieldValue::create([
+            'custom_field_id'        => $field->id,
+            'custom_field_option_id' => $sizeB->id,
+        ]);
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2, null, collect([$customFieldValueA]));
+        $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            1000 * 100, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if custom field fallback costs are calculated correctly.
+     * @return void
+     */
+    public function test_calculate_custom_fields_fallback_costs()
+    {
+
+        // Create Custom Field Options
+        $sizeA = CustomFieldOption::create([
+            'name'       => 'Size A',
+            'sort_order' => 1,
+        ]);
+        $sizeB = CustomFieldOption::create([
+            'name'       => 'Size B',
+            'sort_order' => 2,
+        ]);
+
+        // Create Custom Field
+        $field = CustomField::create([
+            'name' => 'Size',
+            'type' => 'dropdown',
+        ]);
+        $field->price = ['CHF' => 300, 'EUR' => 150];
+        $field->custom_field_options()->save($sizeA);
+        $field->custom_field_options()->save($sizeB);
+
+        // Create Custom Field Values
+        $customFieldValueA = CustomFieldValue::create([
+
+            'custom_field_id'        => $field->id,
+            'custom_field_option_id' => $sizeA->id,
+        ]);
+        $customFieldValueB = CustomFieldValue::create([
+            'custom_field_id'        => $field->id,
+            'custom_field_option_id' => $sizeB->id,
+        ]);
+        
+        // Create Product
+        $product = $this->getProduct(200);
+        $product->custom_fields()->attach($field);
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2, null, collect([$customFieldValueA]));
+        $cart->addProduct($product, 1, null, collect([$customFieldValueB]));
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            1500 * 100, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if fixed discount is applied and calculated correctly.
+     * @return void
+     */
+    public function test_calculate_fixed_discount()
+    {
+        $price = ['CHF' => 20000, 'EUR' => 24000];
+        $quantity = 5;
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'    => 'Test',
+            'trigger' => 'code',
+            'name'    => 'Test discount',
+            'type'    => 'fixed_amount',
+        ]);
+        $discount->amounts()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 2,
+            'field'       => 'amounts',
+        ]));
+
+        // Get Cart
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            ($quantity * $price['CHF'] * 100) - 10000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if rate discount is applied and calculated correctly.
+     * @return void
+     */
+    public function test_calculate_rate_discount()
+    {
+        $price = ['CHF' => 20000, 'EUR' => 24000];
+        $quantity = 5;
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'    => 'Test',
+            'name'    => 'Test discount',
+            'trigger' => 'code',
+            'type'    => 'rate',
+            'rate'    => 50,
+        ]);
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            ($quantity * $price['CHF'] * 100) / 2, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if rate discount is applied and calculated always on the base price.
+     * @return void
+     */
+    public function test_calculate_rate_discount_always_on_base_price()
+    {
+        $price = ['CHF' => 20000, 'EUR' => 24000];
+        $quantity = 5;
+
+        // Create Discounts
+        $discountA = Discount::create([
+            'name'    => 'Test discount',
+            'trigger' => 'code',
+            'type'    => 'rate',
+            'rate'    => 25,
+        ]);
+
+        $discountB       = $discountA->replicate();
+        $discountB->code = 'xxx';
+        $discountB->save();
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($this->getProduct($price), $quantity);
+        $cart->applyDiscount($discountA);
+        $cart->applyDiscount($discountB);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            ($quantity * $price['CHF'] * 100) / 2, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if alternate shipping price is calculated correctly.
+     * @return void
+     */
+    public function test_calculate_alternate_shipping_price_discount()
+    {
+        $tax1 = $this->getTax('Test 1', 10);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        // Create Product
+        $product = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->taxes()->attach([$tax1->id, $tax2->id]);
+        $product->save();
+
+        // Create Shipping Method
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->save();
+        $shippingMethod->prices()->save(new Price([
+            'price'       => 200,
+            'currency_id' => 2,
+        ]));
+        $shippingMethod->taxes()->attach($tax1);
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'                 => 'Test',
+            'name'                 => 'Test discount',
+            'trigger'              => 'code',
+            'type'                 => 'shipping',
+            'shipping_description' => 'Test shipping',
+        ]);
+        $discount->shipping_prices()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 2,
+            'field'       => 'shipping_prices',
+        ]));
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+        $cart->setShippingMethod($shippingMethod);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            5524, 
+            $bag->totalTax()->getMinorAmount()->toInt()
+        );
+        $this->assertEquals(
+            30000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if fixed discount is applied and calculated only when given total is reached.
+     * @return void
+     */
+    public function test_calculate_fixed_discount_only_when_total_is_reached()
+    {
+        $product = $this->getProduct(100);
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'    => 'Test',
+            'name'    => 'Test discount',
+            'type'    => 'fixed_amount',
+            'trigger' => 'total',
+        ]);
+        $discount->totals_to_reach()->save(new Price([
+            'price'       => 300,
+            'currency_id' => 2,
+            'field'       => 'totals_to_reach',
+        ]));
+        $discount->amounts()->save(new Price([
+            'price'       => 150,
+            'currency_id' => 2,
+            'field'       => 'amounts',
+        ]));
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            20000, 
+            $bag->totalInclusive()->integer()
+        );
+
+        // Add Another Product
+        $cart->addProduct($product);
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            15000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if rate discount is applied and calculated only when given total is reached.
+     * @return void
+     */
+    public function test_calculate_rate_discount_only_when_total_is_reached()
+    {
+        $product = $this->getProduct(100);
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'    => 'Test',
+            'name'    => 'Test discount',
+            'type'    => 'rate',
+            'rate'    => 50,
+            'trigger' => 'total',
+        ]);
+        $discount->totals_to_reach()->save(new Price([
+            'price'       => 300,
+            'currency_id' => 2,
+            'field'       => 'totals_to_reach',
+        ]));
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            20000, 
+            $bag->totalInclusive()->integer()
+        );
+
+        // Add Another Product
+        $cart->addProduct($product);
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            15000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if alternate shipping price is calculated only when total is reached.
+     * @return void
+     */
+    public function test_calculate_alternate_shipping_price_discount_only_when_total_is_reached()
+    {
+
+        // Create Product
+        $product = $this->getProduct(100);
+
+        // Create Shipping Method
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'                 => 'Test',
+            'name'                 => 'Test discount',
+            'trigger'              => 'total',
+            'type'                 => 'shipping',
+            'shipping_description' => 'Test shipping',
+        ]);
+        $discount->totals_to_reach()->save(new Price([
+            'price'       => 300,
+            'currency_id' => 2,
+            'field'       => 'totals_to_reach',
+        ]));
+        $discount->shipping_prices()->save(new Price([
+            'price'       => 0,
+            'currency_id' => 2,
+            'field'       => 'shipping_prices',
+        ]));
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 2);
+        $cart->setShippingMethod($shippingMethod);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            40000, 
+            $bag->totalInclusive()->integer()
+        );
+
+        // Add Another Product
+        $cart->addProduct($product);
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            30000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if fixed discount is applied and calculated only when a specific product is in cart.
+     * @return void
+     */
+    public function test_calculate_fixed_discount_only_when_product_is_in_cart()
+    {
+
+        // Create Products
+        $productA = $this->getProduct(100);
+        $productB = $this->getProduct(100);
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'       => 'xxxx',
+            'name'       => 'Test discount',
+            'type'       => 'fixed_amount',
+            'trigger'    => 'product',
+            'product_id' => $productB->id,
+        ]);
+        $discount->amounts()->save(new Price([
+            'price'       => 150,
+            'currency_id' => 2,
+            'field'       => 'amounts',
+        ]));
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            20000, 
+            $bag->totalInclusive()->integer()
+        );
+
+        // Add Another Product
+        $cart->addProduct($productB);
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            15000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if rate discount is applied and calculated only when a specific product is in cart.
+     * @return void
+     */
+    public function test_calculate_rate_discount_only_when_product_is_in_cart()
+    {
+        $productA = $this->getProduct(100);
+        $productB = $this->getProduct(100);
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'       => 'xxxx',
+            'name'       => 'Test discount',
+            'type'       => 'rate',
+            'rate'       => 50,
+            'trigger'    => 'product',
+            'product_id' => $productB->id,
+        ]);
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            20000, 
+            $bag->totalInclusive()->integer()
+        );
+
+        // Add Another Product
+        $cart->addProduct($productB);
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            15000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if alternate shipping price is calculated only when a specific product is in cart.
+     * @return void
+     */
+    public function test_calculate_alternate_shipping_price_discount_only_when_product_is_in_cart()
+    {
+        $productA = $this->getProduct(100);
+        $productB = $this->getProduct(100);
+
+        // Create Variant
+        $variant = Variant::create([
+            'name'       => 'Variant',
+            'product_id' => $productA->id,
+            'price'      => ['CHF' => 100, 'EUR' => 150],
+            'stock'      => 20,
+        ]);
+
+        // Create Shipping Method
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->price = ['CHF' => 200, 'EUR' => 150];
+
+        // Create Discount
+        $discount = Discount::create([
+            'code'                 => 'Test',
+            'name'                 => 'Test discount',
+            'trigger'              => 'product',
+            'type'                 => 'shipping',
+            'shipping_description' => 'Test shipping',
+            'product_id'           => $productB->id,
+        ]);
+        $discount->shipping_prices()->save(new Price([
+            'price'       => 0,
+            'currency_id' => 2,
+            'field'       => 'shipping_prices',
+        ]));
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($productA, 2);
+        $cart->setShippingMethod($shippingMethod);
+        $cart->applyDiscount($discount);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            40000, 
+            $bag->totalInclusive()->integer()
+        );
+
+        // Add Another Product
+        $cart->addProduct($productB);
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+        // Check
+        $this->assertEquals(
+            30000, 
+            $bag->totalInclusive()->integer()
+        );
+    }
 }

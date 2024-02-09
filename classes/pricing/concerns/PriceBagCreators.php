@@ -36,13 +36,13 @@ trait PriceBagCreators
         // Add Products and Services
         foreach ($cart->products as $product) {
             $element = $product->variant ?? $product->product;
-            $prices = $element->prices()->get()->mapWithKeys(function ($price) {
-                return [$price->currency->code => $price->integer];
-            });
+
+            // Get prices from CartProduct (incl. custom field prices)
+            $prices = array_map(fn ($price) => intval($price * 100), $product->price);
 
             // Add Record
             $record = $bag->addProduct(
-                $product, 
+                $element, 
                 $prices[$currency->code],
                 $product->quantity,
                 $element->price_includes_tax == true
@@ -218,10 +218,18 @@ trait PriceBagCreators
     {
         foreach ($discounts AS $discount) {
             if ($discount->type == 'fixed_amount') {
-                $bag->addDiscount('products', $discount->amount()->integer);
+                $bag->addDiscount($discount, $discount->amount()->integer);
             }
+
             if ($discount->type == 'rate') {
-                $bag->addDiscount('products', $discount->rate, true);
+                $bag->addDiscount($discount, $discount->rate, true);
+            }
+
+            if ($discount->type == 'shipping') {
+                $prices = $discount->shipping_prices()->get()->mapWithKeys(function ($price) {
+                    return [$price->currency->code => $price->integer];
+                });
+                $bag->addDiscount($discount, $prices[$currency->code], false);
             }
         }
     }

@@ -1,13 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Cart;
 
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
-use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Discount;
 
+/**
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * system with the PriceBag class construct instead.
+ */
 class DiscountApplier
 {
     /**

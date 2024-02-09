@@ -162,4 +162,13 @@ abstract class BaseRecord
         return $this->bag;
     }
 
+    /**
+     * Return the associated Model instance or context string, or null if no association has been applied.
+     * @return null|PriceBag
+     */
+    public function model(): null|string|Model
+    {
+        return $this->model;
+    }
+
 }
