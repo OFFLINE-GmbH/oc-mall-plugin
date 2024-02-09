@@ -18,6 +18,13 @@ class ShippingRecord extends AbstractItemRecord
     protected int $packages = 1;
 
     /**
+     * Additional shipping costs rates.
+     * @var array
+     */
+    protected array $rates = [];
+
+
+    /**
      * Return record type
      * @return string
      */
@@ -52,12 +59,62 @@ class ShippingRecord extends AbstractItemRecord
     }
 
     /**
+     * Add additional shipping costs rate.
+     * @param integer|null $from
+     * @param integer|null $until
+     * @param integer|float|string|Price $amount
+     * @return self
+     */
+    public function addRate(?int $from, ?int $until, int|float|string|Price $amount): self
+    {
+        if (!($amount instanceof Price)) {
+            if (is_string($amount)) {
+                $amount = Price::parse($amount, $this->currency, 1);
+            } else {
+                $amount = new Price(Money::ofMinor($amount, $this->currency), 1);
+            }
+        }
+
+        $this->rates[] = [$from ?? 0, $until ?? 0, $amount];
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function exclusive(int $roundingMode = RoundingMode::HALF_UP): PriceValue
     {
-        $exclusive = parent::exclusive($roundingMode);
-        return new PriceValue($exclusive->value()->multipliedBy($this->packages));
+        if (empty($this->rates) || !$this->bag) {
+            $exclusive = parent::exclusive($roundingMode);
+            return new PriceValue($exclusive->value()->multipliedBy($this->packages));
+        } else {
+            $original = clone $this->price;
+
+            // Find amount by weight rate
+            $amount = null;
+            $weight = $this->bag->productsWeight();
+            foreach ($this->rates AS $rate) {
+                if ($weight >= $rate[0]) {
+                    if ($rate[1] === 0 || $weight <= $rate[1]) {
+                        $amount = $rate[2];
+                        break;
+                    }
+                }
+            }
+
+            // Return default
+            if (empty($amount)) {
+                $exclusive = parent::exclusive($roundingMode);
+                return new PriceValue($exclusive->value()->multipliedBy($this->packages));
+            }
+
+            // Temporary Overwrite amount
+            $this->price = $amount;
+            $exclusive = parent::exclusive($roundingMode);
+            $result = new PriceValue($exclusive->value()->multipliedBy($this->packages));
+            $this->price = $original;
+            return $result;
+        }
     }
 
     /**

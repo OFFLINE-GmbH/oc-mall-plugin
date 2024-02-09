@@ -347,7 +347,7 @@ class PriceBag
         $weight = 0;
 
         foreach ($this->map['products'] AS $product) {
-            $weight += $product->weight;
+            $weight += $product->weight();
         }
 
         return $weight;
@@ -435,6 +435,23 @@ class PriceBag
         }
 
         return $detailed ? $results : $results['total'];
+    }
+
+    /**
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * services.
+     * @param $detailed
+     * @return array
+     */
+    public function servicesTaxes(bool $detailed = false): array|Money
+    {
+        $results = [];
+
+        foreach ($this->map['services'] AS $service) {
+            $results[] = $service->taxes($detailed);
+        }
+
+        return $results;
     }
 
     /**
@@ -537,6 +554,23 @@ class PriceBag
     }
 
     /**
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * services.
+     * @param $detailed
+     * @return array
+     */
+    public function shippingTaxes(bool $detailed = false): array|Money
+    {
+        $results = [];
+
+        foreach ($this->map['shipping'] AS $shipping) {
+            $results[] = $shipping->taxes($detailed);
+        }
+
+        return $results;
+    }
+
+    /**
      * Return inclusive price value, containing discounts, vat and other taxes.
      * @return PriceValue
      */
@@ -622,6 +656,22 @@ class PriceBag
         $price = $price->plus($this->servicesTax());
         $price = $price->plus($this->shippingTax());
         return $price;
+    }
+
+    /**
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * products.
+     * @param $detailed
+     * @return array
+     */
+    public function totalTaxes(bool $detailed = false): array|Money
+    {
+        $results = array_merge(
+            array_values($this->productsTaxes($detailed)),
+            array_values($this->servicesTaxes($detailed)),
+            array_values($this->shippingTaxes($detailed))
+        );
+        return $results;
     }
 
     /**

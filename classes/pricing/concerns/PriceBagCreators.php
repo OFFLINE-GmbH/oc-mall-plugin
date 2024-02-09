@@ -35,13 +35,25 @@ trait PriceBagCreators
 
         // Add Products and Services
         foreach ($cart->products as $product) {
+            $element = $product->variant ?? $product->product;
+            $prices = $element->prices()->get()->mapWithKeys(function ($price) {
+                return [$price->currency->code => $price->integer];
+            });
+
+            // Add Record
             $record = $bag->addProduct(
                 $product, 
-                $product->price[$currency->code],
+                $prices[$currency->code],
                 $product->quantity,
-                $product->product->price_includes_tax == true
+                $element->price_includes_tax == true
             );
 
+            // Set Weight
+            if (!empty($element->weight)) {
+                $record->setWeight($element->weight);
+            }
+
+            // Set Taxes
             $taxes = $product->filtered_product_taxes;
             if ($taxes->count() == 1) {
                 $record->setVat($taxes->first()->percentage);
@@ -49,6 +61,7 @@ trait PriceBagCreators
                 $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
             }
 
+            // Set Service Options
             foreach ($product->service_options AS $option) {
                 $service = $option->service()->first();
                 $prices = $option->prices()->get()->mapWithKeys(function ($price) {
@@ -58,7 +71,7 @@ trait PriceBagCreators
                     $option, 
                     $prices[$currency->code],
                     $product->quantity ?? 1,
-                    $product->product->price_includes_tax == true
+                    $element->price_includes_tax == true
                 );
 
                 $taxes = $service->taxes;
@@ -72,17 +85,17 @@ trait PriceBagCreators
 
         // Add Shipping
         if ($cart->shipping_method) {
-            self::bagAddShippingMethod($bag, $currency, $cart->shipping_method);
+            self::bagAddShippingMethod($bag, $currency, $cart->shipping_method, $cart);
         }
         
         // Add Payment
         if ($cart->payment_method) {
-            self::bagAddPaymentMethod($bag, $currency, $cart->payment_method);
+            self::bagAddPaymentMethod($bag, $currency, $cart->payment_method, $cart);
         }
 
         // Add Discounts
         if ($cart->discounts) {
-            self::bagAddDiscounts($bag, $currency, $cart->discounts);
+            self::bagAddDiscounts($bag, $currency, $cart->discounts, $cart);
         }
 
         return $bag;
@@ -150,11 +163,9 @@ trait PriceBagCreators
      * @param ShippingMethod $method
      * @return void
      */
-    static protected function bagAddShippingMethod(PriceBag $bag, Currency $currency, ShippingMethod $method)
+    static protected function bagAddShippingMethod(PriceBag $bag, Currency $currency, ShippingMethod $method, Cart $cart)
     {
-        $prices = $method->prices()->get()->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price->integer];
-        });
+        $prices = array_map(fn ($val) => $val->integer, $method->actual_prices);
 
         // Add Record
         $record = $bag->addShippingMethod(
@@ -162,6 +173,12 @@ trait PriceBagCreators
             $prices[$currency->code],
             $method->price_includes_tax
         );
+        foreach ($method->rates AS $rate) {
+            $prices = $rate->prices()->get()->mapWithKeys(function ($price) {
+                return [$price->currency->code => $price->integer];
+            });
+            $record->addRate($rate->from_weight, $rate->to_weight, $prices[$currency->code]);
+        }
 
         // Add Taxes
         $taxes = $method->taxes;
@@ -180,7 +197,7 @@ trait PriceBagCreators
      * @param PaymentMethod $method
      * @return void
      */
-    static protected function bagAddPaymentMethod(PriceBag $bag, Currency $currency, PaymentMethod $method)
+    static protected function bagAddPaymentMethod(PriceBag $bag, Currency $currency, PaymentMethod $method, Cart $cart)
     {
         $prices = $method->prices()->get()->mapWithKeys(function ($price) {
             return [$price->currency->code => $price->integer];
@@ -197,7 +214,7 @@ trait PriceBagCreators
      * @param array|Collection $discounts
      * @return void
      */
-    static protected function bagAddDiscounts(PriceBag $bag, Currency $currency, array|Collection $discounts)
+    static protected function bagAddDiscounts(PriceBag $bag, Currency $currency, array|Collection $discounts, Cart $cart)
     {
         foreach ($discounts AS $discount) {
             if ($discount->type == 'fixed_amount') {

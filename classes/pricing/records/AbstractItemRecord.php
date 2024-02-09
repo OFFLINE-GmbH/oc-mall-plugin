@@ -288,7 +288,7 @@ abstract class AbstractItemRecord extends BaseRecord
         $price = new Price($this->exclusive()->exclusive());
         $price->minus($this->discount());
         $price->plus($this->tax());
-
+        
         $price = $this->cleanInclusive($price);
         return new PriceValue($price);
     }

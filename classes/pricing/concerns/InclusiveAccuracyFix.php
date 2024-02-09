@@ -110,7 +110,7 @@ trait InclusiveAccuracyFix
                 if ($amount instanceof AmountValue) {
                     $carry += $amount->value()->exclusive()->getAmount()->toFloat();
                 } else {
-                    $carry += $amount->valueOf($price)->getAmount()->toFloat();
+                    $carry += $amount->valueOf($price)->getMinorAmount()->toFloat();
                 }
                 return $carry;
             },

@@ -126,37 +126,6 @@ class ShippingMethod extends Model
     ];
 
     /**
-     * The morphMany relationships of this model.
-     * @var array
-     */
-    public $morphMany = [
-        'prices'                 => [
-            Price::class,
-            'name'       => 'priceable',
-            'conditions' => 'price_category_id is null and field is null',
-        ],
-        'available_below_totals' => [
-            Price::class,
-            'name'       => 'priceable',
-            'conditions' => "price_category_id is null and field = 'available_below_totals'",
-        ],
-        'available_above_totals' => [
-            Price::class,
-            'name'       => 'priceable',
-            'conditions' => "price_category_id is null and field = 'available_above_totals'",
-        ],
-    ];
-
-    /**
-     * The hasMany relationships of this model.
-     * @var array
-     */
-    public $hasMany = [
-        'carts' => Cart::class,
-        'rates' => ShippingMethodRate::class,
-    ];
-
-    /**
      * The attachOne relationships of this model.
      * @var array
      */
@@ -186,6 +155,37 @@ class ShippingMethod extends Model
             'table'    => 'offline_mall_shipping_countries',
             'key'      => 'shipping_method_id',
             'otherKey' => 'country_id',
+        ],
+    ];
+
+    /**
+     * The hasMany relationships of this model.
+     * @var array
+     */
+    public $hasMany = [
+        'carts' => Cart::class,
+        'rates' => ShippingMethodRate::class,
+    ];
+
+    /**
+     * The morphMany relationships of this model.
+     * @var array
+     */
+    public $morphMany = [
+        'prices'                 => [
+            Price::class,
+            'name'       => 'priceable',
+            'conditions' => 'price_category_id is null and field is null',
+        ],
+        'available_below_totals' => [
+            Price::class,
+            'name'       => 'priceable',
+            'conditions' => "price_category_id is null and field = 'available_below_totals'",
+        ],
+        'available_above_totals' => [
+            Price::class,
+            'name'       => 'priceable',
+            'conditions' => "price_category_id is null and field = 'available_above_totals'",
         ],
     ];
 
@@ -281,6 +281,19 @@ class ShippingMethod extends Model
     }
 
     /**
+     * JSON serialize class.
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        $base = parent::jsonSerialize();
+        $this->prices->load('currency');
+        unset($base['price']);
+        $base['price'] = $this->prices->mapWithKeys(fn($price) => [$price->currency->code => $price]);
+        return $base;
+    }
+
+    /**
      * Hook after model has been deleted.
      * @return void
      */
@@ -290,6 +303,19 @@ class ShippingMethod extends Model
            ->where('priceable_type', self::MORPH_KEY)
            ->where('priceable_id', $this->id)
            ->delete();
+    }
+
+    /**
+     * Get actual / enforced prices by currency.
+     * @return array
+     */
+    public function getActualPricesAttribute()
+    {
+        $prices = [];
+        foreach (Currency::all() AS $currency) {
+            $prices[$currency->code] = $this->price($currency);
+        }
+        return $prices;
     }
 
     /**
@@ -322,8 +348,7 @@ class ShippingMethod extends Model
      */
     protected function useEnforcedValues()
     {
-        // Never use enforced values in the backend.
-        return app()->runningInBackend() !== true;
+        return app()->runningInBackend() !== true; // Never use enforced values in the backend.
     }
     
     /**
@@ -369,18 +394,5 @@ class ShippingMethod extends Model
         }
 
         return $this->priceAccessorPriceRelation($currency, $relation, $filter);
-    }
-
-    /**
-     * JSON serialize class.
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        $base = parent::jsonSerialize();
-        $this->prices->load('currency');
-        unset($base['price']);
-        $base['price'] = $this->prices->mapWithKeys(fn($price) => [$price->currency->code => $price]);
-        return $base;
     }
 }
