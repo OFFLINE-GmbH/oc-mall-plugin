@@ -9,9 +9,9 @@ import OrdersIcon from '../../.vitepress/components/OrdersIcon.vue'
 
 <BadgeStd label="v3.2.1 - Stable" color="tip" />
 
-With version 3.2, Mall is looking to the future. Fixing old bugs, removing legacy code and issues,
-but also taking the first cautious steps forward. The dust is knocked off, the gaze is directed 
-towards the rising sun.
+> With version 3.2, Mall is looking to the future. Fixing old bugs, removing legacy code and issues,
+> but also taking the first cautious steps forward. The dust is knocked off, the gaze is directed 
+> towards the rising sun.
 
 ## Highlights
 
