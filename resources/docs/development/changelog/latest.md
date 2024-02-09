@@ -19,7 +19,7 @@ towards the rising sun.
 - [New documentation page](#new-documentation-page)
 - [Introducing new PriceBag Calculator](#introducing-new-pricebag-calculator)
 - [Enabled-States on different models](#enabled-states-on-different-models)
-- [Updates console commands with new seeders](#updates-console-commands-with-new-seeders)
+- [Updated console commands with new seeders](#updated-console-commands-with-new-seeders)
 
 ### New navigation icons
 
@@ -60,7 +60,7 @@ records can now be de- and activated separately and do not have to be deleted.
 - Shipping Methods
 - Order States
 
-### Updates console commands with new seeders
+### Updated console commands with new seeders
 
 The artisan console-commands have been revised and renamed, and adapted to the new seeders. The DB 
 Seeders itself has been split up into the initial core-records (`OFFLINE\Mall\Updates\Seeders\CoreSeeder`) 
