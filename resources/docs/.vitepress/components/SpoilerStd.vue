@@ -53,6 +53,7 @@ watch(active, newValue => {
     flex-direction: column;
 }
 
+h3 + .spoiler,
 .spoiler + .spoiler {
     margin-top: 1.0rem;
 }
