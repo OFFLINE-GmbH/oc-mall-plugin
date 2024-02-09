@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
 use October\Rain\Database\Collection;
+use OFFLINE\Mall\Classes\Exceptions\PriceBagException;
 use OFFLINE\Mall\Classes\Pricing\PriceBag;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Models\Cart;
@@ -134,25 +135,13 @@ trait PriceBagCreators
      */
     static public function fromTotalsCalculatorInput(TotalsCalculatorInput $input): self
     {
-        $currency = Currency::activeCurrency();
-        $bag = new static();
-
-        foreach ($input->products as $product) {
-            $record = $bag->addProduct(
-                $product, 
-                $product->price[$currency->code],
-                $product->quantity
-            );
-
-            $taxes = $product->filtered_product_taxes;
-            if ($taxes->count() == 1) {
-                $record->setVat($taxes->first()->percentage);
-            } else if ($taxes->count() > 1) {
-                $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
-            }
+        if (!empty($input->cart)) {
+            return self::fromCart($input->cart);
+        } else if (!empty($input->wishlist)) {
+            return self::fromWishlist($input->wishlist);
+        } else {
+            throw new PriceBagException('The passed TotalsCalculatorInput is invalid or corrupt.');
         }
-
-        return $bag;
     }
 
     /**

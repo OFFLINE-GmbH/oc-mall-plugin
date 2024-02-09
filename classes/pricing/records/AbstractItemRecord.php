@@ -238,9 +238,9 @@ abstract class AbstractItemRecord extends BaseRecord
             $value = $this->vat->valueOf(clone $original);
             if ($detailed) {
                 $taxes['vat'] = [
-                    'base'      => strval($original),
+                    'base'      => clone $original,
                     'factor'    => $this->vat->value(),
-                    'value'     => strval($value)
+                    'value'     => clone $value,
                 ];
             } else {
                 $taxes['vat'] = $value;
@@ -259,9 +259,9 @@ abstract class AbstractItemRecord extends BaseRecord
             if ($tax instanceof FactorValue) {
                 if ($detailed) {
                     $taxes['taxes'][] = [
-                        'base'      => strval($original),
+                        'base'      => clone $original,
                         'factor'    => $tax->value(),
-                        'value'     => strval($value)
+                        'value'     => clone $value,
                     ];
                 } else {
                     $taxes['taxes'][] = $value;

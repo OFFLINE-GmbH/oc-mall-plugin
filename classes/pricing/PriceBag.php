@@ -118,6 +118,20 @@ class PriceBag
     }
 
     /**
+     * Return the whole map or a specific map item.
+     * @param ?string $key
+     * @return array
+     */
+    public function get(?string $key = null): array
+    {
+        if (empty($key)) {
+            return $this->map;
+        } else {
+            return $this->map[$key] ?? [];
+        }
+    }
+
+    /**
      * Return used currency model.
      * @return null|Currency
      */

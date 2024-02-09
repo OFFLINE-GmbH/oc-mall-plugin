@@ -4,12 +4,29 @@ namespace OFFLINE\Mall\Classes\Pricing\Records;
 
 use Brick\Math\RoundingMode;
 use Brick\Money\Money;
+use Model;
+use OFFLINE\Mall\Classes\Exceptions\PriceBagException;
+use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
+use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
+use OFFLINE\Mall\Models\Discount;
 use Whitecube\Price\Price;
 
 class ShippingRecord extends AbstractItemRecord
 {
     const TYPE = 'shipping';
+
+    /**
+     * The original associated Price model of this record.
+     * @var ?Price
+     */
+    protected ?Price $original = null;
+
+    /**
+     * The associated Discount model, when set.
+     * @var array
+     */
+    protected ?Model $discountModel = null;
 
     /**
      * Required packages for this delivery.
@@ -22,7 +39,6 @@ class ShippingRecord extends AbstractItemRecord
      * @var array
      */
     protected array $rates = [];
-
 
     /**
      * Return record type
@@ -56,6 +72,57 @@ class ShippingRecord extends AbstractItemRecord
         $this->currency = $currency;
         $this->price = $amount;
         $this->priceInclusive = $isInclusive;
+    }
+
+    /**
+     * Add discount to this record.
+     * @param int|float|string|AmountValue|FactorValue|Price $factorOrAmount
+     * @param boolean $isFactor
+     * @param boolean $perUnit
+     * @return self
+     */
+    public function addDiscount(
+        int|float|string|AmountValue|FactorValue|Price  $value, 
+        bool                                            $isFactor = true, 
+        bool                                            $perUnit = false
+    ): self {
+        throw new PriceBagException('The ShippingRecord class does not support multiple discounts, use setAmount instead.');
+    }
+
+    /**
+     * Overwrite existing amount of this record.
+     * @param int|float|string|AmountValue|FactorValue|Price $amount
+     * @param null|Discount $discount Associated discount model.
+     * @return self
+     */
+    public function setAmount(int|float|string|Price $amount, ?Discount $discount = null): self
+    {
+        if ($amount instanceof Price) {
+            $amount->setUnits(1);
+        } else if (!($amount instanceof Price)) {
+            if (is_string($amount)) {
+                $amount = Price::parse($amount, $this->currency, 1);
+            } else {
+                $amount = new Price(Money::ofMinor($amount, $this->currency), 1);
+            }
+        }
+
+        $this->original = $this->price;
+        $this->price = $amount;
+        $this->discountModel = $discount;
+        return $this;
+    }
+
+    /**
+     * Reset Overwritten amount.
+     * @return self
+     */
+    public function resetAmount(): self
+    {
+        $this->price = $this->original;
+        $this->original = null;
+        $this->discountModel = null;
+        return $this;
     }
 
     /**

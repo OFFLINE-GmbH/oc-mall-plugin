@@ -32,7 +32,7 @@ class DiscountValue extends BaseValue
     }
 
     /**
-     * String-Representation of the desired value instance.
+     * String-Representation of this class instance.
      * @return string
      */
     public function __toString(): string

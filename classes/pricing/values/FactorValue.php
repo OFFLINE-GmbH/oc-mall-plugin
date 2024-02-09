@@ -24,7 +24,7 @@ class FactorValue extends BaseValue
     }
 
     /**
-     * String-Representation of the desired price value instance.
+     * String-Representation of this class instance.
      * @return string
      */
     public function __toString(): string

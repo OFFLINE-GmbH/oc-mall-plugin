@@ -113,7 +113,7 @@ class Price extends Model
     }
 
     /**
-     * Return string presentation of this class.
+     * String-Representation of this class instance.
      * @return string
      */
     public function __toString()

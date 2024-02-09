@@ -65,6 +65,15 @@ abstract class BaseRecord
     }
 
     /**
+     * Return a specific value from this record..
+     * @return mixed
+     */
+    public function get(string $key): mixed
+    {
+        return $this->{$key} ?? null;
+    }
+
+    /**
      * Parse Price.
      * @param mixed $value
      * @return Price

@@ -2,14 +2,11 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use October\Contracts\Twig\CallsAnyMethod;
-use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Pricing\PriceBag;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\Rounding;
-use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
 /**
@@ -21,73 +18,11 @@ class TotalsCalculator implements CallsAnyMethod
     use FilteredTaxes, Rounding;
 
     /**
+     * TotalsCalculatorInput data collection.
+     * @deprecated
      * @var TotalsCalculatorInput
      */
     protected $input;
-    /**
-     * @var Collection<TaxTotal>
-     */
-    protected $taxes;
-    /**
-     * @var Collection<TaxTotal>
-     */
-    protected $detailedTaxes;
-    /**
-     * @var ShippingTotal
-     */
-    protected $shippingTotal;
-    /**
-     * @var int
-     */
-    protected $weightTotal;
-    /**
-     * @var int
-     */
-    protected $totalPreTaxes;
-    /**
-     * @var int
-     */
-    protected $totalPostTaxes;
-    /**
-     * @var int
-     */
-    protected $totalTaxes;
-    /**
-     * @var int
-     */
-    protected $totalDiscounts;
-    /**
-     * @var int
-     */
-    protected $productPreTaxes;
-    /**
-     * @var int
-     */
-    protected $productTaxes;
-    /**
-     * @var int
-     */
-    protected $productPostTaxes;
-    /**
-     * @var Collection
-     */
-    protected $appliedDiscounts;
-    /**
-     * @var Collection
-     */
-    public $shippingTaxes;
-    /**
-     * @var int
-     */
-    protected $totalPrePayment;
-    /**
-     * @var PaymentTotal
-     */
-    protected $paymentTotal;
-    /**
-     * @var Collection
-     */
-    public $paymentTaxes;
 
     /**
      * Primary PriceBag instance.
@@ -96,16 +31,120 @@ class TotalsCalculator implements CallsAnyMethod
     protected PriceBag $bag;
 
     /**
+     * [PRODUCTS] Weight of all products.
+     * @var int|float
+     */
+    protected $weightTotal;
+
+    /**
+     * [PRODUCTS] Exclusive price of all products and services.
+     * @var int|float
+     */
+    protected $productPreTaxes;
+
+    /**
+     * [PRODUCTS] Amount of taxes for all products and services.
+     * @var int|float
+     */
+    protected $productTaxes;
+
+    /**
+     * [PRODUCTS] Inclusive price of all products and services.
+     * @var int|float
+     */
+    protected $productPostTaxes;
+
+    /**
+     * [SHIPPING] Amount of taxes for shipping.
+     * @deprecated
+     * @var Collection
+     */
+    public $shippingTaxes;
+
+    /**
+     * [SHIPPING] ShippingTotal instance.
+     * @deprecated
+     * @var ShippingTotal
+     */
+    protected $shippingTotal;
+
+    /**
+     * [PAYMENT] Inclusive price of the whole bag without payment fees / discounts.
+     * @var int|float
+     */
+    protected $totalPrePayment;
+
+    /**
+     * [PAYMENT] Filtered Collection of applied payment taxes.
+     * @deprecated
+     * @var Collection
+     */
+    public $paymentTaxes;
+
+    /**
+     * [PAYMENT] PaymentTotal instance.
+     * @deprecated
+     * @var PaymentTotal
+     */
+    protected $paymentTotal;
+
+    /**
+     * [TOTALS] Exclusive price of the whole bag.
+     * @var int|float
+     */
+    protected $totalPreTaxes;
+
+    /**
+     * [TOTALS] Amount of taxes for the whole bag.
+     * @var int|float
+     */
+    protected $totalTaxes;
+
+    /**
+     * [TOTALS] Amount of discounts for the whole bag.
+     * @var int|float
+     */
+    protected $totalDiscounts;
+
+    /**
+     * [TOTALS] Inclusive price of the whole bag.
+     * @var int|float
+     */
+    protected $totalPostTaxes;
+
+    /**
+     * Collection of all applied taxes.
+     * @var Collection<TaxTotal>
+     */
+    protected $taxes;
+    
+    /**
+     * Detailed Collection of all applied taxes.
+     * @var Collection<TaxTotal>
+     */
+    protected $detailedTaxes;
+
+    /**
      * Create a new totalsCalculator instance.
      * @param TotalsCalculatorInput $input
      */
     public function __construct(TotalsCalculatorInput $input)
     {
         $this->input = $input;
-        $this->taxes = new Collection();
-        //$this->bag = PriceBag::fromTotalsCalculatorInput($input);
+        $this->bag = PriceBag::fromTotalsCalculatorInput($input);
 
+        // @todo
+        $this->bag->applyDiscounts();
         $this->calculate();
+    }
+
+    /**
+     * Return used PriceBag instance.
+     * @return PriceBag
+     */
+    public function getBag()
+    {
+        return clone $this->bag;
     }
 
     /**
@@ -114,49 +153,22 @@ class TotalsCalculator implements CallsAnyMethod
      */
     protected function calculate()
     {
-        /*
-        $this->weightTotal = $this->bag->productsWeight();          // $this->calculateWeightTotal();
+        $this->weightTotal = $this->bag->productsWeight();
+        
+        $this->productPreTaxes = $this->bag->productsExclusive()->integer() + $this->bag->servicesExclusive()->integer();
+        $this->productTaxes = $this->bag->productsTax()->getMinorAmount()->toInt() + $this->bag->servicesTax()->getMinorAmount()->toInt();
+        $this->productPostTaxes = $this->bag->productsInclusive()->integer() + $this->bag->servicesInclusive()->integer();
 
-        $this->productPreTaxes = $this->bag->totalExclusive();      // $this->calculateProductPreTaxes();
-        $this->productTaxes = $this->bag->totalTax();               // $this->calculateProductTaxes();
-        $this->productPostTaxes = $this->bag->totalInclusive();     // $this->productPreTaxes + $this->productTaxes;
-
-        $this->shippingTaxes = $this->bag->shippingTax();           // $this->filterShippingTaxes();
-        $this->shippingTotal = $this->bag->shippingInclusive();     // new ShippingTotal($this->input->shipping_method, $this);
-
-        $this->totalPreTaxes = $this->bag->totalExclusive();        // $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
-        $this->totalDiscounts = $this->bag->totalDiscount();        // $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
-
-        $this->totalPrePayment = null;                              // $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
-        $this->paymentTaxes = $this->bag->paymentTaxes();           // $this->filterPaymentTaxes();
-        $this->paymentTotal = $this->bag->paymentTotal();           // new PaymentTotal($this->input->payment_method, $this);
-
-        $this->totalPostTaxes = $this->bag->totalInclusive();       // $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
-        if ($this->totalPostTaxes < 0) {
-            $this->totalPostTaxes = 0;
-        }
-
-        $this->taxes = $this->totalTaxes();                         // $this->getTaxTotals();
-        */
-        $this->weightTotal = $this->calculateWeightTotal();
-
-        $this->productPreTaxes = $this->calculateProductPreTaxes();
-        $this->productTaxes = $this->calculateProductTaxes();
-        $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
-
-        $this->shippingTaxes = $this->filterShippingTaxes();
+        $this->shippingTaxes = $this->getFilteredTaxes(optional($this->input->shipping_method)->taxes ?? new Collection());
         $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
 
-        $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
-        $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
-
-        $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
-        $this->paymentTaxes = $this->filterPaymentTaxes();
+        $this->totalPrePayment = $this->bag->productsInclusive()->integer() + $this->bag->servicesInclusive()->integer() + $this->bag->shippingInclusive()->integer();
+        $this->paymentTaxes = $this->getFilteredTaxes(optional($this->input->payment_method)->taxes ?? new Collection());
         $this->paymentTotal = new PaymentTotal($this->input->payment_method, $this);
 
-        $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
-
-        // The grand total should never be negative.
+        $this->totalPreTaxes = $this->bag->totalExclusive()->integer();
+        $this->totalDiscounts = $this->bag->totalDiscount()->getMinorAmount()->toInt();
+        $this->totalPostTaxes = $this->bag->totalInclusive()->integer();
         if ($this->totalPostTaxes < 0) {
             $this->totalPostTaxes = 0;
         }
@@ -164,225 +176,201 @@ class TotalsCalculator implements CallsAnyMethod
         $this->taxes = $this->getTaxTotals();
     }
 
-    protected function calculateProductPreTaxes(): float
-    {
-        $total = $this->input->products->sum('totalPreTaxes');
-
-        return $total > 0 ? $total : 0;
-    }
-
-    protected function calculateProductTaxes(): float
-    {
-        return $this->round($this->input->products->sum('totalTaxes'));
-    }
-
-    protected function getTaxTotals(): Collection
-    {
-        $shippingTaxes = new Collection();
-        $shippingTotal = $this->shippingTotal->totalPreTaxesOriginal();
-        if ($this->shippingTaxes) {
-            $shippingTaxes = $this->shippingTaxes->map(function (Tax $tax) use ($shippingTotal) {
-                return new TaxTotal($shippingTotal, $tax);
-            });
-        }
-
-        $paymentTaxes = new Collection();
-        $paymentTotal = $this->paymentTotal->totalPreTaxesOriginal();
-        if ($this->paymentTaxes) {
-            $paymentTaxes = $this->paymentTaxes->map(function (Tax $tax) use ($paymentTotal) {
-                return new TaxTotal($paymentTotal, $tax);
-            });
-        }
-
-        /** @var $product CartProduct|WishlistItem */
-        $productTaxes = $this->input->products->flatMap(function ($product) {
-            $products = $product->filtered_product_taxes->map(function (Tax $tax) use ($product) {
-                return new TaxTotal($product->totalProductPreTaxes, $tax);
-            });
-
-            return $products->concat($product->filtered_service_taxes);
-        });
-
-        $combined = $productTaxes->concat($shippingTaxes)->concat($paymentTaxes);
-
-        $this->totalTaxes = $combined->sum(function (TaxTotal $tax) {
-            return $tax->total();
-        });
-
-        $this->detailedTaxes = $combined;
-
-        return $this->consolidateTaxes($combined);
-    }
-
     /**
-     * This method consolidates the same taxes on shipping
-     * and products down to one combined TaxTotal.
+     * Return TotalsCalculatorInput property.
+     * @return TotalsCalculatorInput
      */
-    protected function consolidateTaxes(Collection $taxTotals)
-    {
-        return $taxTotals->groupBy(function (TaxTotal $taxTotal) {
-            return $taxTotal->tax->id;
-        })->map(function (Collection $grouped) {
-            $tax = $grouped->first()->tax;
-
-            $preTax = $grouped->sum(function (TaxTotal $tax) {
-                return $tax->preTax();
-            });
-
-            $taxTotal = new TaxTotal($preTax, $tax);
-
-            $taxTotal->setTotal($grouped->sum(function (TaxTotal $type) use ($tax) {
-                return (new TaxTotal($type->preTax(), $tax))->total();
-            }));
-
-            return $taxTotal;
-
-        })->values();
-    }
-
-    /**
-     * Calculate total weight of all products.
-     * @return integer
-     */
-    protected function calculateWeightTotal(): int
-    {
-        return $this->input->products->sum(function ($product) {
-            return $product->weight * $product->quantity;
-        });
-    }
-
-    public function paymentTotal(): PaymentTotal
-    {
-        return $this->paymentTotal;
-    }
-
-    public function shippingTotal(): ShippingTotal
-    {
-        return $this->shippingTotal;
-    }
-
-    public function weightTotal(): int
-    {
-        return $this->weightTotal;
-    }
-
-    public function totalPreTaxes(): float
-    {
-        return $this->totalPreTaxes;
-    }
-
-    public function totalTaxes(): float
-    {
-        return $this->totalTaxes;
-    }
-    
-    public function totalDiscounts(): float
-    {
-        return $this->totalDiscounts;
-    }
-    
-    public function totalPrePayment(): float
-    {
-        return $this->totalPrePayment;
-    }
-
-    public function productPreTaxes(): float
-    {
-        return $this->productPreTaxes;
-    }
-
-    public function productTaxes(): float
-    {
-        return $this->productTaxes;
-    }
-
-    public function productPostTaxes(): float
-    {
-        return $this->productPostTaxes;
-    }
-
-    public function totalPostTaxes(): float
-    {
-        return $this->totalPostTaxes;
-    }
-
-    public function taxes(bool $detailed = false): Collection
-    {
-        return $detailed ? $this->detailedTaxes : $this->taxes;
-    }
-
-    public function detailedTaxes(): Collection
-    {
-        return $this->taxes(true);
-    }
-
     public function getInput(): TotalsCalculatorInput
     {
         return $this->input;
     }
 
-    public function appliedDiscounts(): Collection
+    /**
+     * Return all applied taxes.
+     * @return Collection
+     */    
+    protected function getTaxTotals(): Collection
     {
-        return $this->appliedDiscounts;
+        $collect = new Collection;
+
+        // Taxes
+        $groups = [
+            ...$this->bag->productsTaxes(true),
+            ...$this->bag->servicesTaxes(true),
+            ...$this->bag->shippingTaxes(true) 
+        ];
+        foreach ($groups AS $group) {
+            foreach ($group AS $type => $taxes) {
+                $taxes = $type == 'vat' ? [$taxes] : $taxes;
+                $taxes = !is_array($taxes) ? [$taxes] : $taxes;
+                if (empty($taxes)) {
+                    continue;
+                }
+
+                foreach ($taxes AS $tax) {
+                    $model = new TaxTotal(
+                        $tax['base']->getMinorAmount()->toInt(), 
+                        new Tax(['percentage' => $tax['factor']])
+                    );
+                    $collect->add($model);
+                }
+            }
+        }
+
+        //@todo handle payment
+        //$paymentTaxes = new Collection();
+        //$paymentTotal = $this->paymentTotal->totalPreTaxesOriginal();
+        //if ($this->paymentTaxes) {
+        //    $paymentTaxes = $this->paymentTaxes->map(function (Tax $tax) use ($paymentTotal) {
+        //        return new TaxTotal($paymentTotal, $tax);
+        //    });
+        //}
+
+        // Set Taxes
+        $this->totalTaxes = $this->bag->totalTax()->getMinorAmount()->toInt();
+        $this->detailedTaxes = $collect;
+        return $this->consolidateTaxes($collect);
     }
 
     /**
-     * Process the discounts that are applied to the cart's total.
-     */
-    protected function applyTotalDiscounts($total): ?float
-    {
-        $nonCodeTriggers = Discount
-            ::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method', 'payment_method'])
-            ->with('shipping_methods')
-            ->where(function ($q) {
-                $q->whereNull('valid_from')
-                    ->orWhere('valid_from', '<=', Carbon::now());
-            })->where(function ($q) {
-                $q->whereNull('expires')
-                    ->orWhere('expires', '>', Carbon::now());
-            })->get();
-
-        $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
-            return $item->type === 'shipping';
-        });
-
-        $applier = new DiscountApplier($this->input, $total);
-        $this->appliedDiscounts = $applier->applyMany($discounts);
-
-        return $applier->reducedTotal();
-    }
-
-    /**
-     * Filter out shipping taxes that have to be applied for
-     * the current shipping address of the cart.
-     *
+     * Consolidate same taxes.
      * @return Collection
      */
-    protected function filterShippingTaxes()
+    protected function consolidateTaxes(Collection $taxTotals)
     {
-        $taxes = optional($this->input->shipping_method)->taxes ?? new Collection();
+        return $taxTotals->groupBy(function (TaxTotal $taxTotal) {
+            return $taxTotal->tax->percentage;
+        })->map(function (Collection $grouped) {
+            $tax = $grouped->first()->tax;
+            $preTax = $grouped->sum(function (TaxTotal $tax) {
+                return $tax->preTax();
+            });
 
-        return $this->getFilteredTaxes($taxes);
+            $taxTotal = new TaxTotal($preTax, $tax);
+            $taxTotal->setTotal($grouped->sum(function (TaxTotal $type) use ($tax) {
+                return (new TaxTotal($type->preTax(), $tax))->total();
+            }));
+            return $taxTotal;
+        })->values();
     }
 
     /**
-     * Filter out payment taxes that have to be applied for
-     * the current shipping address of the cart.
-     *
+     * Return weight of all products.
+     * @return int|float
+     */
+    public function weightTotal(): int|float
+    {
+        return $this->weightTotal;
+    }
+
+    /**
+     * Return 1xclusive price of all products and services.
+     * @return int|float
+     */
+    public function productPreTaxes(): int|float
+    {
+        return $this->productPreTaxes;
+    }
+
+    /**
+     * Return amount of taxes for all products and services.
+     * @return int|float
+     */
+    public function productTaxes(): int|float
+    {
+        return $this->productTaxes;
+    }
+
+    /**
+     * Return inclusive price of all products and services.
+     * @return int|float
+     */
+    public function productPostTaxes(): float
+    {
+        return $this->productPostTaxes;
+    }
+
+    /**
+     * Return obsolete ShippingTotal instance.
+     * @deprecated
+     * @return ShippingTotal
+     */
+    public function shippingTotal(): ShippingTotal
+    {
+        return $this->shippingTotal;
+    }
+
+    /**
+     * Return inclusive price of the whole bag without payment fees / discounts.
+     * @return int|float
+     */
+    public function totalPrePayment(): int|float
+    {
+        return $this->totalPrePayment;
+    }
+
+    /**
+     * Return obsolete PaymentTotal instance.
+     * @deprecated
+     * @return PaymentTotal
+     */
+    public function paymentTotal(): PaymentTotal
+    {
+        return $this->paymentTotal;
+    }
+
+    /**
+     * Return exclusive price of the whole bag.
+     * @return int|float
+     */
+    public function totalPreTaxes(): int|float
+    {
+        return $this->totalPreTaxes;
+    }
+
+    /**
+     * Return mount of taxes for the whole bag.
+     * @return int|float
+     */
+    public function totalTaxes(): int|float
+    {
+        return $this->totalTaxes;
+    }
+
+    /**
+     * Return amount of discounts for the whole bag.
+     * @return int|float
+     */
+    public function totalDiscounts(): int|float
+    {
+        return $this->totalDiscounts;
+    }
+
+    /**
+     * Return inclusive price of the whole bag.
+     * @return int|float
+     */
+    public function totalPostTaxes(): int|float
+    {
+        return $this->totalPostTaxes;
+    }
+
+    /**
+     * Return Collection of all taxes.
+     * @param boolean $detailed
      * @return Collection
      */
-    protected function filterPaymentTaxes()
+    public function taxes(bool $detailed = false): Collection
     {
-        $taxes = optional($this->input->payment_method)->taxes ?? new Collection();
-
-        return $this->getFilteredTaxes($taxes);
+        return $detailed ? $this->detailedTaxes : $this->taxes;
     }
 
     /**
-     * Return the current shipping destination country id.
+     * Return Collection of detailed taxes.
+     * @return Collection
      */
-    public function getCartCountryId()
+    public function detailedTaxes(): Collection
     {
-        return $this->input->shipping_country_id;
+        return $this->taxes(true);
     }
 }

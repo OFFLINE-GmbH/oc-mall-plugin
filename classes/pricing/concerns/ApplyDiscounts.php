@@ -89,7 +89,7 @@ trait ApplyDiscounts
             if ($discount->type() == 'shipping') {
                 if ($amount instanceof AmountValue) {
                     foreach ($this->map['shipping'] AS $shipping) {
-                        $shipping->addRate(0, 99999, $amount->value());
+                        $shipping->setAmount($amount->value(), $discount->model());
                     }
                 }
             }
