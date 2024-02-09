@@ -263,10 +263,6 @@ class PriceBag
             $price->plus($product->discount());
         }
 
-        foreach ($this->map['discounts'] AS $discount) {
-            // @todo
-        }
-
         return $price->base();
     }
 
@@ -395,10 +391,6 @@ class PriceBag
             $price->plus($service->discount());
         }
 
-        foreach ($this->map['discounts'] AS $discount) {
-            // @todo
-        }
-
         return $price->base();
     }
 
@@ -509,10 +501,6 @@ class PriceBag
 
         foreach ($this->map['shipping'] AS $shipping) {
             $price->plus($shipping->discount());
-        }
-
-        foreach ($this->map['discounts'] AS $discount) {
-            // @todo
         }
 
         return $price->base();
