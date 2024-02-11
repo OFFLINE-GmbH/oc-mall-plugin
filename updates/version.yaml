@@ -489,6 +489,8 @@ v3.2.0:
     - 'Added new enabled and default-states to shipping methods + minor changes + tests.'
     - 'Added new enabled-state to order states + minor changes.'
     - 'Added a new IsStates database model trait, to support is_default and is_enabled behaviors.'
+    - 'Added a new PriceBag totals construct and handling.'
+    - 'Added a new event to manipulate shipping country on FilteredTaxes trait, thanks to @Cryden.'
     - 'Updated console commands and database seeders.'
     - 'Updated demonstration content (+ add support for german translations).'
     - 'Updated available rounding options on Currency model to support extensions.'
@@ -505,6 +507,11 @@ v3.2.0:
     - 'Fixed faulty empty-check that prevented indexing at 0 (int and string) values, thanks to @xyz1123581321.'
     - 'Fixed out of stock message even if stock was available, thanks to @xyz1123581321.'
     - 'Fixed wrong indexed value key on PropertyValue using color types, thanks to @toome123.'
+    - 'Fixed wrong taxes calculation when discounts has been applied.'
+    - 'Fixed wrong taxes calculation when different discounts has been applied to products and shipping costs.'
+    - 'Fixed bad SQL error when addresses has been added to a customer profile on the backend.'
+    - 'Fixed duplication mess on products with variants.'
+    - 'Fixed possibility to take-over email address on CustomerProfile component, thanks to @cyril-design.'
     - 'Removed legacy v1 code.'
     - 030_01-update_system_plugin_history.php
     - 030_02-alter_offline_mall_currencies.php
