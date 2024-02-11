@@ -48,9 +48,9 @@ trait CartActions
 
                 $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
-                $cartEntry->update(['quantity' => $newQuantity]);
-
                 $this->validateStock($variant ?? $product, $quantity);
+                $cartEntry->update(['quantity' => $newQuantity]);
+                
                 $this->validateShippingMethod();
 
                 return $this->load('products');
