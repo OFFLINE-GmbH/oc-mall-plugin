@@ -42,7 +42,7 @@
 
 - PHP 7.4+ | 8.0+
 - OctoberCMS 2.2+ | v3.0+
-- MySQL 5.7+ | v8.0+ or MariaDB v10.2+ or SQLite v3.16+
+- MySQL 5.7+ | v8.0+ or MariaDB v10.2+ or SQLite v3.19+
 
 We highly recommend not using SQLite on production environments, especially for larger Shops.
 
