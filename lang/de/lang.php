@@ -209,7 +209,7 @@ return [
         'index_driver_comment' => 'Wenn deine Datenbank JSON unterstützt wird der Datenbank-Treiber empfohlen.',
         'index_driver_filesystem' => 'Dateisystem',
         'index_driver_database' => 'Datenbank (MySQL 5.7+, MariaDB 10.2+, SQLite 3.19+)',
-        'index_driver_hint' => 'Nachdem diese Option geändert wurde muss "php artisan mall:reindex" auf der Konsole ausgeführt werden!',
+        'index_driver_hint' => 'Nachdem diese Option geändert wurde muss "php artisan mall:index" auf der Konsole ausgeführt werden!',
     ],
     'feed_settings' => [
         'description' => 'Feeds konfigurieren',

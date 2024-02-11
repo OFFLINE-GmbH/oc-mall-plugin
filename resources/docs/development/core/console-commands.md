@@ -35,9 +35,9 @@ This will erase all order and customer data! Do not run this command if you have
 opened your shop up to the public. 
 :::
 
-## `mall:reindex`
+## `mall:index`
 
-The `php artisan mall:reindex` command re-indexes all your product data and fixes a corrupted product index.
+The `php artisan mall:index` command re-indexes all your product data and fixes a corrupted product index.
 
 You will notice a corrupted index if your category listing shows
 outdated data or the product filters are 

@@ -12,7 +12,7 @@ class BrandChangeUpdate
     public function fire(Job $job, $data)
     {
         if ($job->attempts() > 5) {
-            logger()->error('Failed to handle brand change. Please run php artisan mall:reindex manually to update your index');
+            logger()->error('Failed to handle brand change. Please run php artisan mall:index manually to update your index');
             $job->delete();
         }
 
