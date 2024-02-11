@@ -47,7 +47,6 @@ class PriceBagTest extends BasePriceBagTestCase
 
     /**
      * Get generic cart for testing.
-     * @param mixed $price
      * @return Cart
      */
     protected function getCart(): Cart
@@ -60,10 +59,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
     /**
      * Get generic tax for testing.
-     * @param mixed $price
+     * @param string $name
+     * @param int|float $percentage
      * @return Tax
      */
-    protected function getTax($name, int $percentage): Tax
+    protected function getTax($name, int|float $percentage): Tax
     {
         $tax1             = new Tax();
         $tax1->name       = $name;
@@ -917,6 +917,54 @@ class PriceBagTest extends BasePriceBagTestCase
         $this->assertEquals(
             1500 * 100, 
             $bag->totalInclusive()->integer()
+        );
+    }
+
+    /**
+     * Test if shipping and product taxes are calculated differently.
+     * @see https://github.com/OFFLINE-GmbH/oc-mall-plugin/issues/684
+     * @return void
+     */
+    public function test_calculate_different_shipping_and_product_taxes()
+    {
+        $tax1 = $this->getTax('Test 1', 5.5);
+        $tax2 = $this->getTax('Test 2', 20);
+
+        // Create Product
+        $product = $this->getProduct(110);
+        $product->price_includes_tax = true;
+        $product->taxes()->attach($tax1->id);
+        $product->save();
+
+        // Create Shipping Method
+        $shippingMethod = ShippingMethod::first();
+        $shippingMethod->price_includes_tax = true;
+        $shippingMethod->save();
+        $shippingMethod->price = ['CHF' => 15, 'EUR' => 15];
+        $shippingMethod->taxes()->attach($tax2);
+
+        // Create Cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1);
+        $cart->setShippingMethod($shippingMethod);
+
+        // Create Bag
+        $bag = PriceBag::fromCart($cart);
+        $bag->applyDiscounts();
+
+
+        // Check
+        $this->assertEquals(
+            573, 
+            $bag->totalTaxes()[0]['vat']->getMinorAmount()->toInt()
+        );
+        $this->assertEquals(
+            250, 
+            $bag->totalTaxes()[1]['vat']->getMinorAmount()->toInt()
+        );
+        $this->assertEquals(
+            823, 
+            $bag->totalTax()->getMinorAmount()->toInt()
         );
     }
 }
