@@ -20,7 +20,6 @@ use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
-use OFFLINE\Mall\Updates\Factories\AddressFactory;
 use RainLab\Location\Models\Country;
 
 class TotalsCalculatorTest extends PluginTestCase

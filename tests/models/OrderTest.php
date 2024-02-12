@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use Event;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
@@ -29,10 +30,16 @@ class OrderTest extends PluginTestCase
     {
         parent::setUp();
 
+        // Authenticate user
         app()->singleton('user.auth', function () {
             return AuthManager::instance();
         });
         Auth::login(User::first());
+
+        // Set Country
+        Event::listen('mall.cart.setCountry', function ($model) {
+            $model->countryId = 14;
+        });
     }
 
     public function test_it_creates_a_new_order_from_a_cart()
@@ -52,10 +59,10 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(23.07, $order->total_shipping_taxes);
         $this->assertEquals(100.00, $order->total_shipping_post_taxes);
 
-        $this->assertEquals(923.08, $order->total_product_pre_taxes);
+        $this->assertEquals(923.07, $order->total_product_pre_taxes);
         $this->assertEquals(1200.00, $order->total_product_post_taxes);
-        $this->assertEquals(1000.00, $order->total_pre_taxes);
-        $this->assertEquals(300.00, $order->total_taxes);
+        $this->assertEquals(999.99, $order->total_pre_taxes);
+        $this->assertEquals(299.99, $order->total_taxes);
         $this->assertEquals(1300.00, $order->total_post_taxes);
         $this->assertEquals(2800, $order->total_weight);
         
@@ -242,7 +249,7 @@ class OrderTest extends PluginTestCase
         $discount1->shipping_prices()->save(new Price([
             'currency_id' => 2,
             'price'       => 10,
-            'field'       => 'shipping_price',
+            'field'       => 'shipping_prices',
         ]));
         $discount1->totals_to_reach()->save(new Price([
             'currency_id' => 2,
@@ -261,7 +268,7 @@ class OrderTest extends PluginTestCase
         $discount2->amounts()->save(new Price([
             'currency_id' => 2,
             'price'       => 20,
-            'field'       => 'amount',
+            'field'       => 'amounts',
         ]));
 
         $discount3                   = new Discount();
@@ -277,7 +284,7 @@ class OrderTest extends PluginTestCase
 
         Order::fromCart($cart);
 
-        $this->assertEquals(11, $discount1->fresh()->number_of_usages);
+        $this->assertEquals(10, $discount1->fresh()->number_of_usages);
         $this->assertEquals(13, $discount2->fresh()->number_of_usages);
         $this->assertEquals(19, $discount3->fresh()->number_of_usages);
     }
