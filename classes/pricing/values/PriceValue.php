@@ -18,14 +18,25 @@ class PriceValue extends BaseValue
      * Create a new PriceValue instance.
      * @param Price $price
      */
-    public function __construct(Price $price)
+    public function __construct(Money|Price $price)
     {
+        if ($price instanceof Money) {
+            $price = new Price($price);
+        }
         $this->price = $price;
     }
 
     /**
-     * String-Representation of this class instance.
-     * @return string
+     * Cloned class object should have his own cloned price instance.
+     * @return void
+     */
+    function __clone()
+    {
+        $this->price = clone $this->price;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function __toString(): string
     {
@@ -33,60 +44,62 @@ class PriceValue extends BaseValue
     }
 
     /**
-     * Return amount value.
-     * @return Price
+     * Return copy of the internal money object.
+     * @param bool $perUnit Whether to return unit or total price.
+     * @return Money
      */
-    public function value(): Price
+    public function base(bool $perUnit = false): Money
     {
-        return $this->price;
+        return clone $this->price->base($perUnit);
     }
 
     /**
-     * Return exclusive amount value.
+     * Return copy of the internal price object.
+     * @param bool $perUnit Whether to return unit or total price.
+     * @return Price
+     */
+    public function value(bool $perUnit = false): Price
+    {
+        $price = clone $this->price;
+        if ($perUnit) {
+            $price->setUnits(1);
+        }
+        return $price;
+    }
+
+    /**
+     * Return copy of the internal price object, using the exclusive price.
+     * @param bool $perUnit Whether to return unit or total price.
      * @return Money
      */
     public function exclusive(bool $perUnit = false): Money
     {
-        return $this->price->exclusive($perUnit);
+        return clone $this->price->exclusive($perUnit);
     }
 
     /**
-     * Return inclusive amount value.
+     * Return copy of the internal price object, using the inclusive price.
+     * @param bool $perUnit Whether to return unit or total price.
      * @return Money
      */
     public function inclusive(bool $perUnit = false): Money
     {
-        return $this->price->inclusive($perUnit);
+        return clone $this->price->inclusive($perUnit);
     }
 
     /**
-     * Return base abstract money instance of price value..
-     * @return Money
+     * @inheritDoc
      */
-    public function base(): Money
+    public function toInt(): int
     {
-        return $this->price->base();
+        return $this->base(false)->getMinorAmount()->toInt();
     }
 
     /**
-     * Return amount value as integer.
-     * @return int
+     * @inheritDoc
      */
-    public function integer(): int
+    public function toFloat(): float
     {
-        /** @var Money */
-        $base = $this->price->base();
-        return $base->getMinorAmount()->toInt();
-    }
-
-    /**
-     * Return amount value as float.
-     * @return float
-     */
-    public function float(): float
-    {
-        /** @var Money */
-        $base = $this->price->base();
-        return $base->getMinorAmount()->toFloat();
+        return $this->base(false)->getAmount()->toFloat();
     }
 }

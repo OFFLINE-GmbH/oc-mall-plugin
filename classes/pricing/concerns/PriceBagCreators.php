@@ -191,8 +191,19 @@ trait PriceBagCreators
         $prices = $method->prices()->get()->mapWithKeys(function ($price) {
             return [$price->currency->code => $price->integer];
         });
-        $fee = $method->payment_fee;
 
+        // Add Record
+        $record = $bag->addPaymentMethod(
+            $method, 
+            $method->fee_percentage ?? 0,
+            $prices[$currency->code] ?? 0
+        );
+
+        // Add Taxes
+        $taxes = $method->taxes;
+        if ($taxes->count() > 0) {
+            $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
+        }
     }
 
     /**

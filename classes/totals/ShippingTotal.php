@@ -96,10 +96,10 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
     {
         $method = $this->totals->getBag()->get('shipping');
 
-        $this->preTaxes = $this->totals->getBag()->shippingExclusive()->integer();
+        $this->preTaxes = $this->totals->getBag()->shippingExclusive()->toInt();
         $this->taxes = $this->totals->getBag()->shippingTax()->getMinorAmount()->toInt();
         $this->appliedDiscount = empty($method) ? null : ($method[0]->get('discountModel') ?? null);
-        $this->total = $this->totals->getBag()->shippingInclusive()->integer();
+        $this->total = $this->totals->getBag()->shippingInclusive()->toInt();
     }
 
     /**

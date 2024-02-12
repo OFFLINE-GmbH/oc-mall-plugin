@@ -80,7 +80,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         );
         $this->assertEquals(
             10000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -140,7 +140,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         );
         $this->assertEquals(
             0,
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -218,7 +218,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         );
         $this->assertEquals(
             12250, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
    
@@ -281,7 +281,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         );
         $this->assertEquals(
             7800, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -319,7 +319,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             ($quantity * $price['CHF'] * 100) - 10000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -353,7 +353,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             ($quantity * $price['CHF'] * 100) / 2, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -391,7 +391,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             ($quantity * $price['CHF'] * 100) / 2, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -450,7 +450,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         );
         $this->assertEquals(
             30000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -492,7 +492,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             20000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
 
         // Add Another Product
@@ -503,7 +503,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             15000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -541,7 +541,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             20000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
 
         // Add Another Product
@@ -552,7 +552,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             15000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -602,7 +602,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             40000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
 
         // Add Another Product
@@ -613,7 +613,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             30000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -654,7 +654,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             20000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
 
         // Add Another Product
@@ -665,7 +665,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             15000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -700,7 +700,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             20000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
 
         // Add Another Product
@@ -711,7 +711,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             15000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 
@@ -764,7 +764,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             40000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
 
         // Add Another Product
@@ -775,7 +775,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         // Check
         $this->assertEquals(
             30000, 
-            $bag->totalInclusive()->integer()
+            $bag->totalInclusive()->toInt()
         );
     }
 }

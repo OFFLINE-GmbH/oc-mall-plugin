@@ -155,20 +155,20 @@ class TotalsCalculator implements CallsAnyMethod
     {
         $this->weightTotal = $this->bag->productsWeight();
         
-        $this->productPreTaxes = $this->bag->productsExclusive()->integer() + $this->bag->servicesExclusive()->integer();
+        $this->productPreTaxes = $this->bag->productsExclusive()->toInt() + $this->bag->servicesExclusive()->toInt();
         $this->productTaxes = $this->bag->productsTax()->getMinorAmount()->toInt() + $this->bag->servicesTax()->getMinorAmount()->toInt();
-        $this->productPostTaxes = $this->bag->productsInclusive()->integer() + $this->bag->servicesInclusive()->integer();
+        $this->productPostTaxes = $this->bag->productsInclusive()->toInt() + $this->bag->servicesInclusive()->toInt();
 
         $this->shippingTaxes = $this->getFilteredTaxes(optional($this->input->shipping_method)->taxes ?? new Collection());
         $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
 
-        $this->totalPrePayment = $this->bag->productsInclusive()->integer() + $this->bag->servicesInclusive()->integer() + $this->bag->shippingInclusive()->integer();
+        $this->totalPrePayment = $this->bag->productsInclusive()->toInt() + $this->bag->servicesInclusive()->toInt() + $this->bag->shippingInclusive()->toInt();
         $this->paymentTaxes = $this->getFilteredTaxes(optional($this->input->payment_method)->taxes ?? new Collection());
         $this->paymentTotal = new PaymentTotal($this->input->payment_method, $this);
 
-        $this->totalPreTaxes = $this->bag->totalExclusive()->integer();
+        $this->totalPreTaxes = $this->bag->totalExclusive()->toInt();
         $this->totalDiscounts = $this->bag->totalDiscount()->getMinorAmount()->toInt();
-        $this->totalPostTaxes = $this->bag->totalInclusive()->integer();
+        $this->totalPostTaxes = $this->bag->totalInclusive()->toInt();
         if ($this->totalPostTaxes < 0) {
             $this->totalPostTaxes = 0;
         }

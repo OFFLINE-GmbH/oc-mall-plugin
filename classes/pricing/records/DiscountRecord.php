@@ -6,8 +6,8 @@ use Brick\Money\Money;
 use OFFLINE\Mall\Classes\Exceptions\PriceBagException;
 use OFFLINE\Mall\Classes\Pricing\BaseRecord;
 use OFFLINE\Mall\Classes\Pricing\BaseValue;
-use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
+use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use OFFLINE\Mall\Models\Discount;
 use Whitecube\Price\Price;
@@ -18,22 +18,22 @@ class DiscountRecord extends BaseRecord
 
     /**
      * Amount
-     * @var AmountValue|FactorValue
+     * @var FactorValue|MoneyValue
      */
     protected $amount;
 
     /**
      * Create a new shipping record.
      * @param string $currency
-     * @param int|float|string|AmountValue|FactorValue|Price $amount
+     * @param int|float|string|FactorValue|MoneyValue|Price $amount
      * @param bool $isFactor
      */
-    public function __construct(string $currency, int|float|string|AmountValue|FactorValue|Price $amount, bool $isFactor = false)
+    public function __construct(string $currency, int|float|string|FactorValue|MoneyValue|Price $amount, bool $isFactor = false)
     {
         $this->currency = $currency;
 
         if (!($amount instanceof BaseValue)) {
-            $amount = $isFactor ? new FactorValue($amount) : new AmountValue($this->parsePrice($amount));
+            $amount = $isFactor ? new FactorValue($amount) : new MoneyValue($this->parsePrice($amount));
         }
 
         $this->amount = $amount;
@@ -71,9 +71,9 @@ class DiscountRecord extends BaseRecord
 
     /**
      * Receive discount amount.
-     * @return AmountValue|FactorValue
+     * @return FactorValue|MoneyValue
      */
-    public function amount(): AmountValue|FactorValue
+    public function amount(): FactorValue|MoneyValue
     {
         return $this->amount;
     }

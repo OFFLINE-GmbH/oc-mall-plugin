@@ -2,15 +2,9 @@
 
 namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
-use Brick\Math\RoundingMode;
-use Brick\Money\Money;
-use October\Rain\Database\Model;
-use OFFLINE\Mall\Classes\Pricing\PriceBag;
-use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
-use OFFLINE\Mall\Classes\Pricing\Values\DiscountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
+use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use OFFLINE\Mall\Models\Discount;
-use Whitecube\Price\Price;
 
 /**
  * This trait takes over the applying and reverting of all global-added discounts of the respective
@@ -40,7 +34,7 @@ trait ApplyDiscounts
         $total = $this->productsExclusive()->exclusive()->getMinorAmount()->toInt();
         $products = [];
         foreach ($this->map['products'] AS $product) {
-            $products[] = intval(round((100 / $total) * $product->exclusive()->integer()));
+            $products[] = intval(round((100 / $total) * $product->exclusive()->toInt()));
         }
 
         // Apply Discounts
@@ -55,7 +49,7 @@ trait ApplyDiscounts
 
             // Product Discounts
             if ($discount->type() == 'products') {
-                if ($amount instanceof AmountValue) {
+                if ($amount instanceof MoneyValue) {
                     if (count($products) == 1) {
                         $this->map['products'][0]->addDiscount(
                             $amount,
@@ -65,7 +59,7 @@ trait ApplyDiscounts
                         continue;
                     }
                     
-                    $value = clone $amount->base();
+                    $value = $amount->value();
                     $values = $value->allocate(...$products);
                     for ($i = 0; $i < count($values); $i++) {
                         $this->map['products'][$i]->addDiscount(
@@ -87,9 +81,9 @@ trait ApplyDiscounts
 
             // Shipping Discounts
             if ($discount->type() == 'shipping') {
-                if ($amount instanceof AmountValue) {
+                if ($amount instanceof MoneyValue) {
                     foreach ($this->map['shipping'] AS $shipping) {
-                        $shipping->setAmount($amount->value(), $discount->model());
+                        $shipping->setAmount($amount->price(), $discount->model());
                     }
                 }
             }

@@ -6,8 +6,8 @@ use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use Model;
 use OFFLINE\Mall\Classes\Exceptions\PriceBagException;
-use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
+use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use OFFLINE\Mall\Models\Discount;
 use Whitecube\Price\Price;
@@ -76,22 +76,22 @@ class ShippingRecord extends AbstractItemRecord
 
     /**
      * Add discount to this record.
-     * @param int|float|string|AmountValue|FactorValue|Price $factorOrAmount
+     * @param int|float|string|FactorValue|MoneyValue|Price $factorOrAmount
      * @param boolean $isFactor
      * @param boolean $perUnit
      * @return self
      */
     public function addDiscount(
-        int|float|string|AmountValue|FactorValue|Price  $value, 
-        bool                                            $isFactor = true, 
-        bool                                            $perUnit = false
+        int|float|string|FactorValue|MoneyValue|Price  $value, 
+        bool                                           $isFactor = true, 
+        bool                                           $perUnit = false
     ): self {
         throw new PriceBagException('The ShippingRecord class does not support multiple discounts, use setAmount instead.');
     }
 
     /**
      * Overwrite existing amount of this record.
-     * @param int|float|string|AmountValue|FactorValue|Price $amount
+     * @param int|float|string|Price $amount
      * @param null|Discount $discount Associated discount model.
      * @return self
      */

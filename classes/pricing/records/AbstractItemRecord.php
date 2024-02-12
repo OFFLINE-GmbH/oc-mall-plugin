@@ -8,9 +8,9 @@ use OFFLINE\Mall\Classes\Exceptions\PriceBagException;
 use OFFLINE\Mall\Classes\Pricing\BaseRecord;
 use OFFLINE\Mall\Classes\Pricing\BaseValue;
 use OFFLINE\Mall\Classes\Pricing\Concerns\InclusiveAccuracyFix;
-use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\DiscountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
+use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use Whitecube\Price\Price;
 
@@ -30,7 +30,7 @@ abstract class AbstractItemRecord extends BaseRecord
 
     /**
      * The additional taxes for this record.
-     * @var array<AmountValue|FactorValue>
+     * @var array<FactorValue|MoneyValue>
      */
     protected array $taxes = [ ];
 
@@ -67,18 +67,18 @@ abstract class AbstractItemRecord extends BaseRecord
      * for 100.00 €) as discounts. The last option requires false as second argument. Discounts can 
      * also either applied on the full amount (net-price * quantity) or on a per-unit basis. 
      * Discounts are ALWAYS applied on the exclusive net-price.
-     * @param int|float|string|AmountValue|FactorValue|Price $factorOrAmount
+     * @param int|float|string|FactorValue|MoneyValue|Price $factorOrAmount
      * @param boolean $isFactor
      * @param boolean $perUnit
      * @return self
      */
     public function addDiscount(
-        int|float|string|AmountValue|FactorValue|Price  $value, 
-        bool                                            $isFactor = true, 
-        bool                                            $perUnit = false
+        int|float|string|FactorValue|MoneyValue|Price  $value, 
+        bool                                           $isFactor = true, 
+        bool                                           $perUnit = false
     ): self {
         if (!($value instanceof BaseValue)) {
-            $value = $isFactor ? new FactorValue($value) : new AmountValue($this->parsePrice($value));
+            $value = $isFactor ? new FactorValue($value) : new MoneyValue($this->parsePrice($value));
         }
         $this->discounts[] = new DiscountValue($value, $perUnit);
         return $this;
@@ -106,14 +106,14 @@ abstract class AbstractItemRecord extends BaseRecord
      * (ex. '10000', for 100.00 €). The last option requires false as second argument. We recommend 
      * using the setVat for VAT-values but, however, you can use this method as well. All taxes are 
      * ALWAYS calculated from the exclusive, discount-applied net-price. 
-     * @param int|float|string|AmountValue|FactorValue|Price $value
+     * @param int|float|string|FactorValue|MoneyValue|Price $value
      * @param boolean $isFactor
      * @return self
      */
-    public function addTax(int|float|string|AmountValue|FactorValue|Price $value, bool $isFactor = true): self
+    public function addTax(int|float|string|FactorValue|MoneyValue|Price $value, bool $isFactor = true): self
     {
         if (!($value instanceof BaseValue)) {
-            $value = $isFactor ? new FactorValue($value) : new AmountValue($this->parsePrice($value));
+            $value = $isFactor ? new FactorValue($value) : new MoneyValue($this->parsePrice($value));
         }
         $this->taxes[] = $value;
         return $this;
@@ -134,7 +134,7 @@ abstract class AbstractItemRecord extends BaseRecord
      */
     public function discount(): Money
     {
-        $exclusive = clone $this->exclusive()->value();
+        $exclusive = $this->exclusive()->value();
 
         $discount = Money::ofMinor('0', $this->currency);
         foreach ($this->discounts AS $item) {
@@ -145,7 +145,7 @@ abstract class AbstractItemRecord extends BaseRecord
                 $price = $value->valueOf($exclusive);
             } else {
                 $clean = $this->priceInclusive == true;
-                $price = $value->value()->exclusive();
+                $price = $value->value();
             }
 
             /** @var Money $price */

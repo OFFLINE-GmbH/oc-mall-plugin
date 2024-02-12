@@ -2,38 +2,35 @@
 
 namespace OFFLINE\Mall\Classes\Pricing\Values;
 
-use Brick\Money\Money;
 use OFFLINE\Mall\Classes\Pricing\BaseValue;
-use Whitecube\Price\Price;
 
 class DiscountValue extends BaseValue
 {
     /**
      * The desired value instance.
-     * @var AmountValue|FactorValue
+     * @var FactorValue|MoneyValue
      */
-    protected AmountValue|FactorValue $value;
+    protected FactorValue|MoneyValue $value;
 
     /**
-     * Whether the value applies per unit or on total.
+     * Whether the value applies per unit or on the total price.
      * @var boolean
      */
     protected bool $perUnit = false;
 
     /**
      * Create a new DiscountValue instance.
-     * @param AmountValue|FactorValue $value
+     * @param FactorValue|MoneyValue $value
      * @param bool $perUnit
      */
-    public function __construct(AmountValue|FactorValue $value, bool $perUnit = false)
+    public function __construct(FactorValue|MoneyValue $value, bool $perUnit = false)
     {
         $this->value = $value;
         $this->perUnit = $perUnit;
     }
 
     /**
-     * String-Representation of this class instance.
-     * @return string
+     * @inheritDoc
      */
     public function __toString(): string
     {
@@ -41,20 +38,36 @@ class DiscountValue extends BaseValue
     }
 
     /**
-     * Return raw value.
-     * @return AmountValue|FactorValue
+     * Return copy of the internal value object.
+     * @return FactorValue|MoneyValue
      */
-    public function value(): AmountValue|FactorValue
+    public function value(): FactorValue|MoneyValue
     {
-        return $this->value;
+        return clone $this->value;
     }
 
     /**
-     * Whether the value applies per unit or on total.
+     * Whether the value applies per unit or on the total price.
      * @return boolean
      */
     public function isPerUnit(): bool
     {
         return $this->perUnit;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toInt(): int
+    {
+        return $this->value->toInt();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toFloat(): float
+    {
+        return $this->value->toFloat();
     }
 }

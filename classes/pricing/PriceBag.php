@@ -11,8 +11,8 @@ use OFFLINE\Mall\Classes\Pricing\Records\PaymentRecord;
 use OFFLINE\Mall\Classes\Pricing\Records\ProductRecord;
 use OFFLINE\Mall\Classes\Pricing\Records\ServiceRecord;
 use OFFLINE\Mall\Classes\Pricing\Records\ShippingRecord;
-use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
+use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Discount;
@@ -202,13 +202,13 @@ class PriceBag
     /**
      * Add payment method to price bag.
      * @param string|PaymentRecord $method
-     * @param int|float|string|Price $amount
-     * @param boolean $isInclusive
+     * @param null|int|float $percentage Percentage fee.
+     * @param null|int|float|string|Price Fixed amount.
      * @return PaymentRecord
      */
-    public function addPaymentMethod(string|PaymentMethod $method, int|float|string|Price $amount = null, bool $isInclusive = false)
+    public function addPaymentMethod(string|PaymentMethod $method, null|int|float $percentage = null, null|int|float|string|Price $amount = null)
     {
-        $record = new PaymentRecord($this->currency, $amount, $isInclusive);
+        $record = new PaymentRecord($this->currency, $percentage, $amount);
         $record->setAssoc($this, $method);
 
         $this->map['payment'][] = $record;
@@ -223,11 +223,11 @@ class PriceBag
      *               - 'shipping', shipping-costs discounts
      *               - 'payment', payment-costs discounts
      *               - 'total', gross-total discounts (ex. skonto / conto)
-     * @param int|float|string|AmountValue|FactorValue|Price $amount
+     * @param int|float|string|FactorValue|MoneyValue|Price $amount
      * @param boolean $isFactor
      * @return DiscountRecord
      */
-    public function addDiscount(string|Discount $type, int|float|string|AmountValue|FactorValue|Price $amount, bool $isFactor = false)
+    public function addDiscount(string|Discount $type, int|float|string|FactorValue|MoneyValue|Price $amount, bool $isFactor = false)
     {
         $record = new DiscountRecord($this->currency, $amount, $isFactor);
         $record->setAssoc($this, $type);
@@ -253,7 +253,7 @@ class PriceBag
 
     /**
      * Return sum of all discounts for all products combined.
-     * @return null|Money
+     * @return Money
      */
     public function productsDiscount(): Money
     {
@@ -587,37 +587,51 @@ class PriceBag
 
         return new PriceValue($price);
     }
-
-    /**
-     * Return all applied Payment Fees.
-     * @return Money[]
-     */
-    public function paymentFees(): array
-    {
-        // @todo 
-        return [];
-    }
     
     /**
      * Return all applied Payment Discounts.
-     * @return Money[]
+     * @return Money
      */
-    public function paymentDiscount(): array
+    public function paymentDiscount(): Money
     {
-        // @todo 
-        return [];
+        $money = Money::ofMinor('0', $this->currency);
+        return $money;
     }
 
-    public function paymentTaxes(): mixed
+    /**
+     * Return all applied Payment Fees.
+     * @return Money
+     */
+    public function paymentFee(): Money
     {
-        // @todo 
-        return [];
+        $totals = Price::parse('0', $this->currency);
+        $totals->plus($this->productsExclusive()->exclusive());
+        $totals->plus($this->servicesExclusive()->exclusive());
+        $totals->plus($this->shippingExclusive()->exclusive());
+
+        $money = Money::ofMinor('0', $this->currency);
+        foreach ($this->map['payment'] AS $payment) {
+            $money = $money->plus($payment->inclusiveFromTotals($totals->base(false))->inclusive());
+        }
+        return $money;
     }
 
-    public function paymentTotal(): mixed
+    /**
+     * Return all applied Payment Taxes.
+     * @return Money
+     */
+    public function paymentTax(): mixed
     {
-        // @todo 
-        return [];
+        $totals = Price::parse('0', $this->currency);
+        $totals->plus($this->productsExclusive()->exclusive());
+        $totals->plus($this->servicesExclusive()->exclusive());
+        $totals->plus($this->shippingExclusive()->exclusive());
+
+        $money = Money::ofMinor('0', $this->currency);
+        foreach ($this->map['payment'] AS $payment) {
+            $money = $money->plus($payment->taxFromTotals($totals->base(false)));
+        }
+        return $money;
     }
 
     /**
@@ -627,11 +641,9 @@ class PriceBag
     public function totalExclusive(): PriceValue
     {
         $price = Price::parse('0', $this->currency);
-
         $price->plus($this->productsExclusive()->exclusive());
         $price->plus($this->servicesExclusive()->exclusive());
         $price->plus($this->shippingExclusive()->exclusive());
-
         return new PriceValue($price);
     }
 
@@ -658,6 +670,7 @@ class PriceBag
         $price = $price->plus($this->productsTax());
         $price = $price->plus($this->servicesTax());
         $price = $price->plus($this->shippingTax());
+        $price = $price->plus($this->paymentTax());
         return $price;
     }
 
@@ -684,7 +697,10 @@ class PriceBag
     public function totalDiscount(): Money
     {
         $price = Money::ofMinor('0', $this->currency);
-        // @todo
+        $price = $price->plus($this->productsDiscount());
+        $price = $price->plus($this->servicesDiscount());
+        $price = $price->plus($this->shippingDiscount());
+        $price = $price->plus($this->paymentDiscount());
         return $price;
     }
 
@@ -700,8 +716,8 @@ class PriceBag
         $price->plus($this->productsInclusive()->inclusive());
         $price->plus($this->servicesInclusive()->inclusive());
         $price->plus($this->shippingInclusive()->inclusive());
-        //$this->paymentFees();
-        //$this->paymentDiscounts();
+        $price->plus($this->paymentFee());
+        $price->minus($this->paymentDiscount());
         
         $this->revertDiscounts();
         return new PriceValue($price);

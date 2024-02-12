@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Pricing\Values;
 
+use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use OFFLINE\Mall\Classes\Pricing\BaseValue;
 use Whitecube\Price\Price;
@@ -9,27 +11,38 @@ use Whitecube\Price\Price;
 class FactorValue extends BaseValue
 {
     /**
-     * Plain Factor Value.
-     * @var integer|float
+     * The desired factor value (between 0 and 1).
+     * @var float
      */
-    protected int|float $factor;
+    protected float $factor;
+
+    /**
+     * The desired factor value as percentage (between 0 and 100).
+     * @var float|int
+     */
+    protected float|int $percentage;
 
     /**
      * Create a new FactorValue instance.
-     * @param integer|float $factor
+     * @param integer|float $value
      */
-    public function __construct(int|float $factor)
+    public function __construct(int|float $value)
     {
-        $this->factor = $factor;
+        if (is_float($value) && $value >= 0 && $value <= 1) {
+            $this->factor = $value;
+            $this->percentage = $value * 100;
+        } else {
+            $this->factor = $value / 100;
+            $this->percentage = $value;
+        }
     }
 
     /**
-     * String-Representation of this class instance.
-     * @return string
+     * @inheritDoc
      */
     public function __toString(): string
     {
-        return strval($this->factor . '%');
+        return strval($this->percentage . '%');
     }
 
     /**
@@ -38,22 +51,41 @@ class FactorValue extends BaseValue
      */
     public function value()
     {
-        return $this->factor;
+        return $this->percentage;
     }
 
     /**
-     * Calculate and return the factor value of the passed price
+     * Calculate and return the factor value of the passed price.
      * @param Money|Price $amount
+     * @param bool $perUnit Whether to return unit or total price, used only  when Price object is 
+     *             passed.
      * @return Money
      */
-    public function valueOf(Money|Price $amount): Money
+    public function valueOf(Money|Price $amount, bool $perUnit = false): Money
     {
-        if ($amount instanceof Money) {
-            $amount = new Price($amount);
+        if ($amount instanceof Price) {
+            $amount = clone $amount->base($perUnit);
         }
+        /** @var Money $amount */
 
-        $price = clone $amount;
-        $price->setVat($this->factor);
-        return $price->vat()->money();
+        $percentage = BigDecimal::of($this->percentage);
+        $multiplier = $percentage->dividedBy(100, $percentage->getScale() + 2, RoundingMode::UP);
+        return $amount->multipliedBy($multiplier, RoundingMode::HALF_UP);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toInt(): int
+    {
+        return $this->percentage;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toFloat(): float
+    {
+        return $this->factor;
     }
 }

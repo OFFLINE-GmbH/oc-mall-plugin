@@ -4,9 +4,9 @@ namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
 use Brick\Math\RoundingMode;
 use Brick\Money\Money;
-use OFFLINE\Mall\Classes\Pricing\Values\AmountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\DiscountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
+use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use Whitecube\Price\Price;
 
 /**
@@ -78,8 +78,8 @@ trait InclusiveAccuracyFix
         }
 
         foreach ($this->taxes AS $tax) {
-            if ($tax instanceof AmountValue) {
-                $amount->plus($tax->base());
+            if ($tax instanceof MoneyValue) {
+                $amount->plus($tax->value());
             } else {
                 $factor += $tax->value();
             }
@@ -107,10 +107,10 @@ trait InclusiveAccuracyFix
             $this->discounts,
             function (int|float $carry, DiscountValue $discount) use ($price) {
                 $amount = $discount->value();
-                if ($amount instanceof AmountValue) {
-                    $carry += $amount->value()->exclusive()->getAmount()->toFloat();
+                if ($amount instanceof MoneyValue) {
+                    $carry += $amount->toFloat();
                 } else {
-                    $carry += $amount->valueOf($price)->getMinorAmount()->toFloat();
+                    $carry += $amount->valueOf($price)->getAmount()->toFloat();
                 }
                 return $carry;
             },
@@ -133,7 +133,10 @@ trait InclusiveAccuracyFix
         // Get amounts
         $original = $this->price->inclusive()->getAmount()->toFloat();
         $original -= $this->sumDiscount();
-        $result = $price->inclusive()->getAmount()->toFloat();
+
+        /** @var Money */
+        $inclusive = $price->inclusive();
+        $result = $inclusive->getAmount()->toFloat();
 
         // Handle rounding issues
         $diff = abs($original - $result);
