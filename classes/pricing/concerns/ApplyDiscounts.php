@@ -106,11 +106,11 @@ trait ApplyDiscounts
             return true;
         }
 
-        if ($discount->trigger === 'product' && $this->productIsInCart($discount->product_id)) {
+        if ($discount->trigger === 'product' && $this->productIsInCart(intval($discount->product_id))) {
             return true;
         }
 
-        if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup($discount->customer_group_id)) {
+        if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup(intval($discount->customer_group_id))) {
             return true;
         }
         
@@ -118,7 +118,7 @@ trait ApplyDiscounts
             return true;
         }
 
-        if ($discount->trigger === 'payment_method' && $this->checkPaymentMethod($discount->payment_method_id)) {
+        if ($discount->trigger === 'payment_method' && $this->checkPaymentMethod(intval($discount->payment_method_id))) {
             return true;
         }
 
