@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Tests\Classes\Totals;
 
+use Event;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Models\Address;
@@ -19,6 +20,8 @@ use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
+use OFFLINE\Mall\Updates\Factories\AddressFactory;
+use RainLab\Location\Models\Country;
 
 class TotalsCalculatorTest extends PluginTestCase
 {
@@ -36,7 +39,31 @@ class TotalsCalculatorTest extends PluginTestCase
     {
         parent::setUp();
 
-        $this->address = Address::factory()->create();
+        // October v3 only
+        // $this->address = Address::factory()->create();
+
+        // Legacy
+        $country = Country::inRandomOrder()->whereHas('states')->get()->first();
+        $state = $country->states()->inRandomOrder()->get()->first();
+        $this->address = new Address([
+            "company"       => $this->faker->company(),
+            "name"          => $this->faker->name(),
+            "lines"         => $this->faker->streetAddress(),
+            "zip"           => $this->faker->postcode(),
+            "city"          => $this->faker->city(),
+            "state_id"      => $state->id,
+            "country_id"    => $country->id,
+            "details"       => null,
+            "customer_id"   => 1,
+            "created_at"    => $this->faker->iso8601(),
+            "updated_at"    => $this->faker->iso8601(),
+            "deleted_at"    => null
+        ]);
+
+        // Set Country
+        Event::listen('mall.cart.setCountry', function ($model) {
+            $model->countryId = $this->address->country_id;
+        });
     }
 
     /**

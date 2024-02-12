@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Models;
 
 use Model;
-use October\Rain\Database\Factories\HasFactory;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -12,7 +11,6 @@ use System\Classes\PluginManager;
 
 class Address extends Model
 {
-    use HasFactory;
     use HashIds;
     use SoftDelete;
     use Validation;

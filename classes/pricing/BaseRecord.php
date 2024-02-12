@@ -107,26 +107,26 @@ abstract class BaseRecord
      * Return sum of all discounts.
      * @return null|Money
      */
-    abstract public function discount()
+    abstract public function discount();
 
     /**
      * Return only vat based on the original net-price minus discount.
      * @return null|Money
      */
-    abstract public function vat()
+    abstract public function vat();
 
     /**
      * Return raw vat factor.
      * @return int|float
      */
-    abstract public function factor()
+    abstract public function factor();
 
     /**
      * Return sum of all taxes (incl. or excl. vat) based on the original net-price minus discount.
      * @param bool $excludeVat Wether to include or exclude VAT.
      * @return null|Money
      */
-    abstract public function tax(bool $excludeVat = false)
+    abstract public function tax(bool $excludeVat = false);
 
     /**
      * Return inclusive price value, containing discounts, vat and other taxes.

@@ -142,7 +142,7 @@ trait InclusiveAccuracyFix
         $diff = abs($original - $result);
         if (($currency = $this->bag()->getCurrency()) !== null) {
             $diff = intval($diff * ($p = pow(10, $currency->decimals))) / $p;
-            $accuracy = floatval('0.' . substr(str_repeat('0', $currency->decimals), -1) . '1');
+            $accuracy = floatval('0.' . substr(str_repeat('0', intval($currency->decimals)), -1) . '1');
             if ($diff <= $accuracy) {
                 $price = new Price(Money::ofMinor($original * 100, $this->currency));
             }

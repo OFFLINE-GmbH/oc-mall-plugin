@@ -2,7 +2,8 @@
 
 namespace OFFLINE\Mall\Updates\Factories;
 
-use October\Rain\Database\Factories\Factory;
+use Illuminate\Database\Eloquent\Factory;
+//use October\Rain\Database\Factories\Factory;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Customer;
 use RainLab\Location\Models\Country;
