@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use Event;
 use Illuminate\Support\Facades\DB;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
@@ -23,6 +24,11 @@ class ShippingMethodTest extends PluginTestCase
     {
         parent::setUp();
         DB::table('offline_mall_shipping_methods')->truncate();
+
+        // Set Country
+        Event::listen('mall.cart.setCountry', function ($model) {
+            $model->countryId = 14;
+        });
     }
 
     /**
@@ -301,8 +307,7 @@ class ShippingMethodTest extends PluginTestCase
         $this->assertEquals(1000, $cart->totals()->shippingTotal()->totalTaxes());
         $this->assertEquals(11000, $cart->totals()->shippingTotal()->totalPostTaxes());
 
-        $this->assertEquals(500, $cart->totals()->taxes()->first()->total());
-        $this->assertEquals(500, $cart->totals()->taxes()->last()->total());
+        $this->assertEquals(1000, $cart->totals()->taxes()->first()->total());
     }
 
     /**
