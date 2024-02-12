@@ -107,6 +107,25 @@ class PaymentRecord extends AbstractItemRecord
     }
 
     /**
+     * Return exclusive price value using fixed amount and percentage fee.
+     * @param Money $money
+     * @return void
+     */
+    public function exclusiveFromTotals(Money $money): PriceValue
+    {
+        $price = new Price($this->exclusive()->exclusive());
+
+        // Add fee
+        if ($this->percentage > 0) {
+            $percentage = BigDecimal::of($this->percentage);
+            $multiplier = $percentage->dividedBy(100, $percentage->getScale() + 2, RoundingMode::UP);
+            $price->plus($money->multipliedBy($multiplier, RoundingMode::HALF_UP));
+        }
+
+        return new PriceValue($price);
+    }
+
+    /**
      * Return sum of all taxes based on the original net-price minus discount, calculated from the 
      * total price.
      * @param Money $money

@@ -27,25 +27,23 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
      */
     private $method;
 
-
-
-
     /**
-     * @var int
+     * Exclusive price.
+     * @var float|int
      */
     private $preTaxes;
+
     /**
-     * @var int
-     */
-    private $total;
-    /**
-     * @var int
+     * Amount of Taxes.
+     * @var float|int
      */
     private $taxes;
+
     /**
-     * @var int
+     * Inclusive price.
+     * @var float|int
      */
-    protected $price;
+    private $total;
 
     /**
      * Create a new PaymentTotal instance.
@@ -89,109 +87,45 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
      */
     protected function calculate()
     {
-        $this->preTaxes = $this->calculatePreTax();
-        $this->total    = $this->calculateTotal();
-        $this->taxes    = $this->calculateTaxes();
+        $bag = $this->totals->getBag();
+        $this->preTaxes = $bag->paymentExclusive()->getMinorAmount()->toInt();
+        $this->total = $bag->paymentFee()->getMinorAmount()->toInt();
+        $this->taxes = $bag->paymentTax()->getMinorAmount()->toInt();
     }
 
-    protected function calculatePreTax(): float
-    {
-        if ( ! $this->method) {
-            return 0;
-        }
-
-        $base = $this->totals->totalPrePayment();
-
-        $percentage = $this->getPercentage();
-        $price      = $this->getPrice();
-
-        $charge = $this->getCharge($base, $price, $percentage);
-
-        return $this->round($charge - $base);
-    }
-
-    protected function calculateTotal(): float
-    {
-        if ( ! $this->method) {
-            return 0;
-        }
-
-        $base = $this->totals->totalPrePayment();
-
-        $taxPercentage = $this->totals->paymentTaxes->sum('percentageDecimal') + 1;
-
-        $percentage = $this->getPercentage();
-        $price      = $this->getPrice();
-
-        // Add total tax percentage.
-        $percentage *= $taxPercentage;
-        $price      *= $taxPercentage;
-
-        $charge = $this->getCharge($base, $price, $percentage);
-
-        return $this->round($charge - $base);
-    }
-
-    protected function calculateTaxes(): float
-    {
-        return $this->round($this->total - $this->preTaxes);
-    }
-
-    public function totalPreTaxes(): float
+    /**
+     * Receive exclusive price value.
+     * @return float|int
+     */
+    public function totalPreTaxes()
     {
         return $this->preTaxes;
     }
 
-    public function totalPreTaxesOriginal(): float
+    /**
+     * Receive exclusive price value.
+     * @return float|int
+     */
+    public function totalPreTaxesOriginal()
     {
         return $this->preTaxes;
     }
 
-    public function totalTaxes(): float
+    /**
+     * Receive amount of taxes.
+     * @return float|int
+     */
+    public function totalTaxes()
     {
         return $this->taxes;
     }
 
-    public function totalPostTaxes(): float
-    {
-        return $this->total;
-    }
-
     /**
-     * @return mixed
-     */
-    protected function getPrice()
-    {
-        if ($this->price) {
-            return $this->price;
-        }
-
-        $price = $this->method->price()->integer ?? 0;
-
-        $this->price = $price;
-
-        return $price;
-    }
-
-    /**
-     * Add the fixed and percentage amount to the base price.
-     *
-     * @param $base
-     * @param $price
-     * @param $percentage
-     *
+     * Receive inclusive price value.
      * @return float|int
      */
-    protected function getCharge($base, $price, $percentage)
+    public function totalPostTaxes()
     {
-        return ($base + $price) / (1 - $percentage);
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getPercentage()
-    {
-        return ($this->method->fee_percentage ?? 0) / 100;
+        return $this->total;
     }
 }

@@ -243,7 +243,7 @@ class TotalsCalculator implements CallsAnyMethod
         $groups = [
             ...$this->bag->productsTaxes(true),
             ...$this->bag->servicesTaxes(true),
-            ...$this->bag->shippingTaxes(true) 
+            ...$this->bag->shippingTaxes(true),
         ];
         foreach ($groups AS $group) {
             foreach ($group AS $type => $taxes) {
@@ -262,20 +262,23 @@ class TotalsCalculator implements CallsAnyMethod
                 }
             }
         }
+        $collect = $this->consolidateTaxes($collect);
 
-        //@todo handle payment
-        //$paymentTaxes = new Collection();
-        //$paymentTotal = $this->paymentTotal->totalPreTaxesOriginal();
-        //if ($this->paymentTaxes) {
-        //    $paymentTaxes = $this->paymentTaxes->map(function (Tax $tax) use ($paymentTotal) {
-        //        return new TaxTotal($paymentTotal, $tax);
-        //    });
-        //}
+        // Set payment taxes
+        $paymentTax = $this->bag->paymentTax();
+        if ($paymentTax->getMinorAmount()->toInt() > 0) {
+            $model = new TaxTotal(
+                $paymentTax->getMinorAmount()->toInt(), 
+                new Tax(['percentage' => 0])
+            );
+            $model->setTotal($paymentTax->getMinorAmount()->toInt());
+            $collect->add($model);
+        }
 
         // Set Taxes
         $this->totalTaxes = $this->bag->totalTax()->getMinorAmount()->toInt();
         $this->detailedTaxes = $collect;
-        return $this->consolidateTaxes($collect);
+        return $collect;
     }
 
     /**

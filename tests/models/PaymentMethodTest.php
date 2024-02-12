@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use Event;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Currency;
@@ -21,6 +22,11 @@ class PaymentMethodTest extends PluginTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        // Set Country
+        Event::listen('mall.cart.setCountry', function ($model) {
+            $model->countryId = 14;
+        });
     }
 
     /**
@@ -75,10 +81,10 @@ class PaymentMethodTest extends PluginTestCase
         $cart->setPaymentMethod($method);
 
         // Test Pricing
-        $this->assertEquals(10330, round($cart->totals()->totalPostTaxes(), 0));
-        $this->assertEquals(330, round($cart->totals()->paymentTotal()->totalPreTaxes(), 0));
+        $this->assertEquals(10320, round($cart->totals()->totalPostTaxes(), 0));
+        $this->assertEquals(320, round($cart->totals()->paymentTotal()->totalPreTaxes(), 0));
         $this->assertEquals(0, round($cart->totals()->paymentTotal()->totalTaxes(), 0));
-        $this->assertEquals(330, round($cart->totals()->paymentTotal()->totalPostTaxes(), 0));
+        $this->assertEquals(320, round($cart->totals()->paymentTotal()->totalPostTaxes(), 0));
     }
 
     /**
@@ -116,14 +122,14 @@ class PaymentMethodTest extends PluginTestCase
         $cart->setPaymentMethod($method);
 
         // Test Pricing
-        $this->assertEquals(10364, round($cart->totals()->totalPostTaxes()));
-        $this->assertEquals(330, round($cart->totals()->paymentTotal()->totalPreTaxes()));
-        $this->assertEquals(34, round($cart->totals()->paymentTotal()->totalTaxes()));
-        $this->assertEquals(364, round($cart->totals()->paymentTotal()->totalPostTaxes()));
+        $this->assertEquals(10352, round($cart->totals()->totalPostTaxes()));
+        $this->assertEquals(320, round($cart->totals()->paymentTotal()->totalPreTaxes()));
+        $this->assertEquals(32, round($cart->totals()->paymentTotal()->totalTaxes()));
+        $this->assertEquals(352, round($cart->totals()->paymentTotal()->totalPostTaxes()));
 
         // Test applied taxes
-        $this->assertEquals(2, $cart->totals()->taxes()->count());
-        $this->assertEquals(16, round($cart->totals()->taxes()->last()->total()));
+        $this->assertEquals(1, $cart->totals()->taxes()->count());
+        $this->assertEquals(32, round($cart->totals()->taxes()->last()->total()));
     }
 
     /**

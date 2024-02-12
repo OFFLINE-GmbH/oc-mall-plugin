@@ -29,25 +29,25 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
 
     /**
      * Exclusive price.
-     * @var int
+     * @var float|int
      */
     private $preTaxes;
 
     /**
      * Amount of Taxes.
-     * @var int
+     * @var float|int
      */
     private $taxes;
 
     /**
      * Amount of discount.
-     * @var int
+     * @var float|int
      */
     private $appliedDiscount;
 
     /**
      * Inclusive price.
-     * @var int
+     * @var float|int
      */
     private $total;
 
@@ -104,9 +104,9 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
 
     /**
      * Receive exclusive price value.
-     * @return float
+     * @return float|int
      */
-    public function totalPreTaxes(): float
+    public function totalPreTaxes()
     {
         return $this->preTaxes;
     }
@@ -115,7 +115,7 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
      * Receive exclusive price value.
      * @return float
      */
-    public function totalPreTaxesOriginal(): float
+    public function totalPreTaxesOriginal()
     {
         return $this->preTaxes;
     }
@@ -124,7 +124,7 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
      * Receive amount of taxes.
      * @return float
      */
-    public function totalTaxes(): float
+    public function totalTaxes()
     {
         return $this->taxes;
     }

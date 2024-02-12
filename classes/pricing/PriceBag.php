@@ -589,6 +589,24 @@ class PriceBag
 
         return new PriceValue($price);
     }
+
+    /**
+     * Return all applied Payment Fees without taxes.
+     * @return Money
+     */
+    public function paymentExclusive(): Money
+    {
+        $totals = Price::parse('0', $this->currency);
+        $totals->plus($this->productsExclusive()->exclusive());
+        $totals->plus($this->servicesExclusive()->exclusive());
+        $totals->plus($this->shippingExclusive()->exclusive());
+
+        $money = Money::ofMinor('0', $this->currency);
+        foreach ($this->map['payment'] AS $payment) {
+            $money = $money->plus($payment->exclusiveFromTotals($totals->base(false))->inclusive());
+        }
+        return $money;
+    }
     
     /**
      * Return all applied Payment Discounts.
