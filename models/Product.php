@@ -564,11 +564,8 @@ class Product extends Model
      * This setter makes it easier to set price values
      * in different currencies by providing an array of
      * prices. It is mostly used for unit testing.
-     *
-     * @param $value
-     *
      * @internal
-     *
+     * @param $value
      */
     public function setPriceAttribute($value)
     {

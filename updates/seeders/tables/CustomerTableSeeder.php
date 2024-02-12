@@ -55,16 +55,17 @@ class CustomerTableSeeder extends Seeder
         [$firstname, $lastname] = explode(' ', $name);
 
         $user = User::firstOrCreate([
-            'email'                             => $email,
-            'username'                          => $email,
+            'email'                     => $email,
+            'username'                  => $email,
         ], [
-            'password'                          => '12345678',
-            'password_confirmation'             => '12345678',
-            'name'                              => $firstname,
-            'surname'                           => $lastname,
-            'is_activated'                      => true,
-            'offline_mall_customer_group_id'    => $customerGroupId,
+            'password'                  => '12345678',
+            'password_confirmation'     => '12345678',
+            'name'                      => $firstname,
+            'surname'                   => $lastname,
+            'is_activated'              => true,
         ]);
+        $user->offline_mall_customer_group_id = $customerGroupId;
+        $user->save();
         $customer = Customer::create([
             'firstname' => $firstname,
             'lastname'  => $lastname,
