@@ -212,7 +212,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
     public static function messages(): array
     {
-        return [
+        $messages = [
             'email.required'          => trans('offline.mall::lang.components.signup.errors.email.required'),
             'email.email'             => trans('offline.mall::lang.components.signup.errors.email.email'),
             'email.unique'            => trans('offline.mall::lang.components.signup.errors.email.unique'),
@@ -242,5 +242,9 @@ class DefaultSignUpHandler implements SignUpHandler
 
             'terms_accepted.required' => trans('offline.mall::lang.components.signup.errors.terms_accepted.required'),
         ];
+
+        Event::fire('mall.customer.extendSignupMessages', [&$messages]);
+
+        return $messages;
     }
 }

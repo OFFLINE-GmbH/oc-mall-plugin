@@ -30,6 +30,14 @@ An order has been marked as shipped. This event receives the shipped `$order` as
 
 ## Customer
 
+### `mall.customer.extendSignupRules`
+
+This event is emitted before validating a new customer account. This event receives a reference to the validator rules.
+
+### `mall.customer.extendSignupMessages`
+
+This event is emitted before validating a new customer account. This event receives a reference to the validator messages.
+
 ### `mall.customer.beforeSignup`
 
 This event is emitted before a new customer account is created. This event receives the `SignupHandler` implementation 
