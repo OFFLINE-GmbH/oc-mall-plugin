@@ -26,7 +26,8 @@
         "omnipay/stripe": "^3.0",
         "rainlab/user-plugin": "^1.6|^2.0",
         "rainlab/location-plugin": "^1.2",
-        "rainlab/translate-plugin": "^1.9|^2.0"
+        "rainlab/translate-plugin": "^1.9|^2.0",
+        "whitecube/php-prices": "^2.0|^3.0"
     },
     "suggest": {
         "vitalybaev/google-merchant-feed": "Required to use the Google Merchant Feed integration",
