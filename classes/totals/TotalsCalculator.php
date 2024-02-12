@@ -2,11 +2,14 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use October\Contracts\Twig\CallsAnyMethod;
+use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Pricing\PriceBag;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\Rounding;
+use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\Tax;
 
 /**
@@ -15,7 +18,8 @@ use OFFLINE\Mall\Models\Tax;
  */
 class TotalsCalculator implements CallsAnyMethod
 {
-    use FilteredTaxes, Rounding;
+    use FilteredTaxes;
+    use Rounding;
 
     /**
      * TotalsCalculatorInput data collection.
@@ -125,6 +129,12 @@ class TotalsCalculator implements CallsAnyMethod
     protected $detailedTaxes;
 
     /**
+     * Applied discount model collection.
+     * @var Collection
+     */
+    protected $appliedDiscounts;
+
+    /**
      * Create a new totalsCalculator instance.
      * @param TotalsCalculatorInput $input
      */
@@ -174,6 +184,42 @@ class TotalsCalculator implements CallsAnyMethod
         }
 
         $this->taxes = $this->getTaxTotals();
+        $this->applyTotalDiscounts($this->productPostTaxes);
+    }
+
+    /**
+     * Return applied discounts
+     * @return Collection
+     */
+    public function appliedDiscounts(): Collection
+    {
+        return $this->appliedDiscounts;
+    }
+    
+    /**
+     * Process the discounts that are applied to the cart's total.
+     * @return flaot
+     */
+    protected function applyTotalDiscounts($total): ?float
+    {
+        $nonCodeTriggers = Discount
+            ::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method', 'payment_method'])
+            ->with('shipping_methods')
+            ->where(function ($q) {
+                $q->whereNull('valid_from')
+                    ->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
+                $q->whereNull('expires')
+                    ->orWhere('expires', '>', Carbon::now());
+            })->get();
+
+        $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(function ($item) {
+            return $item->type === 'shipping';
+        });
+
+        $applier = new DiscountApplier($this->input, $total);
+        $this->appliedDiscounts = $applier->applyMany($discounts);
+        return $applier->reducedTotal();
     }
 
     /**

@@ -49,16 +49,15 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(PendingState::class, $order->payment_state);
         $this->assertEquals(OrderState::where('flag', OrderState::FLAG_NEW)->first()->id, $order->order_state_id);
         $this->assertEquals(76.92, $order->total_shipping_pre_taxes);
-        $this->assertEquals(23.08, $order->total_shipping_taxes);
+        $this->assertEquals(23.07, $order->total_shipping_taxes);
         $this->assertEquals(100.00, $order->total_shipping_post_taxes);
 
-        // Some issue ahead, already exist in previous releases. Tax calculation fails for some reason.
-        //$this->assertEquals(923.08, $order->total_product_pre_taxes);
-        //$this->assertEquals(1200.00, $order->total_product_post_taxes);
-        //$this->assertEquals(1000.00, $order->total_pre_taxes);
-        //$this->assertEquals(300.00, $order->total_taxes);
-        //$this->assertEquals(1300.00, $order->total_post_taxes);
-        //$this->assertEquals(2800, $order->total_weight);
+        $this->assertEquals(923.08, $order->total_product_pre_taxes);
+        $this->assertEquals(1200.00, $order->total_product_post_taxes);
+        $this->assertEquals(1000.00, $order->total_pre_taxes);
+        $this->assertEquals(300.00, $order->total_taxes);
+        $this->assertEquals(1300.00, $order->total_post_taxes);
+        $this->assertEquals(2800, $order->total_weight);
         
         $this->assertNotEmpty($order->ip_address);
 
