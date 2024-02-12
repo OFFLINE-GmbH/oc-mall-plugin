@@ -58,8 +58,10 @@ trait BootExtensions
             ];
             $model->rules['surname']            = 'required';
             $model->rules['name']               = 'required';
-            $model->fillable[]                  = 'customer_group';
-            $model->fillable[]                  = 'offline_mall_customer_group_id';
+            $model->addFillable([
+                'customer_group',
+                'offline_mall_customer_group_id',
+            ]);
 
             $model->addDynamicMethod('scopeCustomer', function (Builder $builder) {
                 $builder->whereHas('customer');
