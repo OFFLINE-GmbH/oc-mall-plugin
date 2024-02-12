@@ -125,7 +125,7 @@ class Price extends FormWidgetBase
      * Get the value for this form field, supports nesting via HTML array.
      * @return Collection|Relation|null
      */
-    public function getLoadValue(): Collection|Relation|null
+    public function getLoadValue()
     {
         $relation = ltrim($this->valueFrom, '_');
 

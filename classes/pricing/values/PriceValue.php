@@ -16,9 +16,9 @@ class PriceValue extends BaseValue
 
     /**
      * Create a new PriceValue instance.
-     * @param Price $price
+     * @param Money|Price $price
      */
-    public function __construct(Money|Price $price)
+    public function __construct($price)
     {
         if ($price instanceof Money) {
             $price = new Price($price);

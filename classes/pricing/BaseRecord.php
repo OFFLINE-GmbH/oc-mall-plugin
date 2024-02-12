@@ -38,7 +38,7 @@ abstract class BaseRecord
      * The associated Model of this record.
      * @var null|string|PriceBag
      */
-    protected null|string|Model $model = null;
+    protected $model = null;
 
     /**
      * Create a new product record.
@@ -47,7 +47,7 @@ abstract class BaseRecord
      * @param integer $units
      * @param boolean $isInclusive
      */
-    public function __construct(string $currency, int|float|string|Price $amount, int $units = 1, bool $isInclusive = false)
+    public function __construct(string $currency, $amount, int $units = 1, bool $isInclusive = false)
     {
         if ($amount instanceof Price && $amount->units() != $units) {
             $amount->setUnits($units);
@@ -68,7 +68,7 @@ abstract class BaseRecord
      * Return a specific value from this record..
      * @return mixed
      */
-    public function get(string $key): mixed
+    public function get(string $key)
     {
         return $this->{$key} ?? null;
     }
@@ -107,26 +107,26 @@ abstract class BaseRecord
      * Return sum of all discounts.
      * @return null|Money
      */
-    abstract public function discount(): null|Money;
+    abstract public function discount()
 
     /**
      * Return only vat based on the original net-price minus discount.
      * @return null|Money
      */
-    abstract public function vat(): null|Money;
+    abstract public function vat()
 
     /**
      * Return raw vat factor.
      * @return int|float
      */
-    abstract public function factor(): int|float;
+    abstract public function factor()
 
     /**
      * Return sum of all taxes (incl. or excl. vat) based on the original net-price minus discount.
      * @param bool $excludeVat Wether to include or exclude VAT.
      * @return null|Money
      */
-    abstract public function tax(bool $excludeVat = false): null|Money;
+    abstract public function tax(bool $excludeVat = false)
 
     /**
      * Return inclusive price value, containing discounts, vat and other taxes.
@@ -148,10 +148,10 @@ abstract class BaseRecord
     /**
      * Set PriceBag and Model association for this record.
      * @param PriceBag $bag
-     * @param string|Model $model
+     * @param null|string|Model $model
      * @return void
      */
-    public function setAssoc(PriceBag $bag, null|string|Model $model = null)
+    public function setAssoc(PriceBag $bag, $model = null)
     {
         if (!empty($this->bag)) {
             throw new PriceBagException('This record has already been assigned to a PriceBag instance.');
@@ -173,9 +173,9 @@ abstract class BaseRecord
 
     /**
      * Return the associated Model instance or context string, or null if no association has been applied.
-     * @return null|PriceBag
+     * @return null|string|Model
      */
-    public function model(): null|string|Model
+    public function model()
     {
         return $this->model;
     }

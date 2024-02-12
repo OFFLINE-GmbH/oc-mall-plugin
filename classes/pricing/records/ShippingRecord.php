@@ -55,7 +55,7 @@ class ShippingRecord extends AbstractItemRecord
      * @param integer|float|string|Price $amount
      * @param boolean $isInclusive
      */
-    public function __construct(string $currency, int|float|string|Price $amount, bool $isInclusive = false)
+    public function __construct(string $currency, $amount, bool $isInclusive = false)
     {
         if ($amount instanceof Price) {
             $packages = ceil($amount->units());
@@ -81,11 +81,8 @@ class ShippingRecord extends AbstractItemRecord
      * @param boolean $perUnit
      * @return self
      */
-    public function addDiscount(
-        int|float|string|FactorValue|MoneyValue|Price  $value, 
-        bool                                           $isFactor = true, 
-        bool                                           $perUnit = false
-    ): self {
+    public function addDiscount($value, bool $isFactor = true, bool $perUnit = false): self 
+    {
         throw new PriceBagException('The ShippingRecord class does not support multiple discounts, use setAmount instead.');
     }
 
@@ -95,7 +92,7 @@ class ShippingRecord extends AbstractItemRecord
      * @param null|Discount $discount Associated discount model.
      * @return self
      */
-    public function setAmount(int|float|string|Price $amount, ?Discount $discount = null): self
+    public function setAmount($amount, ?Discount $discount = null): self
     {
         if ($amount instanceof Price) {
             $amount->setUnits(1);
@@ -132,7 +129,7 @@ class ShippingRecord extends AbstractItemRecord
      * @param integer|float|string|Price $amount
      * @return self
      */
-    public function addRate(?int $from, ?int $until, int|float|string|Price $amount): self
+    public function addRate(?int $from, ?int $until, $amount): self
     {
         if (!($amount instanceof Price)) {
             if (is_string($amount)) {

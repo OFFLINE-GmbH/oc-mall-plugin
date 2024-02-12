@@ -20,13 +20,13 @@ class FactorValue extends BaseValue
      * The desired factor value as percentage (between 0 and 100).
      * @var float|int
      */
-    protected float|int $percentage;
+    protected $percentage;
 
     /**
      * Create a new FactorValue instance.
      * @param integer|float $value
      */
-    public function __construct(int|float $value)
+    public function __construct($value)
     {
         if (is_float($value) && $value >= 0 && $value <= 1) {
             $this->factor = $value;
@@ -61,7 +61,7 @@ class FactorValue extends BaseValue
      *             passed.
      * @return Money
      */
-    public function valueOf(Money|Price $amount, bool $perUnit = false): Money
+    public function valueOf($amount, bool $perUnit = false): Money
     {
         if ($amount instanceof Price) {
             $amount = clone $amount->base($perUnit);

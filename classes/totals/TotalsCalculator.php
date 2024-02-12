@@ -258,7 +258,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return weight of all products.
      * @return int|float
      */
-    public function weightTotal(): int|float
+    public function weightTotal()
     {
         return $this->weightTotal;
     }
@@ -267,7 +267,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return 1xclusive price of all products and services.
      * @return int|float
      */
-    public function productPreTaxes(): int|float
+    public function productPreTaxes()
     {
         return $this->productPreTaxes;
     }
@@ -276,7 +276,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return amount of taxes for all products and services.
      * @return int|float
      */
-    public function productTaxes(): int|float
+    public function productTaxes()
     {
         return $this->productTaxes;
     }
@@ -304,7 +304,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return inclusive price of the whole bag without payment fees / discounts.
      * @return int|float
      */
-    public function totalPrePayment(): int|float
+    public function totalPrePayment()
     {
         return $this->totalPrePayment;
     }
@@ -323,7 +323,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return exclusive price of the whole bag.
      * @return int|float
      */
-    public function totalPreTaxes(): int|float
+    public function totalPreTaxes()
     {
         return $this->totalPreTaxes;
     }
@@ -332,7 +332,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return mount of taxes for the whole bag.
      * @return int|float
      */
-    public function totalTaxes(): int|float
+    public function totalTaxes()
     {
         return $this->totalTaxes;
     }
@@ -341,7 +341,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return amount of discounts for the whole bag.
      * @return int|float
      */
-    public function totalDiscounts(): int|float
+    public function totalDiscounts()
     {
         return $this->totalDiscounts;
     }
@@ -350,7 +350,7 @@ class TotalsCalculator implements CallsAnyMethod
      * Return inclusive price of the whole bag.
      * @return int|float
      */
-    public function totalPostTaxes(): int|float
+    public function totalPostTaxes()
     {
         return $this->totalPostTaxes;
     }

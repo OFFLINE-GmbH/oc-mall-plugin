@@ -6,7 +6,7 @@ use Schema;
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 
-return new class extends Migration
+class AlterOfflineMallPaymentMethods_030_05 extends Migration
 {
     /**
      * Install Migration

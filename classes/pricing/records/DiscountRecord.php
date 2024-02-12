@@ -28,7 +28,7 @@ class DiscountRecord extends BaseRecord
      * @param int|float|string|FactorValue|MoneyValue|Price $amount
      * @param bool $isFactor
      */
-    public function __construct(string $currency, int|float|string|FactorValue|MoneyValue|Price $amount, bool $isFactor = false)
+    public function __construct(string $currency, $amount, bool $isFactor = false)
     {
         $this->currency = $currency;
 
@@ -56,7 +56,7 @@ class DiscountRecord extends BaseRecord
      * Return associates type.
      * @return null|string
      */
-    public function type(): null|string
+    public function type()
     {
         if (empty($this->model)) {
             return null;
@@ -73,7 +73,7 @@ class DiscountRecord extends BaseRecord
      * Receive discount amount.
      * @return FactorValue|MoneyValue
      */
-    public function amount(): FactorValue|MoneyValue
+    public function amount()
     {
         return $this->amount;
     }
@@ -94,7 +94,7 @@ class DiscountRecord extends BaseRecord
     /**
      * @inheritDoc
      */
-    public function discount(): null|Money
+    public function discount()
     {
         throw new PriceBagException('The DiscountRecord class does not support the discounts method.');
     }
@@ -102,7 +102,7 @@ class DiscountRecord extends BaseRecord
     /**
      * @inheritDoc
      */
-    public function vat(): null|Money
+    public function vat()
     {
         throw new PriceBagException('The DiscountRecord class does not support the vat method.');
     }
@@ -110,7 +110,7 @@ class DiscountRecord extends BaseRecord
     /**
      * @inheritDoc
      */
-    public function factor(): int|float
+    public function factor()
     {
         throw new PriceBagException('The DiscountRecord class does not support the factor method.');
     }
@@ -118,7 +118,7 @@ class DiscountRecord extends BaseRecord
     /**
      * @inheritDoc
      */
-    public function tax(bool $excludeVat = false): null|Money
+    public function tax(bool $excludeVat = false)
     {
         throw new PriceBagException('The DiscountRecord class does not support the taxes method.');
     }

@@ -18,9 +18,9 @@ class MoneyValue extends BaseValue
 
     /**
      * Create a new MoneyValue.
-     * @param Money $money
+     * @param AbstractMoney|Money|Price $money
      */
-    public function __construct(AbstractMoney|Money|Price $money)
+    public function __construct($money)
     {
         if ($money instanceof Price){
             $money = $money->base(false);

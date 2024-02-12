@@ -214,7 +214,7 @@ trait PriceBagCreators
      * @param array|Collection $discounts
      * @return void
      */
-    static protected function bagAddDiscounts(PriceBag $bag, Currency $currency, array|Collection $discounts, Cart $cart)
+    static protected function bagAddDiscounts(PriceBag $bag, Currency $currency, $discounts, Cart $cart)
     {
         foreach ($discounts AS $discount) {
             if ($discount->type == 'fixed_amount') {

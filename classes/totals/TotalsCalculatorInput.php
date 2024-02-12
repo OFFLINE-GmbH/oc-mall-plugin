@@ -108,7 +108,7 @@ class TotalsCalculatorInput
      * Create a new TotalsCalculatorInput instance.
      * @param null|Cart|Wishlist $model
      */
-    public function __construct(null|Cart|Wishlist $model)
+    public function __construct($model)
     {
         if ($model instanceof Cart) {
             $this->cart = $model;

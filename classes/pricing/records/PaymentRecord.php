@@ -18,7 +18,7 @@ class PaymentRecord extends AbstractItemRecord
      * Percentage fee to be added to the totals.
      * @var integer|float
      */
-    protected int|float $percentage = 0;
+    protected $percentage = 0;
 
     /**
      * Return record type
@@ -35,7 +35,7 @@ class PaymentRecord extends AbstractItemRecord
      * @param null|int|float $percentage Percentage fee.
      * @param null|int|float|string|Price Fixed amount.
      */
-    public function __construct(string $currency, null|int|float $percentage = null, null|int|float|string|Price $amount = null)
+    public function __construct(string $currency, $percentage = null, $amount = null)
     {
         if ($amount instanceof Price) {
             $amount->setUnits(1);
@@ -69,7 +69,7 @@ class PaymentRecord extends AbstractItemRecord
     /**
      * @inheritDoc
      */
-    public function setVat(int|float|FactorValue $value): self
+    public function setVat($value): self
     {
         throw new PriceBagException('The PaymentRecord class does not support VAT values, use taxes only.');
     }
@@ -77,7 +77,7 @@ class PaymentRecord extends AbstractItemRecord
     /**
      * @inheritDoc
      */
-    public function factor(): int|float
+    public function factor()
     {
         throw new PriceBagException('The PaymentRecord class does not support VAT values, use taxes only.');
     }

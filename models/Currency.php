@@ -38,7 +38,7 @@ class Currency extends Model
      * The default set currency model.
      * @var Currency|null
      */
-    public static Currency|null $defaultCurrency = null;
+    public static ?Currency $defaultCurrency = null;
 
     /**
      * The available order state flag options.

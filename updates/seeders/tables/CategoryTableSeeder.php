@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
+use Arr;
+use Locale;
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\PropertyGroup;

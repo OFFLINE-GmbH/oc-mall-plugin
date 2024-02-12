@@ -72,11 +72,8 @@ abstract class AbstractItemRecord extends BaseRecord
      * @param boolean $perUnit
      * @return self
      */
-    public function addDiscount(
-        int|float|string|FactorValue|MoneyValue|Price  $value, 
-        bool                                           $isFactor = true, 
-        bool                                           $perUnit = false
-    ): self {
+    public function addDiscount($value, bool $isFactor = true, bool $perUnit = false): self 
+    {
         if (!($value instanceof BaseValue)) {
             $value = $isFactor ? new FactorValue($value) : new MoneyValue($this->parsePrice($value));
         }
@@ -94,7 +91,7 @@ abstract class AbstractItemRecord extends BaseRecord
      * @return self
      * @throws PriceBagException
      */
-    public function setVat(int|float|FactorValue $value): self
+    public function setVat($value): self
     {
         $this->vat = $value instanceof FactorValue ? $value : new FactorValue($value);
         return $this;
@@ -110,7 +107,7 @@ abstract class AbstractItemRecord extends BaseRecord
      * @param boolean $isFactor
      * @return self
      */
-    public function addTax(int|float|string|FactorValue|MoneyValue|Price $value, bool $isFactor = true): self
+    public function addTax($value, bool $isFactor = true): self
     {
         if (!($value instanceof BaseValue)) {
             $value = $isFactor ? new FactorValue($value) : new MoneyValue($this->parsePrice($value));
@@ -182,7 +179,7 @@ abstract class AbstractItemRecord extends BaseRecord
     /**
      * @inheritDoc
      */
-    public function factor(): int|float
+    public function factor()
     {
         if (empty($this->vat)) {
             return 0;

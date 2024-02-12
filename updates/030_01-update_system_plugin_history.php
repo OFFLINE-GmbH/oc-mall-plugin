@@ -5,7 +5,7 @@ namespace OFFLINE\Mall\Updates;
 use Illuminate\Support\Facades\DB;
 use October\Rain\Database\Updates\Migration;
 
-return new class extends Migration
+class UpdateSystemPluginHistory_030_01 extends Migration
 {
     /**
      * Install Migration

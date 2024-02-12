@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Tests\Classes\Pricing;
 
 use OFFLINE\Mall\Classes\Pricing\PriceBag;
-use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\CustomFieldValue;
@@ -13,7 +12,6 @@ use OFFLINE\Mall\Models\Service;
 use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
-use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 
 class PriceBagTest extends BasePriceBagTestCase
@@ -25,52 +23,6 @@ class PriceBagTest extends BasePriceBagTestCase
     public function setUp(): void
     {
         parent::setUp();
-    }
-
-    /**
-     * Get generic product for testing.
-     * @param mixed $price
-     * @return Product
-     */
-    protected function getProduct($price)
-    {
-        if (is_int($price) || is_float($price)) {
-            $price = ['CHF' => $price, 'EUR' => $price];
-        }
-
-        $product = Product::first()->replicate(['category_id']);
-        $product->save();
-        $product->price = $price;
-
-        return Product::find($product->id);
-    }
-
-    /**
-     * Get generic cart for testing.
-     * @return Cart
-     */
-    protected function getCart(): Cart
-    {
-        $cart                      = new Cart();
-        $cart->shipping_address_id = $this->address->id;
-        $cart->save();
-        return $cart;
-    }
-
-    /**
-     * Get generic tax for testing.
-     * @param string $name
-     * @param int|float $percentage
-     * @return Tax
-     */
-    protected function getTax($name, int|float $percentage): Tax
-    {
-        $tax1             = new Tax();
-        $tax1->name       = $name;
-        $tax1->percentage = $percentage;
-        $tax1->save();
-
-        return $tax1;
     }
 
     /**

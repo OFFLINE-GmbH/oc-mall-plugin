@@ -10,7 +10,7 @@ class ProductRecord extends AbstractItemRecord
      * The assigned weight per unit.
      * @var null|integer|float
      */
-    protected null|int|float $weight = null;
+    protected $weight = null;
 
     /**
      * Return record type
@@ -37,7 +37,7 @@ class ProductRecord extends AbstractItemRecord
      * @param integer|float $weight
      * @return self
      */
-    public function setWeight(int|float $weight): self
+    public function setWeight($weight): self
     {
         $this->weight = $weight;
         return $this;
@@ -47,7 +47,7 @@ class ProductRecord extends AbstractItemRecord
      * Return calculated weight for all units of this record.
      * @return null|int|float
      */
-    public function weight(): int|float
+    public function weight()
     {
         if (empty($this->weight)) {
             return 0;

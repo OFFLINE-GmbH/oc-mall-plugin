@@ -112,7 +112,7 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
      * Return total amount.
      * @return int|float
      */
-    public function total(): int|float
+    public function total()
     {
         return $this->round($this->total);
     }
@@ -121,7 +121,7 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
      * Return total amount before taxes applied.
      * @return int|float
      */
-    public function preTax(): int|float
+    public function preTax()
     {
         return $this->preTax;
     }

@@ -80,7 +80,7 @@ class PriceBag
      * Create a new PriceBag.
      * @param null|string|Currency $currency
      */
-    public function __construct(null|string|Currency $currency = null)
+    public function __construct($currency = null)
     {
         $currency ??= Currency::activeCurrency();
         $this->currency = is_string($currency) ? $currency : $currency->code;
@@ -159,7 +159,7 @@ class PriceBag
      * @param boolean $isInclusive
      * @return ProductRecord
      */
-    public function addProduct(string|Model $product, int|float|string|Price $amount, int $units = 1, bool $isInclusive = false)
+    public function addProduct($product, $amount, int $units = 1, bool $isInclusive = false)
     {
         $record = new ProductRecord($this->currency, $amount, $units, $isInclusive);
         $record->setAssoc($this, $product);
@@ -176,7 +176,7 @@ class PriceBag
      * @param boolean $isInclusive
      * @return ServiceRecord
      */
-    public function addService(string|Model $service, int|float|string|Price $amount, int $units = 1, bool $isInclusive = false)
+    public function addService($service, $amount, int $units = 1, bool $isInclusive = false)
     {
         $record = new ServiceRecord($this->currency, $amount, $units, $isInclusive);
         $record->setAssoc($this, $service);
@@ -192,7 +192,7 @@ class PriceBag
      * @param boolean $isInclusive
      * @return ShippingRecord
      */
-    public function addShippingMethod(string|ShippingMethod $method, int|float|string|Price $amount, bool $isInclusive = false)
+    public function addShippingMethod($method, $amount, bool $isInclusive = false)
     {
         $record = new ShippingRecord($this->currency, $amount, $isInclusive);
         $record->setAssoc($this, $method);
@@ -208,7 +208,7 @@ class PriceBag
      * @param null|int|float|string|Price Fixed amount.
      * @return PaymentRecord
      */
-    public function addPaymentMethod(string|PaymentMethod $method, null|int|float $percentage = null, null|int|float|string|Price $amount = null)
+    public function addPaymentMethod($method, $percentage = null, $amount = null)
     {
         $record = new PaymentRecord($this->currency, $percentage, $amount);
         $record->setAssoc($this, $method);
@@ -229,7 +229,7 @@ class PriceBag
      * @param boolean $isFactor
      * @return DiscountRecord
      */
-    public function addDiscount(string|Discount $type, int|float|string|FactorValue|MoneyValue|Price $amount, bool $isFactor = false)
+    public function addDiscount($type, $amount, bool $isFactor = false)
     {
         $record = new DiscountRecord($this->currency, $amount, $isFactor);
         $record->setAssoc($this, $type);
@@ -273,7 +273,7 @@ class PriceBag
      * @param $detailed Wether to return total (false) or grouped by the different VAT-factors.
      * @return array|Money
      */
-    public function productsVat(bool $detailed = false): array|Money
+    public function productsVat(bool $detailed = false)
     {
         $results = [
             'total' => Money::ofMinor('0', $this->currency)
@@ -300,7 +300,7 @@ class PriceBag
      * @param $detailed Wether to return total (false) or grouped by the different factors.
      * @return array|Money
      */
-    public function productsTax(bool $detailed = false): array|Money
+    public function productsTax(bool $detailed = false)
     {
         $results = $this->productsVat(true);
         if ($detailed) {
@@ -325,7 +325,7 @@ class PriceBag
      * @param $detailed
      * @return array
      */
-    public function productsTaxes(bool $detailed = false): array|Money
+    public function productsTaxes(bool $detailed = false)
     {
         $results = [];
 
@@ -353,9 +353,9 @@ class PriceBag
 
     /**
      * Return sum of all products weight.
-     * @return PriceValue
+     * @return int|float
      */
-    public function productsWeight(): int|float
+    public function productsWeight()
     {
         $weight = 0;
 
@@ -401,7 +401,7 @@ class PriceBag
      * @param $detailed Wether to return total (false) or grouped by the different VAT-factors.
      * @return array|Money
      */
-    public function servicesVat(bool $detailed = false): array|Money
+    public function servicesVat(bool $detailed = false)
     {
         $results = [
             'total' => Money::ofMinor('0', $this->currency)
@@ -427,7 +427,7 @@ class PriceBag
      * @param $detailed Wether to return total (false) or grouped by the different factors.
      * @return array|Money
      */
-    public function servicesTax(bool $detailed = false): array|Money
+    public function servicesTax(bool $detailed = false)
     {
         $results = $this->servicesVat(true);
         if ($detailed) {
@@ -452,7 +452,7 @@ class PriceBag
      * @param $detailed
      * @return array
      */
-    public function servicesTaxes(bool $detailed = false): array|Money
+    public function servicesTaxes(bool $detailed = false)
     {
         $results = [];
 
@@ -513,7 +513,7 @@ class PriceBag
      * @param $detailed Wether to return total (false) or grouped by the different VAT-factors.
      * @return array|Money
      */
-    public function shippingVat(bool $detailed = false): array|Money
+    public function shippingVat(bool $detailed = false)
     {
         $results = [
             'total' => Money::ofMinor('0', $this->currency)
@@ -539,7 +539,7 @@ class PriceBag
      * @param $detailed Wether to return total (false) or grouped by the different factors.
      * @return array|Money
      */
-    public function shippingTax(bool $detailed = false): array|Money
+    public function shippingTax(bool $detailed = false)
     {
         $results = $this->shippingVat(true);
         if ($detailed) {
@@ -564,7 +564,7 @@ class PriceBag
      * @param $detailed
      * @return array
      */
-    public function shippingTaxes(bool $detailed = false): array|Money
+    public function shippingTaxes(bool $detailed = false)
     {
         $results = [];
 
@@ -682,7 +682,7 @@ class PriceBag
      * @param $detailed
      * @return array
      */
-    public function totalTaxes(bool $detailed = false): array|Money
+    public function totalTaxes(bool $detailed = false)
     {
         $results = array_merge(
             array_values($this->productsTaxes($detailed)),

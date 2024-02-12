@@ -100,12 +100,12 @@ trait InclusiveAccuracyFix
      * Return summarized discount value.
      * @return int|float
      */
-    protected function sumDiscount(): int|float
+    protected function sumDiscount()
     {
         $price = $this->price->inclusive();
         $discount = array_reduce(
             $this->discounts,
-            function (int|float $carry, DiscountValue $discount) use ($price) {
+            function ($carry, DiscountValue $discount) use ($price) {
                 $amount = $discount->value();
                 if ($amount instanceof MoneyValue) {
                     $carry += $amount->toFloat();

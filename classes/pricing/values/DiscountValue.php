@@ -10,7 +10,7 @@ class DiscountValue extends BaseValue
      * The desired value instance.
      * @var FactorValue|MoneyValue
      */
-    protected FactorValue|MoneyValue $value;
+    protected $value;
 
     /**
      * Whether the value applies per unit or on the total price.
@@ -23,7 +23,7 @@ class DiscountValue extends BaseValue
      * @param FactorValue|MoneyValue $value
      * @param bool $perUnit
      */
-    public function __construct(FactorValue|MoneyValue $value, bool $perUnit = false)
+    public function __construct($value, bool $perUnit = false)
     {
         $this->value = $value;
         $this->perUnit = $perUnit;
@@ -41,7 +41,7 @@ class DiscountValue extends BaseValue
      * Return copy of the internal value object.
      * @return FactorValue|MoneyValue
      */
-    public function value(): FactorValue|MoneyValue
+    public function value()
     {
         return clone $this->value;
     }
