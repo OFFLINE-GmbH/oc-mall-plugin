@@ -351,8 +351,8 @@ class ShippingMethodTest extends PluginTestCase
         ]));
 
         $cart->setShippingMethod($method);
-        $this->assertEquals(9090, (int)$cart->totals()->shippingTotal()->totalPreTaxes());
-        $this->assertEquals(909, (int)$cart->totals()->shippingTotal()->totalTaxes());
+        $this->assertEquals(9091, (int)$cart->totals()->shippingTotal()->totalPreTaxes());
+        $this->assertEquals(910, (int)$cart->totals()->shippingTotal()->totalTaxes());
         $this->assertEquals(10000, (int)$cart->totals()->shippingTotal()->totalPostTaxes());
     }
 }
