@@ -75,7 +75,7 @@ trait PriceBagCreators
                     $element->price_includes_tax == true
                 );
 
-                $taxes = $service->taxes;
+                $taxes = $bag->getFilteredTaxes($service->taxes);
                 if ($taxes->count() == 1) {
                     $record->setVat($taxes->first()->percentage);
                 } else if ($taxes->count() > 1) {
@@ -170,7 +170,7 @@ trait PriceBagCreators
         }
 
         // Add Taxes
-        $taxes = $method->taxes;
+        $taxes = $bag->getFilteredTaxes($method->taxes);
         if ($taxes->count() == 1) {
             $record->setVat($taxes->first()->percentage);
         } else if ($taxes->count() > 1) {
@@ -200,7 +200,7 @@ trait PriceBagCreators
         );
 
         // Add Taxes
-        $taxes = $method->taxes;
+        $taxes = $bag->getFilteredTaxes($method->taxes);
         if ($taxes->count() > 0) {
             $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
         }

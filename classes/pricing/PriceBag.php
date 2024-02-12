@@ -14,6 +14,7 @@ use OFFLINE\Mall\Classes\Pricing\Records\ShippingRecord;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
 use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
+use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Discount;
 use OFFLINE\Mall\Models\PaymentMethod;
@@ -23,6 +24,7 @@ use Whitecube\Price\Price;
 class PriceBag
 {
     use ApplyDiscounts;
+    use FilteredTaxes;
     use PriceBagCreators;
 
     /**

@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Tests\Classes\Pricing;
 
+use Event;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Product;
@@ -24,6 +25,10 @@ abstract class BasePriceBagTestCase extends PluginTestCase
     {
         parent::setUp();
         $this->address = Address::factory()->create();
+
+        Event::listen('mall.cart.setCountry', function ($model) {
+            $model->countryId = $this->address->country_id;
+        });
     }
 
     /**

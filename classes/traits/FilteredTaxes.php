@@ -64,9 +64,8 @@ trait FilteredTaxes
         $cart = Cart::byUser(Auth::getUser());
         if (!$cart) {
             return null;
+        } else {
+            return optional($cart->shipping_address)->country_id ?? $cart->getFallbackShippingCountryId();
         }
-
-        return optional($cart->shipping_address)->country_id
-            ?? $cart->getFallbackShippingCountryId();
     }
 }
