@@ -34,7 +34,17 @@ class OrderStateTest extends PluginTestCase
     public function test_throw_on_deleting_flagged_state()
     {
         $state = OrderState::whereNotNull('flag')->first();
-        $this->assertThrows(fn () => $state->delete());
+
+        if (method_exists($this, 'assertThrows')) {
+            $this->assertThrows(fn () => $state->delete());
+        } else {
+            try {
+                $value = $state->delete();
+            } catch (\Exception $exc) {
+                $value = false;
+            }
+            $this->assertFalse($value);
+        }
     }
 
 }

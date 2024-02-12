@@ -102,12 +102,30 @@ class CurrencyTest extends PluginTestCase
         // Try to un-default only available currency, should throw an exception.
         $currency = Currency::where('is_default', 1)->first();
         $currency->is_default = false;
-        $this->assertThrows(fn() => $currency->save(), \Throwable::class);
+        if (method_exists($this, 'assertThrows')) {
+            $this->assertThrows(fn() => $currency->save(), \Throwable::class);
+        } else {
+            try {
+                $value = $currency->save();
+            } catch (\Exception $exc) {
+                $value = false;
+            }
+            $this->assertFalse($value);
+        }
 
         // Try to disable only available currency, should throw an exception.
         $currency = Currency::where('is_default', 1)->first();
         $currency->is_default = false;
-        $this->assertThrows(fn() => $currency->save(), \Throwable::class);
+        if (method_exists($this, 'assertThrows')) {
+            $this->assertThrows(fn() => $currency->save(), \Throwable::class);
+        } else {
+            try {
+                $value = $currency->save();
+            } catch (\Exception $exc) {
+                $value = false;
+            }
+            $this->assertFalse($value);
+        }
     }
 
     /**
