@@ -94,6 +94,8 @@ class OrderState extends Model
      */
     public $fillable = [
         'name',
+        'description',
+        'flag',
         'is_enabled',
     ];
 
