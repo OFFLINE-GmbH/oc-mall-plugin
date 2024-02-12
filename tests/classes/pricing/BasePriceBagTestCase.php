@@ -74,7 +74,6 @@ abstract class BasePriceBagTestCase extends PluginTestCase
 
     /**
      * Get generic cart for testing.
-     * @param mixed $price
      * @return Cart
      */
     protected function getCart(): Cart
@@ -87,10 +86,11 @@ abstract class BasePriceBagTestCase extends PluginTestCase
 
     /**
      * Get generic tax for testing.
-     * @param mixed $price
+     * @param string $name
+     * @param int|float $percentage
      * @return Tax
      */
-    protected function getTax($name, int $percentage): Tax
+    protected function getTax($name, $percentage): Tax
     {
         $tax1             = new Tax();
         $tax1->name       = $name;
