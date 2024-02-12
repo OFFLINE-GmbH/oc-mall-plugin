@@ -37,7 +37,7 @@ trait HashIds
      * @param int|int[] $value
      * @return mixed
      */
-    public function encode(mixed $value)
+    public function encode($value)
     {
         return app(Hasher::class)->encode($value);
     }

@@ -622,7 +622,7 @@ class PriceBag
      * Return all applied Payment Taxes.
      * @return Money
      */
-    public function paymentTax(): mixed
+    public function paymentTax()
     {
         $totals = Price::parse('0', $this->currency);
         $totals->plus($this->productsExclusive()->exclusive());

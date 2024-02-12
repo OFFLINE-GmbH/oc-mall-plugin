@@ -174,7 +174,7 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
     }
 
     /**
-     * Add the fixed and percental amount to the base price.
+     * Add the fixed and percentage amount to the base price.
      *
      * @param $base
      * @param $price
@@ -188,7 +188,7 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
     }
 
     /**
-     * @return int|mixed|string
+     * @return mixed
      */
     protected function getPercentage()
     {

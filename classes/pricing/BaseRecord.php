@@ -78,7 +78,7 @@ abstract class BaseRecord
      * @param mixed $value
      * @return Price
      */
-    protected function parsePrice(mixed $value): Price
+    protected function parsePrice($value): Price
     {
         if (is_string($value)) {
             return Price::parse($value, $this->currency, 1);
