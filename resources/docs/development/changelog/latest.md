@@ -107,6 +107,7 @@ Options:
 
 <SpoilerStd label="Changes">
 
+- Decreased PHP Requirement to 7.4 to re-support OC v2.2 installations.
 - Added new navigation icons for catalogue and orders menus.
 - Added new `<grp>_<idx>_<action>_<name>.php` migration file naming for a better overview.
 - Added new enabled-state to currency + minor changes + tests.
@@ -116,6 +117,8 @@ Options:
 - Added new enabled and default-states to shipping methods + minor changes + tests.
 - Added new enabled-state to order states + minor changes.
 - Added a new IsStates database model trait, to support is_default and is_enabled behaviors.
+- Added a new PriceBag totals construct and handling.
+- Added a new event to manipulate shipping country on FilteredTaxes trait, thanks to @Cryden.
 - Updated console commands and database seeders.
 - Updated demonstration content (+ add support for german translations).
 - Updated available rounding options on Currency model to support extensions.
@@ -130,14 +133,20 @@ Options:
 - Fixed PHPUnit testing environment and tests.
 - Fixed Wishlist component with no id parameter set.
 - Fixed faulty empty-check that prevented indexing at 0 (int and string) values, thanks to @xyz1123581321.
+- Fixed out of stock message even if stock was available, thanks to @xyz1123581321.
 - Fixed wrong indexed value key on PropertyValue using color types, thanks to @toome123.
+- Fixed wrong taxes calculation when discounts has been applied.
+- Fixed wrong taxes calculation when different discounts has been applied to products and shipping costs.
+- Fixed bad SQL error when addresses has been added to a customer profile on the backend.
+- Fixed duplication mess on products with variants.
+- Fixed possibility to take-over email address on CustomerProfile component, thanks to @cyril-design.
 - Removed legacy v1 code.
-- `030_01-update_system_plugin_history.php`
-- `030_02-alter_offline_mall_currencies.php`
-- `030_03-alter_offline_mall_price_categories.php`
-- `030_04-alter_offline_mall_taxes.php`
-- `030_05-alter_offline_mall_payment_methods.php`
-- `030_06-alter_offline_mall_shipping_methods.php`
-- `030_07-alter_offline_mall_order_states.php`
+- `30_01-update_system_plugin_history.php`
+- `30_02-alter_offline_mall_currencies.php`
+- `30_03-alter_offline_mall_price_categories.php`
+- `30_04-alter_offline_mall_taxes.php`
+- `30_05-alter_offline_mall_payment_methods.php`
+- `30_06-alter_offline_mall_shipping_methods.php`
+- `30_07-alter_offline_mall_order_states.php`
 
 </SpoilerStd>
