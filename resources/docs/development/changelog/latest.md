@@ -140,6 +140,7 @@ Options:
 - Fixed bad SQL error when addresses has been added to a customer profile on the backend.
 - Fixed duplication mess on products with variants.
 - Fixed possibility to take-over email address on CustomerProfile component, thanks to @cyril-design.
+- Fixed products / variants disappear on first page view after editing a product.
 - Removed legacy v1 code.
 - `30_01-update_system_plugin_history.php`
 - `30_02-alter_offline_mall_currencies.php`
