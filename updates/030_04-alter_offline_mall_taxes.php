@@ -28,7 +28,13 @@ class AlterOfflineMallTaxes_030_04 extends Migration
     public function down()
     {
         if (Schema::hasColumn('offline_mall_taxes', 'is_enabled')) {
-            Schema::dropColumns('offline_mall_taxes', 'is_enabled');
+            if (method_exists(Schema::class, 'dropColumns')) {
+                Schema::dropColumns('offline_mall_taxes', 'is_enabled');
+            } else {
+                Schema::table('offline_mall_taxes', function (Blueprint $table) {
+                    $table->dropColumn('is_enabled');
+                });
+            }
         }
     }
 };

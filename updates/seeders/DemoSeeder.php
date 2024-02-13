@@ -21,18 +21,14 @@ class DemoSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            CustomerGroupTableSeeder::class,
-            CustomerTableSeeder::class,
-            BrandTableSeeder::class,
-            CustomFieldTableSeeder::class,
-            ReviewCategoryTableSeeder::class,
-            PropertyTableSeeder::class,
-            CategoryTableSeeder::class,
-            ProductTableSeeder::class,
-            ServiceTableSeeder::class,
-        ], false, [
-            'useDemo' => true
-        ]);
+        app()->call(CustomerGroupTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(CustomerTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(BrandTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(CustomFieldTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(ReviewCategoryTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(PropertyTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(CategoryTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(ProductTableSeeder::class, ['useDemo' => true], 'run');
+        app()->call(ServiceTableSeeder::class, ['useDemo' => true], 'run');
     }
 }

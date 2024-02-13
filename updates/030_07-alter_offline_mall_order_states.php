@@ -28,7 +28,13 @@ class AlterOfflineMallOrderStates_030_07 extends Migration
     public function down()
     {
         if (Schema::hasColumn('offline_mall_order_states', 'is_enabled')) {
-            Schema::dropColumns('offline_mall_order_states', 'is_enabled');
+            if (method_exists(Schema::class, 'dropColumns')) {
+                Schema::dropColumns('offline_mall_order_states', 'is_enabled');
+            } else {
+                Schema::table('offline_mall_order_states', function (Blueprint $table) {
+                    $table->dropColumn('is_enabled');
+                });
+            }
         }
     }
 };

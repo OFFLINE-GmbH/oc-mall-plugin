@@ -2,12 +2,16 @@
 
 namespace OFFLINE\Mall\Console;
 
+use Cache;
 use DB;
 use Illuminate\Console\Command;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\Noop;
 use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
+use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Updates\Seeders\DemoSeeder;
+use OFFLINE\Mall\Updates\Seeders\MallSeeder;
 
 class SeedDataCommand extends Command
 {
@@ -78,10 +82,14 @@ class SeedDataCommand extends Command
         // Seed core records
         $this->warn(' Seed core database records...');
         try {
-            $this->callSilent('plugin:seed', [
-                'namespace' => 'OFFLINE.Mall',
-                'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder'
-            ]);
+            if (version_compare(\System::VERSION, '3.0', '<')) {
+                app()->call(MallSeeder::class);
+            } else {
+                $this->callSilent('plugin:seed', [
+                    'namespace' => 'OFFLINE.Mall',
+                    'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder'
+                ]);
+            }
             $this->info('Seed core records successful.');
         } catch (\Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
@@ -95,14 +103,18 @@ class SeedDataCommand extends Command
             $this->warn(' Seed demo database records...');
 
             try {
-                $this->callSilent('plugin:seed', [
-                    'namespace' => 'OFFLINE.Mall',
-                    'class'     => 'OFFLINE\Mall\Updates\Seeders\DemoSeeder'
-                ]);
+                if (version_compare(\System::VERSION, '3.0', '<')) {
+                    app()->call(DemoSeeder::class);
+                } else {
+                    $this->callSilent('plugin:seed', [
+                        'namespace' => 'OFFLINE.Mall',
+                        'class'     => 'OFFLINE\Mall\Updates\Seeders\DemoSeeder'
+                    ]);
+                }
                 $this->info('Seed demo records successful.');
             } catch (\Exception $exc) {
                 $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
-                $this->error($exc->getMessage());
+                $this->error($exc->getMessage() . "\n" . $exc->getFile());
                 return 0;
             }
             $this->output->newLine();
@@ -118,7 +130,7 @@ class SeedDataCommand extends Command
             $this->info('Re-Index products successful.');
         } catch (\Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
-            $this->error($exc->getMessage());
+            $this->error($exc->getMessage() . "\n" . $exc->getFile());
             return 0;
         }
         $this->output->newLine();
@@ -134,12 +146,23 @@ class SeedDataCommand extends Command
     protected function cleanup()
     {
         try {
-            $this->callSilent('plugin:refresh', [
-                'namespace'     => 'OFFLINE.Mall',
-                '--force'       => true,
-                '--quiet'       => true
-            ]);
+            if (version_compare(\System::VERSION, '3.0', '<')) {
+                $this->callSilent('plugin:refresh', [
+                    'name'          => 'OFFLINE.Mall',
+                    '--force'       => true,
+                    '--quiet'       => true
+                ]);
+            } else {
+                $this->callSilent('plugin:refresh', [
+                    'namespace'     => 'OFFLINE.Mall',
+                    '--force'       => true,
+                    '--quiet'       => true
+                ]);
+            }
             $this->callSilent('cache:clear', []);
+            Cache::clearResolvedInstances();
+            Cache::forget(Category::MAP_CACHE_KEY . '.en');
+            Cache::forget(Category::MAP_CACHE_KEY . '.de');
     
             // Clean Database
             DB::table('system_files')
