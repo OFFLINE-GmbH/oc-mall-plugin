@@ -239,7 +239,12 @@ class Variant extends Model
     {
 
         $originalValue       = parent::getAttribute($attribute);
-        $inheritanceDisabled = session()->get('mall.variants.disable-inheritance');
+
+        if (app()->runningInBackend()) {
+            $inheritanceDisabled = session()->get('mall.variants.disable-inheritance');
+        } else {
+            $inheritanceDisabled = false;
+        }
 
         // If any of the product relation columns are called don't override the method's default behaviour.
         $dontInheritAttribute = \in_array($attribute, ['product', 'product_id', 'all_property_values']);
