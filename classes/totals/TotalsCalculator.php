@@ -262,7 +262,7 @@ class TotalsCalculator implements CallsAnyMethod
                 }
             }
         }
-        $collect = $this->consolidateTaxes($collect);
+        $consolidatedTaxes = $this->consolidateTaxes(clone $collect);
 
         // Set payment taxes
         $paymentTax = $this->bag->paymentTax();
@@ -273,12 +273,13 @@ class TotalsCalculator implements CallsAnyMethod
             );
             $model->setTotal($paymentTax->getMinorAmount()->toInt());
             $collect->add($model);
+            $consolidatedTaxes->add(clone $model);
         }
 
         // Set Taxes
         $this->totalTaxes = $this->bag->totalTax()->getMinorAmount()->toInt();
         $this->detailedTaxes = $collect;
-        return $collect;
+        return $consolidatedTaxes;
     }
 
     /**
