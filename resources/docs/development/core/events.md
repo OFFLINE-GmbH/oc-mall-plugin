@@ -125,7 +125,7 @@ This event is emitted when a product file grant was created. It receives the cre
 well as the related `Product` model.
 
 For a usage example see
-[Virtual Products -> Generate user specific product files](../digging-deeper/virtual-products.md#generate-user-specific-product-files)
+[Virtual Products -> Generate user specific product files](/guide/usage/virtual-products#generate-user-specific-product-files)
 
 
 ## Index

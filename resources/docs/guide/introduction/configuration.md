@@ -79,7 +79,7 @@ JavaScript files and code blocks.
 
 The **Mall** plugin also requires Octobers [AJAX framework](https://octobercms.com/docs/ajax/introduction)
 for the interaction with the PHP-side of the components. Thus, make sure to include the framework 
-either by using one of the [Combiner aliases](./https://octobercms.com/docs/markup/filter-theme#combiner-aliases) 
+either by using one of the [Combiner aliases](https://octobercms.com/docs/markup/filter-theme#combiner-aliases) 
 or the `{% framework extras %}` tag, as shown below.
 
 ```twig{8,9}

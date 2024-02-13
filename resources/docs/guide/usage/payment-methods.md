@@ -13,7 +13,7 @@ each gateway.
 Each gateway can be used by one or many payment methods.
 
 You can add custom gateways by implementing and registering a
-[Payment provider class](./../development/payment-providers.md).
+[Payment provider class](/development/core/payment-providers).
 
  
 ## Payment methods 
@@ -84,4 +84,4 @@ data using the `{{ order }}` variable.
 Take a look at the demo theme for an example implementation:
 [https://github.com/OFFLINE-GmbH/oc-mall-theme/tree/master/partials/mallPDF/order](https://github.com/OFFLINE-GmbH/oc-mall-theme/tree/master/partials/mallPDF/order)
 
-Read more about the PDF support [on the PDF page](../development/pdf.md).
+Read more about the PDF support [on the PDF page](/development/core/pdf).

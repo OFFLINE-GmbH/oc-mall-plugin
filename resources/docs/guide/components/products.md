@@ -10,7 +10,7 @@ The `Products` component displays a list of products. The list can be sorted, fi
 
 ### `category` (mixed)
 
-Select only items from this [Category](../digging-deeper/categories.md). Possible values are:
+Select only items from this [Category](/guide/usage/categories). Possible values are:
 
 | Value | Description |
 | ----- | ----------- |
@@ -20,7 +20,7 @@ Select only items from this [Category](../digging-deeper/categories.md). Possibl
 
 ### `filterComponent` (string)
 
-Alias of the [ProductsFilter](./products-filter.md) component that is used to filter
+Alias of the [ProductsFilter](/guide/components/products-filter) component that is used to filter
 this `Products` component. Defaults to `productsFilter`
 
 ### `filter` (string)
@@ -28,7 +28,7 @@ this `Products` component. Defaults to `productsFilter`
 Use this property to force a filter for this component instance.
 
 The expected value is a encoded query string. You can tweak your filter
-using the [ProductsFilter](./products-filter.md) component and simply copy and paste
+using the [ProductsFilter](/guide/components/products-filter) component and simply copy and paste
 the query string:
 
 https://mall.offline.swiss/en/category/bikes[?on_sale=true&material=aluminium.carbon&color=dark-grey](https://mall.offline.swiss/en/category/bikes?on_sale=true&material=aluminium.carbon&color=dark-grey)
@@ -48,8 +48,8 @@ with the category.
 
 ### `includeVariants` (bool)
 
-Set this to `true` to list all [Variants](../digging-deeper/products.md) as single items.
-Set this to `false` to list only [Products](../digging-deeper/products.md).
+Set this to `true` to list all [Variants](/guide/usage/products) as single items.
+Set this to `false` to list only [Products](/guide/usage/products).
 
 
 ### `perPage` (int)

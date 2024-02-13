@@ -40,4 +40,4 @@ everyone can review products.
 
 ## Events
 
-See [Events](../development/events.md#Review).
+See [Events](/development/core/events#Review).

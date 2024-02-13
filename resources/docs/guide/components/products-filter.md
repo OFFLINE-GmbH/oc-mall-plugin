@@ -19,7 +19,7 @@ have used in the Products component.
 
 ### `category` (mixed)
 
-Select only items from this [Category](../digging-deeper/categories.md). Possible values are:
+Select only items from this [Category](/guide/usage/categories). Possible values are:
 
 | Value | Description |
 | ----- | ----------- |
