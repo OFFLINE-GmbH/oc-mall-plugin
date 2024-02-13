@@ -2,14 +2,12 @@
 
 namespace OFFLINE\Mall\Console;
 
-use Cache;
 use DB;
 use Illuminate\Console\Command;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\Noop;
 use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
-use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Updates\Seeders\DemoSeeder;
 use OFFLINE\Mall\Updates\Seeders\MallSeeder;
 
@@ -160,9 +158,6 @@ class SeedDataCommand extends Command
                 ]);
             }
             $this->callSilent('cache:clear', []);
-            Cache::clearResolvedInstances();
-            Cache::forget(Category::MAP_CACHE_KEY . '.en');
-            Cache::forget(Category::MAP_CACHE_KEY . '.de');
     
             // Clean Database
             DB::table('system_files')

@@ -73,6 +73,7 @@ class PurgeCommand extends Command
         Product::get()->each->update(['sales_count' => 0]);
         Variant::get()->each->update(['sales_count' => 0]);
         Discount::get()->each->update(['number_of_usages' => 0]);
+        $this->callSilent('cache:clear', []);
         $this->output->newLine();
 
         // Finish
