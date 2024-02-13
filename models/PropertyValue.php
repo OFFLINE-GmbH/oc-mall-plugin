@@ -164,10 +164,9 @@ class PropertyValue extends Model
     /**
      * Handle special array property values.
      * @param $value
-     *
      * @return mixed
      */
-    public function handleArrayValue($value): mixed
+    public function handleArrayValue($value)
     {
         if ($this->isColor()) {
             $name = $value['name'] ?? false;
