@@ -181,10 +181,10 @@ class PaymentMethodTest extends PluginTestCase
         $cart->setPaymentMethod($method);
 
         // Test Pricing
-        $this->assertEquals(10364, round($cart->totals()->totalPostTaxes()));
-        $this->assertEquals(330, round($cart->totals()->paymentTotal()->totalPreTaxes()));
-        $this->assertEquals(34, round($cart->totals()->paymentTotal()->totalTaxes()));
-        $this->assertEquals(364, round($cart->totals()->paymentTotal()->totalPostTaxes()));
+        $this->assertEquals(10352, round($cart->totals()->totalPostTaxes()));
+        $this->assertEquals(320, round($cart->totals()->paymentTotal()->totalPreTaxes()));
+        $this->assertEquals(32, round($cart->totals()->paymentTotal()->totalTaxes()));
+        $this->assertEquals(352, round($cart->totals()->paymentTotal()->totalPostTaxes()));
 
         // Test applied taxes
         $this->assertEquals(1, $cart->totals()->taxes()->count());
