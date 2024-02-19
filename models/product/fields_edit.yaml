@@ -52,10 +52,6 @@ tabs:
             span: left
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-            trigger:
-                action: hide
-                field: is_virtual
-                condition: 'checked'
         group_by_property_id:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
@@ -120,10 +116,6 @@ tabs:
         variants:
             span: full
             path: variants
-            trigger:
-                action: hide
-                field: inventory_management_method
-                condition: 'value[single]'
             type: partial
             tab: 'offline.mall::lang.product.general'
             dependsOn: categories
