@@ -38,10 +38,6 @@ tabs:
             span: right
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-            trigger:
-                action: hide
-                field: is_virtual
-                condition: 'checked'
         stock:
             label: 'offline.mall::lang.product.stock'
             oc.commentPosition: ''
