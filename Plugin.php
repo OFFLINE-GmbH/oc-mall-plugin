@@ -20,8 +20,6 @@ use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.User', 'RainLab.Location', 'RainLab.Translate'];
-
     use BootEvents;
     use BootExtensions;
     use BootServiceContainer;
@@ -32,6 +30,20 @@ class Plugin extends PluginBase
     use BootTwig;
     use BootRelations;
 
+    /**
+     * Required plugin dependencies.
+     * @var array
+     */
+    public $require = [
+        'RainLab.User', 
+        'RainLab.Location', 
+        'RainLab.Translate'
+    ];
+
+    /**
+     * Create a new plugin instance.
+     * @return void
+     */
     public function __construct($app)
     {
         parent::__construct($app);
@@ -40,12 +52,20 @@ class Plugin extends PluginBase
         $this->registerRelations();
     }
 
+    /**
+     * Register this plugin.
+     * @return void
+     */
     public function register()
     {
         $this->registerServices();
         $this->registerTwigEnvironment();
     }
 
+    /**
+     * Boot this plugin.
+     * @return void
+     */
     public function boot()
     {
         $this->registerExtensions();
@@ -58,5 +78,21 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('offline.mall.seed', SeedDataCommand::class);
 
         View::share('app_url', config('app.url'));
+    }
+
+    /**
+     * Register Backend-Navigation items for this plugin.
+     * @return array
+     */
+    public function registerNavigation()
+    {
+        $navigation = parent::registerNavigation();
+
+        // Icon name has been changed from 'icon-star-half-full' to 'icon-star-half'
+        if (version_compare(\System::VERSION, '3.6', '>=')) {
+            $navigation['mall-catalogue']['sideMenu']['mall-reviews']['icon'] = 'icon-star-half';
+        }
+
+        return $navigation;
     }
 }
