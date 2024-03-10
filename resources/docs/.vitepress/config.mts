@@ -21,8 +21,9 @@ export default defineConfig({
             text: 'Edit this page on GitHub'
         },
         lastUpdated: {
-            text: 'Last updated:'
+            text: 'Last updated'
         },
+        externalLinkIcon: true,
         search: {
             provider: 'local'
         },
