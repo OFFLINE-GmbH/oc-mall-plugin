@@ -9,8 +9,13 @@ export default defineConfig({
             port: 3003
         }
     },
+    // https://vitepress.dev/reference/default-theme-config
     themeConfig: {
-        // https://vitepress.dev/reference/default-theme-config
+        logo: {
+            light: 'mall-logo-light.svg',
+            dark: 'mall-logo-dark.svg'
+        },
+        siteTitle: false,
         editLink: {
             pattern: 'https://github.com/OFFLINE-GmbH/oc-mall-plugin/edit/develop/resources/docs/:path',
             text: 'Edit this page on GitHub'
@@ -18,10 +23,13 @@ export default defineConfig({
         lastUpdated: {
             text: 'Last updated:'
         },
+        search: {
+            provider: 'local'
+        },
         nav: [
             { text: 'Home', link: '/' },
-            { text: 'Guide', link: '/guide/' },
-            { text: 'Development', link: '/development/' }
+            { text: 'Guide', link: '/guide/', activeMatch: '/guide/' },
+            { text: 'Development', link: '/development/', activeMatch: '/development/' }
         ],
         sidebar: {
             '/guide/': [
