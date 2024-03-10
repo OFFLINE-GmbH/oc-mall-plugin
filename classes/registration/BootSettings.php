@@ -22,6 +22,7 @@ trait BootSettings
                 'order'       => 0,
                 'permissions' => ['offline.mall.settings.manage_general'],
                 'keywords'    => 'shop store mall general',
+                'size'        => 'huge'
             ],
             'currency_settings'         => [
                 'label'       => 'offline.mall::lang.currency_settings.label',

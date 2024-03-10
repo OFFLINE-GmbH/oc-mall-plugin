@@ -16,7 +16,7 @@ return [
             'preview' => 'Kategorie-Vorschau',
         ],
         'orders' => [
-            'show' => 'Bestellungsdetails',
+            'show' => 'Bestelldetails',
             'export' => 'Bestellungen exportieren',
         ],
         'discounts' => [
@@ -203,18 +203,18 @@ return [
         'customizations' => 'Optionen',
         'customizations_comment' => 'Globale Konfigurationseinstellungen für deinen Shop',
         'category_page_comment' => 'Füge die Komponente "products" zu dieser Seite hinzu.',
-        'order_number_start' => 'Beginn Bestellungsnummerierung',
+        'order_number_start' => 'Beginn Bestellnummerierung',
         'order_number_start_comment' => 'Die erste Bestellung erhält diese Nummer',
         'index_driver' => 'Index-Treiber',
         'index_driver_comment' => 'Wenn deine Datenbank JSON unterstützt wird der Datenbank-Treiber empfohlen.',
         'index_driver_filesystem' => 'Dateisystem',
         'index_driver_database' => 'Datenbank (MySQL 5.7+, MariaDB 10.2+, SQLite 3.19+)',
-        'index_driver_hint' => 'Nachdem diese Option geändert wurde muss "php artisan mall:index" auf der Konsole ausgeführt werden!',
+        'index_driver_hint' => 'Nachdem diese Option geändert wurde muss :command auf der Konsole ausgeführt werden!',
     ],
     'feed_settings' => [
         'description' => 'Feeds konfigurieren',
         'google_merchant_enabled' => 'Verwende Google Merchant Center Feed',
-        'google_merchant_enabled_comment' => 'Ein Produktfeed wird über eine URL zugänglich gemacht',
+        'google_merchant_enabled_comment' => 'Ein Produkt-Feed wird über eine URL zugänglich gemacht',
         'google_merchant_url' => 'Deine Google Merchant Feed URL',
         'google_merchant_url_locale' => 'Füge ?locale=xy zur URL hinzu um einen übersetzten Feed zu erhalten.',
     ],
@@ -225,7 +225,7 @@ return [
         'moderated' => 'Reviews moderieren',
         'moderated_comment' => 'Reviews werden erst nach manueller Prüfung auf der Website sichtbar',
         'allow_anonymous' => 'Anonyme Reviews zulassen',
-        'allow_anonymous_comment' => 'Unregistrierte Benutzer dürfen Reviews erstellen',
+        'allow_anonymous_comment' => 'Nicht registrierte Benutzer dürfen Reviews erstellen',
     ],
     'common' => [
         'shop' => 'Shop',
@@ -305,7 +305,7 @@ return [
         'stock_limit_reached' => 'Es stehen keine weiteren Stücke dieses Artikels zur Verfügung',
         'deleted_at' => 'Gelöscht am',
         'sort_order' => 'Sortierreihenfolge',
-        'order_states' => 'Bestellungs-Status',
+        'order_states' => 'Bestellstatus',
         'website' => 'Website',
         'brands' => 'Marken',
         'brand' => 'Marke',
@@ -511,7 +511,7 @@ return [
     'tax' => [
         'percentage' => 'Prozent',
         'countries' => 'Steuer gilt nur für Versand in diese Länder',
-        'countries_comment' => 'Wird kein Land ausgewhält gilt die Steuer weltweit.',
+        'countries_comment' => 'Wird kein Land ausgewählt gilt die Steuer weltweit.',
         'is_default' => 'Standard',
         'set_as_default' => 'Ist Standard',
         'set_as_default_comment' => 'Diese Steuer wird verwendet falls das Versand-Land noch nicht bekannt ist',
@@ -563,7 +563,7 @@ return [
         'price' => 'Fixkosten',
         'price_comment' => 'Der Betrag wird zum Total dazugerechnet',
         'fee_percentage' => 'Prozentuale Kosten',
-        'fee_percentage_comment' => 'Prozent des Gesamttotals, wird zum Total dazugerechnet',
+        'fee_percentage_comment' => 'Prozent des Gesamtpreises, wird zum Total dazugerechnet',
         'fee_label' => 'Gebührenbezeichnung',
         'fee_label_comment' => 'Dieser Text wird dem Kunden im Warenkorb angezeigt',
         'instructions' => 'Zahlungsanweisung',
@@ -616,13 +616,13 @@ return [
         'items_total' => 'Artikeltotal',
         'subtotal' => 'Zwischentotal',
         'taxable_total' => 'Steuerbares Total',
-        'total_weight' => 'Gesamgtgewicht',
+        'total_weight' => 'Gesamtgewicht',
         'total_rebate_rate' => 'Gesamt-Rabatt',
         'notes' => 'Notiz',
         'custom_fields' => 'Benutzerdefinierte Felder',
         'shipping_enabled' => 'Versand aktiv',
         'payment_transaction_id' => 'Transaktions-ID',
-        'change_order_status' => 'Bestellungsstatus ändern',
+        'change_order_status' => 'Bestellstatus ändern',
         'change_payment_status' => 'Bezahlstatus ändern',
         'items' => 'Artikel',
         'quantity' => 'Menge',
@@ -637,7 +637,7 @@ return [
         'shipped' => 'Versendet',
         'shipping_pending' => 'Versand pendent',
         'not_shipped' => 'Versand ausstehend',
-        'data' => 'Bestellungsdaten',
+        'data' => 'Bestelldaten',
         'total_revenue' => 'Gesamteinnahmen',
         'download_invoice' => 'Rechnung herunterladen',
         'order_file_name' => 'bestellung-:order',
@@ -792,7 +792,7 @@ return [
         'myAccount' => [
             'details' => [
                 'name' => 'Benutzeraccount',
-                'description' => 'Zeigt dem Kunden alle Informationen zu seinem Bentzerkonto an',
+                'description' => 'Zeigt dem Kunden alle Informationen zu seinem Benutzerkonto an',
             ],
             'properties' => [
                 'page' => [
@@ -837,7 +837,7 @@ return [
             'properties' => [
             ],
             'errors' => [
-                'address_not_found' => 'Die gesuchte Addresse wurde nicht gefunden',
+                'address_not_found' => 'Die gesuchte Adresse wurde nicht gefunden',
                 'cannot_delete_last_address' => 'Sie können Ihre letzte Adresse nicht löschen',
             ],
             'messages' => [
@@ -848,7 +848,7 @@ return [
         ],
         'ordersList' => [
             'details' => [
-                'name' => 'Bestellungsliste',
+                'name' => 'Bestellliste',
                 'description' => 'Zeigt alle Bestellungen eines Kunden an',
             ],
             'properties' => [
@@ -1104,7 +1104,7 @@ return [
         ],
         'enhancedEcommerceAnalytics' => [
             'details' => [
-                'name' => 'Enhanced Ecommerce (UA) Component',
+                'name' => 'Enhanced E-Commerce (UA) Component',
                 'description' => 'Implements a Google Tag Manager Data Layer',
             ],
         ],
@@ -1156,7 +1156,7 @@ return [
         ],
     ],
     'customer_group' => [
-        'code_comment' => 'Dieser Code kann verwendet werden, um diese Gruppe programmtechnisch anzusteuern',
+        'code_comment' => 'Dieser Code kann verwendet werden, um diese Gruppe programmatisch anzusteuern',
         'discount_comment' => 'Dieser Benutzergruppe wird dieser Rabatt in % auf das komplette Sortiment gewährt',
     ],
     'order_status' => [
@@ -1175,7 +1175,7 @@ return [
     'payment_log' => [
         'payment_data' => 'Zahlungsdaten',
         'data_comment' => 'Diese Daten wurden vom Zahlungsanbieter zurückgegeben',
-        'order_data_comment' => 'Diese Bestellungsdaten gehören zu der Zahlung',
+        'order_data_comment' => 'Diese Bestelldaten gehören zu der Zahlung',
         'message_comment' => 'Diese Nachricht wurde vom Zahlungsanbieter zurückgegeben',
         'code_comment' => 'Dieser Code wurde vom Zahlungsanbieter zurückgegeben',
         'failed_only' => 'Nur fehlgeschlagene',

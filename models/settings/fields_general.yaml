@@ -5,15 +5,16 @@ fields:
 
     admin_email:
         label: offline.mall::lang.general_settings.admin_email
-        span: auto
-        type: text
+        span: left
+        type: email
         comment: offline.mall::lang.general_settings.admin_email_comment
 
     index_driver:
         label: offline.mall::lang.general_settings.index_driver
-        span: auto
+        span: right
         type: dropdown
         comment: offline.mall::lang.general_settings.index_driver_comment
+        showSearch: false
         options:
             database: offline.mall::lang.general_settings.index_driver_database
             filesystem: offline.mall::lang.general_settings.index_driver_filesystem

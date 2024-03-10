@@ -6,13 +6,52 @@ use Model;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use Illuminate\Support\Facades\Cache;
+use October\Rain\Exception\ValidationException;
+use Validator;
 
 class GeneralSettings extends Model
 {
+
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = ['System.Behaviors.SettingsModel'];
+
+    /**
+     * Required settings code property.
+     * @var string
+     */
     public $settingsCode = 'offline_mall_settings';
+
+    /**
+     * Required settings YAML fields file.
+     * @var string
+     */
     public $settingsFields = '$/offline/mall/models/settings/fields_general.yaml';
 
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
+    public $rules = [
+        'admin_email' => 'email'
+    ];
+
+    /**
+     * Hook before model is saved.
+     * @return void
+     */
+    public function beforeSave()
+    {
+        $validator = Validator::make($this->value, $this->rules);
+        $validator->validate();
+    }
+
+    /**
+     * Hook after model has been saved.
+     * @return void
+     */
     public function afterSave()
     {
         Cache::forget('offline_mall.mysql.index.driver');
