@@ -60,7 +60,7 @@ matrix:
       deploy:
         provider: pages
         skip-cleanup: true
-        local_dir: resources/docs/.vitepress/dist
+        local_dir: src/docs/.vitepress/dist
         github-token: $GITHUB_TOKEN
         repo: OFFLINE-GmbH/oc-mall-plugin
         keep-history: false

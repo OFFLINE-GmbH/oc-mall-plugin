@@ -13,9 +13,9 @@
     "author": "Tobias Kündig <tobias@offline.ch> (https://offline.ch)",
     "private": true,
     "scripts": {
-        "docs:dev": "vitepress dev resources/docs",
-        "docs:build": "vitepress build resources/docs",
-        "docs:preview": "vitepress preview resources/docs"
+        "docs:dev": "vitepress dev src/docs",
+        "docs:build": "vitepress build src/docs",
+        "docs:preview": "vitepress preview src/docs"
     },
     "dependencies": {
         "lucide-vue-next": "^0.316.0"

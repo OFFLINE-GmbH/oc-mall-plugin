@@ -129,7 +129,7 @@ it a go!
 
 ### Documentation
 
-The raw documentation for this plugin is stored in the `resources/docs` directory. It is written in 
+The raw documentation for this plugin is stored in the `src/docs` directory. It is written in 
 markdown and Vue and built with [VitePress](https://vitepress.dev).
 
 for a live preview of the documentation, visit the root plugin directory, install the dependencies 
