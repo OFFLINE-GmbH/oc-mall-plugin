@@ -25,8 +25,8 @@ We highly recommend using the latest OctoberCMS v3 and PHP v8 versions available
 following requirements represent the minimum needed to run Mall on your website.
 
 - OctoberCMS v2.2+ | v3.0+
-- PHP v8.0+
-- MySQL v5.7+ | v8.0+ **`or`** MariaDB v10.2+ **`or`** SQLite v3.19+<span style="color: red;">**\***</span>
+- PHP v7.4+ | v8.0+
+- MySQL v5.7+ | v8.0+ **`or`** MariaDB v10.2+ **`or`** SQLite<span style="color: red;">**\***</span> v3.19+
 
 > [!CAUTION]
 > <span style="color: red;">**\***</span> Although it is possible to use Mall via SQLite, we 

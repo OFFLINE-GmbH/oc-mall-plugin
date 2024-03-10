@@ -124,7 +124,8 @@ export default defineConfig({
                         { text: 'Version 2', link: '/development/changelog/v2' },
                         { text: 'Version 1', link: '/development/changelog/v1' },
                     ]
-                }
+                },
+                { text: 'Roadmap', link: '/development/roadmap' },
             ],
         },
         socialLinks: [

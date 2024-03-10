@@ -34,6 +34,11 @@ defineProps<{
     background-color: var(--vp-badge-tip-bg);
 }
 
+.badge-info .badge-inner {
+    color: var(--vp-badge-info-text);
+    background-color: var(--vp-badge-info-bg);
+}
+
 .badge-warning .badge-inner {
     color: var(--vp-badge-warning-text);
     background-color: var(--vp-badge-warning-bg);

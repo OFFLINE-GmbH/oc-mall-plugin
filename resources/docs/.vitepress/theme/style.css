@@ -59,6 +59,11 @@
   --vp-c-tip-3: var(--vp-c-brand-3);
   --vp-c-tip-soft: var(--vp-c-brand-soft);
 
+  --vp-c-info-1: var(--vp-c-indigo-1);
+  --vp-c-info-2: var(--vp-c-indigo-2);
+  --vp-c-info-3: var(--vp-c-indigo-3);
+  --vp-c-info-soft: var(--vp-c-indigo-soft);
+
   --vp-c-warning-1: var(--vp-c-yellow-1);
   --vp-c-warning-2: var(--vp-c-yellow-2);
   --vp-c-warning-3: var(--vp-c-yellow-3);
