@@ -66,9 +66,7 @@ trait CartSession
 
     /**
      * Transfer a cart to a customer.
-     *
      * @param $customer
-     *
      * @return Cart
      */
     public function transferToCustomer(Customer $customer): Cart

@@ -6,13 +6,14 @@
             data-extra-data="id: <?= e($this->params[0]) ?>"
             href="javascript:;"
             class="btn btn-sm btn-secondary oc-icon-file">
-        <?= e(trans('backend::lang.relation.create_name', ['name'=>trans($relationLabel)])) ?>
+        <?= e(trans('offline.mall::lang.variant.create')) ?>
     </a>
+    
     <button
             class="btn btn-sm btn-secondary oc-icon-trash-o"
             data-request="onRelationButtonDelete"
-            data-request-confirm="<?= e(trans('backend::lang.relation.delete_confirm')) ?>"
+            data-request-confirm="<?= e(trans('offline.mall::lang.variant.delete_confirm')) ?>"
             data-stripe-load-indicator>
-        <?= e(trans('backend::lang.relation.delete')) ?>
+        <?= e(trans('offline.mall::lang.variant.delete')) ?>
     </button>
 </div>

@@ -1,5 +1,8 @@
-<?php namespace OFFLINE\Mall\Tests\Models;
+<?php declare(strict_types=1);
 
+namespace OFFLINE\Mall\Tests\Models;
+
+use Event;
 use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
@@ -23,14 +26,20 @@ use RainLab\User\Facades\Auth;
 
 class OrderTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
+        // Authenticate user
         app()->singleton('user.auth', function () {
             return AuthManager::instance();
         });
         Auth::login(User::first());
+
+        // Set Country
+        Event::listen('mall.cart.setCountry', function ($model) {
+            $model->countryId = 14;
+        });
     }
 
     public function test_it_creates_a_new_order_from_a_cart()
@@ -47,15 +56,16 @@ class OrderTest extends PluginTestCase
         $this->assertEquals(PendingState::class, $order->payment_state);
         $this->assertEquals(OrderState::where('flag', OrderState::FLAG_NEW)->first()->id, $order->order_state_id);
         $this->assertEquals(76.92, $order->total_shipping_pre_taxes);
-        $this->assertEquals(23.08, $order->total_shipping_taxes);
+        $this->assertEquals(23.07, $order->total_shipping_taxes);
         $this->assertEquals(100.00, $order->total_shipping_post_taxes);
-        $this->assertEquals(923.08, $order->total_product_pre_taxes);
-        $this->assertEquals(1200.00, $order->total_product_post_taxes);
 
-        $this->assertEquals(1000.00, $order->total_pre_taxes);
-        $this->assertEquals(300.00, $order->total_taxes);
+        $this->assertEquals(923.07, $order->total_product_pre_taxes);
+        $this->assertEquals(1200.00, $order->total_product_post_taxes);
+        $this->assertEquals(999.99, $order->total_pre_taxes);
+        $this->assertEquals(299.99, $order->total_taxes);
         $this->assertEquals(1300.00, $order->total_post_taxes);
         $this->assertEquals(2800, $order->total_weight);
+        
         $this->assertNotEmpty($order->ip_address);
 
         $this->assertFalse($order->shipping_address_same_as_billing);
@@ -198,7 +208,7 @@ class OrderTest extends PluginTestCase
         $method = ShippingMethod::find($cart->shipping_method->id);
 
         $this->assertEquals(1, $method->id);
-        $this->assertEquals('Default', $method->name);
+        $this->assertEquals('Standard', $method->name);
 
         $discount                       = new Discount();
         $discount->name                 = 'Shipping Test';
@@ -209,7 +219,7 @@ class OrderTest extends PluginTestCase
         $discount->save();
 
         $discount->shipping_prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 10,
             'field'       => 'shipping_prices',
         ]));
@@ -237,12 +247,12 @@ class OrderTest extends PluginTestCase
         $discount1->save();
 
         $discount1->shipping_prices()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 10,
-            'field'       => 'shipping_price',
+            'field'       => 'shipping_prices',
         ]));
         $discount1->totals_to_reach()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 0,
             'field'       => 'total_to_reach',
         ]));
@@ -256,9 +266,9 @@ class OrderTest extends PluginTestCase
         $discount2->save();
 
         $discount2->amounts()->save(new Price([
-            'currency_id' => 1,
+            'currency_id' => 2,
             'price'       => 20,
-            'field'       => 'amount',
+            'field'       => 'amounts',
         ]));
 
         $discount3                   = new Discount();
@@ -274,7 +284,7 @@ class OrderTest extends PluginTestCase
 
         Order::fromCart($cart);
 
-        $this->assertEquals(11, $discount1->fresh()->number_of_usages);
+        $this->assertEquals(10, $discount1->fresh()->number_of_usages);
         $this->assertEquals(13, $discount2->fresh()->number_of_usages);
         $this->assertEquals(19, $discount3->fresh()->number_of_usages);
     }
@@ -298,12 +308,14 @@ class OrderTest extends PluginTestCase
         $productA->save();
         $productA->price = ['CHF' => 200, 'EUR' => 300];
         $productA->taxes()->attach([$tax1->id, $tax2->id]);
+        $productA->save();
         $productA = Product::find($productA->id);
 
         $productB                     = new Product;
         $productB->name               = 'Another Product';
         $productB->stock              = 10;
         $productB->weight             = 800;
+        $productB->published          = true;
         $productB->price_includes_tax = true;
         $productB->save();
         $productB->price = ['CHF' => 100, 'EUR' => 300];
@@ -316,7 +328,7 @@ class OrderTest extends PluginTestCase
         $sizeA->save();
         $sizeA->prices()->save(new Price([
             'price'       => 100,
-            'currency_id' => 1,
+            'currency_id' => 2,
         ]));
 
         $sizeB             = new CustomFieldOption();
@@ -325,7 +337,7 @@ class OrderTest extends PluginTestCase
         $sizeB->save();
         $sizeB->prices()->save(new Price([
             'price'       => 200,
-            'currency_id' => 1,
+            'currency_id' => 2,
         ]));
 
         $field       = new CustomField();

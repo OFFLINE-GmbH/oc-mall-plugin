@@ -63,8 +63,6 @@
             'subject' => 'Chyba pri objednávke #:number',
             'problem_message' => 'Je nám veľmi ľúto, že behom procesu platby došlo k problému. Budeme Vás kontaktovať s ďalšími informáciami.',
             'check_order_status' => 'Ak chcete skontrolovať stav svojej objednávky, môžete sa kedykoľvek prihlásiť do nášho obchodu.',
-            'payment_id' => 'ID platby',
-            'error' => 'Chybové hlásenie',
         ],
     ],
     'admin' => [
@@ -76,6 +74,8 @@
             'subject' => 'Objednávka se nepodarila #:number',
             'not_processed' => 'Nasledujúcu objednávku sa nepodarilo správne spracovať. Je možné, že musíte kontaktovat zákazníka.',
             'error_details' => 'Detaily chyby',
+            'payment_id' => 'ID platby',
+            'error' => 'Chybové hlásenie',
         ],
         'payment_paid' => [
             'subject' => 'Platba za objednávku #:number bola úspešná',

@@ -40,10 +40,10 @@ trait Slug
                 $parent = Category::find($model->parent_id);
                 $parent->setTranslateContext($locale);
                 $prefix = $parent->nested_slug;
-                $slug   .= trim($prefix, '/') . '/';
+                $slug .= trim($prefix, '/') . '/';
             }
             $slug .= trim($model->slug, '/');
-            $map  = $model->getSlugMap($locale);
+            $map = $model->getSlugMap($locale);
 
             if (array_key_exists($slug, $map) && $map[$slug] !== (int)$model->id) {
                 throw new ValidationException(['slug' => trans('offline.mall::lang.common.slug_unique')]);
@@ -89,7 +89,7 @@ trait Slug
     {
         $locale = $this->getLocale($locale);
 
-        return \Cache::rememberForever($this->mapCacheKey($locale), function () use ($locale) {
+        return Cache::rememberForever($this->mapCacheKey($locale), function () use ($locale) {
             $map = [];
 
             $buildSlugMap = function (

@@ -10,27 +10,72 @@ use OFFLINE\Mall\Classes\Traits\NullPrice;
 
 class CustomerGroup extends Model
 {
-    use Validation;
-    use Sortable;
-    use Sluggable;
     use NullPrice;
+    use Sluggable;
+    use Sortable;
+    use Validation;
 
+    /**
+     * Implement behaviors for this model.
+     * @var array
+     */
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
-    public $translatable = ['name'];
+
+    /**
+     * The table associated with this model.
+     * @var string
+     */
     public $table = 'offline_mall_customer_groups';
+
+    /**
+     * The translatable attributes of this model.
+     * @var array
+     */
+    public $translatable = [
+        'name'
+    ];
+
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
     public $rules = [
         'name' => 'required',
         'code' => 'required',
     ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
+    public $fillable = [
+        'name',
+        'code'
+    ];
+
+    /**
+     * Automatically generate unique URL names for the passed attributes.
+     * @var array
+     */
     public $slugs = [
         'code' => 'name',
     ];
+
+    /**
+     * The hasMany relationships of this model.
+     * @var array
+     */
     public $hasMany = [
         'users'  => [User::class, 'key' => 'offline_mall_customer_group_id'],
         'prices' => [CustomerGroupPrice::class],
     ];
 
-    public function price($currency)
+    /**
+     * Return Price relationship
+     * @param null|string|Currency $currency
+     * @return mixed
+     */
+    public function price($currency = null)
     {
         if ($currency === null) {
             $currency = Currency::activeCurrency()->id;

@@ -57,12 +57,22 @@ trait ProductPriceAccessors
 
     public function oldPriceRelations()
     {
-        return $this->additional_prices->where('price_category_id', PriceCategory::OLD_PRICE_CATEGORY_ID);
+        $oldPrice = PriceCategory::where('code', 'old_price')->first();
+        if ($oldPrice) {
+            return $this->additional_prices->where('price_category_id', $oldPrice->id);
+        } else {
+            return [];
+        }
     }
 
     public function oldPrice($currency = null)
     {
-        return $this->additionalPrice(PriceCategory::OLD_PRICE_CATEGORY_ID, $currency);
+        $oldPrice = PriceCategory::where('code', 'old_price')->first();
+        if ($oldPrice) {
+            return $this->additionalPrice($oldPrice, $currency);
+        } else {
+            return null;
+        }
     }
 
     public function getOldPriceAttribute()

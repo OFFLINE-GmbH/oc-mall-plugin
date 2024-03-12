@@ -9,24 +9,21 @@ class CustomerGroupPrice extends Price
     use Validation;
 
     /**
-     * Mark this price as specific to the logged in customer.
-     * This property is useful for frontend checks.
-     *
-     * @var bool
+     * The table associated with this model.
+     * @var string
      */
-    public $isCustomerSpecific = true;
-    /**
-     * Holds the official Price model.
-     * @var Price
-     */
-    public $official;
-
-    public $rules = [
-    ];
     public $table = 'offline_mall_customer_group_prices';
-    public $morphTo = [
-        'priceable' => [],
-    ];
+
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
+    public $rules = [ ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
     public $fillable = [
         'customer_group_id',
         'currency_id',
@@ -34,4 +31,31 @@ class CustomerGroupPrice extends Price
         'priceable_type',
         'price',
     ];
+
+    /**
+     * The morphto relationships of this model.
+     * @var array
+     */
+    public $morphTo = [
+        'priceable' => [],
+    ];
+
+    /**
+     * Mark this price as specific to the logged in customer. Usable for front-end checks.
+     * @var bool
+     */
+    public $isCustomerSpecific = true;
+
+    /**
+     * Holds the official Price model.
+     * @var Price
+     */
+    public $official;
+
+    /**
+     * Skip internal query check, as used by the IsState trait.
+     * @internal
+     * @var boolean
+     */
+    protected $skipEnabledCheck = true;
 }

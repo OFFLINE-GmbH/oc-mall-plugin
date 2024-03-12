@@ -1,52 +1,78 @@
-<div class="callout fade in callout-info">
-    <div class="header">
+<style>
+.offline-callout .header .lucide-chevron-left {
+    transition: transform 300ms ease-in-out;
+}
+
+.offline-callout .header:not(.collapsed) .lucide-chevron-left {
+    transform: rotate(-90deg);
+}
+
+.offline-callout .content .offline-format-code {
+    margin: 0.25rem -1.375rem 1.0rem -52px;
+    padding: 0.15rem 1.375rem 0.3rem 52px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.offline-callout .content .offline-content-inner {
+    padding: 0 20px 15px 52px;
+}
+
+.offline-callout code {
+    color: #6A6CF7;
+    font-weight: bold;
+}
+
+.offline-callout .content dl .offline-dl-code {
+    margin: 0 0 0 -52px;
+    padding: 0.15rem 0 0.15rem 52px;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+</style>
+<div class="callout offline-callout fade in callout-info">
+    <div class="header d-flex align-items-center py-3 collapsed" data-bs-toggle="collapse" href="#currenyFormatHelp" role="button" aria-expanded="false" aria-controls="currenyFormatHelp">
         <i class="icon-info"></i>
-        <p>
-            Currency format help
+        <p class="py-0 my-0" style="margin-left: 0.6175rem;">
+            <b><?= trans('offline.mall::lang.currency_settings.help_title') ?></b>
         </p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left ml-auto ms-auto">            <path d="m15 18-6-6 6-6"/>
+        </svg>
     </div>
-    <div class="content">
-        <p>
-            The default currency format is<br/>
-            <code>{{ currency.code }} {{ price|number_format(currency.decimals, '.', '\'') }}</code>
-        </p>
-        <p>
-            The following variables are available:
-        </p>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Variable</th>
-                <th>Description</th>
-                <th>Example value</th>
-            </tr>
-            </thead>
-            <tr>
-                <td><code>price</code></td>
-                <td>The full price of the product as float</td>
-                <td>1500.40</td>
-            </tr>
-            <tr>
-                <td><code>integers</code></td>
-                <td>The price without decimals</td>
-                <td>1500</td>
-            </tr>
-            <tr>
-                <td><code>decimals</code></td>
-                <td>Only the decimals of the price</td>
-                <td>40</td>
-            </tr>
-            <tr>
-                <td><code>currency</code></td>
-                <td>The currency data you specified</td>
-                <td>{code: "EUR", rate: 1, symbol: "€", decimals: 2}</td>
-            </tr>
-            <tr>
-                <td><code>product</code></td>
-                <td>The product model this price is from.</td>
-                <td>A full model instance</td>
-            </tr>
-        </table>
-        <p>Visit <a href="https://github.com/OFFLINE-GmbH/oc-snipcartshop-plugin/#custom-currency-format" target="_blank">this plugin's documentation</a> for more examples.</p>
+</div>
+
+<div class="callout offline-callout fade in callout-info">
+    <div class="content p-0">
+        <div id="currenyFormatHelp" class="collapse">
+            <div class="offline-content-inner">
+                <p class="mb-0">
+                    <?= trans('offline.mall::lang.currency_settings.help_default_label') ?>
+                </p>
+                <div class="offline-format-code">
+                    <code>{{ price|number_format(currency.decimals, " ", ",") }} ({{ currency.symbol }})</code>
+                </div>
+                <p>
+                    <?= trans('offline.mall::lang.currency_settings.help_variables_label') ?>
+                </p>
+                <dl class="row">
+                    <dt class="col-2"><code class="offline-dl-code">price</code></dt>
+                    <dd class="col-10"><small><?= trans('offline.mall::lang.currency_settings.help_variable_price_label') ?></small></dd>
+                    
+                    <dt class="col-2"><code class="offline-dl-code">integers</code></dt>
+                    <dd class="col-10"><small><?= trans('offline.mall::lang.currency_settings.help_variable_integers_label') ?></small></dd>
+                    
+                    <dt class="col-2"><code class="offline-dl-code">decimals</code></dt>
+                    <dd class="col-10"><small><?= trans('offline.mall::lang.currency_settings.help_variable_decimals_label') ?></small></dd>
+                    
+                    <dt class="col-2"><code class="offline-dl-code">currency</code></dt>
+                    <dd class="col-10"><small><?= trans('offline.mall::lang.currency_settings.help_variable_currency_label') ?></small></dd>
+                    
+                    <dt class="col-2"><code class="offline-dl-code">product</code></dt>
+                    <dd class="col-10"><small><?= trans('offline.mall::lang.currency_settings.help_variable_product_label') ?></small></dd>
+                </dl>
+                <p>
+                    <?= trans('offline.mall::lang.currency_settings.help_plugin_docs_link', ['link' => 'https://github.com/OFFLINE-GmbH/oc-snipcartshop-plugin/#custom-currency-format']) ?>
+                </p>
+            </div>
+        </div>
     </div>
 </div>

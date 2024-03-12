@@ -190,6 +190,7 @@ class Order extends Model
             $order->payment_state                           = PendingState::class;
             $order->order_state_id                          = $initialOrderStatus->id;
             $order->is_virtual                              = $cart->is_virtual;
+
             $order->attributes['total_shipping_pre_taxes']  = $order->round($totals->shippingTotal()->totalPreTaxes());
             $order->attributes['total_shipping_taxes']      = $order->round($totals->shippingTotal()->totalTaxes());
             $order->attributes['total_shipping_post_taxes'] = $order->round($totals->shippingTotal()->totalPostTaxes());

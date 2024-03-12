@@ -243,7 +243,7 @@ class QuickCheckout extends MallComponent
 
         $model = $this->order ?? $this->cart;
 
-        $paymentMethod = PaymentMethod::findOrFail($model->payment_method_id);
+        $paymentMethod = PaymentMethod::where('id', $model->payment_method_id)->firstOrFail();
 
         // Grab the PaymentGateway from the Service Container.
         $gateway = app(PaymentGateway::class);
@@ -297,7 +297,7 @@ class QuickCheckout extends MallComponent
             );
         }
 
-        $method = ShippingMethod::find($id);
+        $method = ShippingMethod::where('id', $id)->first();
         $this->cart->setShippingMethod($method);
         $this->cart->validateShippingMethod();
         $this->setData();
@@ -328,7 +328,7 @@ class QuickCheckout extends MallComponent
 
         $id = post('id');
 
-        $method = PaymentMethod::find($id);
+        $method = PaymentMethod::where('id', $id)->first();
         $this->cart->setPaymentMethod($method);
         $this->setData();
 
@@ -483,7 +483,7 @@ class QuickCheckout extends MallComponent
 
         $this->setVar('cart', $cart);
 
-        $paymentMethod = PaymentMethod::find($cart->payment_method_id);
+        $paymentMethod = PaymentMethod::where('id', $cart->payment_method_id)->first();
         if ( ! $paymentMethod) {
             $paymentMethod = PaymentMethod::getDefault();
             $cart->setPaymentMethod($paymentMethod);
@@ -499,7 +499,7 @@ class QuickCheckout extends MallComponent
         $this->setVar('shippingMethods', ShippingMethod::getAvailableByCart($cart));
         if ($this->user && $orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
-            $this->setVar('order', Order::byCustomer($this->user->customer)->find($orderId));
+            $this->setVar('order', Order::byCustomer($this->user->customer)->where('id', $orderId)->first());
         }
         
         $this->setVar('productPage', GeneralSettings::get('product_page'));

@@ -224,6 +224,11 @@ class MySQL implements Index
             $db->where('on_sale', true);
         }
 
+        if ($filters->has('in_stock')) {
+            $filters->pull('in_stock');
+            $db->where('stock', '>', 0);
+        }
+
         if ($filters->has('price')) {
             $price    = $filters->pull('price');
             $currency = Currency::activeCurrency()->code;

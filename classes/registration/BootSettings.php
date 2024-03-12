@@ -22,6 +22,7 @@ trait BootSettings
                 'order'       => 0,
                 'permissions' => ['offline.mall.settings.manage_general'],
                 'keywords'    => 'shop store mall general',
+                'size'        => 'huge'
             ],
             'currency_settings'         => [
                 'label'       => 'offline.mall::lang.currency_settings.label',
@@ -86,7 +87,7 @@ trait BootSettings
             'payment_gateways_settings' => [
                 'label'       => 'offline.mall::lang.payment_gateway_settings.label',
                 'description' => 'offline.mall::lang.payment_gateway_settings.description',
-                'category'    => 'offline.mall::lang.general_settings.category_payments',
+                'category'    => 'offline.mall::lang.general_settings.category_orders',
                 'icon'        => 'icon-credit-card',
                 'class'       => PaymentGatewaySettings::class,
                 'order'       => 30,
@@ -96,7 +97,7 @@ trait BootSettings
             'payment_method_settings'   => [
                 'label'       => 'offline.mall::lang.common.payment_methods',
                 'description' => 'offline.mall::lang.payment_method_settings.description',
-                'category'    => 'offline.mall::lang.general_settings.category_payments',
+                'category'    => 'offline.mall::lang.general_settings.category_orders',
                 'icon'        => 'icon-money',
                 'url'         => Backend::url('offline/mall/paymentmethods'),
                 'order'       => 40,

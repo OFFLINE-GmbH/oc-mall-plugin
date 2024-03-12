@@ -449,7 +449,10 @@ class Product extends MallComponent
         }
         $this->setVar('variantId', $variantId);
 
-        return $this->variant = Variant::published()->where('product_id', $this->product->id)->findOrFail($this->variantId);
+        return $this->variant = Variant::published()
+            ->where('product_id', $this->product->id)
+            ->where('id', $this->variantId)
+            ->firstOrFail();
     }
 
     /**
@@ -488,7 +491,7 @@ class Product extends MallComponent
             return $model->$method('slug', $this->param('slug'))->firstOrFail();
         }
 
-        return $model->findOrFail($product);
+        return $model->where('id', $product)->firstOrFail();
     }
 
     /**
@@ -635,7 +638,7 @@ class Product extends MallComponent
      */
     protected function getGroupedProperty(Variant $variant)
     {
-        if ( ! $variant->product->group_by_property_id) {
+        if ( !$variant->product || !$variant->product->group_by_property_id) {
             return (object)['value' => 0];
         }
 

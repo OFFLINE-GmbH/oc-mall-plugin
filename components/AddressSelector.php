@@ -163,7 +163,7 @@ class AddressSelector extends MallComponent
         }
 
         $addresses = Address::byCustomer($user->customer)->get();
-        $address   = $addresses->find($address);
+        $address   = $addresses->where('id', $address)->first();
 
         $this->setVar('addresses', $addresses);
         $this->setVar('address', $address);

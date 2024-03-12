@@ -295,10 +295,13 @@ class Products extends MallComponent
         $variantId = $this->decode(post('variant'));
         $values    = $this->validateCustomFields(post('fields', []));
 
-        $product = Product::published()->findOrFail($productId);
+        $product = Product::published()->where('id', $productId)->firstOrFail();
         $variant = null;
         if ($variantId) {
-            $variant = Variant::published()->where('product_id', $product->id)->findOrFail($variantId);
+            $variant = Variant::published()
+                ->where('product_id', $product->id)
+                ->where('id', $variantId)
+                ->firstOrFail();
         }
 
         $cart     = CartModel::byUser(Auth::getUser());

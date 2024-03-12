@@ -63,8 +63,6 @@
             'subject' => 'Falha no pedido #:number',
             'problem_message' => 'Pedimos desculpas mas houve um problema durante o seu pedido. Nós entraremos em contato para maiores informações.',
             'check_order_status' => 'Você pode verificar o status do pedido visitando a sua conta dentro da nossa loja.',
-            'payment_id' => 'Código do pagamento',
-            'error' => 'Mensagem de erro',
         ],
     ],
     'admin' => [
@@ -76,6 +74,8 @@
             'subject' => 'Falha no pagamento #:number',
             'not_processed' => 'Esse pedido não foi processado corretamente. Entre em contato com o cliente para informa-lo.',
             'error_details' => 'Detalhes do erro',
+            'payment_id' => 'Código do pagamento',
+            'error' => 'Mensagem de erro',
         ],
     ],
 ];

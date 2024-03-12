@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Closure;
 use October\Rain\Database\Collection;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
@@ -135,7 +136,7 @@ trait PriceAccessors
     private function updatePrices($value, $field = null)
     {
         foreach ($value as $currency => $price) {
-            Price::updateOrCreate([
+            Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
                 'priceable_id'   => $this->id,
                 'priceable_type' => self::MORPH_KEY,
                 'currency_id'    => Currency::where('code', $currency)->firstOrFail()->id,

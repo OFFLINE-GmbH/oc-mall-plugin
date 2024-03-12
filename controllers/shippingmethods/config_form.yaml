@@ -1,4 +1,4 @@
-name: 'offline.mall::lang.common.shipping_methods'
+name: offline.mall::lang.common.shipping_methods
 modelClass: OFFLINE\Mall\Models\ShippingMethod
 form: $/offline/mall/models/shippingmethod/fields.yaml
 defaultRedirect: offline/mall/shippingmethods

@@ -89,13 +89,19 @@ trait Discounts
     public function updateDiscountUsageCount()
     {
         $this->totals()->appliedDiscounts()->each(function (array $discount) {
-            $discount['discount']->number_of_usages++;
-            $discount['discount']->save();
+            if (is_array($discount) && array_key_exists('discount', $discount)) {
+                $discount = $discount['discount'];
+            }
+            $discount->number_of_usages++;
+            $discount->save();
         });
 
         if ($shippingDiscount = $this->totals()->shippingTotal()->appliedDiscount()) {
-            $shippingDiscount['discount']->number_of_usages++;
-            $shippingDiscount['discount']->save();
+            if (is_array($shippingDiscount) && array_key_exists('discount', $shippingDiscount)) {
+                $shippingDiscount = $shippingDiscount['discount'];
+            }
+            $shippingDiscount->number_of_usages++;
+            $shippingDiscount->save();
         }
     }
 

@@ -180,7 +180,7 @@ return [
         'index_driver_comment' => 'Se sua base de dados suporta JSON, selecione Database.',
         'index_driver_filesystem' => 'Filesystem',
         'index_driver_database' => 'Database (somente para MySQL 5.7+ ou MariaDB 10.2+)',
-        'index_driver_hint' => 'Se você mudar esta opção lembre-se de rodar "php artisan mall:reindex" na linha de comando reindexar seus produtos!',
+        'index_driver_hint' => 'Se você mudar esta opção lembre-se de rodar :command na linha de comando reindexar seus produtos!',
     ],
     'feed_settings' => [
         'description' => 'Configurar feeds',

@@ -13,18 +13,38 @@ use System\Classes\SettingsManager;
 
 class Notifications extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
-        ListController::class,
         FormController::class,
+        ListController::class,
     ];
 
-    public $listConfig = 'config_list.yaml';
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
     public $formConfig = 'config_form.yaml';
 
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.manage_notifications',
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -32,21 +52,22 @@ class Notifications extends Controller
         SettingsManager::setContext('OFFLINE.Mall', 'notification_settings');
     }
 
+    /**
+     * Toggle on Click
+     * @return void
+     */
     public function onToggleClicked()
     {
         $action = post('action');
-        if ($action === 'disable') {
-            $value = 0;
-        } elseif ($action === 'enable') {
-            $value = 1;
-        } else {
+        $value = $action === 'disable' ? 0 : ($action === 'enable' ? 1 : null);
+        if ($value === null) {
             return;
         }
 
         Notification::whereIn('id', post('checked'))->update(['enabled' => $value]);
         Cache::forget(Notification::CACHE_KEY);
-
-        Flash::success(trans('backend::lang.form.update_success', ['name' => trans('offline.mall::lang.common.notification')
+        Flash::success(trans('backend::lang.form.update_success', [
+            'name' => trans('offline.mall::lang.common.notification')
         ]));
     }
 }

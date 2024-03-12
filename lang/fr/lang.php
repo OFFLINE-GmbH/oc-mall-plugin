@@ -178,7 +178,7 @@
         'index_driver_comment' => 'Si votre base de données prend en charge JSON, utilisez le pilote de base de données.',
         'index_driver_filesystem' => 'Filesystem',
         'index_driver_database' => 'Database (seulement pour MySQL 5.7+ or MariaDB 10.2+)',
-        'index_driver_hint' => 'Si vous changez cette option, assurez-vous de lancer "php artisan mall: reindex" sur la ligne de commande pour réindexer vos produits.!',
+        'index_driver_hint' => 'Si vous changez cette option, assurez-vous de lancer :command sur la ligne de commande pour réindexer vos produits.!',
     ],
     'feed_settings' => [
         'description' => 'Configurer les flux de du plugin mall',

@@ -1,5 +1,0 @@
-title: Brands
-modelClass: OFFLINE\Mall\Models\Brand
-nameFrom: name
-toolbar:
-    buttons: reorder_toolbar

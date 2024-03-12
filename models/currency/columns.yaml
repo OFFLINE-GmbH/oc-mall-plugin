@@ -23,3 +23,7 @@ columns:
         label: 'offline.mall::lang.currency_settings.is_default'
         type: switch
         searchable: true
+    is_enabled:
+        label: 'offline.mall::lang.currency_settings.is_enabled'
+        type: switch
+        searchable: true

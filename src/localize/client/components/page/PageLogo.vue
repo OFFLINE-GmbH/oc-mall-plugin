@@ -1,0 +1,24 @@
+<template>
+    <svg width="100%" height="100%" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+        <path d="M32.878,0.674c-13.836,-0.951 -12.433,16.06 -12.433,16.06" style="fill:none;stroke:#16313f;stroke-width:1px;" />
+        <path d="M30.993,0.674c10.679,-0.778 12.66,11.884 12.66,11.884" style="fill:none;stroke:#16313f;stroke-width:1px;" />
+        <g>
+            <path d="M48.255,6.23l-32.905,6.71l5.325,51.06l38.54,-10.677l-10.96,-47.093Z" style="fill:#3fe680;" />
+            <path d="M13.762,13.185l1.672,-0.245l5.324,51.06l-6.22,-2.928l-9.753,0.038l8.977,-47.925Z" style="fill:#309959;" />
+        </g>
+        <path d="M23.267,15.012c0.498,-0.138 1.064,0.295 1.262,0.968c0.198,0.672 -0.045,1.33 -0.543,1.468c-0.499,0.138 -1.064,-0.295 -1.263,-0.968c-0.198,-0.672 0.046,-1.33 0.544,-1.468Z" style="fill:#16313f;" />
+        <path d="M42.669,10.478c0.499,-0.138 1.064,0.296 1.263,0.968c0.198,0.672 -0.045,1.33 -0.544,1.468c-0.498,0.139 -1.063,-0.295 -1.262,-0.967c-0.198,-0.673 0.045,-1.331 0.543,-1.469Z" style="fill:#16313f;" />
+        <path d="M23.848,16.23c0,-0 -4.535,-13.151 4.643,-15.205c11.997,-2.686 14.538,10.911 14.538,10.911" style="fill:none;stroke:#16313f;stroke-width:1px;" />
+        <path d="M44.37,42.508l-2.651,0.755l-1.493,-8.859c-0.079,-0.466 -0.134,-1.132 -0.164,-1.997l-0.836,8.096l-1.402,0.399l-3.938,-6.739c0.254,0.818 0.418,1.453 0.494,1.904l1.493,8.858l-2.651,0.755l-3.027,-17.958l2.604,-0.741l4.572,9.101c0.05,0.098 0.119,0.363 0.208,0.794c-0.032,-0.191 -0.054,-0.469 -0.066,-0.834l1.226,-10.75l2.605,-0.741l3.026,17.957Z" style="fill:#309959;fill-rule:nonzero;" />
+    </svg>
+</template>
+
+<script lang="ts">
+// TypeScript Definition
+</script>
+
+<script lang="ts" setup>
+// Vue Setup
+</script>
+
+<style scoped></style>

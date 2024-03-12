@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OCTranslator - Offline\Mall</title>
+
+    <script>
+        let colorMode = localStorage.getItem('oct:color-mode') == 'dark' ? 'dark' : 'light';
+        document.documentElement.classList.add(colorMode);
+        if (document.currentScript) {
+            document.currentScript.remove();
+        }
+    </script>
+    <script type="module" src="http://localhost:3006/@vite/client"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="module" src="http://localhost:3006/client/index.ts"></script>
+</body>
+</html>

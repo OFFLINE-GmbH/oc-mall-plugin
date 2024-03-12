@@ -56,6 +56,7 @@ class CustomerProfile extends MallComponent
      */
     public function init()
     {
+        /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
         $this->user = Auth::getUser();
     }
 
@@ -76,8 +77,10 @@ class CustomerProfile extends MallComponent
             'password',
             'password_repeat',
         ]);
+        $neededRules['email'] = 'unique:users';
+
+        // The password is unchanged so we don't need to validate it.
         if ($data['password'] === '') {
-            // The password is unchanged so we don't need to validate it.
             unset($neededRules['password'], $neededRules['password_repeat']);
         }
 
@@ -104,6 +107,7 @@ class CustomerProfile extends MallComponent
         });
 
         // Re-authenticate the user with his new credentials
+        /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
         Auth::login($this->user);
 
         Flash::success(trans('offline.mall::lang.common.saved_changes'));

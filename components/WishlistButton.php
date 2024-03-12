@@ -74,7 +74,7 @@ class WishlistButton extends MallComponent
         }
 
         $wishlist = post('wishlist_id')
-            ? $wishlists->find($this->decode(post('wishlist_id')))
+            ? $wishlists->where('id', $this->decode(post('wishlist_id')))->first()
             : $wishlists->first();
 
         if ( ! $wishlist) {
@@ -139,7 +139,7 @@ class WishlistButton extends MallComponent
         
         $this->decodeIds();
 
-        Wishlist::findOrFail($this->decode(post('wishlist_id')))->delete();
+        Wishlist::where('id', $this->decode(post('wishlist_id')))->delete();
 
         return $this->refreshList();
     }

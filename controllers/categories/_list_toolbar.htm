@@ -1,6 +1,6 @@
 <div data-control="toolbar">
-        <a href="<?= Backend::url('offline/mall/categories/create') ?>" class="btn btn-primary oc-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
-        <button
+    <a href="<?= Backend::url('offline/mall/categories/create') ?>" class="btn btn-primary oc-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
+    <button
         class="btn btn-default oc-icon-trash-o"
         disabled="disabled"
         onclick="$(this).data('request-data', {
@@ -15,7 +15,4 @@
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
     </button>
-    <?php if (!class_exists('System')): ?>
-        <a href="<?= Backend::url('offline/mall/categories/reorder') ?>" class="btn btn-default oc-icon-sort"><?= e(trans('offline.mall::lang.common.reorder')) ?></a>
-    <?php endif ?>
 </div>

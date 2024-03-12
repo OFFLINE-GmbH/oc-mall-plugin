@@ -63,8 +63,6 @@
             'subject' => 'Probleem tijdens het afrekenen (bestelling #:number)',
             'problem_message' => 'Er heeft zich een probleem voorgedaan tijdens het afrekenen. Gelieve ons te contacteren met alle foutmeldingen en je bestelnummer, dan proberen wij het zo spoedig mogelijk recht te zetten.',
             'check_order_status' => 'Om de status van je bestelling op te volgen kun je je inloggen op de site.',
-            'payment_id' => 'ID van betaling',
-            'error' => 'Foutbericht',
         ],
     ],
     'admin' => [
@@ -76,6 +74,8 @@
             'subject' => 'Probleem tijdens afrekenen (bestelling #:number)',
             'not_processed' => 'Volgende bestelling kon niet verwerkt worden. Gelieve indien nodig de klant te contacteren.',
             'error_details' => 'Foutbericht',
+            'payment_id' => 'ID van betaling',
+            'error' => 'Foutbericht',
         ],
     ],
 ];

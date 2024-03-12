@@ -13,3 +13,8 @@ toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
+structure:
+    showTree: false
+    showReorder: true
+    showSorting: true
+    maxDepth: 1

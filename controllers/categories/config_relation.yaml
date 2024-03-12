@@ -22,7 +22,8 @@ products:
         list: $/offline/mall/models/product/columns.yaml
         recordsPerPage: 10
         recordUrl: offline/mall/products/update/:id
-        toolbarPartial: products_relation_partial
+    showSorting: false
+    readOnly: true
 
 review_categories:
     label: 'offline.mall::lang.common.review_category'

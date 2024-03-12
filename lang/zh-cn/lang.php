@@ -180,7 +180,7 @@ return [
         'index_driver_comment' => '如果您的数据库支持 JSON，请使用数据库驱动程序。',
         'index_driver_filesystem' => '文件系统',
         'index_driver_database' => '数据库(仅适用于 MySQL 5.7+ 或 MariaDB 10.2+)',
-        'index_driver_hint' => '如果您更改此选项，请确保在命令行上运行“php artisan mall:reindex”以重新索引您的产品！',
+        'index_driver_hint' => '如果您更改此选项，请确保在命令行上运行 :command 以重新索引您的产品！',
     ],
     'feed_settings' => [
         'description' => '配置商城提要',

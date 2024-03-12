@@ -20,3 +20,11 @@ columns:
         label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
         type: number
         sortable: true
+    is_default:
+        label: 'offline.mall::lang.shipping_method_settings.is_default'
+        type: switch
+        searchable: true
+    is_enabled:
+        label: 'offline.mall::lang.shipping_method_settings.is_enabled'
+        type: switch
+        searchable: true

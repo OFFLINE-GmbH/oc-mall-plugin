@@ -6,8 +6,6 @@ matrix:
       services:
         - mysql
       php:
-        - 7.2
-        - 7.3
         - 7.4
         - 8.0
       sudo: false
@@ -51,11 +49,9 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.8
-      install:
-        - npm install -g vuepress
       script:
-        - cd docs
-        - vuepress build
+        - npm i
+        - npm run docs:build
       cache:
         directories:
           - "node_modules"
@@ -64,7 +60,7 @@ matrix:
       deploy:
         provider: pages
         skip-cleanup: true
-        local_dir: docs/.vuepress/dist
+        local_dir: src/docs/.vitepress/dist
         github-token: $GITHUB_TOKEN
         repo: OFFLINE-GmbH/oc-mall-plugin
         keep-history: false

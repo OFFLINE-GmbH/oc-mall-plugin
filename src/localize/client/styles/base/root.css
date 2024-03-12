@@ -1,0 +1,25 @@
+
+/*--- ----------------------------------------*/
+/*  Root Stylings
+/*--- ----------------------------------------*/
+
+html {
+    overscroll-behavior: none;
+}
+
+html body {
+    height: -webkit-fill-available;
+    -webkit-text-size-adjust: none;
+
+    @supports (height: 100svh) {
+        height: 100svh;
+    }
+}
+
+html {
+    @apply bg-gray-100 text-gray-700;
+}
+
+html.dark {
+    @apply bg-gray-800 text-gray-300;
+}

@@ -2,11 +2,11 @@
 return [
     "admin" => [
         "checkout_failed" => [
-            "error" => "",
             "error_details" => "Dettagli dell'errore",
             "not_processed" => "Il seguente ordine non può essere elaborato correttamente. È possibile che si debba contattare il cliente.",
-            "payment_id" => "",
-            "subject" => "Pagamento fallito #:number"
+            "subject" => "Pagamento fallito #:number",
+            "error" => "Messaggio di errore",
+            "payment_id" => "ID di pagamento",
         ],
         "checkout_succeeded" => [
             "order_placed" => "Il seguente ordine è stato effettuato nel vostro negozio:",
@@ -16,8 +16,6 @@ return [
     "checkout" => [
         "failed" => [
             "check_order_status" => "Per controllare lo stato del suo ordine può accedere al nostro negozio in qualsiasi momento.",
-            "error" => "Messaggio di errore",
-            "payment_id" => "ID di pagamento",
             "problem_message" => "Siamo molto spiacenti che ci sia stato un problema durante il processo di checkout. Esamineremo il problema e ti contatteremo per ulteriori informazioni.",
             "subject" => "Errore di checkout per l'ordine #:number"
         ],

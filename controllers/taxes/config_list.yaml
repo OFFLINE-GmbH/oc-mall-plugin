@@ -1,4 +1,4 @@
-title: 'offline.mall::lang.common.taxes'
+title: offline.mall::lang.common.taxes
 modelClass: OFFLINE\Mall\Models\Tax
 list: $/offline/mall/models/tax/columns.yaml
 recordUrl: 'offline/mall/taxes/update/:id'
