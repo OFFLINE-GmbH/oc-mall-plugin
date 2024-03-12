@@ -75,10 +75,10 @@
                             </div>
                             <div class="table-cell" :style="{ flexBasis: '42%' }" :lang="localeStore.selected.short">
                                 <StringFieldPartial 
-                                    :lang="localeStore.selected.short"
+                                    :lang="localeStore.selected.locale"
                                     :file="tab"
                                     :locale-key="key"
-                                    :value="strings[tab][localeStore.selected.locale][key]" 
+                                    :value="strings[tab][localeStore.selected.locale][key] ?? ''" 
                                     @next="onGoToNext"
                                     @prev="onGoToPrev" 
                                     @change="onChange" />

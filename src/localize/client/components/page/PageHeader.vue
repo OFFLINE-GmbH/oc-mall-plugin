@@ -19,7 +19,7 @@
                 ]" @click="showSelector = !showSelector">
                     <span>{{ localeStore.selected ? localeStore.selected.code : 'Select Locale' }}</span>
                     <ChevronDown :size="16" />
-                    <LocaleSelector v-model:visible="showSelector" />
+                    <LocaleSelector v-model:visible="showSelector" @click.prevent.stop="" />
                 </div>
             </div>
         </div>

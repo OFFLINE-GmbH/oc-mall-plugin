@@ -10,7 +10,7 @@
                 <div class="table-cell text-center" style="flex-basis: 15%">mail.php</div>
             </div>
             <div class="table-body">
-                <div class="table-row" v-for="[code, locale] of Object.entries(localeStore.locales)" :key="code">
+                <div class="table-row" v-for="[code, locale] of availableLocales" :key="code">
                     <div class="table-cell cell-auto">
                         <div class="cell-locale">
                             <div class="locale-id"><span>{{ locale.short }}</span></div>
@@ -48,16 +48,26 @@
 </script>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import ProgressBar from '@/components/feedback/ProgressBar.vue';
 import BaseWidget from '@/components/widgets/BaseWidget.vue';
-import { useLocaleStore } from '@/stores/locale';
+import { useLocaleStore, type Locale } from '@/stores/locale';
 
 // Stores
 const localeStore = useLocaleStore();
 
 // States
 const loading = ref<boolean>(true);
+const availableLocales = computed<[string, Locale][]>(() => {
+    const result = Object.entries(localeStore.locales);
+    result.sort((a, b) => {
+        if (a[0] == b[0]) {
+            return 0;
+        }
+        return a[0] > b[0] ? 1 : -1;
+    });
+    return result;
+});
 
 // Component mounted
 onMounted(async () => {

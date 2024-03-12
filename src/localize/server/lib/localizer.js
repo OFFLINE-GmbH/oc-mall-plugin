@@ -204,11 +204,18 @@ class Localizer {
      */
     async stats(restrict = null) {
         const stats = {};
-        for (const locale of restrict ? [restrict] : this.locales) {
+        for (const locale of restrict ? [restrict.toLowerCase()] : this.locales) {
             let lines = 0;
             let translated = 0;
             let files = {};
 
+            if (!(locale in this.strings)) {
+                if (this.locales.includes(locale)) {
+                    this.locales.push(locale);
+                }
+                this.strings[locale] = {};
+            }
+            
             for (const [file, entries] of Object.entries(this.index)) {
                 let curLines = Object.values(entries).length;
                 lines += curLines;
@@ -258,10 +265,15 @@ class Localizer {
      * @returns {object}
      */
     async fetchStrings(locale) {
+        if (!(locale in this.strings)) {
+            if (this.locales.includes(locale)) {
+                this.locales.push(locale);
+            }
+            this.strings[locale] = {};
+        }
+
         const result = {};
-        
         for (const [file, entries] of Object.entries(this.index)) {
-            let empty = false;
             if (!(file in this.strings[locale])) {
                 const filepath = path.join(this.lang, locale, file);
                 if (fs.existsSync(filepath)) {
@@ -269,7 +281,6 @@ class Localizer {
                     this.strings[locale][file] = content;
                 } else {
                     this.strings[locale][file] = {};
-                    empty = true;
                 }
             }
 

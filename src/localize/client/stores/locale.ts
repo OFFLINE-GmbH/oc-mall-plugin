@@ -15,7 +15,7 @@ export interface Locale {
     name: string;
     english: string;
     stats: LocaleStats | null | Promise<LocaleStats|null>;
-    _stats: (() => Promise<LocaleStats|null>);
+    _stats: null | (() => Promise<LocaleStats|null>);
 }
 
 export interface LocaleState {
@@ -121,6 +121,31 @@ export const useLocaleStore = defineStore('locale', {
         },
 
         /**
+         * Create a new Locale
+         * @param code 
+         */
+        create(code: string, locale: Locale) {
+            if (code in this.locales) {
+                return this.select(code);
+            }
+
+            locale._stats = () => new Promise(async resolve => {
+                const response = await fetch(`/stats/${locale.locale}`);
+                const result = await response.json();
+                
+                if (result.status == 'success') {
+                    resolve(result.result);
+                } else {
+                    resolve(null);
+                }
+            });
+
+            this.aliases.set(locale.locale, code);
+            this.locales[code] = locale;
+            return this.select(code);
+        },
+
+        /**
          * Fetch available strings
          */
         async strings() {
@@ -145,12 +170,12 @@ export const useLocaleStore = defineStore('locale', {
          * @returns 
          */
         async progress(code: string, force: boolean = false): Promise<LocaleStats|null> {
-            if (!(code in this.locales)) {
+            if (!(code in this.locales) || this.locales[code]._stats === null) {
                 return null;
             }
 
             if (this.locales[code].stats == null || force) {
-                this.locales[code].stats = this.locales[code]._stats();
+                this.locales[code].stats = (this.locales[code]._stats as any)();
             }
             return await this.locales[code].stats;
         },
@@ -170,7 +195,7 @@ export const useLocaleStore = defineStore('locale', {
             const result = await response.json();
 
             if (result.status == 'success') {
-                this.locales[lang].stats = null;
+                this.locales[this.aliases.get(lang) || lang].stats = null;
                 return result.result;
             } else {
 

@@ -12,7 +12,7 @@ const fastify = Fastify({
     }
 });
 
-// Sett no-cache Hook
+// Set no-cache Hook
 fastify.addHook('onRequest', (request, reply, done) => {
     reply.headers({
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
@@ -59,7 +59,7 @@ fastify.get('/locales', async (request, reply) => {
 fastify.get('/stats/:locale', async (request, reply) => {
     try {
         const localizer = await fastify.localizer();
-        const result = await localizer.stats(request.params.locale);
+        const result = await localizer.stats(request.params.locale.toLowerCase());
         reply.status(200).send({ status: 'success', result });
     } catch (err) {
         console.error(err);
@@ -71,7 +71,7 @@ fastify.get('/stats/:locale', async (request, reply) => {
 fastify.get('/strings/:locale', async (request, reply) => {
     try {
         const localizer = await fastify.localizer();
-        const result = await localizer.fetchStrings(request.params.locale);
+        const result = await localizer.fetchStrings(request.params.locale.toLowerCase());
         reply.status(200).send({ status: 'success', result });
     } catch (err) {
         console.error(err);
@@ -84,7 +84,7 @@ fastify.post('/save/:locale/:file/:key', async (request, reply) => {
     try {
         const localizer = await fastify.localizer();
         const result = await localizer.updateString(
-            request.params.locale,
+            request.params.locale.toLowerCase(),
             request.params.file,
             request.params.key,
             request.body,
