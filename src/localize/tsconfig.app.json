@@ -1,0 +1,23 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "include": [
+        "vite-env.d.ts", 
+        "client/**/*", 
+        "client/**/*.vue",
+        "src/localize/client/**/*",
+        "src/localize/client/**/*.vue"
+    ],
+    "exclude": ["client/**/__tests__/*"],
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "client/*",
+                "./src/localize/client/*"
+            ]
+        }
+    }
+}

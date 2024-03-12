@@ -65,8 +65,6 @@ return [
             'subject' => 'Fizetési hiba rendelésnél (#:number)',
             'problem_message' => 'Sajnálatos módon a fizetési folyamat közben hiba történt. Felül fogjuk vizsgálni az esetet és mihamarabb visszajelzünk további információval.',
             'check_order_status' => 'A rendelésed állapotának megtekintéséhez jelentkezz be webáruházunkba.',
-            'payment_id' => 'Fizetés azonosítója',
-            'error' => 'Hiba üzenet',
         ],
     ],
     'admin' => [
@@ -78,6 +76,8 @@ return [
             'subject' => 'Sikertelen fizetés (#:number)',
             'not_processed' => 'A következő rendelést nem lehetett feldolgozni. Lehetséges, hogy fel kell venni a kapcsolatot a vevővel.',
             'error_details' => 'Hiba részletei',
+            'payment_id' => 'Fizetés azonosítója',
+            'error' => 'Hiba üzenet',
         ],
     ],
 ];

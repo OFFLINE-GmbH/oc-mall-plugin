@@ -64,8 +64,6 @@ return [
             'subject' => 'Hubo un error al crear tu pedido (#:number)',
             'problem_message' => 'Lamentamos informarte que hubo un problema durante la creación de tu pedido. Revisaremos la situación y te contactaremos a la brevedad.',
             'check_order_status' => 'Para revisar el estado de tu pedido puedes iniciar sesión en la tienda en cualquier momento.',
-            'payment_id' => 'ID del Pago',
-            'error' => 'Mensaje de error',
         ],
     ],
     'admin' => [
@@ -77,6 +75,8 @@ return [
             'subject' => 'Falló la creación del pedido #:number',
             'not_processed' => 'El siguiente pedido no pudo ser procesado correctamente. Por favor valida la información y contacta al cliente a la brevedad.',
             'error_details' => 'Detalles del problema',
+            'payment_id' => 'ID del Pago',
+            'error' => 'Mensaje de error',
         ],
     ],
 ];

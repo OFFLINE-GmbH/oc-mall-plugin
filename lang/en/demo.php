@@ -2,7 +2,7 @@
 return [
     'brands' => [
         'cruiser_bikes' => [
-            'description' => 'Cruiser Bikes ist der führende Fahrrad-Hersteller im Internet.'
+            'description' => 'Cruiser Bikes is the leading bicycle manufacturer on the Internet.'
         ]
     ],
     'categories' => [
