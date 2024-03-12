@@ -1,6 +1,7 @@
 
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import DashboardView from '@/views/DashboardView.vue';
+import IssuesView from '@/views/IssuesView.vue';
 import TranslatorView from '@/views/TranslatorView.vue';
 
 /**
@@ -18,6 +19,11 @@ const routerPlugin = () => {
             path: '/translator',
             name: 'translator',
             component: TranslatorView
+        },
+        {
+            path: '/issues',
+            name: 'issues',
+            component: IssuesView
         },
     ] as RouteRecordRaw[];
 

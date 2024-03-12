@@ -1,15 +1,8 @@
 <template>
     <PageContainer>
-        <div class="none" v-if="localeStore.selected == null">
-            <div class="relative">
-                <Rat :size="48" :stroke-width="1" />
-                <Rat :size="48" :stroke-width="1" class="blurry" />
-            </div>
-            <div class="none-text">
-                <h2>No locale selected</h2>
-                <p>You still need to select the language you want to translate.</p>
-            </div>
-        </div>
+        <PageEmpty v-if="localeStore.selected == null" 
+            title="No locale selected"
+            text="You still need to select the language you want to translate." />
         
         <div class="translation-container" v-else-if="loading">
             <div class="flex flex-col items-center gap-2 mx-auto my-10">
@@ -125,21 +118,17 @@
 </template>
 
 <script lang="ts" setup>
-import { 
-    Check,
-    CircleAlert,
-    CodeXml,
-    Rat,
-    X,
-} from 'lucide-vue-next';
+import { Check, CircleAlert, CodeXml, X } from 'lucide-vue-next';
 import Scrollbar from 'smooth-scrollbar';
 import { nextTick, ref } from 'vue';
+
 import ActionButton from '@/components/buttons/ActionButton.vue';
 import CheckboxField from '@/components/controls/CheckboxField.vue';
 import BaseDialog from '@/components/dialogs/BaseDialog.vue';
 import LoadingSpinner from '@/components/feedback/LoadingSpinner.vue';
 import TooltipStd from '@/components/tooltip/TooltipStd.vue';
 import PageContainer from '@/components/page/PageContainer.vue';
+import PageEmpty from '@/components/page/PageEmpty.vue';
 import ReferencesPartial from '@/views/partials/ReferencesPartial.vue';
 import StringFieldPartial from '@/views/partials/StringFieldPartial.vue';
 import { useLocaleStore } from '@/stores/locale';
@@ -258,70 +247,6 @@ async function onCloseReferences() {
 </script>
 
 <style scoped>
-@keyframes hue {
-    0% {
-        @apply text-emerald-600;
-    }
-    25% {
-        @apply text-indigo-600;
-    }
-    50% {
-        @apply text-pink-600;
-    }
-    75% {
-        @apply text-amber-600;
-    }
-    100% {
-        @apply text-emerald-600;
-    }
-}
-@keyframes hueDark {
-    0% {
-        @apply text-emerald-400;
-    }
-    25% {
-        @apply text-indigo-400;
-    }
-    50% {
-        @apply text-pink-400;
-    }
-    75% {
-        @apply text-amber-400;
-    }
-    100% {
-        @apply text-emerald-400;
-    }
-}
-
-.none {
-    @apply border border-solid rounded-lg p-6 mx-auto my-6 flex flex-row items-center gap-4;
-    @apply border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800;
-    width: 440px;
-
-    & svg {
-        @apply shrink-0 grow-0 mr-2 opacity-50;
-        @apply text-emerald-600;
-        animation: 5s ease-in-out 1s infinite reverse both hue;
-
-        .dark & {
-            animation-name: hueDark;
-        }
-
-        &.blurry {
-            @apply absolute top-0 left-0 scale-110;
-            filter: blur(5px)
-        }
-    }
-
-    & h2 {
-        @apply text-lg font-semibold
-    }
-    
-    & p {
-        @apply text-xs;
-    }
-}
-
 .translation-container {
     @apply h-full;
 }

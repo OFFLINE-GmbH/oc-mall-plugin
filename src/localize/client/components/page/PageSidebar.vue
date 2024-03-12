@@ -16,6 +16,12 @@
                     <ScanText :stroke-width="1.5" />
                 </RouterLink>
             </li>
+
+            <li class="navi-item">
+                <RouterLink :to="{ name: 'issues' }" class="navi-link">
+                    <BadgeAlert :stroke-width="1.5" />
+                </RouterLink>
+            </li>
         </ul>
 
         <ul class="page-navi page-socials">
@@ -33,7 +39,7 @@
 </script>
 
 <script lang="ts" setup>
-import { CircleGauge, Github, ScanText } from 'lucide-vue-next';
+import { BadgeAlert, CircleGauge, Github, ScanText } from 'lucide-vue-next';
 import { RouterLink } from 'vue-router';
 import PageLogo from '@/components/page/PageLogo.vue';
 </script>

@@ -3,11 +3,11 @@
         <div class="widget-table">
             <div class="table-header">
                 <div class="table-cell cell-auto">Language</div>
+                <div class="table-cell text-center cell-total" style="flex-basis: 15%">Total</div>
                 <div class="table-cell text-center" style="flex-basis: 15%">demo.php</div>
                 <div class="table-cell text-center" style="flex-basis: 15%">frontend.php</div>
                 <div class="table-cell text-center" style="flex-basis: 15%">lang.php</div>
                 <div class="table-cell text-center" style="flex-basis: 15%">mail.php</div>
-                <div class="table-cell text-center" style="flex-basis: 15%">Total</div>
             </div>
             <div class="table-body">
                 <div class="table-row" v-for="[code, locale] of Object.entries(localeStore.locales)" :key="code">
@@ -18,6 +18,11 @@
                                 <span class="name-real">{{ locale.name }}</span>
                                 <span class="name-english">{{ locale.english }}</span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="table-cell cell-total" style="flex-basis: 15%">
+                        <div class="total-value">
+                            <ProgressBar :value="localeStore.progress(locale.code)" :valuer="(result) => result.percentage" />
                         </div>
                     </div>
                     <div class="table-cell" style="flex-basis: 15%">
@@ -31,9 +36,6 @@
                     </div>
                     <div class="table-cell" style="flex-basis: 15%">
                         <ProgressBar :value="localeStore.progress(locale.code)" :valuer="(result) => result.files['mail.php'].percentage" />
-                    </div>
-                    <div class="table-cell" style="flex-basis: 15%">
-                        <ProgressBar :value="localeStore.progress(locale.code)" :valuer="(result) => result.percentage" />
                     </div>
                 </div>
             </div>
@@ -97,6 +99,20 @@ onMounted(async () => {
 
         &.cell-auto {
             @apply flex-1;
+        }
+
+        &.cell-total {
+            @apply border-x self-stretch;
+            @apply bg-gray-200/25 border-gray-300;
+            @apply dark:bg-gray-200/10 dark:border-gray-700;
+
+            & .total-value {
+                @apply w-full h-full flex flex-row items-center;
+
+                & :deep(.progress) {
+                    @apply w-full shrink-0;
+                }
+            }
         }
     }
 
