@@ -66,3 +66,13 @@ product = ":slug"
 variant = ":slug"
 redirectOnPropertyChange = 1
 ```
+
+### Example of Usage
+
+When considering 'product' as our component, we can access the reviews in the following manner:
+
+```ini
+{% for review in product.product.reviews  %}
+```
+
+
