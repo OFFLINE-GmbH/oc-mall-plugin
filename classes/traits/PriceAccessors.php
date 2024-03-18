@@ -147,7 +147,7 @@ trait PriceAccessors
         }
     }
 
-    private function withFilter(?Closure $filter = null, $query)
+    private function withFilter(?Closure $filter = null, $query = null)
     {
         if ($filter) {
             return $filter($query);
