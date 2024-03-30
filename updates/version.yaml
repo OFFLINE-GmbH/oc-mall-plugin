@@ -412,6 +412,32 @@ v2.0.10:
     - 'Added PDFMaker trait to product model'
 v2.0.11:
     - 'Update to Version 3 of this plugin to get RainLab.Translate v2 support'
+v2.0.12:
+    - 'Fixed bug in product filter with new October JS framework'
+v2.0.13:
+    - 'Added support to load Wishlist using a component parameter'
+v2.0.15:
+    - 'Fixed handling of Currency model timestamps'
+v2.0.16:
+    - 'Fixed bug in addressSelector component. If you did override any of the component partials, make sure to include the following change in your own partials: https://github.com/OFFLINE-GmbH/oc-mall-plugin/commit/8e66134b35e03bf373e2a7a91d09c190a3a7e8c4'
+v2.0.17:
+    - 'Cleaned up the return values of the Product::onAddToCart component method'
+v2.0.18:
+    - 'Fixed handling of recipient name for billing addresses'
+v2.0.19:
+    - 'Fixed handling of recipient name for shipping addresses'
+v2.0.20:
+    - 'Added mall.index.extendData event to extend the indexed data (thanks to @chocolata)'
+v2.0.21:
+    - 'Minor bugfixes'
+v2.0.22:
+    - 'Cleanup sortable relations code (thanks to @mjauvin)'
+v2.0.23:
+    - 'Make Product variants sortable (thanks to @mjauvin)'
+v2.0.24:
+    - 'Fixed migration'
+v2.0.26:
+    - 'Various small bug fixes'
 v3.0.0:
     - 'Introduced RainLab.Translate v2 support'
 v3.0.1:
@@ -513,6 +539,9 @@ v3.1.0:
 #    - 'Fixed duplication mess on products with variants.'
 #    - 'Fixed possibility to take-over email address on CustomerProfile component, thanks to @cyril-design.'
 #    - 'Fixed products / variants disappear on first page view after editing a product.'
+#    - 'Fixed sortable functions on Categories / PropertyGroups relationships.'
+#    - 'Fixed missing v2 migrations.'
+#    - 'Fixed an error that occurred with invalid file names for virtual products, thanks to @dathwa.'
 #    - 'Removed legacy v1 code.'
 #    - 030_01-update_system_plugin_history.php
 #    - 030_02-alter_offline_mall_currencies.php

@@ -58,8 +58,6 @@ class Services extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-services');
-
-        $this->addJs('/plugins/offline/mall/assets/backend.js');
     }
 
     /**

@@ -5,9 +5,8 @@
 properties:
     label: 'offline.mall::lang.common.property'
     deferredBinding: false
-    showSorting: false
     view:
-        list: $/offline/mall/models/property/columns_pivot.yaml
+        list: $/offline/mall/models/property/columns_pivot_legacy.yaml
         toolbarButtons: add|create|remove
         defaultSort:
             column: pivot[sort_order]
@@ -19,3 +18,8 @@ properties:
         recordsPerPage: 50
     pivot:
         form: $/offline/mall/models/property/fields_pivot.yaml
+    structure:
+        showTree: false
+        showReorder: true
+        showSorting: true
+        dragRow: true

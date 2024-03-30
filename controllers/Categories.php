@@ -54,9 +54,25 @@ class Categories extends Controller
     public function __construct()
     {
         parent::__construct();
+        //dd($this->relationGetConfig());
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-categories');
 
-        $this->addJs('/plugins/offline/mall/assets/backend.js');
+        if (version_compare(\System::VERSION, '3.0', '<=')) {
+            $this->addJs('/plugins/offline/mall/assets/backend.js');
+        }
+    }
+    
+    /**
+     * Provides an opportunity to manipulate the field configuration.
+     * @param object $config
+     * @param string $field
+     * @param \October\Rain\Database\Model $model
+     */
+    public function relationExtendConfig($config, $field, $model)
+    {
+        if (version_compare(\System::VERSION, '3.0', '>=')) {
+            $config->view['list'] = "$/offline/mall/models/propertygroup/columns_pivot.yaml";
+        }
     }
 
     /**
