@@ -542,6 +542,7 @@ v3.1.0:
 #    - 'Fixed sortable functions on Categories / PropertyGroups relationships.'
 #    - 'Fixed missing v2 migrations.'
 #    - 'Fixed an error that occurred with invalid file names for virtual products, thanks to @dathwa.'
+#    - 'Fixed some PHP 8.2/8.3 deprecation notices, thanks to @RickAcb.'
 #    - 'Removed legacy v1 code.'
 #    - 030_01-update_system_plugin_history.php
 #    - 030_02-alter_offline_mall_currencies.php
