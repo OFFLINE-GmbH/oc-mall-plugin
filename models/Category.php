@@ -270,10 +270,10 @@ class Category extends Model
         $created = trans('offline.mall::lang.common.created_at');
 
         return [
-            'name asc'        => "${name}, A->Z",
-            'name desc'       => "${name}, Z->A",
-            'created_at asc'  => "${created}, A->Z",
-            'created_at desc' => "${created}, Z->A",
+            'name asc'        => "{$name}, A->Z",
+            'name desc'       => "{$name}, Z->A",
+            'created_at asc'  => "{$created}, A->Z",
+            'created_at desc' => "{$created}, Z->A",
         ];
     }
 
