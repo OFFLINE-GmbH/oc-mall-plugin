@@ -1,10 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Downloads;
 
 use Auth;
 use Cms\Classes\Page;
-use File;
 use Flash;
 use Request;
 use Session;
@@ -50,6 +49,7 @@ class VirtualProductFileDownload
         // If the grant has a file attached, send it.
         if ($grant->file) {
             $filename = sprintf('%s.%s', $grant->display_name, $grant->file->getExtension());
+            $filename = urlencode($filename);
 
             return response()->download($grant->file->getLocalPath(), $filename);
         }
@@ -57,6 +57,7 @@ class VirtualProductFileDownload
         // If no grant specific file is available, return the product file.
         if ($product->latest_file && $product->latest_file->file) {
             $filename = sprintf('%s.%s', $grant->display_name, $product->latest_file->file->getExtension());
+            $filename = urlencode($filename);
 
             return response()->download($product->latest_file->file->getLocalPath(), $filename);
         }
