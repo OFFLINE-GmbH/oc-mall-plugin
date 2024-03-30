@@ -118,7 +118,7 @@ class Plugin extends PluginBase
 
             // Attach the created file to the ProductFileGrant. This makes sure your custom file
             // will be downloaded and not the file that is attached to the $product itself.
-            $grant->file = $path;
+            $grant->file = (new \System\Models\File)->fromFile($path);
             // Set a custom display name for the grant.
             $grant->display_name = $discount->name;
             // Don't forget to save the changes!
