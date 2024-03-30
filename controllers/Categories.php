@@ -54,7 +54,6 @@ class Categories extends Controller
     public function __construct()
     {
         parent::__construct();
-        //dd($this->relationGetConfig());
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-categories');
 
         if (version_compare(\System::VERSION, '3.0', '<=')) {
