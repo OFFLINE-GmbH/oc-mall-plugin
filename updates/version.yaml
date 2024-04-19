@@ -450,3 +450,5 @@
     - 'Fixed migration'
 2.0.26:
     - 'Various small bug fixes'
+2.0.27:
+    - 'Add backend form widget partials viewpath (thanks to @mjauvin)'
