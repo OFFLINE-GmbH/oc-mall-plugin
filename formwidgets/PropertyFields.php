@@ -27,6 +27,8 @@ class PropertyFields extends FormWidgetBase
      */
     public function render()
     {
+        $this->addViewPath(base_path() . '/modules/backend/widgets/form/partials');
+
         $this->prepareVars();
 
         return $this->makePartial('propertyfields');
@@ -336,7 +338,8 @@ class PropertyFields extends FormWidgetBase
 
     protected function backendPartial(string $partial)
     {
-        $path = sprintf('modules/backend/widgets/form/partials/%s', $partial);
+        // viewpath for the backend form partials is now added in render()
+        $path = $partial;
 
         // October 2.0, add .htm extension.
         if (class_exists('System')) {
