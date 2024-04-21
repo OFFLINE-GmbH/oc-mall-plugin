@@ -517,6 +517,7 @@ v3.1.0:
 #    - 'Added a new IsStates database model trait, to support is_default and is_enabled behaviors.'
 #    - 'Added a new PriceBag totals construct and handling.'
 #    - 'Added a new event to manipulate shipping country on FilteredTaxes trait, thanks to @Cryden.'
+#    - 'Added a new event to change the validation messages on the sign-up handler, thanks to @damsfx.'
 #    - 'Updated console commands and database seeders.'
 #    - 'Updated demonstration content (+ add support for german translations).'
 #    - 'Updated available rounding options on Currency model to support extensions.'
