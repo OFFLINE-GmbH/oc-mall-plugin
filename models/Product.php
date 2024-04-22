@@ -375,9 +375,6 @@ class Product extends Model
         if ($this->inventory_management_method === 'variant' && $this->stock === null) {
             $this->stock = 0;
         }
-        if ($this->is_virtual) {
-            $this->inventory_management_method = 'single';
-        }
     }
 
     public function afterSave()

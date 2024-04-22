@@ -106,10 +106,6 @@ tabs:
         variants_section:
             label: 'offline.mall::lang.common.variants'
             span: full
-            trigger:
-                action: show
-                field: inventory_management_method
-                condition: 'value[variant]'
             type: section
             comment: 'offline.mall::lang.products.variants_comment'
             tab: 'offline.mall::lang.product.general'
