@@ -132,20 +132,20 @@
         <td class="text-right"><span><?= e($order->totalPostTaxes()) ?></span></td>
     </tr>
     <?php if ($order['taxes']): ?>
-    <?php foreach ($order['taxes'] as $tax): ?>
-    <tr class="orderfooter orderfooter-taxes separator">
-        <td colspan="3">
-            <span>
-                <?= e($tax['tax']['name']) ?> (<?= e($tax['tax']['percentage']) ?> %)
-            </span>
-        </td>
-        <td class="text-right">
-            <span>
-                <?= e($tax['total_formatted']); ?>
-            </span>
-        </td>
-    </tr>
-    <?php endforeach; ?>
+        <?php foreach ($order['taxes'] as $tax): ?>
+        <tr class="orderfooter orderfooter-taxes separator">
+            <td colspan="3">
+                <span>
+                    <?= e($tax['tax']['name'] ?? '') ?> (<?= e($tax['tax']['percentage']) ?> %)
+                </span>
+            </td>
+            <td class="text-right">
+                <span>
+                    <?= e($tax['total_formatted']); ?>
+                </span>
+            </td>
+        </tr>
+        <?php endforeach; ?>
     <?php endif; ?>
     </tbody>
 </table>
