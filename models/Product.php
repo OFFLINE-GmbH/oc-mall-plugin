@@ -688,12 +688,7 @@ class Product extends Model
         }
 
         if ($this->is_virtual) {
-            $this->hideField($fields, 'inventory_management_method');
-            $this->hideField($fields, 'variants');
             $this->hideField($fields, 'weight');
-            if ($this->files->count() > 0) {
-                $fields->missing_file_hint->hidden = true;
-            }
         } else {
             $this->hideField($fields, 'product_files');
             $this->hideField($fields, 'missing_file_hint');
