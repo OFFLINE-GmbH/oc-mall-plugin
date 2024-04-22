@@ -470,6 +470,8 @@ return [
         'session_required_comment' => 'The file can only be downloaded when the customer is logged in (download link is not shareable).',
         'file' => 'File',
         'download_count' => 'Download count',
+        'limit_to_variants' => 'Limit to variants',
+        'limit_to_variants_comment' => 'Assign and Limit this product file to one or more of the available product variants.',
         'errors' => [
             'invalid' => 'Invalid download link',
             'expired' => 'Download link expired',

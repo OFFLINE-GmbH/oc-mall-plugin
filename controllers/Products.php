@@ -127,9 +127,15 @@ class Products extends Controller
         // Strike through all old file versions.
         Event::listen('backend.list.injectRowClass', function ($lists, $record) {
             $latestFile = $this->vars['formModel']->latest_file;
+            
+            if (empty(trim($latestFile->version))) {
+                return '';
+            }
+
             if (!$latestFile || !$record instanceof ProductFile) {
                 return '';
             }
+
             if ($latestFile->id === $record->id) {
                 return '';
             }

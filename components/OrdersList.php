@@ -63,10 +63,10 @@ class OrdersList extends MallComponent
     public function init()
     {
         $user = Auth::getUser();
-        if ( ! $user) {
+        if (!$user || !$user->customer) {
             return;
         }
-
+        
         $this->paymentLink = $this->getPaymentLink();
         $this->orders = Order
             ::byCustomer($user->customer)

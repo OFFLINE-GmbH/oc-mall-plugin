@@ -7,6 +7,7 @@ use Html;
 use Model;
 use Cms\Classes\Page;
 use Illuminate\Support\Collection;
+use October\Rain\Database\Builder;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -157,6 +158,17 @@ class Variant extends Model
             'key' => 'image_set_id',
             'replicate' => false
         ],
+    ];
+    
+    /**
+     * The belongsToMany relationships of this model.
+     * @var array
+     */
+    public $belongsToMany = [
+        'files' => [
+            ProductFile::class, 
+            'table' => 'offline_mall_product_file_variant'
+        ]
     ];
     
     /**

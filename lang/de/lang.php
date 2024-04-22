@@ -470,6 +470,8 @@ return [
         "session_required_comment" => "Die Datei kann nur nach dem Login mit einem Kundenkonto heruntergeladen werden (Link ist nicht teilbar).",
         "file" => "Datei",
         "download_count" => "Anz. Downloads",
+        'limit_to_variants' => 'Auf Varianten begrenzen',
+        'limit_to_variants_comment' => 'Ordne diese Produktdatei einer oder mehreren Varianten zu.',
         "errors" => [
             "invalid" => "Ungültiger Download-Link",
             "expired" => "Download-Link ist nicht mehr gültig",

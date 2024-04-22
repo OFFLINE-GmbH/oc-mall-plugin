@@ -686,6 +686,9 @@ class Product extends Model
 
         if ($this->is_virtual) {
             $this->hideField($fields, 'weight');
+            if ($this->files->count() > 0) {
+                $this->hideField($fields, 'missing_file_hint');
+            }
         } else {
             $this->hideField($fields, 'product_files');
             $this->hideField($fields, 'missing_file_hint');

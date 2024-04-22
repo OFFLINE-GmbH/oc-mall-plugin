@@ -5,7 +5,9 @@ namespace OFFLINE\Mall\Models;
 use Event;
 use Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use October\Rain\Database\QueryBuilder;
 use System\Models\File;
 
 class ProductFileGrant extends Model
@@ -50,6 +52,30 @@ class ProductFileGrant extends Model
         }
 
         return optional($this->order_product->product->latest_file)->display_name ?? 'Download ' . $this->id;
+    }
+
+    /**
+     * Get available files.
+     * @return mixed
+     */
+    public function getFilesAttribute()
+    {
+        if ($this->order_product->product->inventory_management_method == 'single') {
+            return $this->order_product->product->files;
+        } else {
+            $variantFiles = $this->order_product->variant->files;
+            $productFiles = ProductFile::whereNotExists(function (QueryBuilder $query) {
+                $query->select(DB::raw(1))
+                    ->from('offline_mall_product_file_variant')
+                    ->whereColumn(
+                        'offline_mall_product_file_variant.product_file_id',
+                        'offline_mall_product_files.id'
+                    );
+            })
+            ->where('offline_mall_product_files.product_id', '=', $this->order_product->product->id)
+            ->get();
+            return $productFiles->merge($variantFiles)->all();
+        }
     }
 
     /**

@@ -109,12 +109,20 @@ tabs:
             type: section
             comment: 'offline.mall::lang.products.variants_comment'
             tab: 'offline.mall::lang.product.general'
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[single]'
         variants:
             span: full
             path: variants
             type: partial
             tab: 'offline.mall::lang.product.general'
             dependsOn: categories
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[single]'
         description_short:
             label: 'offline.mall::lang.product.description_short'
             size: small
