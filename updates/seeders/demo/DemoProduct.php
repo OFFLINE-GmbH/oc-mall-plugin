@@ -73,7 +73,9 @@ abstract class DemoProduct
             $this->imageSets[] = $s;
 
             foreach ($set['images'] as $path) {
-                $s->images()->create(['data' => $path]);
+                $s->images()->add(
+                    $s->images()->make()->fromFile($path)
+                );
             }
         }
 
