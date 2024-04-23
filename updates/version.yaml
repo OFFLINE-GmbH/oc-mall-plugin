@@ -438,6 +438,8 @@ v2.0.24:
     - 'Fixed migration'
 v2.0.26:
     - 'Various small bug fixes'
+v2.0.27:
+    - 'Add backend form widget partials viewpath (thanks to @mjauvin)'
 v3.0.0:
     - 'Introduced RainLab.Translate v2 support'
 v3.0.1:
