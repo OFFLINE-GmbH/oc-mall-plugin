@@ -46,8 +46,9 @@ class UpdateSystemPluginHistory_030_01 extends Migration
             }
 
             // Unset missing Mall v2 Migration Files
-            if ($row->detail == 'add_product_variants_sort_order.php') {
+            if (strpos($row->detail, 'add_product_variants_sort_order.php') !== false) {
                 DB::table('system_plugin_history')->where('id', $row->id)->delete();
+                continue;
             }
 
             // Update Filename
@@ -56,8 +57,13 @@ class UpdateSystemPluginHistory_030_01 extends Migration
                 $idx = 1;
                 $grp++;
             }
-            $filename = substr('00' . $grp, -3) . '_' . substr('0' . $idx, -2) . '-' . $row->detail;
 
+            if (preg_match('/[0-9]{3}_[0-9]{2}\-.*/', $row->detail)) {
+                $filename = $row->detail;
+            } else {
+                $filename = substr('00' . $grp, -3) . '_' . substr('0' . $idx, -2) . '-' . $row->detail;
+            }
+            
             // Check if new file exists
             if (!file_exists(__DIR__ . '/' . $filename)) {
                 $error = 'Migration file "'. $filename .'" on path "'. __DIR__ .'" does not exist.';
