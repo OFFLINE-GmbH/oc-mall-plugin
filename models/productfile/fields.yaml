@@ -14,3 +14,9 @@ fields:
         comment: 'offline.mall::lang.product_file.version_comment'
         span: auto
         type: text
+    variants:
+        label: 'offline.mall::lang.product_file.limit_to_variants'
+        comment: 'offline.mall::lang.product_file.limit_to_variants_comment'
+        span: auto
+        type: relation
+        conditions: product_id = :product_id

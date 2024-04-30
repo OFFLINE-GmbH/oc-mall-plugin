@@ -1,13 +1,8 @@
-<div class="callout fade in callout-danger no-icon no-header">
+<div class="callout fade in callout-danger">
+    <div class="header">
+        <h3><?= e(trans('offline.mall::lang.common.caution')) ?></h3>
+    </div>
     <div class="content">
-        <p>
-            <span style="
-                background: #f8d6d5; display: inline-block; padding: 2px 5px;
-                border-radius: 4px; font-weight: bold; margin-bottom: 10px;
-            ">
-                <?= e(trans('offline.mall::lang.common.caution')) ?>
-            </span><br />
-            <?= e(trans('offline.mall::lang.general_settings.index_driver_hint')) ?>
-        </p>
+        <?= trans('offline.mall::lang.general_settings.index_driver_hint', ['command' => "<code>php artisan mall:index</code>"]) ?>
     </div>
 </div>

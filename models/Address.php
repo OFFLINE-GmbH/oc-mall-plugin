@@ -11,9 +11,9 @@ use System\Classes\PluginManager;
 
 class Address extends Model
 {
-    use Validation;
-    use SoftDelete;
     use HashIds;
+    use SoftDelete;
+    use Validation;
 
     public $implement = [LocationModel::class];
 

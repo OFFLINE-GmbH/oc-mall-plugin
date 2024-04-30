@@ -1,6 +1,6 @@
 <?php Block::put('breadcrumb') ?>
     <ul>
-        <li><a href="<?= Backend::url('offline/mall/paymentmethods') ?>">PaymentMethods</a></li>
+        <li><a href="<?= Backend::url('offline/mall/paymentmethods') ?>"><?= e(trans('offline.mall::lang.common.payment_methods')) ?></a></li>
         <li><?= e($this->pageTitle) ?></li>
     </ul>
 <?php Block::endPut() ?>

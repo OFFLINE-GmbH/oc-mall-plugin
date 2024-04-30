@@ -32,7 +32,11 @@ class ServiceOption extends Model
         'description',
     ];
     public $morphMany = [
-        'prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'price_category_id is null'],
+        'prices' => [
+            Price::class, 
+            'name' => 'priceable', 
+            'conditions' => 'price_category_id is null'
+        ],
     ];
     public $belongsTo = [
         'service' => [Service::class],

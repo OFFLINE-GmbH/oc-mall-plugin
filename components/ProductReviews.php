@@ -86,7 +86,7 @@ class ProductReviews extends ComponentBase
 
     public function setData()
     {
-        $this->product          = ProductModel::findOrFail($this->property('product'));
+        $this->product          = ProductModel::where('id', $this->property('product'))->firstOrFail();
         $this->reviewCategories = $this->product->categories->flatMap->inherited_review_categories->unique('id');
         $this->accountPage      = GeneralSettings::get('account_page');
         $this->isModerated      = ReviewSettings::get('moderated');
@@ -122,7 +122,7 @@ class ProductReviews extends ComponentBase
             })
             ->first();
 
-        $pageNumber    = input('page', 1);
+        $pageNumber    = (int)input('page', 1);
         $perPage       = (int)$this->property('perPage', 5);
         $slice         = $this->allReviews->slice(($pageNumber - 1) * $perPage, $perPage);
         $this->reviews = new LengthAwarePaginator($slice, $this->allReviews->count(), $perPage, $pageNumber);

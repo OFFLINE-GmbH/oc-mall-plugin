@@ -1,11 +1,13 @@
-name: Currencies
+name: offline.mall::lang.currency_settings.label
 modelClass: OFFLINE\Mall\Models\Currency
 form: $/offline/mall/models/currency/fields.yaml
 defaultRedirect: offline/mall/currencies
 create:
+    title: offline.mall::lang.titles.currencies.create
     redirect: 'offline/mall/currencies/update/:id'
     redirectClose: offline/mall/currencies
 update:
+    title: offline.mall::lang.titles.currencies.update
     redirect: offline/mall/currencies
     redirectClose: offline/mall/currencies
 preview: {  }

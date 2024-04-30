@@ -3,33 +3,72 @@
 namespace OFFLINE\Mall\Controllers;
 
 use BackendMenu;
-use Backend\Classes\Controller;
-use System\Classes\SettingsManager;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
-use Backend\Behaviors\ReorderController;
+use Backend\Classes\Controller;
+use October\Rain\Database\Builder;
+use October\Rain\Database\QueryBuilder;
+use System\Classes\SettingsManager;
 
 class Currencies extends Controller
 {
+    /**
+     * Implement behaviors for this controller.
+     * @var array
+     */
     public $implement = [
-        ListController::class,
         FormController::class,
-        ReorderController::class,
+        ListController::class,
     ];
-    
-    public $listConfig = 'config_list.yaml';
-    public $formConfig = 'config_form.yaml';
-    public $reorderConfig = 'config_reorder.yaml';
 
+    /**
+     * The configuration file for the form controller implementation.
+     * @var string
+     */
+    public $formConfig = 'config_form.yaml';
+
+    /**
+     * The configuration file for the list controller implementation.
+     * @var string
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
+     * Required admin permission to access this page.
+     * @var array
+     */
     public $requiredPermissions = [
         'offline.mall.settings.manage_currency'
     ];
 
+    /**
+     * Construct the controller.
+     */
     public function __construct()
     {
         parent::__construct();
 
         BackendMenu::setContext('October.System', 'system', 'settings');
         SettingsManager::setContext('OFFLINE.Mall', 'currency_settings');
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function formExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
+    }
+    
+    /**
+     * Extend query to show disabled records.
+     * @param Builder $query
+     * @return void
+     */
+    public function listExtendQuery(Builder $query)
+    {
+        $query->withDisabled();
     }
 }

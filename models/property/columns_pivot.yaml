@@ -1,10 +1,4 @@
 columns:
-    sort_order_handle:
-            label: " "
-            type: partial
-            path: $/offline/mall/models/property/_reorder_handle.htm
-            sortable: false
-            width: 20px
     pivot[sort_order]:
         invisible: true
         type: number

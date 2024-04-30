@@ -180,7 +180,7 @@ return [
         'index_driver_comment' => 'Jeśli twoja baza danych obsługuje JSON, użyj sterownika bazy danych.',
         'index_driver_filesystem' => 'System plików',
         'index_driver_database' => 'Baza danych (tylko dla MySQL 5.7+ lub MariaDB 10.2+)',
-        'index_driver_hint' => 'Jeśli zmienisz tę opcję, uruchom „php artisan mall:reindex” w wierszu poleceń, aby ponownie zindeksować produktys!',
+        'index_driver_hint' => 'Jeśli zmienisz tę opcję, uruchom :command w wierszu poleceń, aby ponownie zindeksować produktys!',
     ],
     'feed_settings' => [
         'description' => 'Skonfiguruj kanały centrum handlowego',

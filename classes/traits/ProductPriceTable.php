@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Backend\Widgets\Table;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Models\Currency;
@@ -162,7 +163,7 @@ trait ProductPriceTable
             if ($price === false || $price === null) {
                 continue;
             }
-            Price::create([
+            Price::withoutGlobalScope(new IsStatesScope)->create([
                 'price_category_id' => $group['id'],
                 'priceable_type'    => $type::MORPH_KEY,
                 'priceable_id'      => $record['original_id'],

@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Models;
 
 use Model;
 use October\Rain\Database\Traits\Validation;
+use October\Rain\Element\ElementHolder;
 use System\Models\File;
 
 class ProductFile extends Model
@@ -28,6 +29,12 @@ class ProductFile extends Model
     public $belongsTo = [
         'product' => Product::class,
     ];
+    public $belongsToMany = [
+        'variants' => [
+            Variant::class,
+            'table' => 'offline_mall_product_file_variant'
+        ]
+    ];
 
     /**
      * Get the current file version first.
@@ -39,5 +46,22 @@ class ProductFile extends Model
     public function scopeSortLatest($q)
     {
         $q->orderBy('created_at', 'DESC');
+    }
+
+    /**
+     * Filter shown fields on backend form.
+     * @param ElementHolder $fields
+     * @param mixed $context
+     * @return void
+     */
+    public function filterFields(ElementHolder $fields, $context = null)
+    {
+        if ($this->product->inventory_management_method == 'single') {
+            if (is_a($fields, ElementHolder::class) && array_key_exists('variants', $fields->config)) {
+                $fields->config['variants']->hidden = true;
+            } elseif (property_exists($fields, 'variants')) {
+                $fields->variants->hidden = true;
+            }
+        }
     }
 }

@@ -598,7 +598,7 @@ return [
         "index_driver_comment" => "Se il tuo database supporta JSON usa il driver database.",
         "index_driver_database" => "Database (solo per MySQL 5.7+ o MariaDB 10.2+)",
         "index_driver_filesystem" => "Filesystem",
-        "index_driver_hint" => "Se cambi questa opzione assicurati di eseguire \"php artisan mall:reindex\" nella riga di comando per re-indicizzare i tuoi prodotti!",
+        "index_driver_hint" => "Se cambi questa opzione assicurati di eseguire :command nella riga di comando per re-indicizzare i tuoi prodotti!",
         "label" => "Configurazione",
         "links" => "Pagine CMS",
         "links_comment" => "Scegli quali pagine verranno usate per visualizzare i componenti base del tuo negozio",

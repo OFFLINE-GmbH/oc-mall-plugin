@@ -132,10 +132,12 @@ class MailingEventHandler
                 'order_url'   => $this->getBackendOrderUrl($result->order),
             ];
             Mail::queue(
-                $this->template('offline.mall::admin.checkout_succeeded'), $data,
-                function ($message) use ($adminMail) {
+                $this->template('offline.mall::admin.checkout_succeeded'), 
+                $data,
+                function (Mailable $message) use ($adminMail) {
                     $message->to($adminMail);
-                });
+                }
+            );
         }
     }
 
@@ -167,10 +169,13 @@ class MailingEventHandler
             $this->enabledNotifications->has('offline.mall::admin.checkout_failed')
             && $adminMail = GeneralSettings::get('admin_email')
         ) {
-            Mail::queue($this->template('offline.mall::admin.checkout_failed'), $data,
+            Mail::queue(
+                $this->template('offline.mall::admin.checkout_failed'), 
+                $data,
                 function ($message) use ($adminMail) {
                     $message->to($adminMail);
-                });
+                }
+            );
         }
     }
 
@@ -274,10 +279,13 @@ class MailingEventHandler
         $failedBecamePaid = $order->getOriginal($attr) === FailedState::class && $order->getAttribute($attr) === PaidState::class;
 
         if ($failedBecamePaid && $adminMail = GeneralSettings::get('admin_email')) {
-            Mail::queue('offline.mall::mail.admin.payment_paid', $data,
+            Mail::queue(
+                'offline.mall::mail.admin.payment_paid', 
+                $data,
                 function ($message) use ($adminMail) {
                     $message->to($adminMail);
-                });
+                }
+            );
         }
     }
 

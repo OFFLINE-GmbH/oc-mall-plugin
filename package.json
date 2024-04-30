@@ -1,0 +1,27 @@
+{
+    "name": "@offline/mall",
+    "homepage": "https://github.com/OFFLINE-GmbH/oc-mall-plugin",
+    "description": "E-commerce solution for October CMS",
+    "keywords": [
+        "october",
+        "cms",
+        "e-commerce",
+        "shop",
+        "plugin"
+    ],
+    "license": "MIT",
+    "author": "Tobias Kündig <tobias@offline.ch> (https://offline.ch)",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "docs:dev": "vitepress dev src/docs",
+        "docs:build": "vitepress build src/docs",
+        "docs:preview": "vitepress preview src/docs",
+        "translate": "translator"
+    },
+    "devDependencies": {
+        "@ratmd/oc-translator": "^0.1.1",
+        "vitepress": "^1.0.0-rc.44",
+        "vue": "^3.4.21"
+    }
+}

@@ -56,7 +56,8 @@ class PropertyValue extends Model
     {
         $value = $this->attributes['value'] ?? '';
         if ($this->isColor()) {
-            $value = $this->jsonDecodeValue()['name'] ?? '';
+            $decoded = $this->jsonDecodeValue();
+            $value = $decoded['name'] ?? $decoded['hex'] ?? '';
         }
         $this->index_value = str_slug($value);
     }
@@ -163,10 +164,9 @@ class PropertyValue extends Model
     /**
      * Handle special array property values.
      * @param $value
-     *
-     * @return string|null
+     * @return mixed
      */
-    public function handleArrayValue($value): ?string
+    public function handleArrayValue($value)
     {
         if ($this->isColor()) {
             $name = $value['name'] ?? false;

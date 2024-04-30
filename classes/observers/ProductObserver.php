@@ -39,7 +39,7 @@ class ProductObserver
     public function updated(Product $product)
     {
         // If a re-index is forced skip this run, it will be triggered manually later on
-        if ($product->forceReindex) {
+        if (!$product || $product->forceReindex) {
             return;
         }
 

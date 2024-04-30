@@ -143,7 +143,7 @@ class AddressForm extends MallComponent
 
         $id = $this->decode($hashId);
         try {
-            $this->setVar('address', Address::byCustomer($user->customer)->findOrFail($id));
+            $this->setVar('address', Address::byCustomer($user->customer)->where('id', $id)->firstOrFail());
         } catch (ModelNotFoundException $e) {
             return false;
         }

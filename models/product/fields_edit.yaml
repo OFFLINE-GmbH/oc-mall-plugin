@@ -52,10 +52,6 @@ tabs:
             span: left
             type: dropdown
             tab: 'offline.mall::lang.product.general'
-            trigger:
-                action: hide
-                field: is_virtual
-                condition: 'checked'
         group_by_property_id:
             label: 'offline.mall::lang.product.group_by_property'
             oc.commentPosition: ''
@@ -110,23 +106,23 @@ tabs:
         variants_section:
             label: 'offline.mall::lang.common.variants'
             span: full
-            trigger:
-                action: show
-                field: inventory_management_method
-                condition: 'value[variant]'
             type: section
             comment: 'offline.mall::lang.products.variants_comment'
             tab: 'offline.mall::lang.product.general'
-        variants:
-            span: full
-            path: variants
             trigger:
                 action: hide
                 field: inventory_management_method
                 condition: 'value[single]'
+        variants:
+            span: full
+            path: variants
             type: partial
             tab: 'offline.mall::lang.product.general'
             dependsOn: categories
+            trigger:
+                action: hide
+                field: inventory_management_method
+                condition: 'value[single]'
         description_short:
             label: 'offline.mall::lang.product.description_short'
             size: small

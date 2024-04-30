@@ -63,8 +63,6 @@
             'subject' => '订单 #:number 的结帐错误',
             'problem_message' => '我们非常抱歉在您的结帐过程中出现问题。我们将调查问题并与您联系以提供更多信息。',
             'check_order_status' => '要查看您的订单状态，您可以随时登录我们的商店。',
-            'payment_id' => '付款 ID',
-            'error' => '错误信息',
         ],
     ],
     'admin' => [
@@ -76,6 +74,8 @@
             'subject' => '结帐失败#:number',
             'not_processed' => '无法正确处理以下订单。您可能必须联系客户。',
             'error_details' => '错误详情',
+            'payment_id' => '付款 ID',
+            'error' => '错误信息',
         ],
         'payment_paid' => [
             'subject' => '订单付款#:number成功',

@@ -1,10 +1,4 @@
 columns:
-    sort_order_handle:
-            label: " "
-            type: partial
-            path: $/offline/mall/models/property/_reorder_handle.htm
-            sortable: false
-            width: 20px
     name:
         label: 'offline.mall::lang.common.name'
         type: text

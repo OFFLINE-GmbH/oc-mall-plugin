@@ -26,33 +26,41 @@ use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use System\Models\File;
 
-
-/**
- * @SuppressWarnings(PHPMD.TooManyFields)
- */
 class Product extends Model
 {
-    use Validation;
-    use SoftDelete;
-    use Sluggable;
-    use UserSpecificPrice;
-    use Images;
     use CustomFields;
-    use PropertyValues;
+    use FilteredTaxes;
     use HashIds;
+    use Images;
     use Nullable;
+    use PDFMaker;
     use PriceAccessors;
     use ProductPriceAccessors;
+    use PropertyValues;
+    use Sluggable;
+    use SoftDelete;
     use StockAndQuantity;
-    use FilteredTaxes;
-    use PDFMaker;
+    use UserSpecificPrice;
+    use Validation;
 
     const MORPH_KEY = 'mall.product';
 
-    protected $dates = ['deleted_at'];
-    public $jsonable = ['links', 'additional_descriptions', 'additional_properties', 'embeds'];
-    public $nullable = ['group_by_property_id'];
+    /**
+     * Implement behaviors for this model.
+     * @var array
+     */
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
+    /**
+     * The table associated with this model.
+     * @var string
+     */
+    public $table = 'offline_mall_products';
+
+    /**
+     * The translatable attributes of this model.
+     * @var array
+     */
     public $translatable = [
         'name',
         ['slug', 'index' => true],
@@ -66,9 +74,11 @@ class Product extends Model
         'additional_properties',
         'embeds',
     ];
-    public $slugs = [
-        'slug' => 'name',
-    ];
+
+    /**
+     * The validation rules for the single attributes.
+     * @var array
+     */
     public $rules = [
         'name'                         => 'required',
         'slug'                         => ['regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
@@ -83,24 +93,22 @@ class Product extends Model
         'file_expires_after_days'      => 'nullable|integer',
         'file_session_required'        => 'nullable|boolean',
     ];
-    public $casts = [
-        'price_includes_tax'           => 'boolean',
-        'allow_out_of_stock_purchases' => 'boolean',
-        'weight'                       => 'integer',
-        'height'                       => 'integer',
-        'length'                       => 'integer',
-        'width'                        => 'integer',
-        'id'                           => 'integer',
-        'stackable'                    => 'boolean',
-        'published'                    => 'boolean',
-        'stock'                        => 'integer',
-        'sales_count'                  => 'integer',
-        'shippable'                    => 'boolean',
-        'is_virtual'                   => 'boolean',
-        'file_max_download_count'      => 'integer',
-        'file_expires_after_days'      => 'integer',
-        'file_session_required'        => 'boolean',
+
+    /**
+     * Attribute names that are json encoded and decoded from the database.
+     * @var array 
+     */
+    public $jsonable = [
+        'links', 
+        'additional_descriptions', 
+        'additional_properties', 
+        'embeds'
     ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
     public $fillable = [
         'brand_id',
         'user_defined_id',
@@ -136,12 +144,66 @@ class Product extends Model
         'file_max_download_count',
         'file_session_required',
     ];
+
+    /**
+     * Attributes which should be set to null, when empty.
+     * @var array
+     */
+    public $nullable = [
+        'group_by_property_id'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    public $casts = [   
+        'price_includes_tax'            => 'boolean',
+        'allow_out_of_stock_purchases'  => 'boolean',
+        'weight'                        => 'integer',
+        'height'                        => 'integer',
+        'length'                        => 'integer',
+        'width'                         => 'integer',
+        'id'                            => 'integer',
+        'stackable'                     => 'boolean',
+        'published'                     => 'boolean',
+        'stock'                         => 'integer',
+        'sales_count'                   => 'integer',
+        'shippable'                     => 'boolean',
+        'is_virtual'                    => 'boolean',
+        'file_max_download_count'       => 'integer',
+        'file_expires_after_days'       => 'integer',
+        'file_session_required'         => 'boolean',
+        'deleted_at'                    => 'datetime',
+    ];
+
+    /**
+     * Automatically generate unique URL names for the passed attributes.
+     * @var array
+     */
+    public $slugs = [
+        'slug' => 'name',
+    ];
+    
+    /**
+     * The accessors to append to the model's array form.
+     * @var array
+     */
     public $appends = ['hash_id'];
-    public $table = 'offline_mall_products';
+    
+    /**
+     * The attachMany relationships of this model.
+     * @var array
+     */
     public $attachMany = [
         'downloads'      => File::class,
         'initial_images' => File::class,
     ];
+
+    /**
+     * The belongsTo relationships of this model.
+     * @var array
+     */
     public $belongsTo = [
         'brand'             => [Brand::class, 'replicate' => false],
         'group_by_property' => [
@@ -150,6 +212,11 @@ class Product extends Model
             'replicate' => false,
         ],
     ];
+
+    /**
+     * The hasManyThrough relationships of this model.
+     * @var array
+     */
     public $hasManyThrough = [
         'custom_field_options' => [
             CustomFieldOption::class,
@@ -158,25 +225,45 @@ class Product extends Model
             'throughKey' => 'custom_field_id',
         ],
     ];
+
+    /**
+     * The morphMany relationships of this model.
+     * @var array
+     */
     public $morphMany = [
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
-        'additional_prices'     => [Price::class, 'name' => 'priceable'],
+        'additional_prices'     => [Price::class, 'name' => 'priceable']
     ];
+
+    /**
+     * The hasMany relationships of this model.
+     * @var array
+     */
     public $hasMany = [
         'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
-        'variants'               => Variant::class,
+        'variants'               => [Variant::class],
         'cart_products'          => [CartProduct::class, 'replicate' => false],
         'order_products'         => [OrderProduct::class, 'replicate' => false],
-        'image_sets'             => ImageSet::class,
-        'property_values'        => PropertyValue::class,
+        'image_sets'             => [ImageSet::class],
+        'property_values'        => [PropertyValue::class, 'conditions' => 'variant_id is null'],
         'reviews'                => [Review::class, 'replicate' => false],
         'discounts'              => [Discount::class, 'replicate' => false],
         'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null', 'replicate' => false],
         'files'                  => [ProductFile::class],
     ];
+
+    /**
+     * The hasOne relationships of this model.
+     * @var array
+     */
     public $hasOne = [
         'latest_file' => [ProductFile::class, 'order' => 'created_at DESC', 'replicate' => false],
     ];
+
+    /**
+     * The belongsToMany relationships of this model.
+     * @var array
+     */
     public $belongsToMany = [
         'categories'      => [
             Category::class,
@@ -242,7 +329,11 @@ class Product extends Model
      */
     private $cachedFilteredTaxes;
 
-    public function __construct($attributes = [])
+    /**
+     * Create a new Product modal instance.
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
         $this->bindEvent('model.relation.beforeAttach', function ($relationName, $attachedIdList, $insertData) {
@@ -284,9 +375,6 @@ class Product extends Model
         if ($this->inventory_management_method === 'variant' && $this->stock === null) {
             $this->stock = 0;
         }
-        if ($this->is_virtual) {
-            $this->inventory_management_method = 'single';
-        }
     }
 
     public function afterSave()
@@ -315,7 +403,7 @@ class Product extends Model
     public function afterDelete()
     {
         $this->prices()->delete();
-        $this->additional_prices()->delete();
+        $this->additional_prices()->withDisabled()->delete();
         $this->variants()->delete();
         $this->property_values()->delete();
         DB::table('offline_mall_product_accessory')->where('product_id', $this->id)->delete();
@@ -473,17 +561,15 @@ class Product extends Model
      * This setter makes it easier to set price values
      * in different currencies by providing an array of
      * prices. It is mostly used for unit testing.
-     *
-     * @param $value
-     *
      * @internal
-     *
+     * @param $value
      */
     public function setPriceAttribute($value)
     {
-        if ( ! is_array($value)) {
+        if (!is_array($value)) {
             return;
         }
+
         foreach ($value as $currency => $price) {
             ProductPrice::updateOrCreate([
                 'product_id'  => $this->id,
@@ -599,11 +685,9 @@ class Product extends Model
         }
 
         if ($this->is_virtual) {
-            $this->hideField($fields, 'inventory_management_method');
-            $this->hideField($fields, 'variants');
             $this->hideField($fields, 'weight');
             if ($this->files->count() > 0) {
-                $fields->missing_file_hint->hidden = true;
+                $this->hideField($fields, 'missing_file_hint');
             }
         } else {
             $this->hideField($fields, 'product_files');

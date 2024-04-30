@@ -27,16 +27,32 @@
                 {% if product.product_file_grants.count|default(0) > 0 %}
                     <br/>
                     {% for grant in product.product_file_grants %}
-                        <br/>
-                        <a href="{{ grant.download_link }}">
-                            {{ 'offline.mall::frontend.download_file'|trans({ file: grant.display_name }) }}
-                            {{ loop.length > 1 ? ('#' ~ loop.index) }}
-                        </a>
-                        {% if grant.expires_at %}
-                            <br />{{ 'offline.mall::frontend.download_valid_until'|trans({ date: grant.expires_at.toDateString() }) }}
-                        {% endif %}
-                        {% if grant.max_download_count %}
-                            <br />{{ 'offline.mall::frontend.download_count'|trans({ count: grant.max_download_count }) }}
+                        {% if product.product.inventory_management_method == 'single' %}
+                            <br/>
+                            <a href="{{ grant.download_link }}">
+                                {{ 'offline.mall::frontend.download_file'|trans({ file: grant.display_name }) }}
+                                {{ loop.length > 1 ? ('#' ~ loop.index) }}
+                            </a>
+                            {% if grant.expires_at %}
+                                <br />{{ 'offline.mall::frontend.download_valid_until'|trans({ date: grant.expires_at.toDateString() }) }}
+                            {% endif %}
+                            {% if grant.max_download_count %}
+                                <br />{{ 'offline.mall::frontend.download_count'|trans({ count: grant.max_download_count }) }}
+                            {% endif %}
+                        {% else %}
+                            {% for file in grant.files %}
+                                <br/>
+                                <a href="{{ grant.download_link }}/{{ file.id }}">
+                                    {{ 'offline.mall::frontend.download_file'|trans({ file: file.display_name|default('Document ' . file.id) }) }}
+                                    {{ loop.length > 1 ? ('#' ~ loop.index) }}
+                                </a>
+                                {% if grant.expires_at %}
+                                    <br />{{ 'offline.mall::frontend.download_valid_until'|trans({ date: grant.expires_at.toDateString() }) }}
+                                {% endif %}
+                                {% if grant.max_download_count %}
+                                    <br />{{ 'offline.mall::frontend.download_count'|trans({ count: grant.max_download_count }) }}
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     {% endfor %}
                 {% endif %}

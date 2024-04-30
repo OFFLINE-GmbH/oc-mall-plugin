@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="./phpunit_bootstrap.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
->
+    backupStaticAttributes="false"
+    bootstrap="../../../tests/bootstrap.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    processIsolation="false"
+    stopOnFailure="false">
     <testsuites>
         <testsuite name="Plugin Unit Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <php>
-        <env name="APP_ENV" value="testing"/>
-        <env name="CACHE_DRIVER" value="array"/>
-        <env name="SESSION_DRIVER" value="array"/>
+        <env name="APP_ENV" value="testing" />
+        <env name="CACHE_DRIVER" value="array" />
+        <env name="SESSION_DRIVER" value="array" />
+        <env name="ACTIVE_THEME" value="mall" />
+        <env name="CONVERT_LINE_ENDINGS" value="true" />
+        <env name="CMS_ROUTE_CACHE" value="true" />
+        <env name="CMS_TWIG_CACHE" value="false" />
+        <env name="ENABLE_CSRF" value="false" />
+        <env name="DB_CONNECTION" value="sqlite" />
+        <env name="DB_DATABASE" value=":memory:" />
+        <env name="DATABASE_URL" value="" />
     </php>
 </phpunit>

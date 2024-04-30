@@ -1,10 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Downloads;
 
 use Auth;
 use Cms\Classes\Page;
-use File;
 use Flash;
 use Request;
 use Session;
@@ -15,7 +14,7 @@ use OFFLINE\Mall\Models\ProductFileGrant;
 
 class VirtualProductFileDownload
 {
-    public function handle(string $key)
+    public function handle(string $key, ?string $idx = null)
     {
         $grant = $this->findGrant($key);
         if ( ! $grant) {
@@ -41,33 +40,30 @@ class VirtualProductFileDownload
             return response($this->trans('expired'), 403);
         }
 
-        // Increase the download counter, then send the file as a response.
-        $grant->increment('download_count');
-        if ($product->latest_file) {
-            $product->latest_file->increment('download_count');
-        }
-
-        // If the grant has a file attached, send it.
-        if ($grant->file) {
-            $filename = sprintf('%s.%s', $grant->display_name, $grant->file->getExtension());
-
-            return response()->download($grant->file->getLocalPath(), $filename);
-        }
-
-        // If no grant specific file is available, return the product file.
-        if ($product->latest_file && $product->latest_file->file) {
-            $filename = sprintf('%s.%s', $grant->display_name, $product->latest_file->file->getExtension());
-
-            return response()->download($product->latest_file->file->getLocalPath(), $filename);
+        // Get File 
+        if (!empty($idx)) {
+            $file = $product->files->where('id', $idx)->first();
+        } else {
+            $file = $grant->file ? $grant->file : $product->latest_file;
         }
 
         // If no file is around, return and log an error. The site admin needs to fix this!
-        Log::error(
-            '[OFFLINE.Mall] A virtual product without a file attachment has been purchased. You need to fix this!',
-            ['grant' => $grant, 'product' => $product, 'user' => Auth::getUser()]
-        );
+        if (empty($file)) {
+            Log::error(
+                '[OFFLINE.Mall] A virtual product without a file attachment has been purchased. You need to fix this!',
+                ['grant' => $grant, 'product' => $product, 'user' => Auth::getUser()]
+            );
+            return response($this->trans('not_found'), 500);
+        }
 
-        return response($this->trans('not_found'), 500);
+        // Increase the download counter, then send the file as a response.
+        $grant->increment('download_count');
+        $file->increment('download_count');
+
+        // Download File
+        $filename = sprintf('%s.%s', $file->display_name, $file->file->getExtension());
+        $filename = urlencode($filename);
+        return response()->download($file->file->getLocalPath(), $filename);
     }
 
     /**

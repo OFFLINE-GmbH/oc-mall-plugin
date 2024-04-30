@@ -63,10 +63,10 @@ class OrdersList extends MallComponent
     public function init()
     {
         $user = Auth::getUser();
-        if ( ! $user) {
+        if (!$user || !$user->customer) {
             return;
         }
-
+        
         $this->paymentLink = $this->getPaymentLink();
         $this->orders = Order
             ::byCustomer($user->customer)
@@ -96,7 +96,7 @@ class OrdersList extends MallComponent
 
         $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
 
-        $order = Order::byCustomer($user->customer)->findOrFail(post('id'));
+        $order = Order::byCustomer($user->customer)->where('id', post('id'))->firstOrFail();
         $order->order_state = $state;
         $order->save();
     }

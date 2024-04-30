@@ -48,9 +48,9 @@ trait CartActions
 
                 $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
-                $cartEntry->update(['quantity' => $newQuantity]);
-
                 $this->validateStock($variant ?? $product, $quantity);
+                $cartEntry->update(['quantity' => $newQuantity]);
+                
                 $this->validateShippingMethod();
 
                 return $this->load('products');
@@ -71,7 +71,7 @@ trait CartActions
             $cartEntry->weight     = $variant ? $variant->weight : $product->weight;
             // Skip any setter methods from the JsonPrice trait
             $cartEntry->attributes['price'] = $cartEntry->mapJsonPrice($price, 1);
-
+            
             $this->products()->save($cartEntry);
             $this->load('products');
 

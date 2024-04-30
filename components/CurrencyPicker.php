@@ -70,7 +70,7 @@ class CurrencyPicker extends MallComponent
             return;
         }
 
-        Currency::setActiveCurrency(Currency::findOrFail($currency));
+        Currency::setActiveCurrency(Currency::where('id', $currency)->firstOrFail());
 
         $pageUrl = $this->getUrl();
 

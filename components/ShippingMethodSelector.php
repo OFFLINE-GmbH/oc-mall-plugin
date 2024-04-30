@@ -146,7 +146,7 @@ class ShippingMethodSelector extends MallComponent
 
         return [
             '.mall-shipping-selector' => $this->renderPartial($this->alias . '::selector'),
-            'method'                  => ShippingMethod::find($id),
+            'method'                  => ShippingMethod::where('id', $id)->first(),
         ];
 	}
 

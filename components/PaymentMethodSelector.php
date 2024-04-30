@@ -118,7 +118,7 @@ class PaymentMethodSelector extends MallComponent
             $orderId = $this->decode($orderId);
 
             try {
-                $order = Order::byCustomer($user->customer)->findOrFail($orderId);
+                $order = Order::byCustomer($user->customer)->where('id', $orderId)->firstOrFail();
                 $this->order          = $order;
                 $this->workingOnModel = $order;
             } catch (ModelNotFoundException $e) {
@@ -126,7 +126,7 @@ class PaymentMethodSelector extends MallComponent
             }
         }
 
-        $method = PaymentMethod::find($this->order->payment_method_id ?? $this->cart->payment_method_id);
+        $method = PaymentMethod::where('id', $this->order->payment_method_id ?? $this->cart->payment_method_id)->first();
 
         $this->setVar('methods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('customerMethods', $this->getCustomerMethods());
@@ -207,7 +207,7 @@ class PaymentMethodSelector extends MallComponent
 
         return [
             '.mall-payment-method-selector' => $this->renderPartial($this->alias . '::selector'),
-            'method'                        => PaymentMethod::find($id),
+            'method'                        => PaymentMethod::where('id', $id)->first(),
         ];
     }
 
@@ -220,7 +220,7 @@ class PaymentMethodSelector extends MallComponent
         $id = $this->decode(post('id'));
 
         $method = CustomerPaymentMethod::where('customer_id', $this->workingOnModel->customer->id)
-                                       ->find($id);
+                                       ->where('id', $id)->first();
 
         if ( ! $method) {
             throw new ValidationException([
@@ -340,6 +340,6 @@ class PaymentMethodSelector extends MallComponent
      */
     protected function getPaymentMethod()
     {
-        return PaymentMethod::findOrFail($this->workingOnModel->payment_method_id);
+        return PaymentMethod::where('id', $this->workingOnModel->payment_method_id)->firstOrFail();
     }
 }
