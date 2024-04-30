@@ -8,5 +8,4 @@ docs/.vitepress/cache
 docs/.vitepress/dist
 nbproject
 node_modules
-package-lock.json
 vendor
