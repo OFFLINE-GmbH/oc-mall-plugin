@@ -14,13 +14,12 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "docs:dev": "vitepress dev src/docs",
-        "docs:build": "vitepress build src/docs",
-        "docs:preview": "vitepress preview src/docs",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs",
         "translate": "translator"
     },
     "devDependencies": {
-        "@ratmd/oc-translator": "^0.1.1",
         "vitepress": "^1.0.0-rc.44",
         "vue": "^3.4.21"
     }
