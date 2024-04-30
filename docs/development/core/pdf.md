@@ -1,8 +1,6 @@
 # PDF 
 
-> [!DANGER] Work in Progress
-> We are currently revising our documentation and the page you are currently looking at has not yet 
-> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 
 Mall bundles the great [barryvdh/laravel-dompdf](https://github.com/barryvdh/laravel-dompdf/)
 to generate PDF files.

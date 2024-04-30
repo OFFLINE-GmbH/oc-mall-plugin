@@ -4,8 +4,8 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
     title: "Mall OctoberCMS Plugin",
     description: "The all-inclusive e-commerce solution for OctoberCMS.",
+    base: '/oc-mall-plugin/',
     vite: {
-	base: '/oc-mall-plugin/',
         server: {
             port: 3003
         }

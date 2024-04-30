@@ -1,8 +1,6 @@
 # Reviews
 
-> [!DANGER] Work in Progress
-> We are currently revising our documentation and the page you are currently looking at has not yet 
-> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 
 Reviews can be added for a Product or Variant. 
 

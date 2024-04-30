@@ -1,8 +1,6 @@
 # Services
 
-> [!DANGER] Work in Progress
-> We are currently revising our documentation and the page you are currently looking at has not yet 
-> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 
 Services are additional offerings for a product 
 (e. g. extended warranty, on-site installation).

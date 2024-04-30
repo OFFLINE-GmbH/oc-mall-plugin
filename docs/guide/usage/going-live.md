@@ -1,8 +1,6 @@
 # Going Live
 
-> [!DANGER] Work in Progress
-> We are currently revising our documentation and the page you are currently looking at has not yet 
-> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 
 Once everything is set up and you have deployed your oc-mall installation to a production server you, can
 use the checklist on this page to make sure everything is running smoothly.

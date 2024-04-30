@@ -1,8 +1,6 @@
 # AddressSelector
 
-> [!DANGER] Work in Progress
-> We are currently revising our documentation and the page you are currently looking at has not yet 
-> been completed. Thus, the information here may therefore be incomplete or out of date.
+
 
 The `AddressSelector` component displays an address that belongs to the user's cart. It gives  the user the 
 ability to edit it or select a different address.
