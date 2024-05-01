@@ -4,7 +4,9 @@
 .phpunit.result.cache
 .vscode
 composer.lock
+docs/.vitepress/cache
 src/docs/.vitepress/cache
+docs/.vitepress/dist
 src/docs/.vitepress/dist
 nbproject
 node_modules
