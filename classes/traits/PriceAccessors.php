@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Traits;
 
@@ -15,6 +14,7 @@ use OFFLINE\Mall\Models\Variant;
 trait PriceAccessors
 {
     use NullPrice;
+
     /**
      * @var Money
      */

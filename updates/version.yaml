@@ -561,3 +561,6 @@ v3.2.0:
     - 030_08-create_offline_mall_product_file_variant_table.php
 v3.2.1:
     - 'Fix Release Number'
+v3.2.2:
+    - 'Minor Bugfix'
+    - 'Fixed mapWithKeys() on array call when oldPrice has been disabled, thanks to @dathwa (#1118).'
