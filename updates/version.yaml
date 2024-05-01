@@ -563,4 +563,6 @@ v3.2.1:
     - 'Fix Release Number'
 v3.2.2:
     - 'Minor Bugfix'
-    - 'Fixed mapWithKeys() on array call when oldPrice has been disabled, thanks to @dathwa (#1118).'
+    - 'Update noUiSlider to version 15.7.1.'
+    - 'Fixed mapWithKeys function call on array when oldPrice has been disabled, thanks to @dathwa (#1118).'
+    - 'Fixed include external assets instead of using a CDN, thanks to @ZhiweiWu0425 (#918).'
