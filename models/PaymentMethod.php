@@ -6,6 +6,7 @@ use Auth;
 use DB;
 use Model;
 use Cms\Classes\Theme;
+use Illuminate\Database\Eloquent\Builder;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -199,6 +200,16 @@ class PaymentMethod extends Model
             $default = static::orderBy('sort_order', 'ASC')->first();
         }
         return $default;
+    }
+
+    /**
+     * Include all payment methods, even disabled ones.
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeAll(Builder $query)
+    {
+        return $query->withDisabled();
     }
 
     /**

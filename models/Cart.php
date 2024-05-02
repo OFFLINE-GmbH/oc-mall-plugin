@@ -38,8 +38,14 @@ class Cart extends Model
         'products' => [CartProduct::class, 'deleted' => true],
     ];
     public $belongsTo = [
-        'shipping_method'  => ShippingMethod::class,
-        'payment_method'   => PaymentMethod::class,
+        'shipping_method'  => [
+            ShippingMethod::class,
+            'scope'     => 'all'
+        ],
+        'payment_method'   => [
+            PaymentMethod::class,
+            'scope'     => 'all'
+        ],
         'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
         'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
         'customer'         => [Customer::class, 'deleted' => true],

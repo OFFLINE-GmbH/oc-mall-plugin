@@ -62,9 +62,21 @@ class Order extends Model
         'payment_logs'     => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
     public $belongsTo = [
-        'payment_method'          => [PaymentMethod::class, 'deleted' => true],
-        'customer_payment_method' => [CustomerPaymentMethod::class, 'deleted' => true],
-        'order_state'             => [OrderState::class, 'deleted' => true],
+        'payment_method'          => [
+            PaymentMethod::class, 
+            'deleted'   => true,
+            'scope'     => 'all'
+        ],
+        'customer_payment_method' => [
+            CustomerPaymentMethod::class, 
+            'deleted'   => true,
+            'scope'     => 'all'
+        ],
+        'order_state'             => [
+            OrderState::class, 
+            'deleted'   => true,
+            'scope'     => 'all'
+        ],
         'customer'                => [Customer::class, 'deleted' => true],
         'cart'                    => [Cart::class, 'deleted' => true],
     ];
