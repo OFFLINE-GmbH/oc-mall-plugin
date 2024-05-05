@@ -564,5 +564,7 @@ v3.2.1:
 v3.2.2:
     - 'Minor Bugfix'
     - 'Update noUiSlider to version 15.7.1.'
-    - 'Fixed mapWithKeys function call on array when oldPrice has been disabled, thanks to @dathwa (#1118).'
+    - 'Update to new translate.localePicker.translateParams event, thanks to @RickAcb (#1126).'
     - 'Fixed include external assets instead of using a CDN, thanks to @ZhiweiWu0425 (#918).'
+    - 'Fixed mapWithKeys function call on array when oldPrice has been disabled, thanks to @dathwa (#1118).'
+    - 'Fixed backend Order menu breaks on used but disabled payment methods, thanks to @dathwa (#1120).'
