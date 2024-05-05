@@ -2,12 +2,13 @@
 
 namespace OFFLINE\Mall;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\View;
+use October\Rain\Database\Relations\Relation;
 use OFFLINE\Mall\Classes\Registration\BootComponents;
 use OFFLINE\Mall\Classes\Registration\BootEvents;
 use OFFLINE\Mall\Classes\Registration\BootExtensions;
 use OFFLINE\Mall\Classes\Registration\BootMails;
-use OFFLINE\Mall\Classes\Registration\BootRelations;
 use OFFLINE\Mall\Classes\Registration\BootServiceContainer;
 use OFFLINE\Mall\Classes\Registration\BootSettings;
 use OFFLINE\Mall\Classes\Registration\BootTwig;
@@ -16,6 +17,16 @@ use OFFLINE\Mall\Console\CheckCommand;
 use OFFLINE\Mall\Console\IndexCommand;
 use OFFLINE\Mall\Console\PurgeCommand;
 use OFFLINE\Mall\Console\SeedDataCommand;
+use OFFLINE\Mall\Models\CustomField;
+use OFFLINE\Mall\Models\CustomFieldOption;
+use OFFLINE\Mall\Models\Discount;
+use OFFLINE\Mall\Models\ImageSet;
+use OFFLINE\Mall\Models\PaymentMethod;
+use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Models\ServiceOption;
+use OFFLINE\Mall\Models\ShippingMethod;
+use OFFLINE\Mall\Models\ShippingMethodRate;
+use OFFLINE\Mall\Models\Variant;
 use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
@@ -28,7 +39,6 @@ class Plugin extends PluginBase
     use BootMails;
     use BootValidation;
     use BootTwig;
-    use BootRelations;
 
     /**
      * Required plugin dependencies.
@@ -41,15 +51,31 @@ class Plugin extends PluginBase
     ];
 
     /**
-     * Create a new plugin instance.
-     * @return void
+     * Required model morph-map relations, must be registered n the constructor 
+     * to make them available when the plugin migrations are run.
+     * @var array
      */
-    public function __construct($app)
+    protected $relations = [
+        Variant::MORPH_KEY            => Variant::class,
+        Product::MORPH_KEY            => Product::class,
+        ImageSet::MORPH_KEY           => ImageSet::class,
+        Discount::MORPH_KEY           => Discount::class,
+        CustomField::MORPH_KEY        => CustomField::class,
+        PaymentMethod::MORPH_KEY      => PaymentMethod::class,
+        ShippingMethod::MORPH_KEY     => ShippingMethod::class,
+        CustomFieldOption::MORPH_KEY  => CustomFieldOption::class,
+        ShippingMethodRate::MORPH_KEY => ShippingMethodRate::class,
+        ServiceOption::MORPH_KEY      => ServiceOption::class,
+    ];
+
+    /**
+     * Create a new plugin instance.
+     * @param Application $app
+     */
+    public function __construct(Application $app)
     {
         parent::__construct($app);
-        // The morph map has to be registered in the constructor so it is available
-        // when plugin migrations are run.
-        $this->registerRelations();
+        Relation::morphMap($this->relations);
     }
 
     /**
