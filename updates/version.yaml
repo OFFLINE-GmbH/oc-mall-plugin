@@ -563,6 +563,9 @@ v3.2.1:
     - 'Fix Release Number'
 v3.2.2:
     - 'Minor Bugfix'
+    - 'Added Customer Group column on RainLab.User list.'
+    - 'Added Customer filter scope on RainLab.User list.'
+    - 'Added Create Customer bulk toolbar action on RainLab.User list.'
     - 'Update noUiSlider to version 15.7.1.'
     - 'Update to new translate.localePicker.translateParams event, thanks to @RickAcb (#1126).'
     - 'Fixed include external assets instead of using a CDN, thanks to @ZhiweiWu0425 (#918).'

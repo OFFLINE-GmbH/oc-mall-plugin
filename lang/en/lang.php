@@ -1158,6 +1158,11 @@ return [
             'cancelled' => 'Set the state of the order as "cancelled"',
         ],
     ],
+    'users' => [
+        'create_customer' => 'Create Customer',
+        'customer_added' => 'The selected users have been extended with a customer account.',
+        'no_customer_added' => 'No valid user found with without a customer account.',
+    ],
     'customer_group' => [
         'code_comment' => 'This code can be used to identify this group programmatically',
         'discount_comment' => 'Give this customer group a specific discount in % on your whole catalogue',

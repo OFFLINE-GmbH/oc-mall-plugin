@@ -3,7 +3,10 @@
 namespace OFFLINE\Mall\Classes\Registration;
 
 use App;
+use Backend\Widgets\Filter;
 use Backend\Widgets\Form;
+use Backend\Widgets\Lists;
+use Flash;
 use Illuminate\Support\Facades\Event;
 use October\Rain\Database\Builder;
 use OFFLINE\Mall\Models\Address;
@@ -67,22 +70,77 @@ trait BootExtensions
                 $builder->whereHas('customer');
                 return $builder;
             });
+
+            $model->addDynamicMethod('scopeHasCustomerFilter', function (Builder $builder, $scopes) {
+                if ($scopes->value == '1') {
+                    $builder->doesntHave('customer');
+                } else if ($scopes->value == '2') {
+                    $builder->whereHas('customer');
+                }
+                return $builder;
+            });
         });
 
         RainLabUsersController::extend(function (RainLabUsersController $users) {
             if (!isset($users->relationConfig)) {
                 $users->addDynamicProperty('relationConfig');
             }
+
             $myConfigPath = '$/offline/mall/controllers/users/config_relation.yaml';
             $users->relationConfig = $users->mergeConfig(
                 $users->relationConfig,
                 $myConfigPath
             );
+
             // Extend the Users controller with the Relation behaviour that is needed
             // to display the addresses relation widget above.
             if (!$users->isClassExtendedWith('Backend.Behaviors.RelationController')) {
                 $users->extendClassWith(\Backend\Behaviors\RelationController::class);
             }
+
+            $users->addDynamicMethod('onCreateCustomerAccounts', function () use ($users) {
+                $ids = post('checked');
+
+                if (!(is_array($ids) && count($ids) > 0)) {
+                    return;
+                } else {
+                    $count = 0;
+
+                    foreach ($ids AS $id) {
+                        $user = RainLabUser::where('id', $id)->first();
+
+                        if (empty($user)) {
+                            continue;
+                        }
+
+                        if ($user->isBanned()) {
+                            continue;
+                        }
+
+                        if (!$user->customer && !$user->is_guest) {
+                            $customer            = new Customer();
+                            $customer->firstname = $user->name;
+                            $customer->lastname  = $user->surname;
+                            $customer->user_id   = $user->id;
+                            $customer->is_guest  = false;
+                            $customer->save();
+                
+                            $user->customer = $customer;
+                            $user->save();
+
+                            $count++;
+                        }
+                    }
+
+                    if ($count == 0) {
+                        Flash::warning(trans('offline.mall::lang.users.no_customer_added'));
+                    } else {
+                        Flash::success(trans('offline.mall::lang.users.customer_added'));
+                    }
+
+                    return $users->listRefresh();
+                }
+            });
         });
 
         MallUser::extend(function ($model) {
@@ -128,16 +186,74 @@ trait BootExtensions
                     'emptyOption' => trans('offline.mall::lang.common.none'),
                     'tab'         => 'offline.mall::lang.plugin.name',
                 ],
-                //
-                // This feature is blocked by https://github.com/octobercms/october/issues/2508
-                //
-                // 'addresses'      => [
-                //     'label' => trans('offline.mall::lang.common.addresses'),
-                //     'type'  => 'partial',
-                //     'path'  => '$/offline/mall/controllers/users/_addresses.htm',
-                //     'tab'   => 'offline.mall::lang.plugin.name',
-                // ],
+                //'addresses'      => [
+                //    'label' => trans('offline.mall::lang.common.addresses'),
+                //    'type'  => 'partial',
+                //    'path'  => '$/offline/mall/controllers/users/_addresses.htm',
+                //    'tab'   => 'offline.mall::lang.plugin.name',
+                //],
             ]);
         }, 5);
+
+        // Add Customer Group on RainLab.User List
+        Event::listen('backend.list.extendColumns', function (Lists $list) {
+            if (!$list->getController() instanceof \RainLab\User\Controllers\Users) {
+                return;
+            }
+
+            if (!$list->getModel() instanceof \RainLab\User\Models\User) {
+                return;
+            }
+        
+            // Add a new column
+            $list->addColumns([
+                'customer_group' => [
+                    'label'     => trans('offline.mall::lang.common.customer_group'),
+                    'default'   => '',
+                    'after'     => 'email',
+                    'relation'  => 'customer_group',
+                    'select'    => 'name',
+                    'sortable'  => true
+                ]
+            ]);
+        });
+
+        // Add Customer Group on RainLab.User List
+        Event::listen('backend.filter.extendScopes', function (Filter $filter) {
+            if (!$filter->getController() instanceof \RainLab\User\Controllers\Users) {
+                return;
+            }
+
+            if (!$filter->getModel() instanceof \RainLab\User\Models\User) {
+                return;
+            }
+
+            $filter->addScopes([
+                'has_customer' => [
+                    'label'         => trans('offline.mall::lang.order.customer'),
+                    'type'          => 'switch',
+                    'conditions'    => [
+                        'offline_mall_customers.id = null',
+                        'offline_mall_customers.id <> null',
+                    ],
+                    'modelScope'    => 'hasCustomerFilter'
+                ]
+            ]);
+        });
+
+        // Add 'Create Customer' Toolbar action
+        Event::listen('rainlab.user.view.extendListToolbar', function (RainLabUsersController $ctrl) {
+            ?>
+                <button
+                    type="button"
+                    class="btn btn-default"
+                    onclick="oc.request(this, 'onCreateCustomerAccounts', { data: { checked: $('.control-list').listWidget('getChecked') } })"
+                    data-trigger-action="enable"
+                    data-trigger=".control-list input[type=checkbox]"
+                    data-trigger-condition="checked">
+                    <?= trans('offline.mall::lang.users.create_customer') ?>
+                </button>
+            <?php
+        });
     }
 }
