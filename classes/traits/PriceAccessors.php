@@ -83,7 +83,7 @@ trait PriceAccessors
 
     public function mapCurrencyPrices($items)
     {
-        return $items->mapWithKeys(function ($price) {
+        return Collection::wrap($items)->mapWithKeys(function ($price) {
             $code = $price->currency->code;
 
             $product = null;
