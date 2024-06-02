@@ -77,9 +77,9 @@ class Plugin extends PluginBase
             // Make sure the event is triggered by a product you care about. Validate this using the slug, the
             // assigned category or one of the other unique values (user_defined_id, gtin, mpn, etc).
             // In this example we check if the product belongs to a category that has the
-            // "generate-gift-cards" code set as a custom code.
+            // "gift-cards" code set as a custom code.
             $isGiftCardCategory = $product->categories->contains(function (Category $category) {
-                return $category->code === 'generate-gift-cards';
+                return $category->code === 'gift-cards';
             });
             // Exit here if this is not a product with a gift card category attached.
             if ( ! $isGiftCardCategory) {
