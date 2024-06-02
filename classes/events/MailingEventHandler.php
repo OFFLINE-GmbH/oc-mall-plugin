@@ -16,7 +16,7 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Notification;
 use OFFLINE\Mall\Models\Order;
 use RainLab\Translate\Classes\Translator;
-use RainLab\User\Models\Settings as UserSettings;
+use OFFLINE\Mall\Classes\User\Settings as UserSettings;
 use PDOException;
 
 class MailingEventHandler
@@ -81,9 +81,16 @@ class MailingEventHandler
             return;
         }
 
-        $needsConfirmation = UserSettings::get('activate_mode') === UserSettings::ACTIVATE_USER;
-        $confirmCode       = implode('!', [$user->id, $user->getActivationCode()]);
-        $confirmUrl        = $this->getAccountUrl('confirmation') . '?code=' . $confirmCode;
+        // RainLab.User 3.0
+        if (class_exists(\RainLab\User\Models\Setting::class)) {
+            $needsConfirmation = false;
+            $confirmCode       = null;
+            $confirmUrl        = null;
+        } else {
+            $needsConfirmation = UserSettings::get('activate_mode') === UserSettings::ACTIVATE_USER;
+            $confirmCode       = implode('!', [$user->id, $user->getActivationCode()]);
+            $confirmUrl        = $this->getAccountUrl('confirmation') . '?code=' . $confirmCode;
+        }
 
         $data = [
             'user'         => $user,

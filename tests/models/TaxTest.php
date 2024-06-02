@@ -2,14 +2,13 @@
 
 namespace OFFLINE\Mall\Tests\Models;
 
-use OFFLINE\Mall\Classes\Customer\AuthManager;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Tests\PluginTestCase;
-use RainLab\User\Facades\Auth;
+use RainLab\User\Models\User;
 
 class TaxTest extends PluginTestCase
 {
@@ -21,9 +20,6 @@ class TaxTest extends PluginTestCase
     {
         parent::setUp();
 
-        app()->singleton('user.auth', function () {
-            return AuthManager::instance();
-        });
         Auth::login(User::first());
     }
 

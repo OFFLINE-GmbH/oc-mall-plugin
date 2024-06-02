@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Components;
 use Auth;
 use DB;
 use October\Rain\Exception\ValidationException;
+use October\Rain\Router\Rule;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use RainLab\User\Models\User;
@@ -77,9 +78,9 @@ class CustomerProfile extends MallComponent
             'password',
             'password_repeat',
         ]);
-        $neededRules['email'] = 'unique:users';
+        $neededRules['email'] = ['required', \Illuminate\Validation\Rule::unique('users', 'email')->ignore($this->user->id)];
 
-        // The password is unchanged so we don't need to validate it.
+        // The password is unchanged, so we don't need to validate it.
         if ($data['password'] === '') {
             unset($neededRules['password'], $neededRules['password_repeat']);
         }

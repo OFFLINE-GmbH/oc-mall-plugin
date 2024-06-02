@@ -571,3 +571,6 @@ v3.2.2:
     - 'Fixed include external assets instead of using a CDN, thanks to @ZhiweiWu0425 (#918).'
     - 'Fixed mapWithKeys function call on array when oldPrice has been disabled, thanks to @dathwa (#1118).'
     - 'Fixed backend Order menu breaks on used but disabled payment methods, thanks to @dathwa (#1120).'
+'v3.3.0':
+    - 'Added support for RainLab.User 3.0'
+    - 'Deprecated OFFLINE\Mall\Models\User, use the RainLab.User model instead'

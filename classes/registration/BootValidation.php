@@ -2,7 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-use OFFLINE\Mall\Models\User as RainLabUser;
+use RainLab\User\Models\User;
 use Validator;
 
 trait BootValidation
@@ -10,12 +10,12 @@ trait BootValidation
     protected function registerValidationRules()
     {
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
-            return RainLabUser
-                    ::with('customer')
+            return User::with('customer')
                     ->where('email', $value)
                     ->whereHas('customer', function ($q) {
                         $q->where('is_guest', 0);
-                    })->count() === 0;
+                    })
+                    ->count() === 0;
         });
     }
 }

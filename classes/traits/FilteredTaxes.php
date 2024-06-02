@@ -7,7 +7,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Tax;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 use Event;
 

@@ -2,18 +2,15 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-use App;
 use Backend\Widgets\Filter;
 use Backend\Widgets\Form;
 use Backend\Widgets\Lists;
-use Flash;
 use Illuminate\Support\Facades\Event;
 use October\Rain\Database\Builder;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\User as MallUser;
 use RainLab\Location\Models\Country as RainLabCountry;
 use RainLab\User\Controllers\Users as RainLabUsersController;
 use RainLab\User\Models\User as RainLabUser;
@@ -45,11 +42,6 @@ trait BootExtensions
 
     protected function extendRainLabUser()
     {
-        // Use custom user model
-        App::singleton('user.auth', function () {
-            return \OFFLINE\Mall\Classes\Customer\AuthManager::instance();
-        });
-
         RainLabUser::extend(function (RainLabUser $model) {
             $model->hasOne['customer']          = Customer::class;
             $model->belongsTo['customer_group'] = [CustomerGroup::class, 'key' => 'offline_mall_customer_group_id'];
@@ -59,12 +51,19 @@ trait BootExtensions
                 'through'    => Customer::class,
                 'throughKey' => 'id',
             ];
-            $model->rules['surname']            = 'required';
-            $model->rules['name']               = 'required';
             $model->addFillable([
                 'customer_group',
                 'offline_mall_customer_group_id',
             ]);
+
+            // RainLab.User 3.0
+            if (class_exists(\RainLab\User\Models\Setting::class)) {
+                $model->rules['first_name'] = 'required';
+                $model->rules['last_name']  = 'required';
+            } else {
+                $model->rules['surname'] = 'required';
+                $model->rules['name']    = 'required';
+            }
 
             $model->addDynamicMethod('scopeCustomer', function (Builder $builder) {
                 $builder->whereHas('customer');
@@ -110,14 +109,12 @@ trait BootExtensions
 
             // Extend the Users controller with the Relation behaviour that is needed
             // to display the addresses relation widget above.
-            if (!$users->isClassExtendedWith('Backend.Behaviors.RelationController')) {
-                $users->extendClassWith(\Backend\Behaviors\RelationController::class);
+            // RainLab.User 3.0 does not need this.
+            if (!class_exists(\RainLab\User\Models\Setting::class)) {
+                if (!$users->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
+                    $users->extendClassWith(\Backend\Behaviors\RelationController::class);
+                }
             }
-        });
-
-        MallUser::extend(function ($model) {
-            $model->rules['surname'] = 'required';
-            $model->rules['name']    = 'required';
         });
 
         // Add Customer Groups menu entry to RainLab.User

@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\GeneralSettings;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 /**
  * The MyAccount component displays an overview of a customer's account.
@@ -123,7 +123,7 @@ class MyAccount extends MallComponent
      *
      * @return string
      */
-    public function pageUrl($page, $params = [])
+    public function getPageUrl($page, $params = [])
     {
         return $this->controller->pageUrl(
             $this->page->page->fileName,
@@ -192,7 +192,7 @@ class MyAccount extends MallComponent
      */
     private function exitRedirect()
     {
-        return redirect()->to($this->pageUrl('orders'));
+        return redirect()->to($this->getPageUrl('orders'));
     }
 
     /**
@@ -204,7 +204,7 @@ class MyAccount extends MallComponent
     private function cartRedirect()
     {
         $controller = Controller::getController() ?: new Controller;
-        $url = $controller->pageUrl(GeneralSettings::get('cart_page'));
+        $url = $controller->getPageUrl(GeneralSettings::get('cart_page'));
 
         return redirect()->to($url);
     }

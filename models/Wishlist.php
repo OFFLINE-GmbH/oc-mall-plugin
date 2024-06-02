@@ -14,7 +14,7 @@ use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Traits\ShippingMethods;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 use RainLab\User\Models\User;
 
 class Wishlist extends Model

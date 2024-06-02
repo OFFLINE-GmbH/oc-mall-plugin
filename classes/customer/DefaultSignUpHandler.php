@@ -6,14 +6,15 @@ use DB;
 use Event;
 use Illuminate\Support\Facades\Validator;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\User\Settings;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\GeneralSettings;
-use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Wishlist;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 use RainLab\User\Models\UserGroup;
+use RainLab\User\Models\User;
 use System\Classes\PluginManager;
 
 class DefaultSignUpHandler implements SignUpHandler
@@ -29,8 +30,9 @@ class DefaultSignUpHandler implements SignUpHandler
 
     /**
      * @throws ValidationException
+     * @return User
      */
-    protected function signUp(array $data): ?User
+    protected function signUp(array $data)
     {
         if ($this->asGuest) {
             $data['password'] = $data['password_repeat'] = str_random(30);
@@ -121,13 +123,23 @@ class DefaultSignUpHandler implements SignUpHandler
         }
     }
 
-    protected function createUser($data, $requiresConfirmation): User
+    /**
+     * @param $data
+     * @param $requiresConfirmation
+     */
+    protected function createUser($data, $requiresConfirmation)
     {
         $data['name']                  = $data['firstname'];
         $data['surname']               = $data['lastname'];
         $data['email']                 = $data['email'];
         $data['password']              = $data['password'];
         $data['password_confirmation'] = $data['password_repeat'];
+
+        // RainLab.User 3.0
+        if (class_exists(\RainLab\User\Models\Setting::class)) {
+            $data['first_name'] = $data['firstname'];
+            $data['last_name']  = $data['lastname'];
+        }
         
         $user = Auth::register($data, ! $requiresConfirmation);
         if ($this->asGuest && $user && $group = UserGroup::getGuestGroup()) {
@@ -170,7 +182,7 @@ class DefaultSignUpHandler implements SignUpHandler
 
     public static function rules($forSignup = true): array
     {
-        $minPasswordLength = \RainLab\User\Models\User::getMinPasswordLength();
+        $minPasswordLength = Settings::getMinPasswordLength();
         $rules = [
             'firstname'           => 'required',
             'lastname'            => 'required',

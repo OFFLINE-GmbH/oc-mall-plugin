@@ -10,7 +10,7 @@ use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Variant;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 /**
  * The Cart component displays a user's cart.

@@ -3,7 +3,6 @@
 namespace OFFLINE\Mall\Tests\Models;
 
 use Event;
-use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Models\Address;
@@ -19,10 +18,10 @@ use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
+use RainLab\User\Models\User;
 
 class OrderTest extends PluginTestCase
 {
@@ -30,10 +29,6 @@ class OrderTest extends PluginTestCase
     {
         parent::setUp();
 
-        // Authenticate user
-        app()->singleton('user.auth', function () {
-            return AuthManager::instance();
-        });
         Auth::login(User::first());
 
         // Set Country

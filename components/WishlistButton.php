@@ -8,7 +8,7 @@ use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Models\Wishlist;
 use OFFLINE\Mall\Models\WishlistItem;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 use Validator;
 
 class WishlistButton extends MallComponent

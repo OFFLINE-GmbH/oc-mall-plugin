@@ -3,14 +3,13 @@
 namespace OFFLINE\Mall\Tests\Models;
 
 use Illuminate\Support\Facades\DB;
-use OFFLINE\Mall\Classes\Customer\AuthManager;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\PriceCategory;
 use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Tests\PluginTestCase;
-use RainLab\User\Facades\Auth;
+use RainLab\User\Models\User;
 
 class PriceCategoryTest extends PluginTestCase
 {
@@ -22,9 +21,6 @@ class PriceCategoryTest extends PluginTestCase
     {
         parent::setUp();
 
-        app()->singleton('user.auth', function () {
-            return AuthManager::instance();
-        });
         Auth::login(User::first());
     }
 

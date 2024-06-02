@@ -2,17 +2,18 @@
 
 namespace OFFLINE\Mall\Classes\Customer;
 
+use Auth;
 use Event;
 use Exception;
 use Flash;
 use October\Rain\Auth\AuthException;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\User\Settings;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
-use OFFLINE\Mall\Models\User;
-use Auth;
 use OFFLINE\Mall\Models\Wishlist;
-use Redirect;
+use RainLab\User\Models\Setting;
+use RainLab\User\Models\User;
 use Validator;
 
 class DefaultSignInHandler implements SignInHandler
@@ -52,9 +53,18 @@ class DefaultSignInHandler implements SignInHandler
         Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
         Event::fire('mall.customer.beforeAuthenticate', [$this, $credentials]);
 
-        $user = Auth::authenticate($credentials, true);
+        // RainLab.User 3.0 compatibility
+        if (class_exists(\RainLab\User\Models\Setting::class)) {
+            if (Auth::attempt(['email' => $credentials['login'], 'password' => $credentials['password']], true)) {
+                $user = Auth::getUser();
+            } else {
+                throw new AuthException('rainlab.user::lang.account.invalid_login');
+            }
+        } else {
+            $user = Auth::authenticate($credentials, true);
+        }
 
-        if ($user->isBanned()) {
+        if (method_exists($user, 'isBanned') && $user->isBanned()) {
             Auth::logout();
             throw new AuthException('rainlab.user::lang.account.banned');
         }
@@ -88,7 +98,7 @@ class DefaultSignInHandler implements SignInHandler
      */
     protected function validate(array $data)
     {
-        $minPasswordLength = \RainLab\User\Models\User::getMinPasswordLength();
+        $minPasswordLength = Settings::getMinPasswordLength();
         $rules    = [
             'login'    => 'required|email|between:6,255',
             'password' => sprintf('required|min:%d|max:255', $minPasswordLength),
