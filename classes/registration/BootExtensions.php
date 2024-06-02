@@ -79,6 +79,22 @@ trait BootExtensions
                 }
                 return $builder;
             });
+
+            // Create a customer for a User model that does not have a customer attached.
+            $model->addDynamicMethod('attachCustomer', function () use ($model) {
+                if ($model->customer || $model->is_guest) {
+                    return;
+                }
+
+                $customer = new Customer();
+                $customer->firstname = $model->name;
+                $customer->lastname = $model->surname;
+                $customer->user_id = $model->id;
+                $customer->is_guest = false;
+                $customer->save();
+
+                $model->customer = $customer;
+            });
         });
 
         RainLabUsersController::extend(function (RainLabUsersController $users) {
@@ -97,50 +113,6 @@ trait BootExtensions
             if (!$users->isClassExtendedWith('Backend.Behaviors.RelationController')) {
                 $users->extendClassWith(\Backend\Behaviors\RelationController::class);
             }
-
-            $users->addDynamicMethod('onCreateCustomerAccounts', function () use ($users) {
-                $ids = post('checked');
-
-                if (!(is_array($ids) && count($ids) > 0)) {
-                    return;
-                } else {
-                    $count = 0;
-
-                    foreach ($ids AS $id) {
-                        $user = RainLabUser::where('id', $id)->first();
-
-                        if (empty($user)) {
-                            continue;
-                        }
-
-                        if ($user->isBanned()) {
-                            continue;
-                        }
-
-                        if (!$user->customer && !$user->is_guest) {
-                            $customer            = new Customer();
-                            $customer->firstname = $user->name;
-                            $customer->lastname  = $user->surname;
-                            $customer->user_id   = $user->id;
-                            $customer->is_guest  = false;
-                            $customer->save();
-                
-                            $user->customer = $customer;
-                            $user->save();
-
-                            $count++;
-                        }
-                    }
-
-                    if ($count == 0) {
-                        Flash::warning(trans('offline.mall::lang.users.no_customer_added'));
-                    } else {
-                        Flash::success(trans('offline.mall::lang.users.customer_added'));
-                    }
-
-                    return $users->listRefresh();
-                }
-            });
         });
 
         MallUser::extend(function ($model) {
@@ -204,7 +176,7 @@ trait BootExtensions
             if (!$list->getModel() instanceof \RainLab\User\Models\User) {
                 return;
             }
-        
+
             // Add a new column
             $list->addColumns([
                 'customer_group' => [
@@ -239,21 +211,6 @@ trait BootExtensions
                     'modelScope'    => 'hasCustomerFilter'
                 ]
             ]);
-        });
-
-        // Add 'Create Customer' Toolbar action
-        Event::listen('rainlab.user.view.extendListToolbar', function (RainLabUsersController $ctrl) {
-            ?>
-                <button
-                    type="button"
-                    class="btn btn-default"
-                    onclick="oc.request(this, 'onCreateCustomerAccounts', { data: { checked: $('.control-list').listWidget('getChecked') } })"
-                    data-trigger-action="enable"
-                    data-trigger=".control-list input[type=checkbox]"
-                    data-trigger-condition="checked">
-                    <?= trans('offline.mall::lang.users.create_customer') ?>
-                </button>
-            <?php
         });
     }
 }
