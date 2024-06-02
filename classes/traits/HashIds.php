@@ -22,13 +22,18 @@ trait HashIds
      * @param string $value
      * @return mixed
      */
-    public function decode(string $value)
+    public function decode(string $value = null)
     {
-        $result = app(Hasher::class)->decode($value) ?? null;
-        if (is_array($result) && count($result) === 1) {
-            return $result[0];
-        } else {
-            return $result;
+        if (!$value) {
+            return null;
+        }
+
+        try {
+            $result = app(Hasher::class)->decode($value) ?? null;
+
+            return is_array($result) && count($result) === 1 ? $result[0] : $result;
+        } catch (\Exception $e) {
+            return null;
         }
     }
 
