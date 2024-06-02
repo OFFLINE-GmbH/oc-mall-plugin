@@ -2,15 +2,13 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
-use DB;
-use PDO;
 use Barryvdh\DomPDF\Facade;
 use Barryvdh\DomPDF\PDF;
+use DB;
 use Dompdf\Dompdf;
 use Hashids\Hashids;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Cache;
-use OFFLINE\Mall\Classes\Customer\AuthManager;
 use OFFLINE\Mall\Classes\Customer\DefaultSignInHandler;
 use OFFLINE\Mall\Classes\Customer\DefaultSignUpHandler;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
@@ -28,6 +26,7 @@ use OFFLINE\Mall\Classes\Payments\Stripe;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\GeneralSettings;
+use PDO;
 
 trait BootServiceContainer
 {
@@ -53,9 +52,6 @@ trait BootServiceContainer
         });
         $this->app->singleton(Hashids::class, function () {
             return new Hashids(config('app.key', 'oc-mall'), 8);
-        });
-        $this->app->singleton('user.auth', function () {
-            return AuthManager::instance();
         });
         $this->app->bind(Index::class, function () {
             $driver = Cache::rememberForever('offline_mall.mysql.index.driver', function () {

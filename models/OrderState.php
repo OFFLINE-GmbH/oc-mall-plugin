@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Lang;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
@@ -118,7 +119,6 @@ class OrderState extends Model
 
     /**
      * Return the available translated orderState flag options.
-     *
      * @return array
      */
     public function getFlagOptions(): array
@@ -128,6 +128,20 @@ class OrderState extends Model
         }, static::$availableFlagOptions);
     }
 
+    /**
+     * Include all payment methods, even disabled ones.
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeAll(Builder $query)
+    {
+        return $query->withDisabled();
+    }
+
+    /**
+     * Undocumented function
+     * @return void
+     */
     public function beforeDelete()
     {
         if (!empty($this->flag)) {

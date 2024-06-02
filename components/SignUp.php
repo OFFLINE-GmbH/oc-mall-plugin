@@ -7,7 +7,7 @@ use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\Location\Models\Country;
-use RainLab\User\Models\Settings as UserSettings;
+use OFFLINE\Mall\Classes\User\Settings as UserSettings;
 
 /**
  * The SignUp component displays a signup and login form

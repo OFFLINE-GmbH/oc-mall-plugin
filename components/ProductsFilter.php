@@ -254,8 +254,8 @@ class ProductsFilter extends MallComponent
     public function init()
     {
         if ((bool)$this->property('includeSliderAssets')) {
-            $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.js');
-            $this->addCss('https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.css');
+            $this->addJs('assets/js/nouislider.min.js');
+            $this->addCss('assets/css/nouislider.min.css');
         }
         $this->money = app(Money::class);
     }

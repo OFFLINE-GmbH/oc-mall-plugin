@@ -6,6 +6,7 @@ use Closure;
 use DB;
 use Event;
 use Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Session;
 use October\Rain\Database\Collection;
 use October\Rain\Database\Traits\Sortable;
@@ -278,6 +279,16 @@ class ShippingMethod extends Model
             });
         Event::fire('mall.shipping.methods.availability', [&$availableShippingMethods, $cart, $wishlist]);
         return $availableShippingMethods;
+    }
+
+    /**
+     * Include all shipping methods, even disabled ones.
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeAll(Builder $query)
+    {
+        return $query->withDisabled();
     }
 
     /**

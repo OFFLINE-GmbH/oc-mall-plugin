@@ -104,6 +104,16 @@ trait BootEvents
                 return Product::translateParams($params, $oldLocale, $newLocale);
             }
         });
+
+        // Translate slugs October 3 CMS
+        Event::listen('cms.sitePicker.overrideParams', function ($page, $params, $currentSite, $proposedSite) {
+            if ($page->getBaseFileName() === GeneralSettings::get('category_page')) {
+                return Category::translateParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
+            }
+            if ($page->getBaseFileName() === GeneralSettings::get('product_page')) {
+                return Product::translateParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
+            }
+        });
     }
 
     protected function registerSiteSearchEvents()

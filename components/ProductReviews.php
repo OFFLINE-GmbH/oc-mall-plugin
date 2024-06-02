@@ -12,7 +12,7 @@ use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\ReviewCategory;
 use OFFLINE\Mall\Models\ReviewSettings;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 class ProductReviews extends ComponentBase
 {

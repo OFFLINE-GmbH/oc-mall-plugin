@@ -2,14 +2,13 @@
 
 namespace OFFLINE\Mall\Tests\Models;
 
-use OFFLINE\Mall\Classes\Customer\AuthManager;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\CustomerGroupPrice;
 use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
+use RainLab\User\Models\User;
 
 class CustomerGroupPriceTest extends PluginTestCase
 {
@@ -21,10 +20,6 @@ class CustomerGroupPriceTest extends PluginTestCase
         $variant->name       = 'Variant';
         $variant->stock      = 20;
         $variant->save();
-
-        app()->singleton('user.auth', function () {
-            return AuthManager::instance();
-        });
     }
 
     public function test_relationship()

@@ -18,10 +18,10 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
-use OFFLINE\Mall\Models\User;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country;
-use RainLab\User\Facades\Auth as FrontendAuth;
+use OFFLINE\Mall\Classes\User\Auth as FrontendAuth;
+use RainLab\User\Models\User;
 use Validator;
 
 /**

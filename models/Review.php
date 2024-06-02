@@ -5,7 +5,7 @@ namespace OFFLINE\Mall\Models;
 use Event;
 use Model;
 use October\Rain\Database\Traits\Validation;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 /**
  * @property Customer $customer

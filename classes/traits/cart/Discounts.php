@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Discount;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 trait Discounts
 {

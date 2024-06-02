@@ -4,7 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Price;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 trait UserSpecificPrice
 {

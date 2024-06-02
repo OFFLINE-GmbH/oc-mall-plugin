@@ -32,9 +32,14 @@ trait ApplyDiscounts
 
         // Calculate Products
         $total = $this->productsExclusive()->exclusive()->getMinorAmount()->toInt();
+
         $products = [];
         foreach ($this->map['products'] AS $product) {
-            $products[] = intval(round((100 / $total) * $product->exclusive()->toInt()));
+            if ($total > 0) {
+                $products[] = intval(round((100 / $total) * $product->exclusive()->toInt()));
+            } else {
+                $products[] = 0;
+            }
         }
 
         // Apply Discounts

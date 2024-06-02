@@ -20,7 +20,7 @@ use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 use Redirect;
 
 /**

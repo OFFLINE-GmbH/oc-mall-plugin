@@ -11,7 +11,7 @@ use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 /**
  * The AddressSelector component displays a dropdown

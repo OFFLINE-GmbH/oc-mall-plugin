@@ -13,7 +13,7 @@ use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Wishlist;
 use OFFLINE\Mall\Models\WishlistItem;
-use RainLab\User\Facades\Auth;
+use OFFLINE\Mall\Classes\User\Auth;
 
 class Wishlists extends MallComponent
 {
