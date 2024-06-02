@@ -26,14 +26,14 @@ trait ProductPriceAccessors
         $price = $this->withFilter($filter, $prices->where('currency_id', $currency->id))->first();
         if ($price) {
             return $price;
-        } else {
-            return $this->nullPrice(
-                $currency,
-                $this->withFilter($filter, $prices),
-                'customer_group_prices',
-                $filter
-            );
         }
+
+        return $this->nullPrice(
+            $currency,
+            $this->withFilter($filter, $prices),
+            'customer_group_prices',
+            $filter
+        );
     }
 
     /**
@@ -57,14 +57,14 @@ trait ProductPriceAccessors
         $price = $this->withFilter($filter, $prices->where('currency_id', $currency->id))->first();
         if ($price) {
             return $price;
-        } else {
-            return $this->nullPrice(
-                $currency,
-                $this->withFilter($filter, $prices),
-                'additional_prices',
-                $filter
-            );
         }
+
+        return $this->nullPrice(
+            $currency,
+            $this->withFilter($filter, $prices),
+            'additional_prices',
+            $filter
+        );
     }
 
     /**
@@ -77,9 +77,9 @@ trait ProductPriceAccessors
         $oldPrice = PriceCategory::where('code', 'old_price')->first();
         if ($oldPrice) {
             return $this->additional_prices->where('price_category_id', $oldPrice->id);
-        } else {
-            return new Collection();
         }
+
+        return new Collection();
     }
 
     /**
@@ -93,9 +93,9 @@ trait ProductPriceAccessors
         $oldPrice = PriceCategory::where('code', 'old_price')->first();
         if ($oldPrice) {
             return $this->additionalPrice($oldPrice, $currency);
-        } else {
-            return null;
         }
+
+        return null;
     }
     
     /**
@@ -116,10 +116,7 @@ trait ProductPriceAccessors
     public function getOnSaleAttribute(): bool
     {
         $price = $this->old_price;
-        if ($price && $price->count() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return $price && $price->count() > 0;
     }
 }
