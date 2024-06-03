@@ -1,107 +1,116 @@
 tabs:
     fields:
+        # General Settings
         admin_email:
-            tab: General
-            label: offline.mall::lang.general_settings.admin_email
-            span: left
+            tab: offline.mall::lang.general_settings.tab_general
             type: email
+            label: offline.mall::lang.general_settings.admin_email
             comment: offline.mall::lang.general_settings.admin_email_comment
-
+            span: left
         index_driver:
-            tab: General
-            label: offline.mall::lang.general_settings.index_driver
-            span: right
+            tab: offline.mall::lang.general_settings.tab_general
             type: dropdown
+            label: offline.mall::lang.general_settings.index_driver
             comment: offline.mall::lang.general_settings.index_driver_comment
+            span: right
             showSearch: false
             options:
                 database: offline.mall::lang.general_settings.index_driver_database
                 filesystem: offline.mall::lang.general_settings.index_driver_filesystem
-
         index_hint:
-            tab: General
-            span: right
+            tab: offline.mall::lang.general_settings.tab_general
             type: partial
             path: $/offline/mall/models/settings/_index_hint.htm
+            span: right
 
+        # CMS Pages
         product_page:
-            tab: CMS Pages
+            tab: offline.mall::lang.general_settings.tab_pages
+            type: dropdown
             label: offline.mall::lang.general_settings.product_page
-            span: left
-            type: dropdown
             comment: offline.mall::lang.general_settings.product_page_comment
-
+            span: left
         category_page:
-            tab: CMS Pages
+            tab: offline.mall::lang.general_settings.tab_pages
+            type: dropdown
             label: offline.mall::lang.general_settings.category_page
-            span: right
-            type: dropdown
             comment: offline.mall::lang.general_settings.category_page_comment
-
+            span: right
         address_page:
-            tab: CMS Pages
+            tab: offline.mall::lang.general_settings.tab_pages
+            type: dropdown
             label: offline.mall::lang.general_settings.address_page
-            span: left
-            type: dropdown
             comment: offline.mall::lang.general_settings.address_page_comment
-
+            span: left
         checkout_page:
-            tab: CMS Pages
+            tab: offline.mall::lang.general_settings.tab_pages
+            type: dropdown
             label: offline.mall::lang.general_settings.checkout_page
-            span: right
-            type: dropdown
             comment: offline.mall::lang.general_settings.checkout_page_comment
-
-        account_page:
-            tab: CMS Pages
-            label: offline.mall::lang.general_settings.account_page
-            span: left
-            type: dropdown
-            comment: offline.mall::lang.general_settings.account_page_comment
-
-        cart_page:
-            tab: CMS Pages
-            label: offline.mall::lang.general_settings.cart_page
             span: right
+        account_page:
+            tab: offline.mall::lang.general_settings.tab_pages
             type: dropdown
-            comment: offline.mall::lang.general_settings.cart_page_comment
-
-        redirect_to_cart:
-            tab: Customizations
-            label: offline.mall::lang.general_settings.redirect_to_cart
+            label: offline.mall::lang.general_settings.account_page
+            comment: offline.mall::lang.general_settings.account_page_comment
             span: left
-            type: switch
-            default: true
-            comment: offline.mall::lang.general_settings.redirect_to_cart_comment
+        cart_page:
+            tab: offline.mall::lang.general_settings.tab_pages
+            type: dropdown
+            label: offline.mall::lang.general_settings.cart_page
+            comment: offline.mall::lang.general_settings.cart_page_comment
+            span: right
 
+        # Miscellaneous
+        vat_calculation:
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: dropdown
+            label: offline.mall::lang.general_settings.vat_calculation
+            comment: offline.mall::lang.general_settings.vat_calculation_comment
+            span: auto
+            options:
+                line: offline.mall::lang.general_settings.vat_calculation_per_line
+                total: offline.mall::lang.general_settings.vat_calculation_on_total
+            showSearch: false
         order_start:
-            tab: Customizations
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: text
             label: offline.mall::lang.general_settings.order_number_start
             comment: offline.mall::lang.general_settings.order_number_start_comment
-            type: text
-            span: right
+            span: auto
             default: 1
-
+        vat_hide:
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: switch
+            label: offline.mall::lang.general_settings.vat_hide
+            comment: offline.mall::lang.general_settings.vat_hide_comment
+            span: auto
+            default: false
+        redirect_to_cart:
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: switch
+            label: offline.mall::lang.general_settings.redirect_to_cart
+            comment: offline.mall::lang.general_settings.redirect_to_cart_comment
+            span: full
+            default: true
         use_state:
-            tab: Customizations
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: switch
             label: offline.mall::lang.general_settings.use_state
-            span: left
-            type: switch
-            default: 1
             comment: offline.mall::lang.general_settings.use_state_comment
-
+            span: full
+            default: 1
         group_search_results_by_product:
-            tab: Customizations
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: switch
             label: offline.mall::lang.general_settings.group_search_results_by_product
-            span: left
-            type: switch
-            default: 0
             comment: offline.mall::lang.general_settings.group_search_results_by_product_comment
-
-        shipping_selection_before_payment:
-            tab: Customizations
-            label: offline.mall::lang.general_settings.shipping_selection_before_payment
-            span: left
-            type: switch
+            span: full
             default: 0
+        shipping_selection_before_payment:
+            tab: offline.mall::lang.general_settings.tab_miscellaneous
+            type: switch
+            label: offline.mall::lang.general_settings.shipping_selection_before_payment
             comment: offline.mall::lang.general_settings.shipping_selection_before_payment_comment
+            span: full
+            default: 0
