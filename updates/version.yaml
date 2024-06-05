@@ -578,3 +578,4 @@ v3.3.0:
 v3.3.1:
     - 'Minor Bugfixes'
     - 'Fixed strict variables issue on oldPrice() attribute, thanks to @dathwa (#1118).'
+    - 'Fixed stripe purchase issue, thanks to @dathwa (#1145).'
