@@ -572,6 +572,10 @@ v3.2.2:
     - 'Fixed mapWithKeys function call on array when oldPrice has been disabled, thanks to @dathwa (#1118).'
     - 'Fixed backend Order menu breaks on used but disabled payment methods, thanks to @dathwa (#1120).'
 v3.3.0:
-    - "Various Bugfixes"
+    - 'Various Bugfixes'
     - 'Added support for RainLab.User 3.0'
     - 'Deprecated OFFLINE\Mall\Models\User, use the RainLab.User model instead'
+v3.3.1:
+    - 'Minor Bugfixes'
+    - 'Fixed strict variables issue on oldPrice() attribute, thanks to @dathwa (#1118).'
+    - 'Fixed stripe purchase issue, thanks to @dathwa (#1145).'

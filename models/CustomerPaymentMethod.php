@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Builder;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
