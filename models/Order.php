@@ -70,7 +70,6 @@ class Order extends Model
         'customer_payment_method' => [
             CustomerPaymentMethod::class, 
             'deleted'   => true,
-            'scope'     => 'all'
         ],
         'order_state'             => [
             OrderState::class, 

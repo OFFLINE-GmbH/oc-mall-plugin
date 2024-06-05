@@ -34,12 +34,4 @@ class CustomerPaymentMethod extends Model
     ];
     public $jsonable = ['data'];
 
-    public function beforeSave()
-    {
-        $hasDefault = self::where('customer_id', $this->customer_id)->where('is_default', 1)->count() > 0;
-        if ( ! $hasDefault) {
-            $this->is_default = true;
-        }
-    }
-
 }
