@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Models;
 
 use Model;
+use October\Rain\Database\Builder;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -33,5 +34,13 @@ class CustomerPaymentMethod extends Model
         'is_default',
     ];
     public $jsonable = ['data'];
+
+    public function beforeSave()
+    {
+        $hasDefault = self::where('customer_id', $this->customer_id)->where('is_default', 1)->count() > 0;
+        if ( ! $hasDefault) {
+            $this->is_default = true;
+        }
+    }
 
 }
