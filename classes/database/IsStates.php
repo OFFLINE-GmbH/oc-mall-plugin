@@ -26,6 +26,8 @@ trait IsStates
     public function initializeIsStates()
     {
         $this->bindEvent('model.beforeSave', [$this, 'onCheckIsDefaultStateBeforeSave']);
+        $this->bindEvent('model.beforeDelete', [$this, 'onHandleStateBeforeDelete']);
+        $this->bindEvent('model.afterDelete', [$this, 'onHandleStateAfterDelete']);
     }
 
     /**
@@ -81,7 +83,27 @@ trait IsStates
             }
         }
     }
-    
+
+    /**
+     * Enable Model (required for SoftDelete trait, see #1119)
+     * @return void
+     */
+    protected function onHandleStateBeforeDelete()
+    {
+        $this->is_enabled = true;
+        $this->update(['is_enabled']);
+    }
+
+    /**
+     * Disable Model (required for SoftDelete trait, see #1119)
+     * @return void
+     */
+    protected function onHandleStateAfterDelete()
+    {
+        $this->is_enabled = false;
+        $this->update(['is_enabled']);
+    }
+
     /**
      * Get the name of the 'is_default' column.
      * @return null|string
