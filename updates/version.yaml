@@ -581,4 +581,5 @@ v3.3.1:
     - 'Fixed stripe purchase issue, thanks to @dathwa (#1145).'
 v3.3.2:
     - 'Minor Bugfixes'
-    - 'Fixed SoftDeleting disabled models, thanks to @dathwa (#1119)'
+    - 'Fixed SoftDeleting disabled models, thanks to @dathwa (#1119).'
+    - 'Fixed empty-check on order properties.'
