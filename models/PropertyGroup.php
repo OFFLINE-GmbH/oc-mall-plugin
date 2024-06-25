@@ -94,6 +94,18 @@ class PropertyGroup extends Model
                        Queue::push(PropertyRemovalUpdate::class, $data);
                    });
         });
+
+        $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if ($relationName === 'properties') {
+                UniquePropertyValue::updateUsingPropertyGroup($this);
+            }
+        });
+
+        $this->bindEvent('model.relation.detach', function ($relationName, $attachedIdList) {
+            if ($relationName === 'properties') {
+                UniquePropertyValue::updateUsingPropertyGroup($this);
+            }
+        });
     }
 
     public function getDisplayNameAttribute()

@@ -96,12 +96,12 @@ class Product extends Model
 
     /**
      * Attribute names that are json encoded and decoded from the database.
-     * @var array 
+     * @var array
      */
     public $jsonable = [
-        'links', 
-        'additional_descriptions', 
-        'additional_properties', 
+        'links',
+        'additional_descriptions',
+        'additional_properties',
         'embeds'
     ];
 
@@ -157,7 +157,7 @@ class Product extends Model
      * The attributes that should be cast.
      * @var array
      */
-    public $casts = [   
+    public $casts = [
         'price_includes_tax'            => 'boolean',
         'allow_out_of_stock_purchases'  => 'boolean',
         'weight'                        => 'integer',
@@ -184,13 +184,13 @@ class Product extends Model
     public $slugs = [
         'slug' => 'name',
     ];
-    
+
     /**
      * The accessors to append to the model's array form.
      * @var array
      */
     public $appends = ['hash_id'];
-    
+
     /**
      * The attachMany relationships of this model.
      * @var array
@@ -393,6 +393,8 @@ class Product extends Model
                 ->whereIn('property_id', $properties)
                 ->delete();
         }
+
+        UniquePropertyValue::updateUsingProduct($this);
 
         if ($this->forceReindex) {
             $this->forceReindex = false;

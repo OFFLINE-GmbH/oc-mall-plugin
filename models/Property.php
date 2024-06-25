@@ -55,6 +55,22 @@ class Property extends Model
         ],
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if ($relationName === 'property_groups') {
+                UniquePropertyValue::updateUsingProperty($this);
+            }
+        });
+        $this->bindEvent('model.relation.detach', function ($relationName, $attachedIdList) {
+            if ($relationName === 'property_groups') {
+                UniquePropertyValue::updateUsingProperty($this);
+            }
+        });
+    }
+
     public function afterSave()
     {
         if ($this->pivot && ! $this->pivot->use_for_variants) {
@@ -67,6 +83,8 @@ class Property extends Model
                 ->where('group_by_property_id', $this->id)
                 ->update(['group_by_property_id' => null]);
         }
+
+        UniquePropertyValue::updateUsingProperty($this);
     }
 
     public function afterDelete()

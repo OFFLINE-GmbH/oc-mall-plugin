@@ -282,6 +282,11 @@ class Category extends Model
         return $this->inherit_review_categories ? $this->getInheritedReviewCategories() : $this->review_categories;
     }
 
+    public function afterSave(): void
+    {
+        UniquePropertyValue::updateUsingCategory($this);
+    }
+
     /**
      * Returns the review categories of the first parent
      * that does not inherit them.

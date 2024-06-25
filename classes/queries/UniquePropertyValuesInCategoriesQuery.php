@@ -5,11 +5,15 @@ namespace OFFLINE\Mall\Classes\Queries;
 use DB;
 use Illuminate\Support\Collection;
 use October\Rain\Database\QueryBuilder;
+use OFFLINE\Mall\Models\UniquePropertyValue;
 
 /**
  * This query is used to get a list of all unique property values in one or
  * more categories. It is used to display a set of possible filters
  * for all available property values.
+ *
+ * @deprecated 3.4.0 use UniquePropertyValue model with category relation
+ *
  */
 class UniquePropertyValuesInCategoriesQuery
 {
@@ -31,9 +35,11 @@ class UniquePropertyValuesInCategoriesQuery
      */
     public function query()
     {
+        return UniquePropertyValue::whereIn('category_id', $this->categories->pluck('id'));
         return DB
             ::table('offline_mall_products')
-            ->selectRaw('
+            ->selectRaw(
+                '
                 MIN(offline_mall_property_values.id) AS id,
                 offline_mall_property_values.value,
                 offline_mall_property_values.index_value,
@@ -42,7 +48,7 @@ class UniquePropertyValuesInCategoriesQuery
             ->where(function ($q) {
                 $q->where(function ($q) {
                     $q->where('offline_mall_products.published', true)
-                      ->whereNull('offline_mall_product_variants.id');
+                        ->whereNull('offline_mall_product_variants.id');
                 })->orWhere('offline_mall_product_variants.published', true);
             })
             ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
