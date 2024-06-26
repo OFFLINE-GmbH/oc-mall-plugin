@@ -50,6 +50,12 @@ class UniquePropertyValue extends Model
         'category'  => [Category::class],
     ];
 
+    /**
+     * Get unique properties for provided categories (no duplicates throughout all of them)
+     *
+     * @param Collection $categories
+     * @return Collection
+     */
     public static function getForMultipleCategories(Collection $categories): Collection
     {
         $ids = self::selectRaw('MIN(property_value_id), value, index_value, property_id')
@@ -60,6 +66,7 @@ class UniquePropertyValue extends Model
 
         return self::whereIn('id', $ids)->get();
     }
+
     /**
      * Reset unique properties for provided category
      *
@@ -104,9 +111,9 @@ class UniquePropertyValue extends Model
     }
 
     /**
-     * Update unique property values using product
+     * Update unique property values using category
      *
-     * @param Product $product
+     * @param Category $category
      * @return void
      */
     public static function updateUsingCategory(Category $category): void
@@ -116,7 +123,6 @@ class UniquePropertyValue extends Model
 
     /**
      * Update unique property values using product
-     * It's looking for all categories that the product is in and updates it
      *
      * @param Product $product
      * @return void
@@ -129,6 +135,12 @@ class UniquePropertyValue extends Model
         }
     }
 
+    /**
+     * Update unique property values using property group
+     *
+     * @param PropertyGroup $propertyGroup
+     * @return void
+     */
     public static function updateUsingPropertyGroup(PropertyGroup $propertyGroup): void
     {
         $propertyGroup->loadMissing(['categories']);
@@ -137,6 +149,12 @@ class UniquePropertyValue extends Model
         }
     }
 
+    /**
+     * Update unique property values using property
+     *
+     * @param Property $property
+     * @return void
+     */
     public static function updateUsingProperty(Property $property): void
     {
         $property->loadMissing(['property_groups.categories']);
@@ -145,12 +163,24 @@ class UniquePropertyValue extends Model
         }
     }
 
+    /**
+     * Update unique property values using property value
+     *
+     * @param PropertyValue $propertyValue
+     * @return void
+     */
     public static function updateUsingPropertyValue(PropertyValue $propertyValue): void
     {
         $propertyValue->loadMissing(['product.categories']);
         self::updateUsingProduct($propertyValue->product);
     }
 
+    /**
+     * Get unique properties for category query
+     *
+     * @param Category $category
+     * @return Builder
+     */
     public static function getRawQueryForCategory(Category $category): Builder
     {
         return DB

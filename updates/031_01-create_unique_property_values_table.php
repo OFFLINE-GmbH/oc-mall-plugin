@@ -56,8 +56,4 @@ class CreateUniquePropertyValuesTable_031_01 extends Migration
     {
         Schema::dropIfExists('offline_mall_unique_property_values');
     }
-
-    public function oldQuery($category)
-    {
-    }
 };
