@@ -172,7 +172,15 @@ class UniquePropertyValue extends Model
     public static function updateUsingPropertyValue(PropertyValue $propertyValue): void
     {
         $propertyValue->loadMissing(['product.categories']);
-        self::updateUsingProduct($propertyValue->product);
+        $product = $propertyValue->product;
+
+        if (!$product) {
+            $product = Product::with(['categories'])->where('id', $propertyValue->product_id)->first();
+        }
+
+        if ($product) {
+            self::updateUsingProduct($product);
+        }
     }
 
     /**
