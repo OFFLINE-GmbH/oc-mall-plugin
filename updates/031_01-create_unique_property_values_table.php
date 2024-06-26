@@ -35,8 +35,7 @@ class CreateUniquePropertyValuesTable_031_01 extends Migration
             $table->text('index_value')->nullable();
 
             if (!app()->runningUnitTests()) {
-                // We're using all four columns in selects, thus index on all of them
-                $table->index(['property_id', 'category_id', 'value', 'index_value'], 'idx_property_values_categories');
+                $table->index(['property_id', 'category_id'], 'idx_property_values_categories');
             }
         });
 
