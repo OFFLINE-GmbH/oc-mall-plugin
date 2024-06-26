@@ -7,6 +7,7 @@ namespace OFFLINE\Mall\Models;
 use DB;
 use Model;
 use Queue;
+use Cache;
 use Illuminate\Database\Query\Builder;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
@@ -118,6 +119,14 @@ class UniquePropertyValue extends Model
      */
     public static function updateUsingCategory(Category $category): void
     {
+        $key = self::getCacheKeyForCategory($category);
+
+        if (Cache::has($key)) {
+            // The category has already pending queue job
+            return;
+        }
+
+        Cache::forever($key, true);
         Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
     }
 
@@ -234,5 +243,10 @@ class UniquePropertyValue extends Model
                 '=',
                 'offline_mall_property_values.product_id'
             );
+    }
+
+    public static function getCacheKeyForCategory(Category $category): string
+    {
+        return 'update-unique-property-value-for-category-' . $category->id;
     }
 }
