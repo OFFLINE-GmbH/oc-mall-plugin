@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
+use DB;
 use Model;
+use Queue;
+use Illuminate\Database\Query\Builder;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
+use Illuminate\Database\Eloquent\Collection;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Jobs\UpdateUniquePropertyForCategory;
 
 class UniquePropertyValue extends Model
 {
@@ -45,62 +50,68 @@ class UniquePropertyValue extends Model
         'category'  => [Category::class],
     ];
 
+    public static function getForMultipleCategories(Collection $categories): Collection
+    {
+        $ids = self::selectRaw('MIN(property_value_id), value, index_value, property_id')
+            ->whereIn('category_id', $categories->pluck('id'))
+            ->groupBy('value', 'index_value', 'property_id')
+            ->get('id')
+            ->pluck('id');
+
+        return self::whereIn('id', $ids)->get();
+    }
     /**
-     * Update unique property values using category
-     * It's looking for all products in the category and updating uniques just for them
+     * Reset unique properties for provided category
      *
      * @param Category $category
      * @return void
      */
+    public static function resetForCategory(Category $category): void
+    {
+        $records = self::getRawQueryForCategory($category)->get();
+
+        DB::transaction(function ()  use ($category, $records) {
+            $idsToLeave = [];
+            foreach ($records as $record) {
+                $uniquePropertyValue = self::where('property_id', $record->property_id)
+                    ->where('category_id', $category->id)
+                    ->where('value', $record->value)
+                    ->where('index_value', $record->index_value)
+                    ->first();
+
+                if (!$uniquePropertyValue) {
+                    $uniquePropertyValue = new UniquePropertyValue();
+                    $uniquePropertyValue->property_id = $record->property_id;
+                    $uniquePropertyValue->property_value_id = $record->id;
+                    $uniquePropertyValue->category_id = $category->id;
+                    $uniquePropertyValue->value = $record->value;
+                    $uniquePropertyValue->index_value = $record->index_value;
+                    $uniquePropertyValue->save();
+                }
+
+                $idsToLeave[] = $uniquePropertyValue->id;
+            }
+
+            // Cleanup all unique properties that were already deleted from the category
+            $uniquePropertiesToRemove = self::where('category_id', $category->id)
+                ->whereNotIn('id', $idsToLeave)
+                ->get();
+
+            foreach ($uniquePropertiesToRemove as $uniquePropertyToRemove) {
+                $uniquePropertyToRemove->delete();
+            }
+        });
+    }
+
+    /**
+     * Update unique property values using product
+     *
+     * @param Product $product
+     * @return void
+     */
     public static function updateUsingCategory(Category $category): void
     {
-        $products = Product::whereHas('categories', function ($q) use ($category) {
-            $q->where($category->getTable() . '.id', $category->id);
-        })->with([
-            'property_values',
-            'variants.property_values',
-        ])->get();
-
-        $uniqueIdsToLeave = [];
-        foreach ($products as $product) {
-            $propertyValues = $product->property_values ?? [];
-            foreach ($propertyValues as $propertyValue) {
-                $uniquePropertyValue = self::whereOrCreate([
-                    'property_id' => $propertyValue->property_id,
-                    'property_value_id' => $propertyValue->id,
-                    'category_id' => $category->id,
-                    'value' => $propertyValue->value,
-                    'index_value' => $propertyValue->index_value,
-                ]);
-
-                $uniqueIdsToLeave[] = $uniquePropertyValue->id;
-            }
-
-            $variants = $product->variants ?? [];
-            foreach ($variants as $variant) {
-                $propertyValues = $variant->property_values ?? [];
-                foreach ($propertyValues as $propertyValue) {
-                    $uniquePropertyValue = self::whereOrCreate([
-                        'property_id' => $propertyValue->property_id,
-                        'property_value_id' => $propertyValue->id,
-                        'category_id' => $category->id,
-                        'value' => $propertyValue->value,
-                        'index_value' => $propertyValue->index_value,
-                    ]);
-
-                    $uniqueIdsToLeave[] = $uniquePropertyValue->id;
-                }
-            }
-        }
-
-        // Cleanup all properties that were already deleted from the category
-        $productPropertyValuesIds = PropertyValue::whereIn('product_id', $products->pluck('id'))
-            ->get('id')
-            ->pluck('id');
-
-        UniquePropertyValue::whereIn('property_value_id', $productPropertyValuesIds)
-            ->whereNotIn('id', $uniqueIdsToLeave)
-            ->delete();
+        Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
     }
 
     /**
@@ -112,64 +123,23 @@ class UniquePropertyValue extends Model
      */
     public static function updateUsingProduct(Product $product): void
     {
-        $product->loadMissing([
-            'categories',
-            'property_values',
-            'variants.property_values'
-        ]);
-
-        $uniqueIdsToLeave = [];
+        $product->loadMissing(['categories']);
         foreach ($product->categories as $category) {
-            $propertyValues = $product->property_values ?? [];
-            foreach ($propertyValues as $propertyValue) {
-                $uniquePropertyValue = self::whereOrCreate([
-                    'property_id' => $propertyValue->property_id,
-                    'property_value_id' => $propertyValue->id,
-                    'category_id' => $category->id,
-                    'value' => $propertyValue->value,
-                    'index_value' => $propertyValue->index_value,
-                ]);
-
-                $uniqueIdsToLeave[] = $uniquePropertyValue->id;
-
-                $variants = $product->variants ?? [];
-                foreach ($variants as $variant) {
-                    $propertyValues = $variant->property_values ?? [];
-                    foreach ($propertyValues as $propertyValue) {
-                        $uniquePropertyValue = self::whereOrCreate([
-                            'property_id' => $propertyValue->property_id,
-                            'property_value_id' => $propertyValue->id,
-                            'category_id' => $category->id,
-                            'value' => $propertyValue->value,
-                            'index_value' => $propertyValue->index_value,
-                        ]);
-
-                        $uniqueIdsToLeave[] = $uniquePropertyValue->id;
-                    }
-                }
-            }
+            Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
         }
-
-        // Cleanup all properties that the product lost on the way
-        $productPropertyValuesIds = PropertyValue::where('product_id', $product->id)
-            ->get('id')
-            ->pluck('id');
-
-        UniquePropertyValue::whereIn('property_value_id', $productPropertyValuesIds)
-            ->whereNotIn('id', $uniqueIdsToLeave)
-            ->delete();
     }
 
     public static function updateUsingPropertyGroup(PropertyGroup $propertyGroup): void
     {
         $propertyGroup->loadMissing(['categories']);
         foreach ($propertyGroup->categories as $category) {
-            self::updateUsingCategory($category);
+            Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
         }
     }
 
     public static function updateUsingProperty(Property $property): void
     {
+        $property->loadMissing(['property_groups.categories']);
         foreach ($property->property_groups as $propertyGroup) {
             self::updateUsingPropertyGroup($propertyGroup);
         }
@@ -177,34 +147,54 @@ class UniquePropertyValue extends Model
 
     public static function updateUsingPropertyValue(PropertyValue $propertyValue): void
     {
+        $propertyValue->loadMissing(['product.categories']);
         self::updateUsingProduct($propertyValue->product);
     }
 
-    /**
-     * Helper method, similar to firstOrCreate, but
-     * we're not using property_value_id when looking for model but we're storing it
-     *
-     * @param array $data
-     * @return self
-     */
-    public static function whereOrCreate(array $data): self
+    public static function getRawQueryForCategory(Category $category): Builder
     {
-        $uniquePropertyValue = UniquePropertyValue::where('property_id', $data['property_id'])
-            ->where('category_id', $data['category_id'])
-            ->where('value', $data['value'])
-            ->where('index_value', $data['index_value'])
-            ->first();
-
-        if (!$uniquePropertyValue) {
-            $uniquePropertyValue = new UniquePropertyValue();
-            $uniquePropertyValue->property_id = $data['property_id'];
-            $uniquePropertyValue->property_value_id = $data['property_value_id'];
-            $uniquePropertyValue->category_id = $data['category_id'];
-            $uniquePropertyValue->value = $data['value'];
-            $uniquePropertyValue->index_value = $data['index_value'];
-            $uniquePropertyValue->save();
-        }
-
-        return $uniquePropertyValue;
+        return DB
+            ::table('offline_mall_products')
+            ->selectRaw(
+                '
+                MIN(offline_mall_property_values.id) AS id,
+                offline_mall_property_values.value,
+                offline_mall_property_values.index_value,
+                offline_mall_property_values.property_id'
+            )
+            ->where(function ($q) {
+                $q->where(function ($q) {
+                    $q->where('offline_mall_products.published', true)
+                        ->whereNull('offline_mall_product_variants.id');
+                })->orWhere('offline_mall_product_variants.published', true);
+            })
+            ->where('offline_mall_category_product.category_id', $category->id)
+            ->whereNull('offline_mall_product_variants.deleted_at')
+            ->whereNull('offline_mall_products.deleted_at')
+            ->where('offline_mall_property_values.value', '<>', '')
+            ->whereNotNull('offline_mall_property_values.value')
+            ->groupBy(
+                'offline_mall_property_values.value',
+                'offline_mall_property_values.index_value',
+                'offline_mall_property_values.property_id'
+            )
+            ->leftJoin(
+                'offline_mall_product_variants',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_product_variants.product_id'
+            )
+            ->leftJoin(
+                'offline_mall_category_product',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_category_product.product_id'
+            )
+            ->join(
+                'offline_mall_property_values',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_property_values.product_id'
+            );
     }
 }

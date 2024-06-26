@@ -1,15 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Model;
 use Illuminate\Support\Facades\Queue;
+use OFFLINE\Mall\Classes\Traits\HashIds;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
-use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
-use OFFLINE\Mall\Classes\Traits\HashIds;
 
 class Property extends Model
 {
@@ -61,19 +62,26 @@ class Property extends Model
 
         $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
             if ($relationName === 'property_groups') {
-                UniquePropertyValue::updateUsingProperty($this);
+                foreach ($attachedIdList as $attachedId) {
+                    $propertyGroup = PropertyGroup::find($attachedId);
+                    UniquePropertyValue::updateUsingPropertyGroup($propertyGroup);
+                }
             }
         });
-        $this->bindEvent('model.relation.detach', function ($relationName, $attachedIdList) {
+
+        $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
             if ($relationName === 'property_groups') {
-                UniquePropertyValue::updateUsingProperty($this);
+                foreach ($detachedIdList as $detachedId) {
+                    $propertyGroup = PropertyGroup::find($detachedId);
+                    UniquePropertyValue::updateUsingPropertyGroup($propertyGroup);
+                }
             }
         });
     }
 
     public function afterSave()
     {
-        if ($this->pivot && ! $this->pivot->use_for_variants) {
+        if ($this->pivot && !$this->pivot->use_for_variants) {
             $categories = $this->property_groups->flatMap->getRelatedCategories();
 
             Product
@@ -94,17 +102,17 @@ class Property extends Model
 
         // Chunk the re-indexing since a lot of products and variants might be affected by this change.
         Product::published()
-               ->orderBy('id')
-               ->whereIn('id', $products)
-               ->with('variants')
-               ->chunk(25, function ($products) {
-                   $data = [
-                       'properties' => [$this->id],
-                       'products'   => $products->pluck('id'),
-                       'variants'   => $products->flatMap->variants->pluck('id'),
-                   ];
-                   Queue::push(PropertyRemovalUpdate::class, $data);
-               });
+            ->orderBy('id')
+            ->whereIn('id', $products)
+            ->with('variants')
+            ->chunk(25, function ($products) {
+                $data = [
+                    'properties' => [$this->id],
+                    'products'   => $products->pluck('id'),
+                    'variants'   => $products->flatMap->variants->pluck('id'),
+                ];
+                Queue::push(PropertyRemovalUpdate::class, $data);
+            });
     }
 
     public function getSortOrderAttribute()
@@ -114,12 +122,21 @@ class Property extends Model
 
     public static function getValuesForCategory($categories)
     {
-        $raw    = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
-        $values = PropertyValue::hydrate($raw->toArray())->load(['property.translations', 'translations']);
+        $uniquePropertyValues = UniquePropertyValue::getForMultipleCategories($categories);
+        $raw = [];
+        foreach ($uniquePropertyValues as $uniquePropertyValue) {
+            $raw[] = [
+                'id' => $uniquePropertyValue->property_value_id,
+                'value' => $uniquePropertyValue->value,
+                'index_value' => $uniquePropertyValue->index_value,
+                'property_id' => $uniquePropertyValue->property_id,
+            ];
+        }
+        $values = PropertyValue::hydrate($raw)->load(['property.translations', 'translations']);
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
             $firstProp = $values->first()->property;
-            if ( ! $firstProp->options) {
+            if (!$firstProp->options) {
                 return $values;
             }
 
@@ -144,7 +161,7 @@ class Property extends Model
             'dropdown'   => trans('offline.mall::lang.custom_field_options.dropdown'),
             'checkbox'   => trans('offline.mall::lang.custom_field_options.checkbox'),
             'color'      => trans('offline.mall::lang.custom_field_options.color'),
-//            'image'    => trans('offline.mall::lang.custom_field_options.image'),
+            //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
             'datetime'   => trans('offline.mall::lang.custom_field_options.datetime'),
             'date'       => trans('offline.mall::lang.custom_field_options.date'),
             'switch'     => trans('offline.mall::lang.custom_field_options.switch'),

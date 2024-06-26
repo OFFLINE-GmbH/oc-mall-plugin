@@ -2,29 +2,30 @@
 
 namespace OFFLINE\Mall\Models;
 
-use Cache;
 use DB;
+use Cache;
 use Model;
+use Queue;
 use Cms\Classes\Page;
-use October\Rain\Database\Models\DeferredBinding;
+use System\Models\File;
+use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Traits\Images;
+use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use October\Rain\Support\Collection;
-use OFFLINE\Mall\Classes\Index\Index;
-use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
-use OFFLINE\Mall\Classes\Traits\HashIds;
-use OFFLINE\Mall\Classes\Traits\Images;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
-use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
+use October\Rain\Database\Models\DeferredBinding;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
-use OFFLINE\Mall\Classes\Traits\PDFMaker;
-use System\Models\File;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
+use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 
 class Product extends Model
 {

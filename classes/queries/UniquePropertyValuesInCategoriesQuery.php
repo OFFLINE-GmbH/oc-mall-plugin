@@ -5,14 +5,14 @@ namespace OFFLINE\Mall\Classes\Queries;
 use DB;
 use Illuminate\Support\Collection;
 use October\Rain\Database\QueryBuilder;
-use OFFLINE\Mall\Models\UniquePropertyValue;
 
 /**
  * This query is used to get a list of all unique property values in one or
  * more categories. It is used to display a set of possible filters
  * for all available property values.
  *
- * @deprecated 3.4.0 use UniquePropertyValue model with category relation
+ * @deprecated 3.4.0 use UniquePropertyValue::getForMultipleCategories($categories)
+ * @see \OFFLINE\Mall\Models\UniquePropertyValue
  *
  */
 class UniquePropertyValuesInCategoriesQuery
@@ -35,7 +35,6 @@ class UniquePropertyValuesInCategoriesQuery
      */
     public function query()
     {
-        return UniquePropertyValue::whereIn('category_id', $this->categories->pluck('id'));
         return DB
             ::table('offline_mall_products')
             ->selectRaw(

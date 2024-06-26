@@ -10,6 +10,7 @@ use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
 use OFFLINE\Mall\Tests\PluginTestCase;
+use OFFLINE\Mall\Models\UniquePropertyValue;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 
 class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
@@ -103,6 +104,13 @@ class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
         $propertyValue5->value = 'Property 4 value for product 2';
         $propertyValue5->save();
 
+        // The same value for different product
+        $propertyValue6 = new PropertyValue();
+        $propertyValue6->product_id = $products[1]->id;
+        $propertyValue6->property_id = $property1->id;
+        $propertyValue6->value = 'Property 1 value for product 1';
+        $propertyValue6->save();
+
         // There are two filled properties for category-1
         $categories = Category::where('slug', 'category-1')->get();
         $records = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
@@ -110,16 +118,37 @@ class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
         $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
         $this->assertEquals($records[1]->value, 'Property 2 value for product 1');
 
+        $records = UniquePropertyValue::getForMultipleCategories($categories);
+        $this->assertEquals(2, $records->count());
+        $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
+        $this->assertEquals($records[1]->value, 'Property 2 value for product 1');
+
         // There are two filled properties for category-2 (and three attached)
         $categories = Category::where('slug', 'category-2')->get();
         $records = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
-        $this->assertEquals(2, $records->count());
+        $this->assertEquals(3, $records->count());
+        $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
+        $this->assertEquals($records[1]->value, 'Property 3 value for product 2');
+        $this->assertEquals($records[2]->value, 'Property 4 value for product 2');
+
+        $records = UniquePropertyValue::getForMultipleCategories($categories);
+        $this->assertEquals(3, $records->count());
+        // Only order differs, it doesn't matter, does it?
         $this->assertEquals($records[0]->value, 'Property 3 value for product 2');
         $this->assertEquals($records[1]->value, 'Property 4 value for product 2');
+        $this->assertEquals($records[2]->value, 'Property 1 value for product 1');
 
-        // There are 4 filled properties for both categories (and five attached to both)
+        // There are 4 unique properties' values for both categories
+        // One is duplicated and the second has the same value for a different product
         $categories = Category::where('slug', 'like', 'category%')->get();
         $records = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
+        $this->assertEquals(4, $records->count());
+        $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
+        $this->assertEquals($records[1]->value, 'Property 2 value for product 1');
+        $this->assertEquals($records[2]->value, 'Property 3 value for product 2');
+        $this->assertEquals($records[3]->value, 'Property 4 value for product 2');
+
+        $records = UniquePropertyValue::getForMultipleCategories($categories);
         $this->assertEquals(4, $records->count());
         $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
         $this->assertEquals($records[1]->value, 'Property 2 value for product 1');
