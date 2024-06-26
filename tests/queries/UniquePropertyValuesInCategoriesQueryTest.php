@@ -118,7 +118,7 @@ class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
         $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
         $this->assertEquals($records[1]->value, 'Property 2 value for product 1');
 
-        $records = UniquePropertyValue::getForMultipleCategories($categories);
+        $records = UniquePropertyValue::hydratePropertyValuesForCategories($categories);
         $this->assertEquals(2, $records->count());
         $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
         $this->assertEquals($records[1]->value, 'Property 2 value for product 1');
@@ -131,12 +131,11 @@ class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
         $this->assertEquals($records[1]->value, 'Property 3 value for product 2');
         $this->assertEquals($records[2]->value, 'Property 4 value for product 2');
 
-        $records = UniquePropertyValue::getForMultipleCategories($categories);
+        $records = UniquePropertyValue::hydratePropertyValuesForCategories($categories);
         $this->assertEquals(3, $records->count());
-        // Only order differs, it doesn't matter, does it?
-        $this->assertEquals($records[0]->value, 'Property 3 value for product 2');
-        $this->assertEquals($records[1]->value, 'Property 4 value for product 2');
-        $this->assertEquals($records[2]->value, 'Property 1 value for product 1');
+        $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
+        $this->assertEquals($records[1]->value, 'Property 3 value for product 2');
+        $this->assertEquals($records[2]->value, 'Property 4 value for product 2');
 
         // There are 4 unique properties' values for both categories
         // One is duplicated and the second has the same value for a different product
@@ -148,7 +147,7 @@ class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
         $this->assertEquals($records[2]->value, 'Property 3 value for product 2');
         $this->assertEquals($records[3]->value, 'Property 4 value for product 2');
 
-        $records = UniquePropertyValue::getForMultipleCategories($categories);
+        $records = UniquePropertyValue::hydratePropertyValuesForCategories($categories);
         $this->assertEquals(4, $records->count());
         $this->assertEquals($records[0]->value, 'Property 1 value for product 1');
         $this->assertEquals($records[1]->value, 'Property 2 value for product 1');

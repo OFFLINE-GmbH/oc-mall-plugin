@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Queue;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Models\UniquePropertyValue;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -121,17 +122,9 @@ class Property extends Model
 
     public static function getValuesForCategory($categories)
     {
-        $uniquePropertyValues = UniquePropertyValue::getForMultipleCategories($categories);
-        $raw = [];
-        foreach ($uniquePropertyValues as $uniquePropertyValue) {
-            $raw[] = [
-                'id' => $uniquePropertyValue->property_value_id,
-                'value' => $uniquePropertyValue->value,
-                'index_value' => $uniquePropertyValue->index_value,
-                'property_id' => $uniquePropertyValue->property_id,
-            ];
-        }
-        $values = PropertyValue::hydrate($raw)->load(['property.translations', 'translations']);
+        $values = UniquePropertyValue::hydratePropertyValuesForCategories($categories)
+            ->load(['property.translations', 'translations']);
+
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
             $firstProp = $values->first()->property;

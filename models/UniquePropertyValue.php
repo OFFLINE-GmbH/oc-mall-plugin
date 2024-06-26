@@ -51,20 +51,20 @@ class UniquePropertyValue extends Model
     ];
 
     /**
-     * Get unique properties for provided categories (no duplicates throughout all of them)
+     * Get property values for provided categories without duplicates
      *
      * @param Collection $categories
      * @return Collection
      */
-    public static function getForMultipleCategories(Collection $categories): Collection
+    public static function hydratePropertyValuesForCategories(Collection $categories): Collection
     {
-        $ids = self::selectRaw('MIN(property_value_id), value, index_value, property_id')
+        $raw = self::selectRaw('MIN(property_value_id) as id, value, index_value, property_id')
             ->whereIn('category_id', $categories->pluck('id'))
             ->groupBy('value', 'index_value', 'property_id')
-            ->get('id')
-            ->pluck('id');
+            ->get()
+            ->toArray();
 
-        return self::whereIn('id', $ids)->get();
+        return PropertyValue::hydrate($raw);
     }
 
     /**

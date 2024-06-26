@@ -187,6 +187,18 @@ class Category extends Model
                        Queue::push(PropertyRemovalUpdate::class, $data);
                    });
         });
+
+        $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if ($relationName === 'property_groups') {
+                UniquePropertyValue::updateUsingCategory($this);
+            }
+        });
+
+        $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
+            if ($relationName === 'property_groups') {
+                UniquePropertyValue::updateUsingCategory($this);
+            }
+        });
     }
 
     /**

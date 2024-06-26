@@ -342,6 +342,24 @@ class Product extends Model
         $this->bindEvent('model.relation.beforeDetach', function ($relationName, $attachedIdList) {
             $this->forceReindex = true;
         });
+
+        $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if ($relationName === 'categories') {
+                foreach ($attachedIdList as $attachedId) {
+                    $category = Category::find($attachedId);
+                    UniquePropertyValue::updateUsingCategory($category);
+                }
+            }
+        });
+
+        $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
+            if ($relationName === 'categories') {
+                foreach ($detachedIdList as $detachedId) {
+                    $category = Category::find($detachedId);
+                    UniquePropertyValue::updateUsingCategory($category);
+                }
+            }
+        });
     }
 
     /**
@@ -393,8 +411,6 @@ class Product extends Model
                 ->whereIn('property_id', $properties)
                 ->delete();
         }
-
-        UniquePropertyValue::updateUsingProduct($this);
 
         if ($this->forceReindex) {
             $this->forceReindex = false;
