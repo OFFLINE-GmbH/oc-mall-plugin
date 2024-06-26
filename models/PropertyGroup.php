@@ -1,16 +1,14 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Model;
 use Illuminate\Support\Facades\Queue;
-use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Sluggable;
+use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
+use OFFLINE\Mall\Classes\Traits\SortableRelation;
 
 class PropertyGroup extends Model
 {
@@ -82,19 +80,19 @@ class PropertyGroup extends Model
             // Chunk the deletion and re-indexing since a lot of products and variants
             // might be affected by this change.
             Product::published()
-                ->orderBy('id')
-                ->whereHas('categories', function ($q) use ($categories) {
-                    $q->whereIn('category_id', $categories->pluck('id'));
-                })
-                ->with('variants')
-                ->chunk(25, function ($products) use ($properties) {
-                    $data = [
-                        'properties' => $properties,
-                        'products'   => $products->pluck('id'),
-                        'variants'   => $products->flatMap->variants->pluck('id'),
-                    ];
-                    Queue::push(PropertyRemovalUpdate::class, $data);
-                });
+                   ->orderBy('id')
+                   ->whereHas('categories', function ($q) use ($categories) {
+                       $q->whereIn('category_id', $categories->pluck('id'));
+                   })
+                   ->with('variants')
+                   ->chunk(25, function ($products) use ($properties) {
+                       $data = [
+                           'properties' => $properties,
+                           'products'   => $products->pluck('id'),
+                           'variants'   => $products->flatMap->variants->pluck('id'),
+                       ];
+                       Queue::push(PropertyRemovalUpdate::class, $data);
+                   });
         });
 
         $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {

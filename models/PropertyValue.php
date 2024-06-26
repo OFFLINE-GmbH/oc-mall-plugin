@@ -1,14 +1,11 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Model;
-use Queue;
-use System\Models\File;
-use OFFLINE\Mall\Classes\Traits\HashIds;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Traits\HashIds;
+use System\Models\File;
 
 class PropertyValue extends Model
 {
@@ -19,7 +16,8 @@ class PropertyValue extends Model
     public $translatable = [
         ['value', 'index' => true],
     ];
-    public $rules = [];
+    public $rules = [
+    ];
     public $fillable = [
         'value',
         'product_id',
@@ -161,7 +159,7 @@ class PropertyValue extends Model
     private function jsonDecodeValue($value = null)
     {
         $value = $value ?? $this->attributes['value'];
-        if (!$value) {
+        if ( ! $value) {
             return null;
         }
 
@@ -179,7 +177,7 @@ class PropertyValue extends Model
             $name = $value['name'] ?? false;
             $hex  = $value['hex'] ?? false;
             // If both keys are empty store this value as null.
-            if (!$name && !$hex) {
+            if ( ! $name && ! $hex) {
                 return null;
             }
         }

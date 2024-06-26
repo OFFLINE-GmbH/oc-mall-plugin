@@ -1,24 +1,21 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use DB;
 use Model;
-use System\Models\File;
-use October\Rain\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
-use OFFLINE\Mall\Models\UniquePropertyValue;
-use OFFLINE\Mall\Classes\Traits\Category\Slug;
-use OFFLINE\Mall\Classes\Traits\SortableRelation;
-use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
+use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
+use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
 use OFFLINE\Mall\Classes\Traits\Category\Properties;
+use OFFLINE\Mall\Classes\Traits\Category\Slug;
 use OFFLINE\Mall\Classes\Traits\Category\Translation;
+use OFFLINE\Mall\Classes\Traits\SortableRelation;
+use System\Models\File;
 
 class Category extends Model
 {
@@ -169,26 +166,26 @@ class Category extends Model
 
             // Fetch all child categories that inherit this categories properties.
             $categories = $this->scopeAllChildren(self::newQuery())
-                ->where('inherit_property_groups', true)
-                ->get()
-                ->concat([$this]);
+                               ->where('inherit_property_groups', true)
+                               ->get()
+                               ->concat([$this]);
 
             // Chunk the deletion and re-indexing since a lot of products and variants
             // might be affected by this change.
             Product::published()
-                ->orderBy('id')
-                ->whereHas('categories', function ($q) use ($categories) {
-                    $q->whereIn('category_id', $categories->pluck('id'));
-                })
-                ->with('variants')
-                ->chunk(25, function ($products) use ($properties) {
-                    $data = [
-                        'properties' => $properties,
-                        'products'   => $products->pluck('id'),
-                        'variants'   => $products->flatMap->variants->pluck('id'),
-                    ];
-                    Queue::push(PropertyRemovalUpdate::class, $data);
-                });
+                   ->orderBy('id')
+                   ->whereHas('categories', function ($q) use ($categories) {
+                       $q->whereIn('category_id', $categories->pluck('id'));
+                   })
+                   ->with('variants')
+                   ->chunk(25, function ($products) use ($properties) {
+                       $data = [
+                           'properties' => $properties,
+                           'products'   => $products->pluck('id'),
+                           'variants'   => $products->flatMap->variants->pluck('id'),
+                       ];
+                       Queue::push(PropertyRemovalUpdate::class, $data);
+                   });
         });
     }
 
@@ -212,7 +209,7 @@ class Category extends Model
             if ($model->inherit_review_categories === true && $model->review_categories()->count() > 0) {
                 $model->review_categories()->detach();
             }
-            if (!$model->slug) {
+            if ( ! $model->slug) {
                 $model->slug = str_slug($model->name);
             }
         });
@@ -257,9 +254,9 @@ class Category extends Model
         $items = $this->id ? Category::withoutSelf()->get() : Category::getAll();
 
         return [
-            // null key for "no parent"
-            null => '(' . trans('offline.mall::lang.category.no_parent') . ')',
-        ] + $items->listsNested('name', 'id');
+                // null key for "no parent"
+                null => '(' . trans('offline.mall::lang.category.no_parent') . ')',
+            ] + $items->listsNested('name', 'id');
     }
 
     /**
@@ -297,7 +294,7 @@ class Category extends Model
     public function getInheritedReviewCategories()
     {
         $groups = $this->getParents()->first(function (Category $category) {
-            return !$category->inherit_review_categories;
+            return ! $category->inherit_review_categories;
         })->review_categories;
 
         return $groups ?? new Collection();
