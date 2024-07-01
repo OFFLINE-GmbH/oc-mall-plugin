@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Queue;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Models\UniquePropertyValue;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -55,6 +56,29 @@ class Property extends Model
         ],
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if ($relationName === 'property_groups') {
+                foreach ($attachedIdList as $attachedId) {
+                    $propertyGroup = PropertyGroup::find($attachedId);
+                    UniquePropertyValue::updateUsingPropertyGroup($propertyGroup);
+                }
+            }
+        });
+
+        $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
+            if ($relationName === 'property_groups') {
+                foreach ($detachedIdList as $detachedId) {
+                    $propertyGroup = PropertyGroup::find($detachedId);
+                    UniquePropertyValue::updateUsingPropertyGroup($propertyGroup);
+                }
+            }
+        });
+    }
+
     public function afterSave()
     {
         if ($this->pivot && ! $this->pivot->use_for_variants) {
@@ -67,6 +91,8 @@ class Property extends Model
                 ->where('group_by_property_id', $this->id)
                 ->update(['group_by_property_id' => null]);
         }
+
+        UniquePropertyValue::updateUsingProperty($this);
     }
 
     public function afterDelete()
@@ -96,8 +122,9 @@ class Property extends Model
 
     public static function getValuesForCategory($categories)
     {
-        $raw    = (new UniquePropertyValuesInCategoriesQuery($categories))->query()->get();
-        $values = PropertyValue::hydrate($raw->toArray())->load(['property.translations', 'translations']);
+        $values = UniquePropertyValue::hydratePropertyValuesForCategories($categories)
+            ->load(['property.translations', 'translations']);
+
         $values = $values->groupBy('property_id')->map(function ($values) {
             // if this property has options make sure to restore the original order
             $firstProp = $values->first()->property;

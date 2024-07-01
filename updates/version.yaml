@@ -579,3 +579,6 @@ v3.3.1:
     - 'Minor Bugfixes'
     - 'Fixed strict variables issue on oldPrice() attribute, thanks to @dathwa (#1118).'
     - 'Fixed stripe purchase issue, thanks to @dathwa (#1145).'
+v3.4.0:
+    - 'Add Unique Property Values'
+    - 031_01-create_unique_property_values_table.php

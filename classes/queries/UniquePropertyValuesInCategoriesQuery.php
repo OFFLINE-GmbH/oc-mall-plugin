@@ -10,6 +10,10 @@ use October\Rain\Database\QueryBuilder;
  * This query is used to get a list of all unique property values in one or
  * more categories. It is used to display a set of possible filters
  * for all available property values.
+ *
+ * @deprecated 3.4.0 use UniquePropertyValue::hydratePropertyValuesForCategories($categories)
+ * @see \OFFLINE\Mall\Models\UniquePropertyValue
+ *
  */
 class UniquePropertyValuesInCategoriesQuery
 {

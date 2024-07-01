@@ -62,6 +62,11 @@ class PropertyValue extends Model
         $this->index_value = str_slug($value);
     }
 
+    public function afterSave(): void
+    {
+        UniquePropertyValue::updateUsingPropertyValue($this);
+    }
+
     public function setValueAttribute($value)
     {
         $this->attributes['value'] = $this->handleArrayValue($value);
