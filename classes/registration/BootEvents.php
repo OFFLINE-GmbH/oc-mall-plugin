@@ -21,7 +21,7 @@ trait BootEvents
 {
     protected function registerEvents()
     {
-        // $this->registerObservers();
+        $this->registerObservers();
         $this->registerGenericEvents();
         $this->registerStaticPagesEvents();
         $this->registerSiteSearchEvents();
