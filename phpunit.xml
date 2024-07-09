@@ -17,6 +17,7 @@
         <env name="APP_ENV" value="testing" />
         <env name="CACHE_DRIVER" value="array" />
         <env name="SESSION_DRIVER" value="array" />
+        <env name="QUEUE_CONNECTION" value="sync" />
         <env name="ACTIVE_THEME" value="mall" />
         <env name="CONVERT_LINE_ENDINGS" value="true" />
         <env name="CMS_ROUTE_CACHE" value="true" />
