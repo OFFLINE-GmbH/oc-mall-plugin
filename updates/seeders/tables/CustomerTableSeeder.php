@@ -22,22 +22,22 @@ class CustomerTableSeeder extends Seeder
         if (!$useDemo && config('app.env') != 'testing') {
             return;
         }
-        
+
         config()->set('rainlab.user::minPasswordLength', 8);
 
         $this->createUser(
             'normal_customer@example.tld',
             trans('offline.mall::demo.customers.normal'),
         );
-        
+
         $this->createUser(
-            'gold_customer@example.tld', 
+            'gold_customer@example.tld',
             trans('offline.mall::demo.customers.gold'),
             CustomerGroup::where('code', 'gold')->first()->id
         );
-        
+
         $this->createUser(
-            'diamond_customer@example.tld', 
+            'diamond_customer@example.tld',
             trans('offline.mall::demo.customers.diamond'),
             CustomerGroup::where('code', 'diamond')->first()->id
         );
@@ -60,9 +60,8 @@ class CustomerTableSeeder extends Seeder
         ], [
             'password'                  => '12345678',
             'password_confirmation'     => '12345678',
-            'name'                      => $firstname,
-            'surname'                   => $lastname,
-            'is_activated'              => true,
+            'first_name'                => $firstname,
+            'last_name'                 => $lastname,
         ]);
         $user->offline_mall_customer_group_id = $customerGroupId;
         $user->save();
