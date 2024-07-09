@@ -187,6 +187,18 @@ class Category extends Model
                        Queue::push(PropertyRemovalUpdate::class, $data);
                    });
         });
+
+        $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if ($relationName === 'property_groups') {
+                UniquePropertyValue::updateUsingCategory($this);
+            }
+        });
+
+        $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
+            if ($relationName === 'property_groups') {
+                UniquePropertyValue::updateUsingCategory($this);
+            }
+        });
     }
 
     /**
@@ -280,6 +292,11 @@ class Category extends Model
     public function getInheritedReviewCategoriesAttribute()
     {
         return $this->inherit_review_categories ? $this->getInheritedReviewCategories() : $this->review_categories;
+    }
+
+    public function afterSave(): void
+    {
+        UniquePropertyValue::updateUsingCategory($this);
     }
 
     /**
