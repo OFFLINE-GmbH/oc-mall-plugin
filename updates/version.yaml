@@ -586,3 +586,5 @@ v3.3.2:
 v3.4.0:
     - 'Optimized unique property queries (thanks to @tomaszstrojny)'
     - 031_01-create_unique_property_values_table.php
+v3.4.1:
+    - 'Prevent from adding too many queue jobs for UniquePropertyValue'

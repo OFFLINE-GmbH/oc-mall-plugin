@@ -140,7 +140,7 @@ class UniquePropertyValue extends Model
     {
         $product->loadMissing(['categories']);
         foreach ($product->categories as $category) {
-            Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
+            self::updateUsingCategory($category);
         }
     }
 
@@ -154,7 +154,7 @@ class UniquePropertyValue extends Model
     {
         $propertyGroup->loadMissing(['categories']);
         foreach ($propertyGroup->categories as $category) {
-            Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
+            self::updateUsingCategory($category);
         }
     }
 
