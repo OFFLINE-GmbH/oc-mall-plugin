@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -60,8 +62,8 @@ class CustomerTableSeeder extends Seeder
         ], [
             'password'                  => '12345678',
             'password_confirmation'     => '12345678',
-            'first_name'                => $firstname,
-            'last_name'                 => $lastname,
+            'name'                      => $firstname,
+            'surname'                   => $lastname,
         ]);
         $user->offline_mall_customer_group_id = $customerGroupId;
         $user->save();
