@@ -588,3 +588,5 @@ v3.4.0:
     - 031_01-create_unique_property_values_table.php
 v3.4.1:
     - 'Prevent from adding too many queue jobs for UniquePropertyValue'
+v3.4.2:
+    - 'Fixed demo seeder with new users plugin'
