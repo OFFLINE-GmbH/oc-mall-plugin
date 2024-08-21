@@ -142,7 +142,7 @@
     - remove_description_column_from_order_products.php
     - remove_payment_data_column_from_orders_table.php
 1.2.2:
-    - Fixed handling of custom field color values, allow single category menu item to be replaced by its products    
+    - Fixed handling of custom field color values, allow single category menu item to be replaced by its products
 1.2.3:
     - Added flash messages to add to cart events
 1.2.4:
@@ -186,7 +186,7 @@
 1.3.10:
     - "Re-use Eloquent model events to trigger `mall.cart.product.*` events. If you added custom event listeners for any of these events make sure to update your function signature to only accept a single CartProduct model (see https://offline-gmbh.github.io/oc-mall-plugin/development/events.html#cart)"
 1.3.11:
-    - Added links to edit and preview customer data to orders list (thanks to @Eoler)      
+    - Added links to edit and preview customer data to orders list (thanks to @Eoler)
 1.3.12:
     - Bugfix release
 1.3.13:
@@ -223,23 +223,23 @@
 1.7.0:
     - Added support for virtual products
     - add_virtual_products_support.php
-1.7.1: 
+1.7.1:
     - Bugfix for parent category dropdown in backend
-1.7.2: 
+1.7.2:
     - Fixed bug where product entries in RainLab.Pages menus included the wrong variant id
-1.7.3: 
+1.7.3:
     - Minor Bugfix when editing a Review on the frontend
-1.7.4: 
+1.7.4:
     - Bugfix release
-1.7.5: 
+1.7.5:
     - Updated russian translations (thanks to @igor-tv)
-1.7.6: 
+1.7.6:
     - Made forceShippingPrice feature to only override the price for a specific shipping method. Make sure to add the new ID parameter in case you use this feature in your custom code.
-1.7.7: 
+1.7.7:
     - Bugfix release
-1.7.8: 
+1.7.8:
     - Another bugfix release
-1.7.9: 
+1.7.9:
     - Added showShipping property to the Cart component. This allows you to display a cart without including any shipping information.
 1.7.10:
     - Added a valid from date for discounts
@@ -310,7 +310,7 @@
 1.11.12:
     - Various bugfixes
 1.11.13:
-    - Fixed handling of virtual product downloads for logged out customers 
+    - Fixed handling of virtual product downloads for logged out customers
 1.11.14:
     - Fixed infinite loop with certain Review Categories setups
 1.11.15:
@@ -452,3 +452,6 @@
     - 'Various small bug fixes'
 2.0.27:
     - 'Add backend form widget partials viewpath (thanks to @mjauvin)'
+2.0.28:
+    - 'Only create carts once a product is added'
+

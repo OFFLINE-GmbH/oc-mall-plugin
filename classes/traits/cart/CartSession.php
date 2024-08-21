@@ -18,7 +18,7 @@ trait CartSession
         }
 
         $cart = self::orderBy('created_at', 'DESC')
-                    ->firstOrCreate(['customer_id' => $user->customer->id]);
+                    ->firstOrNew(['customer_id' => $user->customer->id]);
 
         if ( ! $cart->shipping_address_id || ! $cart->billing_address_id) {
             if ( ! $cart->shipping_address_id) {
@@ -27,7 +27,9 @@ trait CartSession
             if ( ! $cart->billing_address_id) {
                 $cart->billing_address_id = $user->customer->default_billing_address_id;
             }
-            $cart->save();
+            if ($cart->exists) {
+                $cart->save();
+            }
         }
 
         return $cart;
@@ -47,7 +49,7 @@ trait CartSession
         Cookie::queue('cart_session_id', $sessionId, 9e6);
         Session::put('cart_session_id', $sessionId);
 
-        return self::orderBy('created_at', 'DESC')->firstOrCreate(['session_id' => $sessionId]);
+        return self::orderBy('created_at', 'DESC')->firstOrNew(['session_id' => $sessionId]);
     }
 
     /**
