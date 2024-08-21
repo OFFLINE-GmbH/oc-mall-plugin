@@ -592,3 +592,5 @@ v3.4.2:
     - 'Fixed demo seeder with new users plugin'
 v3.4.3:
     - 'Only create carts once a product is added'
+v3.4.4:
+    - 'Fixed customer group prices compatibility with RainLab.User 3.0'
