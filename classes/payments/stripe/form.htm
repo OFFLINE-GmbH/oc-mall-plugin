@@ -61,7 +61,7 @@
                         event.preventDefault();
                     }
                     var errorElement = document.getElementById('card-errors');
-                    errorElement.classList.remove('visible')
+                    errorElement.classList.remove('visible', 'oc-visible')
                     if (form) {
                         var submit = form.querySelector('[type="submit"]')
                         if (submit) {
@@ -73,7 +73,7 @@
                         stripe.createToken(card).then(function (result) {
                             if (result.error) {
                                 errorElement.textContent = result.error.message;
-                                errorElement.classList.add('visible')
+                                errorElement.classList.add('visible', 'oc-visible')
                                 if (submit) {
                                     submit.classList.remove('oc-loading')
                                     submit.disabled = false
