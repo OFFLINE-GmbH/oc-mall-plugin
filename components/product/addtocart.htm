@@ -16,8 +16,10 @@
             <input type="number"
                    id="quantity"
                    class="mall-input"
-                   min="{{ item.quantity_min }}" max="{{ item.quantity_max }}"
-                   name="quantity" value="{{ item.quantity_default | default(1) }}">
+                   min="{{ item.quantity_min | default(1) }}"
+                   max="{{ item.quantity_max }}"
+                   name="quantity"
+                   value="{{ item.quantity_default | default(1) }}">
             <div data-validate-for="quantity"></div>
         </div>
         <button type="submit" class="mall-add-to-cart-button" data-attach-loading>

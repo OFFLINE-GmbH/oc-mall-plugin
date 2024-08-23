@@ -353,7 +353,7 @@ class Product extends Model
         });
 
         $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
-            if ($relationName === 'categories') {
+            if ($relationName === 'categories' && is_array($detachedIdList)) {
                 foreach ($detachedIdList as $detachedId) {
                     $category = Category::find($detachedId);
                     UniquePropertyValue::updateUsingCategory($category);
