@@ -596,3 +596,5 @@ v3.4.4:
     - 'Fixed customer group prices compatibility with RainLab.User 3.0'
 v3.4.5:
     - 'Fixed Stripe errors not showing up in the checkout form'
+v3.4.6:
+    - 'Fixed demo seeder compatibility with all RainLab.User versions'

@@ -56,17 +56,29 @@ class CustomerTableSeeder extends Seeder
     {
         [$firstname, $lastname] = explode(' ', $name);
 
+        $args = [
+            'password'                  => '12345678',
+            'password_confirmation'     => '12345678',
+        ];
+
+        $fillable = (new User())->getFillable();
+
+        if (in_array('surname', $fillable)) {
+            $args['name'] = $firstname;
+            $args['surname'] = $lastname;
+        } else {
+            $args['first_name'] = $firstname;
+            $args['last_name'] = $lastname;
+        }
+
         $user = User::firstOrCreate([
             'email'                     => $email,
             'username'                  => $email,
-        ], [
-            'password'                  => '12345678',
-            'password_confirmation'     => '12345678',
-            'name'                      => $firstname,
-            'surname'                   => $lastname,
-        ]);
+        ], $args);
+
         $user->offline_mall_customer_group_id = $customerGroupId;
         $user->save();
+
         $customer = Customer::create([
             'firstname' => $firstname,
             'lastname'  => $lastname,
