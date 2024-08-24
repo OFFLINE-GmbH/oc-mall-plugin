@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
 use October\Rain\Database\Builder;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Price;
@@ -113,6 +115,7 @@ class ShippingMethods extends Controller
     {
         $parent = parent::onRelationManageCreate();
         $this->checkRelationPriceUpdate();
+
         return $parent;
     }
 
@@ -124,6 +127,7 @@ class ShippingMethods extends Controller
     {
         $parent = parent::onRelationManageUpdate();
         $this->checkRelationPriceUpdate();
+
         return $parent;
     }
 
@@ -139,9 +143,9 @@ class ShippingMethods extends Controller
             } else {
                 // In "create" mode, get the latest shipping method rate to update the prices.
                 $model = $this->relationModel->newQuery()
-                                             ->where('shipping_method_id', $this->params[0])
-                                             ->orderByDesc('id')
-                                             ->first();
+                    ->where('shipping_method_id', $this->params[0])
+                    ->orderByDesc('id')
+                    ->first();
             }
             $this->updatePrices($model);
         }
@@ -157,12 +161,14 @@ class ShippingMethods extends Controller
     protected function updatePrices($model, $field = null, $key = '_prices')
     {
         $data = post('MallPrice', []);
+
         foreach ($data as $currency => $_data) {
             $value = array_get($_data, $key);
+
             if ($value === '') {
                 $value = null;
             }
-            Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
+            Price::withoutGlobalScope(new IsStatesScope())->updateOrCreate([
                 'price_category_id' => null,
                 'priceable_id'      => $model->id,
                 'priceable_type'    => $model::MORPH_KEY,

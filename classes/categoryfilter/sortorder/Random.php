@@ -29,8 +29,6 @@ class Random extends SortOrder
      */
     public function customSortFunction(string $property = '', string $direction = ''): ?callable
     {
-        return function($a, $b) {
-            return random_int(-1, 1);
-        };
+        return fn ($a, $b) => random_int(-1, 1);
     }
 }

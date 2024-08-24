@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -33,8 +35,8 @@ class ProductTableSeeder extends Seeder
                     'published' => true,
                 ]);
                 $product->price = [
-                    'CHF' => 20, 
-                    'EUR' => 30
+                    'CHF' => 20,
+                    'EUR' => 30,
                 ];
         
                 $product = Product::create([
@@ -44,10 +46,11 @@ class ProductTableSeeder extends Seeder
                     'published' => true,
                 ]);
                 $product->price = [
-                    'CHF' => 30, 
-                    'EUR' => 40
+                    'CHF' => 30,
+                    'EUR' => 40,
                 ];
             }
+
             return;
         }
         

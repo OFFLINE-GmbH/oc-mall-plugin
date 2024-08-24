@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
 use Auth;
-use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
@@ -12,6 +13,7 @@ use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentRedirector;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
+use OFFLINE\Mall\Classes\User\Auth as FrontendAuth;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -20,7 +22,6 @@ use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Variant;
 use RainLab\Location\Models\Country;
-use OFFLINE\Mall\Classes\User\Auth as FrontendAuth;
 use RainLab\User\Models\User;
 use Validator;
 
@@ -37,73 +38,85 @@ class QuickCheckout extends MallComponent
      * @var Cart
      */
     public $cart;
+
     /**
      * The currently selected payment method.
      *
      * @var Collection<PaymentMethod>
      */
     public $paymentMethods;
+
     /**
      * All available CustomerPaymentMethods
      * @var Collection
      */
     public $customerPaymentMethods;
+
     /**
      * All available shipping methods.
      *
      * @var Collection<ShippingMethod>
      */
     public $shippingMethods;
+
     /**
      * All available countries.
      *
      * @var array
      */
     public $countries;
+
     /**
      * Use state field.
      *
      * @var boolean
      */
     public $useState = true;
+
     /**
      * Name of the CMS page that hosts the signUp component.
      *
      * @var string
      */
     public $loginPage = 'login';
+
     /**
      * Current page URL.
      *
      * @var string
      */
     public $currentPage;
+
     /**
      * Account page.
      *
      * @var string
      */
     public $accountPage;
+
     /**
      * The current user.
      *
      * @var User
      */
     public $user;
+
     /**
      * The currently active step.
      *
      * @var string
      */
     public $step;
+
     /**
      * The order that was created during checkout.
      *
      * @var Order
      */
     public $order;
+
     /**
-     * The error massage received from the PaymentProvider.
+     * The error message received from the PaymentProvider.
      *
      * @var string
      */
@@ -168,12 +181,14 @@ class QuickCheckout extends MallComponent
     public function init()
     {
         $this->step = $this->property('step', 'overview');
+
         // The default step is "overview". Since this component shows all steps on one screen,
         // the "payment" step can be redirected to the overview as well. The "payment" step is used
         // in case of subsequent payments for a previously failed order.
-        if ( ! $this->step) {
+        if (! $this->step) {
             $this->step = 'overview';
         }
+
         if ($this->step === 'overview') {
             $this->addComponent(AddressSelector::class, 'billingAddressSelector', ['type' => 'billing', 'redirect' => 'quickCheckout']);
             $this->addComponent(AddressSelector::class, 'shippingAddressSelector', ['type' => 'shipping', 'redirect' => 'quickCheckout']);
@@ -183,6 +198,7 @@ class QuickCheckout extends MallComponent
             // Payment step guard
             // Redirect user to the login page when they request order details while not logged in
             $orderId = request()->get('order');
+
             if ($orderId && !FrontendAuth::check()) {
                 throw new HttpResponseException(redirect($this->property('loginPage')));
             }
@@ -193,8 +209,8 @@ class QuickCheckout extends MallComponent
     /**
      * The component is run.
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Cms\Classes\CmsException
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function onRun()
     {
@@ -204,7 +220,7 @@ class QuickCheckout extends MallComponent
         }
 
         // If a invalid step is provided, show a 404 error page.
-        if ( ! in_array($this->step, array_keys($this->getStepOptions()))) {
+        if (! in_array($this->step, array_keys($this->getStepOptions()))) {
             return $this->controller->run('404');
         }
 
@@ -223,9 +239,10 @@ class QuickCheckout extends MallComponent
         $data = post();
 
         // The user is not signed in. Let's create a new account.
-        if ( ! $this->user) {
+        if (! $this->user) {
             $this->user = app(SignUpHandler::class)->handle($data, (bool)post('as_guest'));
-            if ( ! $this->user) {
+
+            if (! $this->user) {
                 throw new ValidationException(
                     [trans('offline.mall::lang.components.quickCheckout.errors.signup_failed')]
                 );
@@ -253,7 +270,7 @@ class QuickCheckout extends MallComponent
         // subsequent try to pay for an existing order for which the payment failed.
         $flow = $this->order ? 'payment' : 'checkout';
 
-        if ( ! $this->order) {
+        if (! $this->order) {
             // Create the order first.
             $this->order = Order::fromCart($this->cart);
         }
@@ -271,8 +288,8 @@ class QuickCheckout extends MallComponent
     /**
      * The shipping method has been changed.
      *
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onChangeShippingMethod()
     {
@@ -289,7 +306,7 @@ class QuickCheckout extends MallComponent
 
         $id = post('id');
 
-        if ( ! $this->shippingMethods || ! $this->shippingMethods->contains($id)) {
+        if (! $this->shippingMethods || ! $this->shippingMethods->contains($id)) {
             throw new ValidationException(
                 [
                     'id' => trans('offline.mall::lang.components.shippingMethodSelector.errors.unavailable'),
@@ -312,8 +329,8 @@ class QuickCheckout extends MallComponent
     /**
      * The payment method has been changed.
      *
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onChangePaymentMethod()
     {
@@ -322,6 +339,7 @@ class QuickCheckout extends MallComponent
         ];
 
         $validation = Validator::make(post(), $rules);
+
         if ($validation->fails()) {
             throw new ValidationException($validation);
         }
@@ -367,8 +385,8 @@ class QuickCheckout extends MallComponent
     /**
      * The user removed a previously applied discount code from the cart.
      *
+     * @throws ValidationException
      * @return array
-     * @throws \October\Rain\Exception\ValidationException
      */
     public function onRemoveDiscountCode()
     {
@@ -384,29 +402,6 @@ class QuickCheckout extends MallComponent
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ]);
-
-    }
-
-    /**
-     * Fetch the item from the user's cart.
-     *
-     * This fails if an item is modified that is not in the
-     * currently logged in user's cart.
-     *
-     * @param Cart $cart
-     * @param mixed $id
-     *
-     * @return mixed
-     * @throws ModelNotFoundException
-     */
-    protected function getProductFromCart(Cart $cart, $id)
-    {
-        return CartProduct
-            ::whereHas('cart', function ($query) use ($cart) {
-                $query->where('id', $cart->id);
-            })
-            ->where('id', $id)
-            ->firstOrFail();
     }
 
     /**
@@ -419,9 +414,7 @@ class QuickCheckout extends MallComponent
      */
     public function updateForm(array $withData = [])
     {
-        $withAlias = function (string $partial) {
-            return $this->alias . '::' . $partial;
-        };
+        $withAlias = fn (string $partial) => $this->alias . '::' . $partial;
 
         return array_merge(
             [
@@ -441,7 +434,7 @@ class QuickCheckout extends MallComponent
      */
     public function renderPaymentForm()
     {
-        if ( ! $this->cart->payment_method) {
+        if (! $this->cart->payment_method) {
             return '';
         }
 
@@ -451,6 +444,27 @@ class QuickCheckout extends MallComponent
         return $gateway
             ->getProviderById($this->cart->payment_method->payment_provider)
             ->renderPaymentForm($this->cart);
+    }
+
+    /**
+     * Fetch the item from the user's cart.
+     *
+     * This fails if an item is modified that is not in the
+     * currently logged in user's cart.
+     *
+     * @param Cart $cart
+     * @param mixed $id
+     *
+     * @throws ModelNotFoundException
+     * @return mixed
+     */
+    protected function getProductFromCart(Cart $cart, $id)
+    {
+        return CartProduct::whereHas('cart', function ($query) use ($cart) {
+            $query->where('id', $cart->id);
+        })
+            ->where('id', $id)
+            ->firstOrFail();
     }
 
     /**
@@ -467,7 +481,8 @@ class QuickCheckout extends MallComponent
         $this->setVar('user', Auth::getUser());
 
         $cart = Cart::byUser($this->user);
-        if ( ! $cart->payment_method_id) {
+
+        if (! $cart->payment_method_id) {
             $cart->setPaymentMethod(PaymentMethod::getDefault());
         }
 
@@ -475,6 +490,7 @@ class QuickCheckout extends MallComponent
             $cart->forgetFallbackShippingCountryId();
         } else {
             $shippingCountry = post('billing_country_id');
+
             if (post('use_different_shipping')) {
                 $shippingCountry = post('shipping_country_id');
             }
@@ -484,19 +500,21 @@ class QuickCheckout extends MallComponent
         $this->setVar('cart', $cart);
 
         $paymentMethod = PaymentMethod::where('id', $cart->payment_method_id)->first();
-        if ( ! $paymentMethod) {
+
+        if (! $paymentMethod) {
             $paymentMethod = PaymentMethod::getDefault();
             $cart->setPaymentMethod($paymentMethod);
         }
         $this->setVar('paymentMethods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
         $this->setVar('customerPaymentMethods', $this->getCustomerMethods());
 
-//        $this->setVar('dataLayer', $this->handleDataLayer());
+        //        $this->setVar('dataLayer', $this->handleDataLayer());
 
         $this->countries = Country::getNameList();
         $this->useState = GeneralSettings::get('use_state', true);
 
         $this->setVar('shippingMethods', ShippingMethod::getAvailableByCart($cart));
+
         if ($this->user && $orderId = request()->get('order')) {
             $orderId = $this->decode($orderId);
             $this->setVar('order', Order::byCustomer($this->user->customer)->where('id', $orderId)->first());
@@ -513,7 +531,7 @@ class QuickCheckout extends MallComponent
      */
     protected function getCustomerMethods()
     {
-        if ( ! optional(Auth::getUser())->customer) {
+        if (! optional(Auth::getUser())->customer) {
             return collect([]);
         }
 
@@ -526,8 +544,8 @@ class QuickCheckout extends MallComponent
      *
      * @param string $type
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Cms\Classes\CmsException
+     * @return \Illuminate\Http\RedirectResponse
      */
     protected function handleOffSiteReturn($type)
     {
@@ -545,6 +563,7 @@ class QuickCheckout extends MallComponent
     private function dataLayerArray($product = null, $variant = null)
     {
         $item = $variant ?? $product;
+
         if (!($item instanceof Product || $item instanceof Variant)) {
             return [];
         }

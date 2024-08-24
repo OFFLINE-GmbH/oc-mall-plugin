@@ -17,28 +17,29 @@ trait MenuItems
      * @param $url
      * @param $theme
      *
-     * @return array
      * @throws \Cms\Classes\CmsException
+     * @return array
      */
     public static function resolveCategoryItem($item, $url, $theme)
     {
         $category = self::find($item->reference);
-        if ( ! $category) {
+
+        if (! $category) {
             return;
         }
 
         // Replace this menu item with its products.
         if ($item->replace) {
             $page = GeneralSettings::get('product_page', 'product');
-            if ( ! Page::loadCached($theme, $page)) {
+
+            if (! Page::loadCached($theme, $page)) {
                 return;
             }
 
-            $controller = Controller::getController() ?: new Controller;
+            $controller = Controller::getController() ?: new Controller();
 
             $items = $category->products
                 ->map(function (Product $product) use ($page, $url, $controller) {
-
                     $pageUrl = $controller->pageUrl($page, ['slug' => $product->slug], false);
 
                     return [
@@ -74,8 +75,8 @@ trait MenuItems
      * @param $url
      * @param $theme
      *
+     * @throws InvalidArgumentException
      * @return array
-     * @throws \InvalidArgumentException
      */
     public static function resolveCategoriesItem($item, $url, $theme)
     {
@@ -84,16 +85,21 @@ trait MenuItems
 
         if (Cache::has($category->treeCacheKey($locale))) {
             return $category->setActiveMenuItem(
-                Cache::get($category->treeCacheKey($locale)
-                ), $url);
+                Cache::get(
+                    $category->treeCacheKey($locale)
+                ),
+                $url
+            );
         }
 
         $structure = [];
         $iterator  = function ($items, $baseUrl = '') use (&$iterator, &$structure, $url, $locale) {
             $branch = [];
+
             foreach ($items as $item) {
                 $branchItem = self::getMenuItem($item, $url);
                 $item->setTranslateContext($locale);
+
                 if ($item->children->count() > 0) {
                     $branchItem['items'] = $iterator($item->children, $item->slug);
                 }
@@ -107,44 +113,13 @@ trait MenuItems
 
         Cache::forever($category->treeCacheKey($locale), $structure);
 
-        $structure = $category->setActiveMenuItem($structure, $url);
-
-        return $structure;
-    }
-
-    /**
-     * Creates a single menu item result array
-     *
-     * @param $item Category
-     * @param $url  string
-     *
-     * @return array
-     * @throws \Cms\Classes\CmsException
-     */
-    protected static function getMenuItem($item, $url)
-    {
-        if ( ! $pageUrl = GeneralSettings::get('category_page')) {
-            throw new InvalidArgumentException(
-                'Mall: Please select a category page via the backend settings.'
-            );
-        }
-
-        $controller = Controller::getController() ?: new Controller;
-        $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug], false);
-
-        $result             = [];
-        $result['url']      = $entryUrl;
-        $result['mtime']    = $item->updated_at;
-        $result['title']    = $item->name;
-        $result['code']     = $item->code;
-        $result['isActive'] = $url === $entryUrl;
-
-        return $result;
+        return $category->setActiveMenuItem($structure, $url);
     }
 
     public static function getMenuTypeInfo($type)
     {
         $result = [];
+
         if ($type === 'mall-category') {
             $result = [
                 'references'   => Category::listSubCategoryOptions(),
@@ -162,6 +137,36 @@ trait MenuItems
     }
 
     /**
+     * Creates a single menu item result array
+     *
+     * @param $item Category
+     * @param $url string
+     *
+     * @throws \Cms\Classes\CmsException
+     * @return array
+     */
+    protected static function getMenuItem($item, $url)
+    {
+        if (! $pageUrl = GeneralSettings::get('category_page')) {
+            throw new InvalidArgumentException(
+                'Mall: Please select a category page via the backend settings.'
+            );
+        }
+
+        $controller = Controller::getController() ?: new Controller();
+        $entryUrl   = $controller->pageUrl($pageUrl, ['slug' => $item->nestedSlug], false);
+
+        $result             = [];
+        $result['url']      = $entryUrl;
+        $result['mtime']    = $item->updated_at;
+        $result['title']    = $item->name;
+        $result['code']     = $item->code;
+        $result['isActive'] = $url === $entryUrl;
+
+        return $result;
+    }
+
+    /**
      * Lists all categories with nested sub categories
      * This is used for the 'mall-category' menu type
      *
@@ -172,8 +177,9 @@ trait MenuItems
         $category = self::getNested();
         $iterator = function ($categories) use (&$iterator) {
             $result = [];
+
             foreach ($categories as $category) {
-                if ( ! $category->children) {
+                if (! $category->children) {
                     $result[$category->id] = $category->name;
                 } else {
                     $result[$category->id] = [
@@ -224,7 +230,6 @@ trait MenuItems
         }
     }
 
-
     /**
      * Mark the currently active menu item as isActive.
      *
@@ -241,6 +246,7 @@ trait MenuItems
         $iterator = function ($items, $url) use (&$iterator) {
             foreach ($items as &$item) {
                 $item['isActive'] = $item['url'] === $url;
+
                 if (isset($item['items']) && count($item['items']) > 0) {
                     $item['items'] = $iterator($item['items'], $url);
                 }

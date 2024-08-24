@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Closure;
 use DB;
 use Event;
-use Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Session;
+use Model;
 use October\Rain\Database\Collection;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
@@ -29,11 +31,11 @@ class ShippingMethod extends Model
      * Morph key as used on the respective relationships.
      * @var string
      */
-    const MORPH_KEY = 'mall.shipping_method';
+    public const MORPH_KEY = 'mall.shipping_method';
 
     /**
-     * Disable `is_default` handler on IsStates trait. Even if ShippingMethod uses a default value, 
-     * the current IsStates trait does not support multiple defaults, especially by using an 
+     * Disable `is_default` handler on IsStates trait. Even if ShippingMethod uses a default value,
+     * the current IsStates trait does not support multiple defaults, especially by using an
      * additional linking table (`offline_mall_shipping_country`).
      * @var null|string
      */
@@ -50,7 +52,7 @@ class ShippingMethod extends Model
      * @var array
      */
     public $implement = [
-        '@RainLab.Translate.Behaviors.TranslatableModel'
+        '@RainLab.Translate.Behaviors.TranslatableModel',
     ];
     
     /**
@@ -74,7 +76,7 @@ class ShippingMethod extends Model
      */
     public $rules = [
         'name'          => 'required',
-        'is_enabled'    => 'nullable|boolean'
+        'is_enabled'    => 'nullable|boolean',
     ];
 
     /**
@@ -105,9 +107,9 @@ class ShippingMethod extends Model
      * @var array<string>
      */
     public $hidden = [
-        'created_at', 
-        'updated_at', 
-        'deleted_at'
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -115,7 +117,7 @@ class ShippingMethod extends Model
      * @var array
      */
     public $appends = [
-        'price_formatted'
+        'price_formatted',
     ];
 
     /**
@@ -123,7 +125,7 @@ class ShippingMethod extends Model
      * @var array
      */
     public $with = [
-        'prices'
+        'prices',
     ];
 
     /**
@@ -191,11 +193,11 @@ class ShippingMethod extends Model
     ];
 
     /**
-     * This method can be used when no shipping is required, for example when there are only virtual 
+     * This method can be used when no shipping is required, for example when there are only virtual
      * products in a cart.
      * @return ShippingMethod
      */
-    static public function noShippingRequired(): self
+    public static function noShippingRequired(): self
     {
         return new self([
             'name'        => trans('offline.mall::lang.shipping_method.not_required_name'),
@@ -207,7 +209,7 @@ class ShippingMethod extends Model
      * Get the first shipping method.
      * @return null|self
      */
-    static public function getDefault(): ?self
+    public static function getDefault(): ?self
     {
         return ShippingMethod::first();
     }
@@ -217,7 +219,7 @@ class ShippingMethod extends Model
      * @param Cart $cart
      * @return Collection|self[]
      */
-    static public function getAvailableByCart(Cart $cart)
+    public static function getAvailableByCart(Cart $cart)
     {
         if ($cart->is_virtual) {
             // Virtual carts cannot be shipped.
@@ -240,13 +242,14 @@ class ShippingMethod extends Model
      * @param null|Wishlist $wishlist
      * @return Collection|self[]
      */
-    static public function getAvailableByWishlist(?Wishlist $wishlist = null)
+    public static function getAvailableByWishlist(?Wishlist $wishlist = null)
     {
         if (!$wishlist) {
             return new Collection();
         } else {
             $total = $wishlist->totals()->productPostTaxes();
             $countryId = $wishlist->getCartCountryId();
+
             return self::getAvailability($countryId, $total, null, $wishlist);
         }
     }
@@ -260,14 +263,14 @@ class ShippingMethod extends Model
      * @param null|Wishlist $wishlist
      * @return Collection|self[]
      */
-    static public function getAvailability($countryId, $total, $cart = null, $wishlist = null)
+    public static function getAvailability($countryId, $total, $cart = null, $wishlist = null)
     {
         $availableShippingMethods = self::orderBy('sort_order')
             ->when($countryId, function ($q) use ($countryId) {
                 $q->whereDoesntHave('countries')
-                  ->orWhereHas('countries', function ($q) use ($countryId) {
-                      $q->where('country_id', $countryId);
-                  });
+                    ->orWhereHas('countries', function ($q) use ($countryId) {
+                        $q->where('country_id', $countryId);
+                    });
             })
             ->get()
             ->filter(function (ShippingMethod $method) use ($total) {
@@ -278,6 +281,7 @@ class ShippingMethod extends Model
                     && ($above === null || $above <= $total);
             });
         Event::fire('mall.shipping.methods.availability', [&$availableShippingMethods, $cart, $wishlist]);
+
         return $availableShippingMethods;
     }
 
@@ -300,7 +304,8 @@ class ShippingMethod extends Model
         $base = parent::jsonSerialize();
         $this->prices->load('currency');
         unset($base['price']);
-        $base['price'] = $this->prices->mapWithKeys(fn($price) => [$price->currency->code => $price]);
+        $base['price'] = $this->prices->mapWithKeys(fn ($price) => [$price->currency->code => $price]);
+
         return $base;
     }
 
@@ -311,9 +316,9 @@ class ShippingMethod extends Model
     public function afterDelete()
     {
         DB::table('offline_mall_prices')
-           ->where('priceable_type', self::MORPH_KEY)
-           ->where('priceable_id', $this->id)
-           ->delete();
+            ->where('priceable_type', self::MORPH_KEY)
+            ->where('priceable_id', $this->id)
+            ->delete();
     }
 
     /**
@@ -323,9 +328,11 @@ class ShippingMethod extends Model
     public function getActualPricesAttribute()
     {
         $prices = [];
-        foreach (Currency::all() AS $currency) {
+
+        foreach (Currency::all() as $currency) {
             $prices[$currency->code] = $this->price($currency);
         }
+
         return $prices;
     }
 
@@ -345,21 +352,12 @@ class ShippingMethod extends Model
     public function getNameAttribute(): ?string
     {
         $enforcedKey = sprintf('mall.shipping.enforced.%s.name', $this->id);
+
         if ($this->useEnforcedValues() && $enforced = Session::get($enforcedKey)) {
             return $enforced;
         } else {
             return $this->getAttributeTranslated('name');
         }
-    }
-
-    /**
-     * Check if enforced shipping price/name should be used.The values are ignored if a 
-     * ShippingMethodSelector component is present on the current page.
-     * @return bool
-     */
-    protected function useEnforcedValues()
-    {
-        return app()->runningInBackend() !== true; // Never use enforced values in the backend.
     }
     
     /**
@@ -383,25 +381,35 @@ class ShippingMethod extends Model
     }
 
     /**
+     * Check if enforced shipping price/name should be used.The values are ignored if a
+     * ShippingMethodSelector component is present on the current page.
+     * @return bool
+     */
+    protected function useEnforcedValues()
+    {
+        return app()->runningInBackend() !== true; // Never use enforced values in the backend.
+    }
+
+    /**
      * Price Relation
      * @param mixed $currency
      * @param string $relation
      * @param null|Closure $filter
      * @return mixed
      */
-    protected function priceRelation($currency = null, $relation = 'prices', ?Closure $filter = null) {
+    protected function priceRelation($currency = null, $relation = 'prices', ?Closure $filter = null)
+    {
         $checkEnforced = $relation === 'prices' && $this->useEnforcedValues();
         $enforcedKey   = sprintf('mall.shipping.enforced.%s.price', $this->id);
 
         if ($checkEnforced && $enforced = Session::get($enforcedKey, [])) {
             $currency = Currency::resolve($currency);
             $value    = array_get($enforced, $currency->code);
-            $price    = new Price([
+
+            return new Price([
                 'currency_id' => $currency->id,
                 'price'       => $value,
             ]);
-
-            return $price;
         }
 
         return $this->priceAccessorPriceRelation($currency, $relation, $filter);

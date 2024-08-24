@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -6,13 +8,13 @@ use Cms\Classes\ComponentBase;
 use DB;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\CategoryReview;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use OFFLINE\Mall\Models\Review;
 use OFFLINE\Mall\Models\ReviewCategory;
 use OFFLINE\Mall\Models\ReviewSettings;
-use OFFLINE\Mall\Classes\User\Auth;
 
 class ProductReviews extends ComponentBase
 {
@@ -20,31 +22,38 @@ class ProductReviews extends ComponentBase
      * @var ProductModel
      */
     public $product;
+
     /**
      * @var Collection<Review>
      */
     public $reviews;
+
     /**
      * @var Collection<Review>
      */
     public $allReviews;
+
     /**
      * @var Collection<ReviewCategory>
      */
     public $reviewCategories;
+
     /**
      * @var Review
      */
     public $customerReview;
+
     /**
      * @var string
      */
     public $accountPage;
+
     /**
      * Determines whether the current user can create a new review.
      * @var bool
      */
     public $canReview;
+
     /**
      * @var bool
      */
@@ -99,8 +108,7 @@ class ProductReviews extends ComponentBase
 
         $limitToVariant = (bool)$this->property('currentVariantReviewsOnly') && (bool)$this->property('variant');
 
-        $this->allReviews = Review
-            ::with(['category_reviews.review_category.translations', 'variant'])
+        $this->allReviews = Review::with(['category_reviews.review_category.translations', 'variant'])
             ->where('product_id', $this->product->id)
             ->when($limitToVariant, function ($q) {
                 $q->where('variant_id', $this->property('variant'));
@@ -109,8 +117,7 @@ class ProductReviews extends ComponentBase
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $this->customerReview = Review
-            ::with('category_reviews')
+        $this->customerReview = Review::with('category_reviews')
             ->where('product_id', $this->product->id)
             ->when($this->property('variant'), function ($q) {
                 $q->where('variant_id', $this->property('variant'));
@@ -156,12 +163,14 @@ class ProductReviews extends ComponentBase
             $review->product_id  = $this->property('product');
             $review->variant_id  = $this->property('variant');
             $review->customer_id = optional(optional(Auth::getUser())->customer)->id;
-            if ( ! $this->isModerated) {
+
+            if (! $this->isModerated) {
                 $review->approved_at = now();
             }
             $review->save();
             // Store any category reviews that are available.
             $categoryRatings = array_filter(post('category_rating', []));
+
             if (is_array($categoryRatings) && count($categoryRatings) > 0) {
                 $approvedAt = $this->isModerated ? null : now();
                 $this->reviewCategories->each(function (ReviewCategory $category) use (
@@ -201,6 +210,7 @@ class ProductReviews extends ComponentBase
             $review->save();
             // Update any category reviews that are available.
             $categoryRatings = array_filter(post('category_rating', []));
+
             if (is_array($categoryRatings) && count($categoryRatings) > 0) {
                 $this->reviewCategories->each(function (ReviewCategory $category) use ($review, $categoryRatings) {
                     if ($value = array_get($categoryRatings, $category->id)) {
@@ -259,13 +269,9 @@ class ProductReviews extends ComponentBase
         $data = post();
 
         // Check if input contains something other than whitespace.
-        $hasContent = function ($input) {
-            return $input !== '' && ctype_space($input) === false;
-        };
+        $hasContent = fn ($input) => $input !== '' && ctype_space($input) === false;
         // Since the data is stored in a repeater field, we need to add a value key.
-        $addValueKey = function ($value) {
-            return ['value' => $value];
-        };
+        $addValueKey = fn ($value) => ['value' => $value];
 
         // Split up on new lines.
         $pros = explode("\n", post('pros', ''));

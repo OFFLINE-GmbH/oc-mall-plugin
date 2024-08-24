@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Console;
 
 use DB;
+use Exception;
 use Illuminate\Console\Command;
 use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\Noop;
@@ -10,6 +13,7 @@ use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Updates\Seeders\DemoSeeder;
 use OFFLINE\Mall\Updates\Seeders\MallSeeder;
+use System;
 
 class SeedDataCommand extends Command
 {
@@ -43,18 +47,21 @@ class SeedDataCommand extends Command
     public function handle()
     {
         $question = 'All existing OFFLINE.Mall data will be erased. Do you want to continue?';
+
         if (!$this->option('force') && !$this->confirm($question, false)) {
             return 0;
         }
         
         $demo = $this->option('with-demo');
         $question = 'Would you also like to import the demo content?';
+
         if (!$this->option('force') && !$demo && $this->confirm($question, false)) {
             $demo = true;
         }
         
         // Force locale
         $locale = $this->option('locale');
+
         if (!empty($locale)) {
             app()->setLocale($locale);
         }
@@ -67,31 +74,35 @@ class SeedDataCommand extends Command
         // Reset Mall Plugin
         $this->output->newLine();
         $this->warn(' Resetting Mall Plugin...');
+
         try {
             $this->cleanup();
             $this->info('Reset successful.');
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
             $this->error($exc->getMessage());
+
             return 0;
         }
         $this->output->newLine();
 
         // Seed core records
         $this->warn(' Seed core database records...');
+
         try {
-            if (version_compare(\System::VERSION, '3.0', '<')) {
+            if (version_compare(System::VERSION, '3.0', '<')) {
                 app()->call(MallSeeder::class);
             } else {
                 $this->callSilent('plugin:seed', [
                     'namespace' => 'OFFLINE.Mall',
-                    'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder'
+                    'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder',
                 ]);
             }
             $this->info('Seed core records successful.');
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
             $this->error($exc->getMessage());
+
             return 0;
         }
         $this->output->newLine();
@@ -101,18 +112,19 @@ class SeedDataCommand extends Command
             $this->warn(' Seed demo database records...');
 
             try {
-                if (version_compare(\System::VERSION, '3.0', '<')) {
+                if (version_compare(System::VERSION, '3.0', '<')) {
                     app()->call(DemoSeeder::class);
                 } else {
                     $this->callSilent('plugin:seed', [
                         'namespace' => 'OFFLINE.Mall',
-                        'class'     => 'OFFLINE\Mall\Updates\Seeders\DemoSeeder'
+                        'class'     => 'OFFLINE\Mall\Updates\Seeders\DemoSeeder',
                     ]);
                 }
                 $this->info('Seed demo records successful.');
-            } catch (\Exception $exc) {
+            } catch (Exception $exc) {
                 $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
                 $this->error($exc->getMessage() . "\n" . $exc->getFile());
+
                 return 0;
             }
             $this->output->newLine();
@@ -120,15 +132,15 @@ class SeedDataCommand extends Command
 
         // Re-Index all products
         $this->warn(' Re-Create products index...');
+
         try {
-            app()->bind(Index::class, function () use ($originalIndex) {
-                return $originalIndex;
-            });
+            app()->bind(Index::class, fn () => $originalIndex);
             $this->callSilent('mall:index', ['--force' => true]);
             $this->info('Re-Index products successful.');
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
             $this->error($exc->getMessage() . "\n" . $exc->getFile());
+
             return 0;
         }
         $this->output->newLine();
@@ -144,32 +156,32 @@ class SeedDataCommand extends Command
     protected function cleanup()
     {
         try {
-            if (version_compare(\System::VERSION, '3.0', '<')) {
+            if (version_compare(System::VERSION, '3.0', '<')) {
                 $this->callSilent('plugin:refresh', [
                     'name'          => 'OFFLINE.Mall',
                     '--force'       => true,
-                    '--quiet'       => true
+                    '--quiet'       => true,
                 ]);
             } else {
                 $this->callSilent('plugin:refresh', [
                     'namespace'     => 'OFFLINE.Mall',
                     '--force'       => true,
-                    '--quiet'       => true
+                    '--quiet'       => true,
                 ]);
             }
             $this->callSilent('cache:clear', []);
     
             // Clean Database
             DB::table('system_files')
-              ->where('attachment_type', 'LIKE', 'OFFLINE%Mall%')
-              ->orWhere('attachment_type', 'LIKE', 'mall.%')
-              ->delete();
+                ->where('attachment_type', 'LIKE', 'OFFLINE%Mall%')
+                ->orWhere('attachment_type', 'LIKE', 'mall.%')
+                ->delete();
     
             // Clean Indexes
             $index = app(Index::class);
             $index->drop(ProductEntry::INDEX);
             $index->drop(VariantEntry::INDEX);
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->error($exc->getMessage());
         }
     }

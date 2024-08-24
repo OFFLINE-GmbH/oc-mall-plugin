@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -33,12 +35,6 @@ class ProductPrice extends Price
      * @var array
      */
     public $nullable = ['price', 'variant_id'];
-    
-    /**
-     * The relationships that should be touched on save.
-     * @var array
-     */
-    protected $touches = ['product', 'variant'];
 
     /**
      * The belongsTo relationships of this model.
@@ -49,7 +45,7 @@ class ProductPrice extends Price
         'variant'  => Variant::class,
         'currency' => [
             Currency::class,
-            'scope' => 'withDisabled'
+            'scope' => 'withDisabled',
         ],
     ];
 
@@ -59,6 +55,12 @@ class ProductPrice extends Price
      * @var array
      */
     public $morphTo = [ ];
+    
+    /**
+     * The relationships that should be touched on save.
+     * @var array
+     */
+    protected $touches = ['product', 'variant'];
 
     /**
      * Skip internal query check, as used by the IsState trait.

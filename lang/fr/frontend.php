@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Recherche...',
     'please_wait' => 'Merci de patienter...',

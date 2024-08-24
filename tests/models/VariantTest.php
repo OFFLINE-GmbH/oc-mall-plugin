@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use DB;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\Price;
 use OFFLINE\Mall\Models\Product;
@@ -15,6 +18,7 @@ use System\Models\File;
 class VariantTest extends PluginTestCase
 {
     public $product;
+
     public $variant;
 
     public function setUp(): void
@@ -97,9 +101,9 @@ class VariantTest extends PluginTestCase
 
     public function test_it_inherits_files()
     {
-        \DB::table('offline_mall_product_variants')
-           ->where('id', $this->variant->id)
-           ->update(['image_set_id' => null]);
+        DB::table('offline_mall_product_variants')
+            ->where('id', $this->variant->id)
+            ->update(['image_set_id' => null]);
 
         $this->variant = Variant::find($this->variant->id);
 
@@ -117,9 +121,9 @@ class VariantTest extends PluginTestCase
 
         $this->product->main_image_set->images()->save($file);
 
-        \DB::table('offline_mall_product_variants')
-           ->where('id', $this->variant->id)
-           ->update(['image_set_id' => null]);
+        DB::table('offline_mall_product_variants')
+            ->where('id', $this->variant->id)
+            ->update(['image_set_id' => null]);
 
         $this->variant = Variant::find($this->variant->id);
 

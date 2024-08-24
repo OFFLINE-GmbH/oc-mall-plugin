@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateOfflineMallCartDiscount extends Migration
 {
@@ -13,7 +15,7 @@ class CreateOfflineMallCartDiscount extends Migration
             $table->integer('cart_id')->unsigned();
             $table->integer('discount_id')->unsigned();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->index(['cart_id', 'discount_id'], 'idx_cart_discount_pivot');
             }
         });

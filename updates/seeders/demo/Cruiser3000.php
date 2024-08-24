@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
 use OFFLINE\Mall\Models\ProductPrice;
-use OFFLINE\Mall\Models\Review;
 
 class Cruiser3000 extends DemoProduct
 {
@@ -52,8 +53,8 @@ class Cruiser3000 extends DemoProduct
     {
         return [
             'color'       => [
-                'name'  => trans('offline.mall::demo.products.properties.heavens_blue'), 
-                'hex'   => '#02bbe6'
+                'name'  => trans('offline.mall::demo.products.properties.heavens_blue'),
+                'hex'   => '#02bbe6',
             ],
             'rear-travel' => '0',
             'fork-travel' => '130',

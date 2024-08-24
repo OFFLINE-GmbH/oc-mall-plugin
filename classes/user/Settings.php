@@ -1,4 +1,5 @@
 <?php
+
 namespace OFFLINE\Mall\Classes\User;
 
 use October\Rain\Support\Facades\Config;
@@ -9,12 +10,7 @@ use October\Rain\Support\Facades\Config;
  */
 class Settings
 {
-    const ACTIVATE_USER = 'user';
-
-    public static function getMinPasswordLength()
-    {
-        return Config::get('rainlab.user::minPasswordLength', Config::get('rainlab.user::password_policy.min_length', 8));
-    }
+    public const ACTIVATE_USER = 'user';
 
     public static function __callStatic($method, $args)
     {
@@ -23,6 +19,10 @@ class Settings
         }
 
         return call_user_func_array([\RainLab\User\Models\Setting::class, $method], $args);
+    }
 
+    public static function getMinPasswordLength()
+    {
+        return Config::get('rainlab.user::minPasswordLength', Config::get('rainlab.user::password_policy.min_length', 8));
     }
 }

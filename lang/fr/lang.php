@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'plugin' => [
         'name' => 'Mall',
         'description' => 'E-commerce solution pour October CMS',
@@ -832,7 +834,7 @@
                 ],
                 'currentVariantReviewsOnly' => [
                     'title' => 'Afficher uniquement les évaluations de cette variante',
-                    'description' => "Ne pas montrer les avis des autres variantes de ce produit",
+                    'description' => 'Ne pas montrer les avis des autres variantes de ce produit',
                 ],
             ],
         ],

@@ -2,18 +2,20 @@
 
 namespace OFFLINE\Mall\Classes\Index;
 
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Variant;
-use Event;
 
 class VariantEntry implements Entry
 {
-    const INDEX = 'variants';
+    public const INDEX = 'variants';
 
     protected $variant;
+
     protected $data;
+
     protected $defaultCurrency;
 
     public function __construct(Variant $variant)
@@ -68,11 +70,7 @@ class VariantEntry implements Entry
 
     protected function mapPrices($variant): Collection
     {
-        return $variant->withForcedPriceInheritance(function () use ($variant) {
-            return Currency::get()->mapWithKeys(function ($currency) use ($variant) {
-                return [$currency->code => $variant->price($currency)->integer];
-            });
-        });
+        return $variant->withForcedPriceInheritance(fn () => Currency::get()->mapWithKeys(fn ($currency) => [$currency->code => $variant->price($currency)->integer]));
     }
 
     protected function mapCustomerGroupPrices($model): Collection
@@ -81,6 +79,7 @@ class VariantEntry implements Entry
             return [
                 $group->id => Currency::get()->mapWithKeys(function ($currency) use ($model, $group) {
                     $price = $model->groupPrice($group, $currency);
+
                     if ($price) {
                         return [$price->currency->code => $price->integer];
                     }
@@ -97,10 +96,6 @@ class VariantEntry implements Entry
             return collect();
         }
 
-        return $input->groupBy('property_id')->map(function ($value) {
-            return $value->pluck('index_value')->unique()->filter(function ($item) {
-                return !empty($item) || $item === 0 || $item === '0';
-            })->values();
-        })->filter();
+        return $input->groupBy('property_id')->map(fn ($value) => $value->pluck('index_value')->unique()->filter(fn ($item) => !empty($item) || $item === 0 || $item === '0')->values())->filter();
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -15,29 +17,35 @@ class ServiceOption extends Model
     use PriceAccessors;
     use SoftDelete;
 
-    const MORPH_KEY = 'mall.service_option';
+    public const MORPH_KEY = 'mall.service_option';
 
     public $table = 'offline_mall_service_options';
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $fillable = [
         'name',
         'description',
         'service_id',
     ];
+
     public $rules = [
         'name' => 'required',
     ];
+
     public $translatable = [
         'name',
         'description',
     ];
+
     public $morphMany = [
         'prices' => [
-            Price::class, 
-            'name' => 'priceable', 
-            'conditions' => 'price_category_id is null'
+            Price::class,
+            'name' => 'priceable',
+            'conditions' => 'price_category_id is null',
         ],
     ];
+
     public $belongsTo = [
         'service' => [Service::class],
     ];
@@ -63,9 +71,7 @@ class ServiceOption extends Model
             ],
         ];
 
-        $base['price'] = $this->prices->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price];
-        });
+        $base['price'] = $this->prices->mapWithKeys(fn ($price) => [$price->currency->code => $price]);
 
         return $base;
     }

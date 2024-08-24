@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use DB;
 use Event;
-use Model;
-use Session;
-use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
+use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
@@ -16,14 +18,13 @@ use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
 use OFFLINE\Mall\Classes\Traits\Cart\CartSession;
 use OFFLINE\Mall\Classes\Traits\Cart\Discounts;
 use OFFLINE\Mall\Classes\Traits\ShippingMethods;
+use Session;
 
 /**
  * @property TotalsCalculator totals
  */
 class Cart extends Model
 {
-    const FALLBACK_SHIPPING_COUNTRY_KEY = 'mall.fallback_shipping_country_id';
-
     use Validation;
     use SoftDelete;
     use CartSession;
@@ -31,43 +32,53 @@ class Cart extends Model
     use Discounts;
     use ShippingMethods;
 
-    protected $dates = ['deleted_at'];
+    public const FALLBACK_SHIPPING_COUNTRY_KEY = 'mall.fallback_shipping_country_id';
+
     public $rules = [];
+
     public $table = 'offline_mall_carts';
+
     public $hasMany = [
         'products' => [CartProduct::class, 'deleted' => true],
     ];
+
     public $belongsTo = [
         'shipping_method'  => [
             ShippingMethod::class,
-            'scope'     => 'all'
+            'scope'     => 'all',
         ],
         'payment_method'   => [
             PaymentMethod::class,
-            'scope'     => 'all'
+            'scope'     => 'all',
         ],
         'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
         'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
         'customer'         => [Customer::class, 'deleted' => true],
     ];
+
     public $hasOne = [
         'wishlist' => Wishlist::class,
     ];
+
     public $belongsToMany = [
         'discounts' => [
             Discount::class,
             'table' => 'offline_mall_cart_discount',
         ],
     ];
+
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
     ];
+
     public $fillable = ['session_id', 'customer_id'];
 
     /**
      * @var TotalsCalculator
      */
     public $totalsCached;
+
+    protected $dates = ['deleted_at'];
 
     public static function boot()
     {
@@ -76,7 +87,8 @@ class Cart extends Model
             // Make sure the selected shipping method is available for the new address(es).
             if ($cart->shipping_method_id !== null && $cart->isDirty('shipping_address_id')) {
                 $availableMethods = ShippingMethod::getAvailableByCart($cart);
-                if ( ! $availableMethods->pluck('id')->contains($cart->shipping_method_id)) {
+
+                if (! $availableMethods->pluck('id')->contains($cart->shipping_method_id)) {
                     $cart->shipping_method_id = ShippingMethod::getDefault()->id;
                 }
             }
@@ -127,9 +139,7 @@ class Cart extends Model
      */
     public function getIsVirtualAttribute(): bool
     {
-        return $this->products->count() > 0 && $this->products->every(function (CartProduct $product) {
-            return $product->data->is_virtual;
-        });
+        return $this->products->count() > 0 && $this->products->every(fn (CartProduct $product) => $product->data->is_virtual);
     }
 
     public function getShippingAddressSameAsBillingAttribute(): bool
@@ -144,10 +154,12 @@ class Cart extends Model
 
     /**
      * Updates the quantity for one cart entry.
+     * @param mixed $cartProductId
      */
     public function setQuantity($cartProductId, int $quantity)
     {
         $product = $this->products->find($cartProductId);
+
         if ($product) {
             $this->validateStock($product->item, $quantity, $product->id);
 
@@ -161,13 +173,12 @@ class Cart extends Model
         $this->validateShippingMethod();
     }
 
-
     /**
      * Checks if a product with the same $value is already
      * in the cart.
      *
-     * @param Product         $product
-     * @param Variant         $variant
+     * @param Product $product
+     * @param Variant $variant
      * @param Collection|null $values
      *
      * @return bool
@@ -209,16 +220,18 @@ class Cart extends Model
      * Remove all products that are no longer published.
      * Returns all removed products.
      *
+     * @throws Exception
      * @return \October\Rain\Support\Collection
-     * @throws \Exception
      */
     public function removeUnpublishedProducts()
     {
         return $this->products->map(function (CartProduct $product) {
             if (!$product->item->published) {
                 $product->delete();
+
                 return $product;
             }
+
             return null;
         })->filter();
     }
@@ -250,7 +263,7 @@ class Cart extends Model
      * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
      *
      * @param Carbon $deadline
-     * @param int    $keepDays
+     * @param int $keepDays
      */
     public function gdprCleanup(Carbon $deadline, int $keepDays)
     {
@@ -273,16 +286,16 @@ class Cart extends Model
      * This is useful if you need a dynamic way to set shipping costs
      * based on an arbitrary other value.
      *
-     * @param int    $id
-     * @param array  $price
+     * @param int $id
+     * @param array $price
      * @param string $name
      *
      * @example $cart->forceShippingPrice(1, ['EUR' => 200], 'Fee Zone 2');
-     *
      */
     public function forceShippingPrice(int $id, array $price, string $name = '')
     {
         Session::put('mall.shipping.enforced.' . $id . '.price', $price);
+
         if ($name) {
             Session::put('mall.shipping.enforced.' . $id . '.name', $name);
         }

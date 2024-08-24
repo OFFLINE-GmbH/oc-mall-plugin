@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateOfflineMallProductPrices extends Migration
 {
@@ -16,7 +18,7 @@ class CreateOfflineMallProductPrices extends Migration
             $table->integer('currency_id')->unsigned();
             $table->timestamps();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->unique(['product_id', 'currency_id', 'variant_id'], 'product_price_unique_price');
                 $table->index('product_id', 'idx_product_price_product');
                 $table->index('variant_id', 'idx_product_price_variant');

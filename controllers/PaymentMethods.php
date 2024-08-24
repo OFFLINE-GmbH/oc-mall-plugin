@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
 use October\Rain\Database\Builder;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\PaymentMethod;
@@ -22,7 +24,7 @@ class PaymentMethods extends Controller
     public $implement = [
         FormController::class,
         ListController::class,
-        RelationController::class
+        RelationController::class,
     ];
 
     /**
@@ -111,12 +113,14 @@ class PaymentMethods extends Controller
     protected function updatePrices($model, $field = null, $key = '_prices')
     {
         $data = post('MallPrice', []);
+
         foreach ($data as $currency => $_data) {
             $value = array_get($_data, $key);
+
             if ($value === '') {
                 $value = null;
             }
-            Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
+            Price::withoutGlobalScope(new IsStatesScope())->updateOrCreate([
                 'price_category_id' => null,
                 'priceable_id'      => $model->id,
                 'priceable_type'    => $model::MORPH_KEY,

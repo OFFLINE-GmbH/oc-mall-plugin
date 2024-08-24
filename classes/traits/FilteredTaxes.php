@@ -1,15 +1,12 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Traits;
 
-
+use Event;
 use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Tax;
-use OFFLINE\Mall\Classes\User\Auth;
-
-use Event;
 
 /**
  * This trait is used to filter a Collection of taxes based
@@ -50,9 +47,7 @@ trait FilteredTaxes
         // If the shipping destination is known, return all taxes that have
         // no country attached (valid for all countries) and all taxes that have
         // the shipping country attached.
-        return $taxes->filter(function ($tax) {
-            return $tax->countries->count() === 0 || $tax->countries->pluck('id')->search($this->countryId) !== false;
-        });
+        return $taxes->filter(fn ($tax) => $tax->countries->count() === 0 || $tax->countries->pluck('id')->search($this->countryId) !== false);
     }
 
     /**
@@ -62,6 +57,7 @@ trait FilteredTaxes
     public function getCartCountryId()
     {
         $cart = Cart::byUser(Auth::getUser());
+
         if (!$cart) {
             return null;
         } else {

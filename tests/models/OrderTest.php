@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
 use Event;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
@@ -20,7 +23,6 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Tax;
 use OFFLINE\Mall\Models\Variant;
 use OFFLINE\Mall\Tests\PluginTestCase;
-use OFFLINE\Mall\Classes\User\Auth;
 use RainLab\User\Models\User;
 
 class OrderTest extends PluginTestCase
@@ -306,7 +308,7 @@ class OrderTest extends PluginTestCase
         $productA->save();
         $productA = Product::find($productA->id);
 
-        $productB                     = new Product;
+        $productB                     = new Product();
         $productB->name               = 'Another Product';
         $productB->stock              = 10;
         $productB->weight             = 800;
@@ -377,6 +379,7 @@ class OrderTest extends PluginTestCase
     protected function getSimpleCart($withProduct = false): Cart
     {
         $cart = new Cart();
+
         if ($withProduct) {
             $product                     = Product::first();
             $product->stackable          = true;

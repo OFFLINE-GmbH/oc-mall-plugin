@@ -1,4 +1,5 @@
 <?php
+
 // barryvdh/laravel-dompdf config
 // For details and documentation @see https://github.com/barryvdh/laravel-dompdf
 return [

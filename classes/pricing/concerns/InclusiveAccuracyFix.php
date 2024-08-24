@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
@@ -10,9 +12,9 @@ use OFFLINE\Mall\Classes\Pricing\Values\MoneyValue;
 use Whitecube\Price\Price;
 
 /**
- * Whitecube\Price\Price works exclusively with exclusive prices. As a result, when inclusive prices 
- * are used, there may be rounding discrepancies, typically less than 1 cent, due to the deduction 
- * of tax percentages. However, this trait ensures accurate display by effectively addressing and 
+ * Whitecube\Price\Price works exclusively with exclusive prices. As a result, when inclusive prices
+ * are used, there may be rounding discrepancies, typically less than 1 cent, due to the deduction
+ * of tax percentages. However, this trait ensures accurate display by effectively addressing and
  * resolving such rounding issues using the used currency precision (or 0.001).
  */
 trait InclusiveAccuracyFix
@@ -38,7 +40,7 @@ trait InclusiveAccuracyFix
         }
 
         // Taxes
-        foreach ($this->taxes AS $tax) {
+        foreach ($this->taxes as $tax) {
             if ($tax instanceof FactorValue) {
                 $factor += $tax->value();
             } else {
@@ -50,6 +52,7 @@ trait InclusiveAccuracyFix
         if ($factor > 0) {
             $price->dividedBy(1 + ($factor / 100), RoundingMode::HALF_UP);
         }
+
         if ($amount->getMinorAmount()->toInt() > 0) {
             $price->minus($amount);
         }
@@ -77,7 +80,7 @@ trait InclusiveAccuracyFix
             $factor += $this->vat->value();
         }
 
-        foreach ($this->taxes AS $tax) {
+        foreach ($this->taxes as $tax) {
             if ($tax instanceof MoneyValue) {
                 $amount->plus($tax->value());
             } else {
@@ -89,6 +92,7 @@ trait InclusiveAccuracyFix
         if ($factor > 0) {
             $money = $money->dividedBy(1 + ($factor / 100), RoundingMode::HALF_UP);
         }
+
         if ($amount->getMinorAmount()->toInt() > 0) {
             $money = $money->minus($amount);
         }
@@ -103,20 +107,22 @@ trait InclusiveAccuracyFix
     protected function sumDiscount()
     {
         $price = $this->price->inclusive();
-        $discount = array_reduce(
+
+        return array_reduce(
             $this->discounts,
             function ($carry, DiscountValue $discount) use ($price) {
                 $amount = $discount->value();
+
                 if ($amount instanceof MoneyValue) {
                     $carry += $amount->toFloat();
                 } else {
                     $carry += $amount->valueOf($price)->getAmount()->toFloat();
                 }
+
                 return $carry;
             },
             0
         );
-        return $discount;
     }
 
     /**
@@ -140,14 +146,17 @@ trait InclusiveAccuracyFix
 
         // Handle rounding issues
         $diff = abs($original - $result);
+
         if (($currency = $this->bag()->getCurrency()) !== null) {
             $diff = intval($diff * ($p = pow(10, $currency->decimals))) / $p;
             $accuracy = floatval('0.' . substr(str_repeat('0', intval($currency->decimals)), -1) . '1');
+
             if ($diff <= $accuracy) {
                 $price = new Price(Money::ofMinor($original * 100, $this->currency));
             }
         } else {
             $diff = intval($diff * ($p = pow(10, 3))) / $p;
+
             if ($diff <= 0.001) {
                 $price = new Price(Money::ofMinor($original * 100, $this->currency));
             }

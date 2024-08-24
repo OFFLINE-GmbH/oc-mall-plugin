@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateOfflineMallProperties extends Migration
 {
@@ -19,7 +21,7 @@ class CreateOfflineMallProperties extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->index('deleted_at', 'idx_property_deleted_at');
             }
         });

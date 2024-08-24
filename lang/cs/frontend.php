@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Vyhledat...',
     'please_wait' => 'Prosím, čekejte...',
@@ -47,8 +48,8 @@ return [
     'form.lastname' => 'Příjmení',
     'form.company' => 'Firma',
     'form.company_placeholder' => 'Nechte prázdné, pokud se jedná o soukromou osobu',
-    'form.recipient' => "Jméno příjemce",
-    'form.recipient_placeholder' => "Nechte prázdné, pokud se jedná o Vás",
+    'form.recipient' => 'Jméno příjemce',
+    'form.recipient_placeholder' => 'Nechte prázdné, pokud se jedná o Vás',
     'form.address_lines' => 'Adresa',
     'form.zip' => 'PSČ',
     'form.city' => 'Město',

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Vyhľadať...',
     'please_wait' => 'Prosím, čakajte...',
@@ -48,8 +49,8 @@ return [
     'form.lastname' => 'Priezvisko',
     'form.company' => 'Firma',
     'form.company_placeholder' => 'Nechajte prázdne, pokiaľ se jedná o súkromnú osobu',
-    'form.recipient' => "Príjemnca",
-    'form.recipient_placeholder' => "Nechajte prázdne, pokiaľ ste to Vy",
+    'form.recipient' => 'Príjemnca',
+    'form.recipient_placeholder' => 'Nechajte prázdne, pokiaľ ste to Vy',
     'form.address_lines' => 'Adresa',
     'form.zip' => 'PSČ',
     'form.city' => 'Mesto',
@@ -168,4 +169,3 @@ return [
     'reviews.one_per_line' => 'Nepovinné, vložte každé pozitívum/negatívum na samostatný riadok',
     'no_shipping_method' => 'Doprava nevybraná',
 ];
-

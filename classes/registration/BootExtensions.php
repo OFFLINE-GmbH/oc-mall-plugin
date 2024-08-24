@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Registration;
 
+use Backend;
 use Backend\Widgets\Filter;
 use Backend\Widgets\Form;
 use Backend\Widgets\Lists;
@@ -23,6 +24,7 @@ trait BootExtensions
         if (PluginManager::instance()->exists('RainLab.Location')) {
             $this->extendRainLabCountry();
         }
+
         if (PluginManager::instance()->exists('RainLab.User')) {
             $this->extendRainLabUser();
         }
@@ -67,15 +69,17 @@ trait BootExtensions
 
             $model->addDynamicMethod('scopeCustomer', function (Builder $builder) {
                 $builder->whereHas('customer');
+
                 return $builder;
             });
 
             $model->addDynamicMethod('scopeHasCustomerFilter', function (Builder $builder, $scopes) {
                 if ($scopes->value == '1') {
                     $builder->doesntHave('customer');
-                } else if ($scopes->value == '2') {
+                } elseif ($scopes->value == '2') {
                     $builder->whereHas('customer');
                 }
+
                 return $builder;
             });
 
@@ -122,7 +126,7 @@ trait BootExtensions
             $manager->addSideMenuItems('RainLab.User', 'user', [
                 'customer_groups' => [
                     'label'       => 'offline.mall::lang.common.customer_groups',
-                    'url'         => \Backend::url('offline/mall/customergroups'),
+                    'url'         => Backend::url('offline/mall/customergroups'),
                     'icon'        => 'icon-users',
                     'permissions' => ['offline.mall.manage_customer_groups'],
                 ],
@@ -130,7 +134,7 @@ trait BootExtensions
             $manager->addSideMenuItems('RainLab.User', 'user', [
                 'customer_addresses' => [
                     'label'       => 'offline.mall::lang.common.addresses',
-                    'url'         => \Backend::url('offline/mall/addresses'),
+                    'url'         => Backend::url('offline/mall/addresses'),
                     'icon'        => 'icon-home',
                     'permissions' => ['offline.mall.manage_customer_addresses'],
                 ],
@@ -139,11 +143,11 @@ trait BootExtensions
 
         // Add Customer Groups relation to RainLab.User form
         Event::listen('backend.form.extendFields', function (Form $widget) {
-            if ( ! $widget->getController() instanceof \RainLab\User\Controllers\Users) {
+            if (! $widget->getController() instanceof RainLabUsersController) {
                 return;
             }
 
-            if ( ! $widget->model instanceof \RainLab\User\Models\User) {
+            if (! $widget->model instanceof RainLabUser) {
                 return;
             }
 
@@ -166,11 +170,11 @@ trait BootExtensions
 
         // Add Customer Group on RainLab.User List
         Event::listen('backend.list.extendColumns', function (Lists $list) {
-            if (!$list->getController() instanceof \RainLab\User\Controllers\Users) {
+            if (!$list->getController() instanceof RainLabUsersController) {
                 return;
             }
 
-            if (!$list->getModel() instanceof \RainLab\User\Models\User) {
+            if (!$list->getModel() instanceof RainLabUser) {
                 return;
             }
 
@@ -182,18 +186,18 @@ trait BootExtensions
                     'after'     => 'email',
                     'relation'  => 'customer_group',
                     'select'    => 'name',
-                    'sortable'  => true
-                ]
+                    'sortable'  => true,
+                ],
             ]);
         });
 
         // Add Customer Group on RainLab.User List
         Event::listen('backend.filter.extendScopes', function (Filter $filter) {
-            if (!$filter->getController() instanceof \RainLab\User\Controllers\Users) {
+            if (!$filter->getController() instanceof RainLabUsersController) {
                 return;
             }
 
-            if (!$filter->getModel() instanceof \RainLab\User\Models\User) {
+            if (!$filter->getModel() instanceof RainLabUser) {
                 return;
             }
 
@@ -205,8 +209,8 @@ trait BootExtensions
                         'offline_mall_customers.id = null',
                         'offline_mall_customers.id <> null',
                     ],
-                    'modelScope'    => 'hasCustomerFilter'
-                ]
+                    'modelScope'    => 'hasCustomerFilter',
+                ],
             ]);
         });
     }

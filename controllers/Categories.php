@@ -1,17 +1,22 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
-use Flash;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
+use Flash;
 use OFFLINE\Mall\Models\Category;
+use System;
 
 class Categories extends Controller
 {
+    public $turboVisitControl = 'disabled';
+
     /**
      * Implement behaviors for this controller.
      * @var array
@@ -56,7 +61,7 @@ class Categories extends Controller
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-categories');
 
-        if (version_compare(\System::VERSION, '3.0', '<=')) {
+        if (version_compare(System::VERSION, '3.0', '<=')) {
             $this->addJs('/plugins/offline/mall/assets/backend.js');
         }
     }
@@ -69,8 +74,8 @@ class Categories extends Controller
      */
     public function relationExtendConfig($config, $field, $model)
     {
-        if (version_compare(\System::VERSION, '3.0', '>=')) {
-            $config->view['list'] = "$/offline/mall/models/propertygroup/columns_pivot.yaml";
+        if (version_compare(System::VERSION, '3.0', '>=')) {
+            $config->view['list'] = '$/offline/mall/models/propertygroup/columns_pivot.yaml';
         }
     }
 

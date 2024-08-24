@@ -1,9 +1,9 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Traits;
 
 use Backend\Widgets\Table;
+use DB;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Classes\Index\Index;
@@ -24,7 +24,37 @@ trait ProductPriceTable
         if(!isset($this->vars['pricetable'])) {
             $this->preparePriceTable();
         }
+
         return $this->makePartial('price_table_modal', ['widget' => $this->vars['pricetable']]);
+    }
+
+    public function onPriceTablePersist()
+    {
+        DB::transaction(function () {
+            $state                     = post('state', []);
+            $currencies                = Currency::get()->keyBy('code');
+            $hasPriceInDefaultCurrency = false;
+
+            $this->removeOldPricingInformation($state, $currencies);
+
+            foreach ($state as $currency => $records) {
+                $currency = $currencies->get($currency);
+
+                foreach ($records as $record) {
+                    if ($this->hasDefaultCurrencyPrice($record, $currency)) {
+                        $hasPriceInDefaultCurrency = true;
+                    }
+                    $this->persistPriceTableRow($record, $currency);
+                }
+            }
+
+            if (! $hasPriceInDefaultCurrency) {
+                throw new ValidationException(['prices' => trans('offline.mall::lang.common.price_missing')]);
+            }
+        });
+
+        // Reindex product and variants.
+        (new ProductObserver(app(Index::class)))->updated(Product::find($this->params[0]));
     }
 
     protected function preparePriceTable()
@@ -57,6 +87,7 @@ trait ProductPriceTable
         ])->find($this->params[0]);
 
         $tableData = collect([$model]);
+
         if ($model->inventory_management_method === 'variant') {
             $tableData = $model->variants->prepend($model);
         }
@@ -64,34 +95,6 @@ trait ProductPriceTable
         $this->vars['pricetable']      = $widget;
         $this->vars['currencies']      = Currency::orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
         $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
-    }
-
-    public function onPriceTablePersist()
-    {
-        \DB::transaction(function () {
-            $state                     = post('state', []);
-            $currencies                = Currency::get()->keyBy('code');
-            $hasPriceInDefaultCurrency = false;
-
-            $this->removeOldPricingInformation($state, $currencies);
-
-            foreach ($state as $currency => $records) {
-                $currency = $currencies->get($currency);
-                foreach ($records as $record) {
-                    if ($this->hasDefaultCurrencyPrice($record, $currency)) {
-                        $hasPriceInDefaultCurrency = true;
-                    }
-                    $this->persistPriceTableRow($record, $currency);
-                }
-            }
-
-            if ( ! $hasPriceInDefaultCurrency) {
-                throw new ValidationException(['prices' => trans('offline.mall::lang.common.price_missing')]);
-            }
-        });
-
-        // Reindex product and variants.
-        (new ProductObserver(app(Index::class)))->updated(Product::find($this->params[0]));
     }
 
     protected function hasDefaultCurrencyPrice($record, $currency)
@@ -106,7 +109,7 @@ trait ProductPriceTable
     {
         $type = $record['type'] === 'product' ? Product::class : Variant::class;
 
-        $model        = (new $type)->find($record['original_id']);
+        $model        = (new $type())->find($record['original_id']);
         $model->stock = $record['stock'] ?? null;
         $model->save();
 
@@ -123,7 +126,7 @@ trait ProductPriceTable
             ? $price->firstWhere('variant_id', $record['original_id'])
             : $price->firstWhere('variant_id', null);
 
-        if ( ! $price) {
+        if (! $price) {
             $productId = $type === Variant::class ? Variant::find($record['original_id'])->product->id : null;
             $price     = ProductPrice::make([
                 'variant_id'  => $type === Product::class ? null : $record['original_id'],
@@ -139,8 +142,10 @@ trait ProductPriceTable
     {
         $type = $record['type'] === 'product' ? Product::class : Variant::class;
         $this->preparePriceTable();
+
         foreach ($this->vars['customerGroups'] as $group) {
             $price = $record['group__' . $group['id']] ?? false;
+
             if ($price === false || $price === null) {
                 continue;
             }
@@ -160,10 +165,11 @@ trait ProductPriceTable
 
         foreach ($this->vars['additionalPriceCategories'] as $group) {
             $price = $record['additional__' . $group['id']] ?? false;
+
             if ($price === false || $price === null) {
                 continue;
             }
-            Price::withoutGlobalScope(new IsStatesScope)->create([
+            Price::withoutGlobalScope(new IsStatesScope())->create([
                 'price_category_id' => $group['id'],
                 'priceable_type'    => $type::MORPH_KEY,
                 'priceable_id'      => $record['original_id'],
@@ -210,13 +216,14 @@ trait ProductPriceTable
     {
         $groupPrice = CustomerGroupPrice::query();
         $price      = Price::query();
+
         foreach ($state as $currency => $items) {
             foreach ($items as $record) {
                 $closure = function ($q) use ($record, $currencies, $currency) {
                     $type = $record['type'] === 'product' ? Product::class : Variant::class;
                     $q->where('priceable_type', $type::MORPH_KEY)
-                      ->where('priceable_id', $record['original_id'])
-                      ->where('currency_id', $currencies->get($currency)->id);
+                        ->where('priceable_id', $record['original_id'])
+                        ->where('currency_id', $currencies->get($currency)->id);
                 };
                 $price->orWhere($closure);
                 $groupPrice->orWhere($closure);

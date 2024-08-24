@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\App;
 use OFFLINE\Mall\Models\Currency;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
+use Twig_Environment;
 
 class DefaultMoney implements Money
 {
     /**
-     * @var \Twig_Environment
+     * @var Twig_Environment
      */
     protected $twig;
 

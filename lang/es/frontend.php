@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Buscar...',
     'please_wait' => 'Por favor espere...',
@@ -47,8 +48,8 @@ return [
     'form.lastname' => 'Apellido',
     'form.company' => 'Empresa',
     'form.company_placeholder' => 'Dejar en blanco si es una cuenta personal',
-    'form.recipient' => "Destinatario",
-    'form.recipient_placeholder' => "Deja este campo en blanco si eres tú",
+    'form.recipient' => 'Destinatario',
+    'form.recipient_placeholder' => 'Deja este campo en blanco si eres tú',
     'form.address_lines' => 'Dirección',
     'form.zip' => 'Código Postal',
     'form.city' => 'Ciudad',

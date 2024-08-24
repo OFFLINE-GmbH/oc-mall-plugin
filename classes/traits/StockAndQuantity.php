@@ -12,12 +12,14 @@ trait StockAndQuantity
         $this->decrement('stock', $quantity);
 
         $fresh = $this->fresh();
+
         if ($fresh->stock < 0 && $this->allow_out_of_stock_purchases !== true) {
             throw new OutOfStockException($fresh);
         }
 
         if ($updateSalesCount) {
             $this->increment('sales_count', $quantity);
+
             if ($this instanceof Variant) {
                 $this->product->increment('sales_count', $quantity);
             }
@@ -29,6 +31,7 @@ trait StockAndQuantity
     /**
      * Enforce min and max quantity values for a product.
      *
+     * @param mixed $quantity
      * @return int
      */
     public function normalizeQuantity($quantity): int
@@ -36,9 +39,11 @@ trait StockAndQuantity
         if ($quantity < 1) {
             $quantity = 1;
         }
+
         if ($this->quantity_min && $quantity < $this->quantity_min) {
             return $this->quantity_min;
         }
+
         if ($this->quantity_max && $quantity > $this->quantity_max) {
             return $this->quantity_max;
         }

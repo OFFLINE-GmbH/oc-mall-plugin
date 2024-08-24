@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
+use BackendMenu;
 
 class Addresses extends Controller
 {
@@ -35,7 +37,7 @@ class Addresses extends Controller
      * @var array
      */
     public $requiredPermissions = [
-        'offline.mall.manage_customer_addresses' 
+        'offline.mall.manage_customer_addresses',
     ];
 
     /**

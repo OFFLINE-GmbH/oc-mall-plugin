@@ -49,6 +49,7 @@ class Stripe extends PaymentProvider
         ];
 
         $validation = Validator::make($this->data, $rules);
+
         if ($validation->fails()) {
             throw new ValidationException($validation);
         }
@@ -63,6 +64,7 @@ class Stripe extends PaymentProvider
     {
         $response                 = null;
         $useCustomerPaymentMethod = $this->order->customer_payment_method;
+
         try {
             $gateway = $this->getGateway();
 
@@ -78,7 +80,8 @@ class Stripe extends PaymentProvider
                 // If the customer uses a new payment method but is already registered
                 // on Stripe, just create the new card.
                 $response = $this->createCard($customer, $gateway);
-                if ( ! $response->isSuccessful()) {
+
+                if (! $response->isSuccessful()) {
                     return $result->fail((array)$response->getData(), $response);
                 }
 
@@ -90,7 +93,8 @@ class Stripe extends PaymentProvider
                 // If this is the first checkout for this customer we have to register
                 // the customer and a card on Stripe.
                 $response = $this->createCustomer($customer, $gateway);
-                if ( ! $response->isSuccessful()) {
+
+                if (! $response->isSuccessful()) {
                     return $result->fail((array)$response->getData(), $response);
                 }
 
@@ -102,9 +106,7 @@ class Stripe extends PaymentProvider
                 // the default_source will be the card we are looking for.
                 $defaultSource = array_get($responseData, 'default_source');
                 $sources = array_get($responseData, 'sources.data', []);
-                $card = array_first($sources, function($source) use ($defaultSource) {
-                    return $source['id'] === $defaultSource;
-                });
+                $card = array_first($sources, fn ($source) => $source['id'] === $defaultSource);
 
                 if ($card) {
                     $this->createCustomerPaymentMethod($customerReference, $cardReference, $card);
@@ -116,18 +118,18 @@ class Stripe extends PaymentProvider
             if ($isFirstCheckout === false) {
                 // Update the customer's data to reflect the order's data.
                 $response = $this->updateCustomer($gateway, $customerReference, $customer);
-                if ( ! $response->isSuccessful()) {
+
+                if (! $response->isSuccessful()) {
                     return $result->fail((array)$response->getData(), $response);
                 }
             }
 
             $response = $this->charge($gateway, $customerReference, $cardReference);
-
         } catch (Throwable $e) {
             return $result->fail([], $e);
         }
 
-        // Everthing went OK, no 3DS required.
+        // Everything went OK, no 3DS required.
         if ($response->isSuccessful()) {
             return $this->completeOrder($result, $response);
         }
@@ -155,7 +157,7 @@ class Stripe extends PaymentProvider
     {
         $intentReference     = Session::pull('mall.stripe.paymentIntentReference');
 
-        if ( ! $intentReference) {
+        if (! $intentReference) {
             return $result->fail([
                 'msg'   => 'Missing payment intent reference',
                 'intent_reference'   => $intentReference,
@@ -173,34 +175,11 @@ class Stripe extends PaymentProvider
             return $result->fail([], $e);
         }
 
-        if ( ! $response->isSuccessful()) {
+        if (! $response->isSuccessful()) {
             return $result->fail((array)$response->getData(), $response);
         }
 
         return $this->completeOrder($result, $response);
-    }
-
-    /**
-     * Set the returned info from Stripe on the Order and Customer.
-     *
-     * @param PaymentResult $result
-     * @param Response $response
-     * @return PaymentResult
-     */
-    protected function completeOrder(PaymentResult $result, Response $response)
-    {
-        $data = $response->getData();
-
-        $charge = array_get($data, 'charges.data.0', []);
-
-        $this->order->card_type                = array_get($charge, 'payment_method_details.card.brand');
-        $this->order->card_holder_name         = array_get($charge, 'payment_method_details.card.name');
-        $this->order->credit_card_last4_digits = array_get($charge, 'payment_method_details.card.last4');
-
-        $this->order->customer->stripe_customer_id = array_get($data, 'customer');
-        $this->order->customer->save();
-
-        return $result->success($data, $response);
     }
 
     /**
@@ -233,9 +212,32 @@ class Stripe extends PaymentProvider
     }
 
     /**
+     * Set the returned info from Stripe on the Order and Customer.
+     *
+     * @param PaymentResult $result
+     * @param Response $response
+     * @return PaymentResult
+     */
+    protected function completeOrder(PaymentResult $result, Response $response)
+    {
+        $data = $response->getData();
+
+        $charge = array_get($data, 'charges.data.0', []);
+
+        $this->order->card_type                = array_get($charge, 'payment_method_details.card.brand');
+        $this->order->card_holder_name         = array_get($charge, 'payment_method_details.card.name');
+        $this->order->credit_card_last4_digits = array_get($charge, 'payment_method_details.card.last4');
+
+        $this->order->customer->stripe_customer_id = array_get($data, 'customer');
+        $this->order->customer->save();
+
+        return $result->success($data, $response);
+    }
+
+    /**
      * Create a new customer.
      *
-     * @param                  $customer
+     * @param $customer
      * @param GatewayInterface $gateway
      *
      * @return mixed
@@ -263,8 +265,8 @@ class Stripe extends PaymentProvider
      * Update the customer.
      *
      * @param GatewayInterface $gateway
-     * @param                  $customerReference
-     * @param                  $customer
+     * @param $customerReference
+     * @param $customer
      *
      * @return ResponseInterface
      */
@@ -286,7 +288,7 @@ class Stripe extends PaymentProvider
     /**
      * Create a new card.
      *
-     * @param                  $customer
+     * @param $customer
      * @param GatewayInterface $gateway
      *
      * @return mixed
@@ -310,6 +312,7 @@ class Stripe extends PaymentProvider
     protected function getShippingInformation($customer): array
     {
         $name = $customer->shipping_address->name;
+
         if ($customer->shipping_address->company) {
             $name = sprintf(
                 '%s (%s)',
@@ -335,8 +338,8 @@ class Stripe extends PaymentProvider
      * Charge the customer.
      *
      * @param GatewayInterface $gateway
-     * @param                  $customerReference
-     * @param                  $cardReference
+     * @param $customerReference
+     * @param $cardReference
      *
      * @return Response
      */
@@ -356,8 +359,8 @@ class Stripe extends PaymentProvider
     /**
      * Create a CustomerPaymentMethod.
      *
-     * @param       $customerReference
-     * @param       $cardReference
+     * @param $customerReference
+     * @param $cardReference
      * @param array $card
      */
     protected function createCustomerPaymentMethod($customerReference, $cardReference, array $card)
@@ -387,5 +390,4 @@ class Stripe extends PaymentProvider
 
         return $gateway;
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Index;
 
 use Illuminate\Support\Collection;

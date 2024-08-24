@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
@@ -20,7 +22,7 @@ trait PriceBagCreators
      * @param Cart $cart
      * @return self
      */
-    static public function fromCart(Cart $cart): self
+    public static function fromCart(Cart $cart): self
     {
         $cart->loadMissing([
             'products',
@@ -28,7 +30,7 @@ trait PriceBagCreators
             'shipping_method',
             'shipping_method.taxes.countries',
             'shipping_method.rates',
-            'discounts'
+            'discounts',
         ]);
 
         $currency = Currency::activeCurrency();
@@ -43,7 +45,7 @@ trait PriceBagCreators
 
             // Add Record
             $record = $bag->addProduct(
-                $element, 
+                $element,
                 $prices[$currency->code],
                 $product->quantity,
                 $element->price_includes_tax == true
@@ -56,29 +58,29 @@ trait PriceBagCreators
 
             // Set Taxes
             $taxes = $product->filtered_product_taxes;
+
             if ($taxes->count() == 1) {
                 $record->setVat($taxes->first()->percentage);
-            } else if ($taxes->count() > 1) {
+            } elseif ($taxes->count() > 1) {
                 $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
             }
 
             // Set Service Options
-            foreach ($product->service_options AS $option) {
+            foreach ($product->service_options as $option) {
                 $service = $option->service()->first();
-                $prices = $option->prices()->get()->mapWithKeys(function ($price) {
-                    return [$price->currency->code => $price->integer];
-                });
+                $prices = $option->prices()->get()->mapWithKeys(fn ($price) => [$price->currency->code => $price->integer]);
                 $record = $bag->addService(
-                    $option, 
+                    $option,
                     $prices[$currency->code],
                     $product->quantity ?? 1,
                     $element->price_includes_tax == true
                 );
 
                 $taxes = $bag->getFilteredTaxes($service->taxes);
+
                 if ($taxes->count() == 1) {
                     $record->setVat($taxes->first()->percentage);
-                } else if ($taxes->count() > 1) {
+                } elseif ($taxes->count() > 1) {
                     $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
                 }
             }
@@ -107,9 +109,8 @@ trait PriceBagCreators
      * @param Order $order
      * @return self
      */
-    static public function fromOrder(Order $order): self
+    public static function fromOrder(Order $order): self
     {
-
         $bag = new static();
 
         return $bag;
@@ -120,9 +121,8 @@ trait PriceBagCreators
      * @param Wishlist $wishlist
      * @return self
      */
-    static public function fromWishlist(Wishlist $wishlist): self
+    public static function fromWishlist(Wishlist $wishlist): self
     {
-
         $bag = new static();
 
         return $bag;
@@ -133,11 +133,11 @@ trait PriceBagCreators
      * @param TotalsCalculatorInput $input
      * @return self
      */
-    static public function fromTotalsCalculatorInput(TotalsCalculatorInput $input): self
+    public static function fromTotalsCalculatorInput(TotalsCalculatorInput $input): self
     {
         if (!empty($input->cart)) {
             return self::fromCart($input->cart);
-        } else if (!empty($input->wishlist)) {
+        } elseif (!empty($input->wishlist)) {
             return self::fromWishlist($input->wishlist);
         } else {
             throw new PriceBagException('The passed TotalsCalculatorInput is invalid or corrupt.');
@@ -152,28 +152,28 @@ trait PriceBagCreators
      * @param ShippingMethod $method
      * @return void
      */
-    static protected function bagAddShippingMethod(PriceBag $bag, Currency $currency, ShippingMethod $method, Cart $cart)
+    protected static function bagAddShippingMethod(PriceBag $bag, Currency $currency, ShippingMethod $method, Cart $cart)
     {
         $prices = array_map(fn ($val) => $val->integer, $method->actual_prices);
 
         // Add Record
         $record = $bag->addShippingMethod(
-            $method, 
+            $method,
             $prices[$currency->code],
             $method->price_includes_tax
         );
-        foreach ($method->rates AS $rate) {
-            $prices = $rate->prices()->get()->mapWithKeys(function ($price) {
-                return [$price->currency->code => $price->integer];
-            });
+
+        foreach ($method->rates as $rate) {
+            $prices = $rate->prices()->get()->mapWithKeys(fn ($price) => [$price->currency->code => $price->integer]);
             $record->addRate($rate->from_weight, $rate->to_weight, $prices[$currency->code]);
         }
 
         // Add Taxes
         $taxes = $bag->getFilteredTaxes($method->taxes);
+
         if ($taxes->count() == 1) {
             $record->setVat($taxes->first()->percentage);
-        } else if ($taxes->count() > 1) {
+        } elseif ($taxes->count() > 1) {
             $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
         }
     }
@@ -186,21 +186,20 @@ trait PriceBagCreators
      * @param PaymentMethod $method
      * @return void
      */
-    static protected function bagAddPaymentMethod(PriceBag $bag, Currency $currency, PaymentMethod $method, Cart $cart)
+    protected static function bagAddPaymentMethod(PriceBag $bag, Currency $currency, PaymentMethod $method, Cart $cart)
     {
-        $prices = $method->prices()->get()->mapWithKeys(function ($price) {
-            return [$price->currency->code => $price->integer];
-        });
+        $prices = $method->prices()->get()->mapWithKeys(fn ($price) => [$price->currency->code => $price->integer]);
 
         // Add Record
         $record = $bag->addPaymentMethod(
-            $method, 
+            $method,
             $method->fee_percentage ?? 0,
             $prices[$currency->code] ?? 0
         );
 
         // Add Taxes
         $taxes = $bag->getFilteredTaxes($method->taxes);
+
         if ($taxes->count() > 0) {
             $taxes->each(fn ($tax) => $record->addTax($tax->percentage));
         }
@@ -214,9 +213,9 @@ trait PriceBagCreators
      * @param array|Collection $discounts
      * @return void
      */
-    static protected function bagAddDiscounts(PriceBag $bag, Currency $currency, $discounts, Cart $cart)
+    protected static function bagAddDiscounts(PriceBag $bag, Currency $currency, $discounts, Cart $cart)
     {
-        foreach ($discounts AS $discount) {
+        foreach ($discounts as $discount) {
             if ($discount->type == 'fixed_amount') {
                 $bag->addDiscount($discount, $discount->amount()->integer);
             }
@@ -226,9 +225,7 @@ trait PriceBagCreators
             }
 
             if ($discount->type == 'shipping') {
-                $prices = $discount->shipping_prices()->get()->mapWithKeys(function ($price) {
-                    return [$price->currency->code => $price->integer];
-                });
+                $prices = $discount->shipping_prices()->get()->mapWithKeys(fn ($price) => [$price->currency->code => $price->integer]);
                 $bag->addDiscount($discount, $prices[$currency->code], false);
             }
         }

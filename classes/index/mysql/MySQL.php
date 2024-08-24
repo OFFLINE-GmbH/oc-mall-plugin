@@ -5,8 +5,6 @@ namespace OFFLINE\Mall\Classes\Index\MySQL;
 use Cache;
 use DB;
 use Event;
-use Schema;
-use Throwable;
 use Illuminate\Support\Collection;
 use October\Rain\Database\Schema\Blueprint;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
@@ -19,10 +17,12 @@ use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\IndexNotSupportedException;
 use OFFLINE\Mall\Classes\Index\IndexResult;
 use OFFLINE\Mall\Models\Currency;
+use Schema;
+use Throwable;
 
 class MySQL implements Index
 {
-    const CACHE_KEY = 'offline_mall.mysql.index.exists';
+    public const CACHE_KEY = 'offline_mall.mysql.index.exists';
 
     /**
      * Type casts for index columns.
@@ -38,11 +38,6 @@ class MySQL implements Index
         $this->create('');
     }
 
-    protected function db()
-    {
-        return new IndexEntry();
-    }
-
     public function insert(string $index, Entry $entry)
     {
         $this->persist($index, $entry);
@@ -53,55 +48,10 @@ class MySQL implements Index
         $this->persist($index, $entry);
     }
 
-    protected function persist(string $index, Entry $entry)
-    {
-        $data = $entry->data();
-
-        $productId = $index === 'products' ? $data['id'] : $data['product_id'];
-        $variantId = $index === 'products' ? null : $data['id'];
-
-        $isGhost = false;
-        if (starts_with($variantId, 'product-')) {
-            $isGhost   = true;
-            $productId = str_replace('product-', '', $variantId);
-        }
-
-        $published = $data['published'] ?? false;
-
-        $indexData = [
-            'name'                  => $data['name'] ?? '',
-            'brand'                 => $data['brand']['slug'] ?? '',
-            'stock'                 => $data['stock'],
-            'reviews_rating'        => $data['reviews_rating'] ?? 0,
-            'sales_count'           => $data['sales_count'] ?? 0,
-            'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
-            'published'             => $published ? 1 : 0,        // update only because of the true/1 conversion
-            'category_id'           => $data['category_id'],
-            'property_values'       => $data['property_values'],
-            'sort_orders'           => $data['sort_orders'],
-            'prices'                => $data['prices'],
-            'parent_prices'         => $data['parent_prices'] ?? [],
-            'customer_group_prices' => $data['customer_group_prices'] ?? [],
-            'created_at'            => $data['created_at'] ?? now(),
-        ];
-        
-        // Allow the index data to be extended with custom information
-        $customIndexData = Event::fire('mall.index.extendData', [$data]);
-        if(!empty($customIndexData) && is_array($customIndexData[0])) {
-            $indexData = array_merge($indexData,$customIndexData[0]);
-        }
-        
-        $this->db()->updateOrCreate([
-            'index'      => $index,
-            'product_id' => $productId,
-            'variant_id' => $isGhost ? null : $variantId,
-            'is_ghost'   => $isGhost,
-        ], $indexData);
-    }
-
     public function delete(string $index, $id)
     {
         $col = $index === 'products' ? 'product_id' : 'variant_id';
+
         // Remove a ghost variant
         if (starts_with($id, 'product-')) {
             $index = 'variants';
@@ -118,6 +68,7 @@ class MySQL implements Index
         }
 
         $table = $this->db()->table;
+
         if (Schema::hasTable($table)) {
             return;
         }
@@ -153,7 +104,6 @@ class MySQL implements Index
             
             // Allow the index table to be extended with custom columns
             Event::fire('mall.index.mysql.extendTable', [$table]);
-            
         } catch (Throwable $e) {
             if ($this->jsonUnsupported($e)) {
                 throw new IndexNotSupportedException();
@@ -174,11 +124,62 @@ class MySQL implements Index
         $skip  = $perPage * ($forPage - 1);
         $items = $this->search($index, $filters, $order);
 
-        $slice = array_map(function ($item) {
-            return $item->is_ghost ? 'product-' . $item->other_id : $item->id;
-        }, array_slice($items, $skip, $perPage));
+        $slice = array_map(fn ($item) => $item->is_ghost ? 'product-' . $item->other_id : $item->id, array_slice($items, $skip, $perPage));
 
         return new IndexResult($slice, count($items));
+    }
+
+    protected function db()
+    {
+        return new IndexEntry();
+    }
+
+    protected function persist(string $index, Entry $entry)
+    {
+        $data = $entry->data();
+
+        $productId = $index === 'products' ? $data['id'] : $data['product_id'];
+        $variantId = $index === 'products' ? null : $data['id'];
+
+        $isGhost = false;
+
+        if (starts_with($variantId, 'product-')) {
+            $isGhost   = true;
+            $productId = str_replace('product-', '', $variantId);
+        }
+
+        $published = $data['published'] ?? false;
+
+        $indexData = [
+            'name'                  => $data['name'] ?? '',
+            'brand'                 => $data['brand']['slug'] ?? '',
+            'stock'                 => $data['stock'],
+            'reviews_rating'        => $data['reviews_rating'] ?? 0,
+            'sales_count'           => $data['sales_count'] ?? 0,
+            'on_sale'               => $data['on_sale'] ? 1 : 0,   // Use integer values to not trigger an
+            'published'             => $published ? 1 : 0,        // update only because of the true/1 conversion
+            'category_id'           => $data['category_id'],
+            'property_values'       => $data['property_values'],
+            'sort_orders'           => $data['sort_orders'],
+            'prices'                => $data['prices'],
+            'parent_prices'         => $data['parent_prices'] ?? [],
+            'customer_group_prices' => $data['customer_group_prices'] ?? [],
+            'created_at'            => $data['created_at'] ?? now(),
+        ];
+        
+        // Allow the index data to be extended with custom information
+        $customIndexData = Event::fire('mall.index.extendData', [$data]);
+
+        if(!empty($customIndexData) && is_array($customIndexData[0])) {
+            $indexData = array_merge($indexData, $customIndexData[0]);
+        }
+        
+        $this->db()->updateOrCreate([
+            'index'      => $index,
+            'product_id' => $productId,
+            'variant_id' => $isGhost ? null : $variantId,
+            'is_ghost'   => $isGhost,
+        ], $indexData);
     }
 
     protected function search(string $index, Collection $filters, SortOrder $order)
@@ -237,11 +238,11 @@ class MySQL implements Index
 
             $db->where(function ($q) use ($currency, $min, $max) {
                 $q->whereRaw('JSON_EXTRACT(`prices`, ?) >= ?', [
-                    "$." . $currency,
+                    '$.' . $currency,
                     (int)($min * 100),
                 ]);
                 $q->whereRaw('JSON_EXTRACT(`prices`, ?) <= ?', [
-                    "$." . $currency,
+                    '$.' . $currency,
                     (int)($max * 100),
                 ]);
             });
@@ -263,6 +264,7 @@ class MySQL implements Index
                     }
                 });
             }
+
             if ($filter instanceof RangeFilter) {
                 $db->where(function ($q) use ($filter) {
                     $id = $filter->property->id;
@@ -286,7 +288,7 @@ class MySQL implements Index
 
             // Apply the right cast for this value. This makes sure, that prices are sorted as floats, not as strings.
             if (isset($this->columnCasts[$field])) {
-                $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', DB::raw($field),  $this->columnCasts[$field], $order->direction());
+                $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', DB::raw($field), $this->columnCasts[$field], $order->direction());
             } else {
                 $orderBy = sprintf('JSON_EXTRACT(%s, ?) %s', DB::raw($field), $order->direction());
             }

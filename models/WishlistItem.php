@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -14,17 +16,20 @@ class WishlistItem extends Model
     use HashIds;
 
     public $table = 'offline_mall_wishlist_items';
+
     public $rules = [
         'product_id'  => 'required|exists:offline_mall_products,id',
         'wishlist_id' => 'required|exists:offline_mall_wishlists,id',
         'variant_id'  => 'nullable|exists:offline_mall_product_variants,id',
     ];
+
     public $belongsTo = [
         'wishlist' => Wishlist::class,
         'product'  => [Product::class, 'deleted' => true],
         'variant'  => [Variant::class, 'deleted' => true],
         'data'     => [Product::class, 'key' => 'product_id'],
     ];
+
     public $casts = [
         'id'          => 'integer',
         'product_id'  => 'integer',
@@ -32,6 +37,7 @@ class WishlistItem extends Model
         'wishlist_id' => 'integer',
         'quantity'    => 'integer',
     ];
+
     public $fillable = [
         'product_id',
         'variant_id',

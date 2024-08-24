@@ -12,8 +12,11 @@ use OFFLINE\Mall\Models\Variant;
 trait JsonPrice
 {
     public $currencies;
+
     public $activeCurrency;
+
     public $baseCurrency;
+
     /**
      * @var Money
      */
@@ -23,9 +26,7 @@ trait JsonPrice
     {
         parent::__construct(...$args);
 
-        $currencies = Currency::hydrate(Cache::rememberForever(Currency::JSON_PRICE_CACHE_KEY, function () {
-            return Currency::orderBy('is_default', 'DESC')->get()->toArray();
-        }));
+        $currencies = Currency::hydrate(Cache::rememberForever(Currency::JSON_PRICE_CACHE_KEY, fn () => Currency::orderBy('is_default', 'DESC')->get()->toArray()));
 
         $this->currencies     = $currencies->keyBy('code');
         $this->baseCurrency   = $currencies->first();
@@ -44,11 +45,11 @@ trait JsonPrice
             return $this->attributes[$key] = null;
         }
 
-        if ( ! $this->isPriceColumn($key)) {
+        if (! $this->isPriceColumn($key)) {
             return parent::setAttribute($key, $value);
         }
 
-        if ( ! is_array($value)) {
+        if (! is_array($value)) {
             return $this->attributes[$key] = null;
         }
 
@@ -57,9 +58,7 @@ trait JsonPrice
 
     public function mapJsonPrice($value, $factor = 100)
     {
-        return json_encode(array_map(function ($value) use ($factor) {
-            return $this->isNullthy($value) ? null : (float)$value * $factor;
-        }, $value));
+        return json_encode(array_map(fn ($value) => $this->isNullthy($value) ? null : (float)$value * $factor, $value));
     }
 
     public function getAttribute($attribute)
@@ -86,9 +85,7 @@ trait JsonPrice
         }
 
         if (is_array($value)) {
-            $value = array_filter($this->fillMissingCurrencies($value), function ($item) {
-                return $item !== null;
-            });
+            $value = array_filter($this->fillMissingCurrencies($value), fn ($item) => $item !== null);
         }
 
         return $format ? $this->formatPrice($value) : $this->roundPrice($value);
@@ -99,6 +96,7 @@ trait JsonPrice
         if ($currency === null) {
             $currency = Currency::activeCurrency();
         }
+
         if (is_string($currency)) {
             $currency = Currency::whereCode($currency)->firstOrFail();
         }
@@ -109,48 +107,40 @@ trait JsonPrice
         ]);
     }
 
-    protected function priceAccessorMethods(string $suffix): array
-    {
-        return collect($this->getPriceColumns())->map(function ($column) use ($suffix) {
-            return camel_case($column . $suffix);
-        })->toArray();
-    }
-
     public function formatPrice(array $price): array
     {
         $product = null;
+
         if ($this instanceof Product) {
             $product = $this;
         }
+
         if ($this instanceof Variant) {
             $product = $this->product;
         }
 
-        return collect($price)->map(function ($price, $currency) use ($product) {
-            return $this->money->format($price, $product, $currency);
-        })->toArray();
+        return collect($price)->map(fn ($price, $currency) => $this->money->format($price, $product, $currency))->toArray();
+    }
+
+    protected function priceAccessorMethods(string $suffix): array
+    {
+        return collect($this->getPriceColumns())->map(fn ($column) => camel_case($column . $suffix))->toArray();
     }
 
     protected function isPriceColumn($key): bool
     {
-        return collect($this->getPriceColumns())->flatMap(function ($col) {
-            return [$col, $col . '_formatted'];
-        })->contains($key);
+        return collect($this->getPriceColumns())->flatMap(fn ($col) => [$col, $col . '_formatted'])->contains($key);
     }
 
     protected function roundPrice($value)
     {
-        $round = function ($value) {
-            return $this->isNullthy($value) ? null : round((int)$value / 100, 2);
-        };
+        $round = fn ($value) => $this->isNullthy($value) ? null : round((int)$value / 100, 2);
 
-        if ( ! is_array($value)) {
+        if (! is_array($value)) {
             return $round($value);
         }
 
-        return array_map(function ($value) use ($round) {
-            return $round($value);
-        }, $value);
+        return array_map(fn ($value) => $round($value), $value);
     }
 
     protected function isNullthy($value): bool

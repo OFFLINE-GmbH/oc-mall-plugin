@@ -1,8 +1,6 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Traits;
-
 
 use OFFLINE\Mall\Models\ShippingMethod;
 
@@ -16,6 +14,7 @@ trait ShippingMethods
     public function setShippingMethod(?ShippingMethod $method)
     {
         $this->shipping_method_id = $method ? $method->id : null;
+
         if ($this->exists) {
             $this->save();
         }
@@ -27,11 +26,12 @@ trait ShippingMethods
      */
     public function validateShippingMethod()
     {
-        if ( ! $this->shipping_method_id) {
+        if (! $this->shipping_method_id) {
             return true;
         }
 
         $available = $this->getAvailableShippingMethods();
+
         if ($available->contains($this->shipping_method_id)) {
             return true;
         }

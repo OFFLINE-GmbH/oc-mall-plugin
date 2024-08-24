@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateOfflineMallPrices extends Migration
 {
@@ -18,7 +20,7 @@ class CreateOfflineMallPrices extends Migration
             $table->string('field')->nullable();
             $table->timestamps();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->unique(
                     ['price_category_id', 'priceable_id', 'priceable_type', 'currency_id', 'field'],
                     'unique_price'

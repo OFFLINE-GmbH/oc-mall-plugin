@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
@@ -41,7 +43,7 @@ class CreateOfflineMallProducts extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->index('deleted_at', 'idx_product_deleted_at');
                 $table->index('slug', 'idx_product_slug');
                 $table->index('category_id', 'idx_product_category_id');

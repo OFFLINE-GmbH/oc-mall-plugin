@@ -52,7 +52,7 @@ class SendVirtualProductFiles
             });
 
             // If the file notification has been disabled exit here.
-            if ( ! $this->enabledNotifications->has('offline.mall::product.file_download')) {
+            if (! $this->enabledNotifications->has('offline.mall::product.file_download')) {
                 return;
             }
 
@@ -85,14 +85,16 @@ class SendVirtualProductFiles
      *
      * @param string $page
      *
-     * @return string
      * @throws \Cms\Classes\CmsException
+     * @return string
      */
     protected function getAccountUrl($page = 'orders'): string
     {
-        $controller = Controller::getController() ?: new Controller;
+        $controller = Controller::getController() ?: new Controller();
+
         return $controller->pageUrl(
-            GeneralSettings::get('account_page'), ['page' => $page]
+            GeneralSettings::get('account_page'),
+            ['page' => $page]
         );
     }
 }

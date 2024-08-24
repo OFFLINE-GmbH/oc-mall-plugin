@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'plugin' => [
         'name' => 'Mall',
         'description' => 'E-commerce solution for October CMS',
@@ -826,7 +828,7 @@
                 ],
                 'currentVariantReviewsOnly' => [
                     'title' => 'نمایش فقط رتبه بندی این متغیر',
-                    'description' => " عدم نمایش دیدگاه ها برای دیگر متغیر های این محصول",
+                    'description' => ' عدم نمایش دیدگاه ها برای دیگر متغیر های این محصول',
                 ],
             ],
         ],

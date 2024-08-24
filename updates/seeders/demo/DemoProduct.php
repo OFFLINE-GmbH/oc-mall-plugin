@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
+use Exception;
 use October\Rain\Support\Arr;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Brand;
@@ -19,33 +22,8 @@ use OFFLINE\Mall\Models\Variant;
 abstract class DemoProduct
 {
     public $product;
+
     public $imageSets;
-
-    abstract protected function attributes(): array;
-
-    abstract protected function properties(): array;
-
-    abstract protected function variants(): array;
-
-    abstract protected function customFields(): array;
-
-    abstract protected function taxes(): array;
-
-    abstract protected function images(): array;
-
-    abstract protected function prices(): array;
-
-    abstract protected function categories(): array;
-
-    protected function additionalPrices(): array
-    {
-        return [];
-    }
-
-    protected function reviews(): array
-    {
-        return [];
-    }
 
     public function create()
     {
@@ -99,7 +77,7 @@ abstract class DemoProduct
 
             if (isset($variant['old_price'])) {
                 foreach ($variant['old_price'] as $currency => $price) {
-                    Price::withoutGlobalScope(new IsStatesScope)->create([
+                    Price::withoutGlobalScope(new IsStatesScope())->create([
                         'currency_id'       => Currency::resolve($currency)->id,
                         'price'             => $price,
                         'priceable_id'      => $v->id,
@@ -155,6 +133,32 @@ abstract class DemoProduct
         }
     }
 
+    abstract protected function attributes(): array;
+
+    abstract protected function properties(): array;
+
+    abstract protected function variants(): array;
+
+    abstract protected function customFields(): array;
+
+    abstract protected function taxes(): array;
+
+    abstract protected function images(): array;
+
+    abstract protected function prices(): array;
+
+    abstract protected function categories(): array;
+
+    protected function additionalPrices(): array
+    {
+        return [];
+    }
+
+    protected function reviews(): array
+    {
+        return [];
+    }
+
     protected function category($code)
     {
         return Category::whereCode($code)->firstOrFail();
@@ -169,9 +173,10 @@ abstract class DemoProduct
     {
         try {
             $prop = Property::whereSlug($slug)->firstOrFail();
-        } catch(\Exception $exc) {
-            throw new \Exception('e -' . $slug);
+        } catch(Exception $exc) {
+            throw new Exception('e -' . $slug);
         }
+
         return $prop;
     }
 }

@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'plugin' => [
         'name' => 'E-shop',
         'description' => 'E-shop pre October CMS',
@@ -824,7 +826,7 @@
                 ],
                 'currentVariantReviewsOnly' => [
                     'title' => 'Zobraziť iba hodnotenia tejto varianty',
-                    'description' => "Nezobrazovať recenzie iných variant tohoto produktu",
+                    'description' => 'Nezobrazovať recenzie iných variant tohoto produktu',
                 ],
             ],
         ],
@@ -1127,4 +1129,3 @@
         'approve_next' => 'Schváliť a prejsť na dalšiu',
     ],
 ];
-

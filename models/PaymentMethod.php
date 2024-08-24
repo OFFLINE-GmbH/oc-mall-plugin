@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Auth;
-use DB;
-use Model;
 use Cms\Classes\Theme;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
+use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
@@ -33,7 +35,7 @@ class PaymentMethod extends Model
      * Morph key as used on the respective relationships.
      * @var string
      */
-    const MORPH_KEY = 'mall.payment_method';
+    public const MORPH_KEY = 'mall.payment_method';
 
     /**
      * Enable `is_default` handler on IsStates trait, by passing the column name.
@@ -52,7 +54,7 @@ class PaymentMethod extends Model
      * @var array
      */
     public $implement = [
-        '@RainLab.Translate.Behaviors.TranslatableModel'
+        '@RainLab.Translate.Behaviors.TranslatableModel',
     ];
 
     /**
@@ -79,7 +81,7 @@ class PaymentMethod extends Model
         'payment_provider'  => 'required',
         'fee_percentage'    => 'nullable',
         'is_enabled'        => 'nullable|boolean',
-        'is_default'        => 'nullable|boolean'
+        'is_default'        => 'nullable|boolean',
     ];
 
     /**
@@ -92,7 +94,7 @@ class PaymentMethod extends Model
         'payment_provider',
         'fee_percentage',
         'is_enabled',
-        'is_default'
+        'is_default',
     ];
 
     /**
@@ -100,7 +102,7 @@ class PaymentMethod extends Model
      * @var array
      */
     public $nullable = [
-        'fee_percentage'
+        'fee_percentage',
     ];
 
     /**
@@ -125,11 +127,11 @@ class PaymentMethod extends Model
      * @var array<string>
      */
     public $hidden = [
-        'settings', 
-        'prices', 
-        'created_at', 
-        'updated_at', 
-        'deleted_at'
+        'settings',
+        'prices',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
     
     /**
@@ -137,7 +139,7 @@ class PaymentMethod extends Model
      * @var array
      */
     public $appends = [
-        'settings'
+        'settings',
     ];
 
     /**
@@ -145,7 +147,7 @@ class PaymentMethod extends Model
      * @var array
      */
     public $with = [
-        'prices'
+        'prices',
     ];
 
     /**
@@ -193,12 +195,14 @@ class PaymentMethod extends Model
      * Get default payment method
      * @return null|self
      */
-    static public function getDefault(): ?self
+    public static function getDefault(): ?self
     {
         $default = static::where('is_default', 1)->first();
+
         if (empty($default)) {
             $default = static::orderBy('sort_order', 'ASC')->first();
         }
+
         return $default;
     }
 
@@ -219,15 +223,15 @@ class PaymentMethod extends Model
     public function afterDelete()
     {
         DB::table('offline_mall_prices')
-           ->where('priceable_type', self::MORPH_KEY)
-           ->where('priceable_id', $this->id)
-           ->delete();
+            ->where('priceable_type', self::MORPH_KEY)
+            ->where('priceable_id', $this->id)
+            ->delete();
     }
 
     /**
      * Renders the payment instructions.
      * @param null|Order $order
-     * @param null|Cart  $cart
+     * @param null|Cart $cart
      * @return null|string
      */
     public function renderInstructions(?Order $order = null, ?Cart $cart = null): ?string
@@ -235,7 +239,7 @@ class PaymentMethod extends Model
         if (!$this->instructions) {
             return null;
         } else {
-            return (new Twig)->parse($this->instructions, [
+            return (new Twig())->parse($this->instructions, [
                 'order' => $order,
                 'cart'  => $cart,
             ]);
@@ -252,8 +256,9 @@ class PaymentMethod extends Model
         $gateway = app(PaymentGateway::class);
 
         $options = [];
+
         foreach ($gateway->getProviders() as $id => $class) {
-            $method       = new $class;
+            $method       = new $class();
             $options[$id] = $method->name();
         }
 
@@ -266,9 +271,9 @@ class PaymentMethod extends Model
      */
     public function getPdfPartialOptions(): array
     {
-
         $null = [null => '-- ' . trans('offline.mall::lang.payment_method.pdf_partial_none')];
         $path = themes_path(sprintf('%s/partials/mallPDF/*', Theme::getActiveThemeCode()));
+
         return $null + collect(glob($path, GLOB_ONLYDIR))->mapWithKeys(
             fn ($dir) => [basename($dir) => basename($dir)]
         )->toArray();
@@ -283,6 +288,7 @@ class PaymentMethod extends Model
         /** @var PaymentGateway $gateway */
         $gateway  = app(PaymentGateway::class);
         $provider = $gateway->getProviderById($this->payment_provider);
+
         return $provider->getSettings();
     }
     
@@ -295,6 +301,7 @@ class PaymentMethod extends Model
         /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
         $user = Auth::getUser();
         $cart = Cart::byUser($user);
+
         return new PaymentTotal($this, $cart->totals);
     }
 }

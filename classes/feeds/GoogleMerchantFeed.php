@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Feeds;
 
 use Cms\Classes\Page;
+use Html;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Product as ProductModel;
 use RainLab\Translate\Classes\Translator;
@@ -14,7 +15,9 @@ use Vitalybaev\GoogleMerchant\Product\Availability\Availability;
 class GoogleMerchantFeed
 {
     public $locale;
+
     public $productPage;
+
     public $feed;
 
     public function __construct(?string $locale)
@@ -47,9 +50,9 @@ class GoogleMerchantFeed
                 $this->addItem($product);
             }
         }
+
         return $this->feed->build();
     }
-
 
     /**
      * Check if the Translator class of RainLab.Translate is available.
@@ -61,6 +64,16 @@ class GoogleMerchantFeed
         return PluginManager::instance()->exists('RainLab.Translate');
     }
 
+    /**
+     * Sets the default locale if no locale was specified by the user.
+     */
+    protected function enforceLocale(): void
+    {
+        if ($this->locale === null && $this->rainlabTranslateInstalled()) {
+            $this->locale = Translator::instance()->getDefaultLocale();
+        }
+    }
+
     private function addItem($item)
     {
         $entry = new Product();
@@ -70,7 +83,7 @@ class GoogleMerchantFeed
             'variant' => $item->variantHashId,
         ]);
 
-        $description = \Html::strip($item->description ?: $item->description_short);
+        $description = Html::strip($item->description ?: $item->description_short);
         $entry->setId($item->prefixedId);
         $entry->setTitle($item->name);
         $entry->setDescription($description);
@@ -79,12 +92,12 @@ class GoogleMerchantFeed
         $entry->setCondition('new');
 
         $images = $item->all_images;
+
         if ($images && $images->count() > 0) {
             $entry->setImage($images->first()->getPath());
+
             if ($images->count() > 1) {
-                $additionalImages = $images->slice(1)->map(function ($q) {
-                    return $q->getPath();
-                })->implode(',');
+                $additionalImages = $images->slice(1)->map(fn ($q) => $q->getPath())->implode(',');
                 $entry->setAdditionalImage($additionalImages);
             }
         }
@@ -102,19 +115,9 @@ class GoogleMerchantFeed
     }
 
     /**
-     * Sets the default locale if no locale was specified by the user.
-     */
-    protected function enforceLocale(): void
-    {
-        if ($this->locale === null && $this->rainlabTranslateInstalled()) {
-            $this->locale = Translator::instance()->getDefaultLocale();
-        }
-    }
-
-    /**
      * Handle Product Category attribute.
      *
-     * @param         $item
+     * @param $item
      * @param Product $entry
      */
     private function handleProductCategory($item, Product $entry): void
@@ -131,14 +134,14 @@ class GoogleMerchantFeed
     /**
      * Handle Identifier attributes.
      *
-     * @param         $item
+     * @param $item
      * @param Product $entry
      *
      * @throws \Vitalybaev\GoogleMerchant\Exception\InvalidArgumentException
      */
     private function handleIdentifier($item, Product $entry): void
     {
-        if ( ! $item->brand && ! $item->gtin && ! $item->mpn) {
+        if (! $item->brand && ! $item->gtin && ! $item->mpn) {
             $entry->setIdentifierExists('no');
 
             return;

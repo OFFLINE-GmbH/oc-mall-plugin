@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use October\Rain\Database\Updates\Migration;
 use Schema;
@@ -27,7 +29,7 @@ class CreateOfflineMallCategories extends Migration
             $table->integer('nest_right')->nullable();
             $table->integer('nest_depth')->nullable();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->index('deleted_at', 'idx_category_deleted_at');
                 $table->index('parent_id', 'idx_category_parent_id');
                 $table->index('nest_left', 'idx_category_nest_left');

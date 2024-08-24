@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Values;
 
@@ -57,8 +59,8 @@ class FactorValue extends BaseValue
     /**
      * Calculate and return the factor value of the passed price.
      * @param Money|Price $amount
-     * @param bool $perUnit Whether to return unit or total price, used only  when Price object is 
-     *             passed.
+     * @param bool $perUnit Whether to return unit or total price, used only  when Price object is
+     *                      passed.
      * @return Money
      */
     public function valueOf($amount, bool $perUnit = false): Money
@@ -70,6 +72,7 @@ class FactorValue extends BaseValue
 
         $percentage = BigDecimal::of($this->percentage);
         $multiplier = $percentage->dividedBy(100, $percentage->getScale() + 2, RoundingMode::UP);
+
         return $amount->multipliedBy($multiplier, RoundingMode::HALF_UP);
     }
 

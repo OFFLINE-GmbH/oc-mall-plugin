@@ -1,15 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use DB;
-use Event;
-use Model;
-use RuntimeException;
-use Session;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
+use DB;
+use Event;
 use Illuminate\Support\Facades\Queue;
+use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
@@ -20,6 +20,8 @@ use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Utils\Money;
+use RuntimeException;
+use Session;
 use System\Classes\PluginManager;
 
 /**
@@ -35,7 +37,6 @@ class Order extends Model
     use HashIds;
     use PDFMaker;
 
-    protected $dates = ['deleted_at', 'shipped_at', 'paid_at'];
     public $rules = [
         'currency'                         => 'required',
         'shipping_address_same_as_billing' => 'required|boolean',
@@ -44,6 +45,7 @@ class Order extends Model
         'ip_address'                       => 'required',
         'customer_id'                      => 'required|exists:offline_mall_customers,id',
     ];
+
     public $jsonable = [
         'billing_address',
         'shipping_address',
@@ -54,48 +56,57 @@ class Order extends Model
         'discounts',
         'shipping',
     ];
+
     public $table = 'offline_mall_orders';
+
     public $hasOne = ['payment_log' => PaymentLog::class];
+
     public $hasMany = [
         'products'         => OrderProduct::class,
         'virtual_products' => [OrderProduct::class, 'scope' => 'virtual'],
         'payment_logs'     => [PaymentLog::class, 'order' => 'created_at DESC'],
     ];
+
     public $belongsTo = [
         'payment_method'          => [
-            PaymentMethod::class, 
+            PaymentMethod::class,
             'deleted'   => true,
-            'scope'     => 'all'
+            'scope'     => 'all',
         ],
         'customer_payment_method' => [
-            CustomerPaymentMethod::class, 
+            CustomerPaymentMethod::class,
             'deleted'   => true,
         ],
         'order_state'             => [
-            OrderState::class, 
+            OrderState::class,
             'deleted'   => true,
-            'scope'     => 'all'
+            'scope'     => 'all',
         ],
         'customer'                => [Customer::class, 'deleted' => true],
         'cart'                    => [Cart::class, 'deleted' => true],
     ];
+
     public $casts = [
         'shipping_address_same_as_billing' => 'boolean',
     ];
+
     /**
      * Use to define if the shipping notification should be sent.
      * @var bool
      */
     public $shippingNotification = false;
+
     /**
      * Use to define if the state change notification should be sent.
      * @var bool
      */
     public $stateNotification = true;
 
+    protected $dates = ['deleted_at', 'shipped_at', 'paid_at'];
+
     public function beforeCreate()
     {
-        if ( ! $this->order_number) {
+        if (! $this->order_number) {
             $this->setOrderNumber();
         }
         $this->payment_hash = str_random(10);
@@ -107,24 +118,29 @@ class Order extends Model
             // Don't trigger payment changes during the checkout flow. A mall.checkout.succeeded
             // Event will already be triggered in the PaymentRedirector.
             $flow = session()->get('mall.checkout.flow');
+
             if ($flow !== 'checkout') {
                 Event::fire('mall.order.payment_state.changed', [$this]);
             }
+
             // If the order became paid, distribute all virtual products.
             if ($this->payment_state === PaidState::class && $this->paid_at === null) {
                 if ($this->virtual_products->count() > 0) {
                     Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
                 }
                 $this->paid_at = Carbon::today();
-                $this->save();
+                $this->saveQuietly();
             }
         }
+
         if ($this->isDirty('order_state_id')) {
             Event::fire('mall.order.state.changed', [$this]);
         }
+
         if ($this->isDirty('tracking_url') || $this->isDirty('tracking_number')) {
             Event::fire('mall.order.tracking.changed', [$this]);
         }
+
         if ($this->getOriginal('shipped_at') === null && $this->isDirty('shipped_at')) {
             Event::fire('mall.order.shipped', [$this]);
         }
@@ -134,6 +150,7 @@ class Order extends Model
     {
         $this->products->each->delete();
         $this->payment_logs->each->delete();
+
         if ($this->cart) {
             $this->cart->delete();
         }
@@ -160,6 +177,7 @@ class Order extends Model
 
         // Make sure all products in the cart are still published.
         $removed = $cart->removeUnpublishedProducts();
+
         if ($removed->count() > 0) {
             throw new ValidationException(['cart' => trans('offline.mall::frontend.cart.products_unavailable')]);
         }
@@ -168,7 +186,8 @@ class Order extends Model
             Event::fire('mall.order.beforeCreate', [$cart]);
 
             $initialOrderStatus = OrderState::where('flag', OrderState::FLAG_NEW)->first();
-            if ( ! $initialOrderStatus) {
+
+            if (! $initialOrderStatus) {
                 throw new RuntimeException('You have to create an order state with the "new" flag before accepting orders!');
             }
 
@@ -177,13 +196,14 @@ class Order extends Model
             }
 
             $cart->validateShippingMethod();
+
             if ($cart->shipping_method_id === null && ! $cart->is_virtual) {
                 throw new ValidationException(['Your order has no shipping method set. Please select a shipping method.']);
             }
 
             $totals = $cart->totals;
 
-            $order                                          = new static;
+            $order                                          = new static();
             $order->session_id                              = session()->getId();
             $order->currency                                = Currency::activeCurrency();
             $order->lang                                    = $order->getLocale();
@@ -250,8 +270,8 @@ class Order extends Model
      * Returns the pdf invoice for this order.
      * If no invoice is available false is returned.
      *
-     * @return PDF|bool
      * @throws \Cms\Classes\CmsException
+     * @return PDF|bool
      */
     public function getPDFInvoice()
     {
@@ -260,34 +280,6 @@ class Order extends Model
         }
 
         return false;
-    }
-
-    /**
-     * This is here to provide custom rounding options for the
-     * end-user in future versions (like round to .05)
-     */
-    protected function round($amount)
-    {
-        return round($amount);
-    }
-
-    /**
-     * Sets the order number to the next higher value.
-     */
-    protected function setOrderNumber()
-    {
-        $numbers = DB::table($this->getTable())
-                     ->sharedLock()
-                     ->selectRaw('max(cast(order_number as unsigned)) as max')
-                     ->first();
-
-        $start = $numbers->max;
-
-        if (is_null($start) || $start === 0) {
-            $start = (int)GeneralSettings::get('order_start');
-        }
-
-        $this->order_number = $start + 1;
     }
 
     public function getPriceColumns(): array
@@ -306,15 +298,6 @@ class Order extends Model
             'total_post_taxes',
             'total_pre_taxes',
         ];
-    }
-
-    protected function useCurrency()
-    {
-        if ($this->currency) {
-            return new Currency($this->currency);
-        }
-
-        return $this->fallbackCurrency();
     }
 
     /**
@@ -410,6 +393,67 @@ class Order extends Model
         return $this->toPriceModel('total_payment_post_taxes');
     }
 
+    /**
+     * Cleanup of old data using OFFLINE.GDPR.
+     *
+     * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
+     *
+     * @param Carbon $deadline
+     * @param int $keepDays
+     */
+    public function gdprCleanup(Carbon $deadline, int $keepDays)
+    {
+        self::where('created_at', '<', $deadline)
+            ->withTrashed()
+            ->whereHas('order_state', function ($q) {
+                $q->where('flag', OrderState::FLAG_COMPLETE);
+            })
+            ->get()
+            ->each(function (Order $order) {
+                DB::transaction(function () use ($order) {
+                    $order->forceDelete();
+                });
+            });
+    }
+
+    /**
+     * This is here to provide custom rounding options for the
+     * end-user in future versions (like round to .05)
+     * @param mixed $amount
+     */
+    protected function round($amount)
+    {
+        return round($amount);
+    }
+
+    /**
+     * Sets the order number to the next higher value.
+     */
+    protected function setOrderNumber()
+    {
+        $numbers = DB::table($this->getTable())
+            ->sharedLock()
+            ->selectRaw('max(cast(order_number as unsigned)) as max')
+            ->first();
+
+        $start = $numbers->max;
+
+        if (is_null($start) || $start === 0) {
+            $start = (int)GeneralSettings::get('order_start');
+        }
+
+        $this->order_number = $start + 1;
+    }
+
+    protected function useCurrency()
+    {
+        if ($this->currency) {
+            return new Currency($this->currency);
+        }
+
+        return $this->fallbackCurrency();
+    }
+
     protected function toPriceModel(string $key): Price
     {
         return new Price([
@@ -425,28 +469,5 @@ class Order extends Model
         }
 
         return 'default';
-    }
-
-    /**
-     * Cleanup of old data using OFFLINE.GDPR.
-     *
-     * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
-     *
-     * @param Carbon $deadline
-     * @param int    $keepDays
-     */
-    public function gdprCleanup(Carbon $deadline, int $keepDays)
-    {
-        self::where('created_at', '<', $deadline)
-            ->withTrashed()
-            ->whereHas('order_state', function ($q) {
-                $q->where('flag', OrderState::FLAG_COMPLETE);
-            })
-            ->get()
-            ->each(function (Order $order) {
-                DB::transaction(function () use ($order) {
-                    $order->forceDelete();
-                });
-            });
     }
 }

@@ -13,7 +13,6 @@ use October\Rain\Database\QueryBuilder;
  *
  * @deprecated 3.4.0 use UniquePropertyValue::hydratePropertyValuesForCategories($categories)
  * @see \OFFLINE\Mall\Models\UniquePropertyValue
- *
  */
 class UniquePropertyValuesInCategoriesQuery
 {
@@ -35,9 +34,9 @@ class UniquePropertyValuesInCategoriesQuery
      */
     public function query()
     {
-        return DB
-            ::table('offline_mall_products')
-            ->selectRaw('
+        return DB::table('offline_mall_products')
+            ->selectRaw(
+                '
                 MIN(offline_mall_property_values.id) AS id,
                 offline_mall_property_values.value,
                 offline_mall_property_values.index_value,
@@ -46,7 +45,7 @@ class UniquePropertyValuesInCategoriesQuery
             ->where(function ($q) {
                 $q->where(function ($q) {
                     $q->where('offline_mall_products.published', true)
-                      ->whereNull('offline_mall_product_variants.id');
+                        ->whereNull('offline_mall_product_variants.id');
                 })->orWhere('offline_mall_product_variants.published', true);
             })
             ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing;
 
@@ -51,7 +53,7 @@ abstract class BaseRecord
     {
         if ($amount instanceof Price && $amount->units() != $units) {
             $amount->setUnits($units);
-        } else if (!($amount instanceof Price)) {
+        } elseif (!($amount instanceof Price)) {
             if (is_string($amount)) {
                 $amount = Price::parse($amount, $currency, $units);
             } else {
@@ -71,24 +73,6 @@ abstract class BaseRecord
     public function get(string $key)
     {
         return $this->{$key} ?? null;
-    }
-
-    /**
-     * Parse Price.
-     * @param mixed $value
-     * @return Price
-     */
-    protected function parsePrice($value): Price
-    {
-        if (is_string($value)) {
-            return Price::parse($value, $this->currency, 1);
-        } else if (is_int($value) || is_float($value)) {
-            return new Price(Money::ofMinor($value, $this->currency), 1);
-        } else if ($value instanceof Price) {
-            return $value;
-        } else {
-            throw new PriceBagException('The passed value could not be parsed.');
-        }
     }
 
     /**
@@ -142,6 +126,7 @@ abstract class BaseRecord
     public function setUnits(int $units): self
     {
         $this->price->setUnits($units);
+
         return $this;
     }
 
@@ -158,6 +143,7 @@ abstract class BaseRecord
         } else {
             $this->bag = $bag;
             $this->model = $model;
+
             return $this;
         }
     }
@@ -180,4 +166,21 @@ abstract class BaseRecord
         return $this->model;
     }
 
+    /**
+     * Parse Price.
+     * @param mixed $value
+     * @return Price
+     */
+    protected function parsePrice($value): Price
+    {
+        if (is_string($value)) {
+            return Price::parse($value, $this->currency, 1);
+        } elseif (is_int($value) || is_float($value)) {
+            return new Price(Money::ofMinor($value, $this->currency), 1);
+        } elseif ($value instanceof Price) {
+            return $value;
+        } else {
+            throw new PriceBagException('The passed value could not be parsed.');
+        }
+    }
 }

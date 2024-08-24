@@ -36,9 +36,11 @@ class PropertyValueObserver
         if ($this->isBackendRelationUpdate()) {
             return;
         }
+
         if ($value->product && $value->product->skipReindex !== true) {
             (new ProductObserver($this->index))->updated($value->product);
         }
+
         if ($value->variant && $value->variant->skipReindex !== true) {
             (new VariantObserver($this->index))->updated($value->variant);
         }

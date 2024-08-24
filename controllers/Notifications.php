@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
+use BackendMenu;
 use Illuminate\Support\Facades\Cache;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Notification;
@@ -60,6 +62,7 @@ class Notifications extends Controller
     {
         $action = post('action');
         $value = $action === 'disable' ? 0 : ($action === 'enable' ? 1 : null);
+
         if ($value === null) {
             return;
         }
@@ -67,7 +70,7 @@ class Notifications extends Controller
         Notification::whereIn('id', post('checked'))->update(['enabled' => $value]);
         Cache::forget(Notification::CACHE_KEY);
         Flash::success(trans('backend::lang.form.update_success', [
-            'name' => trans('offline.mall::lang.common.notification')
+            'name' => trans('offline.mall::lang.common.notification'),
         ]));
     }
 }

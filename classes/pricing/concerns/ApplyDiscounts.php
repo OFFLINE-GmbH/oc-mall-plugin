@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
@@ -12,7 +14,6 @@ use OFFLINE\Mall\Models\Discount;
  */
 trait ApplyDiscounts
 {
-
     /**
      * Switch if discounts has been applied or not.
      * @var boolean
@@ -34,7 +35,8 @@ trait ApplyDiscounts
         $total = $this->productsExclusive()->exclusive()->getMinorAmount()->toInt();
 
         $products = [];
-        foreach ($this->map['products'] AS $product) {
+
+        foreach ($this->map['products'] as $product) {
             if ($total > 0) {
                 $products[] = intval(round((100 / $total) * $product->exclusive()->toInt()));
             } else {
@@ -43,11 +45,12 @@ trait ApplyDiscounts
         }
 
         // Apply Discounts
-        foreach ($this->map['discounts'] AS $discount) {
+        foreach ($this->map['discounts'] as $discount) {
             $amount = $discount->amount();
 
             // Check if discount is applicable
             $model = $discount->model();
+
             if ($model instanceof Discount && !$this->discountApplicable($model)) {
                 return;
             }
@@ -61,6 +64,7 @@ trait ApplyDiscounts
                             false,
                             false
                         );
+
                         continue;
                     }
                     
@@ -73,8 +77,8 @@ trait ApplyDiscounts
                             false
                         );
                     }
-                } else if ($amount instanceof FactorValue) {
-                    foreach ($this->map['products'] AS $product) {
+                } elseif ($amount instanceof FactorValue) {
+                    foreach ($this->map['products'] as $product) {
                         $product->addDiscount(
                             $amount,
                             false,
@@ -87,12 +91,20 @@ trait ApplyDiscounts
             // Shipping Discounts
             if ($discount->type() == 'shipping') {
                 if ($amount instanceof MoneyValue) {
-                    foreach ($this->map['shipping'] AS $shipping) {
+                    foreach ($this->map['shipping'] as $shipping) {
                         $shipping->setAmount($amount->price(), $discount->model());
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Revert Discounts
+     * @return void
+     */
+    public function revertDiscounts()
+    {
     }
 
     /**
@@ -138,11 +150,12 @@ trait ApplyDiscounts
      */
     protected function productIsInCart(int $id): bool
     {
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             if (($product->model()->id ?? 0) === $id) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -156,6 +169,7 @@ trait ApplyDiscounts
     {
         /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
         $group = optional(Auth::getUser())->customer_group();
+
         return $group ? $group->where('id', $id)->exists() : false;
     }
 
@@ -180,14 +194,4 @@ trait ApplyDiscounts
     {
         return ($this->map['payment'][0]->model()->id ?? 0) == $id;
     }
-
-    /**
-     * Revert Discounts
-     * @return void
-     */
-    public function revertDiscounts()
-    {
-
-    }
-
 }

@@ -4,7 +4,6 @@ namespace OFFLINE\Mall\Classes\Registration;
 
 trait BootMails
 {
-
     public function registerMailTemplates()
     {
         return [

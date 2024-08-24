@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -12,28 +14,35 @@ class ProductFile extends Model
     use Validation;
 
     public $table = 'offline_mall_product_files';
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = [
         'display_name',
     ];
+
     public $rules = [
         'display_name' => 'required',
         'file'         => 'required',
     ];
+
     public $casts = [
         'download_count' => 'integer',
     ];
+
     public $attachOne = [
         'file' => [File::class, 'public' => false],
     ];
+
     public $belongsTo = [
         'product' => Product::class,
     ];
+
     public $belongsToMany = [
         'variants' => [
             Variant::class,
-            'table' => 'offline_mall_product_file_variant'
-        ]
+            'table' => 'offline_mall_product_file_variant',
+        ],
     ];
 
     /**

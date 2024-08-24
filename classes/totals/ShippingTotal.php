@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Totals;
 
@@ -8,7 +10,7 @@ use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\ShippingMethod;
 
 /**
- * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing
  * system with the PriceBag class construct instead.
  */
 class ShippingTotal implements JsonSerializable, CallsAnyMethod
@@ -89,20 +91,6 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
     }
 
     /**
-     * Calculate Shipping costs.
-     * @return void
-     */
-    protected function calculate()
-    {
-        $method = $this->totals->getBag()->get('shipping');
-
-        $this->preTaxes = $this->totals->getBag()->shippingExclusive()->toInt();
-        $this->taxes = $this->totals->getBag()->shippingTax()->getMinorAmount()->toInt();
-        $this->appliedDiscount = empty($method) ? null : ($method[0]->get('discountModel') ?? null);
-        $this->total = $this->totals->getBag()->shippingInclusive()->toInt();
-    }
-
-    /**
      * Receive exclusive price value.
      * @return float|int
      */
@@ -156,16 +144,33 @@ class ShippingTotal implements JsonSerializable, CallsAnyMethod
         if ($this->totals->getInput()->products->every('data.is_virtual')) {
             return ShippingMethod::noShippingRequired();
         }
+
         if (!$this->appliedDiscount) {
             return $this->method;
         }
 
         $method = $this->method->replicate(['id', 'name']);
         $discount = $this->totals->getBag()->get('shipping')[0]->get('discountModel');
+
         if ($discount) {
             $method->name = $discount->shipping_description;
             $method->setRelation('prices', $discount->shipping_prices);
         }
+
         return $method;
+    }
+
+    /**
+     * Calculate Shipping costs.
+     * @return void
+     */
+    protected function calculate()
+    {
+        $method = $this->totals->getBag()->get('shipping');
+
+        $this->preTaxes = $this->totals->getBag()->shippingExclusive()->toInt();
+        $this->taxes = $this->totals->getBag()->shippingTax()->getMinorAmount()->toInt();
+        $this->appliedDiscount = empty($method) ? null : ($method[0]->get('discountModel') ?? null);
+        $this->total = $this->totals->getBag()->shippingInclusive()->toInt();
     }
 }

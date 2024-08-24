@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -19,15 +21,15 @@ class ReviewCategoryTableSeeder extends Seeder
         }
         
         ReviewCategory::create([
-            'name' => trans('offline.mall::demo.review_categories.price')
+            'name' => trans('offline.mall::demo.review_categories.price'),
         ]);
 
         ReviewCategory::create([
-            'name' => trans('offline.mall::demo.review_categories.design')
+            'name' => trans('offline.mall::demo.review_categories.design'),
         ]);
 
         ReviewCategory::create([
-            'name' => trans('offline.mall::demo.review_categories.quality')
+            'name' => trans('offline.mall::demo.review_categories.quality'),
         ]);
     }
 }

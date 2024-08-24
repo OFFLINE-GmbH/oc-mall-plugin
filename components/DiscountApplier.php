@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -6,6 +8,7 @@ use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Cart;
+use Throwable;
 
 /**
  * The DiscountApplier component allow the user to enter a discount code.
@@ -56,7 +59,7 @@ class DiscountApplier extends MallComponent
 
         try {
             $cart->applyDiscountByCode($code, (int)$this->property('discountCodeLimit'));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new ValidationException([
                 'code' => $e->getMessage(),
             ]);

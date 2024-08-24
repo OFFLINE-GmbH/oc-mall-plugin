@@ -8,7 +8,6 @@ use RainLab\Translate\Classes\Translator;
 use Request;
 use Session;
 use Throwable;
-use Validator;
 
 /**
  * Process the payment via PostFinance.
@@ -47,6 +46,7 @@ class PostFinance extends PaymentProvider
         $gateway = $this->getGateway();
 
         $response = null;
+
         try {
             $response = $gateway->purchase($this->options($result))->send();
         } catch (Throwable $e) {
@@ -54,7 +54,7 @@ class PostFinance extends PaymentProvider
         }
 
         // PostFinance has to return a RedirectResponse if everything went well
-        if ( ! $response->isRedirect()) {
+        if (! $response->isRedirect()) {
             return $result->fail((array)$response->getData(), $response);
         }
 
@@ -82,31 +82,11 @@ class PostFinance extends PaymentProvider
 
         $data = (array)$response->getData();
 
-        if ( ! $response->isSuccessful()) {
+        if (! $response->isSuccessful()) {
             return $result->fail($data, $response);
         }
 
         return $result->success($data, null);
-    }
-
-    /**
-     * Build the Omnipay Gateway for PostFinance.
-     *
-     * @return \Omnipay\Common\GatewayInterface
-     */
-    protected function getGateway()
-    {
-        $gateway = Omnipay::create('Postfinance');
-        $gateway->initialize([
-            'pspId'         => decrypt(PaymentGatewaySettings::get('postfinance_pspid')),
-            'shaIn'         => decrypt(PaymentGatewaySettings::get('postfinance_sha_in')),
-            'shaOut'        => decrypt(PaymentGatewaySettings::get('postfinance_sha_out')),
-            'language'      => $this->transformLocale(Translator::instance()->getLocale() ?? 'en'),
-            'hashingMethod' => PaymentGatewaySettings::get('postfinance_hashing_method'),
-            'testMode'      => (bool)PaymentGatewaySettings::get('postfinance_test_mode'),
-        ]);
-
-        return $gateway;
     }
 
     /**
@@ -162,18 +142,23 @@ class PostFinance extends PaymentProvider
     }
 
     /**
-     * PostFinance requires a locale in the form of de_DE.
-     * this method naively converts the two letter locale code (de)
-     * from RainLab.Translate to the "de_DE" form. This won't work
-     * for every language, but should work most of the time.
+     * Build the Omnipay Gateway for PostFinance.
      *
-     * @param string $locale
-     *
-     * @return string
+     * @return \Omnipay\Common\GatewayInterface
      */
-    private function transformLocale(string $locale)
+    protected function getGateway()
     {
-        return sprintf("%s_%s", strtolower($locale), strtoupper($locale));
+        $gateway = Omnipay::create('Postfinance');
+        $gateway->initialize([
+            'pspId'         => decrypt(PaymentGatewaySettings::get('postfinance_pspid')),
+            'shaIn'         => decrypt(PaymentGatewaySettings::get('postfinance_sha_in')),
+            'shaOut'        => decrypt(PaymentGatewaySettings::get('postfinance_sha_out')),
+            'language'      => $this->transformLocale(Translator::instance()->getLocale() ?? 'en'),
+            'hashingMethod' => PaymentGatewaySettings::get('postfinance_hashing_method'),
+            'testMode'      => (bool)PaymentGatewaySettings::get('postfinance_test_mode'),
+        ]);
+
+        return $gateway;
     }
 
     /**
@@ -193,5 +178,20 @@ class PostFinance extends PaymentProvider
             'cancelUrl'     => $this->cancelUrl(),
             'notifyUrl'     => $this->cancelUrl(),
         ];
+    }
+
+    /**
+     * PostFinance requires a locale in the form of de_DE.
+     * this method naively converts the two letter locale code (de)
+     * from RainLab.Translate to the "de_DE" form. This won't work
+     * for every language, but should work most of the time.
+     *
+     * @param string $locale
+     *
+     * @return string
+     */
+    private function transformLocale(string $locale)
+    {
+        return sprintf('%s_%s', strtolower($locale), strtoupper($locale));
     }
 }

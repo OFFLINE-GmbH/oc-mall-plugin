@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Values;
 
@@ -22,9 +24,10 @@ class MoneyValue extends BaseValue
      */
     public function __construct($money)
     {
-        if ($money instanceof Price){
+        if ($money instanceof Price) {
             $money = $money->base(false);
         }
+
         if (!($money instanceof Money)) {
             throw new PriceBagException('The MoneyValue class currently only supports Brick\\Money\\Money objects.');
         }

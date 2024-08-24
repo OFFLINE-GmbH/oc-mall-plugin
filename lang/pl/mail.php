@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'common' => [
         'hello' => 'Hello :Imię',
         'view_order_status_online' => 'Wyświetl status zamówienia online',

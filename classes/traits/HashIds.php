@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use Exception;
 use Hashids\Hashids as Hasher;
 
 trait HashIds
@@ -32,7 +33,7 @@ trait HashIds
             $result = app(Hasher::class)->decode($value) ?? null;
 
             return is_array($result) && count($result) === 1 ? $result[0] : $result;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

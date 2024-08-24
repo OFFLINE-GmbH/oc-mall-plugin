@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -7,9 +9,8 @@ use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Address;
-use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Cart;
-use RainLab\User\Classes\AuthManager;
+use OFFLINE\Mall\Models\GeneralSettings;
 
 /**
  * Display a list of user addresses.
@@ -22,24 +23,28 @@ class AddressList extends MallComponent
      * @var Collection
      */
     public $countries;
+
     /**
      * All of the user's addresses.
      *
      * @var Collection
      */
     public $addresses;
+
     /**
      * The name of the address edit page.
      *
      * @var string
      */
     public $addressPage;
+
     /**
      * The id of the default billing address.
      *
      * @var int
      */
     public $defaultBillingAddressId;
+
     /**
      * The id of the default shipping address.
      *
@@ -86,8 +91,8 @@ class AddressList extends MallComponent
     }
 
     /**
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onChangeDefaultShippingAddress()
     {
@@ -101,8 +106,8 @@ class AddressList extends MallComponent
     }
 
     /**
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onChangeDefaultBillingAddress()
     {
@@ -117,12 +122,11 @@ class AddressList extends MallComponent
 
     /**
      * @param string $type
-     * @return mixed
      * @throws ValidationException
+     * @return mixed
      */
     public function updateDefaultAddressFromUser(string $type)
     {
-
         $id = $this->decode(post('id'));
         $user = Auth::getUser();
         $customer = $user->customer;
@@ -147,12 +151,11 @@ class AddressList extends MallComponent
         return $customer->save();
     }
 
-
     /**
      * The user deleted an address.
      *
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onDelete()
     {

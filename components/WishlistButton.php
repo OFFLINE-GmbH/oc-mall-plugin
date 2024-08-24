@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -6,9 +8,9 @@ use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Traits\HashIds;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Wishlist;
 use OFFLINE\Mall\Models\WishlistItem;
-use OFFLINE\Mall\Classes\User\Auth;
 use Validator;
 
 class WishlistButton extends MallComponent
@@ -60,8 +62,9 @@ class WishlistButton extends MallComponent
     {
         $v = Validator::make(post(), [
             'product_id' => 'required',
-            'quantity' => 'nullable|int'
+            'quantity' => 'nullable|int',
         ]);
+
         if ($v->fails()) {
             throw new ValidationException($v);
         }
@@ -77,16 +80,17 @@ class WishlistButton extends MallComponent
             ? $wishlists->where('id', $this->decode(post('wishlist_id')))->first()
             : $wishlists->first();
 
-        if ( ! $wishlist) {
+        if (! $wishlist) {
             throw new ValidationException(['wishlist_id' => 'Invalid list ID provided.']);
         }
 
         $quantity = (int)post('quantity', 1);
+
         if ($quantity < 1) {
             $quantity = 1;
         }
 
-        list($productId, $variantId) = $this->decodeIds();
+        [$productId, $variantId] = $this->decodeIds();
 
         WishlistItem::create([
             'product_id' => $productId,
@@ -114,6 +118,7 @@ class WishlistButton extends MallComponent
         $v = Validator::make(post(), [
             'name' => 'required|max:190',
         ]);
+
         if ($v->fails()) {
             throw new ValidationException($v);
         }
@@ -133,6 +138,7 @@ class WishlistButton extends MallComponent
         $v = Validator::make(post(), [
             'name' => 'required|max:190',
         ]);
+
         if ($v->fails()) {
             throw new ValidationException($v);
         }
@@ -161,6 +167,7 @@ class WishlistButton extends MallComponent
     protected function refreshList(): array
     {
         $this->page['items'] = $this->getWishlists();
+
         return [
             '.mall-wishlists' => $this->renderPartial($this->alias . '::list', ['items' => $this->getWishlists()]),
         ];

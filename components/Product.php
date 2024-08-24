@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -43,24 +45,28 @@ class Product extends MallComponent
      * @var Product|Variant;
      */
     public $item;
+
     /**
      * The Product model belonging to the item.
      *
      * @var ProductModel;
      */
     public $product;
+
     /**
      * The Variants belonging to the ProductModel.
      *
      * @var Collection
      */
     public $variants;
+
     /**
      * All available PropertyValues of the Variant.
      *
      * @var Collection
      */
     public $variantPropertyValues;
+
     /**
      * Available Property models.
      *
@@ -69,18 +75,21 @@ class Product extends MallComponent
      * @var Collection
      */
     public $props;
+
     /**
      * The Variant to display.
      *
      * @var Variant
      */
     public $variant;
+
     /**
      * Google Tag Manager dataLayer code.
      *
      * @var string
      */
     public $dataLayer;
+
     /**
      * Redirect to the new Product/Variant detail page when properties
      * are changed instead of only reloading the add to cart partial.
@@ -88,21 +97,24 @@ class Product extends MallComponent
      * @var boolean
      */
     public $redirectOnPropertyChange;
-    /**
-     * The ID of the Variant to display.
-     * @var integer
-     */
-    protected $variantId;
-    /**
-     * Indicate's that the requested product has not been found.
-     * @var bool
-     */
-    protected $isNotFound;
+
     /**
      * Show or hide reviews, defined in ReviewSettings.
      * @var bool
      */
     public $showReviews;
+
+    /**
+     * The ID of the Variant to display.
+     * @var integer
+     */
+    protected $variantId;
+
+    /**
+     * Indicate's that the requested product has not been found.
+     * @var bool
+     */
+    protected $isNotFound;
 
     /**
      * Component details.
@@ -172,7 +184,8 @@ class Product extends MallComponent
     public function getVariantOptions()
     {
         $product = Request::input('product');
-        if ( ! $product || $product === ':slug') {
+
+        if (! $product || $product === ':slug') {
             return [':slug' => trans('offline.mall::lang.components.products.properties.use_url')];
         }
 
@@ -211,7 +224,7 @@ class Product extends MallComponent
             return;
         }
 
-        if ( ! $this->product->categories) {
+        if (! $this->product->categories) {
             $this->isNotFound = true;
             logger()->error(
                 'A product without an existing category has been found.',
@@ -241,8 +254,8 @@ class Product extends MallComponent
     /**
      * Add a product to the cart.
      *
-     * @return mixed
      * @throws ValidationException
+     * @return mixed
      */
     public function onAddToCart()
     {
@@ -257,6 +270,7 @@ class Product extends MallComponent
         }
 
         $quantity = (int)input('quantity', $product->quantity_default ?? 1);
+
         if ($quantity < 1) {
             throw new ValidationException(['quantity' => trans('offline.mall::lang.common.invalid_quantity')]);
         }
@@ -287,8 +301,8 @@ class Product extends MallComponent
     /**
      * Add a product to the cart with services.
      *
-     * @return mixed
      * @throws ValidationException
+     * @return mixed
      */
     public function onAddToCartWithServices()
     {
@@ -305,13 +319,12 @@ class Product extends MallComponent
             }
         );
         $messages = $required->mapWithKeys(
-            function ($service) {
-                return ['service.' . $service->id . '.*.required' => trans('offline.mall::frontend.services.required')];
-            }
+            fn ($service) => ['service.' . $service->id . '.*.required' => trans('offline.mall::frontend.services.required')]
         );
 
         // Validate all required services are selected.
         $v = Validator::make(post(), $rules->toArray(), $messages->toArray());
+
         if ($v->fails()) {
             throw new ValidationException($v);
         }
@@ -321,9 +334,7 @@ class Product extends MallComponent
         $quantity = Session::pull('mall.cart.add.quantity');
         $values = Collection::wrap(Session::pull('mall.cart.add.values', []));
         $values = $values->map(
-            function ($attributes) {
-                return CustomFieldValue::make($attributes);
-            }
+            fn ($attributes) => CustomFieldValue::make($attributes)
         );
 
         $serviceOptionIds = collect(post('service', []))->values()->flatten()->toArray();
@@ -361,13 +372,14 @@ class Product extends MallComponent
     /**
      * Check the stock for the currently selected item.
      *
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onCheckProductStock()
     {
         $slug = post('slug');
-        if ( ! $slug) {
+
+        if (! $slug) {
             throw new ValidationException(['Missing input data']);
         }
 
@@ -402,6 +414,7 @@ class Product extends MallComponent
         // Remove the add to cart button in case the current configuration
         // does not return a product or variant.
         $return = ['.mall-product__add-to-cart' => ''];
+
         if ($item) {
             $priceData = $item->priceIncludingCustomFieldValues($values);
             $price = Price::fromArray($priceData);
@@ -412,47 +425,6 @@ class Product extends MallComponent
         }
 
         return $return;
-    }
-
-    /**
-     * Fetch the item to display.
-     *
-     * This can be either a Product or a Variant depending
-     * on the given input values.
-     *
-     * @return ProductModel|Variant
-     */
-    protected function getItem()
-    {
-        $this->product = $this->getProduct();
-
-        // If no Variant is specified as URL parameter the Product
-        // model can be returned directly.
-        if ($this->product->inventory_management_method !== 'variant') {
-            return $this->product;
-        }
-
-        // Use the Variant that was configured via the property.
-        $variantId = $this->property('variant');
-
-        // If the property is set to `:slug`, we use the variant from the URL param.
-        if ($variantId === ':slug') {
-            $variantId = $this->decode($this->param('variant'));
-            // If no URL param is present, let's use the first Variant of this Product.
-            if ( ! $variantId) {
-                $variantId = optional($this->product->variants->where('published', true)->first())->id;
-            }
-            // If no Variants are available, simply display the Product itself.
-            if ( ! $variantId) {
-                return $this->product;
-            }
-        }
-        $this->setVar('variantId', $variantId);
-
-        return $this->variant = Variant::published()
-            ->where('product_id', $this->product->id)
-            ->where('id', $this->variantId)
-            ->firstOrFail();
     }
 
     /**
@@ -495,6 +467,49 @@ class Product extends MallComponent
     }
 
     /**
+     * Fetch the item to display.
+     *
+     * This can be either a Product or a Variant depending
+     * on the given input values.
+     *
+     * @return ProductModel|Variant
+     */
+    protected function getItem()
+    {
+        $this->product = $this->getProduct();
+
+        // If no Variant is specified as URL parameter the Product
+        // model can be returned directly.
+        if ($this->product->inventory_management_method !== 'variant') {
+            return $this->product;
+        }
+
+        // Use the Variant that was configured via the property.
+        $variantId = $this->property('variant');
+
+        // If the property is set to `:slug`, we use the variant from the URL param.
+        if ($variantId === ':slug') {
+            $variantId = $this->decode($this->param('variant'));
+
+            // If no URL param is present, let's use the first Variant of this Product.
+            if (! $variantId) {
+                $variantId = optional($this->product->variants->where('published', true)->first())->id;
+            }
+
+            // If no Variants are available, simply display the Product itself.
+            if (! $variantId) {
+                return $this->product;
+            }
+        }
+        $this->setVar('variantId', $variantId);
+
+        return $this->variant = Variant::published()
+            ->where('product_id', $this->product->id)
+            ->where('id', $this->variantId)
+            ->firstOrFail();
+    }
+
+    /**
      * Get all Variants that belong to this ProductModel.
      *
      * @return Collection
@@ -512,9 +527,7 @@ class Product extends MallComponent
                 return $variant->id === $this->variantId;
             }
         )->groupBy(
-            function (Variant $variant) {
-                return $this->getGroupedPropertyValue($variant);
-            }
+            fn (Variant $variant) => $this->getGroupedPropertyValue($variant)
         );
 
         if ($this->variant) {
@@ -528,14 +541,14 @@ class Product extends MallComponent
     /**
      * Add a product to the cart and refresh all related partials.
      *
-     * @param ProductModel    $product
-     * @param                 $quantity
-     * @param                 $variant
-     * @param                 $values
-     * @param array           $serviceOptions
+     * @param ProductModel $product
+     * @param $quantity
+     * @param $variant
+     * @param $values
+     * @param array $serviceOptions
      *
-     * @return array|RedirectResponse
      * @throws ValidationException
+     * @return array|RedirectResponse
      */
     protected function addToCart(ProductModel $product, $quantity, $variant, $values, array $serviceOptions = [])
     {
@@ -614,7 +627,6 @@ class Product extends MallComponent
         return ['quantity', 'weight', 'price', 'hashid', 'custom_field_value_description'];
     }
 
-
     /**
      * Get the PropertyValue this Variant is grouped by.
      *
@@ -638,14 +650,12 @@ class Product extends MallComponent
      */
     protected function getGroupedProperty(Variant $variant)
     {
-        if ( !$variant->product || !$variant->product->group_by_property_id) {
+        if (!$variant->product || !$variant->product->group_by_property_id) {
             return (object)['value' => 0];
         }
 
         return $variant->property_values->first(
-            function (PropertyValue $value) use ($variant) {
-                return $value->property_id === $variant->product->group_by_property_id;
-            }
+            fn (PropertyValue $value) => $value->property_id === $variant->product->group_by_property_id
         );
     }
 
@@ -657,14 +667,13 @@ class Product extends MallComponent
     protected function getProps()
     {
         $valueMap = $this->getValueMap();
+
         if ($valueMap->count() < 1) {
             return $valueMap;
         }
 
         return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
-            $filteredValues = optional($valueMap->get($property->id))->reject(function ($value) {
-                return $this->variant && $value->variant_id === null;
-            });
+            $filteredValues = optional($valueMap->get($property->id))->reject(fn ($value) => $this->variant && $value->variant_id === null);
 
             return (object)[
                 'property' => $property,
@@ -676,9 +685,7 @@ class Product extends MallComponent
             }
 
             return $collection->values && $collection->values->count() > 0;
-        })->keyBy(function ($value) {
-            return $value->property->id;
-        });
+        })->keyBy(fn ($value) => $value->property->id);
     }
 
     /**
@@ -690,17 +697,17 @@ class Product extends MallComponent
      */
     protected function getValueMap()
     {
-        if ( ! $this->variant) {
+        if (! $this->variant) {
             return collect([]);
         }
 
         $groupedValue = $this->getGroupedPropertyValue($this->variant);
+
         if ($groupedValue === null) {
             return collect([]);
         }
 
-        return PropertyValue
-            ::where('product_id', $this->product->id)
+        return PropertyValue::where('product_id', $this->product->id)
             ->with('translations')
             ->where('value', '<>', '')
             ->whereNotNull('value')
@@ -721,9 +728,7 @@ class Product extends MallComponent
     protected function getVariantByPropertyValues($valueIds)
     {
         $ids = collect($valueIds)->map(
-            function ($id) {
-                return $this->decode($id);
-            }
+            fn ($id) => $this->decode($id)
         );
 
         $product = $this->getProduct([]);
@@ -740,7 +745,7 @@ class Product extends MallComponent
      */
     protected function getPropertyValues()
     {
-        if ( ! $this->variant) {
+        if (! $this->variant) {
             return collect([]);
         }
 
@@ -756,6 +761,7 @@ class Product extends MallComponent
     {
         // Make sure reviews are fetched correctly.
         $reviews = $this->controller->findComponentByName('productReviews');
+
         if ($reviews) {
             $reviews->onRun();
         }
@@ -779,9 +785,19 @@ class Product extends MallComponent
     }
 
     /**
+     * Check if RainLab.Translate is available.
+     *
+     * @return bool
+     */
+    protected function rainlabTranslateInstalled(): bool
+    {
+        return PluginManager::instance()->exists('RainLab.Translate');
+    }
+
+    /**
      * Generate the page url for a Product/Variant combination.
      *
-     * @param              $slug
+     * @param $slug
      * @param Variant|null $item
      *
      * @return string
@@ -798,21 +814,11 @@ class Product extends MallComponent
     }
 
     /**
-     * Check if RainLab.Translate is available.
-     *
-     * @return bool
-     */
-    protected function rainlabTranslateInstalled(): bool
-    {
-        return PluginManager::instance()->exists('RainLab.Translate');
-    }
-
-    /**
      * Generate Google Tag Manager dataLayer code.
      */
     private function handleDataLayer()
     {
-        if ( ! $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+        if (! $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
             return;
         }
 

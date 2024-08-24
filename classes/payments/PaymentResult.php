@@ -8,6 +8,7 @@ use OFFLINE\Mall\Classes\PaymentState\PendingState;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * The PaymentResult contains the result of a payment attempt.
@@ -19,36 +20,43 @@ class PaymentResult
      * @var bool
      */
     public $successful = false;
+
     /**
      * If this payment needs a redirect.
      * @var bool
      */
     public $redirect = false;
+
     /**
      * Use this response as redirect.
      * @var \Illuminate\Http\Response
      */
     public $redirectResponse;
+
     /**
      * Redirect the user to this URL.
      * @var string
      */
     public $redirectUrl = '';
+
     /**
      * The failed payment log.
      * @var PaymentLog
      */
     public $failedPayment;
+
     /**
      * The order that is being processed.
      * @var Order
      */
     public $order;
+
     /**
      * Error message in case of a failure.
      * @var string
      */
     public $message;
+
     /**
      * The used PaymentProvider for this payment.
      * @var PaymentProvider
@@ -59,7 +67,7 @@ class PaymentResult
      * PaymentResult constructor.
      *
      * @param PaymentProvider $provider
-     * @param Order           $order
+     * @param Order $order
      */
     public function __construct(PaymentProvider $provider, Order $order)
     {
@@ -75,7 +83,7 @@ class PaymentResult
      * and the order is marked as paid.
      *
      * @param array $data
-     * @param       $response
+     * @param $response
      *
      * @return PaymentResult
      */
@@ -85,7 +93,7 @@ class PaymentResult
 
         try {
             $payment = $this->logSuccessfulPayment($data, $response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Even if the log failed we *have* to mark this order as paid since the payment went already through.
             logger()->error(
                 'OFFLINE.Mall: Could not log successful payment.',
@@ -97,7 +105,7 @@ class PaymentResult
             $this->order->payment_id    = $payment->id;
             $this->order->payment_state = PaidState::class;
             $this->order->save();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // If the order could not be marked as paid the shop admin will have to do this manually.
             logger()->critical(
                 'OFFLINE.Mall: Could not mark paid order as paid.',
@@ -123,7 +131,7 @@ class PaymentResult
         try {
             $this->order->payment_state = PendingState::class;
             $this->order->save();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // If the order could not be marked as pending the shop admin will have to do this manually.
             logger()->critical(
                 'OFFLINE.Mall: Could not mark pending order as pending.',
@@ -141,7 +149,7 @@ class PaymentResult
      * payment state is marked as failed.
      *
      * @param array $data
-     * @param       $response
+     * @param $response
      *
      * @return PaymentResult
      */
@@ -156,7 +164,7 @@ class PaymentResult
 
         try {
             $this->failedPayment = $this->logFailedPayment($data, $response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             logger()->error(
                 'OFFLINE.Mall: Could not log failed payment.',
                 ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
@@ -166,7 +174,7 @@ class PaymentResult
         try {
             $this->order->payment_state = FailedState::class;
             $this->order->save();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // If the order could not be marked as failed the shop admin will have to do this manually.
             logger()->critical(
                 'OFFLINE.Mall: Could not mark failed order as failed.',
@@ -211,7 +219,7 @@ class PaymentResult
      * Create a PaymentLog entry for a failed payment.
      *
      * @param array $data
-     * @param       $response
+     * @param $response
      *
      * @return PaymentLog
      */
@@ -224,7 +232,7 @@ class PaymentResult
      * Create a PaymentLog entry for a successful payment.
      *
      * @param array $data
-     * @param       $response
+     * @param $response
      *
      * @return PaymentLog
      */
@@ -236,9 +244,9 @@ class PaymentResult
     /**
      * Create a PaymentLog entry.
      *
-     * @param bool  $failed
+     * @param bool $failed
      * @param array $data
-     * @param       $response
+     * @param $response
      *
      * @return PaymentLog
      */

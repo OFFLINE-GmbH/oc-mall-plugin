@@ -28,7 +28,7 @@ interface PaymentGateway
      * Initialize the PaymentGateway.
      *
      * @param PaymentMethod $paymentMethod
-     * @param array         $data
+     * @param array $data
      *
      * @throws ValidationException
      */

@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class AllowNonUniqueEmailsForRainlabUser extends Migration
 {
@@ -17,6 +19,7 @@ class AllowNonUniqueEmailsForRainlabUser extends Migration
             $existingIndexes = array_keys($sm->listTableIndexes('users'));
 
             $indexesToDelete = ['users_email_unique', 'users_login_unique'];
+
             foreach ($indexesToDelete as $index) {
                 if (in_array($index, $existingIndexes)) {
                     $table->dropUnique($index);

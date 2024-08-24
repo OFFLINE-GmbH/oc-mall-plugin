@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Records;
 
 class ServiceRecord extends AbstractItemRecord
 {
-    const TYPE = 'service';
+    public const TYPE = 'service';
 
     /**
      * Return record type

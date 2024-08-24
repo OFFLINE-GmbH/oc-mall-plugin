@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Classes\Controller;
 use Backend\Facades\Backend;
+use BackendMenu;
 use Illuminate\Support\Facades\Redirect;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Models\Review;
@@ -19,7 +21,7 @@ class Reviews extends Controller
      */
     public $implement = [
         FormController::class,
-        ListController::class
+        ListController::class,
     ];
 
     /**
@@ -64,6 +66,7 @@ class Reviews extends Controller
             return Redirect::to(Backend::url('offline/mall/reviews/update/' . $next->id));
         } else {
             Flash::success(trans('offline.mall::lang.reviews.no_more'));
+
             return Redirect::to(Backend::url('offline/mall/reviews'));
         }
     }

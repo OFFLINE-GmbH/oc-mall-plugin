@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Zoeken...',
     'please_wait' => 'Even wachten...',
@@ -49,8 +50,8 @@ return [
     'form.company_placeholder' => 'Als particulier niet invullen',
     'form.taxnr' => 'BTW nummer',
     'form.taxnr_placeholder' => 'Als particulier niet invullen',
-    'form.recipient' => "Naam van de ontvanger",
-    'form.recipient_placeholder' => "Niet invullen als u het bent",
+    'form.recipient' => 'Naam van de ontvanger',
+    'form.recipient_placeholder' => 'Niet invullen als u het bent',
     'form.address_lines' => 'Adresregels',
     'form.zip' => 'Postcode',
     'form.city' => 'Stad',

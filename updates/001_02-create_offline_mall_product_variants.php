@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use October\Rain\Database\Updates\Migration;
 use Schema;
@@ -23,7 +25,7 @@ class CreateOfflineMallProductVariants extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->index('product_id', 'idx_product_variant_product_id');
             }
         });

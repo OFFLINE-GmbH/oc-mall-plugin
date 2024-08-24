@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -48,7 +50,7 @@ class ServiceTableSeeder extends Seeder
         ]);
         $option->prices()->save(new Price(['currency_id' => 2, 'price' => 99]));
 
-        // Assembly 
+        // Assembly
         $assembly = Service::create([
             'name'          => trans('offline.mall::demo.services.assembly.name'),
             'description'   => trans('offline.mall::demo.services.assembly.description'),

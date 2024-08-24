@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use DB;
 use October\Rain\Database\Updates\Migration;
@@ -19,7 +21,7 @@ class CreateOfflineMallPropertyValues extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 // Use MySQL specific index names only when running on MySQL.
                 if (DB::connection()->getDriverName() === 'mysql') {
                     $table->index([DB::raw('value(191)')], 'idx_property_value_value');

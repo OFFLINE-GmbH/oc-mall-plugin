@@ -2,6 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use InvalidArgumentException;
+use LogicException;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentMethod;
 use Session;
@@ -20,6 +22,7 @@ class DefaultPaymentGateway implements PaymentGateway
      * @var PaymentProvider
      */
     protected $provider;
+
     /**
      * An array of all registered PaymentProviders.
      * @var PaymentProvider[]
@@ -41,8 +44,8 @@ class DefaultPaymentGateway implements PaymentGateway
      */
     public function getProviderById(string $identifier): PaymentProvider
     {
-        if ( ! isset($this->providers[$identifier])) {
-            throw new \InvalidArgumentException(sprintf('Payment provider %s is not registered.', $identifier));
+        if (! isset($this->providers[$identifier])) {
+            throw new InvalidArgumentException(sprintf('Payment provider %s is not registered.', $identifier));
         }
 
         return $this->providers[$identifier];
@@ -63,8 +66,8 @@ class DefaultPaymentGateway implements PaymentGateway
      */
     public function process(Order $order): PaymentResult
     {
-        if ( ! $this->provider) {
-            throw new \LogicException('Missing data for payment. Make sure to call init() before process()');
+        if (! $this->provider) {
+            throw new LogicException('Missing data for payment. Make sure to call init() before process()');
         }
 
         Session::put('mall.payment.id', str_random(8));
@@ -101,10 +104,10 @@ class DefaultPaymentGateway implements PaymentGateway
     protected function getProviderForMethod(PaymentMethod $method): PaymentProvider
     {
         if (isset($this->providers[$method->payment_provider])) {
-            return new $this->providers[$method->payment_provider];
+            return new $this->providers[$method->payment_provider]();
         }
 
-        throw new \LogicException(
+        throw new LogicException(
             sprintf('The selected payment provider "%s" is unavailable.', $method->payment_provider)
         );
     }

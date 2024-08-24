@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Exceptions;
 
 use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Variant;
+use RuntimeException;
 
-class OutOfStockException extends \RuntimeException
+class OutOfStockException extends RuntimeException
 {
     /**
      * The product which is out of stock.

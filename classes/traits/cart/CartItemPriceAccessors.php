@@ -2,7 +2,6 @@
 
 namespace OFFLINE\Mall\Classes\Traits\Cart;
 
-
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TaxTotal;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
@@ -153,7 +152,7 @@ trait CartItemPriceAccessors
      */
     public function getServiceTaxesAttribute()
     {
-        if ( ! $this->service_options) {
+        if (! $this->service_options) {
             return 0;
         }
 
@@ -170,13 +169,11 @@ trait CartItemPriceAccessors
      */
     public function getServicePostTaxesAttribute()
     {
-        if ( ! $this->service_options) {
+        if (! $this->service_options) {
             return 0;
         }
 
-        return $this->service_options->sum(function ($option) {
-            return $option->price()->integer;
-        });
+        return $this->service_options->sum(fn ($option) => $option->price()->integer);
     }
 
     /**
@@ -204,19 +201,6 @@ trait CartItemPriceAccessors
     }
 
     /**
-     * Sum of all tax factors.
-     * @return mixed
-     */
-    protected function productTaxFactor()
-    {
-        if ($this->productTaxFactor) {
-            return $this->productTaxFactor;
-        }
-
-        return $this->productTaxFactor = $this->filtered_product_taxes->sum('percentageDecimal');
-    }
-
-    /**
      * Filter product taxes by shipping destination.
      *
      * @param array $data
@@ -239,7 +223,7 @@ trait CartItemPriceAccessors
      */
     public function getFilteredServiceTaxesAttribute()
     {
-        if ( ! $this->service_options) {
+        if (! $this->service_options) {
             return new Collection();
         }
 
@@ -248,9 +232,7 @@ trait CartItemPriceAccessors
             $factor   = $taxes->sum('percentageDecimal');
             $preTaxes = $option->price()->integer / (1 + $factor) * $this->quantity;
 
-            return $taxes->map(function (Tax $tax) use ($preTaxes) {
-                return new TaxTotal($preTaxes, $tax);
-            });
+            return $taxes->map(fn (Tax $tax) => new TaxTotal($preTaxes, $tax));
         });
     }
 
@@ -260,4 +242,16 @@ trait CartItemPriceAccessors
             ?? optional($this->cart)->getFallbackShippingCountryId();
     }
 
+    /**
+     * Sum of all tax factors.
+     * @return mixed
+     */
+    protected function productTaxFactor()
+    {
+        if ($this->productTaxFactor) {
+            return $this->productTaxFactor;
+        }
+
+        return $this->productTaxFactor = $this->filtered_product_taxes->sum('percentageDecimal');
+    }
 }

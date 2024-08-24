@@ -1,4 +1,5 @@
 <?php
+
 return [
     'plugin' => [
         'name' => 'Mall',
@@ -81,7 +82,7 @@ return [
             'create' => 'New Price Category',
             'update' => 'Update Price Category',
             'reorder' => 'Reorder Price Categories',
-        ]
+        ],
     ],
     'menu_items' => [
         'all_categories' => 'All shop categories',
@@ -150,7 +151,7 @@ return [
         'description' => 'Configure additional price categories',
         'is_enabled' => 'Enabled',
         'title_label' => 'Label',
-        'title_description' => 'A descriptive label, which can be shown on the front-end.'
+        'title_description' => 'A descriptive label, which can be shown on the front-end.',
     ],
     'order_state_settings' => [
         'description' => 'Configure order states',
@@ -361,7 +362,7 @@ return [
         ],
         'create' => 'Create Variant',
         'delete' => 'Delete Selected',
-        'delete_confirm' => 'Do you really want to remove the selected variants? This action cannot be made undone.'
+        'delete_confirm' => 'Do you really want to remove the selected variants? This action cannot be made undone.',
     ],
     'properties' => [
         'use_for_variants' => 'Use for variants',

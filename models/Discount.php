@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Model;
 use Carbon\Carbon;
+use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -16,7 +18,7 @@ class Discount extends Model
     use Nullable;
     use HashIds;
 
-    const MORPH_KEY = 'mall.discount';
+    public const MORPH_KEY = 'mall.discount';
 
     public $rules = [
         'name'                                 => 'required',
@@ -34,30 +36,37 @@ class Discount extends Model
         'shipping_description'                 => 'required_if:type,shipping',
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
+
     public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
+
     public $table = 'offline_mall_discounts';
+
     public $dates = ['valid_from', 'expires'];
+
     public $nullable = ['max_number_of_usages'];
+
     public $casts = [
         'number_of_usages' => 'integer',
     ];
+
     public $morphMany = [
         'shipping_prices' => [
-            Price::class, 
-            'name' => 'priceable', 
-            'conditions' => "field = 'shipping_prices'"
+            Price::class,
+            'name' => 'priceable',
+            'conditions' => "field = 'shipping_prices'",
         ],
         'amounts' => [
-            Price::class, 
-            'name' => 'priceable', 
-            'conditions' => "field = 'amounts'"
+            Price::class,
+            'name' => 'priceable',
+            'conditions' => "field = 'amounts'",
         ],
         'totals_to_reach' => [
-            Price::class, 
-            'name' => 'priceable', 
-            'conditions' => "field = 'totals_to_reach'"
+            Price::class,
+            'name' => 'priceable',
+            'conditions' => "field = 'totals_to_reach'",
         ],
     ];
+
     public $fillable = [
         'name',
         'valid_from',
@@ -75,17 +84,20 @@ class Discount extends Model
         'shipping_description',
         'shipping_guaranteed_days_to_delivery',
     ];
+
     public $belongsTo = [
         'product' => [Product::class],
         'customer_group' => [CustomerGroup::class],
         'payment_method' => [PaymentMethod::class],
     ];
+
     public $belongsToMany = [
         'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
-        'shipping_methods' => [ShippingMethod::class, 'table' => 'offline_mall_shipping_method_discount']
+        'shipping_methods' => [ShippingMethod::class, 'table' => 'offline_mall_shipping_method_discount'],
     ];
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = [
         'name',
         'shipping_description',
@@ -101,12 +113,15 @@ class Discount extends Model
         });
         static::saving(function (self $discount) {
             $discount->code = strtoupper($discount->code ?? '');
+
             if ($discount->trigger !== 'product') {
                 $discount->product_id = null;
             }
+
             if ($discount->trigger !== 'code') {
                 $discount->code = null;
             }
+
             if ($discount->trigger !== 'customer_group') {
                 $discount->customer_group_id = null;
             }
@@ -115,6 +130,7 @@ class Discount extends Model
 
     /**
      * Filter out discounts that are valid and not expired.
+     * @param mixed $q
      */
     public function scopeIsActive($q)
     {
@@ -135,9 +151,7 @@ class Discount extends Model
             'shipping',
         ];
 
-        return collect($keys)->mapWithKeys(function ($key) {
-            return [$key => trans('offline.mall::lang.discounts.types.' . $key)];
-        });
+        return collect($keys)->mapWithKeys(fn ($key) => [$key => trans('offline.mall::lang.discounts.types.' . $key)]);
     }
 
     public function getTriggerOptions()
@@ -151,9 +165,7 @@ class Discount extends Model
             'payment_method',
         ];
 
-        return collect($keys)->mapWithKeys(function ($key) {
-            return [$key => trans('offline.mall::lang.discounts.triggers.' . $key)];
-        });
+        return collect($keys)->mapWithKeys(fn ($key) => [$key => trans('offline.mall::lang.discounts.triggers.' . $key)]);
     }
 
     public function amount($currency = null)

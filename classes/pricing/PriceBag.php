@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing;
 
@@ -17,7 +19,6 @@ use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\Discount;
-use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\ShippingMethod;
 use Whitecube\Price\Price;
 
@@ -84,7 +85,7 @@ class PriceBag
     {
         $currency ??= Currency::activeCurrency();
         $this->currency = is_string($currency) ? $currency : $currency->code;
-        $this->currencyModel = $currency; 
+        $this->currencyModel = $currency;
         $this->map = [
             'products'  => [],
             'services'  => [],
@@ -115,7 +116,7 @@ class PriceBag
                 'tax'       => strval($this->totalTax()),
                 'discount'  => strval($this->totalDiscount()),
                 'inclusive' => strval($this->totalInclusive()),
-            ]
+            ],
         ];
     }
 
@@ -165,6 +166,7 @@ class PriceBag
         $record->setAssoc($this, $product);
 
         $this->map['products'][] = $record;
+
         return $record;
     }
 
@@ -182,6 +184,7 @@ class PriceBag
         $record->setAssoc($this, $service);
 
         $this->map['services'][] = $record;
+
         return $record;
     }
 
@@ -198,6 +201,7 @@ class PriceBag
         $record->setAssoc($this, $method);
 
         $this->map['shipping'][] = $record;
+
         return $record;
     }
 
@@ -206,6 +210,7 @@ class PriceBag
      * @param string|PaymentRecord $method
      * @param null|int|float $percentage Percentage fee.
      * @param null|int|float|string|Price Fixed amount.
+     * @param null|mixed $amount
      * @return PaymentRecord
      */
     public function addPaymentMethod($method, $percentage = null, $amount = null)
@@ -214,17 +219,18 @@ class PriceBag
         $record->setAssoc($this, $method);
 
         $this->map['payment'][] = $record;
+
         return $record;
     }
 
     /**
      * Add discount to price bag.
      * @param string|Discount $type The type of discount, which should be applied to this bag:
-     *               - 'products', product-specific discounts
-     *               - 'services', service-specific discounts
-     *               - 'shipping', shipping-costs discounts
-     *               - 'payment', payment-costs discounts
-     *               - 'total', gross-total discounts (ex. skonto / conto)
+     *                              - 'products', product-specific discounts
+     *                              - 'services', service-specific discounts
+     *                              - 'shipping', shipping-costs discounts
+     *                              - 'payment', payment-costs discounts
+     *                              - 'total', gross-total discounts (ex. skonto / conto)
      * @param int|float|string|FactorValue|MoneyValue|Price $amount
      * @param boolean $isFactor
      * @return DiscountRecord
@@ -235,6 +241,7 @@ class PriceBag
         $record->setAssoc($this, $type);
 
         $this->map['discounts'][] = $record;
+
         return $record;
     }
 
@@ -246,7 +253,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $price->plus($product->exclusive()->exclusive());
         }
 
@@ -261,7 +268,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $price->plus($product->discount());
         }
 
@@ -276,10 +283,10 @@ class PriceBag
     public function productsVat(bool $detailed = false)
     {
         $results = [
-            'total' => Money::ofMinor('0', $this->currency)
+            'total' => Money::ofMinor('0', $this->currency),
         ];
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $vat = $product->vat();
 
             if ($detailed) {
@@ -292,6 +299,7 @@ class PriceBag
             }
             $results['total'] = $results['total']->plus($vat);
         }
+
         return $detailed ? $results : $results['total'];
     }
 
@@ -303,11 +311,12 @@ class PriceBag
     public function productsTax(bool $detailed = false)
     {
         $results = $this->productsVat(true);
+
         if ($detailed) {
             $results['taxes'] = Money::ofMinor('0', $this->currency);
         }
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $amount = $product->tax(true);
 
             if ($detailed) {
@@ -320,7 +329,7 @@ class PriceBag
     }
 
     /**
-     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all
      * products.
      * @param $detailed
      * @return array
@@ -329,7 +338,7 @@ class PriceBag
     {
         $results = [];
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $results[] = $product->taxes($detailed);
         }
 
@@ -344,7 +353,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $price->plus($product->inclusive()->inclusive());
         }
 
@@ -359,7 +368,7 @@ class PriceBag
     {
         $weight = 0;
 
-        foreach ($this->map['products'] AS $product) {
+        foreach ($this->map['products'] as $product) {
             $weight += $product->weight();
         }
 
@@ -374,7 +383,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['services'] AS $service) {
+        foreach ($this->map['services'] as $service) {
             $price->plus($service->exclusive()->exclusive());
         }
 
@@ -389,7 +398,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['services'] AS $service) {
+        foreach ($this->map['services'] as $service) {
             $price->plus($service->discount());
         }
 
@@ -404,10 +413,10 @@ class PriceBag
     public function servicesVat(bool $detailed = false)
     {
         $results = [
-            'total' => Money::ofMinor('0', $this->currency)
+            'total' => Money::ofMinor('0', $this->currency),
         ];
 
-        foreach ($this->map['services'] AS $service) {
+        foreach ($this->map['services'] as $service) {
             if ($detailed) {
                 if ($service->factor() > 0) {
                     if (!array_key_exists($service->factor(), $results)) {
@@ -430,11 +439,12 @@ class PriceBag
     public function servicesTax(bool $detailed = false)
     {
         $results = $this->servicesVat(true);
+
         if ($detailed) {
             $results['taxes'] = Money::ofMinor('0', $this->currency);
         }
 
-        foreach ($this->map['services'] AS $service) {
+        foreach ($this->map['services'] as $service) {
             $amount = $service->tax(true);
 
             if ($detailed) {
@@ -447,7 +457,7 @@ class PriceBag
     }
 
     /**
-     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all
      * services.
      * @param $detailed
      * @return array
@@ -456,7 +466,7 @@ class PriceBag
     {
         $results = [];
 
-        foreach ($this->map['services'] AS $service) {
+        foreach ($this->map['services'] as $service) {
             $results[] = $service->taxes($detailed);
         }
 
@@ -471,7 +481,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['services'] AS $service) {
+        foreach ($this->map['services'] as $service) {
             $price->plus($service->inclusive()->inclusive());
         }
 
@@ -486,7 +496,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['shipping'] AS $shipping) {
+        foreach ($this->map['shipping'] as $shipping) {
             $price->plus($shipping->exclusive()->exclusive());
         }
 
@@ -501,7 +511,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['shipping'] AS $shipping) {
+        foreach ($this->map['shipping'] as $shipping) {
             $price->plus($shipping->discount());
         }
 
@@ -516,10 +526,10 @@ class PriceBag
     public function shippingVat(bool $detailed = false)
     {
         $results = [
-            'total' => Money::ofMinor('0', $this->currency)
+            'total' => Money::ofMinor('0', $this->currency),
         ];
 
-        foreach ($this->map['shipping'] AS $shipping) {
+        foreach ($this->map['shipping'] as $shipping) {
             if ($detailed) {
                 if ($shipping->factor()) {
                     if (!array_key_exists($shipping->factor(), $results)) {
@@ -542,11 +552,12 @@ class PriceBag
     public function shippingTax(bool $detailed = false)
     {
         $results = $this->shippingVat(true);
+
         if ($detailed) {
             $results['taxes'] = Money::ofMinor('0', $this->currency);
         }
 
-        foreach ($this->map['shipping'] AS $shipping) {
+        foreach ($this->map['shipping'] as $shipping) {
             $amount = $shipping->tax(true);
 
             if ($detailed) {
@@ -559,7 +570,7 @@ class PriceBag
     }
 
     /**
-     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all
      * services.
      * @param $detailed
      * @return array
@@ -568,7 +579,7 @@ class PriceBag
     {
         $results = [];
 
-        foreach ($this->map['shipping'] AS $shipping) {
+        foreach ($this->map['shipping'] as $shipping) {
             $results[] = $shipping->taxes($detailed);
         }
 
@@ -583,7 +594,7 @@ class PriceBag
     {
         $price = Price::parse('0', $this->currency);
 
-        foreach ($this->map['shipping'] AS $shipping) {
+        foreach ($this->map['shipping'] as $shipping) {
             $price->plus($shipping->inclusive()->inclusive());
         }
 
@@ -602,9 +613,11 @@ class PriceBag
         $totals->plus($this->shippingExclusive()->exclusive());
 
         $money = Money::ofMinor('0', $this->currency);
-        foreach ($this->map['payment'] AS $payment) {
+
+        foreach ($this->map['payment'] as $payment) {
             $money = $money->plus($payment->exclusiveFromTotals($totals->base(false))->inclusive());
         }
+
         return $money;
     }
     
@@ -614,8 +627,7 @@ class PriceBag
      */
     public function paymentDiscount(): Money
     {
-        $money = Money::ofMinor('0', $this->currency);
-        return $money;
+        return Money::ofMinor('0', $this->currency);
     }
 
     /**
@@ -630,9 +642,11 @@ class PriceBag
         $totals->plus($this->shippingExclusive()->exclusive());
 
         $money = Money::ofMinor('0', $this->currency);
-        foreach ($this->map['payment'] AS $payment) {
+
+        foreach ($this->map['payment'] as $payment) {
             $money = $money->plus($payment->inclusiveFromTotals($totals->base(false))->inclusive());
         }
+
         return $money;
     }
 
@@ -648,9 +662,11 @@ class PriceBag
         $totals->plus($this->shippingExclusive()->exclusive());
 
         $money = Money::ofMinor('0', $this->currency);
-        foreach ($this->map['payment'] AS $payment) {
+
+        foreach ($this->map['payment'] as $payment) {
             $money = $money->plus($payment->taxFromTotals($totals->base(false)));
         }
+
         return $money;
     }
 
@@ -664,6 +680,7 @@ class PriceBag
         $price->plus($this->productsExclusive()->exclusive());
         $price->plus($this->servicesExclusive()->exclusive());
         $price->plus($this->shippingExclusive()->exclusive());
+
         return new PriceValue($price);
     }
 
@@ -676,8 +693,8 @@ class PriceBag
         $price = Money::ofMinor('0', $this->currency);
         $price = $price->plus($this->productsVat());
         $price = $price->plus($this->servicesVat());
-        $price = $price->plus($this->shippingVat());
-        return $price;
+
+        return $price->plus($this->shippingVat());
     }
 
     /**
@@ -690,24 +707,23 @@ class PriceBag
         $price = $price->plus($this->productsTax());
         $price = $price->plus($this->servicesTax());
         $price = $price->plus($this->shippingTax());
-        $price = $price->plus($this->paymentTax());
-        return $price;
+
+        return $price->plus($this->paymentTax());
     }
 
     /**
-     * Return detailed version of all taxes, based on the original net-price minus discount, of all 
+     * Return detailed version of all taxes, based on the original net-price minus discount, of all
      * products.
      * @param $detailed
      * @return array
      */
     public function totalTaxes(bool $detailed = false)
     {
-        $results = array_merge(
+        return array_merge(
             array_values($this->productsTaxes($detailed)),
             array_values($this->servicesTaxes($detailed)),
             array_values($this->shippingTaxes($detailed))
         );
-        return $results;
     }
 
     /**
@@ -720,8 +736,8 @@ class PriceBag
         $price = $price->plus($this->productsDiscount());
         $price = $price->plus($this->servicesDiscount());
         $price = $price->plus($this->shippingDiscount());
-        $price = $price->plus($this->paymentDiscount());
-        return $price;
+
+        return $price->plus($this->paymentDiscount());
     }
 
     /**
@@ -740,6 +756,7 @@ class PriceBag
         $price->minus($this->paymentDiscount());
         
         $this->revertDiscounts();
+
         return new PriceValue($price);
     }
 

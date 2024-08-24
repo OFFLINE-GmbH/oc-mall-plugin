@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -15,6 +17,7 @@ class Review extends Model
     use Validation;
 
     public $table = 'offline_mall_reviews';
+
     public $rules = [
         'title' => 'required_with:description|max:190',
         'description' => 'max:500',
@@ -23,6 +26,7 @@ class Review extends Model
         'variant_id' => 'nullable|exists:offline_mall_product_variants,id',
         'customer_id' => 'nullable|exists:offline_mall_customers,id',
     ];
+
     public $fillable = [
         'rating',
         'title',
@@ -30,21 +34,26 @@ class Review extends Model
         'pros',
         'cons',
     ];
+
     public $jsonable = [
         'pros',
         'cons',
     ];
+
     public $casts = [
         'rating' => 'integer',
     ];
+
     public $belongsTo = [
         'product' => Product::class,
         'variant' => Variant::class,
         'customer' => Customer::class,
     ];
+
     public $hasMany = [
         'category_reviews' => [CategoryReview::class],
     ];
+
     public $dates = ['approved_at'];
 
     public function approve()
@@ -72,12 +81,14 @@ class Review extends Model
 
     public function afterSave()
     {
-        if ( ! $this->approved_at) {
+        if (! $this->approved_at) {
             return;
         }
+
         if ($this->product) {
             $this->updateRating($this->product);
         }
+
         if ($this->variant) {
             $this->updateRating($this->variant);
         }
@@ -90,12 +101,11 @@ class Review extends Model
      */
     public function updateRating($target)
     {
-        $baseQuery = self
-            ::when($target instanceof Product, function ($q) use ($target) {
-                $q->where('product_id', $target->id);
-            }, function ($q) use ($target) {
-                $q->where('variant_id', $target->id);
-            });
+        $baseQuery = self::when($target instanceof Product, function ($q) use ($target) {
+            $q->where('product_id', $target->id);
+        }, function ($q) use ($target) {
+            $q->where('variant_id', $target->id);
+        });
 
         $count = $baseQuery->count();
         $sum = $baseQuery->sum('rating');
@@ -133,7 +143,7 @@ class Review extends Model
 
     public function getCustomerNameAttribute()
     {
-        if ( ! $this->customer) {
+        if (! $this->customer) {
             return trans('offline.mall::lang.reviews.anonymous');
         }
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
@@ -27,18 +29,6 @@ class PaymentMethodTest extends PluginTestCase
         Event::listen('mall.cart.setCountry', function ($model) {
             $model->countryId = 14;
         });
-    }
-
-    /**
-     * Get product with and adjusted price.
-     * @return mixed
-     */
-    protected function getProduct(int $price): Product
-    {
-        $product = Product::first();
-        $product->save();
-        $product->price = ['CHF' => $price, 'EUR' => 150];
-        return Product::first();
     }
 
     /**
@@ -71,7 +61,7 @@ class PaymentMethodTest extends PluginTestCase
             'payment_provider'  => 'stripe',
         ]);
         $method->prices()->save(new Price([
-            'currency_id' => $currency->id,         
+            'currency_id' => $currency->id,
             'price'       => 0.30,
         ]));
 
@@ -188,5 +178,18 @@ class PaymentMethodTest extends PluginTestCase
 
         // Test applied taxes
         $this->assertEquals(1, $cart->totals()->taxes()->count());
+    }
+
+    /**
+     * Get product with and adjusted price.
+     * @return mixed
+     */
+    protected function getProduct(int $price): Product
+    {
+        $product = Product::first();
+        $product->save();
+        $product->price = ['CHF' => $price, 'EUR' => 150];
+
+        return Product::first();
     }
 }

@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Model;
 use Illuminate\Support\Facades\Queue;
+use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
@@ -17,18 +19,22 @@ class Brand extends Model
     use Sluggable;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = [
         'name',
         'description',
         'website',
     ];
+
     public $slugs = [
         'slug' => 'name',
     ];
+
     public $rules = [
         'name'    => 'required',
         'website' => 'url',
     ];
+
     public $fillable = [
         'name',
         'slug',
@@ -36,10 +42,13 @@ class Brand extends Model
         'website',
         'sort_order',
     ];
+
     public $table = 'offline_mall_brands';
+
     public $attachOne = [
         'logo' => File::class,
     ];
+
     public $hasMany = [
         'products' => Product::class,
     ];
@@ -47,13 +56,13 @@ class Brand extends Model
     public function afterDelete()
     {
         Product::orderBy('id')
-               ->where('brand_id', $this->id)
-               ->chunk(100, function ($products) {
-                   $data = [
-                       'ids' => $products->pluck('id'),
-                   ];
-                   Queue::push(BrandChangeUpdate::class, $data);
-               });
+            ->where('brand_id', $this->id)
+            ->chunk(100, function ($products) {
+                $data = [
+                    'ids' => $products->pluck('id'),
+                ];
+                Queue::push(BrandChangeUpdate::class, $data);
+            });
     }
 
     public function toArray()

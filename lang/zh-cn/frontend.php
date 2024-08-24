@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => '搜索...',
     'please_wait' => '请稍等...',
@@ -48,8 +49,8 @@ return [
     'form.lastname' => '姓',
     'form.company' => '公司',
     'form.company_placeholder' => '如果是私人请留空',
-    'form.recipient' => "收件人的姓名",
-    'form.recipient_placeholder' => "如果是你就留空",
+    'form.recipient' => '收件人的姓名',
+    'form.recipient_placeholder' => '如果是你就留空',
     'form.address_lines' => '地址列表',
     'form.zip' => '邮政编码',
     'form.city' => '城市',

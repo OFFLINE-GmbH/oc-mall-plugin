@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall;
 
@@ -27,6 +29,7 @@ use OFFLINE\Mall\Models\ServiceOption;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Variant;
+use System;
 use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
@@ -45,13 +48,13 @@ class Plugin extends PluginBase
      * @var array
      */
     public $require = [
-        'RainLab.User', 
-        'RainLab.Location', 
-        'RainLab.Translate'
+        'RainLab.User',
+        'RainLab.Location',
+        'RainLab.Translate',
     ];
 
     /**
-     * Required model morph-map relations, must be registered n the constructor 
+     * Required model morph-map relations, must be registered n the constructor
      * to make them available when the plugin migrations are run.
      * @var array
      */
@@ -115,7 +118,7 @@ class Plugin extends PluginBase
         $navigation = parent::registerNavigation();
 
         // Icon name has been changed from 'icon-star-half-full' to 'icon-star-half'
-        if (version_compare(\System::VERSION, '3.6', '>=')) {
+        if (version_compare(System::VERSION, '3.6', '>=')) {
             $navigation['mall-catalogue']['sideMenu']['mall-reviews']['icon'] = 'icon-star-half';
         }
 

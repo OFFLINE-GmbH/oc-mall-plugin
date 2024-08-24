@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Model;
 use Illuminate\Support\Collection;
+use Model;
 use October\Rain\Database\Traits\Encryptable;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 
@@ -11,16 +13,19 @@ class PaymentGatewaySettings extends Model
 {
     use Encryptable;
 
-    protected $encryptable = [];
-
     public $implement = ['System.Behaviors.SettingsModel'];
+
     public $settingsCode = 'offline_mall_settings';
+
     public $settingsFields = '$/offline/mall/models/settings/fields_payment_gateways.yaml';
+
+    protected $encryptable = [];
 
     /**
      * @var PaymentGateway
      */
     protected $gateway;
+
     /**
      * @var Collection<PaymentProvider>
      */
@@ -62,7 +67,7 @@ class PaymentGatewaySettings extends Model
     protected function setDefaultTab(array $settings, $tab)
     {
         return array_map(function ($i) use ($tab) {
-            if ( ! isset($i['tab'])) {
+            if (! isset($i['tab'])) {
                 $i['tab'] = $tab;
             }
 

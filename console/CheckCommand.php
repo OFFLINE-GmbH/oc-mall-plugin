@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Console;
 
@@ -38,7 +40,7 @@ class CheckCommand extends Command
         $checks = [
             [
                 'title' => 'CMS pages are linked',
-                'check' => fn() => $this->checkCMSPages()
+                'check' => fn () => $this->checkCMSPages(),
             ],
             [
                 'title' => 'A base currency is set',
@@ -62,27 +64,27 @@ class CheckCommand extends Command
             ],
             [
                 'title' => 'All products have a price in the default currency',
-                'check' => fn () => $this->checkProducts()
+                'check' => fn () => $this->checkProducts(),
             ],
             [
                 'title' => 'All products have a category',
-                'check' => fn () => $this->checkProductCategories()
+                'check' => fn () => $this->checkProductCategories(),
             ],
             [
                 'title' => 'All shipping methods have a price in the default currency',
-                'check' => fn () => $this->checkShippingMethods()
+                'check' => fn () => $this->checkShippingMethods(),
             ],
         ];
 
         $hints = [];
         $rows  = array_map(function ($item) use (&$hints) {
             $result = $item['check']();
+
             if ($result !== true) {
                 $hints[] = ['title' => $item['title'], 'text' => $result];
             }
 
             return [$item['title'], $result === true ? 'OK' : 'FAIL'];
-
         }, $checks);
 
         $this->output->table([
@@ -92,6 +94,7 @@ class CheckCommand extends Command
 
         if (count($hints) < 1) {
             $this->output->newLine();
+
             return $this->output->success('All checks passed!');
         }
 
@@ -109,9 +112,11 @@ class CheckCommand extends Command
     {
         $methods = ShippingMethod::with('prices')->get();
         $errors  = [];
+
         foreach ($methods as $method) {
             $basePrice = $method->prices->where('currency_id', Currency::defaultCurrency()->id)->first();
-            if ( ! $basePrice) {
+
+            if (! $basePrice) {
                 $errors[] = sprintf(
                     'The shipping method "%s" has no price set for your default currency.',
                     $method->name
@@ -129,9 +134,11 @@ class CheckCommand extends Command
     {
         $products = Product::with('prices')->get();
         $errors   = [];
+
         foreach ($products as $product) {
             $basePrice = $product->prices->where('currency_id', Currency::defaultCurrency()->id)->first();
-            if ( ! $basePrice) {
+
+            if (! $basePrice) {
                 $errors[] = sprintf(
                     'The product "%s (%s)" has no price set for your default currency.',
                     $product->name,
@@ -150,6 +157,7 @@ class CheckCommand extends Command
     {
         $products = Product::with('categories')->get();
         $errors   = [];
+
         foreach ($products as $product) {
             if ($product->categories->count() < 1) {
                 $errors[] = sprintf(
@@ -170,16 +178,20 @@ class CheckCommand extends Command
     {
         $pages  = ['product_page', 'category_page', 'address_page', 'checkout_page', 'account_page'];
         $errors = [];
+
         foreach ($pages as $page) {
             if (GeneralSettings::get($page) === null) {
                 $errors[] = '- ' . trans('offline.mall::lang.general_settings.' . $page);
             }
         }
+
         if (count($errors) < 1) {
             return true;
         }
 
-        return "The following pages are not linked to a CMS page. Do this via the backend settings:\n\n" . implode("\n",
-                $errors);
+        return "The following pages are not linked to a CMS page. Do this via the backend settings:\n\n" . implode(
+            "\n",
+            $errors
+        );
     }
 }

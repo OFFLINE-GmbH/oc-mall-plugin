@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateOfflineMallCustomerGroupPrices extends Migration
 {
@@ -17,7 +19,7 @@ class CreateOfflineMallCustomerGroupPrices extends Migration
             $table->integer('price');
             $table->timestamps();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->unique(
                     ['customer_group_id', 'priceable_id', 'priceable_type', 'currency_id'],
                     'customer_group_unique_price'

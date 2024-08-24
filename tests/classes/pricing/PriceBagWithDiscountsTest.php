@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Classes\Pricing;
 
@@ -19,16 +21,15 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
         parent::setUp();
     }
 
-
     /**
      * Test if the PriceBag calculates different taxes correctly after discount has been applied.
-     * 
+     *
      * Results
      *      tax 1       =   7.69        (10 % of 200.00 - 100.00 discount) <- prices are inclusive
      *      tax 2       =  15.38        (20 % of 200.00 - 100.00 discount) <- prices are inclusive
      *      taxes       =  23.07
      *      inclusive   = 200.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_taxes_correctly_after_discount_applied()
@@ -75,24 +76,24 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
             $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            2307, 
+            2307,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            10000, 
+            10000,
             $bag->totalInclusive()->toInt()
         );
     }
 
     /**
      * Test if the PriceBag calculates correctly after discount has been applied resulting in 0 amount.
-     * 
+     *
      * Results
      *      tax 1       = 0.00        (10 %)
      *      tax 2       = 0.00        (20 %)
      *      taxes       = 0.00
      *      inclusive   = 0.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_correctly_after_discount_results_in_zero_amount()
@@ -147,14 +148,14 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
     /**
      * Test if the PriceBag calculates correctly using multiple products with different taxes and
      * applied discounts.
-     * 
+     *
      * Results
      *      tax 1       =   7.09        (10 % of 115.00 - 66.66 % of 50.00 discount) <- prices are inclusive
      *      tax 2       =   3.54        ( 5 % of 115.00 - 66.66 % of 50.00 discount) <- prices are inclusive
      *      tax 3       =   5.35        (15 % of  57.50 - 33.33 % of 50.00 discount) <- prices are inclusive
      *      taxes       =  15.98
      *      inclusive   = 122.50
-     * 
+     *
      * @return void
      */
     public function test_calculate_multiple_products_with_different_taxes_and_discount()
@@ -209,28 +210,28 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
             $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            535, 
+            535,
             $bag->productsTaxes()[1]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            1598, 
+            1598,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            12250, 
+            12250,
             $bag->totalInclusive()->toInt()
         );
     }
    
     /**
      * Test if the PriceBag calculates different taxes correctly after discount has been applied.
-     * 
+     *
      * Results
      *      tax 1       =   8.00        (10 % of 160.00 - 100.00 discount)
      *      tax 2       =  16.00        (20 % of 160.00 - 100.00 discount)
      *      taxes       =  24.00
      *      inclusive   =  78.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_excluded_taxes_correctly_after_discount_applied()
@@ -276,11 +277,11 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
             $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            1800, 
+            1800,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            7800, 
+            7800,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -318,7 +319,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            ($quantity * $price['CHF'] * 100) - 10000, 
+            ($quantity * $price['CHF'] * 100) - 10000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -352,7 +353,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            ($quantity * $price['CHF'] * 100) / 2, 
+            ($quantity * $price['CHF'] * 100) / 2,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -390,7 +391,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            ($quantity * $price['CHF'] * 100) / 2, 
+            ($quantity * $price['CHF'] * 100) / 2,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -445,11 +446,11 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            5524, 
+            5524,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            30000, 
+            30000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -491,7 +492,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            20000, 
+            20000,
             $bag->totalInclusive()->toInt()
         );
 
@@ -502,7 +503,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            15000, 
+            15000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -540,7 +541,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            20000, 
+            20000,
             $bag->totalInclusive()->toInt()
         );
 
@@ -551,7 +552,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            15000, 
+            15000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -562,7 +563,6 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
      */
     public function test_calculate_alternate_shipping_price_discount_only_when_total_is_reached()
     {
-
         // Create Product
         $product = $this->getProduct(100);
 
@@ -601,7 +601,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            40000, 
+            40000,
             $bag->totalInclusive()->toInt()
         );
 
@@ -612,7 +612,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            30000, 
+            30000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -623,7 +623,6 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
      */
     public function test_calculate_fixed_discount_only_when_product_is_in_cart()
     {
-
         // Create Products
         $productA = $this->getProduct(100);
         $productB = $this->getProduct(100);
@@ -653,7 +652,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            20000, 
+            20000,
             $bag->totalInclusive()->toInt()
         );
 
@@ -664,7 +663,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            15000, 
+            15000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -699,7 +698,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            20000, 
+            20000,
             $bag->totalInclusive()->toInt()
         );
 
@@ -710,7 +709,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            15000, 
+            15000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -763,7 +762,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            40000, 
+            40000,
             $bag->totalInclusive()->toInt()
         );
 
@@ -774,7 +773,7 @@ class PriceBagWithDiscountsTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            30000, 
+            30000,
             $bag->totalInclusive()->toInt()
         );
     }

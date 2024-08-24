@@ -1,25 +1,18 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Records;
 
 class ProductRecord extends AbstractItemRecord
 {
-    const TYPE = 'product';
+    public const TYPE = 'product';
 
     /**
      * The assigned weight per unit.
      * @var null|integer|float
      */
     protected $weight = null;
-
-    /**
-     * Return record type
-     * @return string
-     */
-    protected function type(): string
-    {
-        return self::TYPE;
-    }
 
     /**
      * @inheritDoc
@@ -29,6 +22,7 @@ class ProductRecord extends AbstractItemRecord
         $array = parent::toArray();
         $array['exclusiveUnit'] = strval($this->cleanExclusive((clone $this->price)->setUnits(1)));
         $array['units'] = $this->price->units();
+
         return $array;
     }
 
@@ -40,6 +34,7 @@ class ProductRecord extends AbstractItemRecord
     public function setWeight($weight): self
     {
         $this->weight = $weight;
+
         return $this;
     }
 
@@ -54,5 +49,14 @@ class ProductRecord extends AbstractItemRecord
         } else {
             return $this->weight * $this->price->units();
         }
+    }
+
+    /**
+     * Return record type
+     * @return string
+     */
+    protected function type(): string
+    {
+        return self::TYPE;
     }
 }

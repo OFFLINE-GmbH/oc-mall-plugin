@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
+use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
@@ -261,55 +264,6 @@ class ProductsFilter extends MallComponent
     }
 
     /**
-     * This method sets all variables needed for this component to work.
-     *
-     * @return void
-     */
-    protected function setData()
-    {
-        $this->setVar('currency', Currency::activeCurrency());
-        $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
-        $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
-        $this->setVar('showOnSaleFilter', (bool)$this->property('showOnSaleFilter'));
-
-        // The includeChildren and includeVariants properties are set by the
-        // products component. If the user specifies explicit values via the
-        // component props we can use these instead.
-        $includeChildren = $this->property('includeChildren');
-        if ($includeChildren !== null) {
-            $this->setVar('includeChildren', (bool)$includeChildren);
-        }
-        $includeVariants = $this->property('includeVariants');
-        if ($includeVariants !== null) {
-            $this->setVar('includeVariants', (bool)$includeVariants);
-        }
-
-        $this->setVar('category', $this->getCategory());
-
-        $categories = collect([$this->category]);
-        if ($this->includeChildren) {
-            $categories = $this->category->getAllChildrenAndSelf();
-        }
-        $this->setVar('categories', $categories);
-
-        if ($this->showPriceFilter) {
-            $this->setPriceRange();
-        }
-        if ($this->showBrandFilter) {
-            $this->setBrands();
-        }
-
-        $this->setVar('propertyGroups', $this->getPropertyGroups());
-        $this->setProps();
-
-        $nullOption = [null => trans('offline.mall::frontend.select')];
-
-        $this->setVar('filter', $this->getFilter());
-        $this->setVar('sortOrder', $this->getSortOrder());
-        $this->setVar('sortOptions', array_merge($nullOption, SortOrder::options(true)));
-    }
-
-    /**
      * The component is executed.
      *
      * @return string|void
@@ -333,6 +287,7 @@ class ProductsFilter extends MallComponent
         $sortOrder = $this->getSortOrder();
 
         $data = collect(post('filter', []));
+
         if ($data->count() < 1) {
             return $this->replaceFilter(collect([]), $sortOrder);
         }
@@ -340,6 +295,7 @@ class ProductsFilter extends MallComponent
         $properties = Property::whereIn('slug', $data->keys())->get();
         $filter     = $data->mapWithKeys(function ($values, $id) use ($properties) {
             $property = Filter::isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
+
             if (is_array($values)
                 && array_key_exists('min', $values)
                 && array_key_exists('max', $values)) {
@@ -349,7 +305,8 @@ class ProductsFilter extends MallComponent
 
                 return [
                     $id => new RangeFilter(
-                        $property, [
+                        $property,
+                        [
                             $values['min'] ?? null,
                             $values['max'] ?? null,
                         ]
@@ -364,6 +321,83 @@ class ProductsFilter extends MallComponent
         });
 
         return $this->replaceFilter($filter, $sortOrder);
+    }
+
+    /**
+     * Get the min value of a Collection.
+     *
+     * @param $values
+     *
+     * @return mixed
+     */
+    public function getMinValue(Collection $values)
+    {
+        return $values->min('value');
+    }
+
+    /**
+     * Get the max value of a Collection.
+     *
+     * @param $values
+     *
+     * @return mixed
+     */
+    public function getMaxValue(Collection $values)
+    {
+        return $values->max('value');
+    }
+
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return void
+     */
+    protected function setData()
+    {
+        $this->setVar('currency', Currency::activeCurrency());
+        $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
+        $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
+        $this->setVar('showOnSaleFilter', (bool)$this->property('showOnSaleFilter'));
+
+        // The includeChildren and includeVariants properties are set by the
+        // products component. If the user specifies explicit values via the
+        // component props we can use these instead.
+        $includeChildren = $this->property('includeChildren');
+
+        if ($includeChildren !== null) {
+            $this->setVar('includeChildren', (bool)$includeChildren);
+        }
+        $includeVariants = $this->property('includeVariants');
+
+        if ($includeVariants !== null) {
+            $this->setVar('includeVariants', (bool)$includeVariants);
+        }
+
+        $this->setVar('category', $this->getCategory());
+
+        $categories = collect([$this->category]);
+
+        if ($this->includeChildren) {
+            $categories = $this->category->getAllChildrenAndSelf();
+        }
+        $this->setVar('categories', $categories);
+
+        if ($this->showPriceFilter) {
+            $this->setPriceRange();
+        }
+
+        if ($this->showBrandFilter) {
+            $this->setBrands();
+        }
+
+        $this->setVar('propertyGroups', $this->getPropertyGroups());
+        $this->setProps();
+
+        $nullOption = [null => trans('offline.mall::frontend.select')];
+
+        $this->setVar('filter', $this->getFilter());
+        $this->setVar('sortOrder', $this->getSortOrder());
+        $this->setVar('sortOptions', array_merge($nullOption, SortOrder::options(true)));
     }
 
     /**
@@ -390,7 +424,6 @@ class ProductsFilter extends MallComponent
             $range->max = $this->lower($currencyRange->max, $calculatedMax);
         }
 
-
         $min = $this->money->round($range->min, $this->currency->decimals);
         $max = $this->money->round($range->max, $this->currency->decimals);
 
@@ -404,18 +437,20 @@ class ProductsFilter extends MallComponent
      */
     protected function setBrands()
     {
-        $brands = \DB::table('offline_mall_products')
-                     ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
-                     ->select('offline_mall_brands.*')
-                     ->distinct()
-                     ->join('offline_mall_brands', 'offline_mall_products.brand_id', '=', 'offline_mall_brands.id')
-                     ->join(
-                         'offline_mall_category_product',
-                         'offline_mall_products.id', '=', 'offline_mall_category_product.product_id'
-                     )
-                     ->orderBy('offline_mall_brands.name')
-                     ->get()
-                     ->toArray();
+        $brands = DB::table('offline_mall_products')
+            ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
+            ->select('offline_mall_brands.*')
+            ->distinct()
+            ->join('offline_mall_brands', 'offline_mall_products.brand_id', '=', 'offline_mall_brands.id')
+            ->join(
+                'offline_mall_category_product',
+                'offline_mall_products.id',
+                '=',
+                'offline_mall_category_product.product_id'
+            )
+            ->orderBy('offline_mall_brands.name')
+            ->get()
+            ->toArray();
 
         $this->setVar('brands', Brand::hydrate($brands));
     }
@@ -431,9 +466,7 @@ class ProductsFilter extends MallComponent
             ->load('property_groups.translations')
             ->inherited_property_groups
             ->load('filterable_properties.translations')
-            ->reject(function (PropertyGroup $group) {
-                return $group->filterable_properties->count() < 1;
-            })->sortBy('pivot.relation_sort_order');
+            ->reject(fn (PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
     }
 
     /**
@@ -449,16 +482,12 @@ class ProductsFilter extends MallComponent
         $props        = $this->propertyGroups->flatMap->filterable_properties->unique();
 
         // Remove any property that has no available filters.
-        $this->props = $props->filter(function (Property $property) use ($valueKeys) {
-            return $valueKeys->contains($property->id);
-        });
+        $this->props = $props->filter(fn (Property $property) => $valueKeys->contains($property->id));
 
         $groupKeys = $this->props->pluck('pivot.property_group_id');
 
         // Remove any property group that has no available properties.
-        $this->propertyGroups = $this->propertyGroups->filter(function (PropertyGroup $group) use ($groupKeys) {
-            return $groupKeys->contains($group->id);
-        });
+        $this->propertyGroups = $this->propertyGroups->filter(fn (PropertyGroup $group) => $groupKeys->contains($group->id));
     }
 
     /**
@@ -504,7 +533,7 @@ class ProductsFilter extends MallComponent
      * Replace the currently active filter query string.
      *
      * @param Collection $filter
-     * @param            $sortOrder
+     * @param $sortOrder
      *
      * @return array
      */
@@ -519,30 +548,6 @@ class ProductsFilter extends MallComponent
             'sort'        => $sortOrder,
             'queryString' => (new QueryString())->serialize($filter, $sortOrder),
         ];
-    }
-
-    /**
-     * Get the min value of a Collection.
-     *
-     * @param $values
-     *
-     * @return mixed
-     */
-    public function getMinValue(Collection $values)
-    {
-        return $values->min('value');
-    }
-
-    /**
-     * Get the max value of a Collection.
-     *
-     * @param $values
-     *
-     * @return mixed
-     */
-    public function getMaxValue(Collection $values)
-    {
-        return $values->max('value');
     }
 
     /**

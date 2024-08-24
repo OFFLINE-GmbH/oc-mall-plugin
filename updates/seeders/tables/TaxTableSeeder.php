@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -19,33 +21,34 @@ class TaxTableSeeder extends Seeder
         }
         
         $country = 'de';
+
         if ($country == 'de') {
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.standard'),
                 'percentage'    => 19,
-                'is_default'    => true
+                'is_default'    => true,
             ]);
     
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.reduced'),
                 'percentage'    => 7,
             ]);
-        } else if ($country == 'at') {
+        } elseif ($country == 'at') {
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.standard'),
                 'percentage'    => 20,
-                'is_default'    => true
+                'is_default'    => true,
             ]);
     
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.reduced'),
                 'percentage'    => 10,
             ]);
-        } else if ($country == 'ch') {
+        } elseif ($country == 'ch') {
             Tax::create([
                 'name'          => trans('offline.mall::demo.taxes.standard'),
                 'percentage'    => 8.1,
-                'is_default'    => true
+                'is_default'    => true,
             ]);
     
             Tax::create([

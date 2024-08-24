@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
 use Auth;
 use DB;
 use October\Rain\Exception\ValidationException;
-use October\Rain\Router\Rule;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use RainLab\User\Models\User;
@@ -86,6 +87,7 @@ class CustomerProfile extends MallComponent
         }
 
         $validation = Validator::make($data, $neededRules, $handler::messages());
+
         if ($validation->fails()) {
             throw new ValidationException($validation);
         }
@@ -96,6 +98,7 @@ class CustomerProfile extends MallComponent
             $this->user->name                = $data['firstname'];
             $this->user->surname             = $data['lastname'];
             $this->user->email               = $data['email'];
+
             if ($data['password']) {
                 $this->user->password              = $data['password'];
                 $this->user->password_confirmation = $data['password_repeat'];

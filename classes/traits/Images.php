@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Traits;
 
 use October\Rain\Support\Collection;
@@ -62,7 +61,7 @@ trait Images
      */
     public function getMainImageSetAttribute()
     {
-        if ( ! $this->image_sets) {
+        if (! $this->image_sets) {
             return null;
         }
 

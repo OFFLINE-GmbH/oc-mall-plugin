@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Queries;
 
-use OFFLINE\Mall\Models\Product;
+use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
 use OFFLINE\Mall\Models\Category;
+use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
 use OFFLINE\Mall\Models\PropertyValue;
-use OFFLINE\Mall\Tests\PluginTestCase;
 use OFFLINE\Mall\Models\UniquePropertyValue;
-use OFFLINE\Mall\Classes\Queries\UniquePropertyValuesInCategoriesQuery;
+use OFFLINE\Mall\Tests\PluginTestCase;
 
 class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
 {
@@ -44,8 +44,8 @@ class UniquePropertyValuesInCategoriesQueryTest extends PluginTestCase
         $propertyGroup1->properties()->add($property2);
 
         $category2 = new Category();
-        $category2->name = "Category 2";
-        $category2->slug = "category-2";
+        $category2->name = 'Category 2';
+        $category2->slug = 'category-2';
         $category2->save();
 
         $propertyGroup2 = new PropertyGroup();

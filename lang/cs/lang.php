@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'plugin' => [
         'name' => 'E-shop',
         'description' => 'E-shop pro October CMS',
@@ -824,7 +826,7 @@
                 ],
                 'currentVariantReviewsOnly' => [
                     'title' => 'Zobrazit pouze hodnocení této varianty',
-                    'description' => "Nezobrazovat recenze jiných variant tohoto produktu",
+                    'description' => 'Nezobrazovat recenze jiných variant tohoto produktu',
                 ],
             ],
         ],

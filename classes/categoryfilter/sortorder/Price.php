@@ -22,6 +22,7 @@ abstract class Price extends SortOrder
                 $base = $this->getBasePrice($a);
                 $priceA = $this->calculatePrice($base);
             }
+
             if ($priceB === null) {
                 $base = $this->getBasePrice($b);
                 $priceB = $this->calculatePrice($base);
@@ -29,6 +30,11 @@ abstract class Price extends SortOrder
 
             return $direction === 'asc' ? $priceA <=> $priceB : $priceB <=> $priceA;
         };
+    }
+
+    public function property(): string
+    {
+        return 'prices.' . $this->currency->code;
     }
 
     protected function calculatePrice($price): int
@@ -39,13 +45,9 @@ abstract class Price extends SortOrder
     protected function getBasePrice($record)
     {
         return array_get(
-            $record, 'prices.' . $this->defaultCurrency->code,
+            $record,
+            'prices.' . $this->defaultCurrency->code,
             array_get($record, 'parent_prices.' . $this->defaultCurrency->code)
         );
-    }
-
-    public function property(): string
-    {
-        return 'prices.' . $this->currency->code;
     }
 }

@@ -92,7 +92,7 @@ class CustomerTableSeeder extends Seeder
             'city'          => 'Lucerne',
             'state_id'      => State::where('name', 'Luzern')->first()->id,
             'country_id'    => Country::where('code', 'CH')->first()->id,
-            'customer_id'   => $customer->id
+            'customer_id'   => $customer->id,
         ]);
         $customer->addresses()->save($shippingAddress);
 
@@ -103,7 +103,7 @@ class CustomerTableSeeder extends Seeder
             'city'          => 'Lucerne',
             'state_id'      => State::where('name', 'Luzern')->first()->id,
             'country_id'    => Country::where('code', 'CH')->first()->id,
-            'customer_id'   => $customer->id
+            'customer_id'   => $customer->id,
         ]);
         $customer->addresses()->save($billingAddress);
     }

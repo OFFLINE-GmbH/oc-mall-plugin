@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
-use Backend\Classes\Controller;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
+use Backend\Classes\Controller;
+use BackendMenu;
 
 class PaymentLogs extends Controller
 {
@@ -14,8 +16,8 @@ class PaymentLogs extends Controller
      * @var array
      */
     public $implement = [
-        ListController::class, 
-        FormController::class
+        ListController::class,
+        FormController::class,
     ];
 
     /**
@@ -41,7 +43,7 @@ class PaymentLogs extends Controller
      * @var array
      */
     public $requiredPermissions = [
-        'offline.mall.manage_payment_log' 
+        'offline.mall.manage_payment_log',
     ];
 
     /**
@@ -55,6 +57,8 @@ class PaymentLogs extends Controller
 
     /**
      * Inject row class name.
+     * @param mixed $row
+     * @param mixed $definition
      * @return mixed
      */
     public function listInjectRowClass($row, $definition)

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -34,7 +36,7 @@ class PropertyTableSeeder extends Seeder
         // Dimensions
         $propertyGroup = PropertyGroup::create([
             'name' => trans('offline.mall::demo.property_groups.dimensions'),
-            'slug' => 'dimensions'
+            'slug' => 'dimensions',
         ]);
         $propertyGroup->properties()->attach([
             Property::create([
@@ -53,6 +55,7 @@ class PropertyTableSeeder extends Seeder
                 'unit' => 'mm',
             ])->id,
         ]);
+
         if (!empty($category)) {
             $category->property_groups()->attach($propertyGroup->id);
         }
@@ -60,7 +63,7 @@ class PropertyTableSeeder extends Seeder
         // Size
         $propertyGroup = PropertyGroup::create([
             'name' => trans('offline.mall::demo.property_groups.size'),
-            'slug' => 'size'
+            'slug' => 'size',
         ]);
         $propertyGroup->properties()->attach(
             Property::create([
@@ -74,13 +77,14 @@ class PropertyTableSeeder extends Seeder
                     ['value' => 'M'],
                     ['value' => 'L'],
                     ['value' => 'XL'],
-                ]
+                ],
             ])->id,
             [
-                'use_for_variants' => true, 
-                'filter_type' => 'set'
+                'use_for_variants' => true,
+                'filter_type' => 'set',
             ]
         );
+
         if (!empty($category)) {
             $category->property_groups()->attach($propertyGroup->id);
         }
@@ -92,7 +96,6 @@ class PropertyTableSeeder extends Seeder
      */
     protected function seedDemoData(): void
     {
-
         // Bike Specifications
         $specsGroup = PropertyGroup::create([
             'name'         => trans('offline.mall::demo.property_groups.bike_specs'),
@@ -155,8 +158,8 @@ class PropertyTableSeeder extends Seeder
                 ],
             ])->id,
         ], [
-            'use_for_variants'  => true, 
-            'filter_type'       => 'set'
+            'use_for_variants'  => true,
+            'filter_type'       => 'set',
         ]);
 
         // Bike Suspension
@@ -187,15 +190,15 @@ class PropertyTableSeeder extends Seeder
         ]);
 
         $clothingGroup->properties()->attach([
-            Property::where('slug', 'color')->first()->id
+            Property::where('slug', 'color')->first()->id,
         ], [
-            'use_for_variants'  => true, 
-            'filter_type'       => 'set'
+            'use_for_variants'  => true,
+            'filter_type'       => 'set',
         ]);
         
         $clothingGroup->properties()->attach([
             Property::where('slug', 'material')->first()->id,
-            Property::where('slug', 'gender')->first()->id
+            Property::where('slug', 'gender')->first()->id,
         ], ['filter_type'       => 'set']);
     }
 }

@@ -1,16 +1,18 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
 use Flash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Cart as CartModel;
 use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Variant;
-use OFFLINE\Mall\Classes\User\Auth;
 
 /**
  * The Cart component displays a user's cart.
@@ -23,52 +25,60 @@ class Cart extends MallComponent
      * @var CartModel
      */
     public $cart;
+
     /**
      * Default minimum quantity.
      *
      * @var int
      */
     public $defaultMinQuantity = 1;
+
     /**
      * Default maximum quantity.
      *
      * @var int
      */
     public $defaultMaxQuantity = 100;
+
     /**
      * Display the DiscountApplier component.
      *
      * @var bool
      */
     public $showDiscountApplier = true;
+
     /**
      * Show the shipping information in the cart.
      *
      * @var bool
      */
     public $showShipping = true;
+
     /**
      * Display a tax summary at the end of the cart.
      *
      * @var bool
      */
     public $showTaxes = true;
+
     /**
      * Display a proceed to checkout button.
      *
      * @var bool
      */
     public $showProceedToCheckoutButton = false;
+
     /**
      * The name of the product detail page.
      *
-     * @var  string
+     * @var string
      */
     public $productPage;
+
     /**
      * The name of the checkout page.
      *
-     * @var  string
+     * @var string
      */
     public $checkoutPage;
 
@@ -131,9 +141,9 @@ class Cart extends MallComponent
      */
     public function init()
     {
-      $this->addComponent(DiscountApplier::class, 'discountApplier', [
-          'discountCodeLimit' => $this->property('discountCodeLimit')
-      ]);
+        $this->addComponent(DiscountApplier::class, 'discountApplier', [
+            'discountCodeLimit' => $this->property('discountCodeLimit'),
+        ]);
     }
 
     /**
@@ -155,6 +165,7 @@ class Cart extends MallComponent
     {
         $cart = CartModel::byUser(Auth::getUser());
         $cart->loadMissing(['products', 'products.custom_field_values', 'discounts']);
+
         if ($cart->shipping_method_id === null) {
             $cart->setShippingMethod(ShippingMethod::getDefault());
         }
@@ -181,14 +192,15 @@ class Cart extends MallComponent
         $cart    = CartModel::byUser(Auth::getUser());
         $product = $this->getProductFromCart($cart, $id);
 
-	if (!$product) {
-	    return;
-	}
+        if (!$product) {
+            return;
+        }
 
         try {
             $cart->setQuantity($product->id, (int)input('quantity'));
         } catch (OutOfStockException $exc) {
             Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $exc->product->stock]));
+
             return;
         } finally {
             $this->setData();
@@ -209,7 +221,7 @@ class Cart extends MallComponent
         $product = $this->getProductFromCart($cart, $id);
         
         if (!$product) {
-	    return [];
+            return [];
         }
 
         $cart->removeProduct($product);
@@ -227,8 +239,8 @@ class Cart extends MallComponent
     /**
      * The user removed a previously applied discount code from the cart.
      *
-     * @return array
      * @throws \October\Rain\Exception\ValidationException
+     * @return array
      */
     public function onRemoveDiscountCode()
     {
@@ -244,7 +256,6 @@ class Cart extends MallComponent
             'new_items_count' => optional($cart->products)->count() ?? 0,
             'new_items_quantity' => optional($cart->products)->sum('quantity') ?? 0,
         ];
-
     }
 
     /**
@@ -254,17 +265,16 @@ class Cart extends MallComponent
      * currently logged in user's cart.
      *
      * @param CartModel $cart
-     * @param mixed     $id
+     * @param mixed $id
      *
-     * @return mixed
      * @throws ModelNotFoundException
+     * @return mixed
      */
     protected function getProductFromCart(CartModel $cart, $id)
     {
-        return CartProduct
-            ::whereHas('cart', function ($query) use ($cart) {
-                 $query->where('id', $cart->id);
-            })
+        return CartProduct::whereHas('cart', function ($query) use ($cart) {
+            $query->where('id', $cart->id);
+        })
             ->where('id', $id)
             ->first();
     }
@@ -280,6 +290,7 @@ class Cart extends MallComponent
     private function dataLayerArray($product = null, $variant = null)
     {
         $item = $variant ?? $product;
+
         if (!($item instanceof Product || $item instanceof Variant)) {
             return [];
         }

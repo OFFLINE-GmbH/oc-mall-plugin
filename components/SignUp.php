@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
+use Exception;
 use Illuminate\Support\Facades\Session;
 use OFFLINE\Mall\Classes\Customer\SignInHandler;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\User\Settings as UserSettings;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\Location\Models\Country;
-use OFFLINE\Mall\Classes\User\Settings as UserSettings;
 
 /**
  * The SignUp component displays a signup and login form
@@ -21,12 +24,14 @@ class SignUp extends MallComponent
      * @var bool
      */
     public $requiresConfirmation;
+
     /**
      * All available countries.
      *
      * @var array
      */
     public $countries;
+
     /**
      * Use state field.
      *
@@ -78,8 +83,8 @@ class SignUp extends MallComponent
     /**
      * The user signs in with an existing account.
      *
+     * @throws Exception
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
      */
     public function onSignIn()
     {
@@ -91,8 +96,8 @@ class SignUp extends MallComponent
     /**
      * The user signs up for a new account.
      *
+     * @throws Exception
      * @return \Illuminate\Http\RedirectResponse|array
-     * @throws \Exception
      */
     public function onSignUp()
     {

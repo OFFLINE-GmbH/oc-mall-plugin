@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -17,14 +19,18 @@ class Service extends Model
     use SoftDelete;
 
     public $table = 'offline_mall_services';
+
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $fillable = [
         'name',
         'description',
     ];
+
     public $rules = [
         'name' => 'required',
     ];
+
     public $hasMany = [
         'options' => [
             ServiceOption::class,
@@ -34,6 +40,7 @@ class Service extends Model
             'otherKey' => 'id',
         ],
     ];
+
     public $belongsToMany = [
         'products' => [
             Product::class,
@@ -49,10 +56,12 @@ class Service extends Model
             'otherKey' => 'tax_id',
         ],
     ];
+
     public $translatable = [
         'name',
         'description',
     ];
+
     public $slugs = [
         'code' => 'name',
     ];

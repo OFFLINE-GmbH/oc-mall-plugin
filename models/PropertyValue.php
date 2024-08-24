@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -13,36 +15,34 @@ class PropertyValue extends Model
     use HashIds;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = [
         ['value', 'index' => true],
     ];
+
     public $rules = [
     ];
+
     public $fillable = [
         'value',
         'product_id',
         'variant_id',
         'property_id',
     ];
+
     public $with = ['property'];
+
     public $table = 'offline_mall_property_values';
+
     public $belongsTo = [
         'property' => [Property::class, 'deleted' => true],
         'product'  => [Product::class],
         'variant'  => [Variant::class],
     ];
+
     public $attachOne = [
         'image' => File::class,
     ];
-
-    /**
-     * Scope that selects only property values that are assigned
-     * to a Product, not to a Variant.
-     */
-    public function scopeProductOnly($query)
-    {
-        $query->whereNull('variant_id');
-    }
 
     /**
      * The parent's attribute type is stored to make trigger conditions
@@ -52,9 +52,20 @@ class PropertyValue extends Model
      */
     public $attribute_type = '';
 
+    /**
+     * Scope that selects only property values that are assigned
+     * to a Product, not to a Variant.
+     * @param mixed $query
+     */
+    public function scopeProductOnly($query)
+    {
+        $query->whereNull('variant_id');
+    }
+
     public function beforeSave()
     {
         $value = $this->attributes['value'] ?? '';
+
         if ($this->isColor()) {
             $decoded = $this->jsonDecodeValue();
             $value = $decoded['name'] ?? $decoded['hex'] ?? '';
@@ -118,8 +129,10 @@ class PropertyValue extends Model
     public function getDisplayValueAttribute()
     {
         $value = $this->getAttributeTranslated('value');
+
         if ($this->isColor()) {
             $value = $this->jsonDecodeValue($value);
+
             return sprintf(
                 '<span class="mall-color-swatch" style="display: inline-block; width: 12px; height: 12px; background: %s" title="%s"></span>',
                 $value['hex'] ?? 'unknown',
@@ -128,8 +141,10 @@ class PropertyValue extends Model
         }
 
         $type  = optional($this->property)->type;
+
         if ($type === 'checkbox') {
             $key = (bool)$value ? 'yes' : 'no';
+
             return trans('offline.mall::lang.common.' . $key);
         }
 
@@ -139,31 +154,17 @@ class PropertyValue extends Model
     public function getValueAttributeTranslated($locale)
     {
         $value = $this->noFallbackLocale()->getAttributeTranslated('value', $locale);
+
         if ($this->isColor()) {
             // Only the name attribute is translatable for a color value.
             // We only return the name so the MLText form widget displays
             // the correct value in the backend form.
             $value = $this->jsonDecodeValue($value);
+
             return $value['name'] ?? '';
         }
+
         return $value;
-    }
-
-    /**
-     * Returns the decoded json value.
-     *
-     * @param null $value
-     *
-     * @return mixed
-     */
-    private function jsonDecodeValue($value = null)
-    {
-        $value = $value ?? $this->attributes['value'];
-        if ( ! $value) {
-            return null;
-        }
-
-        return json_decode($value, true);
     }
 
     /**
@@ -176,13 +177,37 @@ class PropertyValue extends Model
         if ($this->isColor()) {
             $name = $value['name'] ?? false;
             $hex  = $value['hex'] ?? false;
+
             // If both keys are empty store this value as null.
-            if ( ! $name && ! $hex) {
+            if (! $name && ! $hex) {
                 return null;
             }
         }
+
         // Some attribute types (like color) have multiple values (a hex color and a display name)
         // These types of attribute values are stored as json string.
         return \is_array($value) ? json_encode($value) : $value;
+    }
+
+    /**
+     * Returns the decoded json value.
+     *
+     * @param null $value
+     *
+     * @return mixed
+     */
+    private function jsonDecodeValue($value = null)
+    {
+        $value = $value ?? $this->attributes['value'];
+
+        if (! $value) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            return $value;
+        }
+
+        return json_decode($value, true);
     }
 }

@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates;
 
+use Exception;
 use Illuminate\Support\Facades\DB;
 use October\Rain\Database\Updates\Migration;
 
@@ -13,7 +16,7 @@ class UpdateSystemPluginHistory_030_01 extends Migration
      * @return void
      */
     public function up()
-    {   
+    {
         $rows = DB::table('system_plugin_history')
             ->select('*')
             ->from('system_plugin_history')
@@ -23,7 +26,8 @@ class UpdateSystemPluginHistory_030_01 extends Migration
             ->all();
 
         // Check if upgrade is necessary
-        $test = array_filter([...$rows], fn($val) => preg_match('/^[0-9]{3}\_/', $val->detail) === 0);
+        $test = array_filter([...$rows], fn ($val) => preg_match('/^[0-9]{3}\_/', $val->detail) === 0);
+
         if (empty($test)) {
             return;
         }
@@ -35,19 +39,22 @@ class UpdateSystemPluginHistory_030_01 extends Migration
         $tag = null;
         $names = [];
         $error = null;
-        foreach ($rows AS $row) {
+
+        foreach ($rows as $row) {
             if (array_key_exists($row->detail, $names)) {
                 DB::table('system_plugin_history')
                     ->where('id', $row->id)
                     ->update([
-                        'detail' => $names[$row->detail]
+                        'detail' => $names[$row->detail],
                     ]);
+
                 continue;
             }
 
             // Unset missing Mall v2 Migration Files
             if (strpos($row->detail, 'add_product_variants_sort_order.php') !== false) {
                 DB::table('system_plugin_history')->where('id', $row->id)->delete();
+
                 continue;
             }
 
@@ -66,7 +73,8 @@ class UpdateSystemPluginHistory_030_01 extends Migration
             
             // Check if new file exists
             if (!file_exists(__DIR__ . '/' . $filename)) {
-                $error = 'Migration file "'. $filename .'" on path "'. __DIR__ .'" does not exist.';
+                $error = 'Migration file "' . $filename . '" on path "' . __DIR__ . '" does not exist.';
+
                 continue;
             }
 
@@ -74,7 +82,7 @@ class UpdateSystemPluginHistory_030_01 extends Migration
             DB::table('system_plugin_history')
                 ->where('id', $row->id)
                 ->update([
-                    'detail' => $filename
+                    'detail' => $filename,
                 ]);
             $names[$row->detail] = $filename;
             $idx++;
@@ -85,7 +93,8 @@ class UpdateSystemPluginHistory_030_01 extends Migration
             DB::commit();
         } else {
             DB::rollBack();
-            throw new \Exception($error);
+
+            throw new Exception($error);
         }
     }
 

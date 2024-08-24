@@ -15,11 +15,13 @@ abstract class SortOrder implements CallsAnyMethod
      * @var Currency
      */
     public $currency;
+
     /**
      * The default currency.
      * @var Currency
      */
     public $defaultCurrency;
+
     /**
      * Any active search filters.
      * @var Collection
@@ -42,7 +44,8 @@ abstract class SortOrder implements CallsAnyMethod
     public static function fromKey(string $key): SortOrder
     {
         $options = self::options();
-        if ( ! array_key_exists($key, $options)) {
+
+        if (! array_key_exists($key, $options)) {
             return $options[self::default()];
         }
 
@@ -82,6 +85,7 @@ abstract class SortOrder implements CallsAnyMethod
         ];
 
         $extensions = array_filter(Event::fire('offline.mall.extendSortOrder'));
+
         if (count($extensions) > 0) {
             foreach ($extensions as $extension) {
                 $options = array_merge($options, $extension);

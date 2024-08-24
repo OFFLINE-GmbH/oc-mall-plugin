@@ -1,11 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use Exception;
 use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Tests\PluginTestCase;
 use RainLab\User\Models\User;
+use Throwable;
 
 class CurrencyTest extends PluginTestCase
 {
@@ -28,6 +32,7 @@ class CurrencyTest extends PluginTestCase
     {
         $cur = Currency::where('is_default', 1)->count();
         $this->assertEquals($cur, 1);
+
         return $cur;
     }
 
@@ -49,6 +54,7 @@ class CurrencyTest extends PluginTestCase
         $this->assertNotEmpty($default);
         $this->assertEquals($default->id, $currency->id);
         $this->assertNotEquals($default->id, $oldDefaultCurrencyId);
+
         return $currency;
     }
 
@@ -71,6 +77,7 @@ class CurrencyTest extends PluginTestCase
         $sameCurrency = Currency::withDisabled()->where('id', $currency->id)->first();
         $this->assertNotEmpty($sameCurrency);
         $this->assertFalse($sameCurrency->is_default);
+
         return $currency;
     }
 
@@ -98,12 +105,13 @@ class CurrencyTest extends PluginTestCase
         // Try to un-default only available currency, should throw an exception.
         $currency = Currency::where('is_default', 1)->first();
         $currency->is_default = false;
+
         if (method_exists($this, 'assertThrows')) {
-            $this->assertThrows(fn() => $currency->save(), \Throwable::class);
+            $this->assertThrows(fn () => $currency->save(), Throwable::class);
         } else {
             try {
                 $value = $currency->save();
-            } catch (\Exception $exc) {
+            } catch (Exception $exc) {
                 $value = false;
             }
             $this->assertFalse($value);
@@ -112,12 +120,13 @@ class CurrencyTest extends PluginTestCase
         // Try to disable only available currency, should throw an exception.
         $currency = Currency::where('is_default', 1)->first();
         $currency->is_default = false;
+
         if (method_exists($this, 'assertThrows')) {
-            $this->assertThrows(fn() => $currency->save(), \Throwable::class);
+            $this->assertThrows(fn () => $currency->save(), Throwable::class);
         } else {
             try {
                 $value = $currency->save();
-            } catch (\Exception $exc) {
+            } catch (Exception $exc) {
                 $value = false;
             }
             $this->assertFalse($value);

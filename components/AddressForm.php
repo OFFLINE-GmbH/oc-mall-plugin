@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use October\Rain\Support\Facades\Flash;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
 use RainLab\Location\Models\Country;
-use OFFLINE\Mall\Classes\User\Auth;
 
 /**
  * The AddressForm component displays a form to edit an address.
@@ -21,24 +23,28 @@ class AddressForm extends MallComponent
      * @var Address
      */
     public $address;
+
     /**
      * A list of all available countries.
      *
      * @var \Illuminate\Support\Collection
      */
     public $countries;
+
     /**
      * If this address is used as "billing" or "shipping" address.
      *
      * @var string
      */
     public $setAddressAs;
+
     /**
      * The user's cart.
      *
      * @var Cart
      */
     public $cart;
+
     /**
      * Use state field.
      *
@@ -127,7 +133,8 @@ class AddressForm extends MallComponent
     public function setData()
     {
         $user = Auth::getUser();
-        if ( ! $user) {
+
+        if (! $user) {
             return false;
         }
 
@@ -137,11 +144,13 @@ class AddressForm extends MallComponent
         $this->setVar('useState', GeneralSettings::get('use_state', true));
 
         $hashId = $this->property('address');
+
         if ($hashId === 'new') {
             return true;
         }
 
         $id = $this->decode($hashId);
+
         try {
             $this->setVar('address', Address::byCustomer($user->customer)->where('id', $id)->firstOrFail());
         } catch (ModelNotFoundException $e) {
@@ -158,7 +167,7 @@ class AddressForm extends MallComponent
      */
     public function onRun()
     {
-        if ( ! $this->setData()) {
+        if (! $this->setData()) {
             return $this->controller->run('404');
         }
     }
@@ -172,7 +181,8 @@ class AddressForm extends MallComponent
     {
         $this->setData();
         $user = Auth::getUser();
-        if ( ! $user) {
+
+        if (! $user) {
             return $this->controller->run('404');
         }
 
@@ -201,6 +211,7 @@ class AddressForm extends MallComponent
         if ($user->customer->default_shipping_address_id === null) {
             $user->customer->default_shipping_address_id = $this->address->id;
         }
+
         if ($user->customer->default_billing_address_id === null) {
             $user->customer->default_billing_address_id = $this->address->id;
         }

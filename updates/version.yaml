@@ -600,3 +600,6 @@ v3.4.6:
     - 'Fixed demo seeder compatibility with all RainLab.User versions'
 v3.4.7:
     - 'The quantity selector cannot go below 1 now by default'
+v3.5.0:
+    - 'PHP 8.0 is now the minimum required version'
+    - 'Free orders no longer require a payment'

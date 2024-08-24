@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Totals;
 
@@ -12,24 +14,28 @@ use OFFLINE\Mall\Models\Tax;
 use Whitecube\Price\Price;
 
 /**
- * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing
  * system with the PriceBag class construct instead.
  */
 class TaxTotal implements JsonSerializable, CallsAnyMethod
 {
     use Rounding;
+
     /**
      * @var Tax
      */
     public $tax;
+
     /**
      * @var float
      */
     private $preTax;
+
     /**
      * @var float
      */
     private $total;
+
     /**
      * @var Money
      */
@@ -83,22 +89,6 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
     }
 
     /**
-     * Calculate total amount
-     * @return void
-     */
-    protected function calculate(): void
-    {
-        $currency = $currency ?? Currency::activeCurrency();
-
-        $total = new Price(BrickMoney::ofMinor($this->preTax, $currency->code));
-        $total->setVat($this->tax->percentage);
-
-        /** @var BrickMoney */
-        $money = $total->vat()->money();
-        $this->total = $money->getMinorAmount()->toInt();
-    }
-
-    /**
      * Set total amount.
      * @param float $total
      * @return void
@@ -126,4 +116,19 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
         return $this->preTax;
     }
 
+    /**
+     * Calculate total amount
+     * @return void
+     */
+    protected function calculate(): void
+    {
+        $currency = $currency ?? Currency::activeCurrency();
+
+        $total = new Price(BrickMoney::ofMinor($this->preTax, $currency->code));
+        $total->setVat($this->tax->percentage);
+
+        /** @var BrickMoney */
+        $money = $total->vat()->money();
+        $this->total = $money->getMinorAmount()->toInt();
+    }
 }
