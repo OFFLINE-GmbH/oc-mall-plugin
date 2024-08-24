@@ -129,7 +129,7 @@ class Stripe extends PaymentProvider
             return $result->fail([], $e);
         }
 
-        // Everthing went OK, no 3DS required.
+        // Everything went OK, no 3DS required.
         if ($response->isSuccessful()) {
             return $this->completeOrder($result, $response);
         }
