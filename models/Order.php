@@ -129,7 +129,7 @@ class Order extends Model
                     Queue::push(SendVirtualProductFiles::class, ['order' => $this->id]);
                 }
                 $this->paid_at = Carbon::today();
-                $this->save();
+                $this->saveQuietly();
             }
         }
 
