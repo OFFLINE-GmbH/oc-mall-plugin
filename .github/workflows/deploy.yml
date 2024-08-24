@@ -2,7 +2,7 @@ name: Deploy Docs to GH Pages
 
 on:
     push:
-        branches: [master, develop]
+        branches: [develop, next]
     workflow_dispatch:
 
 permissions:
