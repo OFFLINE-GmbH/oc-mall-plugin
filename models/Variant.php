@@ -1,13 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
+use Cms\Classes\Page;
 use DB;
 use Html;
-use Model;
-use Cms\Classes\Page;
 use Illuminate\Support\Collection;
-use October\Rain\Database\Builder;
+use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
@@ -35,7 +36,7 @@ class Variant extends Model
     use PropertyValues;
     use StockAndQuantity;
 
-    const MORPH_KEY = 'mall.variant';
+    public const MORPH_KEY = 'mall.variant';
 
     /**
      * Implement behaviors for this model.
@@ -76,28 +77,6 @@ class Variant extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
-     * @var array<string>
-     */
-    protected $fillable = [
-        'product_id',
-        'user_defined_id',
-        'image_set_id',
-        'stock',
-        'name',
-        'published',
-        'weight',
-        'length',
-        'width',
-        'height',
-        'allow_out_of_stock_purchases',
-        'mpn',
-        'gtin',
-        'description',
-        'description_short',
-    ];
-
-    /**
      * Attributes which should be set to null, when empty.
      * @var array
      */
@@ -117,7 +96,7 @@ class Variant extends Model
         'height'                        => 'integer',
         'length'                        => 'integer',
         'width'                         => 'integer',
-        'deleted_at'                    => 'datetime'
+        'deleted_at'                    => 'datetime',
     ];
 
     /**
@@ -154,9 +133,9 @@ class Variant extends Model
     public $belongsTo = [
         'product'    => Product::class,
         'image_sets' => [
-            ImageSet::class, 
+            ImageSet::class,
             'key' => 'image_set_id',
-            'replicate' => false
+            'replicate' => false,
         ],
     ];
     
@@ -166,9 +145,9 @@ class Variant extends Model
      */
     public $belongsToMany = [
         'files' => [
-            ProductFile::class, 
-            'table' => 'offline_mall_product_file_variant'
-        ]
+            ProductFile::class,
+            'table' => 'offline_mall_product_file_variant',
+        ],
     ];
     
     /**
@@ -178,17 +157,17 @@ class Variant extends Model
     public $hasMany = [
         'prices'                  => ProductPrice::class,
         'property_values'         => [
-            PropertyValue::class, 
+            PropertyValue::class,
             'key' => 'variant_id',
             'otherKey' => 'id',
         ],
         'reviews'                 => [
             Review::class,
-            'replicate' => false
+            'replicate' => false,
         ],
         'category_review_totals'  => [
-            CategoryReviewTotal::class, 
-            'conditions' => 'product_id is null'
+            CategoryReviewTotal::class,
+            'conditions' => 'product_id is null',
         ],
         'cart_products'           => CartProduct::class,
         'order_products'          => OrderProduct::class,
@@ -197,7 +176,7 @@ class Variant extends Model
             'key'       => 'product_id',
             'otherKey'  => 'product_id',
             'scope'     => 'productOnly',
-            'replicate' => false
+            'replicate' => false,
         ],
     ];
     
@@ -208,6 +187,28 @@ class Variant extends Model
     public $morphMany = [
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
         'additional_prices'     => [Price::class, 'name' => 'priceable'],
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<string>
+     */
+    protected $fillable = [
+        'product_id',
+        'user_defined_id',
+        'image_set_id',
+        'stock',
+        'name',
+        'published',
+        'weight',
+        'length',
+        'width',
+        'height',
+        'allow_out_of_stock_purchases',
+        'mpn',
+        'gtin',
+        'description',
+        'description_short',
     ];
 
     public function afterDelete()
@@ -223,7 +224,8 @@ class Variant extends Model
         ];
 
         $sets = Product::find(post('id', $this->product_id))->image_sets;
-        if ( ! $sets) {
+
+        if (! $sets) {
             return $null;
         }
 
@@ -249,7 +251,6 @@ class Variant extends Model
 
     public function getAttribute($attribute)
     {
-
         $originalValue       = parent::getAttribute($attribute);
 
         if (app()->runningInBackend()) {
@@ -260,6 +261,7 @@ class Variant extends Model
 
         // If any of the product relation columns are called don't override the method's default behaviour.
         $dontInheritAttribute = \in_array($attribute, ['product', 'product_id', 'all_property_values']);
+
         if ($dontInheritAttribute || $inheritanceDisabled || ! $this->product_id || ! $this->product) {
             return $originalValue;
         }
@@ -275,9 +277,7 @@ class Variant extends Model
         }
 
         // Inherit parent pricing info.
-        return $originalValue->map(function ($price) use ($parentValues) {
-            return $price->price === null ? $this->nullPrice($price->currency, $parentValues) : $price;
-        });
+        return $originalValue->map(fn ($price) => $price->price === null ? $this->nullPrice($price->currency, $parentValues) : $price);
     }
 
     /**
@@ -288,13 +288,13 @@ class Variant extends Model
      * @param $value
      *
      * @internal
-     *
      */
     public function setPriceAttribute($value)
     {
-        if ( ! is_array($value)) {
+        if (! is_array($value)) {
             return;
         }
+
         foreach ($value as $currency => $price) {
             ProductPrice::updateOrCreate([
                 'variant_id'  => $this->id,
@@ -337,25 +337,6 @@ class Variant extends Model
         return 'variant-' . $this->id;
     }
 
-    protected function isEmpty($attribute, $originalValue): bool
-    {
-        if ($attribute === 'description' || $attribute === 'description_short') {
-            $originalValue = trim(Html::strip($originalValue));
-
-            return $originalValue === '';
-        }
-
-        if ($originalValue instanceof Collection) {
-            return $originalValue->count() < 1;
-        }
-
-        if (is_array($originalValue)) {
-            return count($originalValue) < 1;
-        }
-
-        return false;
-    }
-
     /**
      * Resolve the item for RainLab.Sitemap and RainLab.Pages plugins.
      *
@@ -363,23 +344,22 @@ class Variant extends Model
      * @param $url
      * @param $theme
      *
-     * @return array
      * @throws \Cms\Classes\CmsException
+     * @return array
      */
     public static function resolveItem($item, $url, $theme)
     {
         $page    = GeneralSettings::get('product_page', 'product');
         $cmsPage = Page::loadCached($theme, $page);
 
-        if ( ! $cmsPage) {
+        if (! $cmsPage) {
             return;
         }
 
-        $items = self
-            ::published()
-			->whereHas('product',function($query) {
-					$query->where('offline_mall_products.published', 1);
-				})
+        $items = self::published()
+            ->whereHas('product', function ($query) {
+                $query->where('offline_mall_products.published', 1);
+            })
             ->with('product')
             ->get()
             ->map(function (self $variant) use ($cmsPage, $page, $url) {
@@ -400,5 +380,24 @@ class Variant extends Model
         return [
             'items' => $items,
         ];
+    }
+
+    protected function isEmpty($attribute, $originalValue): bool
+    {
+        if ($attribute === 'description' || $attribute === 'description_short') {
+            $originalValue = trim(Html::strip($originalValue));
+
+            return $originalValue === '';
+        }
+
+        if ($originalValue instanceof Collection) {
+            return $originalValue->count() < 1;
+        }
+
+        if (is_array($originalValue)) {
+            return count($originalValue) < 1;
+        }
+
+        return false;
     }
 }

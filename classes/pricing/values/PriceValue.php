@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Values;
 
@@ -30,7 +32,7 @@ class PriceValue extends BaseValue
      * Cloned class object should have his own cloned price instance.
      * @return void
      */
-    function __clone()
+    public function __clone()
     {
         $this->price = clone $this->price;
     }
@@ -61,9 +63,11 @@ class PriceValue extends BaseValue
     public function value(bool $perUnit = false): Price
     {
         $price = clone $this->price;
+
         if ($perUnit) {
             $price->setUnits(1);
         }
+
         return $price;
     }
 

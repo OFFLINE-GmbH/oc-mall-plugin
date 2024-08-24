@@ -26,7 +26,7 @@ trait Rounding
             $factor = $this->getCurrency()->rounding;
         }
 
-        if ( ! $factor) {
+        if (! $factor) {
             return $int;
         }
 

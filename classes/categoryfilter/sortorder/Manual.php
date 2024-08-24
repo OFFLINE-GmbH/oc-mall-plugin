@@ -18,7 +18,8 @@ class Manual extends SortOrder
     public function property(): string
     {
         $value = optional($this->filters->get('category_id'))->values()[0] ?? null;
-        if ( ! $value) {
+
+        if (! $value) {
             return '_category_missing';
         }
 

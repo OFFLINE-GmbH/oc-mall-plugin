@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Customer;
 
 use RainLab\User\Models\User;

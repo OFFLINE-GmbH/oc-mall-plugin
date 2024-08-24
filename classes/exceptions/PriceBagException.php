@@ -1,8 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Exceptions;
 
-class PriceBagException extends \RuntimeException
+use RuntimeException;
+
+class PriceBagException extends RuntimeException
 {
     /**
      * Create a new exception.

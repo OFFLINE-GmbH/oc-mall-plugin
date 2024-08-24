@@ -1,15 +1,20 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Tests\PluginTestCase;
+use Throwable;
 
 class CategoryTest extends PluginTestCase
 {
     public $parent;
+
     public $child;
+
     public $nestedChild;
 
     public function setUp(): void
@@ -39,7 +44,7 @@ class CategoryTest extends PluginTestCase
             // Overwrite the auto fixed child-2 slug
             $nestedChild->slug = 'child';
             $nestedChild->save();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             dd($e);
         }
 
@@ -74,13 +79,13 @@ class CategoryTest extends PluginTestCase
 
         try {
             Category::getByNestedSlug('child');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(ModelNotFoundException::class, $e);
         }
 
         try {
             Category::getByNestedSlug('child/child');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(ModelNotFoundException::class, $e);
         }
     }

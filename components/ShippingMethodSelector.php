@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
 use Auth;
-use Validator;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\ShippingMethod;
+use Validator;
 
 /**
  * The ShippingMethodSelector component displays available shipping
@@ -22,12 +24,14 @@ class ShippingMethodSelector extends MallComponent
      * @var Cart
      */
     public $cart;
+
     /**
      * All available shipping methods.
      *
      * @var Collection
      */
     public $methods;
+
     /**
      * Redirect further in the checkout process if
      * only one shipping is available to choose from.
@@ -35,6 +39,7 @@ class ShippingMethodSelector extends MallComponent
      * @var bool
      */
     public $skipIfOnlyOneAvailable = true;
+
     /**
      * Backend setting whether shipping should be before payment.
      *
@@ -69,19 +74,6 @@ class ShippingMethodSelector extends MallComponent
                 'default' => true,
             ],
         ];
-    }
-
-    /**
-     * This method sets all variables needed for this component to work.
-     *
-     * @return void
-     */
-    protected function setData()
-    {
-        $this->skipIfOnlyOneAvailable = (bool)$this->property('skipIfOnlyOneAvailable');
-        $this->setVar('cart', Cart::byUser(Auth::getUser()));
-        $this->setVar('methods', ShippingMethod::getAvailableByCart($this->cart));
-        $this->setVar('shippingSelectionBeforePayment', GeneralSettings::get('shipping_selection_before_payment', false));	// Needed by themes
     }
 
     /**
@@ -133,7 +125,7 @@ class ShippingMethodSelector extends MallComponent
 
         $id = post('id');
 
-        if ( ! $this->methods || ! $this->methods->contains($id)) {
+        if (! $this->methods || ! $this->methods->contains($id)) {
             throw new ValidationException([
                 'id' => trans('offline.mall::lang.components.shippingMethodSelector.errors.unavailable'),
             ]);
@@ -148,12 +140,25 @@ class ShippingMethodSelector extends MallComponent
             '.mall-shipping-selector' => $this->renderPartial($this->alias . '::selector'),
             'method'                  => ShippingMethod::where('id', $id)->first(),
         ];
-	}
+    }
+
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return void
+     */
+    protected function setData()
+    {
+        $this->skipIfOnlyOneAvailable = (bool)$this->property('skipIfOnlyOneAvailable');
+        $this->setVar('cart', Cart::byUser(Auth::getUser()));
+        $this->setVar('methods', ShippingMethod::getAvailableByCart($this->cart));
+        $this->setVar('shippingSelectionBeforePayment', GeneralSettings::get('shipping_selection_before_payment', false));	// Needed by themes
+    }
 
     /**
      * Get the URL to a specific checkout step.
      *
-     * @param      $step
+     * @param $step
      * @param null $via
      *
      * @return string
@@ -161,7 +166,8 @@ class ShippingMethodSelector extends MallComponent
     protected function getStepUrl($step, $via = null): string
     {
         $url = $this->controller->pageUrl($this->page->page->fileName, ['step' => $step]);
-        if ( ! $via) {
+
+        if (! $via) {
             return $url;
         }
 
@@ -176,6 +182,7 @@ class ShippingMethodSelector extends MallComponent
     protected function redirect()
     {
         $nextStep = 'confirm';
+
         if ($this->shippingSelectionBeforePayment) {
             $nextStep = request()->get('via') === 'confirm' ? 'confirm' : 'payment';
         }
@@ -183,7 +190,7 @@ class ShippingMethodSelector extends MallComponent
         $url = $this->getStepUrl($nextStep);
 
         // If the analytics component is present return the datalayer partial that handles the redirect.
-        if ( ! $this->shouldSkipStep() && $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
+        if (! $this->shouldSkipStep() && $this->page->layout->hasComponent('enhancedEcommerceAnalytics')) {
             return [
                 '#mall-datalayer' => $this->renderPartial($this->alias . '::datalayer', ['url' => $url]),
             ];

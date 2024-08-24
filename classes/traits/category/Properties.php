@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits\Category;
 
+use DB;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Models\Category;
 
@@ -24,12 +25,10 @@ trait Properties
             return $this->inheritedPropertyGroupsCache;
         }
 
-        $groups = $this->getParents()->first(function (Category $category) {
-            return ! $category->inherit_property_groups;
-        })->property_groups;
+        $groups = $this->getParents()->first(fn (Category $category) => ! $category->inherit_property_groups)->property_groups;
 
         if ($groups) {
-            $groups->load(['properties' => function($q) {
+            $groups->load(['properties' => function ($q) {
                 $q->withPivot(['use_for_variants', 'filter_type', 'sort_order']);
             }]);
         }
@@ -52,10 +51,10 @@ trait Properties
      */
     protected function getPropertiesInGroups(array $groupIds): Collection
     {
-        return \DB::table('offline_mall_property_property_group')
-                  ->where('property_group_id', $groupIds)
-                  ->get(['property_id'])
-                  ->pluck('property_id')
-                  ->values();
+        return DB::table('offline_mall_property_property_group')
+            ->where('property_group_id', $groupIds)
+            ->get(['property_id'])
+            ->pluck('property_id')
+            ->values();
     }
 }

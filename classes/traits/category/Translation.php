@@ -7,7 +7,6 @@ use System\Classes\PluginManager;
 
 trait Translation
 {
-
     /**
      * Translate url parameters when the user switches the active locale.
      *
@@ -20,21 +19,25 @@ trait Translation
     public static function translateParams($params, $oldLocale, $newLocale)
     {
         $newParams = $params;
+
         foreach ($params as $paramName => $paramValue) {
             $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+
             if ($records) {
                 $records->setTranslateContext($newLocale);
                 $newParams[$paramName] = $records->$paramName;
             } elseif ($paramName === 'slug') {
                 // Translate nested slugs.
-                $model    = new Category;
+                $model    = new Category();
                 $category = array_get($model->getSlugMap($oldLocale), $newParams['slug'] ?? -1);
-                if ( ! $category) {
+
+                if (! $category) {
                     continue;
                 }
 
                 $translationMap = array_flip($model->getSlugMap($newLocale));
                 $translatedSlug = array_get($translationMap, $category);
+
                 if ($translatedSlug) {
                     $newParams['slug'] = $translatedSlug;
                 }
@@ -82,6 +85,7 @@ trait Translation
         }
 
         $locale = Category::DEFAULT_LOCALE;
+
         if (class_exists(\RainLab\Translate\Classes\Translator::class)) {
             $locale = \RainLab\Translate\Classes\Translator::instance()->getLocale();
         }
@@ -97,10 +101,11 @@ trait Translation
     protected function getLocales(): array
     {
         $locales = [Category::DEFAULT_LOCALE];
+
         if ($this->rainlabTranslateInstalled()) {
             if (class_exists(\RainLab\Translate\Classes\Locale::class)) {
                 $locales = \RainLab\Translate\Classes\Locale::listLocales()->pluck('code')->toArray();
-            } else if (class_exists(\RainLab\Translate\Models\Locale::class)) {
+            } elseif (class_exists(\RainLab\Translate\Models\Locale::class)) {
                 $locales = \RainLab\Translate\Models\Locale::get(['code'])->pluck('code')->toArray();
             }
         }

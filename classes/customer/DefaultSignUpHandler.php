@@ -6,15 +6,15 @@ use DB;
 use Event;
 use Illuminate\Support\Facades\Validator;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Classes\User\Settings;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Wishlist;
-use OFFLINE\Mall\Classes\User\Auth;
-use RainLab\User\Models\UserGroup;
 use RainLab\User\Models\User;
+use RainLab\User\Models\UserGroup;
 use System\Classes\PluginManager;
 
 class DefaultSignUpHandler implements SignUpHandler
@@ -26,6 +26,83 @@ class DefaultSignUpHandler implements SignUpHandler
         $this->asGuest = $asGuest;
 
         return $this->signUp($data);
+    }
+
+    public static function rules($forSignup = true): array
+    {
+        $minPasswordLength = Settings::getMinPasswordLength();
+        $rules = [
+            'firstname'           => 'required',
+            'lastname'            => 'required',
+            'email'               => ['required', 'email', ($forSignup ? 'non_existing_user' : null)],
+            'billing_lines'       => 'required',
+            'billing_zip'         => 'required',
+            'billing_city'        => 'required',
+            'billing_country_id'  => 'required|exists:rainlab_location_countries,id',
+            'billing_state_id'    => 'required|exists:rainlab_location_states,id',
+            'shipping_lines'      => 'required_if:use_different_shipping,1',
+            'shipping_zip'        => 'required_if:use_different_shipping,1',
+            'shipping_city'       => 'required_if:use_different_shipping,1',
+            'shipping_state_id'   => 'required_if:use_different_shipping,1|exists:rainlab_location_states,id',
+            'shipping_country_id' => 'required_if:use_different_shipping,1|exists:rainlab_location_countries,id',
+            'password'            => sprintf('required|min:%d|max:255', $minPasswordLength),
+            'password_repeat'     => 'required|same:password',
+            'terms_accepted'      => 'required',
+        ];
+
+        if ((bool)GeneralSettings::get('use_state', true) !== true) {
+            unset($rules['billing_state_id'], $rules['shipping_state_id']);
+        }
+
+        Event::fire('mall.customer.extendSignupRules', [&$rules, $forSignup]);
+
+        if (PluginManager::instance()->hasPlugin('Winter.Location')) {
+            $translatedRules = array_where($rules, fn ($value, $key) => (is_string($value) && str_contains($value, 'rainlab_')));
+
+            foreach (array_keys($translatedRules) as $rule) {
+                $rules[$rule] = str_replace('rainlab_', 'winter_', $rules[$rule]);
+            }
+        }
+
+        return $rules;
+    }
+
+    public static function messages(): array
+    {
+        $messages = [
+            'email.required'          => trans('offline.mall::lang.components.signup.errors.email.required'),
+            'email.email'             => trans('offline.mall::lang.components.signup.errors.email.email'),
+            'email.unique'            => trans('offline.mall::lang.components.signup.errors.email.unique'),
+            'email.non_existing_user' => trans('offline.mall::lang.components.signup.errors.email.non_existing_user'),
+
+            'firstname.required'           => trans('offline.mall::lang.components.signup.errors.firstname.required'),
+            'lastname.required'            => trans('offline.mall::lang.components.signup.errors.lastname.required'),
+            'billing_lines.required'       => trans('offline.mall::lang.components.signup.errors.lines.required'),
+            'billing_zip.required'         => trans('offline.mall::lang.components.signup.errors.zip.required'),
+            'billing_city.required'        => trans('offline.mall::lang.components.signup.errors.city.required'),
+            'billing_country_id.required'  => trans('offline.mall::lang.components.signup.errors.country_id.required'),
+            'billing_country_id.exists'    => trans('offline.mall::lang.components.signup.errors.country_id.exists'),
+            'billing_state_id.required'    => trans('offline.mall::lang.components.signup.errors.state_id.required'),
+            'billing_state_id.exists'      => trans('offline.mall::lang.components.signup.errors.state_id.exists'),
+            'shipping_lines.required'      => trans('offline.mall::lang.components.signup.errors.lines.required'),
+            'shipping_zip.required'        => trans('offline.mall::lang.components.signup.errors.zip.required'),
+            'shipping_city.required'       => trans('offline.mall::lang.components.signup.errors.city.required'),
+            'shipping_country_id.required' => trans('offline.mall::lang.components.signup.errors.country_id.required'),
+            'shipping_country_id.exists'   => trans('offline.mall::lang.components.signup.errors.country_id.exists'),
+
+            'password.required' => trans('offline.mall::lang.components.signup.errors.password.required'),
+            'password.min'      => trans('offline.mall::lang.components.signup.errors.password.min'),
+            'password.max'      => trans('offline.mall::lang.components.signup.errors.password.max'),
+
+            'password_repeat.required' => trans('offline.mall::lang.components.signup.errors.password_repeat.required'),
+            'password_repeat.same'     => trans('offline.mall::lang.components.signup.errors.password_repeat.same'),
+
+            'terms_accepted.required' => trans('offline.mall::lang.components.signup.errors.terms_accepted.required'),
+        ];
+
+        Event::fire('mall.customer.extendSignupMessages', [&$messages]);
+
+        return $messages;
     }
 
     /**
@@ -45,7 +122,6 @@ class DefaultSignUpHandler implements SignUpHandler
         Event::fire('mall.customer.beforeSignup', [$this, $data]);
 
         $user = DB::transaction(function () use ($data, $requiresConfirmation) {
-
             $user = $this->createUser($data, $requiresConfirmation);
 
             $customer            = new Customer();
@@ -65,7 +141,7 @@ class DefaultSignUpHandler implements SignUpHandler
             $billing->save();
             $customer->default_billing_address_id = $billing->id;
 
-            if ( ! empty($data['use_different_shipping'])) {
+            if (! empty($data['use_different_shipping'])) {
                 $addressData = $this->transformAddressKeys($data, 'shipping');
 
                 $shipping = new Address();
@@ -118,6 +194,7 @@ class DefaultSignUpHandler implements SignUpHandler
         $messages = self::messages();
 
         $validation = Validator::make($data, $rules, $messages);
+
         if ($validation->fails()) {
             throw new ValidationException($validation);
         }
@@ -142,6 +219,7 @@ class DefaultSignUpHandler implements SignUpHandler
         }
         
         $user = Auth::register($data, ! $requiresConfirmation);
+
         if ($this->asGuest && $user && $group = UserGroup::getGuestGroup()) {
             $user->groups()->sync($group);
         } else {
@@ -178,83 +256,5 @@ class DefaultSignUpHandler implements SignUpHandler
                 $q->where('is_guest', 1);
             })
             ->update(['email' => $newEmail, 'username' => $newEmail]);
-    }
-
-    public static function rules($forSignup = true): array
-    {
-        $minPasswordLength = Settings::getMinPasswordLength();
-        $rules = [
-            'firstname'           => 'required',
-            'lastname'            => 'required',
-            'email'               => ['required', 'email', ($forSignup ? 'non_existing_user' : null)],
-            'billing_lines'       => 'required',
-            'billing_zip'         => 'required',
-            'billing_city'        => 'required',
-            'billing_country_id'  => 'required|exists:rainlab_location_countries,id',
-            'billing_state_id'    => 'required|exists:rainlab_location_states,id',
-            'shipping_lines'      => 'required_if:use_different_shipping,1',
-            'shipping_zip'        => 'required_if:use_different_shipping,1',
-            'shipping_city'       => 'required_if:use_different_shipping,1',
-            'shipping_state_id'   => 'required_if:use_different_shipping,1|exists:rainlab_location_states,id',
-            'shipping_country_id' => 'required_if:use_different_shipping,1|exists:rainlab_location_countries,id',
-            'password'            => sprintf('required|min:%d|max:255', $minPasswordLength),
-            'password_repeat'     => 'required|same:password',
-            'terms_accepted'      => 'required',
-        ];
-
-        if ((bool)GeneralSettings::get('use_state', true) !== true) {
-            unset($rules['billing_state_id'], $rules['shipping_state_id']);
-        }
-
-        Event::fire('mall.customer.extendSignupRules', [&$rules, $forSignup]);
-
-        if (PluginManager::instance()->hasPlugin('Winter.Location')) {
-            $translatedRules = array_where($rules, function ($value, $key) {
-                return (is_string($value) && str_contains($value, 'rainlab_'));
-            });
-            foreach (array_keys($translatedRules) as $rule) {
-                $rules[$rule] = str_replace('rainlab_', 'winter_', $rules[$rule]);
-            }
-        }
-
-        return $rules;
-    }
-
-    public static function messages(): array
-    {
-        $messages = [
-            'email.required'          => trans('offline.mall::lang.components.signup.errors.email.required'),
-            'email.email'             => trans('offline.mall::lang.components.signup.errors.email.email'),
-            'email.unique'            => trans('offline.mall::lang.components.signup.errors.email.unique'),
-            'email.non_existing_user' => trans('offline.mall::lang.components.signup.errors.email.non_existing_user'),
-
-            'firstname.required'           => trans('offline.mall::lang.components.signup.errors.firstname.required'),
-            'lastname.required'            => trans('offline.mall::lang.components.signup.errors.lastname.required'),
-            'billing_lines.required'       => trans('offline.mall::lang.components.signup.errors.lines.required'),
-            'billing_zip.required'         => trans('offline.mall::lang.components.signup.errors.zip.required'),
-            'billing_city.required'        => trans('offline.mall::lang.components.signup.errors.city.required'),
-            'billing_country_id.required'  => trans('offline.mall::lang.components.signup.errors.country_id.required'),
-            'billing_country_id.exists'    => trans('offline.mall::lang.components.signup.errors.country_id.exists'),
-            'billing_state_id.required'    => trans('offline.mall::lang.components.signup.errors.state_id.required'),
-            'billing_state_id.exists'      => trans('offline.mall::lang.components.signup.errors.state_id.exists'),
-            'shipping_lines.required'      => trans('offline.mall::lang.components.signup.errors.lines.required'),
-            'shipping_zip.required'        => trans('offline.mall::lang.components.signup.errors.zip.required'),
-            'shipping_city.required'       => trans('offline.mall::lang.components.signup.errors.city.required'),
-            'shipping_country_id.required' => trans('offline.mall::lang.components.signup.errors.country_id.required'),
-            'shipping_country_id.exists'   => trans('offline.mall::lang.components.signup.errors.country_id.exists'),
-
-            'password.required' => trans('offline.mall::lang.components.signup.errors.password.required'),
-            'password.min'      => trans('offline.mall::lang.components.signup.errors.password.min'),
-            'password.max'      => trans('offline.mall::lang.components.signup.errors.password.max'),
-
-            'password_repeat.required' => trans('offline.mall::lang.components.signup.errors.password_repeat.required'),
-            'password_repeat.same'     => trans('offline.mall::lang.components.signup.errors.password_repeat.same'),
-
-            'terms_accepted.required' => trans('offline.mall::lang.components.signup.errors.terms_accepted.required'),
-        ];
-
-        Event::fire('mall.customer.extendSignupMessages', [&$messages]);
-
-        return $messages;
     }
 }

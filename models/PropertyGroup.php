@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Model;
 use Illuminate\Support\Facades\Queue;
+use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
@@ -18,6 +20,7 @@ class PropertyGroup extends Model
     use Sortable;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = [
         'name',
         'display_name',
@@ -27,9 +30,11 @@ class PropertyGroup extends Model
     public $slugs = [
         'slug' => 'name',
     ];
+
     public $rules = [
         'name' => 'required',
     ];
+
     public $fillable = ['name', 'display_name', 'slug', 'description'];
 
     public $table = 'offline_mall_property_groups';
@@ -80,19 +85,19 @@ class PropertyGroup extends Model
             // Chunk the deletion and re-indexing since a lot of products and variants
             // might be affected by this change.
             Product::published()
-                   ->orderBy('id')
-                   ->whereHas('categories', function ($q) use ($categories) {
-                       $q->whereIn('category_id', $categories->pluck('id'));
-                   })
-                   ->with('variants')
-                   ->chunk(25, function ($products) use ($properties) {
-                       $data = [
-                           'properties' => $properties,
-                           'products'   => $products->pluck('id'),
-                           'variants'   => $products->flatMap->variants->pluck('id'),
-                       ];
-                       Queue::push(PropertyRemovalUpdate::class, $data);
-                   });
+                ->orderBy('id')
+                ->whereHas('categories', function ($q) use ($categories) {
+                    $q->whereIn('category_id', $categories->pluck('id'));
+                })
+                ->with('variants')
+                ->chunk(25, function ($products) use ($properties) {
+                    $data = [
+                        'properties' => $properties,
+                        'products'   => $products->pluck('id'),
+                        'variants'   => $products->flatMap->variants->pluck('id'),
+                    ];
+                    Queue::push(PropertyRemovalUpdate::class, $data);
+                });
         });
 
         $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
@@ -129,10 +134,6 @@ class PropertyGroup extends Model
 
     public function getRelatedCategories()
     {
-        return $this->categories->flatMap(function (Category $category) {
-            return $category->getAllChildrenAndSelf()->filter(function (Category $category) {
-                return $category->inherit_property_groups === true || $category->nest_depth === 0;
-            });
-        });
+        return $this->categories->flatMap(fn (Category $category) => $category->getAllChildrenAndSelf()->filter(fn (Category $category) => $category->inherit_property_groups === true || $category->nest_depth === 0));
     }
 }

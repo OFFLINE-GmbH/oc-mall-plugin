@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
@@ -15,7 +17,6 @@ use RainLab\Location\Models\Country;
 
 class ShippingMethodTest extends PluginTestCase
 {
-
     /**
      * Setup the test environment.
      * @return void
@@ -29,38 +30,6 @@ class ShippingMethodTest extends PluginTestCase
         Event::listen('mall.cart.setCountry', function ($model) {
             $model->countryId = 14;
         });
-    }
-
-    /**
-     * Create default shipping method
-     * @return ShippingMethod
-     */
-    protected function getMethod(): ShippingMethod
-    {
-        $availableMethod = new ShippingMethod();
-        $availableMethod->name = 'Available';
-        $availableMethod->sort_order = 1;
-        $availableMethod->save();
-        $availableMethod->prices()->save(new Price([
-            'price'       => 100,
-            'currency_id' => 2,
-            'field'       => 'price',
-        ]));
-
-        return $availableMethod;
-    }
-
-    /**
-     * Get product with and adjusted price.
-     * @return mixed
-     */
-    protected function getProduct(int $price): Product
-    {
-        $product = Product::first();
-        $product->save();
-        $product->price = ['CHF' => $price, 'EUR' => 150];
-
-        return Product::first();
     }
 
     /**
@@ -89,14 +58,14 @@ class ShippingMethodTest extends PluginTestCase
                 'price'          => 15,
                 'currency_id'    => 3,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
-            ])
+            ]),
         ]);
         
         $method = ShippingMethod::create([
             'name'                      => trans('offline.mall::demo.shipping_methods.express'),
             'sort_order'                => 1,
             'is_default'                => false,
-            'guaranteed_delivery_days'  => 3
+            'guaranteed_delivery_days'  => 3,
         ]);
         $method->prices()->saveMany([
             new Price([
@@ -113,7 +82,7 @@ class ShippingMethodTest extends PluginTestCase
                 'price'          => 30,
                 'currency_id'    => 3,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
-            ])
+            ]),
         ]);
 
         $expressMethod = ShippingMethod::first();
@@ -354,5 +323,37 @@ class ShippingMethodTest extends PluginTestCase
         $this->assertEquals(9091, (int)$cart->totals()->shippingTotal()->totalPreTaxes());
         $this->assertEquals(910, (int)$cart->totals()->shippingTotal()->totalTaxes());
         $this->assertEquals(10000, (int)$cart->totals()->shippingTotal()->totalPostTaxes());
+    }
+
+    /**
+     * Create default shipping method
+     * @return ShippingMethod
+     */
+    protected function getMethod(): ShippingMethod
+    {
+        $availableMethod = new ShippingMethod();
+        $availableMethod->name = 'Available';
+        $availableMethod->sort_order = 1;
+        $availableMethod->save();
+        $availableMethod->prices()->save(new Price([
+            'price'       => 100,
+            'currency_id' => 2,
+            'field'       => 'price',
+        ]));
+
+        return $availableMethod;
+    }
+
+    /**
+     * Get product with and adjusted price.
+     * @return mixed
+     */
+    protected function getProduct(int $price): Product
+    {
+        $product = Product::first();
+        $product->save();
+        $product->price = ['CHF' => $price, 'EUR' => 150];
+
+        return Product::first();
     }
 }

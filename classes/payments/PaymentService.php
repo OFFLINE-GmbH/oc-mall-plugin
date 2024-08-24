@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Models\Order;
+use Throwable;
 
 /**
  * The PaymentService orchestrates the payment process.
@@ -14,16 +15,19 @@ class PaymentService
      * @var PaymentGateway
      */
     public $gateway;
+
     /**
      * The order that is being paid.
      * @var Order
      */
     public $order;
+
     /**
      * Page filename of the checkout page.
      * @var string
      */
     public $pageFilename;
+
     /**
      * A PaymentRedirector instance.
      * @var PaymentRedirector
@@ -34,8 +38,8 @@ class PaymentService
      * PaymentService constructor.
      *
      * @param PaymentGateway $gateway
-     * @param Order          $order
-     * @param string         $pageFilename
+     * @param Order $order
+     * @param string $pageFilename
      *
      * @throws \Cms\Classes\CmsException
      */
@@ -61,7 +65,7 @@ class PaymentService
 
         try {
             $result = $this->gateway->process($this->order);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $result = new PaymentResult($this->gateway->getActiveProvider(), $this->order);
             $result->fail($this->order->toArray(), $e);
         }

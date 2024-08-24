@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
@@ -70,8 +72,8 @@ class RedShirt extends DemoProduct
                 'properties' => [
                     'size'  => 'S',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.red'), 
-                        'hex' => '#ff0000'
+                        'name' => trans('offline.mall::demo.products.properties.red'),
+                        'hex' => '#ff0000',
                     ],
                 ],
             ],
@@ -81,8 +83,8 @@ class RedShirt extends DemoProduct
                 'properties' => [
                     'size'  => 'M',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.red'), 
-                        'hex' => '#ff0000'
+                        'name' => trans('offline.mall::demo.products.properties.red'),
+                        'hex' => '#ff0000',
                     ],
                 ],
             ],
@@ -92,8 +94,8 @@ class RedShirt extends DemoProduct
                 'properties' => [
                     'size'  => 'L',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.red'), 
-                        'hex' => '#ff0000'
+                        'name' => trans('offline.mall::demo.products.properties.red'),
+                        'hex' => '#ff0000',
                     ],
                 ],
             ],
@@ -103,7 +105,6 @@ class RedShirt extends DemoProduct
     protected function customFields(): array
     {
         return [
-
         ];
     }
 

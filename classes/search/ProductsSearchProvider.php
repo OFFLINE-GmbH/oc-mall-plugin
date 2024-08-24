@@ -24,22 +24,27 @@ class ProductsSearchProvider extends ResultsProvider
 
         // Build a results collection, depending on the $groupByProducts setting.
         $results = new Collection();
+
         foreach ($matchingProducts->concat($matchingVariants) as $match) {
             // If results should not be grouped by product, just add this match to the collection.
-            if ( ! $groupByProducts) {
+            if (! $groupByProducts) {
                 $results->push($match);
+
                 continue;
             }
+
             // If matches should be grouped by product, and this match is a variant, check if
             // the related product is already in the results collection. If not, add it.
             if ($match instanceof Variant) {
-                if ( ! $results->has($match->product_id)) {
+                if (! $results->has($match->product_id)) {
                     $results->put($match->product_id, $match->product);
                 }
+
                 continue;
             }
+
             // The match is a Product, Add it to the result collection if it is not already there.
-            if ( ! $results->has($match->id)) {
+            if (! $results->has($match->id)) {
                 $results->put($match->id, $match);
             }
         }
@@ -99,42 +104,42 @@ class ProductsSearchProvider extends ResultsProvider
     protected function searchProductsFromDefaultLocale()
     {
         return Product::where('inventory_management_method', 'single')
-                      ->published()
-                      ->where($this->productQuery())
-                      ->get();
+            ->published()
+            ->where($this->productQuery())
+            ->get();
     }
 
     protected function searchVariantsFromDefaultLocale()
     {
         $variantQuery = function ($q) {
             $q->where('name', 'like', "%{$this->query}%")
-              ->orWhereHas('product', $this->productQuery());
+                ->orWhereHas('product', $this->productQuery());
         };
 
         return Variant::where($variantQuery)
-                      ->published()
-                      ->get();
+            ->published()
+            ->get();
     }
 
     protected function productQuery()
     {
         return function ($q) {
             $q->where('published', true)
-              ->where(function ($q) {
-                  $q->where('name', 'like', "%{$this->query}%")
-                    ->orWhere('meta_title', 'like', "%{$this->query}%")
-                    ->orWhere('meta_description', 'like', "%{$this->query}%")
-                    ->orWhere('meta_keywords', 'like', "%{$this->query}%")
-                    ->orWhere('description', 'like', "%{$this->query}%")
-                    ->orWhere('description_short', 'like', "%{$this->query}%")
-                    ->orWhere('user_defined_id', 'like', "%{$this->query}%")
-                    ->orWhereHas('categories', function ($q) {
-                        $q->where('name', 'like', "%{$this->query}%");
-                    })
-                    ->orWhereHas('brand', function ($q) {
-                        $q->where('name', 'like', "%{$this->query}%");
-                    });
-              });
+                ->where(function ($q) {
+                    $q->where('name', 'like', "%{$this->query}%")
+                        ->orWhere('meta_title', 'like', "%{$this->query}%")
+                        ->orWhere('meta_description', 'like', "%{$this->query}%")
+                        ->orWhere('meta_keywords', 'like', "%{$this->query}%")
+                        ->orWhere('description', 'like', "%{$this->query}%")
+                        ->orWhere('description_short', 'like', "%{$this->query}%")
+                        ->orWhere('user_defined_id', 'like', "%{$this->query}%")
+                        ->orWhereHas('categories', function ($q) {
+                            $q->where('name', 'like', "%{$this->query}%");
+                        })
+                        ->orWhereHas('brand', function ($q) {
+                            $q->where('name', 'like', "%{$this->query}%");
+                        });
+                });
         };
     }
 
@@ -150,9 +155,9 @@ class ProductsSearchProvider extends ResultsProvider
 
         // Then return all matching models via Eloquent.
         return Product::where('inventory_management_method', 'single')
-                      ->published()
-                      ->whereIn('id', $ids)
-                      ->get();
+            ->published()
+            ->whereIn('id', $ids)
+            ->get();
     }
 
     /**
@@ -168,12 +173,12 @@ class ProductsSearchProvider extends ResultsProvider
 
         // Then return all matching models via Eloquent.
         return Variant::published()
-                      ->whereIn('id', $variantIds)
-                      ->orWhereHas('product', function ($q) use ($productIds) {
-                          $q->where('published', true)
-                            ->whereIn('id', $productIds);
-                      })
-                      ->get();
+            ->whereIn('id', $variantIds)
+            ->orWhereHas('product', function ($q) use ($productIds) {
+                $q->where('published', true)
+                    ->whereIn('id', $productIds);
+            })
+            ->get();
     }
 
     /**
@@ -181,12 +186,11 @@ class ProductsSearchProvider extends ResultsProvider
      *
      * @param string $modelClass
      *
-     * @return \Illuminate\Support\Collection|\October\Rain\Support\Collection
+     * @return \Illuminate\Support\Collection|Collection
      */
     protected function getModelIdsForQuery($modelClass)
     {
-        $results = Attribute
-            ::where('model_type', $modelClass)
+        $results = Attribute::where('model_type', $modelClass)
             ->where('locale', $this->currentLocale())
             ->where('attribute_data', 'LIKE', "%{$this->query}%")
             ->get(['model_id']);
@@ -204,7 +208,7 @@ class ProductsSearchProvider extends ResultsProvider
     {
         $translator = $this->translator();
 
-        if ( ! $translator) {
+        if (! $translator) {
             return true;
         }
 
@@ -220,7 +224,7 @@ class ProductsSearchProvider extends ResultsProvider
     {
         $translator = $this->translator();
 
-        if ( ! $translator) {
+        if (! $translator) {
             return null;
         }
 

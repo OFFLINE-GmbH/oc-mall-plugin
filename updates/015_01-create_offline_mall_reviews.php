@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use October\Rain\Database\Updates\Migration;
 use Schema;
@@ -61,7 +63,7 @@ class CreateOfflineMallReviews extends Migration
             $table->decimal('rating', 3, 2);
         });
         Schema::table('offline_mall_categories', function ($table) {
-            if ( ! Schema::hasColumn('offline_mall_categories', 'inherit_review_categories')) {
+            if (! Schema::hasColumn('offline_mall_categories', 'inherit_review_categories')) {
                 $table->boolean('inherit_review_categories')->after('inherit_property_groups')->default(0);
             }
         });
@@ -71,9 +73,10 @@ class CreateOfflineMallReviews extends Migration
         Schema::table('offline_mall_product_variants', function ($table) {
             $table->decimal('reviews_rating', 3, 2)->after('stock')->default(0);
         });
+
         if (Schema::hasTable('offline_mall_index')) {
             Schema::table('offline_mall_index', function ($table) {
-                if ( ! Schema::hasColumn('offline_mall_index', 'reviews_rating')) {
+                if (! Schema::hasColumn('offline_mall_index', 'reviews_rating')) {
                     $table->decimal('reviews_rating', 3, 2);
                 }
             });

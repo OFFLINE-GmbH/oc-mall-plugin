@@ -1,12 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Cookie;
-use Model;
-use Session;
 use Carbon\Carbon;
+use Cookie;
 use Illuminate\Support\Collection;
+use Model;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
@@ -16,6 +17,7 @@ use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Traits\ShippingMethods;
 use OFFLINE\Mall\Classes\User\Auth;
 use RainLab\User\Models\User;
+use Session;
 
 class Wishlist extends Model
 {
@@ -25,27 +27,33 @@ class Wishlist extends Model
     use ShippingMethods;
 
     public $table = 'offline_mall_wishlists';
+
     public $rules = [
         'name'        => 'required',
         'session_id'  => 'required_without:customer_id',
         'customer_id' => 'required_without:session_id',
     ];
+
     public $hasMany = [
         'items' => [WishlistItem::class, 'delete' => true],
     ];
+
     public $belongsTo = [
         'shipping_method' => [ShippingMethod::class],
         'customer'        => [Customer::class],
     ];
+
     public $fillable = [
         'name',
         'session_id',
         'customer_id',
     ];
+
     public $with = [
         'items',
         'shipping_method',
     ];
+
     /**
      * @var TotalsCalculator
      */
@@ -68,8 +76,8 @@ class Wishlist extends Model
     /**
      * Return a PDF instance of this Wishlist.
      *
-     * @return \Barryvdh\DomPDF\PDF
      * @throws \Cms\Classes\CmsException
+     * @return \Barryvdh\DomPDF\PDF
      */
     public function getPDF()
     {
@@ -85,11 +93,11 @@ class Wishlist extends Model
         $sessionId = static::getSessionId();
 
         return self::where('session_id', $sessionId)
-                   ->when($user && $user->customer, function ($q) use ($user) {
-                       $q->orWhere('customer_id', $user->customer->id);
-                   })
-                   ->orderBy('created_at')
-                   ->get();
+            ->when($user && $user->customer, function ($q) use ($user) {
+                $q->orWhere('customer_id', $user->customer->id);
+            })
+            ->orderBy('created_at')
+            ->get();
     }
 
     /**
@@ -150,10 +158,10 @@ class Wishlist extends Model
     public static function transferToCustomer(Customer $customer)
     {
         Wishlist::whereIn('id', self::byUser()->pluck('id'))
-                ->update([
-                    'customer_id' => $customer->id,
-                    'session_id'  => null,
-                ]);
+            ->update([
+                'customer_id' => $customer->id,
+                'session_id'  => null,
+            ]);
     }
 
     /**
@@ -162,7 +170,7 @@ class Wishlist extends Model
      * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
      *
      * @param Carbon $deadline
-     * @param int    $keepDays
+     * @param int $keepDays
      */
     public function gdprCleanup(Carbon $deadline, int $keepDays)
     {
@@ -183,7 +191,8 @@ class Wishlist extends Model
     public function getCartCountryId()
     {
         $user = Auth::getUser();
-        if ( ! $user || ! $user->customer) {
+
+        if (! $user || ! $user->customer) {
             return null;
         }
 

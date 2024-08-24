@@ -2,8 +2,8 @@
 
 namespace OFFLINE\Mall\Classes\Observers;
 
-use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\Index;
+use OFFLINE\Mall\Classes\Index\ProductEntry;
 use OFFLINE\Mall\Classes\Index\VariantEntry;
 use OFFLINE\Mall\Models\Product;
 
@@ -30,6 +30,7 @@ class ProductObserver
             $this->index->insert(VariantEntry::INDEX, $this->ghostVariant($product, $productEntry));
         } else {
             $product->variants->load(['prices.currency', 'property_values.property', 'product.brand']);
+
             foreach ($product->variants as $variant) {
                 $this->index->insert(VariantEntry::INDEX, new VariantEntry($variant));
             }
@@ -46,6 +47,7 @@ class ProductObserver
         $product->load('property_values', 'variants.product_property_values', 'variants.property_values');
 
         $productEntry = new ProductEntry($product);
+
         if ($product->inventory_management_method === 'single' || $product->variants->count() > 0) {
             $this->index->update(ProductEntry::INDEX, $product->id, $productEntry);
         } else {
@@ -71,6 +73,7 @@ class ProductObserver
     public function deleted(Product $product)
     {
         $this->index->delete(ProductEntry::INDEX, $product->id);
+
         if ($product->inventory_management_method === 'single') {
             $this->index->delete(VariantEntry::INDEX, $this->ghostId($product));
         } else {
@@ -84,7 +87,7 @@ class ProductObserver
      * any variants from the same index.
      *
      * @param Product $product
-     * @param         $productEntry
+     * @param $productEntry
      *
      * @return mixed
      */
@@ -115,6 +118,7 @@ class ProductObserver
     {
         $methodWas = $product->getOriginal('inventory_management_method');
         $methodIs  = $product->inventory_management_method;
+
         if ($methodWas === 'variant' && $methodIs === 'single') {
             $this->removeVariantsFromIndex($product);
         }

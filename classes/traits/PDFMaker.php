@@ -1,8 +1,6 @@
 <?php
 
-
 namespace OFFLINE\Mall\Classes\Traits;
-
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Cms\Classes\CmsException;
@@ -14,10 +12,10 @@ trait PDFMaker
      * Generate a PDF document from a partial in the plugins/mallPDF folder.
      *
      * @param string $dir
-     * @param array  $data
+     * @param array $data
      *
-     * @return \Barryvdh\DomPDF\PDF
      * @throws CmsException
+     * @return \Barryvdh\DomPDF\PDF
      */
     public function makePDFFromDir(string $dir, array $data = [])
     {
@@ -30,10 +28,10 @@ trait PDFMaker
      * Generate a PDF document from a partial.
      *
      * @param string $partial
-     * @param array  $data
+     * @param array $data
      *
-     * @return \Barryvdh\DomPDF\PDF
      * @throws CmsException
+     * @return \Barryvdh\DomPDF\PDF
      */
     public function makePDFFromPartial(string $partial, array $data = [])
     {
@@ -55,5 +53,4 @@ trait PDFMaker
     {
         return Pdf::loadHTML($contents);
     }
-
 }

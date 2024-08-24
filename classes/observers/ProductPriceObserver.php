@@ -34,6 +34,7 @@ class ProductPriceObserver
         if ($price->product) {
             (new ProductObserver($this->index))->updated($price->product);
         }
+
         if ($price->variant) {
             (new VariantObserver($this->index))->updated($price->variant);
         }

@@ -1,10 +1,10 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Artisan;
+namespace OFFLINE\Mall\Updates;
+
 use DB;
 use October\Rain\Database\Updates\Migration;
 use Schema;
-
 
 class MigrateCategoriesToBelongstoManyRelation extends Migration
 {
@@ -19,11 +19,9 @@ class MigrateCategoriesToBelongstoManyRelation extends Migration
         });
 
         // Migrate products to new structure. Migrate the category sort order as well.
-        $sortOrders = DB::table('offline_mall_category_product_sort_order')->get()->mapWithKeys(function ($item) {
-            return [$item->category_id . '-' . $item->product_id => $item->sort_order];
-        });
+        $sortOrders = DB::table('offline_mall_category_product_sort_order')->get()->mapWithKeys(fn ($item) => [$item->category_id . '-' . $item->product_id => $item->sort_order]);
 
-        $products = \DB::table('offline_mall_products')->get();
+        $products = DB::table('offline_mall_products')->get();
         $products->each(function ($product, $index) use ($sortOrders) {
             if ($product->category_id === null) {
                 return;

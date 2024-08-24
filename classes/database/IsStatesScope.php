@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Database;
 
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Scope;
 
 /**
  * Checks and implements the both states `is_default` and `is_enabled`.
- * 
+ *
  * `is_default` ensures that there is (only) one as default marked model.
  * `is_enabled` adds additional scopes to only include `is_enabled` marked models.
  */
@@ -24,9 +26,10 @@ class IsStatesScope implements Scope
     {
         if (method_exists($model, 'isEnabledQuery')) {
             $model->isEnabledQuery($builder);
-        } else if (($column = $model->getIsEnabledColumnName()) != null) {
+        } elseif (($column = $model->getIsEnabledColumnName()) != null) {
             $builder->where($column, 1);
         }
+
         return $builder;
     }
     
@@ -69,6 +72,7 @@ class IsStatesScope implements Scope
 
             // Fetch Model
             $model = $builder->getModel();
+
             if (!$model->getUseEnabledConstant()) {
                 return;
             }
@@ -76,11 +80,11 @@ class IsStatesScope implements Scope
             // Add Global Builder function
             if (method_exists($model, 'isEnabledQuery')) {
                 $model->isEnabledQuery($builder);
-            } else if (($column = $model->getIsEnabledColumnName()) != null) {
+            } elseif (($column = $model->getIsEnabledColumnName()) != null) {
                 $builder->where($column, 1);
             }
+
             return $builder;
         });
     }
-
 }

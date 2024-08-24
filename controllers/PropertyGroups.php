@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
-use Flash;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
+use Flash;
 use OFFLINE\Mall\Models\PropertyGroup;
+use System;
 
 class PropertyGroups extends Controller
 {
@@ -58,7 +61,7 @@ class PropertyGroups extends Controller
         parent::__construct();
         BackendMenu::setContext('OFFLINE.Mall', 'mall-catalogue', 'mall-properties');
 
-        if (version_compare(\System::VERSION, '3.0', '<=')) {
+        if (version_compare(System::VERSION, '3.0', '<=')) {
             $this->addJs('/plugins/offline/mall/assets/backend.js');
         }
     }
@@ -71,8 +74,8 @@ class PropertyGroups extends Controller
      */
     public function relationExtendConfig($config, $field, $model)
     {
-        if (version_compare(\System::VERSION, '3.0', '>=')) {
-            $config->view['list'] = "$/offline/mall/models/property/columns_pivot.yaml";
+        if (version_compare(System::VERSION, '3.0', '>=')) {
+            $config->view['list'] = '$/offline/mall/models/property/columns_pivot.yaml';
         }
     }
 

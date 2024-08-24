@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -39,14 +41,14 @@ class ShippingMethodTableSeeder extends Seeder
                 'price'          => 15,
                 'currency_id'    => 3,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
-            ])
+            ]),
         ]);
         
         $method = ShippingMethod::create([
             'name'                      => trans('offline.mall::demo.shipping_methods.express'),
             'sort_order'                => 1,
             'is_default'                => false,
-            'guaranteed_delivery_days'  => 3
+            'guaranteed_delivery_days'  => 3,
         ]);
         $method->prices()->saveMany([
             new Price([
@@ -63,7 +65,7 @@ class ShippingMethodTableSeeder extends Seeder
                 'price'          => 30,
                 'currency_id'    => 3,
                 'priceable_type' => ShippingMethod::MORPH_KEY,
-            ])
+            ]),
         ]);
     }
 }

@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'common' => [
         'hello' => '你好 :firstname',
         'view_order_status_online' => '在线查看订单状态',

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
@@ -25,29 +27,6 @@ class PriceCategoryTest extends PluginTestCase
     }
 
     /**
-     * Prepare Tests below
-     * @return void
-     */
-    protected function prepare()
-    {
-        $product = Product::first();
-        $currency = Currency::where('code', 'CHF')->first();
-        $oldPriceCategory = PriceCategory::where('code', 'old_price')->first();
-        $msrpPriceCategory = PriceCategory::where('code', 'msrp')->first();
-
-        $product->additional_prices()->save(new Price([
-            'price'             => 50,
-            'price_category_id' => $oldPriceCategory->id,
-            'currency_id'       => $currency->id,
-        ]));
-        $product->additional_prices()->save(new Price([
-            'price'             => 60,
-            'price_category_id' => $msrpPriceCategory->id,
-            'currency_id'       => $currency->id,
-        ]));
-    }
-
-    /**
      * Create and receive additional prices.
      * @return void
      */
@@ -63,8 +42,8 @@ class PriceCategoryTest extends PluginTestCase
 
         // Check if values has been added correctly.
         $this->assertEquals([
-            "old_price" => 50.0,
-            "msrp" => 60.0,
+            'old_price' => 50.0,
+            'msrp' => 60.0,
         ], $prices);
     }
 
@@ -83,22 +62,18 @@ class PriceCategoryTest extends PluginTestCase
 
         // Fetch prices, added by the prepare method.
         $product = Product::first();
-        $prices = $product->additional_prices()->get()->mapWithKeys(function (Price $price) {
-            return [$price->category->code => $price->float];
-        })->toArray();
+        $prices = $product->additional_prices()->get()->mapWithKeys(fn (Price $price) => [$price->category->code => $price->float])->toArray();
 
         // Should only contain old_price, since msrp has been disabled.
         $this->assertEquals([
-            "old_price" => 50.0,
+            'old_price' => 50.0,
         ], $prices);
 
         // Receive all prices by especially adding "withDisabled" scope.
-        $prices = $product->additional_prices()->withDisabled()->get()->mapWithKeys(function (Price $price) {
-            return [$price->category->code => $price->float];
-        })->toArray();
+        $prices = $product->additional_prices()->withDisabled()->get()->mapWithKeys(fn (Price $price) => [$price->category->code => $price->float])->toArray();
         $this->assertEquals([
-            "old_price" => 50.0,
-            "msrp" => 60.0,
+            'old_price' => 50.0,
+            'msrp' => 60.0,
         ], $prices);
     }
 
@@ -125,5 +100,28 @@ class PriceCategoryTest extends PluginTestCase
             ->where('priceable_id', $product->id)
             ->count();
         $this->assertEquals($prices, 0);
+    }
+
+    /**
+     * Prepare Tests below
+     * @return void
+     */
+    protected function prepare()
+    {
+        $product = Product::first();
+        $currency = Currency::where('code', 'CHF')->first();
+        $oldPriceCategory = PriceCategory::where('code', 'old_price')->first();
+        $msrpPriceCategory = PriceCategory::where('code', 'msrp')->first();
+
+        $product->additional_prices()->save(new Price([
+            'price'             => 50,
+            'price_category_id' => $oldPriceCategory->id,
+            'currency_id'       => $currency->id,
+        ]));
+        $product->additional_prices()->save(new Price([
+            'price'             => 60,
+            'price_category_id' => $msrpPriceCategory->id,
+            'currency_id'       => $currency->id,
+        ]));
     }
 }

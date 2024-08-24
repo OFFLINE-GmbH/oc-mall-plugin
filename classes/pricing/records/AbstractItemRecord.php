@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Records;
 
@@ -15,7 +17,7 @@ use OFFLINE\Mall\Classes\Pricing\Values\PriceValue;
 use Whitecube\Price\Price;
 
 /**
- * @internal Used to share methods between ProductRecord, ServiceRecord, ShippingRecord and 
+ * @internal Used to share methods between ProductRecord, ServiceRecord, ShippingRecord and
  * PaymentRecord only. Not used by DiscountRecord.
  */
 abstract class AbstractItemRecord extends BaseRecord
@@ -41,12 +43,6 @@ abstract class AbstractItemRecord extends BaseRecord
     protected array $discounts = [ ];
 
     /**
-     * Return record type.
-     * @return string
-     */
-    abstract protected function type(): string;
-
-    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -63,46 +59,49 @@ abstract class AbstractItemRecord extends BaseRecord
 
     /**
      * Add discount to record.
-     * You can pass factors (ex. 10.5, for 10.5% of the net-value) or a fixed amount (ex. '10000', 
-     * for 100.00 €) as discounts. The last option requires false as second argument. Discounts can 
-     * also either applied on the full amount (net-price * quantity) or on a per-unit basis. 
+     * You can pass factors (ex. 10.5, for 10.5% of the net-value) or a fixed amount (ex. '10000',
+     * for 100.00 €) as discounts. The last option requires false as second argument. Discounts can
+     * also either applied on the full amount (net-price * quantity) or on a per-unit basis.
      * Discounts are ALWAYS applied on the exclusive net-price.
      * @param int|float|string|FactorValue|MoneyValue|Price $factorOrAmount
      * @param boolean $isFactor
      * @param boolean $perUnit
+     * @param mixed $value
      * @return self
      */
-    public function addDiscount($value, bool $isFactor = true, bool $perUnit = false): self 
+    public function addDiscount($value, bool $isFactor = true, bool $perUnit = false): self
     {
         if (!($value instanceof BaseValue)) {
             $value = $isFactor ? new FactorValue($value) : new MoneyValue($this->parsePrice($value));
         }
         $this->discounts[] = new DiscountValue($value, $perUnit);
+
         return $this;
     }
 
     /**
      * Set primary vat to this record.
-     * The PriceBag supports one single VAT (which should fit most countries) only, however, you 
-     * can always add additional taxes using the `addTax` method. In fact, you can also skip `setVat` 
+     * The PriceBag supports one single VAT (which should fit most countries) only, however, you
+     * can always add additional taxes using the `addTax` method. In fact, you can also skip `setVat`
      * completely and use `addTax` only. Each tax is ALWAYS calculated from the exclusive, discount-
      * applied net-price.
      * @param integer|float|FactorValue $value
-     * @return self
      * @throws PriceBagException
+     * @return self
      */
     public function setVat($value): self
     {
         $this->vat = $value instanceof FactorValue ? $value : new FactorValue($value);
+
         return $this;
     }
 
     /**
      * Add additional tax to record.
-     * You can pass tax-factors (ex. 10.5, for 10.5% of the net-value) or a declared fixed amount 
-     * (ex. '10000', for 100.00 €). The last option requires false as second argument. We recommend 
-     * using the setVat for VAT-values but, however, you can use this method as well. All taxes are 
-     * ALWAYS calculated from the exclusive, discount-applied net-price. 
+     * You can pass tax-factors (ex. 10.5, for 10.5% of the net-value) or a declared fixed amount
+     * (ex. '10000', for 100.00 €). The last option requires false as second argument. We recommend
+     * using the setVat for VAT-values but, however, you can use this method as well. All taxes are
+     * ALWAYS calculated from the exclusive, discount-applied net-price.
      * @param int|float|string|FactorValue|MoneyValue|Price $value
      * @param boolean $isFactor
      * @return self
@@ -113,6 +112,7 @@ abstract class AbstractItemRecord extends BaseRecord
             $value = $isFactor ? new FactorValue($value) : new MoneyValue($this->parsePrice($value));
         }
         $this->taxes[] = $value;
+
         return $this;
     }
 
@@ -123,6 +123,7 @@ abstract class AbstractItemRecord extends BaseRecord
     {
         $price = clone $this->price;
         $price = $this->cleanExclusive($price);
+
         return new PriceValue($price);
     }
 
@@ -134,10 +135,12 @@ abstract class AbstractItemRecord extends BaseRecord
         $exclusive = $this->exclusive()->value();
 
         $discount = Money::ofMinor('0', $this->currency);
-        foreach ($this->discounts AS $item) {
+
+        foreach ($this->discounts as $item) {
             $clean = false;
 
             $value = $item->value();
+
             if ($value instanceof FactorValue) {
                 $price = $value->valueOf($exclusive);
             } else {
@@ -173,6 +176,7 @@ abstract class AbstractItemRecord extends BaseRecord
 
         $price = new Price($exclusive);
         $price->minus($discount);
+
         return $this->vat->valueOf($price->base());
     }
 
@@ -206,7 +210,7 @@ abstract class AbstractItemRecord extends BaseRecord
         }
 
         // Add Taxes
-        foreach ($this->taxes AS $tax) {
+        foreach ($this->taxes as $tax) {
             if ($tax instanceof FactorValue) {
                 $value = $tax->valueOf($original);
             } else {
@@ -233,6 +237,7 @@ abstract class AbstractItemRecord extends BaseRecord
         // VAT
         if ($this->vat) {
             $value = $this->vat->valueOf(clone $original);
+
             if ($detailed) {
                 $taxes['vat'] = [
                     'base'      => clone $original,
@@ -246,7 +251,8 @@ abstract class AbstractItemRecord extends BaseRecord
 
         // Additional Taxes
         $taxes['taxes'] = [];
-        foreach ($this->taxes AS $tax) {
+
+        foreach ($this->taxes as $tax) {
             if ($tax instanceof FactorValue) {
                 $value = $tax->valueOf(clone $original);
             } else {
@@ -266,7 +272,7 @@ abstract class AbstractItemRecord extends BaseRecord
             } else {
                 if ($detailed) {
                     $taxes['taxes'][] = [
-                        'amount'    => $value
+                        'amount'    => $value,
                     ];
                 } else {
                     $taxes['taxes'][] = $value;
@@ -287,6 +293,13 @@ abstract class AbstractItemRecord extends BaseRecord
         $price->plus($this->tax());
         
         $price = $this->cleanInclusive($price);
+
         return new PriceValue($price);
     }
+
+    /**
+     * Return record type.
+     * @return string
+     */
+    abstract protected function type(): string;
 }

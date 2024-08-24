@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Totals;
 
@@ -11,7 +13,7 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\Wishlist;
 
 /**
- * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing
  * system with the PriceBag class construct instead.
  */
 class TotalsCalculatorInput
@@ -59,6 +61,19 @@ class TotalsCalculatorInput
     public $payment_method;
 
     /**
+     * Create a new TotalsCalculatorInput instance.
+     * @param null|Cart|Wishlist $model
+     */
+    public function __construct($model)
+    {
+        if ($model instanceof Cart) {
+            $this->cart = $model;
+        } elseif ($model instanceof Wishlist) {
+            $this->wishlist = $model;
+        }
+    }
+
+    /**
      * Create an instance from a Cart model.
      * @param Cart $cart
      * @return TotalsCalculatorInput
@@ -80,8 +95,9 @@ class TotalsCalculatorInput
             'shipping_method'     => $cart->shipping_method,
             'payment_method'      => $cart->payment_method,
             'discounts'           => $cart->discounts,
-            'shipping_country_id' => optional(optional($cart)->shipping_address)->country_id ?? $cart->getFallbackShippingCountryId()
+            'shipping_country_id' => optional(optional($cart)->shipping_address)->country_id ?? $cart->getFallbackShippingCountryId(),
         ]);
+
         return $input;
     }
 
@@ -101,20 +117,8 @@ class TotalsCalculatorInput
             'shipping_method'     => $wishlist->shipping_method,
             'shipping_country_id' => $wishlist->getCartCountryId(),
         ]);
-        return $input;
-    }
 
-    /**
-     * Create a new TotalsCalculatorInput instance.
-     * @param null|Cart|Wishlist $model
-     */
-    public function __construct($model)
-    {
-        if ($model instanceof Cart) {
-            $this->cart = $model;
-        } else if ($model instanceof Wishlist) {
-            $this->wishlist = $model;
-        }
+        return $input;
     }
 
     /**
@@ -124,7 +128,7 @@ class TotalsCalculatorInput
      */
     public function fill(array $params)
     {
-        foreach ($params AS $key => $value) {
+        foreach ($params as $key => $value) {
             if (property_exists($this, $key)) {
                 $this->$key = $value;
             }

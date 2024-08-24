@@ -1,12 +1,13 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use October\Rain\Database\Schema\Blueprint;
-use Schema;
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class AddCustomerGroupIdToRainlabUsers extends Migration
 {
-
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {

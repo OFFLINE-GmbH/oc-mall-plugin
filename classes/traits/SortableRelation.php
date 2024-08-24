@@ -9,7 +9,7 @@ trait SortableRelation
 {
     public function setRelationOrder($relationName, $itemIds, $itemOrders = null, $sortKey = 'sort_order')
     {
-        if ( ! is_array($itemIds)) {
+        if (! is_array($itemIds)) {
             $itemIds = [$itemIds];
         }
 
@@ -25,9 +25,9 @@ trait SortableRelation
             $order    = $itemOrders[$index];
             $relation = $this->getRelationDefinition($relationName);
             DB::table($relation['table'])
-              ->where($relation['key'], $this->id)
-              ->where($relation['otherKey'], $id)
-              ->update([$sortKey => $order]);
+                ->where($relation['key'], $this->id)
+                ->where($relation['otherKey'], $id)
+                ->update([$sortKey => $order]);
         }
     }
 }

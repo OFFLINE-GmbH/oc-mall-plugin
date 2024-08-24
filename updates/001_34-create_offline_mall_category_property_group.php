@@ -1,7 +1,9 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Schema;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateOfflineMallCategoryPropertyGroup extends Migration
 {
@@ -16,7 +18,7 @@ class CreateOfflineMallCategoryPropertyGroup extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
 
-            if ( ! app()->runningUnitTests()) {
+            if (! app()->runningUnitTests()) {
                 $table->index(['category_id', 'property_group_id'], 'idx_property_group_pivot');
             }
         });

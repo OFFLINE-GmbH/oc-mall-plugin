@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Records;
 
@@ -14,7 +16,7 @@ use Whitecube\Price\Price;
 
 class ShippingRecord extends AbstractItemRecord
 {
-    const TYPE = 'shipping';
+    public const TYPE = 'shipping';
 
     /**
      * The original associated Price model of this record.
@@ -41,15 +43,6 @@ class ShippingRecord extends AbstractItemRecord
     protected array $rates = [];
 
     /**
-     * Return record type
-     * @return string
-     */
-    protected function type(): string
-    {
-        return self::TYPE;
-    }
-
-    /**
      * Create a new shipping record.
      * @param string $currency
      * @param integer|float|string|Price $amount
@@ -61,7 +54,7 @@ class ShippingRecord extends AbstractItemRecord
             $packages = ceil($amount->units());
             $amount->setUnits(1);
             $this->packages = $packages;
-        } else if (!($amount instanceof Price)) {
+        } elseif (!($amount instanceof Price)) {
             if (is_string($amount)) {
                 $amount = Price::parse($amount, $currency, 1);
             } else {
@@ -79,9 +72,10 @@ class ShippingRecord extends AbstractItemRecord
      * @param int|float|string|FactorValue|MoneyValue|Price $factorOrAmount
      * @param boolean $isFactor
      * @param boolean $perUnit
+     * @param mixed $value
      * @return self
      */
-    public function addDiscount($value, bool $isFactor = true, bool $perUnit = false): self 
+    public function addDiscount($value, bool $isFactor = true, bool $perUnit = false): self
     {
         throw new PriceBagException('The ShippingRecord class does not support multiple discounts, use setAmount instead.');
     }
@@ -96,7 +90,7 @@ class ShippingRecord extends AbstractItemRecord
     {
         if ($amount instanceof Price) {
             $amount->setUnits(1);
-        } else if (!($amount instanceof Price)) {
+        } elseif (!($amount instanceof Price)) {
             if (is_string($amount)) {
                 $amount = Price::parse($amount, $this->currency, 1);
             } else {
@@ -107,6 +101,7 @@ class ShippingRecord extends AbstractItemRecord
         $this->original = $this->price;
         $this->price = $amount;
         $this->discountModel = $discount;
+
         return $this;
     }
 
@@ -119,6 +114,7 @@ class ShippingRecord extends AbstractItemRecord
         $this->price = $this->original;
         $this->original = null;
         $this->discountModel = null;
+
         return $this;
     }
 
@@ -140,6 +136,7 @@ class ShippingRecord extends AbstractItemRecord
         }
 
         $this->rates[] = [$from ?? 0, $until ?? 0, $amount];
+
         return $this;
     }
 
@@ -150,6 +147,7 @@ class ShippingRecord extends AbstractItemRecord
     {
         if (empty($this->rates) || !$this->bag) {
             $exclusive = parent::exclusive($roundingMode);
+
             return new PriceValue($exclusive->value()->multipliedBy($this->packages));
         } else {
             $original = clone $this->price;
@@ -157,7 +155,8 @@ class ShippingRecord extends AbstractItemRecord
             // Find amount by weight rate
             $amount = null;
             $weight = $this->bag->productsWeight();
-            foreach ($this->rates AS $rate) {
+
+            foreach ($this->rates as $rate) {
                 if ($weight >= $rate[0]) {
                     if ($rate[1] === 0 || $weight <= $rate[1]) {
                         $amount = $rate[2];
@@ -169,6 +168,7 @@ class ShippingRecord extends AbstractItemRecord
             // Return default
             if (empty($amount)) {
                 $exclusive = parent::exclusive($roundingMode);
+
                 return new PriceValue($exclusive->value()->multipliedBy($this->packages));
             }
 
@@ -177,6 +177,7 @@ class ShippingRecord extends AbstractItemRecord
             $exclusive = parent::exclusive($roundingMode);
             $result = new PriceValue($exclusive->value()->multipliedBy($this->packages));
             $this->price = $original;
+
             return $result;
         }
     }
@@ -189,6 +190,7 @@ class ShippingRecord extends AbstractItemRecord
         /** @var Money */
         $vat = parent::vat();
         $vat->multipliedBy($this->packages);
+
         /** @var Money */
         return $vat;
     }
@@ -201,6 +203,7 @@ class ShippingRecord extends AbstractItemRecord
         /** @var Money */
         $taxes = parent::tax($excludeVat);
         $taxes->multipliedBy($this->packages);
+
         /** @var Money */
         return $taxes;
     }
@@ -211,6 +214,16 @@ class ShippingRecord extends AbstractItemRecord
     public function inclusive(): PriceValue
     {
         $inclusive = parent::inclusive();
+
         return new PriceValue($inclusive->value()->multipliedBy($this->packages));
+    }
+
+    /**
+     * Return record type
+     * @return string
+     */
+    protected function type(): string
+    {
+        return self::TYPE;
     }
 }

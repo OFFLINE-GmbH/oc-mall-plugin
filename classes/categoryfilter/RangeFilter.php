@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\CategoryFilter;
 class RangeFilter extends Filter
 {
     public $minValue;
+
     public $maxValue;
 
     public function __construct($property, array $values)

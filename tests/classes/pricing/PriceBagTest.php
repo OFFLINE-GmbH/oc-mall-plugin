@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Classes\Pricing;
 
@@ -27,11 +29,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
     /**
      * Test if the PriceBag calculates the price correctly for a single product.
-     * 
+     *
      * Results
      *      exclusive   = 1000.00
      *      inclusive   = 1000.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_price_for_single_product()
@@ -49,11 +51,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check if price matches
         $this->assertEquals(
-            intval($quantity * $price['CHF']) * 100, 
+            intval($quantity * $price['CHF']) * 100,
             $bag->totalExclusive()->toInt()
         );
         $this->assertEquals(
-            intval($quantity * $price['CHF']) * 100, 
+            intval($quantity * $price['CHF']) * 100,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -61,12 +63,12 @@ class PriceBagTest extends BasePriceBagTestCase
     /**
      * Test if the PriceBag calculates the price correctly for a single product with service option
      * and an additional tax applied.
-     * 
+     *
      * Results
      *      exclusive   = 545.46
      *      tax         =  54.54
      *      inclusive   = 600.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_price_for_single_product_with_service_option()
@@ -80,8 +82,8 @@ class PriceBagTest extends BasePriceBagTestCase
         $service->taxes()->attach($tax->id);
 
         $option = ServiceOption::create([
-            'name' => 'Test Option', 
-            'service_id' => $service->id
+            'name' => 'Test Option',
+            'service_id' => $service->id,
         ]);
         $option->prices()->save(new Price([
             'currency_id' => 2,
@@ -108,11 +110,11 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->totalExclusive()->toInt()
         );
         $this->assertEquals(
-            5454, 
+            5454,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            60000, 
+            60000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -120,12 +122,12 @@ class PriceBagTest extends BasePriceBagTestCase
     /**
      * Test if the PriceBag calculates the price correctly for a single product with service option
      * using 2 different taxes applied.
-     * 
+     *
      * Results
      *      exclusive   = 488.64
      *      tax         = 111.36
      *      inclusive   = 600.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_price_using_multiple_taxes_on_service_option()
@@ -162,25 +164,25 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            48864, 
+            48864,
             $bag->totalExclusive()->toInt()
         );
         $this->assertEquals(
-            11136, 
+            11136,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            60000, 
+            60000,
             $bag->totalInclusive()->toInt()
         );
     }
 
     /**
      * Test if the PriceBag calculates the price correctly for multiple products.
-     * 
+     *
      * Results
      *      inclusive   = 2000.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_price_on_multiple_products()
@@ -206,7 +208,7 @@ class PriceBagTest extends BasePriceBagTestCase
 
     /**
      * Test if the PriceBag calculates different taxes correctly.
-     * 
+     *
      * Results
      *      exclusive   = 153.84
      *      no. taxes   = 2
@@ -214,7 +216,7 @@ class PriceBagTest extends BasePriceBagTestCase
      *      tax 2       =  30.77        (20 %)
      *      taxes       =  46.15
      *      inclusive   = 200.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_taxes_correctly()
@@ -238,11 +240,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            15384, 
+            15384,
             $bag->totalExclusive()->toInt()
         );
         $this->assertCount(
-            2, 
+            2,
             $bag->productsTaxes()[0]['taxes']
         );
         $this->assertEquals(
@@ -254,18 +256,18 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            4615, 
+            4615,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            20000, 
+            20000,
             $bag->totalInclusive()->toInt()
         );
     }
  
     /**
      * Test if the PriceBag calculates taxes correctly when passed excluded.
-     * 
+     *
      * Results
      *      exclusive   =  80.00 x 2
      *      no. taxes   = 2
@@ -273,7 +275,7 @@ class PriceBagTest extends BasePriceBagTestCase
      *      tax 2       =  32.00        (20 %)
      *      taxes       =  48.00
      *      inclusive   = 208.00
-     * 
+     *
      * @return void
      */
     public function test_calculate_excluded_taxes_correctly()
@@ -297,11 +299,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            16000, 
+            16000,
             $bag->totalExclusive()->toInt()
         );
         $this->assertCount(
-            2, 
+            2,
             $bag->productsTaxes()[0]['taxes']
         );
         $this->assertEquals(
@@ -313,11 +315,11 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            4800, 
+            4800,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            20800, 
+            20800,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -358,15 +360,15 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->productsTaxes()[0]['taxes']
         );
         $this->assertEquals(
-            1538, 
+            1538,
             $bag->productsTaxes()[0]['taxes'][0]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            3077, 
+            3077,
             $bag->productsTaxes()[0]['taxes'][1]->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            909, 
+            909,
             $bag->shippingTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
@@ -374,7 +376,7 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            30000, 
+            30000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -412,11 +414,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            5152, 
+            5152,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            40000, 
+            40000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -453,23 +455,23 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertCount(
-            2, 
+            2,
             $bag->totalTaxes()
         );
         $this->assertEquals(
-            1000, 
+            1000,
             $bag->totalTaxes()[0]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            909, 
+            909,
             $bag->totalTaxes()[1]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            1909, 
+            1909,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            21000, 
+            21000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -506,11 +508,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertCount(
-            2, 
+            2,
             $bag->totalTaxes()
         );
         $this->assertEquals(
-            3000, 
+            3000,
             $bag->totalTaxes()[0]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
@@ -518,11 +520,11 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->totalTaxes()[1]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            4667, 
+            4667,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            43000, 
+            43000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -558,23 +560,23 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertCount(
-            2, 
+            2,
             $bag->totalTaxes()
         );
         $this->assertEquals(
-            1000, 
+            1000,
             $bag->totalTaxes()[0]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            909, 
+            909,
             $bag->totalTaxes()[1]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            1909, 
+            1909,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            21000, 
+            21000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -585,7 +587,6 @@ class PriceBagTest extends BasePriceBagTestCase
      */
     public function test_calculate_product_weight_total()
     {
-
         // Create Products
         $product1 = $this->getProduct(100);
         $product1->weight = 1000;
@@ -608,7 +609,7 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            5000, 
+            5000,
             $bag->productsWeight()
         );
     }
@@ -619,7 +620,6 @@ class PriceBagTest extends BasePriceBagTestCase
      */
     public function test_calculate_product_weight_total_using_variants()
     {
-
         // Create Product
         $product = $this->getProduct(100);
         $product->weight = 1000;
@@ -652,7 +652,7 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            5000, 
+            5000,
             $bag->productsWeight()
         );
     }
@@ -697,11 +697,11 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertCount(
-            2, 
+            2,
             $bag->productsTaxes()[0]['taxes']
         );
         $this->assertEquals(
-            4615, 
+            4615,
             $bag->productsTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
@@ -709,11 +709,11 @@ class PriceBagTest extends BasePriceBagTestCase
             $bag->shippingTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            6433, 
+            6433,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            40000, 
+            40000,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -724,7 +724,6 @@ class PriceBagTest extends BasePriceBagTestCase
      */
     public function test_calculate_variant_cost()
     {
-
         // Create Product
         $product = Product::first();
         $product->stackable = true;
@@ -751,7 +750,7 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            300 * 100, 
+            300 * 100,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -762,7 +761,6 @@ class PriceBagTest extends BasePriceBagTestCase
      */
     public function test_calculate_custom_fields_costs()
     {
-
         // Create Custom Field Options
         $sizeA = CustomFieldOption::create([
             'name'       => 'Size A',
@@ -790,7 +788,6 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Create Custom Field Values
         $customFieldValueA = CustomFieldValue::create([
-
             'custom_field_id'        => $field->id,
             'custom_field_option_id' => $sizeA->id,
         ]);
@@ -810,7 +807,7 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            1000 * 100, 
+            1000 * 100,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -821,7 +818,6 @@ class PriceBagTest extends BasePriceBagTestCase
      */
     public function test_calculate_custom_fields_fallback_costs()
     {
-
         // Create Custom Field Options
         $sizeA = CustomFieldOption::create([
             'name'       => 'Size A',
@@ -843,7 +839,6 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Create Custom Field Values
         $customFieldValueA = CustomFieldValue::create([
-
             'custom_field_id'        => $field->id,
             'custom_field_option_id' => $sizeA->id,
         ]);
@@ -867,7 +862,7 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            1500 * 100, 
+            1500 * 100,
             $bag->totalInclusive()->toInt()
         );
     }
@@ -906,15 +901,15 @@ class PriceBagTest extends BasePriceBagTestCase
 
         // Check
         $this->assertEquals(
-            573, 
+            573,
             $bag->totalTaxes()[0]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            250, 
+            250,
             $bag->totalTaxes()[1]['vat']->getMinorAmount()->toInt()
         );
         $this->assertEquals(
-            823, 
+            823,
             $bag->totalTax()->getMinorAmount()->toInt()
         );
     }

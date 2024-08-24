@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Model;
 use Illuminate\Support\Facades\Cache;
-use October\Rain\Database\Traits\Validation;
+use Model;
 use October\Rain\Database\Collection;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Database\IsStates;
 use Rainlab\Location\Models\Country as RainLabCountry;
 
@@ -22,7 +24,7 @@ class Tax extends Model
 
     /**
      * Disable `is_default` handler on IsStates trait. Even if Tax uses a default value, the
-     * current IsStates trait does not support multiple defaults, especially when using an 
+     * current IsStates trait does not support multiple defaults, especially when using an
      * additional linking table (`offline_mall_country_tax`).
      * @var null|string
      */
@@ -39,7 +41,7 @@ class Tax extends Model
      * @var array
      */
     public $implement = [
-        '@RainLab.Translate.Behaviors.TranslatableModel'
+        '@RainLab.Translate.Behaviors.TranslatableModel',
     ];
     
     /**
@@ -63,7 +65,7 @@ class Tax extends Model
     public $rules = [
         'name'          => 'required',
         'percentage'    => 'numeric|min:0|max:100',
-        'is_enabled'    => 'nullable|boolean'
+        'is_enabled'    => 'nullable|boolean',
     ];
 
     /**
@@ -122,11 +124,12 @@ class Tax extends Model
      * Returns the default taxes.
      * @return Collection<Tax>|Tax[]
      */
-    static public function defaultTaxes(): Collection
+    public static function defaultTaxes(): Collection
     {
         $taxes = Cache::rememberForever(static::DEFAULT_TAX_CACHE_KEY, function () {
             $columns = [ 'id',  'name',  'percentage',  'is_default', 'is_enabled'];
             $taxes = static::where('is_default', true)->get($columns);
+
             if (!$taxes) {
                 return [];
             } else {

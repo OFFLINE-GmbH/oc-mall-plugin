@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Szukaj...',
     'please_wait' => 'Proszę czekać...',
@@ -48,8 +49,8 @@ return [
     'form.lastname' => 'Nazwisko',
     'form.company' => 'Firma',
     'form.company_placeholder' => 'Pozostaw puste w przypadku osoby prywatnej',
-    'form.recipient' => "Nazwa odbiorcy",
-    'form.recipient_placeholder' => "Pozostaw puste jeśli to Ty",
+    'form.recipient' => 'Nazwa odbiorcy',
+    'form.recipient_placeholder' => 'Pozostaw puste jeśli to Ty',
     'form.address_lines' => 'Adres',
     'form.zip' => 'Kod pocztowy',
     'form.city' => 'Miasto',

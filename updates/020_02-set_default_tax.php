@@ -1,4 +1,6 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
+
+namespace OFFLINE\Mall\Updates;
 
 use Illuminate\Support\Facades\DB;
 use October\Rain\Database\Updates\Migration;
@@ -9,9 +11,10 @@ class SetDefaultTax extends Migration
     {
         // Version 1.9.0 introduced a default tax. Let's use the first one as default.
         $tax = DB::table('offline_mall_taxes')->first();
+
         if ($tax) {
             DB::table('offline_mall_taxes')->where('id', $tax->id)->update([
-                'is_default'    => true
+                'is_default'    => true,
             ]);
         }
     }

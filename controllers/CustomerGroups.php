@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
 use System\Classes\PluginManager;
 
 class CustomerGroups extends Controller
@@ -58,6 +60,9 @@ class CustomerGroups extends Controller
 
     /**
      * Extend relation controller configuration.
+     * @param mixed $config
+     * @param mixed $field
+     * @param mixed $model
      * @return void
      */
     public function relationExtendConfig($config, $field, $model)

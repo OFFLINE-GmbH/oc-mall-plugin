@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Console;
 
@@ -38,6 +40,7 @@ class PurgeCommand extends Command
     public function handle()
     {
         $question = 'This command removes all customer and order related data. Do you really want to continue?';
+
         if (!$this->option('force') && !$this->output->confirm($question, false)) {
             return 0;
         }

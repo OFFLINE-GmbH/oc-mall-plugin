@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
@@ -22,7 +24,7 @@ class PaymentMethodTableSeeder extends Seeder
             'name'              => trans('offline.mall::demo.payment_methods.invoice'),
             'payment_provider'  => 'offline',
             'sort_order'        => 1,
-            'is_default'        => true
+            'is_default'        => true,
         ]);
         
         PaymentMethod::create([

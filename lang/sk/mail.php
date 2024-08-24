@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'common' => [
         'hello' => 'Dobrý deň :firstname',
         'view_order_status_online' => 'Zobraziť stav objednávky online',
@@ -83,4 +85,3 @@
         ],
     ],
 ];
-

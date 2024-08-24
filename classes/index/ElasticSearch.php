@@ -51,7 +51,7 @@ class ElasticSearch implements Index
 
     public function create(string $index)
     {
-        if ( ! $this->client->indices()->exists(['index' => $index])) {
+        if (! $this->client->indices()->exists(['index' => $index])) {
             $this->client->indices()->create(['index' => $index]);
             $this->setMapping($index);
         }
@@ -82,26 +82,6 @@ class ElasticSearch implements Index
         ]);
     }
 
-    protected function buildPropertyValueMapping()
-    {
-        return Property::get()->mapWithKEys(function (Property $property) {
-
-            if ($property->type === 'float') {
-                $type = 'float';
-            } elseif ($property->type === 'integer') {
-                $type = 'integer';
-            } else {
-                return [];
-            }
-
-            return [
-                $property->id => [
-                    'type' => $type,
-                ],
-            ];
-        })->filter()->toArray();
-    }
-
     public function drop(string $index)
     {
         $this->client->indices()->delete(['index' => $index]);
@@ -127,11 +107,28 @@ class ElasticSearch implements Index
         $hits   = $result['hits']['hits'] ?? [];
         $count  = $result['hits']['total'] ?? 0;
 
-        $ids = array_map(function ($hit) {
-            return $hit['_source']['id'];
-        }, $hits);
+        $ids = array_map(fn ($hit) => $hit['_source']['id'], $hits);
 
         return new IndexResult($ids, $count);
+    }
+
+    protected function buildPropertyValueMapping()
+    {
+        return Property::get()->mapWithKEys(function (Property $property) {
+            if ($property->type === 'float') {
+                $type = 'float';
+            } elseif ($property->type === 'integer') {
+                $type = 'integer';
+            } else {
+                return [];
+            }
+
+            return [
+                $property->id => [
+                    'type' => $type,
+                ],
+            ];
+        })->filter()->toArray();
     }
 
     protected function applySpecialFilters(Collection $filters, array $query): array
@@ -141,6 +138,7 @@ class ElasticSearch implements Index
 
             $query['query']['bool']['filter']['bool']['must'][]['terms']['category_id'] = $filter->values();
         }
+
         if ($filters->has('brand')) {
             $filter = $filters->pull('brand');
 
@@ -168,11 +166,13 @@ class ElasticSearch implements Index
     {
         $filters->each(function (Filter $filter) use (&$query) {
             $path = 'property_values.' . $filter->property->id;
+
             if ($filter instanceof SetFilter) {
                 $query['query']['bool']['filter']['bool']['must'][]['terms'] = [
                     $path => $filter->values(),
                 ];
             }
+
             if ($filter instanceof RangeFilter) {
                 $query['query']['bool']['filter']['bool']['must'][]['range'] = [
                     $path => [

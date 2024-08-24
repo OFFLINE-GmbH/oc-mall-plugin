@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\FormWidgets;
 
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Backend\FormWidgets\ColorPicker;
-use Backend\FormWidgets\FileUpload;
 use Backend\FormWidgets\DatePicker;
+use Backend\FormWidgets\FileUpload;
 use Backend\FormWidgets\RichEditor;
 use OFFLINE\Mall\Models\Property;
 use OFFLINE\Mall\Models\PropertyGroup;
@@ -63,9 +65,7 @@ class PropertyFields extends FormWidgetBase
             $unknownIds = $group->properties->pluck('id')->diff($knownIds);
             $knownIds   = $knownIds->concat($unknownIds);
 
-            $properties = $group->properties->filter(function ($property) use ($unknownIds) {
-                return $unknownIds->contains($property->id);
-            });
+            $properties = $group->properties->filter(fn ($property) => $unknownIds->contains($property->id));
 
             $group->setRelation('properties', $properties->sortBy('sort_order'));
 
@@ -77,7 +77,7 @@ class PropertyFields extends FormWidgetBase
 
     public function createFormWidget(Property $property, ?PropertyValue $value)
     {
-        if ( ! $value) {
+        if (! $value) {
             $value = new PropertyValue();
         }
 
@@ -106,6 +106,41 @@ class PropertyFields extends FormWidgetBase
             default:
                 return $this->textfield($property, $value);
         }
+    }
+
+    public function fieldPrefix(): string
+    {
+        return $this->formField->config['fieldPrefix'] ?? 'PropertyValues';
+    }
+
+    protected function newFormField($property, $subkey = null): FormField
+    {
+        $subkey    = $subkey ? '[' . $subkey . ']' : '';
+        $fieldName = sprintf('%s[%s]%s', $this->fieldPrefix(), $property->id, $subkey);
+
+        return new FormField($fieldName, $property->name);
+    }
+
+    protected function useVariantSpecificPropertiesOnly(): bool
+    {
+        return isset($this->formField->config['variantPropertiesOnly']) && $this->formField->config['variantPropertiesOnly'] === true;
+    }
+
+    protected function backendPartial(string $partial)
+    {
+        // October 2.0, add _ prefix.
+        if (class_exists('System')) {
+            $partial = '_' . $partial;
+        }
+
+        $path = sprintf('~/modules/backend/widgets/form/partials/%s', $partial);
+
+        // October 2.0, add .htm extension.
+        if (class_exists('System')) {
+            $path .= '.htm';
+        }
+
+        return $path;
     }
 
     private function color($property, PropertyValue $value)
@@ -241,9 +276,7 @@ class PropertyFields extends FormWidgetBase
         $formField          = $this->newFormField($property);
         $formField->value   = $value->value;
         $formField->label   = $property->name;
-        $formField->options = collect($property->options)->map(function ($i) {
-            return [$i['value'], $i['value']];
-        })->toArray();
+        $formField->options = collect($property->options)->map(fn ($i) => [$i['value'], $i['value']])->toArray();
 
         return $this->makePartial(
             $this->backendPartial('field_checkbox'),
@@ -256,9 +289,7 @@ class PropertyFields extends FormWidgetBase
         $formField          = $this->newFormField($property);
         $formField->value   = $value->value;
         $formField->label   = $property->name;
-        $formField->options = collect($property->options)->map(function ($i) {
-            return [$i['value'], $i['value']];
-        })->toArray();
+        $formField->options = collect($property->options)->map(fn ($i) => [$i['value'], $i['value']])->toArray();
 
         return $this->makePartial(
             $this->backendPartial('field_switch'),
@@ -270,7 +301,7 @@ class PropertyFields extends FormWidgetBase
     {
         $config = $this->makeConfig([
             'model'      => optional($this->model->property_values->where('property_id', $property->id))
-                    ->first() ?? new PropertyValue(),
+                ->first() ?? new PropertyValue(),
             'sessionKey' => $this->sessionKey,
         ]);
 
@@ -281,42 +312,9 @@ class PropertyFields extends FormWidgetBase
         $widget->alias = 'image';
         $widget->bindToController();
 
-        return $this->makePartial('fileupload',
-            ['field' => $property, 'widget' => $widget, 'value' => $value->value, 'session_key' => $this->sessionKey]);
-    }
-
-    protected function newFormField($property, $subkey = null): FormField
-    {
-        $subkey    = $subkey ? '[' . $subkey . ']' : '';
-        $fieldName = sprintf('%s[%s]%s', $this->fieldPrefix(), $property->id, $subkey);
-
-        return new FormField($fieldName, $property->name);
-    }
-
-    protected function useVariantSpecificPropertiesOnly(): bool
-    {
-        return isset($this->formField->config['variantPropertiesOnly']) && $this->formField->config['variantPropertiesOnly'] === true;
-    }
-
-    public function fieldPrefix(): string
-    {
-        return $this->formField->config['fieldPrefix'] ?? 'PropertyValues';
-    }
-
-    protected function backendPartial(string $partial)
-    {
-        // October 2.0, add _ prefix.
-        if (class_exists('System')) {
-            $partial = '_' . $partial;
-        }
-
-        $path = sprintf('~/modules/backend/widgets/form/partials/%s', $partial);
-
-        // October 2.0, add .htm extension.
-        if (class_exists('System')) {
-            $path .= '.htm';
-        }
-
-        return $path;
+        return $this->makePartial(
+            'fileupload',
+            ['field' => $property, 'widget' => $widget, 'value' => $value->value, 'session_key' => $this->sessionKey]
+        );
     }
 }

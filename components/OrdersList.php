@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
@@ -19,12 +21,14 @@ class OrdersList extends MallComponent
      * @var Collection
      */
     public $orders;
+
     /**
      * All available countries.
      *
      * @var Collection
      */
     public $countries;
+
     /**
      * Link to pay a pending order.
      *
@@ -63,16 +67,31 @@ class OrdersList extends MallComponent
     public function init()
     {
         $user = Auth::getUser();
+
         if (!$user || !$user->customer) {
             return;
         }
         
         $this->paymentLink = $this->getPaymentLink();
-        $this->orders = Order
-            ::byCustomer($user->customer)
+        $this->orders = Order::byCustomer($user->customer)
             ->with(['products', 'products.variant'])
             ->orderBy('created_at', 'DESC')
             ->get();
+    }
+
+    public function onCancelOrder()
+    {
+        $user = Auth::getUser();
+
+        if (! $user) {
+            return;
+        }
+
+        $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
+
+        $order = Order::byCustomer($user->customer)->where('id', post('id'))->firstOrFail();
+        $order->order_state = $state;
+        $order->save();
     }
 
     /**
@@ -85,19 +104,5 @@ class OrdersList extends MallComponent
         $page = GeneralSettings::get('checkout_page');
 
         return $this->controller->pageUrl($page, ['step' => 'payment']);
-    }
-
-    public function onCancelOrder()
-    {
-        $user = Auth::getUser();
-        if ( ! $user) {
-            return;
-        }
-
-        $state = OrderState::where('flag', OrderState::FLAG_CANCELLED)->first();
-
-        $order = Order::byCustomer($user->customer)->where('id', post('id'))->firstOrFail();
-        $order->order_state = $state;
-        $order->save();
     }
 }

@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
 use Backend;
-use BackendMenu;
-use Flash;
 use Backend\Behaviors\ImportExportController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
+use Flash;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Stats\OrdersStats;
 use OFFLINE\Mall\Classes\Utils\Money;
@@ -50,7 +52,7 @@ class Orders extends Controller
      * @var array
      */
     public $requiredPermissions = [
-        'offline.mall.manage_orders'
+        'offline.mall.manage_orders',
     ];
 
     /**
@@ -64,6 +66,7 @@ class Orders extends Controller
 
     /**
      * Extend query done by the list controller implementation.
+     * @param mixed $query
      * @return void
      */
     public function listExtendQuery($query)
@@ -115,6 +118,7 @@ class Orders extends Controller
     {
         $orderState = OrderState::findOrFail(input('state'));
         $this->updateOrder(['order_state_id' => $orderState->id]);
+
         return [
             '#order_state' => $orderState->name,
         ];
@@ -122,8 +126,8 @@ class Orders extends Controller
 
     /**
      * Ajax handler on change payment state.
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onChangePaymentState()
     {
@@ -131,12 +135,14 @@ class Orders extends Controller
         $newState = input('state');
 
         $availableStatus = $order->payment_state::getAvailableTransitions();
+
         if (!in_array($newState, $availableStatus)) {
             throw new ValidationException([trans('offline.mall::lang.order.invalid_status')]);
         }
 
         $order->payment_state = $newState;
         $order->save();
+
         return [
             '#payment-state'        => trans($newState::label()),
             '#payment-state-toggle' => $this->paymentStatePartial($order),
@@ -156,20 +162,24 @@ class Orders extends Controller
         $completed      = (bool)input('completed', false);
 
         $data = [
-            'tracking_url' => $trackingUrl, 
-            'tracking_number' => $trackingNumber
+            'tracking_url' => $trackingUrl,
+            'tracking_number' => $trackingNumber,
         ];
+
         if ($shipped) {
             $data['shipped_at'] = now();
         }
+
         if ($completed) {
             $state = OrderState::where('flag', OrderState::FLAG_COMPLETE)->first();
+
             if ($state) {
                 $data['order_state_id'] = $state->id;
             }
         }
 
         $order = $this->updateOrder($data, false, $notification);
+
         return [
             '#shipped_at'  => $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-',
             '#order_state' => e($order->order_state->name),
@@ -195,11 +205,13 @@ class Orders extends Controller
     {
         $id    = $this->params[0];
         $order = Order::with(['customer', 'products'])->findOrFail($id);
+
         return $order->getPDFInvoice()->stream(sprintf('mall-order-%s.pdf', $id));
     }
 
     /**
      * Ajax handler on delete record.
+     * @param null|mixed $recordId
      * @return mixed
      */
     public function onDelete($recordId = null)
@@ -207,6 +219,7 @@ class Orders extends Controller
         $order = Order::findOrFail($recordId);
         $order->delete();
         Flash::success(trans('offline.mall::lang.order.deleted'));
+
         return Backend::redirect('offline/mall/orders');
     }
 
@@ -231,6 +244,7 @@ class Orders extends Controller
 
     /**
      * Render payment state partial.
+     * @param mixed $order
      * @return mixed
      */
     protected function paymentStatePartial($order)

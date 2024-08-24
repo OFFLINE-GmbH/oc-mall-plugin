@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Cache;
+use Cms\Classes\Page;
 use DB;
 use Model;
-use Cms\Classes\Page;
 use October\Rain\Database\Models\DeferredBinding;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Sluggable;
@@ -18,12 +20,12 @@ use OFFLINE\Mall\Classes\Traits\CustomFields;
 use OFFLINE\Mall\Classes\Traits\FilteredTaxes;
 use OFFLINE\Mall\Classes\Traits\HashIds;
 use OFFLINE\Mall\Classes\Traits\Images;
+use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use OFFLINE\Mall\Classes\Traits\PriceAccessors;
 use OFFLINE\Mall\Classes\Traits\ProductPriceAccessors;
 use OFFLINE\Mall\Classes\Traits\PropertyValues;
 use OFFLINE\Mall\Classes\Traits\StockAndQuantity;
 use OFFLINE\Mall\Classes\Traits\UserSpecificPrice;
-use OFFLINE\Mall\Classes\Traits\PDFMaker;
 use System\Models\File;
 
 class Product extends Model
@@ -43,7 +45,7 @@ class Product extends Model
     use UserSpecificPrice;
     use Validation;
 
-    const MORPH_KEY = 'mall.product';
+    public const MORPH_KEY = 'mall.product';
 
     /**
      * Implement behaviors for this model.
@@ -96,13 +98,13 @@ class Product extends Model
 
     /**
      * Attribute names that are json encoded and decoded from the database.
-     * @var array 
+     * @var array
      */
     public $jsonable = [
-        'links', 
-        'additional_descriptions', 
-        'additional_properties', 
-        'embeds'
+        'links',
+        'additional_descriptions',
+        'additional_properties',
+        'embeds',
     ];
 
     /**
@@ -150,14 +152,14 @@ class Product extends Model
      * @var array
      */
     public $nullable = [
-        'group_by_property_id'
+        'group_by_property_id',
     ];
 
     /**
      * The attributes that should be cast.
      * @var array
      */
-    public $casts = [   
+    public $casts = [
         'price_includes_tax'            => 'boolean',
         'allow_out_of_stock_purchases'  => 'boolean',
         'weight'                        => 'integer',
@@ -232,7 +234,7 @@ class Product extends Model
      */
     public $morphMany = [
         'customer_group_prices' => [CustomerGroupPrice::class, 'name' => 'priceable'],
-        'additional_prices'     => [Price::class, 'name' => 'priceable']
+        'additional_prices'     => [Price::class, 'name' => 'priceable'],
     ];
 
     /**
@@ -374,11 +376,13 @@ class Product extends Model
     public static function translateParams($params, $oldLocale, $newLocale)
     {
         $newParams = $params;
+
         foreach ($params as $paramName => $paramValue) {
             if ($paramName !== 'slug') {
                 continue;
             }
             $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+
             if ($records) {
                 $records->translateContext($newLocale);
                 $newParams[$paramName] = $records->$paramName;
@@ -401,12 +405,9 @@ class Product extends Model
         // from the product. Otherwise we will end up with duplicated values.
         if ($this->getOriginal('inventory_management_method') === 'single' && $this->inventory_management_method === 'variant') {
             $this->forceReindex = true;
-            $properties = $this->categories->flatMap->properties->filter(function ($q) {
-                return $q->pivot->use_for_variants;
-            })->pluck('id');
+            $properties = $this->categories->flatMap->properties->filter(fn ($q) => $q->pivot->use_for_variants)->pluck('id');
 
-            PropertyValue
-                ::where('product_id', $this->id)
+            PropertyValue::where('product_id', $this->id)
                 ->whereNull('variant_id')
                 ->whereIn('property_id', $properties)
                 ->delete();
@@ -450,13 +451,15 @@ class Product extends Model
     public function handlePropertyValueUpdates()
     {
         $locales = [];
+
         if (class_exists(\RainLab\Translate\Classes\Locale::class)) {
             $locales = \RainLab\Translate\Classes\Locale::listLocales()->where('is_enabled', true)->all();
-        } else if (class_exists(\RainLab\Translate\Models\Locale::class)) {
+        } elseif (class_exists(\RainLab\Translate\Models\Locale::class)) {
             $locales = \RainLab\Translate\Models\Locale::isEnabled()->get();
         }
 
         $formData = array_wrap(post('PropertyValues', []));
+
         if (count($formData) < 1) {
             PropertyValue::where('product_id', $this->id)->whereNull('variant_id')->delete();
         }
@@ -474,6 +477,7 @@ class Product extends Model
                 ]);
 
             $pv->value = $value;
+
             foreach ($locales as $locale) {
                 $transValue = post(
                     sprintf('RLTranslate.%s.PropertyValues.%d', $locale->code, $id),
@@ -499,9 +503,9 @@ class Product extends Model
             // Transfer any deferred media
             if ($property->type === 'image') {
                 $media = DeferredBinding::where('master_type', PropertyValue::class)
-                                        ->where('master_field', 'image')
-                                        ->where('session_key', post('_session_key'))
-                                        ->get();
+                    ->where('master_field', 'image')
+                    ->where('session_key', post('_session_key'))
+                    ->get();
 
                 foreach ($media as $m) {
                     $slave                  = $m->slave_type::find($m->slave_id);
@@ -572,6 +576,7 @@ class Product extends Model
         if ($this->cachedFilteredTaxes) {
             return $this->cachedFilteredTaxes;
         }
+
         return $this->cachedFilteredTaxes = $this->getfilteredTaxes($this->taxes);
     }
 
@@ -605,7 +610,7 @@ class Product extends Model
 
     public function scopeInCategories($query, $ids)
     {
-        if ( ! count($ids)) {
+        if (! count($ids)) {
             return $query;
         }
 
@@ -627,9 +632,7 @@ class Product extends Model
     public function getGroupByPropertyIdOptions()
     {
         return ['' => trans('offline.mall::lang.common.none')]
-            + $this->categories->flatMap->properties->filter(function ($q) {
-                return $q->pivot->use_for_variants;
-            })->pluck('name', 'id')->toArray();
+            + $this->categories->flatMap->properties->filter(fn ($q) => $q->pivot->use_for_variants)->pluck('name', 'id')->toArray();
     }
 
     /**
@@ -638,17 +641,18 @@ class Product extends Model
     public function getSortOrders()
     {
         return Cache::rememberForever(self::sortOrderCacheKey($this->id), function () {
-            return \DB::table('offline_mall_category_product')
-                      ->where('product_id', $this->id)
-                      ->get(['category_id', 'sort_order',])
-                      ->pluck('sort_order', 'category_id')
-                      ->toArray();
+            return DB::table('offline_mall_category_product')
+                ->where('product_id', $this->id)
+                ->get(['category_id', 'sort_order',])
+                ->pluck('sort_order', 'category_id')
+                ->toArray();
         });
     }
 
     /**
      * Returns the Cache key to store the sort order.
      *
+     * @param mixed $id
      * @return string
      */
     public static function sortOrderCacheKey($id)
@@ -663,20 +667,19 @@ class Product extends Model
      * @param $url
      * @param $theme
      *
-     * @return array
      * @throws \Cms\Classes\CmsException
+     * @return array
      */
     public static function resolveItem($item, $url, $theme)
     {
         $page    = GeneralSettings::get('product_page', 'product');
         $cmsPage = Page::loadCached($theme, $page);
 
-        if ( ! $cmsPage) {
+        if (! $cmsPage) {
             return;
         }
 
-        $items = self
-            ::published()
+        $items = self::published()
             ->where('inventory_management_method', 'single')
             ->get()
             ->map(function (self $product) use ($cmsPage, $page, $url) {
@@ -704,6 +707,7 @@ class Product extends Model
 
         if ($this->is_virtual) {
             $this->hideField($fields, 'weight');
+
             if ($this->files->count() > 0) {
                 $this->hideField($fields, 'missing_file_hint');
             }
@@ -722,16 +726,26 @@ class Product extends Model
             if ($fields->variants) {
                 $fields->variants->path               = 'variants_unavailable';
             }
+
             if ($fields->group_by_property_id) {
                 $fields->group_by_property_id->hidden = true;
             }
         }
     }
 
+    public function getInventoryManagementMethodOptions()
+    {
+        return [
+            'single'  => 'offline.mall::lang.variant.method.single',
+            'variant' => 'offline.mall::lang.variant.method.variant',
+        ];
+    }
+
     /**
      * Hides a field only if it is present. This makes sure
      * the form does not crash if a user programmatically removes
      * a field.
+     * @param mixed $fields
      */
     protected function hideField($fields, string $field)
     {
@@ -742,13 +756,5 @@ class Product extends Model
         } elseif (property_exists($fields, $field)) {
             $fields->$field->hidden = true;
         }
-    }
-
-    public function getInventoryManagementMethodOptions()
-    {
-        return [
-            'single'  => 'offline.mall::lang.variant.method.single',
-            'variant' => 'offline.mall::lang.variant.method.variant',
-        ];
     }
 }

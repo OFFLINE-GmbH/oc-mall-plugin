@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\FormWidgets;
 
@@ -14,6 +16,12 @@ use OFFLINE\Mall\Models\Currency;
 class Price extends FormWidgetBase
 {
     /**
+     * The value assigned to this widget.
+     * @var mixed
+     */
+    public $value = null;
+
+    /**
      * Default Currency Model
      * @var Currency|null
      */
@@ -24,12 +32,6 @@ class Price extends FormWidgetBase
      * @var string
      */
     protected $defaultAlias = 'price';
-
-    /**
-     * The value assigned to this widget.
-     * @var mixed
-     */
-    public $value = null;
 
     /**
      * Initializes the widget, called by the constructor and free from its parameters.
@@ -49,16 +51,18 @@ class Price extends FormWidgetBase
     public function render()
     {
         $this->prepareVars();
+
         return $this->makePartial('price');
     }
 
     /**
-     * The price widget's form values have to be handled manually in the controller since the prices 
+     * The price widget's form values have to be handled manually in the controller since the prices
      * might go to different models and different fields at once.
      *
-     * This mode is "misused" to add basic validation to make sure that at least one price in the 
+     * This mode is "misused" to add basic validation to make sure that at least one price in the
      * default currency is provided if the field's required attribute is set to true.
      *
+     * @param mixed $value
      * @return array
      */
     public function getSaveValue($value)
@@ -67,9 +71,7 @@ class Price extends FormWidgetBase
             return null;
         }
 
-        $values = collect(post('MallPrice'))->map(function ($value, $key) {
-            return $value[$this->valueFrom] === '' || $value[$this->valueFrom] === null ? null : $key;
-        })->filter();
+        $values = collect(post('MallPrice'))->map(fn ($value, $key) => $value[$this->valueFrom] === '' || $value[$this->valueFrom] === null ? null : $key)->filter();
 
         if (!$values->has($this->defaultCurrency->id)) {
             throw new ValidationException([$this->valueFrom => trans('offline.mall::lang.common.price_missing')]);
@@ -81,7 +83,7 @@ class Price extends FormWidgetBase
     /**
      * Used by child classes to render in context of this view path.
      * @param string $partial The view to load.
-     * @param array  $params  Parameter variables to pass to the view.
+     * @param array $params Parameter variables to pass to the view.
      * @return string The view contents.
      */
     public function makeParentPartial($partial, $params = [])
@@ -114,6 +116,7 @@ class Price extends FormWidgetBase
     public function getPriceValue($currency)
     {
         $value = $this->getLoadValue();
+
         if (!$value) {
             return $this->value;
         } else {
@@ -133,6 +136,7 @@ class Price extends FormWidgetBase
             return null;
         } else {
             $this->model->loadMissing($relation);
+
             return $this->model->getRelation($relation);
         }
     }

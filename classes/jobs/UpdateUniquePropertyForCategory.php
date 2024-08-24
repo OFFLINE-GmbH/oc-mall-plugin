@@ -3,8 +3,8 @@
 namespace OFFLINE\Mall\Classes\Jobs;
 
 use Cache;
-use OFFLINE\Mall\Models\Category;
 use Illuminate\Contracts\Queue\Job;
+use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\UniquePropertyValue;
 
 class UpdateUniquePropertyForCategory

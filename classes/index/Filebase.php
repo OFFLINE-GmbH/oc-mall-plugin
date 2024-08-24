@@ -13,7 +13,9 @@ use OFFLINE\Mall\Models\Currency;
 class Filebase implements Index
 {
     protected $db;
+
     protected $jsonq;
+
     protected $dir;
 
     public function __construct()
@@ -49,6 +51,7 @@ class Filebase implements Index
     public function delete(string $index, $id)
     {
         $item = $this->db->get($this->key($index, $id));
+
         if (count($item->getData()) < 1) {
             // The item is not existing in the index and doesn't have to be deleted.
             return;
@@ -60,7 +63,8 @@ class Filebase implements Index
     public function create(string $index)
     {
         $dir = storage_path('app/index');
-        if ( ! is_dir($dir)) {
+
+        if (! is_dir($dir)) {
             mkdir($dir);
         }
         $this->dir = $dir;
@@ -69,6 +73,7 @@ class Filebase implements Index
     public function drop(string $index)
     {
         $pattern = sprintf('%s/%s-*.json', $this->dir, $index);
+
         foreach (glob($pattern) as $file) {
             unlink($file);
         }
@@ -79,9 +84,7 @@ class Filebase implements Index
         $skip  = $perPage * ($forPage - 1);
         $items = $this->search($index, $filters, $order);
 
-        $slice = array_map(function ($item) {
-            return $item['id'];
-        }, array_slice($items, $skip, $perPage));
+        $slice = array_map(fn ($item) => $item['id'], array_slice($items, $skip, $perPage));
 
         return new IndexResult($slice, count($items));
     }
@@ -142,6 +145,7 @@ class Filebase implements Index
             if ($filter instanceof SetFilter) {
                 $this->jsonq->where('property_values.' . $filter->property->id, 'includes', $filter->values());
             }
+
             if ($filter instanceof RangeFilter) {
                 $this->jsonq->where('property_values.' . $filter->property->id, 'includes between', [
                     $filter->minValue,

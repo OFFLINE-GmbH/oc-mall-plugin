@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -16,13 +18,17 @@ class CustomFieldValue extends Model
         'cart_product_id' => 'exists:offline_mall_cart_products,id',
         'custom_field_id' => 'exists:offline_mall_custom_fields,id',
     ];
+
     public $table = 'offline_mall_cart_custom_field_value';
+
     public $with = ['custom_field_option', 'prices'];
+
     public $belongsTo = [
         'cart_product'        => CartProduct::class,
         'custom_field'        => CustomField::class,
         'custom_field_option' => CustomFieldOption::class,
     ];
+
     public $morphMany = [
         'prices' => [
             Price::class,
@@ -30,6 +36,7 @@ class CustomFieldValue extends Model
             'conditions' => 'price_category_id is null and field is null',
         ],
     ];
+
     public $fillable = [
         'cart_product_id',
         'custom_field_id',
@@ -45,7 +52,7 @@ class CustomFieldValue extends Model
      * We allow to pass the fields and option parameter to save a few queries when
      * adding the Product to the cart since these relations are already available then.
      *
-     * @param null|CustomField       $field
+     * @param null|CustomField $field
      * @param null|CustomFieldOption $option
      *
      * @return null|Collection
@@ -70,8 +77,8 @@ class CustomFieldValue extends Model
     public function getDisplayValueAttribute()
     {
         $value = e($this->value);
-        if ($this->custom_field->type === 'color') {
 
+        if ($this->custom_field->type === 'color') {
             $value = $this->custom_field->custom_field_options->count() === 0
                 ? $this->value
                 : $this->custom_field_option->option_value;
@@ -81,12 +88,15 @@ class CustomFieldValue extends Model
                 e($value)
             );
         }
+
         if ($this->custom_field->type === 'checkbox') {
             return $this->value || $this->value === 'on' ? '&#10004;' : '&#10007;';
         }
+
         if ($this->custom_field->type === 'dropdown') {
             return $this->custom_field_option->name;
         }
+
         if ($this->custom_field->type === 'image') {
             return $this->custom_field_option->name;
         }

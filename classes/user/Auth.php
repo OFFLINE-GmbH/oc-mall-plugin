@@ -1,4 +1,5 @@
 <?php
+
 namespace OFFLINE\Mall\Classes\User;
 
 /**

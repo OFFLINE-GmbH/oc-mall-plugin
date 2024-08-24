@@ -19,9 +19,9 @@ class BrandChangeUpdate
         $index = app(Index::class);
 
         Product::whereIn('id', $data['ids'] ?? [])
-               ->each(function (Product $product) use ($index) {
-                   (new ProductObserver($index))->updated($product);
-               });
+            ->each(function (Product $product) use ($index) {
+                (new ProductObserver($index))->updated($product);
+            });
 
         $job->delete();
     }

@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
+use Carbon\Carbon;
 use DB;
 use Model;
-use Carbon\Carbon;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use RainLab\User\Models\User;
@@ -39,16 +41,7 @@ class Customer extends Model
         'firstname',
         'lastname',
         'is_guest',
-        'user_id'
-    ];
-
-    /**
-     * The attributes that should be cast.
-     * @var array
-     */
-    protected $casts = [
-        'is_guest'      => 'boolean',
-        'deleted_at'    => 'datetime'
+        'user_id',
     ];
 
     /**
@@ -80,6 +73,15 @@ class Customer extends Model
         'addresses'       => Address::class,
         'orders'          => Order::class,
         'payment_methods' => CustomerPaymentMethod::class,
+    ];
+
+    /**
+     * The attributes that should be cast.
+     * @var array
+     */
+    protected $casts = [
+        'is_guest'      => 'boolean',
+        'deleted_at'    => 'datetime',
     ];
 
     /**
@@ -123,7 +125,7 @@ class Customer extends Model
      * Cleanup of old data using OFFLINE.GDPR.
      * @see https://github.com/OFFLINE-GmbH/oc-gdpr-plugin
      * @param Carbon $deadline
-     * @param int    $keepDays
+     * @param int $keepDays
      */
     public function gdprCleanup(Carbon $deadline, int $keepDays)
     {

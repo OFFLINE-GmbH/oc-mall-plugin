@@ -1,4 +1,5 @@
 <?php
+
 return [
     'plugin' => [
         'name' => '购物中心',
@@ -842,7 +843,7 @@ return [
                 ],
                 'currentVariantReviewsOnly' => [
                     'title' => '仅显示此属性的评分',
-                    'description' => "不显示对该产品其他属性的评论",
+                    'description' => '不显示对该产品其他属性的评论',
                 ],
             ],
         ],

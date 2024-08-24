@@ -1,4 +1,5 @@
 <?php
+
 return [
     'common' => [
         'hello' => 'Hola :firstname',

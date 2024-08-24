@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Lang;
 use Model;
@@ -62,7 +65,7 @@ class OrderState extends Model
      * @var array
      */
     public $implement = [
-        '@RainLab.Translate.Behaviors.TranslatableModel'
+        '@RainLab.Translate.Behaviors.TranslatableModel',
     ];
 
     /**
@@ -86,7 +89,7 @@ class OrderState extends Model
      */
     public $rules = [
         'name'          => 'required',
-        'is_enabled'    => 'nullable|boolean'
+        'is_enabled'    => 'nullable|boolean',
     ];
 
     /**
@@ -123,9 +126,7 @@ class OrderState extends Model
      */
     public function getFlagOptions(): array
     {
-        return array_map(function (string $val) {
-            return Lang::get($val);
-        }, static::$availableFlagOptions);
+        return array_map(fn (string $val) => Lang::get($val), static::$availableFlagOptions);
     }
 
     /**
@@ -145,7 +146,7 @@ class OrderState extends Model
     public function beforeDelete()
     {
         if (!empty($this->flag)) {
-            throw new \Exception('You cannot delete a flagged order state.');
+            throw new Exception('You cannot delete a flagged order state.');
         }
     }
 }

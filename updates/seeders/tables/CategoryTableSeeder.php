@@ -1,9 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Tables;
 
-use Arr;
-use Locale;
 use October\Rain\Database\Updates\Seeder;
 use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\PropertyGroup;
@@ -35,7 +35,6 @@ class CategoryTableSeeder extends Seeder
      */
     protected function seedDemoData(): void
     {
-
         // Bike Category
         $bikes = Category::create([
             'name'             => trans('offline.mall::demo.categories.bikes.name'),
@@ -92,7 +91,7 @@ class CategoryTableSeeder extends Seeder
             'code'             => 'clothing',
             'sort_order'       => 1,
             'meta_title'       => trans('offline.mall::demo.categories.clothing.meta_title'),
-            'meta_description' => trans('offline.mall::demo.categories.clothing.meta_description')
+            'meta_description' => trans('offline.mall::demo.categories.clothing.meta_description'),
         ]);
         $clothing->property_groups()->attach(
             PropertyGroup::where('slug', 'size')->first()->id,

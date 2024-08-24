@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Payments;
 use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use October\Rain\Exception\ValidationException;
-use October\Rain\Parse\Twig;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
@@ -25,12 +24,32 @@ abstract class PaymentProvider
      * @var Order
      */
     public $order;
+
     /**
      * Data that is needed for the payment.
      *
      * @var array
      */
     public $data;
+
+    /**
+     * PaymentProvider constructor.
+     *
+     * Optionally pass an order or payment data.
+     *
+     * @param Order|null $order
+     * @param array $data
+     */
+    public function __construct(Order $order = null, array $data = [])
+    {
+        if ($order) {
+            $this->setOrder($order);
+        }
+
+        if ($data) {
+            $this->setData($data);
+        }
+    }
 
     /**
      * Return the display name of this payment provider.
@@ -56,8 +75,8 @@ abstract class PaymentProvider
     /**
      * Validate the given input data for this payment.
      *
-     * @return bool
      * @throws ValidationException
+     * @return bool
      */
     abstract public function validate(): bool;
 
@@ -69,24 +88,6 @@ abstract class PaymentProvider
      * @return PaymentResult
      */
     abstract public function process(PaymentResult $result): PaymentResult;
-
-    /**
-     * PaymentProvider constructor.
-     *
-     * Optionally pass an order or payment data.
-     *
-     * @param Order|null $order
-     * @param array      $data
-     */
-    public function __construct(Order $order = null, array $data = [])
-    {
-        if ($order) {
-            $this->setOrder($order);
-        }
-        if ($data) {
-            $this->setData($data);
-        }
-    }
 
     /**
      * Fields returned from this method are stored encrypted.
@@ -150,7 +151,9 @@ abstract class PaymentProvider
             );
         }
 
-        if (! file_exists($formPartial)) return '';
+        if (! file_exists($formPartial)) {
+            return '';
+        }
 
         $controller = Controller::getController() ?? new Controller();
 
@@ -198,9 +201,7 @@ abstract class PaymentProvider
      */
     public function getSettings()
     {
-        return collect($this->settings())->mapWithKeys(function ($settings, $key) {
-            return [$key => PaymentGatewaySettings::get($key)];
-        });
+        return collect($this->settings())->mapWithKeys(fn ($settings, $key) => [$key => PaymentGatewaySettings::get($key)]);
     }
 
     /**
@@ -229,9 +230,9 @@ abstract class PaymentProvider
     public function returnUrl(): string
     {
         return Request::url() . '?' . http_build_query([
-                'return'             => 'return',
-                'oc-mall_payment_id' => $this->getPaymentId(),
-            ]);
+            'return'             => 'return',
+            'oc-mall_payment_id' => $this->getPaymentId(),
+        ]);
     }
 
     /**
@@ -245,9 +246,9 @@ abstract class PaymentProvider
     public function cancelUrl(): string
     {
         return Request::url() . '?' . http_build_query([
-                'return'             => 'cancel',
-                'oc-mall_payment_id' => $this->getPaymentId(),
-            ]);
+            'return'             => 'cancel',
+            'oc-mall_payment_id' => $this->getPaymentId(),
+        ]);
     }
 
     /**

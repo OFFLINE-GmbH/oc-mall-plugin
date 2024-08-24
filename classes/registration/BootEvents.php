@@ -19,15 +19,6 @@ use OFFLINE\Mall\Models\Wishlist;
 
 trait BootEvents
 {
-    protected function registerEvents()
-    {
-        $this->registerObservers();
-        $this->registerGenericEvents();
-        $this->registerStaticPagesEvents();
-        $this->registerSiteSearchEvents();
-        $this->registerGdprEvents();
-    }
-
     public function registerObservers()
     {
         Product::observe(\OFFLINE\Mall\Classes\Observers\ProductObserver::class);
@@ -37,11 +28,18 @@ trait BootEvents
         ProductPrice::observe(\OFFLINE\Mall\Classes\Observers\ProductPriceObserver::class);
     }
 
+    protected function registerEvents()
+    {
+        $this->registerObservers();
+        $this->registerGenericEvents();
+        $this->registerStaticPagesEvents();
+        $this->registerSiteSearchEvents();
+        $this->registerGdprEvents();
+    }
+
     protected function registerGenericEvents()
     {
-        $this->app->bind(MailingEventHandler::class, function() {
-            return new MailingEventHandler();
-        });
+        $this->app->bind(MailingEventHandler::class, fn () => new MailingEventHandler());
 
         $this->app['events']->subscribe(MailingEventHandler::class);
     }
@@ -61,11 +59,13 @@ trait BootEvents
             if ($type === 'all-mall-categories' || $type === 'mall-category') {
                 return Category::getMenuTypeInfo($type);
             }
+
             if ($type === 'all-mall-products' || $type === 'all-mall-variants') {
                 return [
                     'dynamicItems' => true,
                 ];
             }
+
             return null;
         };
 
@@ -73,15 +73,19 @@ trait BootEvents
             if ($type === 'all-mall-categories') {
                 return Category::resolveCategoriesItem($item, $url, $theme);
             }
+
             if ($type === 'mall-category') {
                 return Category::resolveCategoryItem($item, $url, $theme);
             }
+
             if ($type === 'all-mall-products') {
                 return Product::resolveItem($item, $url, $theme);
             }
+
             if ($type === 'all-mall-variants') {
                 return Variant::resolveItem($item, $url, $theme);
             }
+
             return null;
         };
 
@@ -100,6 +104,7 @@ trait BootEvents
             if ($page->getBaseFileName() === GeneralSettings::get('category_page')) {
                 return Category::translateParams($params, $oldLocale, $newLocale);
             }
+
             if ($page->getBaseFileName() === GeneralSettings::get('product_page')) {
                 return Product::translateParams($params, $oldLocale, $newLocale);
             }
@@ -110,6 +115,7 @@ trait BootEvents
             if ($page->getBaseFileName() === GeneralSettings::get('category_page')) {
                 return Category::translateParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
             }
+
             if ($page->getBaseFileName() === GeneralSettings::get('product_page')) {
                 return Product::translateParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
             }
@@ -118,9 +124,7 @@ trait BootEvents
 
     protected function registerSiteSearchEvents()
     {
-        Event::listen('offline.sitesearch.extend', function () {
-            return new ProductsSearchProvider();
-        });
+        Event::listen('offline.sitesearch.extend', fn () => new ProductsSearchProvider());
     }
 
     protected function registerGdprEvents()

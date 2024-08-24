@@ -1,7 +1,7 @@
-<?php namespace OFFLINE\Mall\Updates;
+<?php
 
-use Artisan;
-use DB;
+namespace OFFLINE\Mall\Updates;
+
 use October\Rain\Database\Updates\Migration;
 use Schema;
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Traits;
 
@@ -19,11 +21,10 @@ trait ProductPriceAccessors
     {
         $currency = Currency::resolve($currency);
         $prices = $this->customer_group_prices;
-        $filter = function ($query) use ($group) {
-            return $query->where('customer_group_id', $group->id);
-        };
+        $filter = fn ($query) => $query->where('customer_group_id', $group->id);
 
         $price = $this->withFilter($filter, $prices->where('currency_id', $currency->id))->first();
+
         if ($price) {
             return $price;
         }
@@ -50,11 +51,10 @@ trait ProductPriceAccessors
 
         $currency = Currency::resolve($currency);
         $prices = $this->additional_prices;
-        $filter = function ($query) use ($category) {
-            return $query->where('price_category_id', $category);
-        };
+        $filter = fn ($query) => $query->where('price_category_id', $category);
 
         $price = $this->withFilter($filter, $prices->where('currency_id', $currency->id))->first();
+
         if ($price) {
             return $price;
         }
@@ -75,6 +75,7 @@ trait ProductPriceAccessors
     public function oldPriceRelations()
     {
         $oldPrice = PriceCategory::where('code', 'old_price')->first();
+
         if ($oldPrice) {
             return $this->additional_prices->where('price_category_id', $oldPrice->id);
         }
@@ -91,6 +92,7 @@ trait ProductPriceAccessors
     public function oldPrice($currency = null)
     {
         $oldPrice = PriceCategory::where('code', 'old_price')->first();
+
         if ($oldPrice) {
             return $this->additionalPrice($oldPrice, $currency);
         }

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Suchen...',
     'please_wait' => 'Bitte warten...',
@@ -45,7 +46,7 @@ return [
     'form.lastname' => 'Nachname',
     'form.signin' => 'Einloggen',
     'form.signup' => 'Konto erstellen',
-    "form.already_registered" => "Du hast bereits ein Konto?",
+    'form.already_registered' => 'Du hast bereits ein Konto?',
     'signup.different_address' => 'Verwende andere Adresse für den Versand',
     'form.forgot_password' => 'Passwort vergessen?',
     'form.company' => 'Firma',
@@ -179,5 +180,5 @@ return [
     'no_payment_method_available' => 'Keine Zahlungsmethode verfügbar.',
     'download_file' => ':file herunterladen',
     'download_valid_until' => 'gültig bis :date',
-    'download_count' => 'max. :count downloadbar'
+    'download_count' => 'max. :count downloadbar',
 ];

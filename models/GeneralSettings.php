@@ -1,17 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
-use Model;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use Illuminate\Support\Facades\Cache;
-use October\Rain\Exception\ValidationException;
+use Model;
 use Validator;
 
 class GeneralSettings extends Model
 {
-
     /**
      * Implement behaviors for this controller.
      * @var array
@@ -35,7 +35,7 @@ class GeneralSettings extends Model
      * @var array
      */
     public $rules = [
-        'admin_email' => 'email'
+        'admin_email' => 'email',
     ];
 
     /**
@@ -85,20 +85,6 @@ class GeneralSettings extends Model
     }
 
     /**
-     * Return all CMS Pages
-     * @return array
-     */
-    protected function allPages()
-    {
-        return Page
-            ::listInTheme( Theme::getActiveTheme(), true)
-            ->mapWithKeys(function($page) {
-                return [$page->baseFileName => $page->title];
-            })
-            ->toArray();
-    }
-
-    /**
      * Return CMS Pages with [product] component
      * @return array
      */
@@ -135,6 +121,7 @@ class GeneralSettings extends Model
             $this->getPagesByComponent('checkout', false),
             $this->getPagesByComponent('quickCheckout', false),
         );
+
         return empty($result) ? $this->allPages() : $result;
     }
 
@@ -154,5 +141,16 @@ class GeneralSettings extends Model
     public function getCartPageOptions()
     {
         return $this->getPagesByComponent('cart');
+    }
+
+    /**
+     * Return all CMS Pages
+     * @return array
+     */
+    protected function allPages()
+    {
+        return Page::listInTheme(Theme::getActiveTheme(), true)
+            ->mapWithKeys(fn ($page) => [$page->baseFileName => $page->title])
+            ->toArray();
     }
 }

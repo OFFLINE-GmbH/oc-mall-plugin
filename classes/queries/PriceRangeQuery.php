@@ -18,6 +18,7 @@ class PriceRangeQuery
      * @var Currency
      */
     protected $currency;
+
     /**
      * Categories to filter by.
      *
@@ -38,8 +39,7 @@ class PriceRangeQuery
      */
     public function query()
     {
-        return DB
-            ::table('offline_mall_product_prices')
+        return DB::table('offline_mall_product_prices')
             ->selectRaw(DB::raw('min(price) as min, max(price) as max'))
             ->join(
                 'offline_mall_products',

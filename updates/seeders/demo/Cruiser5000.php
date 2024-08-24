@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
@@ -53,7 +55,7 @@ class Cruiser5000 extends DemoProduct
         return [
             'color'       => [
                 'name'  => trans('offline.mall::demo.products.properties.devils_red'),
-                'hex'   => '#e74c3c'
+                'hex'   => '#e74c3c',
             ],
             'rear-travel' => '155',
             'fork-travel' => '160',

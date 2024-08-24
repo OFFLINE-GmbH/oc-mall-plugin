@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -10,5 +12,4 @@ use RainLab\User\Models\User as UserBase;
  */
 class User extends UserBase
 {
-
 }

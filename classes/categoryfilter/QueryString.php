@@ -15,12 +15,13 @@ class QueryString
      * Delimiter for range filter values.
      * @var string
      */
-    const DELIMITER_RANGE = '-';
+    public const DELIMITER_RANGE = '-';
+
     /**
      * Delimiter for set filter values.
      * @var string
      */
-    const DELIMITER_SET = '.';
+    public const DELIMITER_SET = '.';
 
     public function deserialize(array $query, ?Category $category = null): Collection
     {
@@ -32,7 +33,7 @@ class QueryString
 
         // Map the special properties since they won't be found in the database.
         $specialProperties = collect(Filter::$specialProperties)->mapWithKeys(function ($type, $prop) use ($query) {
-            if ( ! $query->has($prop)) {
+            if (! $query->has($prop)) {
                 return [];
             }
 
@@ -41,7 +42,7 @@ class QueryString
             return [$prop => new $type($prop, array_values($values))];
         });
 
-        if ( ! $category) {
+        if (! $category) {
             return $specialProperties;
         }
 
@@ -51,11 +52,13 @@ class QueryString
         return $properties->mapWithKeys(function (Property $property) use ($query) {
             $delimiter = $this->getDelimiter($property->pivot->filter_type);
             $values    = $query->get($property->slug);
+
             if ($property->pivot->filter_type === 'set') {
                 $values = $this->getPropValues($values, $delimiter);
 
                 return [$property->slug => new SetFilter($property, $values)];
             }
+
             if ($property->pivot->filter_type === 'range') {
                 $values = $this->getPropValues($values, $delimiter);
 
@@ -89,7 +92,7 @@ class QueryString
      * Explode the string version of the property values back
      * into a proper array.
      *
-     * @param        $values
+     * @param $values
      *
      * @param string $delimiter
      *
@@ -98,6 +101,7 @@ class QueryString
     protected function getPropValues($values, string $delimiter): array
     {
         $values = explode($delimiter, $values);
+
         if ($delimiter === '-') {
             return ['min' => $values[0] ?? null, 'max' => $values[1] ?? null];
         }

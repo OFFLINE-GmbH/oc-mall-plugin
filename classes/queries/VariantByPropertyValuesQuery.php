@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Queries;
 
+use Closure;
 use DB;
 use Illuminate\Support\Collection;
 use October\Rain\Database\QueryBuilder;
@@ -20,6 +21,7 @@ class VariantByPropertyValuesQuery
      * @var Product
      */
     protected $product;
+
     /**
      * ID's of PropertyValues.
      *
@@ -31,7 +33,7 @@ class VariantByPropertyValuesQuery
      * VariantByPropertyValuesQuery constructor.
      *
      * @param Product $product
-     * @param array   $ids
+     * @param array $ids
      */
     public function __construct(Product $product, Collection $ids)
     {
@@ -46,13 +48,12 @@ class VariantByPropertyValuesQuery
      */
     public function query()
     {
-        $query = PropertyValue
-            ::leftJoin(
-                'offline_mall_product_variants',
-                'variant_id',
-                '=',
-                'offline_mall_product_variants.id'
-            )
+        return PropertyValue::leftJoin(
+            'offline_mall_product_variants',
+            'variant_id',
+            '=',
+            'offline_mall_product_variants.id'
+        )
             ->whereNull('offline_mall_product_variants.deleted_at')
             ->where('offline_mall_product_variants.published', true)
             ->where('offline_mall_product_variants.product_id', $this->product->id)
@@ -61,26 +62,24 @@ class VariantByPropertyValuesQuery
             ->with('variant')
             ->having('matching_attributes', count($this->ids))
             ->where($this->subQuery());
-
-        return $query;
     }
 
     /**
      * Fetch all PropertyValues with matching property_id and value pairs.
      *
-     * @return \Closure
+     * @return Closure
      */
-    protected function subQuery(): \Closure
+    protected function subQuery(): Closure
     {
         return function ($query) {
             PropertyValue::whereIn('id', $this->ids)
-                         ->get(['value', 'property_id'])
-                         ->each(function (PropertyValue $propertyValue) use (&$query) {
-                             $query->orWhereRaw(
-                                 '(property_id, value) = (?, ?)',
-                                 [$propertyValue->property_id, $propertyValue->safeValue]
-                             );
-                         });
+                ->get(['value', 'property_id'])
+                ->each(function (PropertyValue $propertyValue) use (&$query) {
+                    $query->orWhereRaw(
+                        '(property_id, value) = (?, ?)',
+                        [$propertyValue->property_id, $propertyValue->safeValue]
+                    );
+                });
         };
     }
 }

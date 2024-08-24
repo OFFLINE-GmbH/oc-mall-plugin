@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -20,7 +22,7 @@ class PriceCategory extends Model
      * Former identification of the 'old_price' model item.
      * @deprecated
      */
-    const OLD_PRICE_CATEGORY_ID = 1;
+    public const OLD_PRICE_CATEGORY_ID = 1;
 
     /**
      * Disable `is_default` handler on IsStates trait.
@@ -39,7 +41,7 @@ class PriceCategory extends Model
      * @var array
      */
     public $implement = [
-        '@RainLab.Translate.Behaviors.TranslatableModel'
+        '@RainLab.Translate.Behaviors.TranslatableModel',
     ];
     
     /**
@@ -54,7 +56,7 @@ class PriceCategory extends Model
      */
     public $translatable = [
         'name',
-        'title'
+        'title',
     ];
 
     /**
@@ -65,7 +67,7 @@ class PriceCategory extends Model
         'name'          => 'required',
         'code'          => 'required',
         'title'         => 'nullable',
-        'is_enabled'    => 'nullable|boolean'
+        'is_enabled'    => 'nullable|boolean',
     ];
 
     /**
@@ -76,7 +78,7 @@ class PriceCategory extends Model
         'name',
         'code',
         'title',
-        'is_enabled'
+        'is_enabled',
     ];
 
     /**
@@ -101,8 +103,8 @@ class PriceCategory extends Model
      */
     public $hasMany = [
         'prices' => [
-            Price::class, 
-            'key' => 'price_category_id'
+            Price::class,
+            'key' => 'price_category_id',
         ],
     ];
 

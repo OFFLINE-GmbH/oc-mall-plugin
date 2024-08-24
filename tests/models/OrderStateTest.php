@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
+use Exception;
 use OFFLINE\Mall\Models\OrderState;
 use OFFLINE\Mall\Tests\PluginTestCase;
 
@@ -40,11 +43,10 @@ class OrderStateTest extends PluginTestCase
         } else {
             try {
                 $value = $state->delete();
-            } catch (\Exception $exc) {
+            } catch (Exception $exc) {
                 $value = false;
             }
             $this->assertFalse($value);
         }
     }
-
 }

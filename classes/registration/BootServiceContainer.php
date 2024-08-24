@@ -32,15 +32,9 @@ trait BootServiceContainer
 {
     protected function registerServices()
     {
-        $this->app->bind(SignInHandler::class, function () {
-            return new DefaultSignInHandler();
-        });
-        $this->app->bind(SignUpHandler::class, function () {
-            return new DefaultSignUpHandler();
-        });
-        $this->app->singleton(Money::class, function () {
-            return new DefaultMoney();
-        });
+        $this->app->bind(SignInHandler::class, fn () => new DefaultSignInHandler());
+        $this->app->bind(SignUpHandler::class, fn () => new DefaultSignUpHandler());
+        $this->app->singleton(Money::class, fn () => new DefaultMoney());
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();
             $gateway->registerProvider(new Offline());
@@ -50,22 +44,24 @@ trait BootServiceContainer
 
             return $gateway;
         });
-        $this->app->singleton(Hashids::class, function () {
-            return new Hashids(config('app.key', 'oc-mall'), 8);
-        });
+        $this->app->singleton(Hashids::class, fn () => new Hashids(config('app.key', 'oc-mall'), 8));
         $this->app->bind(Index::class, function () {
             $driver = Cache::rememberForever('offline_mall.mysql.index.driver', function () {
                 $driver = GeneralSettings::get('index_driver');
+
                 if ($driver === null) {
                     GeneralSettings::set('index_driver', 'database');
                 }
+
                 return $driver;
             });
+
             try {
                 if ($driver === 'filesystem') {
                     return new Filebase();
                 } else {
                     $pdo = DB::connection()->getPdo();
+
                     if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
                         $pdo->sqliteCreateFunction('JSON_CONTAINS', function ($json, $val, $path = null) {
                             $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
@@ -79,12 +75,13 @@ trait BootServiceContainer
                             if (strpos($val, '[') == 0 && strrpos($val, ']') == strlen($val)-1) {
                                 $val = json_decode($val, true)[0];
                             }
+
                             return in_array($val, $array, true);
                         });
                     }
+
                     return new MySQL();
                 }
-
             } catch (IndexNotSupportedException $e) {
                 logger()->error(
                     '[OFFLINE.Mall] Your database does not support JSON data. Your index driver has been switched to "Filesystem". Update your database to make use of database indexing.'
@@ -109,6 +106,7 @@ trait BootServiceContainer
         $this->app->bind('dompdf.options', function () {
             if ($defines = $this->app['config']->get('offline.mall::pdf.defines')) {
                 $options = [];
+
                 foreach ($defines as $key => $value) {
                     $key           = strtolower(str_replace('DOMPDF_', '', $key));
                     $options[$key] = $value;
@@ -128,8 +126,6 @@ trait BootServiceContainer
             return $dompdf;
         });
         $this->app->alias('dompdf', Dompdf::class);
-        $this->app->bind('dompdf.wrapper', function ($app) {
-            return new PDF($app['dompdf'], $app['config'], $app['files'], $app['view']);
-        });
+        $this->app->bind('dompdf.wrapper', fn ($app) => new PDF($app['dompdf'], $app['config'], $app['files'], $app['view']));
     }
 }

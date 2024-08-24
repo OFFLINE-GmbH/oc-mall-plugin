@@ -31,7 +31,7 @@ class BrandObserver
 
     protected function handle(Brand $brand)
     {
-        if ( ! $brand->isDirty('slug')) {
+        if (! $brand->isDirty('slug')) {
             return;
         }
         $brand->products->each(function (Product $product) {

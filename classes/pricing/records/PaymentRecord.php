@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Records;
 
@@ -12,7 +14,7 @@ use Whitecube\Price\Price;
 
 class PaymentRecord extends AbstractItemRecord
 {
-    const TYPE = 'payment';
+    public const TYPE = 'payment';
 
     /**
      * Percentage fee to be added to the totals.
@@ -21,25 +23,17 @@ class PaymentRecord extends AbstractItemRecord
     protected $percentage = 0;
 
     /**
-     * Return record type
-     * @return string
-     */
-    protected function type(): string
-    {
-        return self::TYPE;
-    }
-
-    /**
      * Create a new payment record.
      * @param string $currency
      * @param null|int|float $percentage Percentage fee.
      * @param null|int|float|string|Price Fixed amount.
+     * @param null|mixed $amount
      */
     public function __construct(string $currency, $percentage = null, $amount = null)
     {
         if ($amount instanceof Price) {
             $amount->setUnits(1);
-        } else if (!($amount instanceof Price)) {
+        } elseif (!($amount instanceof Price)) {
             if (is_string($amount)) {
                 $amount = Price::parse($amount, $currency, 1);
             } else {
@@ -62,7 +56,7 @@ class PaymentRecord extends AbstractItemRecord
             'type'          => $this->type(),
             'exclusive'     => strval($this->exclusive()),
             'discounts'     => strval($this->discount()),
-            'percentage'    => $this->percentage
+            'percentage'    => $this->percentage,
         ];
     }
 
@@ -126,7 +120,7 @@ class PaymentRecord extends AbstractItemRecord
     }
 
     /**
-     * Return sum of all taxes based on the original net-price minus discount, calculated from the 
+     * Return sum of all taxes based on the original net-price minus discount, calculated from the
      * total price.
      * @param Money $money
      * @return Money
@@ -147,7 +141,8 @@ class PaymentRecord extends AbstractItemRecord
 
         // Add Taxes
         $price = Price::parse('0', $this->currency);
-        foreach ($this->taxes AS $tax) {
+
+        foreach ($this->taxes as $tax) {
             if ($tax instanceof FactorValue) {
                 $value = $tax->valueOf($original);
             } else {
@@ -155,11 +150,12 @@ class PaymentRecord extends AbstractItemRecord
             }
             $price->plus($value);
         }
+
         return $price->base();
     }
 
     /**
-     * Return inclusive price value using fixed amount and percentage fee, containing discounts, vat 
+     * Return inclusive price value using fixed amount and percentage fee, containing discounts, vat
      * and other taxes.
      * @param Money $money
      * @return void
@@ -180,7 +176,8 @@ class PaymentRecord extends AbstractItemRecord
 
         // Add Taxes
         $original = clone $price;
-        foreach ($this->taxes AS $tax) {
+
+        foreach ($this->taxes as $tax) {
             if ($tax instanceof FactorValue) {
                 $value = $tax->valueOf($original);
             } else {
@@ -190,5 +187,14 @@ class PaymentRecord extends AbstractItemRecord
         }
 
         return new PriceValue($price);
+    }
+
+    /**
+     * Return record type
+     * @return string
+     */
+    protected function type(): string
+    {
+        return self::TYPE;
     }
 }

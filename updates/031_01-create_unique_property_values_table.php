@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace OFFLINE\Mall\Updates;
 
 use DB;
-use Schema;
-use OFFLINE\Mall\Models\Category;
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
+use OFFLINE\Mall\Models\Category;
 use OFFLINE\Mall\Models\UniquePropertyValue;
+use Schema;
 
 /**
  * CreateUniquePropertyValuesTable Migration

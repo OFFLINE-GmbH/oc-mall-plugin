@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Controllers;
 
-use BackendMenu;
-use DB;
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
 use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use BackendMenu;
+use DB;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Price;
@@ -22,9 +24,9 @@ class Services extends Controller
      * @var array
      */
     public $implement = [
-        ListController::class, 
-        FormController::class, 
-        RelationController::class
+        ListController::class,
+        FormController::class,
+        RelationController::class,
     ];
 
     /**
@@ -121,11 +123,12 @@ class Services extends Controller
         DB::transaction(function () use ($model, $key, $data) {
             foreach ($data as $currency => $_data) {
                 $value = array_get($_data, $key);
+
                 if ($value === '') {
                     $value = null;
                 }
 
-                Price::withoutGlobalScope(new IsStatesScope)->updateOrCreate([
+                Price::withoutGlobalScope(new IsStatesScope())->updateOrCreate([
                     'price_category_id' => null,
                     'priceable_id'      => $model->id,
                     'priceable_type'    => $model::MORPH_KEY,

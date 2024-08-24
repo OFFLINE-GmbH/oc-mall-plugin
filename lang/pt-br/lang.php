@@ -1,4 +1,5 @@
 <?php
+
 return [
     'plugin' => [
         'name' => 'Mall',
@@ -839,7 +840,7 @@ return [
                 ],
                 'currentVariantReviewsOnly' => [
                     'title' => 'Mostrar somente avaliações deste Variação',
-                    'description' => "Não mostrar avaliações de outras variações deste produto",
+                    'description' => 'Não mostrar avaliações de outras variações deste produto',
                 ],
             ],
         ],

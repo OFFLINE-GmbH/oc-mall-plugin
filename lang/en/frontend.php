@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Search...',
     'please_wait' => 'Please wait...',
@@ -42,7 +43,7 @@ return [
     'form.password_repeat' => 'Repeat password',
     'form.signin' => 'Sign in',
     'form.signup' => 'Sign up',
-    "form.already_registered" => "Already have an account?",
+    'form.already_registered' => 'Already have an account?',
     'signup.as_guest' => 'Signup as guest',
     'signup.terms_checkbox' => 'I accept the terms and conditions of this store',
     'form.forgot_password' => 'Forgot password?',
@@ -179,5 +180,5 @@ return [
     'no_payment_method_available' => 'No payment method available.',
     'download_file' => 'Download :file',
     'download_valid_until' => 'valid until :date',
-    'download_count' => 'max. :count downloads'
+    'download_count' => 'max. :count downloads',
 ];

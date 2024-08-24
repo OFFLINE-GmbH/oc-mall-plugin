@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Index\Index;
@@ -52,6 +55,7 @@ class IndexCommand extends Command
         $this->index = $index;
 
         $question = 'The current index will be dropped. Your product data will not be modified. Do you want to proceed?';
+
         if (!$this->option('force') && ! $this->output->confirm($question, false)) {
             return 0;
         }
@@ -60,24 +64,28 @@ class IndexCommand extends Command
 
         // Clean Index
         $this->warn(' Purge and Create Index...');
+
         try {
             $this->cleanup();
             $this->info('Re-Created Index successful.');
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
             $this->error($exc->getMessage());
+
             return 0;
         }
         $this->output->newLine();
 
         // Re-Index Products
         $this->warn(' Index Products...');
+
         try {
             $this->reindex();
             $this->info('Indexing successful.');
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->output->block('The following error occurred.', 'ERROR', 'fg=red');
             $this->error($exc->getMessage());
+
             return 0;
         }
         $this->output->newLine();

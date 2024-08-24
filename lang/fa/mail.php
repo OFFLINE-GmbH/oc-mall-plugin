@@ -1,4 +1,6 @@
-<?php return [
+<?php
+
+return [
     'common' => [
         'hello' => 'سلام :firstname',
         'view_order_status_online' => ' نمایش وضعیت آنلاین سفارش',

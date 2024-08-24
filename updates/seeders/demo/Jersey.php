@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
@@ -70,8 +72,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'XS',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.brg'), 
-                        'hex' => '#413f40'
+                        'name' => trans('offline.mall::demo.products.properties.brg'),
+                        'hex' => '#413f40',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
@@ -82,8 +84,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'S',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.brg'), 
-                        'hex' => '#413f40'
+                        'name' => trans('offline.mall::demo.products.properties.brg'),
+                        'hex' => '#413f40',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
@@ -94,8 +96,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'M',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.brg'), 
-                        'hex' => '#413f40'
+                        'name' => trans('offline.mall::demo.products.properties.brg'),
+                        'hex' => '#413f40',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
@@ -106,13 +108,12 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'L',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.brg'), 
-                        'hex' => '#413f40'
+                        'name' => trans('offline.mall::demo.products.properties.brg'),
+                        'hex' => '#413f40',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[0]->id,
             ],
-
 
             [
                 'name'         => trans('offline.mall::demo.products.jersey.variants.bbw_xs_name'),
@@ -120,8 +121,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'XS',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
-                        'hex' => '#09d2bf'
+                        'name' => trans('offline.mall::demo.products.properties.bbw'),
+                        'hex' => '#09d2bf',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
@@ -132,8 +133,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'S',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
-                        'hex' => '#09d2bf'
+                        'name' => trans('offline.mall::demo.products.properties.bbw'),
+                        'hex' => '#09d2bf',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
@@ -144,8 +145,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'M',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
-                        'hex' => '#09d2bf'
+                        'name' => trans('offline.mall::demo.products.properties.bbw'),
+                        'hex' => '#09d2bf',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
@@ -156,8 +157,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'L',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
-                        'hex' => '#09d2bf'
+                        'name' => trans('offline.mall::demo.products.properties.bbw'),
+                        'hex' => '#09d2bf',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
@@ -168,8 +169,8 @@ class Jersey extends DemoProduct
                 'properties'   => [
                     'size'  => 'XL',
                     'color' => [
-                        'name' => trans('offline.mall::demo.products.properties.bbw'), 
-                        'hex' => '#09d2bf'
+                        'name' => trans('offline.mall::demo.products.properties.bbw'),
+                        'hex' => '#09d2bf',
                     ],
                 ],
                 'image_set_id' => $this->imageSets[1]->id,
@@ -180,7 +181,6 @@ class Jersey extends DemoProduct
     protected function customFields(): array
     {
         return [
-
         ];
     }
 

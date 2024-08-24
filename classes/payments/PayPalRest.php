@@ -7,7 +7,6 @@ use Omnipay\Omnipay;
 use Request;
 use Session;
 use Throwable;
-use Validator;
 
 /**
  * Process the payment via PayPal's REST API.
@@ -46,6 +45,7 @@ class PayPalRest extends PaymentProvider
         $gateway = $this->getGateway();
 
         $response = null;
+
         try {
             $response = $gateway->purchase([
                 'amount'    => $this->order->total_in_currency,
@@ -58,7 +58,7 @@ class PayPalRest extends PaymentProvider
         }
 
         // PayPal has to return a RedirectResponse if everything went well
-        if ( ! $response->isRedirect()) {
+        if (! $response->isRedirect()) {
             return $result->fail((array)$response->getData(), $response);
         }
 
@@ -80,7 +80,7 @@ class PayPalRest extends PaymentProvider
         $key     = Session::pull('mall.paypal.transactionReference');
         $payerId = Request::input('PayerID');
 
-        if ( ! $key || ! $payerId) {
+        if (! $key || ! $payerId) {
             return $result->fail([
                 'msg'   => 'Missing payment data',
                 'key'   => $key,
@@ -101,28 +101,11 @@ class PayPalRest extends PaymentProvider
 
         $data = (array)$response->getData();
 
-        if ( ! $response->isSuccessful()) {
+        if (! $response->isSuccessful()) {
             return $result->fail($data, $response);
         }
 
         return $result->success($data, $response);
-    }
-
-    /**
-     * Build the Omnipay Gateway for PayPal.
-     *
-     * @return \Omnipay\Common\GatewayInterface
-     */
-    protected function getGateway()
-    {
-        $gateway = Omnipay::create('PayPal_Rest');
-        $gateway->initialize([
-            'clientId' => decrypt(PaymentGatewaySettings::get('paypal_client_id')),
-            'secret'   => decrypt(PaymentGatewaySettings::get('paypal_secret')),
-            'testMode' => (bool)PaymentGatewaySettings::get('paypal_test_mode'),
-        ]);
-
-        return $gateway;
     }
 
     /**
@@ -156,5 +139,22 @@ class PayPalRest extends PaymentProvider
     public function encryptedSettings(): array
     {
         return ['paypal_client_id', 'paypal_secret'];
+    }
+
+    /**
+     * Build the Omnipay Gateway for PayPal.
+     *
+     * @return \Omnipay\Common\GatewayInterface
+     */
+    protected function getGateway()
+    {
+        $gateway = Omnipay::create('PayPal_Rest');
+        $gateway->initialize([
+            'clientId' => decrypt(PaymentGatewaySettings::get('paypal_client_id')),
+            'secret'   => decrypt(PaymentGatewaySettings::get('paypal_secret')),
+            'testMode' => (bool)PaymentGatewaySettings::get('paypal_test_mode'),
+        ]);
+
+        return $gateway;
     }
 }

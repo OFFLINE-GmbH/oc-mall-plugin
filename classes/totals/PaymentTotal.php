@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Totals;
 
@@ -8,7 +10,7 @@ use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\PaymentMethod;
 
 /**
- * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing
  * system with the PriceBag class construct instead.
  */
 class PaymentTotal implements JsonSerializable, CallsAnyMethod
@@ -82,18 +84,6 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
     }
 
     /**
-     * Calculate Shipping costs.
-     * @return void
-     */
-    protected function calculate()
-    {
-        $bag = $this->totals->getBag();
-        $this->preTaxes = $bag->paymentExclusive()->getMinorAmount()->toInt();
-        $this->total = $bag->paymentFee()->getMinorAmount()->toInt();
-        $this->taxes = $bag->paymentTax()->getMinorAmount()->toInt();
-    }
-
-    /**
      * Receive exclusive price value.
      * @return float|int
      */
@@ -127,5 +117,17 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
     public function totalPostTaxes()
     {
         return $this->total;
+    }
+
+    /**
+     * Calculate Shipping costs.
+     * @return void
+     */
+    protected function calculate()
+    {
+        $bag = $this->totals->getBag();
+        $this->preTaxes = $bag->paymentExclusive()->getMinorAmount()->toInt();
+        $this->total = $bag->paymentFee()->getMinorAmount()->toInt();
+        $this->taxes = $bag->paymentTax()->getMinorAmount()->toInt();
     }
 }

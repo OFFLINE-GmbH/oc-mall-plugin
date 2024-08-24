@@ -1,9 +1,10 @@
 <?php
+
 return [
     'brands' => [
         'cruiser_bikes' => [
-            'description' => 'Cruiser Bikes is the leading bicycle manufacturer on the Internet.'
-        ]
+            'description' => 'Cruiser Bikes is the leading bicycle manufacturer on the Internet.',
+        ],
     ],
     'categories' => [
         'example' => [
@@ -35,7 +36,7 @@ return [
             'name' => 'Gift cards',
             'meta_title' => 'Gift cards',
             'meta_description' => 'Order your Mall gift card online',
-        ]
+        ],
     ],
     'customer_groups' => [
         'silver' => [
@@ -93,7 +94,7 @@ return [
         'payment_refunded' => [
             'name' => 'Payment refunded',
             'description' => 'Sent when a payment has been refunded',
-        ]
+        ],
     ],
     'order_states' => [
         'new' => 'New',
@@ -103,7 +104,7 @@ return [
         'complete' => 'Complete',
     ],
     'payment_methods' => [
-        'invoice' => 'Invoice'
+        'invoice' => 'Invoice',
     ],
     'products' => [
         'cruiser_1000' => [
@@ -117,9 +118,9 @@ return [
                     'description' => "I've been looking for a bike like this for years!",
                     'pros_01' => 'Nice color',
                     'pros_02' => 'Great price',
-                    'cons_01' => 'Assembly is quite complicated'
-                ]
-            ]
+                    'cons_01' => 'Assembly is quite complicated',
+                ],
+            ],
         ],
         'cruiser_1500' => [
             'description' => '<p>Find your passion for city biking on Cruisers’ Model 1500. Whether you want to ride to the train or commute to work this is the right bike for you. The aluminium frame is feather light and durable.</p>',
@@ -129,7 +130,7 @@ return [
             'reviews' => [
                 'title' => 'This bike is for girls',
                 'description' => "So I've bought this bike last week and now my friend pointed out, that it is actually a girl's bike. This should be mentioned in the description!",
-            ]
+            ],
         ],
         'cruiser_3000' => [
             'description' => '<p>Find your passion for mountain biking on Cruisers’ Model 3000. Whether you want to ride enduro, all-mountain, or downhill - and there\'s nothing stopping you from trying them all - this fun and friendly Cruiser Suspension Bike will help you climb and descend. This carbon mountain bike comes with fun guaranteed.</p>',
@@ -150,8 +151,8 @@ return [
             'meta_description' => 'Whether you want to ride enduro, all-mountain, or downhill this fun and friendly Cruiser Suspension Bike will help you climb and descend.',
             'reviews' => [
                 'title' => 'Very bad build quality',
-                'description' => "The bike is okay but after a few rides parts started to fall off!",
-            ]
+                'description' => 'The bike is okay but after a few rides parts started to fall off!',
+            ],
         ],
         'gift_card_50' => [
             'name' => '50 € Gift Card',
@@ -186,7 +187,7 @@ return [
                 'bbw_m_name' => 'Stormrider Jersey Men black/blue/white M',
                 'bbw_l_name' => 'Stormrider Jersey Men black/blue/white L',
                 'bbw_xl_name' => 'Stormrider Jersey Men black/blue/white XL',
-            ]
+            ],
         ],
         'red_shirt' => [
             'name' => 'Red Shirt',
@@ -197,10 +198,10 @@ return [
                 's_name' => 'Red Shirt S',
                 'm_name' => 'Red Shirt M',
                 'l_name' => 'Red Shirt L',
-            ]
+            ],
         ],
         'fields' => [
-            'include_bike_assembly' => 'Include bike assembly guide'
+            'include_bike_assembly' => 'Include bike assembly guide',
         ],
         'images' => [
             'main' => 'Main Images',
@@ -223,10 +224,10 @@ return [
             'darker_red' => 'Darker Red',
             'heavens_blue' => "Heaven\'s Blue",
             'dark_grey' => 'Dark Grey',
-            'think_pink' => 'Think Pink'
+            'think_pink' => 'Think Pink',
         ],
     ],
-    "property_groups" => [
+    'property_groups' => [
         'height' => 'Height',
         'width' => 'Width',
         'depth' => 'Depth',
@@ -275,7 +276,7 @@ return [
             'description' => "Don't have the right tools at hand? We can preassemble this product for you.",
             'preassemble_name' => 'Preassemble product',
             'preassemble_description' => 'The completely assembled product will be shipped to your doorstep.',
-        ]
+        ],
     ],
     'shipping_methods' => [
         'standard' => 'Standard',
@@ -283,6 +284,6 @@ return [
     ],
     'taxes' => [
         'standard' => 'Standard',
-        'reduced' => 'Reduced'
-    ]
+        'reduced' => 'Reduced',
+    ],
 ];

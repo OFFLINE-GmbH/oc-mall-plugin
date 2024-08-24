@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Downloads;
 
@@ -6,21 +8,21 @@ use Auth;
 use Cms\Classes\Controller;
 use Cms\Classes\Page;
 use Flash;
-use OFFLINE\Mall\Models\Product;
-use OFFLINE\Mall\Models\ProductFile;
-use Request;
-use Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use OFFLINE\Mall\Models\GeneralSettings;
+use OFFLINE\Mall\Models\Product;
 use OFFLINE\Mall\Models\ProductFileGrant;
+use Request;
+use Session;
 
 class VirtualProductFileDownload
 {
     public function handle(string $key)
     {
         $grant = $this->findGrant($key);
-        if ( ! $grant) {
+
+        if (! $grant) {
             return response($this->trans('invalid'), 404);
         }
 
@@ -45,6 +47,7 @@ class VirtualProductFileDownload
 
         // Increase the download counter, then send the file as a response.
         $grant->increment('download_count');
+
         if ($product->latest_file) {
             $product->latest_file->increment('download_count');
         }
@@ -82,8 +85,8 @@ class VirtualProductFileDownload
         $key = base64_decode(urldecode($key));
 
         return ProductFileGrant::where('download_key', $key)
-                               ->with('order_product.product.latest_file')
-                               ->first();
+            ->with('order_product.product.latest_file')
+            ->first();
     }
 
     /**
@@ -97,7 +100,7 @@ class VirtualProductFileDownload
         Session::put('mall.login.redirect', Request::url());
         Flash::warning(trans('offline.mall::frontend.session.login_required'));
 
-        $url = (new Controller)->pageUrl(GeneralSettings::get('account_page'));
+        $url = (new Controller())->pageUrl(GeneralSettings::get('account_page'));
 
         return Redirect::to($url);
     }

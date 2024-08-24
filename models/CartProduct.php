@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -16,8 +18,11 @@ class CartProduct extends Model
     use CartItemPriceAccessors;
 
     public $table = 'offline_mall_cart_products';
+
     public $fillable = ['quantity', 'product_id', 'variant_id', 'weight', 'price'];
+
     public $jsonable = ['price'];
+
     public $hidden = [
         'id',
         'cart_id',
@@ -30,22 +35,27 @@ class CartProduct extends Model
         'updated_at',
         'deleted_at',
     ];
+
     public $appends = ['hashid'];
+
     public $casts = [
         'quantity'   => 'integer',
         'id'         => 'integer',
         'product_id' => 'integer',
         'variant_id' => 'integer',
     ];
+
     public $belongsTo = [
         'cart'    => Cart::class,
         'product' => Product::class,
         'variant' => Variant::class,
         'data'    => [Product::class, 'key' => 'product_id'],
     ];
+
     public $hasMany = [
         'custom_field_values' => [CustomFieldValue::class, 'key' => 'cart_product_id', 'otherKey' => 'id'],
     ];
+
     public $belongsToMany = [
         'service_options' => [
             ServiceOption::class,
@@ -140,9 +150,7 @@ class CartProduct extends Model
 
                 $prices = $value->priceForFieldOption($value->custom_field)->load('currency');
 
-                $data['price'] = $prices->mapWithKeys(function (Price $price) {
-                    return [$price->currency->code => $price->float];
-                })->toArray();
+                $data['price'] = $prices->mapWithKeys(fn (Price $price) => [$price->currency->code => $price->float])->toArray();
 
                 if (isset($data['custom_field']['custom_field_options'])) {
                     unset($data['custom_field']['custom_field_options']);
@@ -184,8 +192,6 @@ class CartProduct extends Model
 
     public function getCustomFieldValueDescriptionAttribute()
     {
-        return $this->custom_field_values->map(function (CustomFieldValue $value) {
-            return sprintf('%s: %s', e($value->custom_field->name), $value->display_value);
-        })->implode('<br />');
+        return $this->custom_field_values->map(fn (CustomFieldValue $value) => sprintf('%s: %s', e($value->custom_field->name), $value->display_value))->implode('<br />');
     }
 }

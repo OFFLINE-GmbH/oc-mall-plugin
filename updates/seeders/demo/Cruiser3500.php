@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Updates\Seeders\Demo;
 
@@ -51,8 +53,8 @@ class Cruiser3500 extends DemoProduct
     {
         return [
             'color'       => [
-                'name' => trans('offline.mall::demo.products.properties.darker_red'), 
-                'hex' => '#c22a29'
+                'name' => trans('offline.mall::demo.products.properties.darker_red'),
+                'hex' => '#c22a29',
             ],
             'rear-travel' => '0',
             'fork-travel' => '130',

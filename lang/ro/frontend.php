@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Căutaţi',
     'please_wait' => 'aşteptati puţin',
@@ -47,8 +48,8 @@ return [
     'form.lastname' => 'Prenumele',
     'form.company' => 'Companie',
     'form.company_placeholder' => 'Nu se completează ca persoană fizică',
-    'form.recipient' => "Număr TVA",
-    'form.recipient_placeholder' => "Nu se completează ca persoană fizică",
+    'form.recipient' => 'Număr TVA',
+    'form.recipient_placeholder' => 'Nu se completează ca persoană fizică',
     'form.address_lines' => 'Rand adresa',
     'form.zip' => 'cod poştal',
     'form.city' => 'Oraş',

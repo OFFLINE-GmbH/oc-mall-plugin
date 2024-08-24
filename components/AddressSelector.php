@@ -1,17 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
-use Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
+use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\GeneralSettings;
-use OFFLINE\Mall\Classes\User\Auth;
+use Validator;
 
 /**
  * The AddressSelector component displays a dropdown
@@ -25,12 +27,14 @@ class AddressSelector extends MallComponent
      * @var Cart
      */
     public $cart;
+
     /**
      * All the user's addresses.
      *
      * @var Collection
      */
     public $addresses;
+
     /**
      * The currently active address.
      * This will be displayed as a full string representation.
@@ -38,18 +42,21 @@ class AddressSelector extends MallComponent
      * @var Address
      */
     public $address;
+
     /**
      * The type of the address (billing, shipping).
      *
      * @var string
      */
     public $type;
+
     /**
      * The currently active Address in the selection dropdown.
      *
      * @var Address
      */
     public $activeAddress;
+
     /**
      * The name of the address edit page.
      *
@@ -85,7 +92,7 @@ class AddressSelector extends MallComponent
             'redirect' => [
                 'label' => 'Redirect',
                 'type'  => 'string',
-                'default' => 'checkout'
+                'default' => 'checkout',
             ],
         ];
     }
@@ -137,40 +144,6 @@ class AddressSelector extends MallComponent
     }
 
     /**
-     * This method sets all variables needed for this component to work.
-     *
-     * @return bool
-     */
-    protected function setData()
-    {
-        $user = Auth::getUser();
-        if ( ! $user) {
-            return;
-        }
-
-        if ( ! $user->customer) {
-            logger()->warning('User account without customer relation found.', ['user' => $user]);
-            Auth::logout();
-            return;
-        }
-
-        $this->setVar('type', $this->property('type'));
-
-        if ($this->type === 'billing') {
-            $address = $this->cart->billing_address_id ?? $user->customer->default_billing_address_id;
-        } else {
-            $address = $this->cart->shipping_address_id ?? $user->customer->default_shipping_address_id;
-        }
-
-        $addresses = Address::byCustomer($user->customer)->get();
-        $address   = $addresses->where('id', $address)->first();
-
-        $this->setVar('addresses', $addresses);
-        $this->setVar('address', $address);
-        $this->setVar('addressPage', GeneralSettings::get('address_page'));
-    }
-
-    /**
      * The user wants to select another address.
      *
      * Display a dropdown of all available addresses.
@@ -189,8 +162,8 @@ class AddressSelector extends MallComponent
     /**
      * The user selected a new address.
      *
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onUpdateAddress()
     {
@@ -208,6 +181,7 @@ class AddressSelector extends MallComponent
         ];
 
         $validation = Validator::make($data, $rules);
+
         if ($validation->fails()) {
             throw new ValidationException($validation);
         }
@@ -225,5 +199,41 @@ class AddressSelector extends MallComponent
         $this->setData();
 
         return [$selector => $this->renderPartial($partial)];
+    }
+
+    /**
+     * This method sets all variables needed for this component to work.
+     *
+     * @return bool
+     */
+    protected function setData()
+    {
+        $user = Auth::getUser();
+
+        if (! $user) {
+            return;
+        }
+
+        if (! $user->customer) {
+            logger()->warning('User account without customer relation found.', ['user' => $user]);
+            Auth::logout();
+
+            return;
+        }
+
+        $this->setVar('type', $this->property('type'));
+
+        if ($this->type === 'billing') {
+            $address = $this->cart->billing_address_id ?? $user->customer->default_billing_address_id;
+        } else {
+            $address = $this->cart->shipping_address_id ?? $user->customer->default_shipping_address_id;
+        }
+
+        $addresses = Address::byCustomer($user->customer)->get();
+        $address   = $addresses->where('id', $address)->first();
+
+        $this->setVar('addresses', $addresses);
+        $this->setVar('address', $address);
+        $this->setVar('addressPage', GeneralSettings::get('address_page'));
     }
 }

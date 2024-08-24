@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Pricing\Records;
 
-use Brick\Money\Money;
 use OFFLINE\Mall\Classes\Exceptions\PriceBagException;
 use OFFLINE\Mall\Classes\Pricing\BaseRecord;
 use OFFLINE\Mall\Classes\Pricing\BaseValue;
@@ -14,7 +15,7 @@ use Whitecube\Price\Price;
 
 class DiscountRecord extends BaseRecord
 {
-    const TYPE = 'discount';
+    public const TYPE = 'discount';
 
     /**
      * Amount
@@ -48,7 +49,7 @@ class DiscountRecord extends BaseRecord
     public function toArray(): array
     {
         return [
-            'type'  => self::TYPE
+            'type'  => self::TYPE,
         ];
     }
 
@@ -60,11 +61,12 @@ class DiscountRecord extends BaseRecord
     {
         if (empty($this->model)) {
             return null;
-        } else if (is_string($this->model)) {
+        } elseif (is_string($this->model)) {
             return $this->model;
         } else {
             /** @var Discount $model */
             $model = $this->model;
+
             return ($model->type == 'shipping') ? 'shipping' : 'products';
         }
     }
@@ -88,6 +90,7 @@ class DiscountRecord extends BaseRecord
         } else {
             $value = $this->amount->value();
         }
+
         return new PriceValue($value);
     }
 
@@ -130,5 +133,4 @@ class DiscountRecord extends BaseRecord
     {
         return $this->exclusive();
     }
-
 }

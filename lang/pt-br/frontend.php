@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'Pesquisar...',
     'please_wait' => 'Aguarde...',
@@ -47,8 +48,8 @@ return [
     'form.lastname' => 'Sobrenome',
     'form.company' => 'Razão social',
     'form.company_placeholder' => 'Deixe em branco se for pessoa física',
-    'form.recipient' => "Nome do destinatário",
-    'form.recipient_placeholder' => "Deixe em branco se for você",
+    'form.recipient' => 'Nome do destinatário',
+    'form.recipient_placeholder' => 'Deixe em branco se for você',
     'form.address_lines' => 'Endereço',
     'form.zip' => 'CEP',
     'form.city' => 'Cidade',

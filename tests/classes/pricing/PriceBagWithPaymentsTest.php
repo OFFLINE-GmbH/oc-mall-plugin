@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Classes\Pricing;
 
@@ -93,7 +95,7 @@ class PriceBagWithPaymentsTest extends BasePriceBagTestCase
     }
 
     /**
-     * Test if the percentage payment fee is calculated from the totals (incl. shipping) and added 
+     * Test if the percentage payment fee is calculated from the totals (incl. shipping) and added
      * to the totals correctly.
      * @return void
      */

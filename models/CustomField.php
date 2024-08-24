@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -15,31 +17,39 @@ class CustomField extends Model
     use HashIds;
     use PriceAccessors;
 
-    const MORPH_KEY = 'mall.custom_field';
+    public const MORPH_KEY = 'mall.custom_field';
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = ['name'];
+
     public $with = ['custom_field_options', 'prices'];
+
     public $casts = [
         'required' => 'boolean',
     ];
+
     public $fillable = [
         'name',
         'type',
         'required',
     ];
+
     public $rules = [
         'product_id' => 'exists:offline_mall_products,id',
         'name'       => 'required',
         'type'       => 'in:text,textarea,dropdown,checkbox,color,image',
         'required'   => 'boolean',
     ];
+
     public $hasMany = [
         'custom_field_options' => [CustomFieldOption::class, 'order' => 'sort_order'],
     ];
+
     public $morphMany = [
         'prices' => [Price::class, 'name' => 'priceable', 'conditions' => 'price_category_id is null'],
     ];
+
     public $belongsToMany = [
         'products' => [
             Product::class,
@@ -48,6 +58,7 @@ class CustomField extends Model
             'otherKey' => 'product_id',
         ],
     ];
+
     public $attachOne = [
         'image' => File::class,
     ];

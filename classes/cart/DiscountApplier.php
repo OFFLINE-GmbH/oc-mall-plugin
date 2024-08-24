@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Classes\Cart;
 
+use Auth;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Discount;
 
 /**
- * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing 
+ * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing
  * system with the PriceBag class construct instead.
  */
 class DiscountApplier
@@ -17,22 +20,27 @@ class DiscountApplier
      * @var TotalsCalculatorInput
      */
     private $input;
+
     /**
      * @var int
      */
     private $total;
+
     /**
      * @var int
      */
     private $reducedTotal;
+
     /**
      * @var Discount[]
      */
     private $discounts;
+
     /**
      * @var bool
      */
     private $reducedTotalIsFixed = false;
+
     /**
      * @var Money
      */
@@ -49,7 +57,7 @@ class DiscountApplier
 
     public function apply(Discount $discount): ?bool
     {
-        if ( ! $this->discountCanBeApplied($discount)) {
+        if (! $this->discountCanBeApplied($discount)) {
             return null;
         }
 
@@ -61,8 +69,8 @@ class DiscountApplier
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
-            $savings                   = $this->input->shipping_method->price()->integer -
-                $discount->shippingPrice()->integer;
+            $savings                   = $this->input->shipping_method->price()->integer
+                - $discount->shippingPrice()->integer;
             $this->reducedTotalIsFixed = true;
         }
 
@@ -139,10 +147,12 @@ class DiscountApplier
 
     private function userBelongsToCustomerGroup(int $customerGroupId): bool
     {
-        $group = optional(\Auth::getUser())->customer_group();
-        if ( ! $group) {
+        $group = optional(Auth::getUser())->customer_group();
+
+        if (! $group) {
             return false;
         }
+
         return $group->where('id', $customerGroupId)->exists();
     }
 
@@ -151,10 +161,10 @@ class DiscountApplier
         return $discount->shipping_methods->contains($this->input->shipping_method->id);
     }
 
-    private function checkPaymentMethod(int $method_id) {
+    private function checkPaymentMethod(int $method_id)
+    {
         if(isset($this->input->payment_method)) {
             return $method_id == $this->input->payment_method->id;
         }
     }
-
 }

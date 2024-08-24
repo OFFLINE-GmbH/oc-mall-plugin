@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
@@ -19,9 +21,13 @@ use OFFLINE\Mall\Tests\PluginTestCase;
 class CartProductTest extends PluginTestCase
 {
     public $product;
+
     public $variant;
+
     public $cart;
+
     public $customFieldValueA;
+
     protected $address;
 
     public function setUp(): void
@@ -92,7 +98,6 @@ class CartProductTest extends PluginTestCase
 
         $cart->addProduct($product, 2, null, collect([$customFieldValueA, $customFieldValueB]));
     }
-
 
     public function test_custom_field_value_conversion()
     {
@@ -211,7 +216,6 @@ class CartProductTest extends PluginTestCase
         $this->assertEquals(64000, $entry->totalPostTaxes);
     }
 
-
     protected function getTax($name, int $percentage): Tax
     {
         $tax1             = new Tax();
@@ -231,7 +235,6 @@ class CartProductTest extends PluginTestCase
         return $cart;
     }
 
-
     protected function getProduct($price)
     {
         if (is_int($price)) {
@@ -245,6 +248,4 @@ class CartProductTest extends PluginTestCase
         // Reload everything to prevent stale relationships.
         return Product::find($product->id);
     }
-
 }
-

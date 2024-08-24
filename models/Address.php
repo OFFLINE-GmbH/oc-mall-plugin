@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -16,8 +18,6 @@ class Address extends Model
     use Validation;
 
     public $implement = [LocationModel::class];
-
-    protected $dates = ['deleted_at'];
 
     public $rules = [
         'lines'       => 'required',
@@ -38,6 +38,7 @@ class Address extends Model
         'state_id',
         'details',
     ];
+
     public $hidden = [
         'id',
         'customer_id',
@@ -45,6 +46,7 @@ class Address extends Model
         'updated_at',
         'deleted_at',
     ];
+
     public $appends = ['hash_id'];
 
     public $table = 'offline_mall_addresses';
@@ -52,6 +54,8 @@ class Address extends Model
     public $belongsTo = [
         'customer' => Customer::class,
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function beforeValidate()
     {
@@ -86,6 +90,7 @@ class Address extends Model
     public function getNamesArrayAttribute(): array
     {
         $names = explode("\n", $this->name);
+
         if (count($names)) {
             return $names;
         }

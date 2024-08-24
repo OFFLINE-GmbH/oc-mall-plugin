@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -33,7 +35,7 @@ class CustomerGroup extends Model
      * @var array
      */
     public $translatable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -51,7 +53,7 @@ class CustomerGroup extends Model
      */
     public $fillable = [
         'name',
-        'code'
+        'code',
     ];
 
     /**
@@ -81,9 +83,11 @@ class CustomerGroup extends Model
         if ($currency === null) {
             $currency = Currency::activeCurrency()->id;
         }
+
         if ($currency instanceof Currency) {
             $currency = $currency->id;
         }
+
         if (is_string($currency)) {
             $currency = Currency::whereCode($currency)->firstOrFail()->id;
         }

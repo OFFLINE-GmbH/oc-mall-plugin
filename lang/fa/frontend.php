@@ -1,4 +1,5 @@
 <?php
+
 return [
     'search' => 'جستجو...',
     'please_wait' => 'لطفا صبر کنید...',
@@ -47,8 +48,8 @@ return [
     'form.lastname' => 'نام خانوادگی',
     'form.company' => 'شرکت',
     'form.company_placeholder' => 'اگر شخص حقیقی است ، خالی باشد',
-    'form.recipient' => "نام گیرنده",
-    'form.recipient_placeholder' => "اگر گیرنده شما هستید، خالی  باشد",
+    'form.recipient' => 'نام گیرنده',
+    'form.recipient_placeholder' => 'اگر گیرنده شما هستید، خالی  باشد',
     'form.address_lines' => 'آدرس',
     'form.zip' => 'کدپستی',
     'form.city' => 'شهر',

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -15,7 +17,7 @@ class ShippingMethodRate extends Model
      * Morph key as used on the respective relationships.
      * @var string
      */
-    const MORPH_KEY = 'mall.shipping_method_rate';
+    public const MORPH_KEY = 'mall.shipping_method_rate';
     
     /**
      * The table associated with this model.
@@ -45,7 +47,7 @@ class ShippingMethodRate extends Model
     public $fillable = [
         'from_weight',
         'to_weight',
-        'shipping_method_id'
+        'shipping_method_id',
     ];
 
     /**

@@ -10,6 +10,7 @@ class IndexResult
      * @var array<integer>
      */
     public $ids = [];
+
     /**
      * @var int
      */

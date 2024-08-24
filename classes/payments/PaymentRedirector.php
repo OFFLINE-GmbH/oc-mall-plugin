@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Event;
+use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -17,6 +18,7 @@ class PaymentRedirector
      * @var Controller
      */
     protected $controller;
+
     /**
      * @var string
      */
@@ -31,7 +33,7 @@ class PaymentRedirector
      */
     public function __construct(string $page)
     {
-        $this->controller = Controller::getController() ?: new Controller;
+        $this->controller = Controller::getController() ?: new Controller();
         $this->page       = $page;
     }
 
@@ -54,6 +56,7 @@ class PaymentRedirector
         $flow    = session()->get('mall.checkout.flow');
 
         $url = $states[$state];
+
         if ($orderId) {
             $url .= '?' . http_build_query(['order' => $orderId, 'flow' => $flow]);
         }
@@ -75,8 +78,8 @@ class PaymentRedirector
                 return redirect()->to($result->redirectUrl);
             }
 
-            if ( ! $result->redirectResponse) {
-                throw new \LogicException('redirectUrl or redirectResponse on PaymentResult is required.');
+            if (! $result->redirectResponse) {
+                throw new LogicException('redirectUrl or redirectResponse on PaymentResult is required.');
             }
 
             // If the PaymentProvider returned a RedirectResponse we can re-use it
@@ -105,7 +108,6 @@ class PaymentRedirector
             return $this->finalRedirect('successful');
         }
 
-
         if (optional($result->order)->wasRecentlyCreated) {
             Event::fire('mall.checkout.failed', [$result]);
         }
@@ -124,6 +126,7 @@ class PaymentRedirector
     {
         // Someone tampered with the url or the session has expired.
         $paymentId = session()->pull('mall.payment.id');
+
         if ($paymentId !== request()->input('oc-mall_payment_id')) {
             session()->forget('mall.payment.callback');
 
@@ -140,11 +143,13 @@ class PaymentRedirector
         // If a callback is set we need to do an additional step to
         // complete this payment.
         $callback = session()->pull('mall.payment.callback');
+
         if ($callback) {
             /** @var PaymentProvider $paymentProvider */
-            $paymentProvider = new $callback;
-            if ( ! method_exists($paymentProvider, 'complete')) {
-                throw new \LogicException('Payment providers that redirect off-site need to have a "complete" method!');
+            $paymentProvider = new $callback();
+
+            if (! method_exists($paymentProvider, 'complete')) {
+                throw new LogicException('Payment providers that redirect off-site need to have a "complete" method!');
             }
 
             $result = new PaymentResult($paymentProvider, $paymentProvider->getOrderFromSession());
@@ -158,7 +163,7 @@ class PaymentRedirector
     /**
      * Returns the URL to a substep of the payment process.
      *
-     * @param       $step
+     * @param $step
      * @param array $params
      *
      * @return string
@@ -170,7 +175,6 @@ class PaymentRedirector
             array_merge($params, ['step' => $step])
         );
     }
-
 
     /**
      * The user is redirected to this URL if a payment failed.

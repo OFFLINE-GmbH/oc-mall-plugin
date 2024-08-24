@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests;
 
@@ -12,6 +14,7 @@ use OFFLINE\Mall\Updates\Seeders\Tables\CustomerGroupTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\CustomerTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\CustomFieldTableSeeder;
 use OFFLINE\Mall\Updates\Seeders\Tables\ProductTableSeeder;
+use System;
 use System\Classes\PluginManager;
 
 class PluginTestCase extends \PluginTestCase
@@ -28,7 +31,7 @@ class PluginTestCase extends \PluginTestCase
         parent::setUp();
 
         // Seed demo data
-        if (version_compare(\System::VERSION, '3.0', '<')) {
+        if (version_compare(System::VERSION, '3.0', '<')) {
             $manager = PluginManager::instance();
             $manager->loadPlugins();
             $plugin = $manager->findByIdentifier('offline.mall');
@@ -42,31 +45,31 @@ class PluginTestCase extends \PluginTestCase
         } else {
             $this->artisan('plugin:seed', [
                 'namespace' => 'OFFLINE.Mall',
-                'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder'
+                'class'     => 'OFFLINE\Mall\Updates\Seeders\MallSeeder',
             ]);
     
             //@todo temporary solution to fix testing
             $this->artisan('plugin:seed', [
                 'namespace' => 'OFFLINE.Mall',
-                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\CustomerGroupTableSeeder'
+                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\CustomerGroupTableSeeder',
             ]);
     
             //@todo temporary solution to fix testing
             $this->artisan('plugin:seed', [
                 'namespace' => 'OFFLINE.Mall',
-                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\CustomerTableSeeder'
+                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\CustomerTableSeeder',
             ]);
     
             //@todo temporary solution to fix testing
             $this->artisan('plugin:seed', [
                 'namespace' => 'OFFLINE.Mall',
-                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\CustomFieldTableSeeder'
+                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\CustomFieldTableSeeder',
             ]);
     
             //@todo temporary solution to fix testing
             $this->artisan('plugin:seed', [
                 'namespace' => 'OFFLINE.Mall',
-                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\ProductTableSeeder'
+                'class'     => 'OFFLINE\Mall\Updates\Seeders\Tables\ProductTableSeeder',
             ]);
         }
 
@@ -74,9 +77,7 @@ class PluginTestCase extends \PluginTestCase
         Currency::setActiveCurrency(Currency::where('code', 'CHF')->first());
 
         // Bind No-Op Index
-        app()->bind(Index::class, function() {
-            return new Noop();
-        });
+        app()->bind(Index::class, fn () => new Noop());
     }
 
     /**

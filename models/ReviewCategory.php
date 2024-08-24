@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
@@ -12,23 +14,29 @@ class ReviewCategory extends Model
     use Sluggable;
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     public $translatable = [
         'name',
     ];
+
     public $fillable = [
         'name',
     ];
+
     public $table = 'offline_mall_review_categories';
+
     public $slugs = [
         'slug' => 'name',
     ];
+
     public $rules = [
         'name' => 'required',
     ];
+
     public $belongsToMany = [
         'categories' => [
             Category::class,
             'table' => 'offline_mall_category_review_category',
-        ]
+        ],
     ];
 }

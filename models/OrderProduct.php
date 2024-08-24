@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
 use Model;
-use October\Rain\Database\Traits\Validation;
 use October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Traits\JsonPrice;
 
 class OrderProduct extends Model
@@ -59,12 +61,12 @@ class OrderProduct extends Model
         'shippable'     => 'boolean',
         'taxable'       => 'boolean',
         'is_virtual'    => 'boolean',
-        'deleted_at'    => 'datetime'
+        'deleted_at'    => 'datetime',
     ];
 
     /**
      * Attribute names that are json encoded and decoded from the database.
-     * @var array 
+     * @var array
      */
     public $jsonable = [
         'taxes',
@@ -96,6 +98,7 @@ class OrderProduct extends Model
     /**
      * Add virtual query scope.
      * @var array
+     * @param mixed $query
      */
     public function scopeVirtual($query)
     {
@@ -116,21 +119,6 @@ class OrderProduct extends Model
             'total_taxes',
             'total_post_taxes',
         ];
-    }
-
-    /**
-     * Set used Currency
-     * @return Currency
-     */
-    protected function useCurrency()
-    {
-        if ($this->currency) {
-            return new Currency($this->currency);
-        } else if ($this->order->currency) {
-            return new Currency($this->order->currency);
-        } else {
-            return $this->fallbackCurrency();
-        }
     }
 
     /**
@@ -195,20 +183,8 @@ class OrderProduct extends Model
     {
         $kind      = $this->variant_id ? 'variant' : 'product';
         $attribute = $this->variant_id ? 'variant_id' : 'product_id';
-        return $kind . '-' . $this->{$attribute};
-    }
 
-    /**
-     * Undocumented function
-     * @param string $key
-     * @return mixed
-     */
-    protected function toPriceModel(string $key): Price
-    {
-        return new Price([
-            'currency_id' => $this->useCurrency()->id,
-            'price'       => $this->getOriginal($key) / 100,
-        ]);
+        return $kind . '-' . $this->{$attribute};
     }
 
     /**
@@ -232,5 +208,33 @@ class OrderProduct extends Model
                 $display
             );
         })->implode('<br />');
+    }
+
+    /**
+     * Set used Currency
+     * @return Currency
+     */
+    protected function useCurrency()
+    {
+        if ($this->currency) {
+            return new Currency($this->currency);
+        } elseif ($this->order->currency) {
+            return new Currency($this->order->currency);
+        } else {
+            return $this->fallbackCurrency();
+        }
+    }
+
+    /**
+     * Undocumented function
+     * @param string $key
+     * @return mixed
+     */
+    protected function toPriceModel(string $key): Price
+    {
+        return new Price([
+            'currency_id' => $this->useCurrency()->id,
+            'price'       => $this->getOriginal($key) / 100,
+        ]);
     }
 }

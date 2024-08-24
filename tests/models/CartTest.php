@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OFFLINE\Mall\Tests\Models;
 
@@ -530,19 +532,17 @@ class CartTest extends PluginTestCase
         $this->assertNull($cart->shipping_method_id);
     }
 
-
     public function test_transferred_carts_get_merged()
     {
         // @todo Old Cart is currently just deleted, not merged with new one!
         return;
-        
         $customer = Customer::first();
         $prod1 = Product::find(1);
         $prod2 = Product::find(2);
 
         // Create an existing Cart for a customer.
         $cart = Cart::create([
-            'customer_id' => $customer->id
+            'customer_id' => $customer->id,
         ]);
         $cart->addProduct($prod1);
 

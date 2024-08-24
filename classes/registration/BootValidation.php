@@ -11,11 +11,11 @@ trait BootValidation
     {
         Validator::extend('non_existing_user', function ($attribute, $value, $parameters) {
             return User::with('customer')
-                    ->where('email', $value)
-                    ->whereHas('customer', function ($q) {
-                        $q->where('is_guest', 0);
-                    })
-                    ->count() === 0;
+                ->where('email', $value)
+                ->whereHas('customer', function ($q) {
+                    $q->where('is_guest', 0);
+                })
+                ->count() === 0;
         });
     }
 }
