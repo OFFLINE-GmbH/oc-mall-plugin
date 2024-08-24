@@ -163,6 +163,10 @@ class PropertyValue extends Model
             return null;
         }
 
+        if (is_array($value)) {
+            return $value;
+        }
+
         return json_decode($value, true);
     }
 

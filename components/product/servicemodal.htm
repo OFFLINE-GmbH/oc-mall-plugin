@@ -11,7 +11,7 @@
             <h4 class="mall-product-service__name">{{ service.name }}</h4>
             {% if service.description %}
             <div class="mall-product-service__description">
-                {{ html_clean(service.description|raw) }}
+                {{ service.description|content }}
             </div>
             {% endif %}
             {% if service.pivot.required %}
@@ -39,11 +39,11 @@
                             {{ option.name }}
                         </span>
                         <span class="mall-product-service-option__price">
-                            {{ html_clean(option.price().string|raw) }}
+                            {{ option.price().string|content }}
                         </span>
                         {% if option.description %}
                             <span class="mall-product-service-option__description">
-                                {{ html_clean(option.description|raw) }}
+                                {{ option.description|content }}
                             </span>
                         {% endif %}
                     </label>

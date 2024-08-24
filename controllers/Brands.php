@@ -9,6 +9,8 @@ use Backend\Classes\Controller;
 
 class Brands extends Controller
 {
+    public $turboVisitControl = 'disabled';
+
     /**
      * Implement behaviors for this controller.
      * @var array

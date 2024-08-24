@@ -30,7 +30,9 @@ use RainLab\Translate\Behaviors\TranslatableModel;
 
 class Products extends Controller
 {
-    use ProductPriceTable;
+   use ProductPriceTable;
+
+    public $turboVisitControl = 'reload';
 
     /**
      * Implement behaviors for this controller.
@@ -111,12 +113,12 @@ class Products extends Controller
     public function update($id)
     {
         parent::update($id);
-        
+
         // Something went wrong if no formModel is available. Proceed with default behavior.
         if (!isset($this->vars['formModel'])) {
             return;
         }
-        
+
         // If the product has no category something is wrong and needs fixing!
         if (!$this->vars['formModel']->categories) {
             Flash::error(trans('offline.mall::lang.common.action_required'));
@@ -131,7 +133,7 @@ class Products extends Controller
             if (!$latestFile || !$record instanceof ProductFile) {
                 return '';
             }
-            
+
             if (empty(trim($latestFile->version))) {
                 return '';
             }
@@ -185,7 +187,7 @@ class Products extends Controller
     }
 
     /**
-     * Save the initial price into the prices table and create an initial image set if images have 
+     * Save the initial price into the prices table and create an initial image set if images have
      * been uploaded.
      * @param Product $model
      * @return void
@@ -404,14 +406,14 @@ class Products extends Controller
         if ($this->relationName === 'files') {
             $parent['#Form-field-Product-missing_file_hint-group'] = '';
         }
-        
+
         if ($this->relationName === 'variants') {
             $this->updateProductPrices($this->vars['formModel'], $this->relationModel);
             $this->createImageSetFromTempImages($this->relationModel);
             $this->handlePropertyValueUpdates($this->relationModel);
 
             (new ProductObserver(app(Index::class)))->updated($this->vars['formModel']);
-        }        
+        }
 
         return $this->asExtension(RelationController::class)->relationRefresh();
     }
@@ -533,12 +535,12 @@ class Products extends Controller
                 $set->name       = $variant->name;
                 $set->product_id = $variant->product_id;
                 $set->save();
-    
+
                 $variant->image_set_id = $set->id;
                 $variant->save();
-    
+
                 $variant->commitDeferred(post('_session_key'));
-    
+
                 return DB::table('system_files')
                     ->where('attachment_type', Variant::MORPH_KEY)
                     ->where('attachment_id', $variant->id)
@@ -579,7 +581,7 @@ class Products extends Controller
             }
         });
     }
-    
+
     /**
      * Update product prices.
      * @param mixed $product

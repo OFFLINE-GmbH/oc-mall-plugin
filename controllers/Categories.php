@@ -12,6 +12,8 @@ use OFFLINE\Mall\Models\Category;
 
 class Categories extends Controller
 {
+    public $turboVisitControl = 'disabled';
+
     /**
      * Implement behaviors for this controller.
      * @var array

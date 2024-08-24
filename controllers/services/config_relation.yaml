@@ -7,6 +7,11 @@ options:
     manage:
         form: $/offline/mall/models/serviceoption/fields.yaml
         recordsPerPage: 10
+    structure:
+        showTree: false
+        showReorder: true
+        showSorting: true
+        dragRow: true
 
 products:
     label: 'offline.mall::lang.common.products'

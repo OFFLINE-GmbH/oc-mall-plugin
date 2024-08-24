@@ -15,6 +15,8 @@ use OFFLINE\Mall\Models\Service;
 
 class Services extends Controller
 {
+    public $turboVisitControl = 'disabled';
+
     /**
      * Implement behaviors for this controller.
      * @var array
