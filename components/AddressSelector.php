@@ -117,7 +117,7 @@ class AddressSelector extends MallComponent
      */
     public function init()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
         $this->setVar('cart', Cart::byUser($user));
     }
 
@@ -130,7 +130,7 @@ class AddressSelector extends MallComponent
     {
         $this->setData();
 
-        if (Auth::getUser() && $this->addresses->count() < 1) {
+        if (Auth::user() && $this->addresses->count() < 1) {
             Flash::warning(trans('offline.mall::frontend.flash.missing_address'));
 
             $url = $this->controller->pageUrl($this->addressPage, [
@@ -152,7 +152,7 @@ class AddressSelector extends MallComponent
      */
     public function onChangeAddress()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
         $this->setData();
 
         $this->setVar('addresses', Address::byCustomer($user->customer)->get());
@@ -167,7 +167,7 @@ class AddressSelector extends MallComponent
      */
     public function onUpdateAddress()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
         $this->setData();
 
         $data  = post();
@@ -208,7 +208,7 @@ class AddressSelector extends MallComponent
      */
     protected function setData()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (! $user) {
             return;

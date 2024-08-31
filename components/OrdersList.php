@@ -66,7 +66,7 @@ class OrdersList extends MallComponent
      */
     public function init()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (!$user || !$user->customer) {
             return;
@@ -81,7 +81,7 @@ class OrdersList extends MallComponent
 
     public function onCancelOrder()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (! $user) {
             return;

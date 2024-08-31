@@ -552,7 +552,7 @@ class Product extends MallComponent
      */
     protected function addToCart(ProductModel $product, $quantity, $variant, $values, array $serviceOptions = [])
     {
-        $cart = Cart::byUser(Auth::getUser());
+        $cart = Cart::byUser(Auth::user());
 
         $serviceOptions = array_filter($serviceOptions);
 

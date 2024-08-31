@@ -190,7 +190,7 @@ class Wishlist extends Model
 
     public function getCartCountryId()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (! $user || ! $user->customer) {
             return null;

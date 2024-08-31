@@ -132,14 +132,14 @@ class AddressForm extends MallComponent
      */
     public function setData()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (! $user) {
             return false;
         }
 
         $this->setVar('setAddressAs', $this->property('set'));
-        $this->setVar('cart', Cart::byUser(Auth::getUser()));
+        $this->setVar('cart', Cart::byUser(Auth::user()));
         $this->setVar('countries', Country::getNameList());
         $this->setVar('useState', GeneralSettings::get('use_state', true));
 
@@ -180,7 +180,7 @@ class AddressForm extends MallComponent
     public function onSubmit()
     {
         $this->setData();
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (! $user) {
             return $this->controller->run('404');

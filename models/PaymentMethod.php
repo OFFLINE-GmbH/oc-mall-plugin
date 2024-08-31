@@ -299,7 +299,7 @@ class PaymentMethod extends Model
     public function priceForCart(): PaymentTotal
     {
         /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
-        $user = Auth::getUser();
+        $user = Auth::user();
         $cart = Cart::byUser($user);
 
         return new PaymentTotal($this, $cart->totals);

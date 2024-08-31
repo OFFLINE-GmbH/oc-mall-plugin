@@ -603,3 +603,5 @@ v3.4.7:
 v3.5.0:
     - 'PHP 8.0 is now the minimum required version'
     - 'Free orders no longer require a payment'
+v3.5.1:
+    - 'Fixed RainLab.User 3.0 Auth facade compatibility'

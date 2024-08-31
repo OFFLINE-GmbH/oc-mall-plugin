@@ -55,7 +55,7 @@ class DiscountApplier extends MallComponent
     public function onApplyDiscount()
     {
         $code = strtoupper(post('code'));
-        $cart = Cart::byUser(Auth::getUser());
+        $cart = Cart::byUser(Auth::user());
 
         try {
             $cart->applyDiscountByCode($code, (int)$this->property('discountCodeLimit'));

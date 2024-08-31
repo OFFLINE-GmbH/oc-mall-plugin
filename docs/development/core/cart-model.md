@@ -10,7 +10,7 @@ You can use the following method to retrieve a new or existing
 cart for the current customer:
 
 ```php
-$cart = Cart::byUser(Auth::getUser());
+$cart = Cart::byUser(Auth::user());
 ```
 
 ## Enforce shipping price
