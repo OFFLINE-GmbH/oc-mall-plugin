@@ -100,7 +100,7 @@ class ProductReviews extends ComponentBase
         $this->accountPage      = GeneralSettings::get('account_page');
         $this->isModerated      = ReviewSettings::get('moderated');
 
-        if (Auth::getUser()) {
+        if (Auth::user()) {
             $this->canReview = true;
         } else {
             $this->canReview = ReviewSettings::get('allow_anonymous', false);
@@ -122,8 +122,8 @@ class ProductReviews extends ComponentBase
             ->when($this->property('variant'), function ($q) {
                 $q->where('variant_id', $this->property('variant'));
             })
-            ->when(optional(Auth::getUser())->customer, function ($q) {
-                $q->where('customer_id', Auth::getUser()->customer->id);
+            ->when(optional(Auth::user())->customer, function ($q) {
+                $q->where('customer_id', Auth::user()->customer->id);
             }, function ($q) {
                 $q->where('user_hash', Review::getUserHash());
             })
@@ -162,7 +162,7 @@ class ProductReviews extends ComponentBase
             $review->fill($data);
             $review->product_id  = $this->property('product');
             $review->variant_id  = $this->property('variant');
-            $review->customer_id = optional(optional(Auth::getUser())->customer)->id;
+            $review->customer_id = optional(optional(Auth::user())->customer)->id;
 
             if (! $this->isModerated) {
                 $review->approved_at = now();

@@ -116,17 +116,6 @@ export default defineConfig({
                         { text: 'Unit Testing', link: '/development/extend/unit-testing' },
                     ]
                 },
-                {
-                    text: 'Changelog',
-                    collapsed: true,
-                    items: [
-                        { text: 'Latest Release', link: '/development/changelog/latest' },
-                        { text: 'Version 3', link: '/development/changelog/v3' },
-                        { text: 'Version 2', link: '/development/changelog/v2' },
-                        { text: 'Version 1', link: '/development/changelog/v1' },
-                    ]
-                },
-                { text: 'Roadmap', link: '/development/roadmap' },
             ],
         },
         socialLinks: [

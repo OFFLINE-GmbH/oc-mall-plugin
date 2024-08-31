@@ -366,7 +366,7 @@ class QuickCheckout extends MallComponent
     {
         $id = $this->decode(input('id'));
 
-        $cart = Cart::byUser(FrontendAuth::getUser());
+        $cart = Cart::byUser(FrontendAuth::user());
 
         $product = $this->getProductFromCart($cart, $id);
 
@@ -392,7 +392,7 @@ class QuickCheckout extends MallComponent
     {
         $id = $this->decode(input('id'));
 
-        $cart = Cart::byUser(Auth::getUser());
+        $cart = Cart::byUser(Auth::user());
 
         $cart->removeDiscountCodeById($id);
 
@@ -478,7 +478,7 @@ class QuickCheckout extends MallComponent
         $this->currentPage = $this->page->page->getBaseFileName();
         $this->setVar('accountPage', GeneralSettings::get('account_page'));
 
-        $this->setVar('user', Auth::getUser());
+        $this->setVar('user', Auth::user());
 
         $cart = Cart::byUser($this->user);
 
@@ -531,11 +531,11 @@ class QuickCheckout extends MallComponent
      */
     protected function getCustomerMethods()
     {
-        if (! optional(Auth::getUser())->customer) {
+        if (! optional(Auth::user())->customer) {
             return collect([]);
         }
 
-        return optional(Auth::getUser()->customer->payment_methods)->groupBy('payment_method_id');
+        return optional(Auth::user()->customer->payment_methods)->groupBy('payment_method_id');
     }
 
     /**

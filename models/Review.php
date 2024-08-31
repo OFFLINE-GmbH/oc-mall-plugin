@@ -121,7 +121,7 @@ class Review extends Model
      */
     public static function getUserHash()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         $userId = $user->id ?? 0;
         $data = implode('-', [request()->ip(), request()->userAgent(), $userId]);

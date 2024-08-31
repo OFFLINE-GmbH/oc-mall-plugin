@@ -56,7 +56,7 @@ class DefaultSignInHandler implements SignInHandler
         // RainLab.User 3.0 compatibility
         if (class_exists(Setting::class)) {
             if (Auth::attempt(['email' => $credentials['login'], 'password' => $credentials['password']], true)) {
-                $user = Auth::getUser();
+                $user = Auth::user();
             } else {
                 throw new AuthException('rainlab.user::lang.account.invalid_login');
             }

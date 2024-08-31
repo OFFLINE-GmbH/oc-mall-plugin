@@ -163,7 +163,7 @@ class Cart extends MallComponent
      */
     public function setData()
     {
-        $cart = CartModel::byUser(Auth::getUser());
+        $cart = CartModel::byUser(Auth::user());
         $cart->loadMissing(['products', 'products.custom_field_values', 'discounts']);
 
         if ($cart->shipping_method_id === null) {
@@ -189,7 +189,7 @@ class Cart extends MallComponent
     {
         $id = $this->decode(input('id'));
 
-        $cart    = CartModel::byUser(Auth::getUser());
+        $cart    = CartModel::byUser(Auth::user());
         $product = $this->getProductFromCart($cart, $id);
 
         if (!$product) {
@@ -216,7 +216,7 @@ class Cart extends MallComponent
     {
         $id = $this->decode(input('id'));
 
-        $cart = CartModel::byUser(Auth::getUser());
+        $cart = CartModel::byUser(Auth::user());
 
         $product = $this->getProductFromCart($cart, $id);
         
@@ -246,7 +246,7 @@ class Cart extends MallComponent
     {
         $id = $this->decode(input('id'));
 
-        $cart = CartModel::byUser(Auth::getUser());
+        $cart = CartModel::byUser(Auth::user());
 
         $cart->removeDiscountCodeById($id);
 

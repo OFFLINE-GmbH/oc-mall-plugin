@@ -150,7 +150,7 @@ class ShippingMethodSelector extends MallComponent
     protected function setData()
     {
         $this->skipIfOnlyOneAvailable = (bool)$this->property('skipIfOnlyOneAvailable');
-        $this->setVar('cart', Cart::byUser(Auth::getUser()));
+        $this->setVar('cart', Cart::byUser(Auth::user()));
         $this->setVar('methods', ShippingMethod::getAvailableByCart($this->cart));
         $this->setVar('shippingSelectionBeforePayment', GeneralSettings::get('shipping_selection_before_payment', false));	// Needed by themes
     }

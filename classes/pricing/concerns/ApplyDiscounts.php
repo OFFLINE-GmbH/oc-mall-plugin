@@ -168,7 +168,7 @@ trait ApplyDiscounts
     protected function userBelongsToCustomerGroup(int $id): bool
     {
         /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
-        $group = optional(Auth::getUser())->customer_group();
+        $group = optional(Auth::user())->customer_group();
 
         return $group ? $group->where('id', $id)->exists() : false;
     }

@@ -280,7 +280,7 @@ class Products extends MallComponent
                 ->firstOrFail();
         }
 
-        $cart     = CartModel::byUser(Auth::getUser());
+        $cart     = CartModel::byUser(Auth::user());
         $quantity = (int)post('quantity', $product->quantity_default ?? 1);
 
         if ($quantity < 1) {

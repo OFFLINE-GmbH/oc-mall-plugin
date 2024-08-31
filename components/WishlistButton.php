@@ -73,7 +73,7 @@ class WishlistButton extends MallComponent
 
         // If there is no wishlist available create the initial one.
         if ($wishlists->count() < 1) {
-            $wishlists = collect([Wishlist::createForUser(Auth::getUser())]);
+            $wishlists = collect([Wishlist::createForUser(Auth::user())]);
         }
 
         $wishlist = post('wishlist_id')
@@ -125,7 +125,7 @@ class WishlistButton extends MallComponent
 
         $this->decodeIds();
 
-        Wishlist::createForUser(Auth::getUser(), post('name'));
+        Wishlist::createForUser(Auth::user(), post('name'));
 
         return $this->refreshList();
     }
@@ -156,7 +156,7 @@ class WishlistButton extends MallComponent
      */
     public function getWishlists()
     {
-        return Wishlist::byUser(Auth::getUser());
+        return Wishlist::byUser(Auth::user());
     }
 
     /**

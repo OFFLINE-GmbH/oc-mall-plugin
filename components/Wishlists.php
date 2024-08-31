@@ -230,7 +230,7 @@ class Wishlists extends MallComponent
     {
         $this->setCurrentItem();
 
-        $allInStock = $this->currentItem->addToCart(Cart::byUser(Auth::getUser()));
+        $allInStock = $this->currentItem->addToCart(Cart::byUser(Auth::user()));
 
         if (! $allInStock) {
             Flash::warning(trans('offline.mall::frontend.wishlists.stockmissing'));
@@ -250,7 +250,7 @@ class Wishlists extends MallComponent
      */
     public function getWishlists()
     {
-        return Wishlist::byUser(Auth::getUser());
+        return Wishlist::byUser(Auth::user());
     }
 
     /**
@@ -263,7 +263,7 @@ class Wishlists extends MallComponent
     protected function handlePDFDownload(string $download)
     {
         $id        = $this->decode($download);
-        $wishlists = Wishlist::byUser(Auth::getUser());
+        $wishlists = Wishlist::byUser(Auth::user());
 
         /** @var Wishlist $wishlist */
         $wishlist = $wishlists->where('id', $id)->first();

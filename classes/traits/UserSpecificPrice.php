@@ -10,7 +10,7 @@ trait UserSpecificPrice
 {
     public function getUserSpecificPrice(Price $original)
     {
-        $group = optional(Auth::getUser())->customer_group;
+        $group = optional(Auth::user())->customer_group;
 
         if (! $this->hasUserSpecificPrice()) {
             return $this->checkDiscount($group, $original);
@@ -51,7 +51,7 @@ trait UserSpecificPrice
     protected function hasUserSpecificPrice(): bool
     {
         return ! app()->runningInBackend()
-            && optional(Auth::getUser())->offline_mall_customer_group_id !== null
+            && optional(Auth::user())->offline_mall_customer_group_id !== null
             && $this->customer_group_prices->count() > 0;
     }
 }

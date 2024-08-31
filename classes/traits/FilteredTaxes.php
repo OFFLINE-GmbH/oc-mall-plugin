@@ -56,7 +56,7 @@ trait FilteredTaxes
      */
     public function getCartCountryId()
     {
-        $cart = Cart::byUser(Auth::getUser());
+        $cart = Cart::byUser(Auth::user());
 
         if (!$cart) {
             return null;

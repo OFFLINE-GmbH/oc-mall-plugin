@@ -147,7 +147,7 @@ class DiscountApplier
 
     private function userBelongsToCustomerGroup(int $customerGroupId): bool
     {
-        $group = optional(Auth::getUser())->customer_group();
+        $group = optional(Auth::user())->customer_group();
 
         if (! $group) {
             return false;

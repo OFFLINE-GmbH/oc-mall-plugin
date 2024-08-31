@@ -82,7 +82,7 @@ class AddressList extends MallComponent
      */
     public function init()
     {
-        if ($user = Auth::getUser()) {
+        if ($user = Auth::user()) {
             $this->addresses = $user->customer->addresses;
             $this->defaultBillingAddressId = $user->customer->default_billing_address_id;
             $this->defaultShippingAddressId = $user->customer->default_shipping_address_id;
@@ -128,7 +128,7 @@ class AddressList extends MallComponent
     public function updateDefaultAddressFromUser(string $type)
     {
         $id = $this->decode(post('id'));
-        $user = Auth::getUser();
+        $user = Auth::user();
         $customer = $user->customer;
         $cart = Cart::byUser($user);
 
@@ -160,7 +160,7 @@ class AddressList extends MallComponent
     public function onDelete()
     {
         $id = $this->decode(post('id'));
-        $user = Auth::getUser();
+        $user = Auth::user();
         $customer = $user->customer;
         $cart = Cart::byUser($user);
         $address = Address::byCustomer($customer)->where('id', $id)->first();
@@ -174,7 +174,7 @@ class AddressList extends MallComponent
         }
 
         $address->delete();
-        $this->addresses = Auth::getUser()->load('customer')->customer->addresses;
+        $this->addresses = Auth::user()->load('customer')->customer->addresses;
 
         $defaultAddress = Address::byCustomer($customer)->first();
 

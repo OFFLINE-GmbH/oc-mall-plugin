@@ -59,7 +59,7 @@ class CustomerProfile extends MallComponent
     public function init()
     {
         /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
-        $this->user = Auth::getUser();
+        $this->user = Auth::user();
     }
 
     /**

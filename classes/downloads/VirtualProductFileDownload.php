@@ -31,7 +31,7 @@ class VirtualProductFileDownload
 
         // Redirect the user to the login page if a session is required but
         // no user is logged in.
-        if ($product->file_session_required && ! Auth::getUser()) {
+        if ($product->file_session_required && ! Auth::user()) {
             return $this->redirectToLogin();
         }
 
@@ -69,7 +69,7 @@ class VirtualProductFileDownload
         // If no file is around, return and log an error. The site admin needs to fix this!
         Log::error(
             '[OFFLINE.Mall] A virtual product without a file attachment has been purchased. You need to fix this!',
-            ['grant' => $grant, 'product' => $product, 'user' => Auth::getUser()]
+            ['grant' => $grant, 'product' => $product, 'user' => Auth::user()]
         );
 
         return response($this->trans('not_found'), 500);

@@ -234,7 +234,7 @@ class PaymentMethodSelector extends MallComponent
      */
     protected function setData()
     {
-        $user = Auth::getUser();
+        $user = Auth::user();
 
         if (! $user) {
             return;
