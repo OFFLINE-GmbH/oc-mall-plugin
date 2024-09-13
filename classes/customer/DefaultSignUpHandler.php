@@ -211,6 +211,7 @@ class DefaultSignUpHandler implements SignUpHandler
         $data['email']                 = $data['email'];
         $data['password']              = $data['password'];
         $data['password_confirmation'] = $data['password_repeat'];
+        $data['is_guest']              = $this->asGuest;
 
         // RainLab.User 3.0
         if (class_exists(\RainLab\User\Models\Setting::class)) {
