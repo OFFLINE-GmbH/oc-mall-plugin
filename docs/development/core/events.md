@@ -81,6 +81,10 @@ This event is emitted when the quantity of a cart product has changed. It receiv
 * `oldQuantity` the old quantity value 
 * `newQuantity` the new quantity value 
 
+### `mall.cart.extendAvailablePaymentMethods`
+
+This event allows to customize the payment methods based on the current cart.
+
 ## Checkout
 
 ### `mall.checkout.succeeded`
