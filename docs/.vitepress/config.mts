@@ -18,7 +18,7 @@ export default defineConfig({
         },
         siteTitle: false,
         editLink: {
-            pattern: 'https://github.com/OFFLINE-GmbH/oc-mall-plugin/edit/develop/src/docs/:path',
+            pattern: 'https://github.com/OFFLINE-GmbH/oc-mall-plugin/tree/next/docs/:path',
             text: 'Edit this page on GitHub'
         },
         lastUpdated: {

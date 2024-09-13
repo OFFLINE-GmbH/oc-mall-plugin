@@ -15,6 +15,7 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Sortable;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Parse\Twig;
+use October\Rain\Support\Facades\Event;
 use OFFLINE\Mall\Classes\Database\IsStates;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Totals\PaymentTotal;
@@ -204,6 +205,21 @@ class PaymentMethod extends Model
         }
 
         return $default;
+    }
+
+    /**
+     * Get all available payment methods.
+     * @param Cart $cart
+     * @return mixed
+     */
+    public static function getAvailableByCart(Cart $cart)
+    {
+        $results = array_filter(Event::fire('mall.cart.extendAvailablePaymentMethods', [$cart]) ?? []);
+        if (count($results) > 0) {
+            return $results[0];
+        }
+
+        return PaymentMethod::orderBy('sort_order', 'ASC')->get();
     }
 
     /**

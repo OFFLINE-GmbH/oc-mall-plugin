@@ -605,3 +605,5 @@ v3.5.0:
     - 'Free orders no longer require a payment'
 v3.5.1:
     - 'Fixed RainLab.User 3.0 Auth facade compatibility'
+v3.5.2:
+    - 'Added mall.cart.extendAvailablePaymentMethods to filter payment methods based on the current cart'

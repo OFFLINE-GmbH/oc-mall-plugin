@@ -505,7 +505,9 @@ class QuickCheckout extends MallComponent
             $paymentMethod = PaymentMethod::getDefault();
             $cart->setPaymentMethod($paymentMethod);
         }
-        $this->setVar('paymentMethods', PaymentMethod::orderBy('sort_order', 'ASC')->get());
+
+        $this->setVar('paymentMethods', PaymentMethod::getAvailableByCart($cart));
+
         $this->setVar('customerPaymentMethods', $this->getCustomerMethods());
 
         //        $this->setVar('dataLayer', $this->handleDataLayer());
