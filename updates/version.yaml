@@ -609,3 +609,5 @@ v3.5.2:
     - 'Added mall.cart.extendAvailablePaymentMethods to filter payment methods based on the current cart'
 v3.5.3:
     - 'Fixed guest signup'
+v3.5.4:
+    - 'Refactgored built-in validation rule'
