@@ -344,6 +344,7 @@
         'richeditor' => 'Éditeur enrichi',
         'dropdown' => 'Liste déroulante',
         'checkbox' => 'Case à cocher',
+        'checkboxlist' => 'Case à cocher multiple',
         'color' => 'Couleur',
         'image' => 'Image',
         'switch' => 'Commutateur',

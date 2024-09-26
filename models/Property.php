@@ -20,7 +20,7 @@ class Property extends Model
     public $jsonable = ['options'];
     public $rules = [
         'name' => 'required',
-        'type' => 'required|in:text,textarea,dropdown,checkbox,color,image,float,integer,richeditor,switch,datetime,date',
+        'type' => 'required|in:text,textarea,dropdown,checkbox,checkboxlist,color,image,float,integer,richeditor,switch,datetime,date',
     ];
     public $slugs = [
         'slug' => 'name',
@@ -123,6 +123,7 @@ class Property extends Model
             'richeditor' => trans('offline.mall::lang.custom_field_options.richeditor'),
             'dropdown'   => trans('offline.mall::lang.custom_field_options.dropdown'),
             'checkbox'   => trans('offline.mall::lang.custom_field_options.checkbox'),
+            'checkboxlist'   => trans('offline.mall::lang.custom_field_options.checkboxlist'),
             'color'      => trans('offline.mall::lang.custom_field_options.color'),
 //            'image'    => trans('offline.mall::lang.custom_field_options.image'),
             'datetime'   => trans('offline.mall::lang.custom_field_options.datetime'),
