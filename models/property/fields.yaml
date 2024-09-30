@@ -22,7 +22,7 @@ fields:
         trigger:
             action: show
             field: type
-            condition: 'value[dropdown]'
+            condition: 'value[dropdown][checkboxlist]'
         type: repeater
         form:
             fields:

@@ -92,6 +92,8 @@ class PropertyFields extends FormWidgetBase
                 return $this->dropdown($property, $value);
             case 'checkbox':
                 return $this->checkbox($property, $value);
+            case 'checkboxlist':
+                return $this->checkboxlist($property, $value);
             case 'richeditor':
                 return $this->richeditor($property, $value);
             case 'image':
@@ -263,6 +265,27 @@ class PropertyFields extends FormWidgetBase
 
         $widget = $this->makePartial(
             $this->backendPartial('field_dropdown'),
+            ['field' => $formField, 'value' => $escapedValue]
+        );
+
+        return $this->makePartial('dropdown', ['widget' => $widget, 'field' => $property]);
+    }
+
+    private function checkboxlist($property, PropertyValue $value)
+    {
+        $escapedValue = json_decode($value->value, true);
+
+        $formField          = $this->newFormField($property);
+        $formField->value   = $escapedValue;
+        $formField->label   = $property->name;
+        $formField->options = collect($property->options)->mapWithKeys(function ($i) {
+            $value = e($i['value']);
+
+            return [$value => $value];
+        })->toArray();
+
+        $widget = $this->makePartial(
+            $this->backendPartial('field_checkboxlist'),
             ['field' => $formField, 'value' => $escapedValue]
         );
 

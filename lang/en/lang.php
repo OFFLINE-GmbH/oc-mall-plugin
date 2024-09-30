@@ -346,6 +346,7 @@ return [
         'richeditor' => 'Richtext',
         'dropdown' => 'Dropdown',
         'checkbox' => 'Checkbox',
+        'checkboxlist' => 'Checkbox list',
         'color' => 'Color',
         'image' => 'Image',
         'switch' => 'Switch',
