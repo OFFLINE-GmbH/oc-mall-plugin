@@ -612,4 +612,4 @@ v3.5.3:
 v3.5.4:
     - 'Refactgored built-in validation rule'
 v3.5.5:
-    - 'Fix raw query for Laravel 10+'
+    - 'Fixed product sorting when using MySQL product index with Laravel 10 (thanks to @tomaszstrojny)'
