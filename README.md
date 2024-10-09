@@ -37,19 +37,6 @@
 - [Official Documentation](https://offline-gmbh.github.io/oc-mall-plugin)
 - [Demonstration Website](https://mall.offline.swiss)
 
-## Team
-
-The plugin was originally developed by [OFFLINE GmbH](https://offline.ch). In the past years it has been
-improved and extended by the October CMS community.
-
-The following maintainers are currently working actively on the plugin:
-
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/SamBrishes"><img src="https://avatars.githubusercontent.com/u/106578633?s=200&v=4" width="100px;" alt="SamBrishes"/><br /><sub><b>SamBrishes</b></sub></a></td>
-    <td align="center"><a href="https://github.com/OFFLINE-GmbH/"><img src="https://avatars.githubusercontent.com/u/8600031?s=200&v=4" width="100px;" alt="OFFLINE GmbH"/><br /><sub><b>OFFLINE</b></sub></a></td>
-  </tr>
-</table>
 
 ## Requirements
 
