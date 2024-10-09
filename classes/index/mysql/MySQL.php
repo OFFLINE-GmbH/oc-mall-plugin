@@ -101,7 +101,7 @@ class MySQL implements Index
                 );
                 $table->index(['index', 'published'], 'idx_published_index');
             });
-            
+
             // Allow the index table to be extended with custom columns
             Event::fire('mall.index.mysql.extendTable', [$table]);
         } catch (Throwable $e) {
@@ -166,14 +166,14 @@ class MySQL implements Index
             'customer_group_prices' => $data['customer_group_prices'] ?? [],
             'created_at'            => $data['created_at'] ?? now(),
         ];
-        
+
         // Allow the index data to be extended with custom information
         $customIndexData = Event::fire('mall.index.extendData', [$data]);
 
         if(!empty($customIndexData) && is_array($customIndexData[0])) {
             $indexData = array_merge($indexData, $customIndexData[0]);
         }
-        
+
         $this->db()->updateOrCreate([
             'index'      => $index,
             'product_id' => $productId,
@@ -287,10 +287,12 @@ class MySQL implements Index
             $nested = implode('.', $parts);
 
             // Apply the right cast for this value. This makes sure, that prices are sorted as floats, not as strings.
+            $expression = DB::raw($field)->getValue(DB::connection()->getQueryGrammar());
+
             if (isset($this->columnCasts[$field])) {
-                $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', DB::raw($field), $this->columnCasts[$field], $order->direction());
+                $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', $expression, $this->columnCasts[$field], $order->direction());
             } else {
-                $orderBy = sprintf('JSON_EXTRACT(%s, ?) %s', DB::raw($field), $order->direction());
+                $orderBy = sprintf('JSON_EXTRACT(%s, ?) %s', $expression, $order->direction());
             }
 
             $db->orderByRaw($orderBy, ['$.' . '"' . $nested . '"']);
