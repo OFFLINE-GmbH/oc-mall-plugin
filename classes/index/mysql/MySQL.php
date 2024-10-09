@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Index\MySQL;
 use Cache;
 use DB;
 use Event;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 use October\Rain\Database\Schema\Blueprint;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
@@ -19,7 +20,6 @@ use OFFLINE\Mall\Classes\Index\IndexResult;
 use OFFLINE\Mall\Models\Currency;
 use Schema;
 use Throwable;
-use Illuminate\Foundation\Application;
 
 class MySQL implements Index
 {
