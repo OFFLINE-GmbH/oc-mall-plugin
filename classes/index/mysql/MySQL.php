@@ -2,23 +2,24 @@
 
 namespace OFFLINE\Mall\Classes\Index\MySQL;
 
-use Cache;
 use DB;
+use Cache;
 use Event;
-use Illuminate\Support\Collection;
-use October\Rain\Database\Schema\Blueprint;
-use OFFLINE\Mall\Classes\CategoryFilter\Filter;
-use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
-use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
-use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\Random;
-use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
-use OFFLINE\Mall\Classes\Index\Entry;
-use OFFLINE\Mall\Classes\Index\Index;
-use OFFLINE\Mall\Classes\Index\IndexNotSupportedException;
-use OFFLINE\Mall\Classes\Index\IndexResult;
-use OFFLINE\Mall\Models\Currency;
 use Schema;
 use Throwable;
+use OFFLINE\Mall\Models\Currency;
+use Illuminate\Support\Collection;
+use OFFLINE\Mall\Classes\Index\Entry;
+use OFFLINE\Mall\Classes\Index\Index;
+use Illuminate\Foundation\Application;
+use October\Rain\Database\Schema\Blueprint;
+use OFFLINE\Mall\Classes\Index\IndexResult;
+use OFFLINE\Mall\Classes\CategoryFilter\Filter;
+use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\Random;
+use OFFLINE\Mall\Classes\Index\IndexNotSupportedException;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 
 class MySQL implements Index
 {
@@ -286,9 +287,18 @@ class MySQL implements Index
             array_shift($parts);
             $nested = implode('.', $parts);
 
-            // Apply the right cast for this value. This makes sure, that prices are sorted as floats, not as strings.
-            $expression = DB::raw($field)->getValue(DB::connection()->getQueryGrammar());
+            $expression = DB::raw($field);
 
+            /**
+             * Laravel 10 changed the way expressions are converted to strings
+             * @see https://laravel.com/docs/10.x/upgrade#database-expressions
+             */
+            $laravelMajorVersion = (int) (explode('.', Application::VERSION)[0] ?? 0);
+            if ($laravelMajorVersion >= 10) {
+                $expression = $expression->getValue(DB::connection()->getQueryGrammar());
+            }
+
+            // Apply the right cast for this value. This makes sure, that prices are sorted as floats, not as strings.
             if (isset($this->columnCasts[$field])) {
                 $orderBy = sprintf('CAST(JSON_EXTRACT(%s, ?) as %s) %s', $expression, $this->columnCasts[$field], $order->direction());
             } else {
