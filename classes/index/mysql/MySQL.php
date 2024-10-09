@@ -2,24 +2,24 @@
 
 namespace OFFLINE\Mall\Classes\Index\MySQL;
 
-use DB;
 use Cache;
+use DB;
 use Event;
-use Schema;
-use Throwable;
-use OFFLINE\Mall\Models\Currency;
 use Illuminate\Support\Collection;
+use October\Rain\Database\Schema\Blueprint;
+use OFFLINE\Mall\Classes\CategoryFilter\Filter;
+use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\Random;
+use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
 use OFFLINE\Mall\Classes\Index\Entry;
 use OFFLINE\Mall\Classes\Index\Index;
-use Illuminate\Foundation\Application;
-use October\Rain\Database\Schema\Blueprint;
-use OFFLINE\Mall\Classes\Index\IndexResult;
-use OFFLINE\Mall\Classes\CategoryFilter\Filter;
-use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
-use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
-use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\Random;
 use OFFLINE\Mall\Classes\Index\IndexNotSupportedException;
-use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
+use OFFLINE\Mall\Classes\Index\IndexResult;
+use OFFLINE\Mall\Models\Currency;
+use Schema;
+use Throwable;
+use Illuminate\Foundation\Application;
 
 class MySQL implements Index
 {
