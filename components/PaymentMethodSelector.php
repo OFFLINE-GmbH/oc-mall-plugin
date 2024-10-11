@@ -257,7 +257,7 @@ class PaymentMethodSelector extends MallComponent
 
         $method = PaymentMethod::where('id', $this->order->payment_method_id ?? $this->cart->payment_method_id)->first();
 
-        $this->setVar('paymentMethods', PaymentMethod::getAvailableByCart($this->cart));
+        $this->setVar('methods', PaymentMethod::getAvailableByCart($this->cart));
         $this->setVar('customerMethods', $this->getCustomerMethods());
         $this->setVar('activeMethod', $method);
         $this->setVar('shippingSelectionBeforePayment', GeneralSettings::get('shipping_selection_before_payment', false));	// Needed by themes
