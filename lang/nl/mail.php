@@ -9,7 +9,7 @@ return [
     ],
     'payment' => [
         'refunded' => [
-            'subject' => 'Je bestelling werd terugbetaald',
+            'subject' => 'Je bestelling is terugbetaald',
             'message' => 'We hebben je bestelling **#:number** terugbetaald.',
             'duration' => 'Het kan enkele dagen duren tot je de terugbetaling ontvangen hebt.',
         ],
@@ -21,22 +21,22 @@ return [
         'failed' => [
             'subject' => 'Betaling mislukt',
             'message' => 'De betaling voor je bestelling **#:number** is mislukt.',
-            'payment_advice' => 'Log je in in je account om de betaling opnieuw te proberen.',
-            'support' => 'Contacteer ons mocht het toch blijven mislopen.',
+            'payment_advice' => 'Log in op je account om de betaling opnieuw te proberen.',
+            'support' => 'Neem contact met ons op mocht het nog steeds fout gaan.',
         ],
     ],
     'order' => [
         'partials' => [
-            'billing_address' => 'Facturatieadres',
-            'billing_and_shipping' => 'Facturatie- en verzendingsadres',
-            'shipping_address' => 'Verzendingsadres',
-            'has_been_paid_on' => 'De bestelling werd betaald op',
+            'billing_address' => 'Factuuradres',
+            'billing_and_shipping' => 'Factuur- en verzendingsadres',
+            'shipping_address' => 'Verzendadres',
+            'has_been_paid_on' => 'De bestelling is betaald op',
             'currently_pending' => 'De betaling is nog niet voltooid.',
-            'track_shipping_status' => 'Je kunt de verzendingsstatus van je bestelling opvolgen via:',
+            'track_shipping_status' => 'Je kunt de verzendstatus van je bestelling volgen via:',
         ],
         'state_changed' => [
-            'subject' => 'De status van je bestelling werd aangepast',
-            'message' => 'Je bestelling met nummer **#:number** werd aangepast naar: **:state**',
+            'subject' => 'De status van je bestelling is aangepast',
+            'message' => 'Je bestelling met nummer **#:number** is aangepast naar: **:state**',
         ],
         'shipped' => [
             'subject' => 'Je bestelling is verzonden',
@@ -58,19 +58,19 @@ return [
     'checkout' => [
         'succeeded' => [
             'subject' => 'Bevestiging van bestelling #:number',
-            'thanks_for_order' => 'Bedankt voor je bestelling. We ontvingen onderstaande informatie:',
-            'check_order_status' => 'Je kunt je bestelling opvolgen via "mijn account" op de website.',
+            'thanks_for_order' => 'Bedankt voor je bestelling. We hebben onderstaande informatie ontvangen:',
+            'check_order_status' => 'Je kunt je bestelling volgen via "mijn account" op de website.',
         ],
         'failed' => [
             'subject' => 'Probleem tijdens het afrekenen (bestelling #:number)',
-            'problem_message' => 'Er heeft zich een probleem voorgedaan tijdens het afrekenen. Gelieve ons te contacteren met alle foutmeldingen en je bestelnummer, dan proberen wij het zo spoedig mogelijk recht te zetten.',
-            'check_order_status' => 'Om de status van je bestelling op te volgen kun je je inloggen op de site.',
+            'problem_message' => 'Er heeft zich een probleem voorgedaan tijdens het afrekenen. Neem alsjeblieft contact met ons op met alle foutmeldingen en je bestelnummer, dan proberen wij het zo spoedig mogelijk recht te zetten.',
+            'check_order_status' => 'Om de status van je bestelling op te volgen kun je inloggen op de site.',
         ],
     ],
     'admin' => [
         'checkout_succeeded' => [
             'subject' => 'Nieuwe bestelling #:number',
-            'order_placed' => 'Volgende bestelling werd zonet geplaatst:',
+            'order_placed' => 'Deze bestelling werd zojuist geplaatst:',
         ],
         'checkout_failed' => [
             'subject' => 'Probleem tijdens afrekenen (bestelling #:number)',
