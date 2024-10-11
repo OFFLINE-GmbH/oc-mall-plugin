@@ -615,3 +615,5 @@ v3.5.6:
     - 'Fixed product sorting when using MySQL product index with Laravel 10 (thanks to @tomaszstrojny)'
 v3.5.7:
     - 'Fixed payment method selector in QuickCheckout component'
+v3.5.8:
+    - 'Updated dutch translations (thanks to @rubenvanerk)'
