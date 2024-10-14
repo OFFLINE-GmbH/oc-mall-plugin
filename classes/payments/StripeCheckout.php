@@ -77,11 +77,14 @@ class StripeCheckout extends PaymentProvider
             'shipping_options' => [
                 'shipping_rate_data' => [
                     'display_name' => array_get($result->order->shipping, 'method.name'),
-                    'fixed_amount' => $result->order->totalShippingPostTaxes()->integer,
+                    'fixed_amount' => [
+                        'amount' => $result->order->totalShippingPostTaxes()->integer,
+                        'currency' => $result->order->currency['code'],
+                    ],
                     'tax_behavior' => 'inclusive',
                 ],
             ],
-            'line_items' => $result->order->products->map(function(OrderProduct $orderProduct) use ($result) {
+            'line_items' => $result->order->products->map(function (OrderProduct $orderProduct) use ($result) {
                 return [
                     'price_data' => [
                         'currency' => $result->order->currency['code'],
@@ -118,14 +121,14 @@ class StripeCheckout extends PaymentProvider
         }
 
         return [
-            'name'    => $name,
+            'name' => $name,
             'address' => [
-                'line1'       => $address->lines_array[0] ?? '',
-                'line2'       => $address->lines_array[1] ?? '',
-                'city'        => $address->city,
-                'country'     => $address->country->name,
+                'line1' => $address->lines_array[0] ?? '',
+                'line2' => $address->lines_array[1] ?? '',
+                'city' => $address->city,
+                'country' => $address->country->name,
                 'postal_code' => $address->zip,
-                'state'       => optional($address->state)->name,
+                'state' => optional($address->state)->name,
             ]
         ];
     }
