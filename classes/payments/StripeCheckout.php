@@ -3,14 +3,10 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
-use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\OrderProduct;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
-use Omnipay\Omnipay;
-use Request;
 use Session;
-use Throwable;
 
 /**
  * Process the payment via Stripe Checkout.
