@@ -77,7 +77,7 @@ class StripeCheckout extends PaymentProvider
             'shipping_options' => [
                 'shipping_rate_data' => [
                     'display_name' => array_get($result->order->shipping, 'method.name'),
-                    'fixed_amount' => $result->order->shipping_method->price()->integer,
+                    'fixed_amount' => $result->order->totalShippingPostTaxes()->integer,
                     'tax_behavior' => 'inclusive',
                 ],
             ],
