@@ -34,7 +34,8 @@
         "bummzack/omnipay-postfinance": "Required to use the PostFinance payment provider",
         "elasticsearch/elasticsearch": "Required to use the ElasticSearch indexing support (experimental)",
         "offline/jsonq": "Required to use the file based index",
-        "tmarois/filebase": "Required to use the file based index"
+        "tmarois/filebase": "Required to use the file based index",
+        "stripe/stripe-php": "Required to use the Stripe payment provider"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
