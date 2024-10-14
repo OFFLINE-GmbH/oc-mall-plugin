@@ -74,6 +74,13 @@ class StripeCheckout extends PaymentProvider
                 'order_id' => $result->order->id,
             ],
             'customer' => $customer->id,
+            'shipping_options' => [
+                'shipping_rate_data' => [
+                    'display_name' => array_get($result->order->shipping, 'method.name'),
+                    'fixed_amount' => $result->order->shipping_method->price()->integer,
+                    'tax_behavior' => 'inclusive',
+                ],
+            ],
             'line_items' => $result->order->products->map(function(OrderProduct $orderProduct) use ($result) {
                 return [
                     'price_data' => [
@@ -81,7 +88,7 @@ class StripeCheckout extends PaymentProvider
                         'product_data' => [
                             'name' => $orderProduct->name,
                         ],
-                        'unit_amount' => $orderProduct->pricePostTaxes()->integer,
+                        'unit_amount' => $orderProduct->totalPostTaxes()->integer,
                     ],
                     'quantity' => $orderProduct->quantity,
                 ];
