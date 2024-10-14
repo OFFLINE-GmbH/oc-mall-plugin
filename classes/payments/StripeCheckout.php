@@ -75,13 +75,16 @@ class StripeCheckout extends PaymentProvider
             ],
             'customer' => $customer->id,
             'shipping_options' => [
-                'shipping_rate_data' => [
-                    'display_name' => array_get($result->order->shipping, 'method.name'),
-                    'fixed_amount' => [
-                        'amount' => $result->order->totalShippingPostTaxes()->integer,
-                        'currency' => $result->order->currency['code'],
+                [
+                    'shipping_rate_data' => [
+                        'display_name' => array_get($result->order->shipping, 'method.name'),
+                        'type' => 'fixed_amount',
+                        'fixed_amount' => [
+                            'amount' => $result->order->totalShippingPostTaxes()->integer,
+                            'currency' => strtolower($result->order->currency['code']),
+                        ],
+                        'tax_behavior' => 'inclusive',
                     ],
-                    'tax_behavior' => 'inclusive',
                 ],
             ],
             'line_items' => $result->order->products->map(function (OrderProduct $orderProduct) use ($result) {
@@ -100,6 +103,7 @@ class StripeCheckout extends PaymentProvider
             'success_url' => $this->returnUrl(),
             'cancel_url' => $this->cancelUrl(),
         ]);
+
 
         Session::put('mall.payment.callback', self::class);
         Session::put('mall.stripe.checkout.transactionReference', $session->id);
