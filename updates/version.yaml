@@ -619,3 +619,5 @@ v3.5.8:
     - 'Updated dutch translations (thanks to @rubenvanerk)'
 v3.5.9:
     - 'Fixed product sorting in categories'
+v3.5.10:
+    - 'Fixed attaching/detaching of property groups to categories'
