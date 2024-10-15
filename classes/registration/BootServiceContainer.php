@@ -42,7 +42,6 @@ trait BootServiceContainer
             $gateway->registerProvider(new PayPalRest());
             $gateway->registerProvider(new Stripe());
             $gateway->registerProvider(new PostFinance());
-            $gateway->registerProvider(new StripeCheckout());
 
             return $gateway;
         });
