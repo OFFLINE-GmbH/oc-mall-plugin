@@ -101,23 +101,35 @@ class PropertyGroup extends Model
         });
 
         $this->bindEvent('model.relation.attach', function ($relationName, $attachedIdList, $insertData) {
+            if (!$attachedIdList) {
+                return;
+            }
+
             if ($relationName === 'properties') {
                 UniquePropertyValue::updateUsingPropertyGroup($this);
             } elseif ($relationName === 'categories') {
                 foreach ($attachedIdList as $attachedId) {
                     $category = Category::find($attachedId);
-                    UniquePropertyValue::updateUsingCategory($category);
+                    if ($category) {
+                        UniquePropertyValue::updateUsingCategory($category);
+                    }
                 }
             }
         });
 
         $this->bindEvent('model.relation.detach', function ($relationName, $detachedIdList) {
+            if (!$detachedIdList) {
+                return;
+            }
+
             if ($relationName === 'properties') {
                 UniquePropertyValue::updateUsingPropertyGroup($this);
             } elseif ($relationName === 'categories') {
                 foreach ($detachedIdList as $detachedId) {
                     $category = Category::find($detachedId);
-                    UniquePropertyValue::updateUsingCategory($category);
+                    if ($category) {
+                        UniquePropertyValue::updateUsingCategory($category);
+                    }
                 }
             }
         });
