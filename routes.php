@@ -16,7 +16,7 @@ Route::get('/mall/download/{key}/{idx?}', '\OFFLINE\Mall\Classes\Downloads\Virtu
 Route::get('/mall/checkout/response', function () {
     $data = session()->pull('mall.checkout.response');
 
-    if (! $data) {
+    if (!$data) {
         return response('Missing data.', 404);
     }
 
@@ -29,7 +29,7 @@ Route::get('/mall/checkout/response', function () {
 Route::get('/feeds/google-merchant/{key}', function ($key) {
     $useFeed = FeedSettings::get('google_merchant_enabled');
 
-    if (! $useFeed) {
+    if (!$useFeed) {
         return (new Controller())->run('404');
     }
 

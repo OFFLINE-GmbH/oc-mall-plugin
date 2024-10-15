@@ -23,7 +23,6 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\PostFinance;
 use OFFLINE\Mall\Classes\Payments\Stripe;
-use OFFLINE\Mall\Classes\Payments\StripeCheckout;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\GeneralSettings;
