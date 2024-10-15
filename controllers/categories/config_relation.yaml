@@ -24,8 +24,11 @@ products:
         list: $/offline/mall/models/product/columns.yaml
         recordsPerPage: 10
         recordUrl: offline/mall/products/update/:id
-    showSorting: false
     readOnly: true
+    structure:
+        showTree: false
+        showReorder: true
+        maxDepth: 1
 
 review_categories:
     label: 'offline.mall::lang.common.review_category'

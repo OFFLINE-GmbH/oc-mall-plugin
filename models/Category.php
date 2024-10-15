@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\NestedTree;
 use October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\SortableRelation;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Support\Collection;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
@@ -16,7 +17,6 @@ use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
 use OFFLINE\Mall\Classes\Traits\Category\Properties;
 use OFFLINE\Mall\Classes\Traits\Category\Slug;
 use OFFLINE\Mall\Classes\Traits\Category\Translation;
-use OFFLINE\Mall\Classes\Traits\SortableRelation;
 use System\Models\File;
 
 class Category extends Model
@@ -132,6 +132,7 @@ class Category extends Model
             'key'      => 'category_id',
             'otherKey' => 'product_id',
             'pivot'    => ['sort_order'],
+            'pivotSortable' => 'sort_order',
         ],
         'publishedProducts' => [
             Product::class,
