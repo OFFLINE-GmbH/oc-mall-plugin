@@ -43,7 +43,7 @@
                         var data = response.hasOwnProperty('responseJSON') ? response.reponseJSON : response
 
                         if (data.hasOwnProperty('queryString')) {
-                            history.replaceState(null, '', '?' + data.queryString)
+                            history.replaceState(null, '', window.location.pathname + '?' + data.queryString);
                         }
 
                         $('[data-filter]').hide()
