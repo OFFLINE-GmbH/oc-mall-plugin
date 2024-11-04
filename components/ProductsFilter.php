@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OFFLINE\Mall\Components;
 
 use DB;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
@@ -375,7 +376,7 @@ class ProductsFilter extends MallComponent
 
         $this->setVar('category', $this->getCategory());
 
-        $categories = collect([$this->category]);
+        $categories = new EloquentCollection([$this->category]);
 
         if ($this->includeChildren) {
             $categories = $this->category->getAllChildrenAndSelf();
