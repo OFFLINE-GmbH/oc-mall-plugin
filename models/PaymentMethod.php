@@ -71,6 +71,7 @@ class PaymentMethod extends Model
     public $translatable = [
         'name',
         'description',
+        'instructions',
     ];
 
     /**
