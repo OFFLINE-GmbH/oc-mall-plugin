@@ -439,6 +439,7 @@ class ProductsFilter extends MallComponent
     protected function setBrands()
     {
         $brands = DB::table('offline_mall_products')
+            ->where('offline_mall_products.published', '=', true)
             ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
             ->select('offline_mall_brands.*')
             ->distinct()
