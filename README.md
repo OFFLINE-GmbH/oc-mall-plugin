@@ -7,8 +7,6 @@
 
 > The all-inclusive e-commerce solution of OctoberCMS.
 
-[![Build Status](https://travis-ci.com/OFFLINE-GmbH/oc-mall-plugin.svg?branch=develop)](https://travis-ci.com/github/OFFLINE-GmbH/oc-mall-plugin)
-
 **Mall** is a fully featured online shop solution for October CMS.
 
 - Manage Products and Variants
