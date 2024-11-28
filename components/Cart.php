@@ -183,7 +183,7 @@ class Cart extends MallComponent
     /**
      * The user updated the quantity of a specific cart item.
      *
-     * @return void
+     * @return array
      */
     public function onUpdateQuantity()
     {
@@ -193,7 +193,7 @@ class Cart extends MallComponent
         $product = $this->getProductFromCart($cart, $id);
 
         if (!$product) {
-            return;
+            return [];
         }
 
         try {
@@ -201,9 +201,16 @@ class Cart extends MallComponent
         } catch (OutOfStockException $exc) {
             Flash::error(trans('offline.mall::lang.common.out_of_stock', ['quantity' => $exc->product->stock]));
 
-            return;
+            return [];
         } finally {
             $this->setData();
+
+            return [
+                'item' => $this->dataLayerArray($product->product, $product->variant),
+                'quantity' => optional($product)->quantity ?? 0,
+                'new_items_count' => optional($this->cart->products)->count() ?? 0,
+                'new_items_quantity' => optional($this->cart->products)->sum('quantity') ?? 0,
+            ];
         }
     }
 

@@ -623,3 +623,5 @@ v3.5.10:
     - 'Fixed attaching/detaching of property groups to categories'
 v3.5.11:
     - 'Various small bugfixes'
+v3.5.12:
+    - 'Various small additions (thanks to @RickAcb and @rubenvanerk)'
