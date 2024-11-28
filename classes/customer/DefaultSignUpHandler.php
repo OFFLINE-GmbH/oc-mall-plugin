@@ -185,13 +185,13 @@ class DefaultSignUpHandler implements SignUpHandler
      */
     protected function validate(array $data)
     {
-        $rules = self::rules();
+        $rules = static::rules();
 
         if ($this->asGuest) {
             unset($rules['password'], $rules['password_repeat']);
         }
 
-        $messages = self::messages();
+        $messages = static::messages();
 
         $validation = Validator::make($data, $rules, $messages);
 
