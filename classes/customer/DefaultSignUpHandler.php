@@ -217,6 +217,9 @@ class DefaultSignUpHandler implements SignUpHandler
         if (class_exists(\RainLab\User\Models\Setting::class)) {
             $data['first_name'] = $data['firstname'];
             $data['last_name']  = $data['lastname'];
+
+            unset($data['name']);
+            unset($data['surname']);
         }
         
         $user = Auth::register($data, ! $requiresConfirmation);

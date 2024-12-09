@@ -625,3 +625,5 @@ v3.5.11:
     - 'Various small bugfixes'
 v3.5.12:
     - 'Various small additions (thanks to @RickAcb and @rubenvanerk)'
+v3.5.13:
+    - 'Fixed RainLab.User v3 compatibility'
