@@ -99,6 +99,15 @@ class CustomerProfile extends MallComponent
             $this->user->surname             = $data['lastname'];
             $this->user->email               = $data['email'];
 
+            // RainLab.User 3.0
+            if (class_exists(\RainLab\User\Models\Setting::class)) {
+                $this->user->first_name    = $data['firstname'];
+                $this->user->last_name     = $data['lastname'];
+
+                unset($this->user->name);
+                unset($this->user->surname);
+            }
+
             if ($data['password']) {
                 $this->user->password              = $data['password'];
                 $this->user->password_confirmation = $data['password_repeat'];
