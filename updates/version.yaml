@@ -454,3 +454,5 @@
     - 'Add backend form widget partials viewpath (thanks to @mjauvin)'
 2.0.29:
     - 'Added checkbox list property type (thanks to @mjauvin)'
+2.0.30:
+    - 'Support for more flexible model extensions in the backend (thanks to @xyz1123581321)'
