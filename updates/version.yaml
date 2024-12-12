@@ -631,3 +631,5 @@ v3.5.14:
     - 'Support for more flexible model extensions in the backend (thanks to @xyz1123581321)'
 v3.5.15:
     - 'Fixed category-specific manual sort orders'
+v3.5.16:
+    - 'Fixed category-specific manual sort orders'
