@@ -629,3 +629,5 @@ v3.5.13:
     - 'Fixed RainLab.User v3 compatibility'
 v3.5.14:
     - 'Support for more flexible model extensions in the backend (thanks to @xyz1123581321)'
+v3.5.15:
+    - 'Fixed category-specific manual sort orders'

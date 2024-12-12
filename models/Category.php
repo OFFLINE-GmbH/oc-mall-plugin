@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OFFLINE\Mall\Models;
 
+use Cache;
 use DB;
 use Illuminate\Support\Facades\Queue;
 use Model;
@@ -12,7 +13,9 @@ use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\SortableRelation;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Support\Collection;
+use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
+use OFFLINE\Mall\Classes\Observers\ProductObserver;
 use OFFLINE\Mall\Classes\Traits\Category\MenuItems;
 use OFFLINE\Mall\Classes\Traits\Category\Properties;
 use OFFLINE\Mall\Classes\Traits\Category\Slug;
@@ -24,7 +27,9 @@ class Category extends Model
     use Validation;
     use SoftDelete;
     use NestedTree;
-    use SortableRelation;
+    use SortableRelation {
+        setSortableRelationOrder as traitSetSortableRelationOrder;
+    }
     use MenuItems;
     use Slug;
     use Translation;
@@ -318,5 +323,14 @@ class Category extends Model
         $groups = $this->getParents()->first(fn (Category $category) => ! $category->inherit_review_categories)->review_categories;
 
         return $groups ?? new Collection();
+    }
+
+    public function setSortableRelationOrder($relationName, $itemIds, $referencePool = null) {
+        $this->traitSetSortableRelationOrder($relationName, $itemIds, $referencePool);
+
+        $this->products->each(function (Product $product) {
+            Cache::forget(Product::sortOrderCacheKey($product->id));
+            (new ProductObserver(app(Index::class)))->updated($product);
+        });
     }
 }
