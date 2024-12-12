@@ -102,7 +102,7 @@ class Orders extends Controller
 
         $order = Order::with('products', 'order_state')->findOrFail($this->params[0]);
 
-        $this->initRelation($order, 'payment_logs');
+        $this->initRelation($order);
 
         $this->vars['order']        = $order;
         $this->vars['money']        = app(Money::class);

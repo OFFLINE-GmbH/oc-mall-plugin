@@ -627,3 +627,5 @@ v3.5.12:
     - 'Various small additions (thanks to @RickAcb and @rubenvanerk)'
 v3.5.13:
     - 'Fixed RainLab.User v3 compatibility'
+v3.5.14:
+    - 'Support for more flexible model extensions in the backend (thanks to @xyz1123581321)'
