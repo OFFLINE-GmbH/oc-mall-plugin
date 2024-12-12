@@ -6,7 +6,7 @@ columns:
         sortable: true
     description:
         label: 'offline.mall::lang.product.description'
-        type: text
+        type: summary
         searchable: true
         sortable: true
     created_at:
@@ -19,6 +19,6 @@ columns:
         invisible: true
     pivot[relation_sort_order]:
         label: 'offline.mall::lang.common.sort_order'
-        invisible: false
+        invisible: true
         type: number
         sortable: true
