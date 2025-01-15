@@ -66,16 +66,16 @@ trait ApplyDiscounts
                         );
 
                         continue;
-                    }
-                    
-                    $value = $amount->value();
-                    $values = $value->allocate(...$products);
-                    for ($i = 0; $i < count($values); $i++) {
-                        $this->map['products'][$i]->addDiscount(
-                            $values[$i]->getMinorAmount()->toInt(),
-                            false,
-                            false
-                        );
+                    } else if (count($products) > 1) {
+                        $value = $amount->value();
+                        $values = $value->allocate(...$products);
+                        for ($i = 0; $i < count($values); $i++) {
+                            $this->map['products'][$i]->addDiscount(
+                                $values[$i]->getMinorAmount()->toInt(),
+                                false,
+                                false
+                            );
+                        }
                     }
                 } elseif ($amount instanceof FactorValue) {
                     foreach ($this->map['products'] as $product) {

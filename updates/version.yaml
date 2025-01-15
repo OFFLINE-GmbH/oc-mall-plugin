@@ -633,3 +633,5 @@ v3.5.15:
     - 'Fixed category-specific manual sort orders'
 v3.5.16:
     - 'Fixed category-specific manual sort orders'
+v3.5.17:
+    - 'Fixed discount calculation for empty Carts'
