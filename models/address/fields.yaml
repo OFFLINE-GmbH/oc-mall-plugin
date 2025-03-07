@@ -2,10 +2,9 @@ fields:
     customer:
         label: 'offline.mall::lang.order.customer'
         type: recordfinder
-        list: ~/plugins/rainlab/user/models/user/columns.yaml
+        list: ~/plugins/offline/mall/models/customer/columns.yaml
         useRelation: false
         modelClass: OFFLINE\Mall\Models\Customer
-        scope: customer
         recordsPerPage: 10
         title: Find Record
         nameFrom: lastname
