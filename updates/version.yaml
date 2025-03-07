@@ -635,3 +635,5 @@ v3.5.16:
     - 'Fixed category-specific manual sort orders'
 v3.5.17:
     - 'Fixed discount calculation for empty Carts'
+v3.5.18:
+    - 'Fixed customer picker in Address form in the backend'

@@ -4,11 +4,12 @@ fields:
         type: recordfinder
         list: ~/plugins/rainlab/user/models/user/columns.yaml
         useRelation: false
-        modelClass: RainLab\User\Models\User
+        modelClass: OFFLINE\Mall\Models\Customer
         scope: customer
         recordsPerPage: 10
         title: Find Record
-        nameFrom: name
+        nameFrom: lastname
+        descriptionFrom: firstname
         span: auto
     company:
         label: 'offline.mall::frontend.form.company'
