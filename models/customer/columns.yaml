@@ -1,0 +1,9 @@
+columns:
+    firstname:
+        label: 'offline.mall::frontend.form.firstname'
+        type: text
+        searchable: true
+    lastname:
+        label: 'offline.mall::frontend.form.lastname'
+        type: text
+        searchable: true
