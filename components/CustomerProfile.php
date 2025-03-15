@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace OFFLINE\Mall\Components;
 
-use Auth;
 use DB;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\User\Auth;
 use RainLab\User\Models\User;
 use RainLab\User\Models\UserGroup;
+use Request;
 use Validator;
 
 /**
@@ -120,8 +121,11 @@ class CustomerProfile extends MallComponent
         });
 
         // Re-authenticate the user with his new credentials
-        /** @ignore @disregard facade alias for \RainLab\User\Classes\AuthManager */
-        Auth::login($this->user);
+        if (Request::hasSession()) {
+            Request::session()->put([
+                'password_hash_'.Auth::getDefaultDriver() => $this->user->getAuthPassword(),
+            ]);
+        }
 
         Flash::success(trans('offline.mall::lang.common.saved_changes'));
     }

@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Customer;
 use DB;
 use Event;
 use Illuminate\Support\Facades\Validator;
+use October\Rain\Auth\AuthException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Classes\User\Settings;
@@ -13,6 +14,7 @@ use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\GeneralSettings;
 use OFFLINE\Mall\Models\Wishlist;
+use RainLab\User\Models\Setting;
 use RainLab\User\Models\User;
 use RainLab\User\Models\UserGroup;
 use System\Classes\PluginManager;
@@ -172,12 +174,9 @@ class DefaultSignUpHandler implements SignUpHandler
             return $user;
         }
 
-        $credentials = [
-            'login'    => array_get($data, 'email'),
-            'password' => array_get($data, 'password'),
-        ];
+        Auth::login($user, true);
 
-        return Auth::authenticate($credentials, true);
+        return $user;
     }
 
     /**
