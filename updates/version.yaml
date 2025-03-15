@@ -639,3 +639,5 @@ v3.5.18:
     - 'Fixed customer picker in Address form in the backend'
 v3.5.19:
     - 'Fixed customer picker in Address form in the backend'
+v3.5.20:
+    - 'Fixed password reset'
