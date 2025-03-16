@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace OFFLINE\Mall\Classes\Pricing\Concerns;
 
 use Brick\Math\RoundingMode;
+use Brick\Money\Context\CustomContext;
+use Brick\Money\Context\DefaultContext;
 use Brick\Money\Money;
 use OFFLINE\Mall\Classes\Pricing\Values\DiscountValue;
 use OFFLINE\Mall\Classes\Pricing\Values\FactorValue;
@@ -50,7 +52,14 @@ trait InclusiveAccuracyFix
 
         // Subtract Taxes
         if ($factor > 0) {
-            $price->dividedBy(1 + ($factor / 100), RoundingMode::HALF_UP);
+            // We need more precision to avoid rounding issues. This is a workaround to achieve that.
+            $money = Money::of($price->getAmount(), $price->currency())
+                ->toRational()
+                ->dividedBy(1 + ($factor / 100))
+                ->to(new CustomContext(scale: 4), RoundingMode::HALF_UP);
+
+            // FIXME: This is a workaround to avoid rounding issues. Unfortunately, we lose the units value here.
+            $price = Price::parse((string)(new Price($money, $price->units())), $this->currency);
         }
 
         if ($amount->getMinorAmount()->toInt() > 0) {

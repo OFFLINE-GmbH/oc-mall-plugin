@@ -641,3 +641,5 @@ v3.5.19:
     - 'Fixed customer picker in Address form in the backend'
 v3.5.20:
     - 'Fixed password reset'
+v3.5.21:
+    - 'Added tax calculation workaround'
