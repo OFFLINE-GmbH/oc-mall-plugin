@@ -329,7 +329,7 @@ class TotalsCalculator implements CallsAnyMethod
     {
         $taxes = optional($this->input->shipping_method)->taxes ?? new Collection();
 
-        return $this->getFilteredTaxes($taxes);
+        return $this->getFilteredTaxes($taxes, ignoreDefaults: true);
     }
 
     /**
@@ -342,7 +342,7 @@ class TotalsCalculator implements CallsAnyMethod
     {
         $taxes = optional($this->input->payment_method)->taxes ?? new Collection();
 
-        return $this->getFilteredTaxes($taxes);
+        return $this->getFilteredTaxes($taxes, ignoreDefaults: true);
     }
 
     /**
