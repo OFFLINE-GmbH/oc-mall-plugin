@@ -74,8 +74,16 @@ class DefaultSignInHandler implements SignInHandler
         // Make sure to add the Customer model now
         if (! $user->customer && ! $user->is_guest) {
             $customer            = new Customer();
-            $customer->firstname = $user->name;
-            $customer->lastname  = $user->surname;
+
+            // RainLab.User 3.0 compatibility
+            if (class_exists(Setting::class)) {
+                $customer->firstname = $user->first_name;
+                $customer->lastname  = $user->last_name;
+            } else {
+                $customer->firstname = $user->name;
+                $customer->lastname  = $user->surname;
+            }
+
             $customer->user_id   = $user->id;
             $customer->is_guest  = false;
             $customer->save();
