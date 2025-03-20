@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\Sortable;
+use October\Rain\Database\Traits\SortableRelation;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
-use OFFLINE\Mall\Classes\Traits\SortableRelation;
 
 class PropertyGroup extends Model
 {
@@ -47,6 +47,7 @@ class PropertyGroup extends Model
             'otherKey'   => 'property_id',
             'pivot'      => ['use_for_variants', 'filter_type', 'sort_order'],
             'pivotModel' => PropertyGroupProperty::class,
+            'pivotSortable' => 'sort_order',
         ],
         'filterable_properties' => [
             Property::class,

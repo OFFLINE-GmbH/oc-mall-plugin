@@ -21,6 +21,7 @@ return [
     'cart.added' => 'Added product to cart',
     'cart.products_unavailable' => 'Some products in your cart are no longer available. Reload this page to see the updated cart.',
     'cart.shipping_on_checkout' => 'Shipping will be calculated during checkout.',
+    'cart.discounts_no_longer_valid' => 'Some discounts in your cart are no longer valid. They have been removed. Please reload the page and check your total.',
     'quantity' => 'Quantity',
     'product' => 'Product',
     'price' => 'Price',

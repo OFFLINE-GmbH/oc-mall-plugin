@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OFFLINE\Mall\Classes\Database;
 
 use Exception;
+use OFFLINE\Mall\Models\ProductPrice;
 
 /**
  * Checks and implements the both states `is_default` and `is_enabled`.
@@ -117,8 +118,12 @@ trait IsStates
      */
     protected function onHandleStateBeforeDelete()
     {
+        if ($this instanceof ProductPrice) {
+            return;
+        }
+
         $this->is_enabled = true;
-        $this->update(['is_enabled']);
+        $this->updateQuietly(['is_enabled']);
     }
 
     /**
@@ -127,6 +132,10 @@ trait IsStates
      */
     protected function onHandleStateAfterDelete()
     {
+        if ($this instanceof ProductPrice) {
+            return;
+        }
+
         $this->is_enabled = false;
         $this->update(['is_enabled']);
     }

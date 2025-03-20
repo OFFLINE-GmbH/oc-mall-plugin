@@ -105,11 +105,11 @@ class TotalsCalculator implements CallsAnyMethod
 
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
 
+        $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
+
         $this->shippingTaxes = $this->filterShippingTaxes();
         $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
         $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
-
-        $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
 
         $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
         $this->paymentTaxes = $this->filterPaymentTaxes();

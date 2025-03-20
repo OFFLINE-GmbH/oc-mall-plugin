@@ -1,3 +1,8 @@
+<style>
+    .text-right {
+        text-align: right;
+    }
+</style>
 <table class="table data">
     <thead>
     <tr>
@@ -52,7 +57,7 @@
             <?php if ($item->service_options): ?>
             <?php foreach($item->service_options as $option): ?>
             <div class="order-product-service" title="<?= e($option['name']) ?>">
-                + <?= e($option['price_formatted']); ?>
+                <?= e($option['price_formatted']); ?>
             </div>
             <?php endforeach; ?>
             <?php endif; ?>
@@ -122,7 +127,8 @@
         </td>
         <td class="text-right">
             <span>
-                <?= e($money->format($order['payment']['total'])) ?>
+                <?php $currency = \OFFLINE\Mall\Models\Currency::find(array_get($order->currency, 'id', 0)); ?>
+                <?= e($money->format($order['payment']['total'], null, $currency)) ?>
             </span>
         </td>
     </tr>

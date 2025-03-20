@@ -14,6 +14,7 @@ use OFFLINE\Mall\Models\Customer;
 use OFFLINE\Mall\Models\Wishlist;
 use RainLab\User\Models\Setting;
 use RainLab\User\Models\User;
+use RainLab\User\Models\UserLog;
 use Validator;
 
 class DefaultSignInHandler implements SignInHandler
@@ -99,6 +100,13 @@ class DefaultSignInHandler implements SignInHandler
 
         Cart::transferSessionCartToCustomer($user->customer);
         Wishlist::transferToCustomer($user->customer);
+
+        if (class_exists(UserLog::class)) {
+            UserLog::createRecord($user->getKey(), UserLog::TYPE_SELF_LOGIN, [
+                'user_full_name' => $user->full_name,
+                'is_two_factor' => false,
+            ]);
+        }
 
         return $user;
     }

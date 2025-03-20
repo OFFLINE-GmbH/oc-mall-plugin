@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Queue;
 use Model;
 use October\Rain\Database\Traits\Sluggable;
 use October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\SortableRelation;
 use October\Rain\Database\Traits\Validation;
 use OFFLINE\Mall\Classes\Jobs\PropertyRemovalUpdate;
 use OFFLINE\Mall\Classes\Traits\HashIds;
@@ -18,6 +19,7 @@ class Property extends Model
     use SoftDelete;
     use HashIds;
     use Sluggable;
+    use SortableRelation;
 
     public $jsonable = ['options'];
 

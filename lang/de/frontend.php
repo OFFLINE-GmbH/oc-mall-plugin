@@ -21,6 +21,7 @@ return [
     'cart.added' => 'Artikel zum Warenkorb hinzugefügt',
     'cart.products_unavailable' => 'Einige Produkte in Ihrem Warenkorb sind nicht mehr verfügbar. Laden Sie diese Seite neu um den neuen Warenkorb zu sehen.',
     'cart.shipping_on_checkout' => 'Die Versandkosten werden während des Bestellvorgangs berechnet.',
+    'cart.discounts_no_longer_valid' => 'Einige Rabatte in Ihrem Warenkorb sind nicht mehr gültig und wurden entfernt. Bitte laden Sie die Seite neu und überprüfen Sie das neue Total.',
     'quantity' => 'Anzahl',
     'product' => 'Produkt',
     'price' => 'Preis',

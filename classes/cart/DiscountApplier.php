@@ -65,8 +65,7 @@ class DiscountApplier
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
-            $savings                   = $this->input->shipping_method->price()->integer
-                - $discount->shippingPrice()->integer;
+            $savings = $this->input->shipping_method->price()->integer - $discount->shippingPrice()->integer;
             $this->reducedTotalIsFixed = true;
         }
 
@@ -107,9 +106,9 @@ class DiscountApplier
         return $this->reducedTotal;
     }
 
-    protected function discountCanBeApplied(Discount $discount): bool
+    public function discountCanBeApplied(Discount $discount): bool
     {
-        if ($discount->max_number_of_usages !== null && $discount->max_number_of_usages < $discount->number_of_usages) {
+        if ($discount->max_number_of_usages !== null && $discount->number_of_usages >= $discount->max_number_of_usages) {
             return false;
         }
 

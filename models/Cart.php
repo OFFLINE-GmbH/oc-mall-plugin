@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
+use OFFLINE\Mall\Classes\Cart\DiscountApplier;
+use OFFLINE\Mall\Classes\Exceptions\InvalidDiscountException;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Traits\Cart\CartActions;
@@ -43,17 +45,17 @@ class Cart extends Model
     ];
 
     public $belongsTo = [
-        'shipping_method'  => [
+        'shipping_method' => [
             ShippingMethod::class,
-            'scope'     => 'all',
+            'scope' => 'all',
         ],
-        'payment_method'   => [
+        'payment_method' => [
             PaymentMethod::class,
-            'scope'     => 'all',
+            'scope' => 'all',
         ],
         'shipping_address' => [Address::class, 'localKey' => 'shipping_address_id', 'deleted' => true],
-        'billing_address'  => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
-        'customer'         => [Customer::class, 'deleted' => true],
+        'billing_address' => [Address::class, 'localKey' => 'billing_address_id', 'deleted' => true],
+        'customer' => [Customer::class, 'deleted' => true],
     ];
 
     public $hasOne = [
@@ -88,7 +90,7 @@ class Cart extends Model
             if ($cart->shipping_method_id !== null && $cart->isDirty('shipping_address_id')) {
                 $availableMethods = ShippingMethod::getAvailableByCart($cart);
 
-                if (! $availableMethods->pluck('id')->contains($cart->shipping_method_id)) {
+                if (!$availableMethods->pluck('id')->contains($cart->shipping_method_id)) {
                     $cart->shipping_method_id = ShippingMethod::getDefault()->id;
                 }
             }
@@ -139,7 +141,7 @@ class Cart extends Model
      */
     public function getIsVirtualAttribute(): bool
     {
-        return $this->products->count() > 0 && $this->products->every(fn (CartProduct $product) => $product->data->is_virtual);
+        return $this->products->count() > 0 && $this->products->every(fn(CartProduct $product) => $product->data->is_virtual);
     }
 
     public function getShippingAddressSameAsBillingAttribute(): bool
@@ -208,7 +210,7 @@ class Cart extends Model
 
             $query->when($hasCustomFieldOption, function ($query) use ($value) {
                 $query->where('custom_field_option_id', $value->custom_field_option_id);
-            })->when(! $hasCustomFieldOption, function ($query) use ($value) {
+            })->when(!$hasCustomFieldOption, function ($query) use ($value) {
                 $query->where('value', $value->value);
             });
         }
@@ -220,8 +222,8 @@ class Cart extends Model
      * Remove all products that are no longer published.
      * Returns all removed products.
      *
-     * @throws Exception
      * @return \October\Rain\Support\Collection
+     * @throws Exception
      */
     public function removeUnpublishedProducts()
     {
@@ -307,5 +309,31 @@ class Cart extends Model
     public function forgetForcedShippingPrice()
     {
         Session::forget('mall.shipping.enforced');
+    }
+
+    /**
+     * Validate discounts and remove those that are no longer valid.
+     * @return void
+     */
+    public function validateDiscounts()
+    {
+        if ($this->discounts->count() === 0) {
+            return;
+        }
+
+        $discountApplier = new DiscountApplier(TotalsCalculatorInput::fromCart($this), $this->totals->totalPostTaxes());
+
+        $invalidDiscounts = new Collection();
+        $this->discounts->each(function (Discount $discount) use ($discountApplier, $invalidDiscounts) {
+            if (!$discountApplier->discountCanBeApplied($discount)) {
+                $this->discounts()->remove($discount);
+                $invalidDiscounts->push($discount);
+            }
+        });
+
+        if ($invalidDiscounts->count() > 0) {
+            $this->save();
+            throw new InvalidDiscountException($this, $invalidDiscounts);
+        }
     }
 }
