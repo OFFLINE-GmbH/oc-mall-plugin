@@ -65,8 +65,7 @@ class DiscountApplier
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
-            $savings                   = $this->input->shipping_method->price()->integer
-                - $discount->shippingPrice()->integer;
+            $savings = $this->input->shipping_method->price()->integer - $discount->shippingPrice()->integer;
             $this->reducedTotalIsFixed = true;
         }
 

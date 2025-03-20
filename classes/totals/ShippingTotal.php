@@ -181,9 +181,13 @@ class ShippingTotal implements \JsonSerializable, CallsAnyMethod
             return $price;
         }
 
+        // Remove all discount savings before checking if an alternate shipping price can be applied.
+        $discountSavings = -1 * $this->totals->appliedDiscounts()->where('discount.trigger', '<>', 'shipping')->sum('savings');
+        $basePriceForDiscountCheck = $this->totals->productPostTaxes() - $discountSavings;
+
         $applier = new DiscountApplier(
             $this->totals->getInput(),
-            $this->totals->productPostTaxes(),
+            $basePriceForDiscountCheck,
             $price
         );
 

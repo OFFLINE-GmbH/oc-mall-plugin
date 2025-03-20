@@ -650,3 +650,4 @@ v3.6.1:
     - 'Do not return 404 on missing products filter category'
     - 'Added additional coupon checks'
     - 'Optimized order display in backend'
+    - 'Alternate Shipping prices take now other discount totals into effect'

@@ -280,6 +280,7 @@ class ShippingMethod extends Model
                 return ($below === null || $below > $total)
                     && ($above === null || $above <= $total);
             });
+
         Event::fire('mall.shipping.methods.availability', [&$availableShippingMethods, $cart, $wishlist]);
 
         return $availableShippingMethods;
