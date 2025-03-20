@@ -38,7 +38,7 @@
     </td>
     <td class="text-right">
         {{ product.price()|raw }}
-        {% if product.service_options.count|default(0) > 0 %}
+        {% if product.service_options.count|default(0) > 0 and product.servicePostTaxes > 0 %}
             <div class="mall-cart__price-additions">
                 + {{ product.servicePostTaxes|money }}
             </div>

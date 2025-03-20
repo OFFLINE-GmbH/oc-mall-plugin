@@ -649,3 +649,4 @@ v3.6.1:
     - 'Logging login/register events in RainLab.User'
     - 'Do not return 404 on missing products filter category'
     - 'Added additional coupon checks'
+    - 'Optimized order display in backend'

@@ -63,7 +63,7 @@
                 {% if product.service_options|default(null) %}
                     {% for option in product.service_options %}
                         <div class="text-muted" title="{{ option.name }}">
-                            + {{ option.price_formatted }}
+                            {{ option.price_formatted }}
                         </div>
                     {% endfor %}
                 {% endif %}
