@@ -643,3 +643,5 @@ v3.5.20:
     - 'Fixed password reset'
 v3.5.21:
     - 'Added tax calculation workaround'
+v3.6.0:
+    - '!!! Reverted to old totals calculator logic. If you modified the "Pricing" classes that existed in v3.2 - v3.4, please check your code before updating. Since the classes were not part of the public API you probably have not touched them.'

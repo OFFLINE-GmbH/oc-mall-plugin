@@ -1,57 +1,39 @@
 <?php
 
-declare(strict_types=1);
-
 namespace OFFLINE\Mall\Classes\Totals;
 
-use JsonSerializable;
 use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\PaymentMethod;
 
-/**
- * @deprecated Since version 3.2.0, will be removed in 3.4.0 or later. Please use the new Pricing
- * system with the PriceBag class construct instead.
- */
-class PaymentTotal implements JsonSerializable, CallsAnyMethod
+class PaymentTotal implements \JsonSerializable, CallsAnyMethod
 {
     use Rounding;
-
     /**
-     * TotalsCalculator instance.
      * @var TotalsCalculator
      */
     private $totals;
-
     /**
-     * PaymentMethod instance.
      * @var PaymentMethod
      */
     private $method;
-
     /**
-     * Exclusive price.
-     * @var float|int
+     * @var int
      */
     private $preTaxes;
-
     /**
-     * Amount of Taxes.
-     * @var float|int
-     */
-    private $taxes;
-
-    /**
-     * Inclusive price.
-     * @var float|int
+     * @var int
      */
     private $total;
-
     /**
-     * Create a new PaymentTotal instance.
-     * @param PaymentMethod|null $method
-     * @param TotalsCalculator $totals
+     * @var int
      */
+    private $taxes;
+    /**
+     * @var int
+     */
+    protected $price;
+
     public function __construct(?PaymentMethod $method, TotalsCalculator $totals)
     {
         $this->method = $method;
@@ -60,19 +42,114 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
         $this->calculate();
     }
 
-    /**
-     * String-Representation of this class instance.
-     * @return string
-     */
-    public function __toString()
+    protected function calculate()
     {
-        return (string)json_encode($this->jsonSerialize());
+        $this->preTaxes = $this->calculatePreTax();
+        $this->total    = $this->calculateTotal();
+        $this->taxes    = $this->calculateTaxes();
+    }
+
+    protected function calculatePreTax(): float
+    {
+        if ( ! $this->method) {
+            return 0;
+        }
+
+        $base = $this->totals->totalPrePayment();
+
+        $percentage = $this->getPercentage();
+        $price      = $this->getPrice();
+
+        $charge = $this->getCharge($base, $price, $percentage);
+
+        return $this->round($charge - $base);
+    }
+
+    protected function calculateTotal(): float
+    {
+        if ( ! $this->method) {
+            return 0;
+        }
+
+        $base = $this->totals->totalPrePayment();
+
+        $taxPercentage = $this->totals->paymentTaxes->sum('percentageDecimal') + 1;
+
+        $percentage = $this->getPercentage();
+        $price      = $this->getPrice();
+
+        // Add total tax percentage.
+        $percentage *= $taxPercentage;
+        $price      *= $taxPercentage;
+
+        $charge = $this->getCharge($base, $price, $percentage);
+
+        return $this->round($charge - $base);
+    }
+
+    protected function calculateTaxes(): float
+    {
+        return $this->round($this->total - $this->preTaxes);
+    }
+
+    public function totalPreTaxes(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalPreTaxesOriginal(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalTaxes(): float
+    {
+        return $this->taxes;
+    }
+
+    public function totalPostTaxes(): float
+    {
+        return $this->total;
     }
 
     /**
-     * JSON serialize class.
-     * @return array
+     * @return mixed
      */
+    protected function getPrice()
+    {
+        if ($this->price) {
+            return $this->price;
+        }
+
+        $price = $this->method->price()->integer ?? 0;
+
+        $this->price = $price;
+
+        return $price;
+    }
+
+    /**
+     * Add the fixed and percental amount to the base price.
+     *
+     * @param $base
+     * @param $price
+     * @param $percentage
+     *
+     * @return float|int
+     */
+    protected function getCharge($base, $price, $percentage)
+    {
+        return ($base + $price) / (1 - $percentage);
+    }
+
+    /**
+     * @return int|mixed|string
+     */
+    protected function getPercentage()
+    {
+        return ($this->method->fee_percentage ?? 0) / 100;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -83,51 +160,8 @@ class PaymentTotal implements JsonSerializable, CallsAnyMethod
         ];
     }
 
-    /**
-     * Receive exclusive price value.
-     * @return float|int
-     */
-    public function totalPreTaxes()
+    public function __toString()
     {
-        return $this->preTaxes;
-    }
-
-    /**
-     * Receive exclusive price value.
-     * @return float|int
-     */
-    public function totalPreTaxesOriginal()
-    {
-        return $this->preTaxes;
-    }
-
-    /**
-     * Receive amount of taxes.
-     * @return float|int
-     */
-    public function totalTaxes()
-    {
-        return $this->taxes;
-    }
-
-    /**
-     * Receive inclusive price value.
-     * @return float|int
-     */
-    public function totalPostTaxes()
-    {
-        return $this->total;
-    }
-
-    /**
-     * Calculate Shipping costs.
-     * @return void
-     */
-    protected function calculate()
-    {
-        $bag = $this->totals->getBag();
-        $this->preTaxes = $bag->paymentExclusive()->getMinorAmount()->toInt();
-        $this->total = $bag->paymentFee()->getMinorAmount()->toInt();
-        $this->taxes = $bag->paymentTax()->getMinorAmount()->toInt();
+        return (string)json_encode($this->jsonSerialize());
     }
 }

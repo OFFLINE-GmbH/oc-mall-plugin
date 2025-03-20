@@ -23,6 +23,7 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\PostFinance;
 use OFFLINE\Mall\Classes\Payments\Stripe;
+use OFFLINE\Mall\Classes\User\UserProvider;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\GeneralSettings;
@@ -94,6 +95,8 @@ trait BootServiceContainer
         });
 
         $this->registerDomPDF();
+
+        $this->registerUserProvider();
     }
 
     /**
@@ -127,5 +130,17 @@ trait BootServiceContainer
         });
         $this->app->alias('dompdf', Dompdf::class);
         $this->app->bind('dompdf.wrapper', fn ($app) => new PDF($app['dompdf'], $app['config'], $app['files'], $app['view']));
+    }
+
+    protected function registerUserProvider()
+    {
+        // RainLab.User 3.0
+        if (class_exists(\RainLab\User\Models\Setting::class)) {
+            // RainLab.User excludes guests from logging in starting with 3.0.
+            // We handle these restrictions ourselves, so we can allow guests to log in.
+            $this->app->auth->provider('user', function ($app, array $config) {
+                return new UserProvider($app['hash'], $config['model']);
+            });
+        }
     }
 }

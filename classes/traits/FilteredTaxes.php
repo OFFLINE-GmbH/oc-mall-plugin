@@ -20,11 +20,9 @@ trait FilteredTaxes
     /**
      * Filter a tax collection based on the shipping destination country.
      *
-     * @param $taxes
-     *
      * @return Collection
      */
-    public function getFilteredTaxes($taxes)
+    public function getFilteredTaxes($taxes, $ignoreDefaults = false)
     {
         if (!$taxes instanceof Collection) {
             $taxes = Collection::wrap($taxes);
@@ -41,6 +39,12 @@ trait FilteredTaxes
 
         // If the shipping destination is not yet known, return the default tax.
         if ($this->countryId === null) {
+            // For shipping and payment methods, we use the input taxes as default (as long as they don't have a country restriction).
+            $globalTaxes = $taxes->filter(fn($tax) => $tax->countries->count() === 0);
+            if ($ignoreDefaults && $globalTaxes->count() > 0) {
+                return $globalTaxes;
+            }
+
             return Tax::defaultTaxes();
         }
 
