@@ -17,6 +17,7 @@ use OFFLINE\Mall\Models\Wishlist;
 use RainLab\User\Models\Setting;
 use RainLab\User\Models\User;
 use RainLab\User\Models\UserGroup;
+use RainLab\User\Models\UserLog;
 use System\Classes\PluginManager;
 
 class DefaultSignUpHandler implements SignUpHandler
@@ -169,6 +170,12 @@ class DefaultSignUpHandler implements SignUpHandler
         $this->renameExistingGuestAccounts($data, $user);
 
         Event::fire('mall.customer.afterSignup', [$this, $user]);
+
+        if (class_exists(UserLog::class)) {
+            UserLog::createRecord($user->getKey(), UserLog::TYPE_NEW_USER, [
+                'user_full_name' => $user->full_name,
+            ]);
+        }
 
         if ($requiresConfirmation === true) {
             return $user;
