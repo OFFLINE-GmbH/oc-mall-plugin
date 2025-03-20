@@ -169,7 +169,7 @@ class ProductsFilter extends MallComponent
      * @var Category
      */
     public $productsComponentCategory;
-    
+
     /**
      * An instance of the money formatter class.
      *
@@ -185,7 +185,7 @@ class ProductsFilter extends MallComponent
     public function componentDetails()
     {
         return [
-            'name'        => 'offline.mall::lang.components.productsFilter.details.name',
+            'name' => 'offline.mall::lang.components.productsFilter.details.name',
             'description' => 'offline.mall::lang.components.productsFilter.details.description',
         ];
     }
@@ -198,43 +198,43 @@ class ProductsFilter extends MallComponent
     public function defineProperties()
     {
         return [
-            'category'            => [
-                'title'   => 'offline.mall::lang.common.category',
+            'category' => [
+                'title' => 'offline.mall::lang.common.category',
                 'default' => null,
-                'type'    => 'dropdown',
+                'type' => 'dropdown',
             ],
-            'includeChildren'     => [
-                'title'       => 'offline.mall::lang.components.productsFilter.properties.includeChildren.title',
+            'includeChildren' => [
+                'title' => 'offline.mall::lang.components.productsFilter.properties.includeChildren.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeChildren.description',
-                'default'     => null,
-                'type'        => 'checkbox',
+                'default' => null,
+                'type' => 'checkbox',
             ],
-            'includeVariants'     => [
-                'title'       => 'offline.mall::lang.components.productsFilter.properties.includeVariants.title',
+            'includeVariants' => [
+                'title' => 'offline.mall::lang.components.productsFilter.properties.includeVariants.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeVariants.description',
-                'default'     => null,
-                'type'        => 'checkbox',
+                'default' => null,
+                'type' => 'checkbox',
             ],
-            'showPriceFilter'     => [
-                'title'   => 'offline.mall::lang.components.productsFilter.properties.showPriceFilter.title',
+            'showPriceFilter' => [
+                'title' => 'offline.mall::lang.components.productsFilter.properties.showPriceFilter.title',
                 'default' => '1',
-                'type'    => 'checkbox',
+                'type' => 'checkbox',
             ],
-            'showBrandFilter'     => [
-                'title'   => 'offline.mall::lang.components.productsFilter.properties.showBrandFilter.title',
+            'showBrandFilter' => [
+                'title' => 'offline.mall::lang.components.productsFilter.properties.showBrandFilter.title',
                 'default' => '1',
-                'type'    => 'checkbox',
+                'type' => 'checkbox',
             ],
-            'showOnSaleFilter'    => [
-                'title'   => 'offline.mall::lang.components.productsFilter.properties.showOnSaleFilter.title',
+            'showOnSaleFilter' => [
+                'title' => 'offline.mall::lang.components.productsFilter.properties.showOnSaleFilter.title',
                 'default' => '0',
-                'type'    => 'checkbox',
+                'type' => 'checkbox',
             ],
             'includeSliderAssets' => [
-                'title'       => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.title',
+                'title' => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.title',
                 'description' => 'offline.mall::lang.components.productsFilter.properties.includeSliderAssets.description',
-                'default'     => '1',
-                'type'        => 'checkbox',
+                'default' => '1',
+                'type' => 'checkbox',
             ],
         ];
     }
@@ -271,11 +271,7 @@ class ProductsFilter extends MallComponent
      */
     public function onRun()
     {
-        try {
-            $this->setData();
-        } catch (ModelNotFoundException $e) {
-            return $this->controller->run('404');
-        }
+        $this->setData();
     }
 
     /**
@@ -294,7 +290,7 @@ class ProductsFilter extends MallComponent
         }
 
         $properties = Property::whereIn('slug', $data->keys())->get();
-        $filter     = $data->mapWithKeys(function ($values, $id) use ($properties) {
+        $filter = $data->mapWithKeys(function ($values, $id) use ($properties) {
             $property = Filter::isSpecialProperty($id) ? $id : $properties->where('slug', $id)->first();
 
             if (is_array($values)
@@ -376,9 +372,12 @@ class ProductsFilter extends MallComponent
 
         $this->setVar('category', $this->getCategory());
 
-        $categories = new EloquentCollection([$this->category]);
+        $categories = new EloquentCollection([]);
+        if ($this->category->exists) {
+           $categories->push($this->category);
+        }
 
-        if ($this->includeChildren) {
+        if ($this->includeChildren && $this->category->exists) {
             $categories = $this->category->getAllChildrenAndSelf();
         }
         $this->setVar('categories', $categories);
@@ -440,7 +439,9 @@ class ProductsFilter extends MallComponent
     {
         $brands = DB::table('offline_mall_products')
             ->where('offline_mall_products.published', '=', true)
-            ->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'))
+            ->when($this->categories->count() > 0, function ($query) {
+                $query->whereIn('offline_mall_category_product.category_id', $this->categories->pluck('id'));
+            })
             ->select('offline_mall_brands.*')
             ->distinct()
             ->join('offline_mall_brands', 'offline_mall_products.brand_id', '=', 'offline_mall_brands.id')
@@ -468,7 +469,7 @@ class ProductsFilter extends MallComponent
             ->load('property_groups.translations')
             ->inherited_property_groups
             ->load('filterable_properties.translations')
-            ->reject(fn (PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
+            ->reject(fn(PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
     }
 
     /**
@@ -480,16 +481,16 @@ class ProductsFilter extends MallComponent
     protected function setProps()
     {
         $this->values = Property::getValuesForCategory($this->categories);
-        $valueKeys    = $this->values->keys();
-        $props        = $this->propertyGroups->flatMap->filterable_properties->unique();
+        $valueKeys = $this->values->keys();
+        $props = $this->propertyGroups->flatMap->filterable_properties->unique();
 
         // Remove any property that has no available filters.
-        $this->props = $props->filter(fn (Property $property) => $valueKeys->contains($property->id));
+        $this->props = $props->filter(fn(Property $property) => $valueKeys->contains($property->id));
 
         $groupKeys = $this->props->pluck('pivot.property_group_id');
 
         // Remove any property group that has no available properties.
-        $this->propertyGroups = $this->propertyGroups->filter(fn (PropertyGroup $group) => $groupKeys->contains($group->id));
+        $this->propertyGroups = $this->propertyGroups->filter(fn(PropertyGroup $group) => $groupKeys->contains($group->id));
     }
 
     /**
@@ -502,6 +503,11 @@ class ProductsFilter extends MallComponent
         // Use the category from the products component if nothing else is specified.
         if ($this->productsComponentCategory && $this->property('category') === null) {
             return $this->productsComponentCategory;
+        }
+
+        // If no category is set, use the root category.
+        if ($this->property('category') === null) {
+            return new Category();
         }
 
         return Category::bySlugOrId($this->param('slug'), $this->property('category'));
@@ -546,8 +552,8 @@ class ProductsFilter extends MallComponent
         $this->setVar('sortOrder', $sortOrder);
 
         return [
-            'filter'      => $filter,
-            'sort'        => $sortOrder,
+            'filter' => $filter,
+            'sort' => $sortOrder,
             'queryString' => (new QueryString())->serialize($filter, $sortOrder),
         ];
     }
