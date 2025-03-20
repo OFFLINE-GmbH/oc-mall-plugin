@@ -778,7 +778,7 @@ class Product extends MallComponent
         $data['price'] = $this->page['price'] = Price::fromArray($priceData);
 
         return [
-            '.mall-product__price' => $this->renderPartial($this->alias . '::price', $data),
+            '.mall-product__current-price' => $this->renderPartial($this->alias . '::currentprice', $data),
             '.mall-product__info' => $this->renderPartial($this->alias . '::info', $data),
             '.mall-product__add-to-cart' => $this->renderPartial($this->alias . '::addtocart', $data),
         ];
