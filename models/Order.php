@@ -13,6 +13,7 @@ use Model;
 use October\Rain\Database\Traits\SoftDelete;
 use October\Rain\Database\Traits\Validation;
 use October\Rain\Exception\ValidationException;
+use OFFLINE\Mall\Classes\Exceptions\InvalidDiscountException;
 use OFFLINE\Mall\Classes\Jobs\SendVirtualProductFiles;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
@@ -180,6 +181,13 @@ class Order extends Model
 
         if ($removed->count() > 0) {
             throw new ValidationException(['cart' => trans('offline.mall::frontend.cart.products_unavailable')]);
+        }
+
+        // Ensure all applied discounts are still valid.
+        try {
+            $cart->validateDiscounts();
+        } catch (InvalidDiscountException $e) {
+            throw new ValidationException(['cart' => trans('offline.mall::frontend.cart.discounts_no_longer_valid')]);
         }
 
         $order = DB::transaction(function () use ($cart) {

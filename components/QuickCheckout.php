@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
+use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PaymentRedirector;
 use OFFLINE\Mall\Classes\Payments\PaymentService;
@@ -272,7 +273,11 @@ class QuickCheckout extends MallComponent
 
         if (! $this->order) {
             // Create the order first.
-            $this->order = Order::fromCart($this->cart);
+            try {
+                $this->order = Order::fromCart($this->cart);
+            } catch (OutOfStockException $e) {
+                throw new ValidationException(['cart' => $e->getMessage()]);
+            }
         }
 
         // If the order was created successfully proceed with the payment.
