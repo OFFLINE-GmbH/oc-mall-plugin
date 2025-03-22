@@ -41,6 +41,13 @@ class Checkout extends MallComponent
     public $step;
 
     /**
+     * Show the notes field.
+     *
+     * @var bool
+     */
+    public $showNotesField = false;
+
+    /**
      * The order that was created during checkout.
      * @var Order
      */
@@ -87,6 +94,12 @@ class Checkout extends MallComponent
                 'type' => 'dropdown',
                 'name' => 'offline.mall::lang.components.checkout.properties.step.name',
             ],
+            'showNotesField' => [
+                'name' => 'offline.mall::lang.components.checkout.properties.showNotesField.name',
+                'description' => 'offline.mall::lang.components.checkout.properties.showNotesField.description',
+                'type' => 'checkbox',
+                'default' => false,
+            ],
         ];
     }
 
@@ -113,6 +126,8 @@ class Checkout extends MallComponent
      */
     public function init()
     {
+        $this->showNotesField = (bool)$this->property('showNotesField');
+
         $this->addComponent(CartComponent::class, 'cart', ['showDiscountApplier' => false]);
 
         if ($this->param('step') === 'confirm') {
@@ -193,8 +208,13 @@ class Checkout extends MallComponent
         $gateway = app(PaymentGateway::class);
         $gateway->init($paymentMethod, $paymentData);
 
+        $attributes = [];
+        if ($this->showNotesField) {
+            $attributes['customer_notes'] = post('customer_notes');
+        }
+
         // Create the order first.
-        $order = Order::fromCart($this->cart);
+        $order = Order::fromCart($this->cart, $attributes);
 
         // If the order was created successfully proceed with the payment.
         $paymentService = new PaymentService(

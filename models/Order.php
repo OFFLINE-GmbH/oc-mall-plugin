@@ -172,7 +172,7 @@ class Order extends Model
         return static::where('customer_id', $customer->id);
     }
 
-    public static function fromCart(Cart $cart): self
+    public static function fromCart(Cart $cart, array $additionalAttributes = []): self
     {
         $cart->loadMissing(['products.product.brand']);
 
@@ -190,7 +190,7 @@ class Order extends Model
             throw new ValidationException(['cart' => trans('offline.mall::frontend.cart.discounts_no_longer_valid')]);
         }
 
-        $order = DB::transaction(function () use ($cart) {
+        $order = DB::transaction(function () use ($additionalAttributes, $cart) {
             Event::fire('mall.order.beforeCreate', [$cart]);
 
             $initialOrderStatus = OrderState::where('flag', OrderState::FLAG_NEW)->first();
@@ -244,6 +244,9 @@ class Order extends Model
             $order->attributes['total_taxes']               = $order->round($totals->totalTaxes());
             $order->attributes['total_post_taxes']          = $order->round($totals->totalPostTaxes());
             $order->total_weight                            = $order->round($totals->weightTotal());
+
+            $order->forceFill($additionalAttributes);
+
             $order->save();
 
             $cart

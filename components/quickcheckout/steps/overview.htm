@@ -22,6 +22,11 @@
         </div>
 
         {% if __SELF__.cart.products.count|default(0) > 0 %}
+
+            {% if __SELF__.showNotesField %}
+                {% partial __SELF__ ~ '::notes' %}
+            {% endif %}
+
             <div class="mall-signup-terms">
                 <label class="mall-checkbox">
                     <input class="js-mall-toggle-signup-terms"

@@ -592,6 +592,12 @@ return [
         'currency' => 'Currency',
         'status' => 'Status',
         'email' => 'Email',
+        'notes_section' => 'Notes',
+        'update_notes' => 'Save notes',
+        'notes_updated' => 'Notes updated',
+        'customer_notes' => 'Customer notes',
+        'admin_notes' => 'Admin notes',
+        'admin_notes_comment' => 'Only admins can see these notes',
         'will_be_paid_later' => 'Will be paid later',
         'shipping_address_same_as_billing' => 'Shipping address is same as billing',
         'credit_card_last4_digits' => 'Last 4 digits',
@@ -921,6 +927,10 @@ return [
             'properties' => [
                 'step' => [
                     'name' => 'Active checkout step (is set automatically)',
+                ],
+                'showNotesField' => [
+                    'name' => 'Show notes field',
+                    'description' => 'Allow the user to enter additional notes to the order',
                 ],
             ],
         ],

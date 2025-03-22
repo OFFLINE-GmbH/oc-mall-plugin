@@ -14,6 +14,9 @@ care of all redirects and component initialisations.
 
 The currently active checkout step. This parameter should be filled via URL parameter.
 
+### `showNotesField` (boolean)
+
+Determines if the customer notes field should be displayed.
 
 ## Example implementations
 
@@ -27,6 +30,7 @@ url = "/checkout/:step?"
 
 [checkout]
 step = "{{ :step }}"
+showNotesField = true
 ==
 {% if not user %}
     {% component 'signUp' %}

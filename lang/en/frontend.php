@@ -59,6 +59,8 @@ return [
     'form.city' => 'City',
     'form.state' => 'State/County/Province',
     'form.country' => 'Country',
+    'form.notes' => 'Notes',
+    'form.notes_placeholder' => 'Add any notes regarding your order here',
     'proceed_to_checkout' => 'Proceed',
     'address' => 'Address',
     'customer_information' => 'Customer information',

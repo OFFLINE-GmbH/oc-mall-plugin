@@ -51,6 +51,16 @@ columns:
         path: $/offline/mall/models/order/_payment_state.htm
         sortable: true
         searchable: false
+    customer_notes:
+        label: 'offline.mall::lang.order.customer_notes'
+        type: text
+        invisible: true
+        searchable: true
+    admin_notes:
+        label: 'offline.mall::lang.order.admin_notes'
+        type: text
+        invisible: true
+        searchable: true
     shipped_at:
         label: 'offline.mall::lang.order.shipped'
         type: partial

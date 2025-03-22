@@ -64,11 +64,12 @@
                         <div class="form-buttons">
                             <div class="loading-indicator-container">
                                 <button
-                                        type="button"
-                                        class="oc-icon-trash-o btn-icon danger pull-right"
-                                        data-request="onDelete"
-                                        data-load-indicator="<?= e(trans('offline.mall::lang.order.deleting')) ?>"
-                                        data-request-confirm="<?= e(trans('offline.mall::lang.order.delete_confirm')) ?>">
+                                    type="button"
+                                    class="oc-icon-trash-o btn-icon danger pull-right"
+                                    data-request="onDelete"
+                                    data-load-indicator="<?= e(trans('offline.mall::lang.order.deleting')) ?>"
+                                    data-request-confirm="<?= e(trans('offline.mall::lang.order.delete_confirm')) ?>"
+                                >
                                 </button>
                             </div>
                         </div>
@@ -86,7 +87,7 @@
                         'heading' => e(trans('offline.mall::lang.order.shipping_address'))
                     ]) ?>
 
-                    <?php if( ! $order['shipping_address_same_as_billing']): ?>
+                    <?php if (!$order['shipping_address_same_as_billing']): ?>
                         <?= $this->makePartial('address', [
                             'address' => $order['billing_address'],
                             'heading' => e(trans('offline.mall::lang.order.billing_address'))
@@ -99,11 +100,21 @@
                     <?php endif; ?>
 
                     <?php
-                    $outputs = \Event::fire('mall.backend.order.sidebar', [$order]);
-                    foreach (array_filter($outputs) as $output) {
+                    $customOutputs = \Event::fire('mall.backend.order.sidebar', [$order]);
+                    foreach (array_filter($customOutputs) as $output) {
                         echo $output;
                     }
                     ?>
+
+                    <h5><?= e(trans('offline.mall::lang.order.notes_section')) ?></h5>
+
+                    <form action="#" data-request="onUpdateNotes" data-request-validate data-request-flash>
+                        <?= $orderFormWidget->render() ?>
+
+                        <button data-attach-loading class="btn btn-primary w-100">
+                            <?= e(trans('offline.mall::lang.order.update_notes')) ?>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

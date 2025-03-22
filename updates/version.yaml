@@ -653,3 +653,5 @@ v3.6.1:
     - 'Alternate Shipping prices take now other discount totals into effect'
 v3.6.2:
     - 'Added event to add content to the backend order detail view sidebar'
+v3.6.3:
+    - 'Added native support for Order notes (see showNotesField property on Checkout component)'
