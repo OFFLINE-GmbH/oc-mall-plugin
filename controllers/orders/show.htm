@@ -75,8 +75,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
     <div class="layout-cell w-300 form-sidebar control-scrollpanel">
@@ -100,6 +98,12 @@
                         </div>
                     <?php endif; ?>
 
+                    <?php
+                    $outputs = \Event::fire('mall.backend.order.sidebar', [$order]);
+                    foreach (array_filter($outputs) as $output) {
+                        echo $output;
+                    }
+                    ?>
                 </div>
             </div>
         </div>
