@@ -137,3 +137,27 @@ For a usage example see
 This event can be used to add additional data to the index table.
 
 It receives the `Product` model (for Products) or the `Product` and `Variant` models (for Variants). You can return an array of additional data to be stored with the index entry.
+
+## Backend 
+
+### `mall.backend.order.sidebar'`
+
+Add custom content to the order detail sidebar. This event receives the `$order` model as a single argument.
+
+Returned strings will be added to the sidebar.
+
+```php
+Event::listen('mall.backend.order.sidebar', function (\OFFLINE\Mall\Models\Order $order) {
+    $form = new Form(null, [
+        'model' => $order,
+        'fields' => [
+            'some_custom_order_field' => [
+                'label' => 'Custom order field',
+                'type' => 'textarea'
+            ],
+        ]
+    ]);
+    
+    return $form->render();
+});
+```
