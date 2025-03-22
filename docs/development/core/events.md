@@ -140,7 +140,7 @@ It receives the `Product` model (for Products) or the `Product` and `Variant` mo
 
 ## Backend 
 
-### `mall.backend.order.sidebar'`
+### `mall.backend.order.sidebar`
 
 Add custom content to the order detail sidebar. This event receives the `$order` model as a single argument.
 

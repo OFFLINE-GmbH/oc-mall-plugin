@@ -106,15 +106,19 @@
                     }
                     ?>
 
-                    <h5><?= e(trans('offline.mall::lang.order.notes_section')) ?></h5>
+                    <?php if (config('offline.mall::features.order_notes')): ?>
 
-                    <form action="#" data-request="onUpdateNotes" data-request-validate data-request-flash>
-                        <?= $orderFormWidget->render() ?>
+                        <h5><?= e(trans('offline.mall::lang.order.notes_section')) ?></h5>
 
-                        <button data-attach-loading class="btn btn-primary w-100">
-                            <?= e(trans('offline.mall::lang.order.update_notes')) ?>
-                        </button>
-                    </form>
+                        <form action="#" data-request="onUpdateNotes" data-request-validate data-request-flash>
+                            <?= $orderFormWidget->render() ?>
+
+                            <button data-attach-loading class="btn btn-primary w-100">
+                                <?= e(trans('offline.mall::lang.order.update_notes')) ?>
+                            </button>
+                        </form>
+
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
