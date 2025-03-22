@@ -95,19 +95,56 @@ class Orders extends Controller
         $this->bodyClass = 'compact-container';
         $this->pageTitle = trans('offline.mall::lang.titles.orders.show');
         $this->addCss('/plugins/offline/mall/assets/backend.css');
-        $this->vars['ordersList']      = Backend::url('offline/mall/orders');
-        $this->vars['productUpdate']   = Backend::url('offline/mall/products/update');
-        $this->vars['addressUpdate']   = Backend::url('offline/mall/addresses/update');
+        $this->vars['ordersList'] = Backend::url('offline/mall/orders');
+        $this->vars['productUpdate'] = Backend::url('offline/mall/products/update');
+        $this->vars['addressUpdate'] = Backend::url('offline/mall/addresses/update');
         $this->vars['customerPreview'] = Backend::url('rainlab/user/users/preview');
 
         $order = Order::with('products', 'order_state')->findOrFail($this->params[0]);
 
         $this->initRelation($order);
 
-        $this->vars['order']        = $order;
-        $this->vars['money']        = app(Money::class);
-        $this->vars['orderStates']  = OrderState::orderBy('sort_order', 'ASC')->get();
+        $this->vars['order'] = $order;
+        $this->vars['money'] = app(Money::class);
+        $this->vars['orderStates'] = OrderState::orderBy('sort_order', 'ASC')->get();
         $this->vars['paymentState'] = $this->paymentStatePartial($order);
+
+        // Notes Form
+        $config = $this->makeConfigFromArray([
+            'fields' => [
+                'customer_notes' => [
+                    'label' => 'offline.mall::lang.order.customer_notes',
+                    'span' => 'full',
+                    'type' => 'textarea',
+                    'size' => 'tiny',
+                ],
+                'admin_notes' => [
+                    'label' => 'offline.mall::lang.order.admin_notes',
+                    'comment' => 'offline.mall::lang.order.admin_notes_comment',
+                    'span' => 'full',
+                    'type' => 'textarea',
+                    'size' => 'tiny',
+                ],
+            ],
+        ]);
+        $config->model = $order;
+        $config->arrayName = class_basename($config->model);
+
+        $widget = $this->makeWidget('Backend\Widgets\Form', $config);
+
+        $this->vars['orderFormWidget'] = $widget;
+    }
+
+    public function onUpdateNotes()
+    {
+        $order = Order::findOrFail($this->params[0]);
+
+        $order->customer_notes = post('Order[customer_notes]');
+        $order->admin_notes = post('Order[admin_notes]');
+
+        $order->save();
+
+        Flash::success(trans('offline.mall::lang.order.notes_updated'));
     }
 
     /**
@@ -126,12 +163,12 @@ class Orders extends Controller
 
     /**
      * Ajax handler on change payment state.
-     * @throws ValidationException
      * @return array
+     * @throws ValidationException
      */
     public function onChangePaymentState()
     {
-        $order    = Order::findOrFail(input('id'));
+        $order = Order::findOrFail(input('id'));
         $newState = input('state');
 
         $availableStatus = $order->payment_state::getAvailableTransitions();
@@ -144,7 +181,7 @@ class Orders extends Controller
         $order->save();
 
         return [
-            '#payment-state'        => trans($newState::label()),
+            '#payment-state' => trans($newState::label()),
             '#payment-state-toggle' => $this->paymentStatePartial($order),
         ];
     }
@@ -156,10 +193,10 @@ class Orders extends Controller
     public function onUpdateTrackingInfo()
     {
         $trackingNumber = input('trackingNumber');
-        $trackingUrl    = input('trackingUrl');
-        $notification   = (bool)input('notification', false);
-        $shipped        = (bool)input('shipped', false);
-        $completed      = (bool)input('completed', false);
+        $trackingUrl = input('trackingUrl');
+        $notification = (bool)input('notification', false);
+        $shipped = (bool)input('shipped', false);
+        $completed = (bool)input('completed', false);
 
         $data = [
             'tracking_url' => $trackingUrl,
@@ -181,7 +218,7 @@ class Orders extends Controller
         $order = $this->updateOrder($data, false, $notification);
 
         return [
-            '#shipped_at'  => $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-',
+            '#shipped_at' => $order->shipped_at ? $order->shipped_at->toFormattedDateString() : '-',
             '#order_state' => e($order->order_state->name),
         ];
     }
@@ -203,7 +240,7 @@ class Orders extends Controller
      */
     public function invoice()
     {
-        $id    = $this->params[0];
+        $id = $this->params[0];
         $order = Order::with(['customer', 'products'])->findOrFail($id);
 
         return $order->getPDFInvoice()->stream(sprintf('mall-order-%s.pdf', $id));

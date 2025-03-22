@@ -59,6 +59,8 @@ return [
     'form.city' => 'Ort',
     'form.state' => 'Kanton/Bundesstaat',
     'form.country' => 'Land',
+    'form.notes' => 'Bemerkungen',
+    'form.notes_placeholder' => 'Fügen Sie eine Bemerkung zu Ihrer Bestellung hinzu.',
     'proceed_to_checkout' => 'Fortfahren',
     'address' => 'Adresse',
     'customer_information' => 'Kundeninformation',

@@ -124,3 +124,9 @@ name = "Order table"
         </tbody>
     </table>
 </div>
+
+{% if order.customer_notes %}
+    <strong>{{ 'offline.mall::frontend.form.notes' | trans }}</strong><br>
+    {{ order.customer_notes | nl2br }}
+    <br />
+{% endif %}

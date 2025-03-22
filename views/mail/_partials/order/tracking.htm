@@ -1,4 +1,5 @@
-
+name = "Order Tracking"
+==
 {% if order.tracking_number or order.tracking_url %}
     {{ 'offline.mall::mail.order.partials.track_shipping_status' | trans() }}
     {% partial 'panel' body %}

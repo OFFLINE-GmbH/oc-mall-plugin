@@ -592,6 +592,12 @@ return [
         'currency' => 'Währung',
         'status' => 'Status',
         'email' => 'Email',
+        'notes_section' => 'Bemerkungen',
+        'update_notes' => 'Bemerkungen speichern',
+        'notes_updated' => 'Bemerkungen aktualisiert',
+        'customer_notes' => 'Bemerkungen des Kunden',
+        'admin_notes' => 'Bemerkungen des Admins',
+        'admin_notes_comment' => 'Diese Bemerkungen sind für den Kunden nicht sichtbar',
         'will_be_paid_later' => 'Wird später bezahlt',
         'shipping_address_same_as_billing' => 'Versandadresse gleich wie Rechnungsadresse',
         'credit_card_last4_digits' => 'Letzte 4 Ziffern',
@@ -911,6 +917,10 @@ return [
             'properties' => [
                 'step' => [
                     'name' => 'Aktiver Schritt des Checkouts (wird automatisch gesetzt)',
+                ],
+                'showNotesField' => [
+                    'name' => 'Bemerkungs-Feld anzeigen',
+                    'description' => 'Erlaubt es dem Kunden eine Bemerkung zur Bestellung zu hinterlassen',
                 ],
             ],
         ],

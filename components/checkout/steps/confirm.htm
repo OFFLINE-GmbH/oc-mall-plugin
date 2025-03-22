@@ -3,7 +3,16 @@
 {% component 'cart' %}
 
 {% partial __SELF__ ~ '::confirminfo' %}
-{% partial __SELF__ ~ '::actions' %}
+
+{% if cart.products.count|default(0) > 0 %}
+    <form class="mall-cart-form">
+        {% if __SELF__.showNotesField %}
+            {% partial __SELF__ ~ '::notes' %}
+        {% endif %}
+
+        {% partial __SELF__ ~ '::actions' %}
+    </form>
+{% endif %}
 
 {% if __SELF__.dataLayer %}
     {% partial __SELF__ ~ '::datalayer' %}

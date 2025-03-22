@@ -110,6 +110,13 @@ class QuickCheckout extends MallComponent
     public $step;
 
     /**
+     * Show the notes field.
+     *
+     * @var bool
+     */
+    public $showNotesField = false;
+
+    /**
      * The order that was created during checkout.
      *
      * @var Order
@@ -153,6 +160,12 @@ class QuickCheckout extends MallComponent
                 'name' => 'offline.mall::lang.components.checkout.properties.step.name',
                 'default' => 'overview',
             ],
+            'showNotesField' => [
+                'name' => 'offline.mall::lang.components.checkout.properties.showNotesField.name',
+                'description' => 'offline.mall::lang.components.checkout.properties.showNotesField.description',
+                'type' => 'checkbox',
+                'default' => false,
+            ],
         ];
     }
 
@@ -182,6 +195,7 @@ class QuickCheckout extends MallComponent
     public function init()
     {
         $this->step = $this->property('step', 'overview');
+        $this->showNotesField = (bool)$this->property('showNotesField');
 
         // The default step is "overview". Since this component shows all steps on one screen,
         // the "payment" step can be redirected to the overview as well. The "payment" step is used
@@ -272,9 +286,14 @@ class QuickCheckout extends MallComponent
         $flow = $this->order ? 'payment' : 'checkout';
 
         if (! $this->order) {
+            $attributes = [];
+            if ($this->showNotesField) {
+                $attributes['customer_notes'] = post('customer_notes');
+            }
+
             // Create the order first.
             try {
-                $this->order = Order::fromCart($this->cart);
+                $this->order = Order::fromCart($this->cart, $attributes);
             } catch (OutOfStockException $e) {
                 throw new ValidationException(['cart' => $e->getMessage()]);
             }

@@ -3,6 +3,7 @@
         $(function () {
             var $body = $('body');
             var $overlay = $('.mall-overlay');
+            var $form = $('.mall-cart-form');
 
             $.subscribe('mall.address.update', function () {
                 $.request('{{ __SELF__ }}::onRun', {
@@ -13,7 +14,7 @@
             $body.on('click', '.js-mall-checkout', function (e) {
                 e.preventDefault()
                 $overlay.prependTo($body).show()
-                $.request('{{ __SELF__ }}::onCheckout', {
+                $form.request('{{ __SELF__ }}::onCheckout', {
                     error: function (jqXHR) {
                         $overlay.hide();
                         if (jqXHR.status === 406) {

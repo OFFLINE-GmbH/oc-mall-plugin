@@ -17,6 +17,10 @@ The name of the cms page that hosts the `signUp` component. By default, a sign u
 displayed by the `quickCheckout` component. For users with an existing account a "Log in"
 link is available. This property determines what cms page will be used for that link.
 
+### `showNotesField` (boolean)
+
+Determines if the customer notes field should be displayed.
+
 ## Example implementations
 
 ### Display the quick checkout page
@@ -27,6 +31,7 @@ url = "/checkout/:step?"
 
 [quickCheckout]
 step = "{{ :step }}"
+showNotesField = true
 ==
 {% component 'quickCheckout' %}
 ```
