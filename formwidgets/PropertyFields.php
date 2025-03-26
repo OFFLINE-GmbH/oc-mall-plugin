@@ -182,7 +182,7 @@ class PropertyFields extends FormWidgetBase
         $formField->valueFrom = 'value';
 
         return $this->makePartial(
-            'textfield',
+            'textarea',
             ['field' => $property, 'value' => $value->value]
         );
     }
