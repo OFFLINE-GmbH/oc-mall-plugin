@@ -657,3 +657,5 @@ v3.6.3:
     - 'Added native support for Order notes (see showNotesField property on Checkout component)'
 v3.6.4:
     - 'Added feature flag for order notes (see config/features.php to opt-out of this feature)'
+v3.6.5:
+    - 'Fixed multi-line custom textfield'
