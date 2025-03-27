@@ -9,6 +9,7 @@ use October\Rain\Exception\ValidationException;
 use October\Rain\Support\Facades\Flash;
 use OFFLINE\Mall\Classes\Customer\SignUpHandler;
 use OFFLINE\Mall\Classes\User\Auth;
+use RainLab\User\Models\Setting;
 use RainLab\User\Models\User;
 use RainLab\User\Models\UserGroup;
 use Request;
@@ -120,8 +121,8 @@ class CustomerProfile extends MallComponent
             $this->user->customer->save();
         });
 
-        // Re-authenticate the user with his new credentials
-        if (Request::hasSession()) {
+        // Re-authenticate the user with his new credentials (RainLab.User 3.0 only)
+        if (class_exists(Setting::class) && Request::hasSession()) {
             Request::session()->put([
                 'password_hash_'.Auth::getDefaultDriver() => $this->user->getAuthPassword(),
             ]);
