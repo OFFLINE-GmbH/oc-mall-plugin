@@ -49,6 +49,8 @@ trait BootEvents
         $listTypes = function () {
             return [
                 'mall-category' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
+                'mall-product' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_product'),
+                'mall-variant' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_variant'),
                 'all-mall-categories' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_categories'),
                 'all-mall-products' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
                 'all-mall-variants' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
@@ -58,6 +60,10 @@ trait BootEvents
         $getTypeInfo = function ($type) {
             if ($type === 'all-mall-categories' || $type === 'mall-category') {
                 return Category::getMenuTypeInfo($type);
+            }
+
+            if ($type === 'mall-product' || $type === 'mall-variant') {
+                return Product::getMenuTypeInfo($type);
             }
 
             if ($type === 'all-mall-products' || $type === 'all-mall-variants') {
@@ -78,8 +84,8 @@ trait BootEvents
                 return Category::resolveCategoryItem($item, $url, $theme);
             }
 
-            if ($type === 'all-mall-products') {
-                return Product::resolveItem($item, $url, $theme);
+            if ($type === 'all-mall-products' || $type === 'mall-product' || $type === 'mall-variant') {
+                return Product::resolveItem($item, $url, $theme, $type);
             }
 
             if ($type === 'all-mall-variants') {

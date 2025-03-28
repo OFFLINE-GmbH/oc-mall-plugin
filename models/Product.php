@@ -670,7 +670,7 @@ class Product extends Model
      * @throws \Cms\Classes\CmsException
      * @return array
      */
-    public static function resolveItem($item, $url, $theme)
+    public static function resolveItem($item, $url, $theme, $type)
     {
         $page    = GeneralSettings::get('product_page', 'product');
         $cmsPage = Page::loadCached($theme, $page);
@@ -679,24 +679,40 @@ class Product extends Model
             return;
         }
 
-        $items = self::published()
-            ->where('inventory_management_method', 'single')
-            ->get()
-            ->map(function (self $product) use ($cmsPage, $page, $url) {
-                $pageUrl = $cmsPage->url($page, ['slug' => $product->slug]);
+        $toItem = function (Product|Variant $model) use ($cmsPage, $page, $url) {
+            $attrs = ['slug' => $model->slug, 'variant' => ''];
+            if ($model instanceof Variant) {
+                $attrs['variant'] = $model->hash_id;
+            }
 
-                return [
-                    'title'    => $product->name,
-                    'url'      => $pageUrl,
-                    'mtime'    => $product->updated_at,
-                    'isActive' => $pageUrl === $url,
-                ];
-            })
-            ->toArray();
+            $pageUrl = $cmsPage->url($page, $attrs);
 
-        return [
-            'items' => $items,
-        ];
+            return [
+                'title'    => $model->name,
+                'url'      => $pageUrl,
+                'mtime'    => $model->updated_at,
+                'isActive' => $pageUrl === $url,
+            ];
+        };
+
+        $result = null;
+        if ($type === 'mall-all-products') {
+            $data = self::published()->where('inventory_management_method', 'single')->get();
+
+            return [
+                'items' => $data->map($toItem),
+            ];
+        } elseif ($type === 'mall-variant') {
+            $result = Variant::published()->find($item->reference);
+        } elseif ($type === 'mall-product') {
+            $result = self::published()->find($item->reference);
+        }
+
+        if (!$result) {
+            return [];
+        }
+
+        return $toItem($result);
     }
 
     public function filterFields($fields, $context = null)
@@ -756,5 +772,42 @@ class Product extends Model
         } elseif (property_exists($fields, $field)) {
             $fields->$field->hidden = true;
         }
+    }
+
+    public static function getMenuTypeInfo($type)
+    {
+        $result = [];
+
+        if ($type === 'mall-product') {
+            $references = Product::get()
+                ->mapWithKeys(function (self $product) {
+                    return [
+                        $product->id => [
+                            'title' => $product->name,
+                        ],
+                    ];
+                })
+                ->toArray();
+            $result = [
+                'references'   => $references,
+            ];
+        }
+        else if ($type === 'mall-variant') {
+            $references = Variant::get()
+                ->mapWithKeys(function (Variant $variant) {
+                    return [
+                        $variant->id => [
+                            'title' => sprintf("%s (%s)", $variant->name, $variant->product->name),
+                        ],
+                    ];
+                })
+                ->toArray();
+            $result = [
+                'references'   => $references,
+            ];
+        }
+
+
+        return $result;
     }
 }
