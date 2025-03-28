@@ -87,6 +87,8 @@ return [
     'menu_items' => [
         'all_categories' => 'All shop categories',
         'single_category' => 'Single shop category',
+        'single_product' => 'Single shop product',
+        'single_variant' => 'Single shop variant',
         'all_products' => 'All shop products',
         'all_variants' => 'All shop variants',
     ],
