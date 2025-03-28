@@ -148,7 +148,7 @@ class CartProduct extends Model
                 $data                  = $value->toArray();
                 $data['display_value'] = $value->displayValue;
 
-                $prices = $value->priceForFieldOption($value->custom_field)->load('currency');
+                $prices = $value->priceForFieldOption($value->custom_field);
 
                 $data['price'] = $prices->mapWithKeys(fn (Price $price) => [$price->currency->code => $price->float])->toArray();
 

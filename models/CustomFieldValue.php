@@ -66,7 +66,7 @@ class CustomFieldValue extends Model
 
         return $optionPrice && $optionPrice->count() > 0
             ? $optionPrice
-            : collect([$field->price()]);
+            : collect([$field->price()?->load('currency')]);
     }
 
     /**
