@@ -17,7 +17,7 @@ class PropertyValue extends Model
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
 
     public $translatable = [
-        ['value', 'index' => true],
+        ['value', 'index' => true, 'fallback' => false],
     ];
 
     public $rules = [
