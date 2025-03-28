@@ -665,5 +665,5 @@ v3.6.7:
     - 'Fixed RainLab.User 2.0 compatibility'
 v3.6.8:
     - 'Fixed saving of translated property values'
-v3.6.9:
+v3.6.10:
     - 'Added options to link to products and variants in a menu'
