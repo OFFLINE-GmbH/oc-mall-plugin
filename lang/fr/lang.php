@@ -515,6 +515,7 @@ return [
             'expired' => 'Ce code promo a expiré.',
             'not_found' => 'Ce code promo n\'est pas valide.',
             'usage_limit_reached' => 'Ce code promotionnel a été appliqué plusieurs fois et n’est donc plus valide.',
+            'cart_limit_reached' => 'Limite de codes promotionnels atteinte. Vous ne pouvez plus ajouter de codes à ce panier.',
         ],
     ],
     'payment_method' => [
