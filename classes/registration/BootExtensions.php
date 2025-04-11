@@ -6,7 +6,7 @@ use Backend;
 use Backend\Widgets\Filter;
 use Backend\Widgets\Form;
 use Backend\Widgets\Lists;
-use Illuminate\Support\Facades\Event;
+use Event;
 use October\Rain\Database\Builder;
 use OFFLINE\Mall\Models\Address;
 use OFFLINE\Mall\Models\Customer;
