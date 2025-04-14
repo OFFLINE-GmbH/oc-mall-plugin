@@ -669,3 +669,5 @@ v3.6.10:
     - 'Added options to link to products and variants in a menu'
 v3.6.11:
     - 'Updated french translations'
+v3.6.12:
+    - "Use October's event class for plugin extensions"
