@@ -671,3 +671,5 @@ v3.6.11:
     - 'Updated french translations'
 v3.6.12:
     - "Use October's event class for plugin extensions"
+v3.6.13:
+    - "Added feature flag to disable logging of failed payments (thanks to @chocolata)"
