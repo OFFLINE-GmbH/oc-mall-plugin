@@ -9,6 +9,7 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use Config;
 
 /**
  * The PaymentResult contains the result of a payment attempt.
@@ -145,41 +146,48 @@ class PaymentResult
     /**
      * The payment has failed.
      *
-     * The failed payment is logged and the order's
-     * payment state is marked as failed.
+     * Unless disabled in the config, the failed payment will be logged.
+     * The order's payment state is always marked as failed.
      *
      * @param array $data
-     * @param $response
+     * @param mixed $response
      *
-     * @return PaymentResult
+     * @return self
      */
     public function fail(array $data, $response): self
     {
         $this->successful = false;
 
-        logger()->error(
-            'OFFLINE.Mall: A payment failed.',
-            ['data' => $data, 'response' => $response, 'order' => $this->order]
-        );
+        $shouldLog = Config::get('offline.mall::features.log_failed_payments', true);
+
+        if ($shouldLog) {
+            logger()->error(
+                'OFFLINE.Mall: A payment failed.',
+                ['data' => $data, 'response' => $response, 'order' => $this->order]
+            );
+        }
 
         try {
             $this->failedPayment = $this->logFailedPayment($data, $response);
         } catch (Throwable $e) {
-            logger()->error(
-                'OFFLINE.Mall: Could not log failed payment.',
-                ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
-            );
+            if ($shouldLog) {
+                logger()->error(
+                    'OFFLINE.Mall: Could not log failed payment.',
+                    ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
+                );
+            }
         }
 
         try {
             $this->order->payment_state = FailedState::class;
             $this->order->save();
         } catch (Throwable $e) {
-            // If the order could not be marked as failed the shop admin will have to do this manually.
-            logger()->critical(
-                'OFFLINE.Mall: Could not mark failed order as failed.',
-                ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
-            );
+            if ($shouldLog) {
+                logger()->critical(
+                    'OFFLINE.Mall: Could not mark failed order as failed.',
+                    ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
+                );
+            }
         }
 
         return $this;
