@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Jobs;
 
+use App;
 use Cms\Classes\Controller;
 use DB;
 use Illuminate\Contracts\Queue\Job;
@@ -68,6 +69,7 @@ class SendVirtualProductFiles
                 'account_url' => $this->getAccountUrl(),
             ];
 
+            App::setLocale($order->lang);
             Mail::send(
                 $this->enabledNotifications->get('offline.mall::product.file_download'),
                 $data,
