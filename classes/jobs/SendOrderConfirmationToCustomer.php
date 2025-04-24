@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Jobs;
 
+use App;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +31,7 @@ class SendOrderConfirmationToCustomer
             'order_url'   => $input['order_url'],
         ];
 
+        App::setLocale($order->lang);
         Mail::send(
             $input['template'],
             $data,
