@@ -674,4 +674,4 @@ v3.6.12:
 v3.6.13:
     - "Added feature flag to disable logging of failed payments (thanks to @chocolata)"
 v3.6.14:
-    - "Set App locale in Mailer jobs (thanks to @Pindagus)
+    - "Set App locale in Mailer jobs (thanks to @Pindagus)"
