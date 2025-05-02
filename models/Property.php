@@ -143,7 +143,7 @@ class Property extends Model
                 return $values;
             }
 
-            $order = collect($firstProp->options)->flatten()->flip();
+            $order = collect($firstProp->options)->flatten()->filter()->flip();
 
             return $values->sortBy(fn ($value) => $order[$value->value] ?? 0);
         });
