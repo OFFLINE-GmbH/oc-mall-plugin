@@ -677,3 +677,5 @@ v3.6.14:
     - "Set App locale in Mailer jobs (thanks to @Pindagus)"
 v3.6.15:
     - "Set App locale in Mailer jobs (thanks to @Pindagus)"
+v3.6.16:
+    - "Remove empty property options before saving (thanks to @rubenvanerk)"
