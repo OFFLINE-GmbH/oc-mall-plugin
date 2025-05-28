@@ -162,6 +162,7 @@
         'use_state' => 'Utilisez les champs État/Province/Région ',
         'use_state_comment' => 'Les clients doivent sélectionner un État/Province/Région lors de l\'inscription',
         'group_search_results_by_product' => 'Regrouper les résultats de la recherche par produit',
+        'group_search_results_by_product_comment' => 'Inclure un produit une seule fois dans les résultats de la recherche, ne pas afficher toutes les variantes correspondantes',
         'shipping_selection_before_payment' => 'Sélectionnez le mode d\'expédition avant le paiement lors du passage en caisse.',
         'shipping_selection_before_payment_comment' => 'Par défaut, lors du passage à la caisse, l\'utilisateur doit d\'abord choisir un mode de paiement avant de sélectionner un mode d\'expédition ; utilisez cette option pour inverser cette logique.',
         'admin_email' => 'Email de l\'administrateur',
@@ -352,6 +353,8 @@
         'price' => 'Prix',
         'attributes' => 'Attributs',
         'option' => 'Option',
+        'date' => 'Date',
+        'datetime' => 'Date et heure',
     ],
     'product' => [
         'user_defined_id' => 'ID produit',
@@ -458,6 +461,8 @@
         'inherit_property_groups_comment' => 'Utiliser les groupes de propriétés de la catégorie parente de cette catégorie',
         'inherit_review_categories' => 'Héritage des catégories d\'avis de la catégorie parente',
         'inherit_review_categories_comment' => 'Utilisez les catégories d\'avis de la catégorie mère de cette catégorie',
+        'google_product_category_id' => 'ID de la catégorie de produits Google',
+        'google_product_category_id_comment' => 'Utilisé pour l’intégration de Google Merchant, voir https://support.google.com/merchants/answer/6324436',
     ],
     'custom_fields' => [
         'name' => 'Nom du champ',
@@ -489,6 +494,7 @@
         'expires' => 'Expire',
         'number_of_usages' => 'Nombre d\'utilisations',
         'shipping_description' => 'Nom du mode de livraison alternatif',
+        'payment_method_description' => 'Choisir un mode de paiement',
         'shipping_price' => 'Prix du mode de livraison alternatif',
         'shipping_guaranteed_days_to_delivery' => 'Jours garantis de livraison',
         'section_type' => 'Que fait cette réduction ?',
@@ -513,6 +519,7 @@
             'expired' => 'Ce code promo a expiré.',
             'not_found' => 'Ce code promo n\'est pas valide.',
             'usage_limit_reached' => 'Ce code promotionnel a été appliqué plusieurs fois et n’est donc plus valide.',
+            'cart_limit_reached' => 'Limite de codes promotionnels atteinte. Vous ne pouvez plus ajouter de codes promotionnels pour ce panier.',
         ],
     ],
     'payment_method' => [
@@ -597,6 +604,7 @@
         'total_revenue' => 'Revenu total',
         'download_invoice' => 'Télécharger la facture',
         'order_file_name' => 'commande-:order',
+        'virtual_product_download_hint' => 'Les liens de téléchargement seront envoyés séparément après le paiement.',
         'modal' => [
             'cancel' => 'Annuler',
             'update' => 'Mettre à jour information',
@@ -655,6 +663,7 @@
         'manage_wishlists' => 'Peut gérer les listes de souhaits',
         'manage_services' => 'Peut gérer les services',
         'manage_reviews' => 'Peut gérer les avis',
+        'manage_brands' => 'Peut gérer les marques',
     ],
     'components' => [
         'products' => [
@@ -845,6 +854,10 @@
                 'showDiscountApplier' => [
                     'title' => 'Afficher l\'applicateur de remise',
                 ],
+                'discountCodeLimit' => [
+                    'title' => 'Limite des codes de réduction',
+                    'description' => 'Régler sur 0 pour des codes illimités',
+                ],
                 'showShipping' => [
                     'title' => 'Afficher les frais de port',
                 ],
@@ -863,6 +876,20 @@
             ],
             'errors' => [
                 'missing_settings' => 'Veuillez sélectionner un mode de paiement et d\'expédition.',
+            ],
+            'properties' => [
+                'step' => [
+                    'name' => 'Étape de commande active (définie automatiquement)',
+                ],
+            ],
+        ],
+        'quickCheckout' => [
+            'details' => [
+                'name' => 'Commande rapide',
+                'description' => 'Processus de commande sur une seule page',
+            ],
+            'errors' => [
+                'signup_failed' => 'Échec de la création d’un compte utilisateur.',
             ],
         ],
         'discountApplier' => [
