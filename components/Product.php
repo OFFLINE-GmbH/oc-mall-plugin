@@ -675,6 +675,14 @@ class Product extends MallComponent
         return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
             $filteredValues = optional($valueMap->get($property->id))->reject(fn ($value) => $this->variant && $value->variant_id === null);
 
+            // Reorder values based on property options if it's a dropdown
+            if ($property->type === 'dropdown' && $property->options && $filteredValues) {
+                $order = collect($property->options)->pluck('value')->flip();
+                $filteredValues = $filteredValues->sortBy(function ($value) use ($order) {
+                    return $order->get($value->value, 999999);
+                });
+            }
+            
             return (object)[
                 'property' => $property,
                 'values' => optional($filteredValues)->unique('value'),
