@@ -204,7 +204,7 @@ class Product extends MallComponent
             return $this->controller->run('404');
         }
 
-        $this->page->title = $this->item->meta_title ?? $this->item->name;
+        $this->page->title = $this->item->meta_title ?: $this->item->name;
         $this->page->meta_description = $this->item->meta_description;
     }
 
