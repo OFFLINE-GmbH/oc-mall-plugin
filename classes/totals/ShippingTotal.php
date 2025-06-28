@@ -231,7 +231,7 @@ class ShippingTotal implements \JsonSerializable, CallsAnyMethod
         return $price;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'method' => $this->method(),

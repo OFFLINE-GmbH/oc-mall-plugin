@@ -96,6 +96,13 @@ class QuickCheckout extends MallComponent
     public $accountPage;
 
     /**
+     * The product page.
+     *
+     * @var string
+     */
+    public $productPage;
+
+    /**
      * The current user.
      *
      * @var User

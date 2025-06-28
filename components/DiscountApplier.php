@@ -54,7 +54,7 @@ class DiscountApplier extends MallComponent
      */
     public function onApplyDiscount()
     {
-        $code = strtoupper(post('code'));
+        $code = strtoupper(post('code') ?? '');
         $cart = Cart::byUser(Auth::user());
 
         try {

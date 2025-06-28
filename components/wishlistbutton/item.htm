@@ -13,7 +13,7 @@
     ">
     <div class="mall-wishlist-item__data">
         <div class="mall-wishlist-item__name">
-            {{ name|default('offline.mall::frontend.wishlist.default_name'|trans) }}
+            {{ label|default('offline.mall::frontend.wishlist.default_name'|trans) }}
         </div>
         <div class="mall-wishlist-item__description">
             {{ 'offline.mall::frontend.wishlist.count'|transchoice(count|default(0)) }}

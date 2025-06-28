@@ -150,7 +150,7 @@ class PaymentTotal implements \JsonSerializable, CallsAnyMethod
         return ($this->method->fee_percentage ?? 0) / 100;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'method'   => $this->method,

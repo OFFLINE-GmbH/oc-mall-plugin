@@ -298,9 +298,8 @@ class ShippingMethod extends Model
 
     /**
      * JSON serialize class.
-     * @return array
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): mixed
     {
         $base = parent::jsonSerialize();
         $this->prices->load('currency');

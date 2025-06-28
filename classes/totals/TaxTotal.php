@@ -63,7 +63,7 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
         return $this->jsonSerialize();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'tax'              => $this->tax->toArray(),
