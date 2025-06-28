@@ -45,6 +45,11 @@ class PropertyValue extends Model
     ];
 
     /**
+     * These types must never be translated.
+     */
+    public $untranslatableTypes = ['checkbox', 'switch', 'integer', 'float'];
+
+    /**
      * The parent's attribute type is stored to make trigger conditions
      * work in the custom backend relationship form.
      *
@@ -70,6 +75,7 @@ class PropertyValue extends Model
             $decoded = $this->jsonDecodeValue();
             $value = $decoded['name'] ?? $decoded['hex'] ?? '';
         }
+
         $this->index_value = str_slug($value);
     }
 
@@ -80,6 +86,10 @@ class PropertyValue extends Model
 
     public function setValueAttribute($value)
     {
+        if (in_array(optional($this->property)->type, $this->untranslatableTypes)) {
+            $this->translatable = [];
+        }
+
         $this->attributes['value'] = $this->handleArrayValue($value);
     }
 
@@ -91,7 +101,12 @@ class PropertyValue extends Model
     public function getValueAttribute()
     {
         $type  = optional($this->property)->type;
-        $value = $this->getAttributeTranslated('value');
+
+        if (in_array($type, $this->untranslatableTypes)) {
+            $value = $this->original['value'];
+        } else {
+            $value = $this->getAttributeTranslated('value');
+        }
 
         if ($type === 'float') {
             return (float)$value;
@@ -101,7 +116,7 @@ class PropertyValue extends Model
             return (int)$value;
         }
 
-        if ($type === 'checkbox') {
+        if ($type === 'checkbox' || $type === 'switch') {
             return (bool)$value;
         }
 

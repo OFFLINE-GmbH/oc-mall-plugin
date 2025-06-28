@@ -240,11 +240,11 @@ class MySQL implements Index
             $db->where(function ($q) use ($currency, $min, $max) {
                 $q->whereRaw('JSON_EXTRACT(`prices`, ?) >= ?', [
                     '$.' . $currency,
-                    (int)($min * 100),
+                    (int)($min) * 100,
                 ]);
                 $q->whereRaw('JSON_EXTRACT(`prices`, ?) <= ?', [
                     '$.' . $currency,
-                    (int)($max * 100),
+                    (int)($max) * 100,
                 ]);
             });
         }
