@@ -127,7 +127,7 @@ trait PriceAccessors
                     $specific = $specificPrices;
                 }
 
-                $specific = $specific ?? $this->nullPrice($currency, $specificPrices, $relation, $filter);
+                $specific ??= $this->nullPrice($currency, $specificPrices, $relation, $filter);
 
                 $specific->official = $price;
 

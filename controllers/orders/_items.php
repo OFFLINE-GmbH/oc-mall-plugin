@@ -38,14 +38,14 @@
             </a>
             <?= $item['variant_name'] ?>
             <div class="attributes">
-                <?php if($item['custom_field_values']): ?>
-                    <?php foreach($item['custom_field_values'] as $field): ?>
+                <?php if ($item['custom_field_values']): ?>
+                    <?php foreach ($item['custom_field_values'] as $field): ?>
                         <?= e($field['custom_field']['name']) ?>: <?= $field['display_value'] ?><br/>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
             <?php if ($item->service_options): ?>
-                <?php foreach($item->service_options as $option): ?>
+                <?php foreach ($item->service_options as $option): ?>
                     <strong><?= e(trans('offline.mall::lang.common.service')) ?></strong>:
                     <?= e($option['name']) ?><br/>
                 <?php endforeach; ?>
@@ -55,7 +55,7 @@
         <td class="text-right">
             <?= e($item->pricePostTaxes()) ?>
             <?php if ($item->service_options): ?>
-            <?php foreach($item->service_options as $option): ?>
+            <?php foreach ($item->service_options as $option): ?>
             <div class="order-product-service" title="<?= e($option['name']) ?>">
                 <?= e($option['price_formatted']); ?>
             </div>
@@ -77,7 +77,7 @@
             </span>
         </td>
     </tr>
-    <?php if($order['discounts']): ?>
+    <?php if ($order['discounts']): ?>
     <?php foreach ($order['discounts'] as $entry): ?>
     <tr class="orderdiscount">
         <td colspan="3">
@@ -102,7 +102,7 @@
                 <?php if (!empty($order['shipping']['method'])): ?>
                     <?= e($order['shipping']['method']['name']) ?>
                 <?php endif; ?>
-                <?php if($order['shipping']['appliedDiscount']): ?>
+                <?php if ($order['shipping']['appliedDiscount']): ?>
                 (<?= e($order['shipping']['appliedDiscount']['discount']['name']) ?>,
                 <?= e($money->format($order['shipping']['appliedDiscount']['savings'])) ?>)
                 <?php endif; ?>
@@ -127,7 +127,7 @@
         </td>
         <td class="text-right">
             <span>
-                <?php $currency = \OFFLINE\Mall\Models\Currency::find(array_get($order->currency, 'id', 0)); ?>
+                <?php $currency = OFFLINE\Mall\Models\Currency::find(array_get($order->currency, 'id', 0)); ?>
                 <?= e($money->format($order['payment']['total'], null, $currency)) ?>
             </span>
         </td>

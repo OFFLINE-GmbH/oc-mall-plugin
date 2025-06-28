@@ -84,13 +84,13 @@
                 <div class="sidebar-content">
                     <?= $this->makePartial('address', [
                         'address' => $order['shipping_address'],
-                        'heading' => e(trans('offline.mall::lang.order.shipping_address'))
+                        'heading' => e(trans('offline.mall::lang.order.shipping_address')),
                     ]) ?>
 
                     <?php if (!$order['shipping_address_same_as_billing']): ?>
                         <?= $this->makePartial('address', [
                             'address' => $order['billing_address'],
-                            'heading' => e(trans('offline.mall::lang.order.billing_address'))
+                            'heading' => e(trans('offline.mall::lang.order.billing_address')),
                         ]) ?>
                     <?php else: ?>
                         <div class="sidebar-box sidebar-box--with-icon">
@@ -100,11 +100,12 @@
                     <?php endif; ?>
 
                     <?php
-                    $customOutputs = \Event::fire('mall.backend.order.sidebar', [$order]);
-                    foreach (array_filter($customOutputs) as $output) {
-                        echo $output;
-                    }
-                    ?>
+                    $customOutputs = Event::fire('mall.backend.order.sidebar', [$order]);
+
+                        foreach (array_filter($customOutputs) as $output) {
+                            echo $output;
+                        }
+                        ?>
 
                     <?php if (config('offline.mall::features.order_notes')): ?>
 

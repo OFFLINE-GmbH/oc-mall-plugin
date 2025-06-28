@@ -22,7 +22,7 @@ class DefaultMoney implements Money
 
     public function format(?float $value, $product = null, ?Currency $currency = null): string
     {
-        $currency = $currency ?? Currency::activeCurrency();
+        $currency ??= Currency::activeCurrency();
 
         $value    = app(Money::class)->round($value, $currency['decimals']);
         $integers = floor($value);

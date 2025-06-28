@@ -105,11 +105,9 @@ class Address extends Model
 
     public function getCustomerOptions()
     {
-        return Customer::with('user')->get()->mapWithKeys(function (Customer $customer) {
-            return [
-                $customer->id => sprintf('%s (%s)', $customer->name, optional($customer->user)->email),
-            ];
-        })->toArray();
+        return Customer::with('user')->get()->mapWithKeys(fn (Customer $customer) => [
+            $customer->id => sprintf('%s (%s)', $customer->name, optional($customer->user)->email),
+        ])->toArray();
     }
 
     public function toArray()

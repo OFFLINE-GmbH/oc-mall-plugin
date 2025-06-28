@@ -216,6 +216,7 @@ class PaymentMethod extends Model
     public static function getAvailableByCart(Cart $cart)
     {
         $results = array_filter(Event::fire('mall.cart.extendAvailablePaymentMethods', [$cart]) ?? []);
+
         if (count($results) > 0) {
             return $results[0];
         }

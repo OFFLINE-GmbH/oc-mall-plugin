@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Payments;
 
+use Config;
 use OFFLINE\Mall\Classes\PaymentState\FailedState;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Classes\PaymentState\PendingState;
@@ -9,7 +10,6 @@ use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentLog;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use Config;
 
 /**
  * The PaymentResult contains the result of a payment attempt.

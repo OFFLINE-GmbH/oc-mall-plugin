@@ -141,7 +141,7 @@ class Cart extends Model
      */
     public function getIsVirtualAttribute(): bool
     {
-        return $this->products->count() > 0 && $this->products->every(fn(CartProduct $product) => $product->data->is_virtual);
+        return $this->products->count() > 0 && $this->products->every(fn (CartProduct $product) => $product->data->is_virtual);
     }
 
     public function getShippingAddressSameAsBillingAttribute(): bool
@@ -222,8 +222,8 @@ class Cart extends Model
      * Remove all products that are no longer published.
      * Returns all removed products.
      *
-     * @return \October\Rain\Support\Collection
      * @throws Exception
+     * @return \October\Rain\Support\Collection
      */
     public function removeUnpublishedProducts()
     {
@@ -333,6 +333,7 @@ class Cart extends Model
 
         if ($invalidDiscounts->count() > 0) {
             $this->save();
+
             throw new InvalidDiscountException($this, $invalidDiscounts);
         }
     }

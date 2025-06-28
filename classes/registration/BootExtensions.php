@@ -115,8 +115,8 @@ trait BootExtensions
             // to display the addresses relation widget above.
             // RainLab.User 3.0 does not need this.
             if (!class_exists(\RainLab\User\Models\Setting::class)) {
-                if (!$users->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
-                    $users->extendClassWith(\Backend\Behaviors\RelationController::class);
+                if (!$users->isClassExtendedWith(Backend\Behaviors\RelationController::class)) {
+                    $users->extendClassWith(Backend\Behaviors\RelationController::class);
                 }
             }
         });

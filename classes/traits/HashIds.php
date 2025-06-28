@@ -23,7 +23,7 @@ trait HashIds
      * @param string $value
      * @return mixed
      */
-    public function decode(string $value = null)
+    public function decode(?string $value = null)
     {
         if (!$value) {
             return null;

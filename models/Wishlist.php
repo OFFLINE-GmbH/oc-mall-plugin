@@ -117,13 +117,13 @@ class Wishlist extends Model
     /**
      * Create a new wishlist for a specified user or the currently active session.
      */
-    public static function createForUser(?User $user, string $name = null): self
+    public static function createForUser(?User $user, ?string $name = null): self
     {
         $attributes = $user && $user->customer
             ? ['customer_id' => $user->customer->id]
             : ['session_id' => static::getSessionId()];
 
-        $name = $name ?? trans('offline.mall::frontend.wishlist.default_name');
+        $name ??= trans('offline.mall::frontend.wishlist.default_name');
 
         return Wishlist::create(array_merge($attributes, ['name' => $name]));
     }

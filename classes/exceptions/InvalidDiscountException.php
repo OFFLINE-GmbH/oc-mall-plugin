@@ -15,6 +15,7 @@ class InvalidDiscountException extends RuntimeException
      * @var Cart
      */
     public $cart;
+
     /**
      * @var Collection<Discount>
      */

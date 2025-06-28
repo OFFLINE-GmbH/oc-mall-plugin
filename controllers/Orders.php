@@ -163,8 +163,8 @@ class Orders extends Controller
 
     /**
      * Ajax handler on change payment state.
-     * @return array
      * @throws ValidationException
+     * @return array
      */
     public function onChangePaymentState()
     {

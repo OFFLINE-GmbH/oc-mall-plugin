@@ -102,14 +102,12 @@ abstract class DemoProduct
             unset($customField['price']);
 
             $f = CustomField::create($customField);
-            collect($prices)->map(function ($price, $currency) use ($f) {
-                return new Price([
-                    'currency_id'    => Currency::resolve($currency)->id,
-                    'price'          => $price,
-                    'priceable_id'   => $f->id,
-                    'priceable_type' => 'mall.custom_field',
-                ]);
-            });
+            collect($prices)->map(fn ($price, $currency) => new Price([
+                'currency_id'    => Currency::resolve($currency)->id,
+                'price'          => $price,
+                'priceable_id'   => $f->id,
+                'priceable_type' => 'mall.custom_field',
+            ]));
             $this->product->custom_fields()->attach($f);
         }
 
@@ -173,7 +171,7 @@ abstract class DemoProduct
     {
         try {
             $prop = Property::whereSlug($slug)->firstOrFail();
-        } catch(Exception $exc) {
+        } catch (Exception $exc) {
             throw new Exception('e -' . $slug);
         }
 

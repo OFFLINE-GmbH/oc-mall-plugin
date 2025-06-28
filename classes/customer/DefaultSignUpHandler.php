@@ -5,7 +5,6 @@ namespace OFFLINE\Mall\Classes\Customer;
 use DB;
 use Event;
 use Illuminate\Support\Facades\Validator;
-use October\Rain\Auth\AuthException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Classes\User\Settings;
@@ -220,7 +219,7 @@ class DefaultSignUpHandler implements SignUpHandler
         $data['is_guest']              = $this->asGuest;
 
         // RainLab.User 3.0
-        if (class_exists(\RainLab\User\Models\Setting::class)) {
+        if (class_exists(Setting::class)) {
             $data['first_name'] = $data['firstname'];
             $data['last_name']  = $data['lastname'];
 

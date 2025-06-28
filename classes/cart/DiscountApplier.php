@@ -42,7 +42,7 @@ class DiscountApplier
      */
     private $money;
 
-    public function __construct(TotalsCalculatorInput $input, float $total, float $baseTotal = null)
+    public function __construct(TotalsCalculatorInput $input, float $total, ?float $baseTotal = null)
     {
         $this->input        = $input;
         $this->total        = $total;
@@ -158,7 +158,7 @@ class DiscountApplier
 
     private function checkPaymentMethod(int $method_id)
     {
-        if(isset($this->input->payment_method)) {
+        if (isset($this->input->payment_method)) {
             return $method_id == $this->input->payment_method->id;
         }
     }

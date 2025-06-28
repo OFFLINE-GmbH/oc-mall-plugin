@@ -111,6 +111,7 @@ class PropertyGroup extends Model
             } elseif ($relationName === 'categories') {
                 foreach ($attachedIdList as $attachedId) {
                     $category = Category::find($attachedId);
+
                     if ($category) {
                         UniquePropertyValue::updateUsingCategory($category);
                     }
@@ -128,6 +129,7 @@ class PropertyGroup extends Model
             } elseif ($relationName === 'categories') {
                 foreach ($detachedIdList as $detachedId) {
                     $category = Category::find($detachedId);
+
                     if ($category) {
                         UniquePropertyValue::updateUsingCategory($category);
                     }

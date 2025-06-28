@@ -48,12 +48,10 @@ trait PropertyValues
             $groups = $groups->sortBy(fn ($group) => $order[$group->id] ?? 0);
         }
 
-        return $groups->map(function (PropertyGroup $group) {
-            return collect([
-                'group' => $group,
-                'values' => $this->all_property_values->filter(fn (PropertyValue $value) => $value->property->property_groups->contains($group->id)),
-            ]);
-        });
+        return $groups->map(fn (PropertyGroup $group) => collect([
+            'group' => $group,
+            'values' => $this->all_property_values->filter(fn (PropertyValue $value) => $value->property->property_groups->contains($group->id)),
+        ]));
     }
 
     public function getPropertyValue($id)

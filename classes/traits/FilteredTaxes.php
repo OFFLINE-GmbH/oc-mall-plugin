@@ -20,6 +20,8 @@ trait FilteredTaxes
     /**
      * Filter a tax collection based on the shipping destination country.
      *
+     * @param mixed $taxes
+     * @param mixed $ignoreDefaults
      * @return Collection
      */
     public function getFilteredTaxes($taxes, $ignoreDefaults = false)
@@ -40,7 +42,8 @@ trait FilteredTaxes
         // If the shipping destination is not yet known, return the default tax.
         if ($this->countryId === null) {
             // For shipping and payment methods, we use the input taxes as default (as long as they don't have a country restriction).
-            $globalTaxes = $taxes->filter(fn($tax) => $tax->countries->count() === 0);
+            $globalTaxes = $taxes->filter(fn ($tax) => $tax->countries->count() === 0);
+
             if ($ignoreDefaults && $globalTaxes->count() > 0) {
                 return $globalTaxes;
             }

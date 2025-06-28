@@ -21,7 +21,7 @@ trait ProductPriceTable
 {
     public function onLoadPriceTable()
     {
-        if(!isset($this->vars['pricetable'])) {
+        if (!isset($this->vars['pricetable'])) {
             $this->preparePriceTable();
         }
 

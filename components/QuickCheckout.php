@@ -96,6 +96,13 @@ class QuickCheckout extends MallComponent
     public $accountPage;
 
     /**
+     * The product page.
+     *
+     * @var string
+     */
+    public $productPage;
+
+    /**
      * The current user.
      *
      * @var User
@@ -287,6 +294,7 @@ class QuickCheckout extends MallComponent
 
         if (! $this->order) {
             $attributes = [];
+
             if ($this->showNotesField) {
                 $attributes['customer_notes'] = post('customer_notes');
             }

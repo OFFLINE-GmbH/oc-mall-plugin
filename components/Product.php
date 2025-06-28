@@ -311,12 +311,10 @@ class Product extends MallComponent
         // Create validation rules for required services.
         $required = $product->services->where('pivot.required', true);
         $rules = $required->mapWithKeys(
-            function ($service) {
-                return [
-                    'service.' . $service->id => 'required|min:1|array',
-                    'service.' . $service->id . '.*' => 'required|in:' . $service->options->pluck('id')->implode(','),
-                ];
-            }
+            fn ($service) => [
+                'service.' . $service->id => 'required|min:1|array',
+                'service.' . $service->id . '.*' => 'required|in:' . $service->options->pluck('id')->implode(','),
+            ]
         );
         $messages = $required->mapWithKeys(
             fn ($service) => ['service.' . $service->id . '.*.required' => trans('offline.mall::frontend.services.required')]
@@ -678,9 +676,7 @@ class Product extends MallComponent
             // Reorder values based on property options if it's a dropdown
             if ($property->type === 'dropdown' && $property->options && $filteredValues) {
                 $order = collect($property->options)->pluck('value')->flip();
-                $filteredValues = $filteredValues->sortBy(function ($value) use ($order) {
-                    return $order->get($value->value, 999999);
-                });
+                $filteredValues = $filteredValues->sortBy(fn ($value) => $order->get($value->value, 999999));
             }
             
             return (object)[
@@ -851,8 +847,8 @@ class Product extends MallComponent
      */
     private function dataLayerArray($product = null, $variant = null)
     {
-        $product = $product ?? $this->product;
-        $variant = $variant ?? $this->variant;
+        $product ??= $this->product;
+        $variant ??= $this->variant;
 
         $item = $variant ?? $product;
 

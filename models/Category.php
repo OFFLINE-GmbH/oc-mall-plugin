@@ -325,7 +325,8 @@ class Category extends Model
         return $groups ?? new Collection();
     }
 
-    public function setSortableRelationOrder($relationName, $itemIds, $referencePool = null) {
+    public function setSortableRelationOrder($relationName, $itemIds, $referencePool = null)
+    {
         $this->traitSetSortableRelationOrder($relationName, $itemIds, $referencePool);
 
         $this->products->each(function (Product $product) {
