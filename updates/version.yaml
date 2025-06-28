@@ -683,3 +683,5 @@ v3.6.17:
     - "Minor bug fixes"
 v3.6.18:
     - "Added missing permission to manage taxes"
+v3.7.0:
+    - "October v4 support"
