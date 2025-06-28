@@ -239,8 +239,8 @@ class Products extends Controller
         $model->fill($data);
 
         if ($model->isClassExtendedWith(TranslatableModel::class) && $translations = post('RLTranslate')) {
-            foreach($translations as $locale => $attributes) {
-                foreach($attributes as $key => $value) {
+            foreach ($translations as $locale => $attributes) {
+                foreach ($attributes as $key => $value) {
                     $model->setAttributeTranslated($key, $value, $locale);
                 }
             }
@@ -440,7 +440,7 @@ class Products extends Controller
      * @param null|CustomFieldOption $model
      * @return mixed
      */
-    protected function createOptionFormWidget(CustomFieldOption $model = null)
+    protected function createOptionFormWidget(?CustomFieldOption $model = null)
     {
         $config                    = $this->makeConfig('$/offline/mall/models/customfieldoption/fields.yaml');
         $config->alias             = 'optionForm';

@@ -6,7 +6,6 @@ namespace OFFLINE\Mall\Components;
 
 use DB;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
@@ -373,8 +372,9 @@ class ProductsFilter extends MallComponent
         $this->setVar('category', $this->getCategory());
 
         $categories = new EloquentCollection([]);
+
         if ($this->category->exists) {
-           $categories->push($this->category);
+            $categories->push($this->category);
         }
 
         if ($this->includeChildren && $this->category->exists) {
@@ -469,7 +469,7 @@ class ProductsFilter extends MallComponent
             ->load('property_groups.translations')
             ->inherited_property_groups
             ->load('filterable_properties.translations')
-            ->reject(fn(PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
+            ->reject(fn (PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
     }
 
     /**
@@ -485,12 +485,12 @@ class ProductsFilter extends MallComponent
         $props = $this->propertyGroups->flatMap->filterable_properties->unique();
 
         // Remove any property that has no available filters.
-        $this->props = $props->filter(fn(Property $property) => $valueKeys->contains($property->id));
+        $this->props = $props->filter(fn (Property $property) => $valueKeys->contains($property->id));
 
         $groupKeys = $this->props->pluck('pivot.property_group_id');
 
         // Remove any property group that has no available properties.
-        $this->propertyGroups = $this->propertyGroups->filter(fn(PropertyGroup $group) => $groupKeys->contains($group->id));
+        $this->propertyGroups = $this->propertyGroups->filter(fn (PropertyGroup $group) => $groupKeys->contains($group->id));
     }
 
     /**

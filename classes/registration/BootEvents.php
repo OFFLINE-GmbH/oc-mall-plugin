@@ -46,16 +46,14 @@ trait BootEvents
 
     protected function registerStaticPagesEvents()
     {
-        $listTypes = function () {
-            return [
-                'mall-category' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
-                'mall-product' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_product'),
-                'mall-variant' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_variant'),
-                'all-mall-categories' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_categories'),
-                'all-mall-products' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
-                'all-mall-variants' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
-            ];
-        };
+        $listTypes = fn () => [
+            'mall-category' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_category'),
+            'mall-product' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_product'),
+            'mall-variant' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.single_variant'),
+            'all-mall-categories' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_categories'),
+            'all-mall-products' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_products'),
+            'all-mall-variants' => '[OFFLINE.Mall] ' . trans('offline.mall::lang.menu_items.all_variants'),
+        ];
 
         $getTypeInfo = function ($type) {
             if ($type === 'all-mall-categories' || $type === 'mall-category') {
@@ -135,33 +133,31 @@ trait BootEvents
 
     protected function registerGdprEvents()
     {
-        Event::listen('offline.gdpr::cleanup.register', function () {
-            return [
-                'id'     => 'oc-mall-plugin',
-                'label'  => 'OFFLINE Mall',
-                'models' => [
-                    [
-                        'label'   => 'Customers',
-                        'comment' => 'Delete inactive customer accounts (based on last login date)',
-                        'class'   => Customer::class,
-                    ],
-                    [
-                        'label'   => 'Orders',
-                        'comment' => 'Delete completed orders',
-                        'class'   => Order::class,
-                    ],
-                    [
-                        'label'   => 'Carts',
-                        'comment' => 'Delete abandoned shopping carts',
-                        'class'   => Cart::class,
-                    ],
-                    [
-                        'label'   => 'Wishlists',
-                        'comment' => 'Delete old wishlists of unregistered users',
-                        'class'   => Wishlist::class,
-                    ],
+        Event::listen('offline.gdpr::cleanup.register', fn () => [
+            'id'     => 'oc-mall-plugin',
+            'label'  => 'OFFLINE Mall',
+            'models' => [
+                [
+                    'label'   => 'Customers',
+                    'comment' => 'Delete inactive customer accounts (based on last login date)',
+                    'class'   => Customer::class,
                 ],
-            ];
-        });
+                [
+                    'label'   => 'Orders',
+                    'comment' => 'Delete completed orders',
+                    'class'   => Order::class,
+                ],
+                [
+                    'label'   => 'Carts',
+                    'comment' => 'Delete abandoned shopping carts',
+                    'class'   => Cart::class,
+                ],
+                [
+                    'label'   => 'Wishlists',
+                    'comment' => 'Delete old wishlists of unregistered users',
+                    'class'   => Wishlist::class,
+                ],
+            ],
+        ]);
     }
 }

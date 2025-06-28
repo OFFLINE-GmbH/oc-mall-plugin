@@ -138,9 +138,7 @@ trait BootServiceContainer
         if (class_exists(\RainLab\User\Models\Setting::class)) {
             // RainLab.User excludes guests from logging in starting with 3.0.
             // We handle these restrictions ourselves, so we can allow guests to log in.
-            $this->app->auth->provider('user', function ($app, array $config) {
-                return new UserProvider($app['hash'], $config['model']);
-            });
+            $this->app->auth->provider('user', fn ($app, array $config) => new UserProvider($app['hash'], $config['model']));
         }
     }
 }

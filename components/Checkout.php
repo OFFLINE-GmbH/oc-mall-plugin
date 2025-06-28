@@ -209,6 +209,7 @@ class Checkout extends MallComponent
         $gateway->init($paymentMethod, $paymentData);
 
         $attributes = [];
+
         if ($this->showNotesField) {
             $attributes['customer_notes'] = post('customer_notes');
         }

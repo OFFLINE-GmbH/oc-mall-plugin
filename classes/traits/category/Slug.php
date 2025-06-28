@@ -96,7 +96,7 @@ trait Slug
 
             $buildSlugMap = function (
                 ?Category $parent = null,
-                array &$map = null,
+                ?array &$map = null,
                 string $base = ''
             ) use (
                 &$buildSlugMap,

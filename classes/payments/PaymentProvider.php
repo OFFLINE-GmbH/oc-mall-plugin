@@ -40,7 +40,7 @@ abstract class PaymentProvider
      * @param Order|null $order
      * @param array $data
      */
-    public function __construct(Order $order = null, array $data = [])
+    public function __construct(?Order $order = null, array $data = [])
     {
         if ($order) {
             $this->setOrder($order);

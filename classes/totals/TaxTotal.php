@@ -11,18 +11,22 @@ use OFFLINE\Mall\Models\Tax;
 class TaxTotal implements JsonSerializable, CallsAnyMethod
 {
     use Rounding;
+
     /**
      * @var Tax
      */
     public $tax;
+
     /**
      * @var float
      */
     private $preTax;
+
     /**
      * @var float
      */
     private $total;
+
     /**
      * @var Money
      */
@@ -37,15 +41,9 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
         $this->calculate();
     }
 
-    public function setTotal(float $total) {
-        $this->total = $total;
-    }
-
-    protected function calculate()
+    public function setTotal(float $total)
     {
-        $this->total = $this->preTax * $this->tax->percentageDecimal;
-
-        return $this->total;
+        $this->total = $total;
     }
 
     public function total(): float
@@ -72,5 +70,12 @@ class TaxTotal implements JsonSerializable, CallsAnyMethod
             'amount_formatted' => $this->money->format(round($this->preTax)),
             'total_formatted'  => $this->money->format(round($this->total)),
         ];
+    }
+
+    protected function calculate()
+    {
+        $this->total = $this->preTax * $this->tax->percentageDecimal;
+
+        return $this->total;
     }
 }

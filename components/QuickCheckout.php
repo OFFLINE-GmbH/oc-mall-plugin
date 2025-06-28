@@ -294,6 +294,7 @@ class QuickCheckout extends MallComponent
 
         if (! $this->order) {
             $attributes = [];
+
             if ($this->showNotesField) {
                 $attributes['customer_notes'] = post('customer_notes');
             }

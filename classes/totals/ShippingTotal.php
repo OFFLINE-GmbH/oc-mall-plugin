@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
+use JsonSerializable;
 use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
 use OFFLINE\Mall\Classes\Traits\Rounding;
@@ -11,38 +12,44 @@ use OFFLINE\Mall\Models\ShippingMethod;
 use OFFLINE\Mall\Models\ShippingMethodRate;
 use OFFLINE\Mall\Models\Tax;
 
-class ShippingTotal implements \JsonSerializable, CallsAnyMethod
+class ShippingTotal implements JsonSerializable, CallsAnyMethod
 {
     use Rounding;
+
+    /**
+     * @var int
+     */
+    protected $price;
 
     /**
      * @var TotalsCalculator
      */
     private $totals;
+
     /**
      * @var ShippingMethod
      */
     private $method;
+
     /**
      * @var int
      */
     private $preTaxes;
+
     /**
      * @var int
      */
     private $total;
+
     /**
      * @var int
      */
     private $taxes;
+
     /**
      * @var int
      */
     private $appliedDiscount;
-    /**
-     * @var int
-     */
-    protected $price;
 
     public function __construct(?ShippingMethod $method, TotalsCalculator $totals)
     {
@@ -50,6 +57,72 @@ class ShippingTotal implements \JsonSerializable, CallsAnyMethod
         $this->totals = $totals;
 
         $this->calculate();
+    }
+
+    public function __toString()
+    {
+        return (string)json_encode($this->jsonSerialize());
+    }
+
+    public function totalPreTaxes(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalPreTaxesOriginal(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalTaxes(): float
+    {
+        return $this->taxes;
+    }
+
+    public function totalPostTaxes(): float
+    {
+        return $this->total;
+    }
+
+    public function appliedDiscount()
+    {
+        return $this->appliedDiscount;
+    }
+
+    /**
+     * Get the effective ShippingMethod including changes
+     * made by any applied discounts.
+     *
+     * @return ?ShippingMethod
+     */
+    public function method(): ?ShippingMethod
+    {
+        if ($this->totals->getInput()->products->every('data.is_virtual')) {
+            return ShippingMethod::noShippingRequired();
+        }
+
+        if (!$this->appliedDiscount) {
+            return $this->method;
+        }
+
+        $method = $this->method->replicate(['id', 'name']);
+
+        $discount = $this->appliedDiscount['discount'];
+        $method->name = $discount->shipping_description;
+        $method->setRelation('prices', $discount->shipping_prices);
+
+        return $method;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'method' => $this->method(),
+            'preTaxes' => $this->preTaxes,
+            'taxes' => $this->taxes,
+            'total' => $this->total,
+            'appliedDiscount' => $this->appliedDiscount,
+        ];
     }
 
     protected function calculate()
@@ -110,92 +183,6 @@ class ShippingTotal implements \JsonSerializable, CallsAnyMethod
         return $price > 0 ? $price : 0;
     }
 
-    public function totalPreTaxes(): float
-    {
-        return $this->preTaxes;
-    }
-
-    public function totalPreTaxesOriginal(): float
-    {
-        return $this->preTaxes;
-    }
-
-    public function totalTaxes(): float
-    {
-        return $this->taxes;
-    }
-
-    public function totalPostTaxes(): float
-    {
-        return $this->total;
-    }
-
-    public function appliedDiscount()
-    {
-        return $this->appliedDiscount;
-    }
-
-    /**
-     * Get the effective ShippingMethod including changes
-     * made by any applied discounts.
-     *
-     * @return ?ShippingMethod
-     */
-    public function method(): ?ShippingMethod
-    {
-        if ($this->totals->getInput()->products->every('data.is_virtual')) {
-            return ShippingMethod::noShippingRequired();
-        }
-
-        if (!$this->appliedDiscount) {
-            return $this->method;
-        }
-
-        $method = $this->method->replicate(['id', 'name']);
-
-        $discount = $this->appliedDiscount['discount'];
-        $method->name = $discount->shipping_description;
-        $method->setRelation('prices', $discount->shipping_prices);
-
-        return $method;
-    }
-
-    private function applyDiscounts(int $price): ?float
-    {
-        $discounts = Discount::whereIn('trigger', ['total', 'product'])
-            ->where('type', 'shipping')
-            ->where(function ($q) {
-                $q->whereNull('valid_from')
-                    ->orWhere('valid_from', '<=', Carbon::now());
-            })->where(function ($q) {
-                $q->whereNull('expires')
-                    ->orWhere('expires', '>', Carbon::now());
-            })->get();
-
-        $codeDiscount = $this->totals->getInput()->discounts->where('type', 'shipping')->first();
-        if ($codeDiscount) {
-            $discounts->push($codeDiscount);
-        }
-
-        if ($discounts->count() < 1) {
-            return $price;
-        }
-
-        // Remove all discount savings before checking if an alternate shipping price can be applied.
-        $discountSavings = -1 * $this->totals->appliedDiscounts()->where('discount.trigger', '<>', 'shipping')->sum('savings');
-        $basePriceForDiscountCheck = $this->totals->productPostTaxes() - $discountSavings;
-
-        $applier = new DiscountApplier(
-            $this->totals->getInput(),
-            $basePriceForDiscountCheck,
-            $price
-        );
-
-        $this->appliedDiscount = optional($applier->applyMany($discounts))->first();
-
-        return $applier->reducedTotal();
-    }
-
     /**
      * @return mixed
      */
@@ -231,19 +218,40 @@ class ShippingTotal implements \JsonSerializable, CallsAnyMethod
         return $price;
     }
 
-    public function jsonSerialize(): mixed
+    private function applyDiscounts(int $price): ?float
     {
-        return [
-            'method' => $this->method(),
-            'preTaxes' => $this->preTaxes,
-            'taxes' => $this->taxes,
-            'total' => $this->total,
-            'appliedDiscount' => $this->appliedDiscount,
-        ];
-    }
+        $discounts = Discount::whereIn('trigger', ['total', 'product'])
+            ->where('type', 'shipping')
+            ->where(function ($q) {
+                $q->whereNull('valid_from')
+                    ->orWhere('valid_from', '<=', Carbon::now());
+            })->where(function ($q) {
+                $q->whereNull('expires')
+                    ->orWhere('expires', '>', Carbon::now());
+            })->get();
 
-    public function __toString()
-    {
-        return (string)json_encode($this->jsonSerialize());
+        $codeDiscount = $this->totals->getInput()->discounts->where('type', 'shipping')->first();
+
+        if ($codeDiscount) {
+            $discounts->push($codeDiscount);
+        }
+
+        if ($discounts->count() < 1) {
+            return $price;
+        }
+
+        // Remove all discount savings before checking if an alternate shipping price can be applied.
+        $discountSavings = -1 * $this->totals->appliedDiscounts()->where('discount.trigger', '<>', 'shipping')->sum('savings');
+        $basePriceForDiscountCheck = $this->totals->productPostTaxes() - $discountSavings;
+
+        $applier = new DiscountApplier(
+            $this->totals->getInput(),
+            $basePriceForDiscountCheck,
+            $price
+        );
+
+        $this->appliedDiscount = optional($applier->applyMany($discounts))->first();
+
+        return $applier->reducedTotal();
     }
 }

@@ -373,7 +373,6 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(3077, round($calc->taxes()[1]->total()));
     }
 
-
     public function test_it_calculates_enforced_shipping_cost()
     {
         $tax1 = $this->getTax('Test 1', 10);
@@ -664,7 +663,6 @@ class TotalsCalculatorTest extends PluginTestCase
         $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
         $this->assertEquals(1000 * 100, $calc->totalPostTaxes());
     }
-
 
     public function test_it_calculates_custom_field_fallback_cost()
     {

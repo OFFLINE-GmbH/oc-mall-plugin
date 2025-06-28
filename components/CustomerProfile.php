@@ -102,7 +102,7 @@ class CustomerProfile extends MallComponent
             $this->user->email               = $data['email'];
 
             // RainLab.User 3.0
-            if (class_exists(\RainLab\User\Models\Setting::class)) {
+            if (class_exists(Setting::class)) {
                 $this->user->first_name    = $data['firstname'];
                 $this->user->last_name     = $data['lastname'];
 
@@ -124,7 +124,7 @@ class CustomerProfile extends MallComponent
         // Re-authenticate the user with his new credentials (RainLab.User 3.0 only)
         if (class_exists(Setting::class) && Request::hasSession()) {
             Request::session()->put([
-                'password_hash_'.Auth::getDefaultDriver() => $this->user->getAuthPassword(),
+                'password_hash_' . Auth::getDefaultDriver() => $this->user->getAuthPassword(),
             ]);
         }
 

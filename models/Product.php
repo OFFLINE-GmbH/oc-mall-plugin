@@ -640,13 +640,11 @@ class Product extends Model
      */
     public function getSortOrders()
     {
-        return Cache::rememberForever(self::sortOrderCacheKey($this->id), function () {
-            return DB::table('offline_mall_category_product')
-                ->where('product_id', $this->id)
-                ->get(['category_id', 'sort_order',])
-                ->pluck('sort_order', 'category_id')
-                ->toArray();
-        });
+        return Cache::rememberForever(self::sortOrderCacheKey($this->id), fn () => DB::table('offline_mall_category_product')
+            ->where('product_id', $this->id)
+            ->get(['category_id', 'sort_order',])
+            ->pluck('sort_order', 'category_id')
+            ->toArray());
     }
 
     /**
@@ -666,6 +664,7 @@ class Product extends Model
      * @param $item
      * @param $url
      * @param $theme
+     * @param mixed $type
      *
      * @throws \Cms\Classes\CmsException
      * @return array
@@ -681,6 +680,7 @@ class Product extends Model
 
         $toItem = function (Product|Variant $model) use ($cmsPage, $page, $url) {
             $attrs = ['slug' => $model->slug, 'variant' => ''];
+
             if ($model instanceof Variant) {
                 $attrs['variant'] = $model->hash_id;
             }
@@ -696,6 +696,7 @@ class Product extends Model
         };
 
         $result = null;
+
         if ($type === 'mall-all-products') {
             $data = self::published()->where('inventory_management_method', 'single')->get();
 
@@ -757,6 +758,37 @@ class Product extends Model
         ];
     }
 
+    public static function getMenuTypeInfo($type)
+    {
+        $result = [];
+
+        if ($type === 'mall-product') {
+            $references = Product::get()
+                ->mapWithKeys(fn (self $product) => [
+                    $product->id => [
+                        'title' => $product->name,
+                    ],
+                ])
+                ->toArray();
+            $result = [
+                'references'   => $references,
+            ];
+        } elseif ($type === 'mall-variant') {
+            $references = Variant::get()
+                ->mapWithKeys(fn (Variant $variant) => [
+                    $variant->id => [
+                        'title' => sprintf('%s (%s)', $variant->name, $variant->product->name),
+                    ],
+                ])
+                ->toArray();
+            $result = [
+                'references'   => $references,
+            ];
+        }
+
+        return $result;
+    }
+
     /**
      * Hides a field only if it is present. This makes sure
      * the form does not crash if a user programmatically removes
@@ -772,42 +804,5 @@ class Product extends Model
         } elseif (property_exists($fields, $field)) {
             $fields->$field->hidden = true;
         }
-    }
-
-    public static function getMenuTypeInfo($type)
-    {
-        $result = [];
-
-        if ($type === 'mall-product') {
-            $references = Product::get()
-                ->mapWithKeys(function (self $product) {
-                    return [
-                        $product->id => [
-                            'title' => $product->name,
-                        ],
-                    ];
-                })
-                ->toArray();
-            $result = [
-                'references'   => $references,
-            ];
-        }
-        else if ($type === 'mall-variant') {
-            $references = Variant::get()
-                ->mapWithKeys(function (Variant $variant) {
-                    return [
-                        $variant->id => [
-                            'title' => sprintf("%s (%s)", $variant->name, $variant->product->name),
-                        ],
-                    ];
-                })
-                ->toArray();
-            $result = [
-                'references'   => $references,
-            ];
-        }
-
-
-        return $result;
     }
 }

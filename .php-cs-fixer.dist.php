@@ -8,6 +8,7 @@ return $config
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
+        '@PHP84Migration' => true,
         'array_syntax' => ['syntax' => 'short'],
         'no_unused_imports' => true,
         'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
@@ -24,7 +25,7 @@ return $config
         'no_trailing_whitespace' => true,
         'echo_tag_syntax' => ['format' => 'short'],
         'return_assignment' => true,
-        'semicolon_after_instruction' => true,
+        'semicolon_after_instruction' => false,
         'explicit_string_variable' => true,
         'single_quote' => ['strings_containing_single_quote_chars' => false],
         'function_declaration' => ['closure_function_spacing' => 'one'],

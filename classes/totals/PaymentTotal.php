@@ -2,37 +2,44 @@
 
 namespace OFFLINE\Mall\Classes\Totals;
 
+use JsonSerializable;
 use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Traits\Rounding;
 use OFFLINE\Mall\Models\PaymentMethod;
 
-class PaymentTotal implements \JsonSerializable, CallsAnyMethod
+class PaymentTotal implements JsonSerializable, CallsAnyMethod
 {
     use Rounding;
-    /**
-     * @var TotalsCalculator
-     */
-    private $totals;
-    /**
-     * @var PaymentMethod
-     */
-    private $method;
-    /**
-     * @var int
-     */
-    private $preTaxes;
-    /**
-     * @var int
-     */
-    private $total;
-    /**
-     * @var int
-     */
-    private $taxes;
+
     /**
      * @var int
      */
     protected $price;
+
+    /**
+     * @var TotalsCalculator
+     */
+    private $totals;
+
+    /**
+     * @var PaymentMethod
+     */
+    private $method;
+
+    /**
+     * @var int
+     */
+    private $preTaxes;
+
+    /**
+     * @var int
+     */
+    private $total;
+
+    /**
+     * @var int
+     */
+    private $taxes;
 
     public function __construct(?PaymentMethod $method, TotalsCalculator $totals)
     {
@@ -40,6 +47,41 @@ class PaymentTotal implements \JsonSerializable, CallsAnyMethod
         $this->totals = $totals;
 
         $this->calculate();
+    }
+
+    public function __toString()
+    {
+        return (string)json_encode($this->jsonSerialize());
+    }
+
+    public function totalPreTaxes(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalPreTaxesOriginal(): float
+    {
+        return $this->preTaxes;
+    }
+
+    public function totalTaxes(): float
+    {
+        return $this->taxes;
+    }
+
+    public function totalPostTaxes(): float
+    {
+        return $this->total;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'method'   => $this->method,
+            'preTaxes' => $this->preTaxes,
+            'taxes'    => $this->taxes,
+            'total'    => $this->total,
+        ];
     }
 
     protected function calculate()
@@ -51,7 +93,7 @@ class PaymentTotal implements \JsonSerializable, CallsAnyMethod
 
     protected function calculatePreTax(): float
     {
-        if ( ! $this->method) {
+        if (! $this->method) {
             return 0;
         }
 
@@ -67,7 +109,7 @@ class PaymentTotal implements \JsonSerializable, CallsAnyMethod
 
     protected function calculateTotal(): float
     {
-        if ( ! $this->method) {
+        if (! $this->method) {
             return 0;
         }
 
@@ -90,26 +132,6 @@ class PaymentTotal implements \JsonSerializable, CallsAnyMethod
     protected function calculateTaxes(): float
     {
         return $this->round($this->total - $this->preTaxes);
-    }
-
-    public function totalPreTaxes(): float
-    {
-        return $this->preTaxes;
-    }
-
-    public function totalPreTaxesOriginal(): float
-    {
-        return $this->preTaxes;
-    }
-
-    public function totalTaxes(): float
-    {
-        return $this->taxes;
-    }
-
-    public function totalPostTaxes(): float
-    {
-        return $this->total;
     }
 
     /**
@@ -148,20 +170,5 @@ class PaymentTotal implements \JsonSerializable, CallsAnyMethod
     protected function getPercentage()
     {
         return ($this->method->fee_percentage ?? 0) / 100;
-    }
-
-    public function jsonSerialize(): mixed
-    {
-        return [
-            'method'   => $this->method,
-            'preTaxes' => $this->preTaxes,
-            'taxes'    => $this->taxes,
-            'total'    => $this->total,
-        ];
-    }
-
-    public function __toString()
-    {
-        return (string)json_encode($this->jsonSerialize());
     }
 }

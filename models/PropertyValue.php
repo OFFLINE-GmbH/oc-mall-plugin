@@ -198,7 +198,7 @@ class PropertyValue extends Model
      */
     private function jsonDecodeValue($value = null)
     {
-        $value = $value ?? $this->attributes['value'];
+        $value ??= $this->attributes['value'];
 
         if (! $value) {
             return null;

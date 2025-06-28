@@ -391,11 +391,9 @@ class Products extends MallComponent
         }
 
         // Insert the Ghost models back at their old position so the sort order remains.
-        $resultSet = collect($result->ids)->map(function ($id) use ($models, $ghosts) {
-            return is_numeric($id)
+        $resultSet = collect($result->ids)->map(fn ($id) => is_numeric($id)
                 ? $models->find(intval($id))
-                : $ghosts->find(str_replace('product-', '', $id));
-        });
+                : $ghosts->find(str_replace('product-', '', $id)));
 
         return $this->paginate(
             $resultSet,
@@ -573,8 +571,8 @@ class Products extends MallComponent
      */
     private function dataLayerArray($product = null, $variant = null)
     {
-        $product = $product ?? $this->product;
-        $variant = $variant ?? $this->variant;
+        $product ??= $this->product;
+        $variant ??= $this->variant;
 
         $item = $variant ?? $product;
 

@@ -34,16 +34,14 @@ trait CartActions
                 $this->save();
             }
 
-            $quantity = $quantity ?? $product->quantity_default ?? 1;
+            $quantity ??= $product->quantity_default ?? 1;
 
             $isStackable = $product->stackable && count($serviceOptionIds) === 0 && $this->isInCart($product, $variant, $values);
 
             if ($isStackable) {
-                $cartEntry = $this->products->first(function (CartProduct $cartProduct) use ($product, $variant) {
-                    return $variant
+                $cartEntry = $this->products->first(fn (CartProduct $cartProduct) => $variant
                         ? $cartProduct->product_id === $product->id && $cartProduct->variant_id === $variant->id
-                        : $cartProduct->product_id === $product->id;
-                });
+                        : $cartProduct->product_id === $product->id);
 
                 $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
 
