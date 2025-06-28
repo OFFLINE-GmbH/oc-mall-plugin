@@ -294,8 +294,9 @@ class ProductsFilter extends MallComponent
 
             if (is_array($values)
                 && array_key_exists('min', $values)
-                && array_key_exists('max', $values)) {
-                if ($values['min'] === '' && $values['max'] === '') {
+                && array_key_exists('max', $values)
+            ) {
+                if ($values['min'] === '' && $values['max'] === '' || $values['min'] === null && $values['max'] === null) {
                     return [];
                 }
 
