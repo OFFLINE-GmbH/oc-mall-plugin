@@ -681,3 +681,5 @@ v3.6.16:
     - "Remove empty property options before saving (thanks to @rubenvanerk)"
 v3.6.17:
     - "Minor bug fixes"
+v3.6.18:
+    - "Added missing permission to manage taxes"

@@ -139,3 +139,6 @@ permissions:
     offline.mall.manage_brands:
         tab: 'offline.mall::lang.plugin.name'
         label: 'offline.mall::lang.permissions.manage_brands'
+    offline.mall.manage_taxes:
+        tab: 'offline.mall::lang.plugin.name'
+        label: 'offline.mall::lang.permissions.manage_taxes'
