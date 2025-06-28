@@ -697,7 +697,7 @@ return [
             'manage_general' => 'Kann die Grundeinstellungen des Shops verändern',
             'manage_payment_gateways' => 'Kann die Zahlungsanbieter-Einstellungen des Shops verändern',
             'manage_currency' => 'Kann die Währungs-Einstellungen des Shops verändern',
-            'manage_payment_methods' => 'Zahlungsmethoden verwalten',
+            'manage_payment_methods' => 'Kann Zahlungsmethoden verwalten',
         ],
         'manage_properties' => 'Kann Produkt-Eigenschaften verwalten',
         'manage_customer_groups' => 'Kann Kundengruppen verwalten',
