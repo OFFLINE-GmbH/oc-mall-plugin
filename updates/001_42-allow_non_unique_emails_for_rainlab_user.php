@@ -15,8 +15,15 @@ class AllowNonUniqueEmailsForRainlabUser extends Migration
     public function up()
     {
         Schema::table('users', function ($table) {
-            $sm              = Schema::getConnection()->getDoctrineSchemaManager();
-            $existingIndexes = array_keys($sm->listTableIndexes('users'));
+            $conn = Schema::getConnection();
+
+            // Laravel <11
+            if (method_exists($conn, 'getDoctrineSchemaManager')) {
+                $sm              = $conn->getDoctrineSchemaManager();
+                $existingIndexes = array_keys($sm->listTableIndexes('users'));
+            } else {
+                $existingIndexes = Schema::getIndexes('users');
+            }
 
             $indexesToDelete = ['users_email_unique', 'users_login_unique'];
 
