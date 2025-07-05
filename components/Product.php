@@ -675,7 +675,7 @@ class Product extends MallComponent
 
             // Reorder values based on property options if it's a dropdown
             if ($property->type === 'dropdown' && $property->options && $filteredValues) {
-                $order = collect($property->options)->pluck('value')->flip();
+                $order = collect($property->options)->pluck('value')->filter()->flip();
                 $filteredValues = $filteredValues->sortBy(fn ($value) => $order->get($value->value, 999999));
             }
             
