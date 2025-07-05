@@ -689,3 +689,5 @@ v3.7.1:
     - "Property Values: Switches and checkboxes should never be translatable"
 v3.7.2:
     - "Fixed October v4 compatibility"
+v3.7.3:
+    - "Remove empty property options before saving (thanks to @rubenvanerk)"
