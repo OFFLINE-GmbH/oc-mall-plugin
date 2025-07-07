@@ -691,3 +691,5 @@ v3.7.2:
     - "Fixed October v4 compatibility"
 v3.7.3:
     - "Remove empty property options before saving (thanks to @rubenvanerk)"
+v3.7.4:
+    - "Fixed FR translations (thanks to @willouch)"
