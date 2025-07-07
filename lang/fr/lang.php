@@ -960,19 +960,19 @@ return [
                     'non_existing_user' => 'Un utilisateur avec cette adresse e-mail est déjà enregistré. Utiliser la fonction de réinitialisation du mot de passe.',
                 ],
                 'firstname' => [
-                    'required' => 'Veuillez entrez votre prénom s\'il vous plait.',
+                    'required' => 'Veuillez entrer votre prénom s\'il vous plait.',
                 ],
                 'lastname' => [
                     'required' => 'Veuillez entrer votre nom de famille.',
                 ],
                 'lines' => [
-                    'required' => 'Veuillez entrez votre adresse.',
+                    'required' => 'Veuillez entrer votre adresse.',
                 ],
                 'zip' => [
-                    'required' => 'Veuillez entrez votre code postal.',
+                    'required' => 'Veuillez entrer votre code postal.',
                 ],
                 'city' => [
-                    'required' => 'Veuillez entrez votre a ville.',
+                    'required' => 'Veuillez entrer votre a ville.',
                 ],
                 'country_id' => [
                     'required' => 'Choisissez un pays.',
