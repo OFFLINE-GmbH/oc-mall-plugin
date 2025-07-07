@@ -460,3 +460,5 @@
     - 'Updated translations'
 2.0.32:
     - 'Simplified CMS page selection in the backend settings'
+2.0.33:
+    - 'Fixed FR translations (thanks to @damsfx)'
