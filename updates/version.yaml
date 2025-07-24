@@ -695,3 +695,5 @@ v3.7.4:
     - "Fixed FR translations (thanks to @willouch)"
 v3.7.5:
     - "Fixed FR translations (thanks to @damsfx)"
+v3.7.6:
+    - "Fixed id inheritance to Variant model (thanks to @Pindagus)"
