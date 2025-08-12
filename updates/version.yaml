@@ -697,3 +697,5 @@ v3.7.5:
     - "Fixed FR translations (thanks to @damsfx)"
 v3.7.6:
     - "Fixed id inheritance to Variant model (thanks to @Pindagus)"
+v3.7.7:
+    - "Fixed bug in discount removal"
