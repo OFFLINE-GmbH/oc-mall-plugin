@@ -121,7 +121,7 @@ trait Discounts
                 $code = $discount->code;
 
                 $this->totals()->appliedDiscounts()->each(function (array $discount) use ($code) {
-                    if ($code === $discount['discount']->code) {
+                    if ($code === $discount['discount']->code && $discount['discount']->number_of_usages > 0) {
                         $discount['discount']->number_of_usages--;
                         $discount['discount']->save();
                     }
