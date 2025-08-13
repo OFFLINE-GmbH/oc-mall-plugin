@@ -58,7 +58,9 @@ class UniquePropertyValue extends Model
     public static function hydratePropertyValuesForCategories(Collection $categories): Collection
     {
         $raw = self::selectRaw('MIN(property_value_id) as id, value, index_value, property_id')
-            ->whereIn('category_id', $categories->pluck('id'))
+            ->when($categories->count() > 0, function ($q) use ($categories) {
+                $q->whereIn('category_id', $categories->pluck('id'));
+            })
             ->groupBy('value', 'index_value', 'property_id')
             ->get()
             ->toArray();

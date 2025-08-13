@@ -699,3 +699,5 @@ v3.7.6:
     - "Fixed id inheritance to Variant model (thanks to @Pindagus)"
 v3.7.7:
     - "Fixed bug in discount removal"
+v3.7.8:
+    - "Added support for products filter to work without a category"
