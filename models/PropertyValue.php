@@ -103,7 +103,7 @@ class PropertyValue extends Model
         $type  = optional($this->property)->type;
 
         if (in_array($type, $this->untranslatableTypes)) {
-            $value = $this->original['value'];
+            $value = $this->original['value'] ?? $this->attributes['value'];
         } else {
             $value = $this->getAttributeTranslated('value');
         }
