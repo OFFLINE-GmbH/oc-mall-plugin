@@ -466,11 +466,15 @@ class ProductsFilter extends MallComponent
      */
     protected function getPropertyGroups()
     {
+        if (!$this->category->exists) {
+            return PropertyGroup::with('translations', 'filterable_properties.translations')->get();
+        }
+
         return $this->category
             ->load('property_groups.translations')
             ->inherited_property_groups
             ->load('filterable_properties.translations')
-            ->reject(fn (PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
+            ->reject(fn(PropertyGroup $group) => $group->filterable_properties->count() < 1)->sortBy('pivot.relation_sort_order');
     }
 
     /**
