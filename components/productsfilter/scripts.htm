@@ -4,7 +4,7 @@
             var $propertiesForm = $('.mall-products-filter');
             var $body = $('body');
 
-            $body.on('click', '.js-mall-filter', function (e) {
+            $body.on('click', '.js-mall-filter', function () {
                 var $input = $(this).find('input');
                 $(this).toggleClass('mall-filter__option--selected')
                 if (!$input.is(':visible')) {
