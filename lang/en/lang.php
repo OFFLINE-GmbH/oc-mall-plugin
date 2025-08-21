@@ -769,6 +769,9 @@ return [
                 'showBrandFilter' => [
                     'title' => 'Show brand filter',
                 ],
+                'showCategoryFilter' => [
+                    'title' => 'Show category filter',
+                ],
                 'showOnSaleFilter' => [
                     'title' => 'Show on sale filter',
                 ],

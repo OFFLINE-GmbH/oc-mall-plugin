@@ -7,6 +7,7 @@ return [
     'show_all' => 'Alle anzeigen',
     'brands' => 'Marken',
     'variants' => 'Andere Varianten',
+    'categories' => 'Kategorien',
     'category.empty' => 'Ihre Auswahl lieferte keine Treffer.',
     'reset.filter' => 'Filter zurücksetzen',
     'tax.inclusive' => 'Inkl.',
