@@ -47,6 +47,10 @@ Display a price range filter.
 
 Display a brands dropdown.
 
+### `showCategoryFilter` (bool)
+
+Display a categories filter list. Handy, if you are displaying all products in the shop on a single page but still want to be able to filter by category.
+
 ### `showOnSaleFilter` (bool)
 
 Display a checkbox to only display products that are on sale.
@@ -83,6 +87,41 @@ includeSliderAssets = 1
     
             {% component 'products' %}
         </div>
+    </div>
+</div>
+```
+
+### Display all products of a shop with filters
+
+```ìni
+title = "Show All"
+url = "/all"
+layout = "default"
+is_hidden = 0
+
+[products]
+setPageTitle = 1
+includeVariants = 1
+includeChildren = 1
+perPage = 9
+
+[productsFilter]
+showPriceFilter = 1
+showOnSaleFilter = 1
+showBrandFilter = 1
+showCategoryFilter = 1
+includeChildren = 1
+includeVariants = 1
+includeSliderAssets = 1
+==
+<div class="flex">
+    <div class="w-1/4">
+        {% component 'productsFilter' %}
+    </div>
+    <div class="w-3/4">
+        <h2 class="pl-4">{{ products.category.name }}</h2>
+
+        {% component 'products' %}
     </div>
 </div>
 ```

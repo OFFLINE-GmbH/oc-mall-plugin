@@ -769,6 +769,9 @@ return [
                 'showBrandFilter' => [
                     'title' => 'Zeige Marken-Filter an',
                 ],
+                'showCategoryFilter' => [
+                    'title' => 'Zeige Kategorien-Filter an',
+                ],
                 'showOnSaleFilter' => [
                     'title' => 'Zeige «Reduziert» Filter an',
                 ],

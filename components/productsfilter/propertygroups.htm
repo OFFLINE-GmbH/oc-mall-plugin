@@ -1,10 +1,17 @@
 {% if __SELF__.showBrandFilter|default(false) %}
     {% partial __SELF__ ~ '::brands' %}
 {% endif %}
+
 {% if __SELF__.showPriceFilter|default(false) or __SELF__.showOnSaleFilter|default(false) %}
     {% partial __SELF__ ~ '::price' %}
 {% endif %}
+
+{% if __SELF__.showCategoryFilter|default(false) %}
+    {% partial __SELF__ ~ '::categories' %}
+{% endif %}
+
 {% partial __SELF__ ~ '::labels' %}
+
 {% for group in groups %}
     <div class="mall-property-group">
         <div class="mall-property-group__name">{{ group.display_name }}</div>

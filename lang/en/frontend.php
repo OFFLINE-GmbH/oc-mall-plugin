@@ -7,6 +7,7 @@ return [
     'show_all' => 'Show all',
     'brands' => 'Brands',
     'variants' => 'Other Variants',
+    'categories' => 'Categories',
     'category.empty' => 'Your selection did not return any results.',
     'reset.filter' => 'Reset filter',
     'tax.inclusive' => 'Includes',

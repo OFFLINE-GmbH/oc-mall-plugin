@@ -100,6 +100,13 @@ class ProductsFilter extends MallComponent
     public $showBrandFilter;
 
     /**
+     * Show the categories filter.
+     *
+     * @var boolean
+     */
+    public $showCategoryFilter;
+
+    /**
      * Show the on sale filter.
      *
      * @var boolean
@@ -224,6 +231,11 @@ class ProductsFilter extends MallComponent
                 'default' => '1',
                 'type' => 'checkbox',
             ],
+            'showCategoryFilter' => [
+                'title' => 'offline.mall::lang.components.productsFilter.properties.showCategoryFilter.title',
+                'default' => '0',
+                'type' => 'checkbox',
+            ],
             'showOnSaleFilter' => [
                 'title' => 'offline.mall::lang.components.productsFilter.properties.showOnSaleFilter.title',
                 'default' => '0',
@@ -345,6 +357,15 @@ class ProductsFilter extends MallComponent
     }
 
     /**
+     * Return all categories for the categories filter.
+     * @return Collection<Category>
+     */
+    public function getCategories()
+    {
+        return Category::getNested();
+    }
+
+    /**
      * This method sets all variables needed for this component to work.
      *
      * @return void
@@ -354,6 +375,7 @@ class ProductsFilter extends MallComponent
         $this->setVar('currency', Currency::activeCurrency());
         $this->setVar('showPriceFilter', (bool)$this->property('showPriceFilter'));
         $this->setVar('showBrandFilter', (bool)$this->property('showBrandFilter'));
+        $this->setVar('showCategoryFilter', (bool)$this->property('showCategoryFilter'));
         $this->setVar('showOnSaleFilter', (bool)$this->property('showOnSaleFilter'));
 
         // The includeChildren and includeVariants properties are set by the

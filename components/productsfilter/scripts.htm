@@ -4,10 +4,12 @@
             var $propertiesForm = $('.mall-products-filter');
             var $body = $('body');
 
-            $body.on('click', '.js-mall-filter', function () {
+            $body.on('click', '.js-mall-filter', function (e) {
                 var $input = $(this).find('input');
                 $(this).toggleClass('mall-filter__option--selected')
-                $input.prop('checked', ! $input.prop('checked'));
+                if (!$input.is(':visible')) {
+                    $input.prop('checked', ! $input.prop('checked'));
+                }
                 $propertiesForm.trigger('submit');
             });
             $body.on('click', '.js-mall-clear-filter', function () {

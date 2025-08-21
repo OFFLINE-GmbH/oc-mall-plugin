@@ -703,3 +703,5 @@ v3.7.8:
     - "Added support for products filter to work without a category"
 v3.7.9:
     - "Fixed handling of variant property values"
+v3.7.10:
+    - "Added a category filter to the productsFilter component"
