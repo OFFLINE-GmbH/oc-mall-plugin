@@ -705,3 +705,5 @@ v3.7.9:
     - "Fixed handling of variant property values"
 v3.7.10:
     - "Added a category filter to the productsFilter component"
+v3.7.11:
+    - "Fixed property filtering when no category is present"

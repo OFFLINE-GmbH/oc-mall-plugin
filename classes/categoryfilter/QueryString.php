@@ -42,24 +42,34 @@ class QueryString
             return [$prop => new $type($prop, array_values($values))];
         });
 
-        if (! $category) {
-            return $specialProperties;
+        if (! $category || !$category->exists) {
+            $properties = Property::whereIn('slug', $query->keys())->with('property_groups')->get();
+        } else {
+            $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
         }
-
-        $properties = $category->load('property_groups.properties')->properties->whereIn('slug', $query->keys());
 
         // Map the user defined database properties.
         return $properties->mapWithKeys(function (Property $property) use ($query) {
-            $delimiter = $this->getDelimiter($property->pivot->filter_type);
+            if ($property->pivot) {
+                $filterType = $property->pivot->filter_type;
+            } else if ($group = $property->property_groups->first()) {
+                $filterType = $group->getOriginal('pivot_filter_type');
+            }
+
+            if (!$filterType) {
+                $filterType = 'set';
+            }
+
+            $delimiter = $this->getDelimiter($filterType);
             $values    = $query->get($property->slug);
 
-            if ($property->pivot->filter_type === 'set') {
+            if ($filterType === 'set') {
                 $values = $this->getPropValues($values, $delimiter);
 
                 return [$property->slug => new SetFilter($property, $values)];
             }
 
-            if ($property->pivot->filter_type === 'range') {
+            if ($filterType === 'range') {
                 $values = $this->getPropValues($values, $delimiter);
 
                 return [

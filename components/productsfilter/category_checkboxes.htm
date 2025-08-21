@@ -2,11 +2,14 @@
     {% for category in categories %}
         {% set isSelected = category.id in selected %}
 
-        <label for="category-{{ category.id }}" class="mall-label mall-label--checkbox js-mall-filter">
+        <label for="category-{{ category.id }}" class="mall-label mall-label--checkbox">
             <input
-                type="checkbox" class="mall-input-checkbox" id="category-{{ category.id }}"
+                type="checkbox"
+                class="mall-input-checkbox"
+                id="category-{{ category.id }}"
                 name="filter[category_id][]"
                 value="{{ category.id }}"
+                onchange="$(this).closest('form').trigger('submit')"
                 {{ isSelected ? 'checked' : '' }}
             >
             {{ category.name }}
