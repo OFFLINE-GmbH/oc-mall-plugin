@@ -8,7 +8,7 @@ property_groups:
     view:
         list: $/offline/mall/models/propertygroup/columns_pivot.yaml
         toolbarButtons: add|remove
-        recordUrl: '/offline/mall/propertygroups/update/:id'
+        recordUrl: 'offline/mall/propertygroups/update/:id'
         defaultSort:
             column: pivot[relation_sort_order]
             direction: asc
