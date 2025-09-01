@@ -462,3 +462,5 @@
     - 'Simplified CMS page selection in the backend settings'
 2.0.33:
     - 'Fixed FR translations (thanks to @damsfx)'
+2.0.34:
+    - 'Fixed compatibility issue with Winter CMS (thanks to @damsfx)'
