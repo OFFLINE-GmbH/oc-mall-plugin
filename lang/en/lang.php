@@ -879,6 +879,10 @@ return [
                     'title' => 'Redirect on property change',
                     'description' => 'Redirect the user to the new detail page if a property was changed',
                 ],
+                'filterOutOfStock' => [
+                    'title' => 'Hide out of stock variants',
+                    'description' => 'Hide variants that are out of stock',
+                ],
             ],
             'added_to_cart' => 'Added product successfully',
         ],

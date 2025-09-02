@@ -869,6 +869,10 @@ return [
                     'title' => 'Zu neuer Detailseite umleiten',
                     'description' => 'Leite den Besucher zur neuen Detailseite um wenn eine Eigenschaft geändert wird',
                 ],
+                'filterOutOfStock' => [
+                    'title' => 'Varianten ohne Lagerbestand ausblenden',
+                    'description' => 'Zeige Varianten, die nicht an Langer sind, nicht an',
+                ],
             ],
             'added_to_cart' => 'Produkt erfolgreich hinzugefügt.',
         ],

@@ -707,3 +707,5 @@ v3.7.10:
     - "Added a category filter to the productsFilter component"
 v3.7.11:
     - "Fixed property filtering when no category is present"
+v3.7.12:
+    - "Added filterOutOfStock property to the Product component (thanks to @xyz1123581321)"

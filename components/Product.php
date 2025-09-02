@@ -136,7 +136,7 @@ class Product extends MallComponent
      */
     public function defineProperties()
     {
-        $langPrefix = 'offline.mall::lang.components.product.properties.redirectOnPropertyChange';
+        $langPrefix = 'offline.mall::lang.components.product.properties';
 
         return [
             'product' => [
@@ -151,10 +151,16 @@ class Product extends MallComponent
                 'type' => 'dropdown',
             ],
             'redirectOnPropertyChange' => [
-                'title' => $langPrefix . '.title',
-                'description' => $langPrefix . '.description',
+                'title' => $langPrefix . '.redirectOnPropertyChange.title',
+                'description' => $langPrefix . '.redirectOnPropertyChange.description',
                 'default' => 0,
                 'type' => 'checkbox',
+            ],
+            'filterOutOfStock' => [
+                'title' => $langPrefix . '.filterOutOfStock.title',
+                'description' => $langPrefix . '.filterOutOfStock.description',
+                'type' => 'checkbox',
+                'default' => 0,
             ],
             'currentVariantReviewsOnly' => [
                 'title' => 'offline.mall::lang.components.productReviews.properties.currentVariantReviewsOnly.title',
@@ -671,7 +677,21 @@ class Product extends MallComponent
         }
 
         return $this->product->categories->flatMap->properties->map(function (Property $property) use ($valueMap) {
-            $filteredValues = optional($valueMap->get($property->id))->reject(fn ($value) => $this->variant && $value->variant_id === null);
+            
+             $filteredValues = optional($valueMap->get($property->id))->filter(function ($value) {
+                // Reject values where variant_id is null when we have a variant
+                if ($this->variant && $value->variant_id === null) {
+                    return false;
+                }
+                
+                // Filter out property values where the associated variant has zero stock (if enabled)
+                if ((bool)$this->property('filterOutOfStock')) {
+                    return $value->variant->stock > 0 || $value->variant->allow_out_of_stock_purchases;
+                }
+                
+                return true;
+            });
+
 
             // Reorder values based on property options if it's a dropdown
             if ($property->type === 'dropdown' && $property->options && $filteredValues) {
