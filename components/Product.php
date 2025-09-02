@@ -136,7 +136,7 @@ class Product extends MallComponent
      */
     public function defineProperties()
     {
-        $langPrefix = 'offline.mall::lang.components.product.properties.redirectOnPropertyChange';
+        $langPrefix = 'offline.mall::lang.components.product.properties';
 
         return [
             'product' => [
@@ -151,14 +151,14 @@ class Product extends MallComponent
                 'type' => 'dropdown',
             ],
             'redirectOnPropertyChange' => [
-                'title' => $langPrefix . '.title',
-                'description' => $langPrefix . '.description',
+                'title' => $langPrefix . '.redirectOnPropertyChange.title',
+                'description' => $langPrefix . '.redirectOnPropertyChange.description',
                 'default' => 0,
                 'type' => 'checkbox',
             ],
             'filterOutOfStock' => [
-                'title' => 'Filter out of stock variants',
-                'description' => 'Hide property values for variants that have zero stock',
+                'title' => $langPrefix . '.filterOutOfStock.title',
+                'description' => $langPrefix . '.filterOutOfStock.description',
                 'type' => 'checkbox',
                 'default' => 0,
             ],

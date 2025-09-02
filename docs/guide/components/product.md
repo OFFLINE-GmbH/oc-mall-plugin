@@ -32,6 +32,12 @@ Default behaviour is to only reload the "add to cart" partial where new pricing
 information and stock values are displayed. The title, description and product images
 remain unchanged. Set this property to true if you need the whole page to update.
 
+### `filterOutOfStock` (boolean)
+
+By default, the component will display all available variants.
+
+Set this property to true to only display variants that are in stock.
+
 ### `currentVariantReviewsOnly` (boolean)
 
 If Reviews are enabled, display only Reviews for the currently viewed Variant.
