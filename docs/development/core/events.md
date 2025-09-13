@@ -129,6 +129,21 @@ well as the related `Product` model.
 For a usage example see
 [Virtual Products -> Generate user specific product files](/guide/usage/virtual-products#generate-user-specific-product-files)
 
+## Products
+
+### `mall.products.filter.extend`
+
+Use this event to change the Product filter configuration.
+
+This event is emitted after the filters have been processed. It receives the `Products` component and the `Filters` collection as arguments.
+
+```php
+Event::listen('mall.products.filter.extend', function (\OFFLINE\Mall\Components\Products $component, \October\Rain\Support\Collection $filters) {
+      // only show products from category 2 
+      $filters->get('category_id')->values = [2];
+});
+```
+
 
 ## Index
 

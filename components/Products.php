@@ -11,6 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use LogicException;
 use October\Rain\Exception\ValidationException;
+use October\Rain\Support\Facades\Event;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\SetFilter;
 use OFFLINE\Mall\Classes\CategoryFilter\SortOrder\SortOrder;
@@ -495,6 +496,8 @@ class Products extends MallComponent
         if ($this->categories && !isset($filters['category_id'])) {
             $filters->put('category_id', new SetFilter('category_id', $this->categories->pluck('id')->toArray()));
         }
+
+        Event::fire('mall.products.filter.extend', [$this, $filters]);
 
         return $filters;
     }
