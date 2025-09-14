@@ -709,3 +709,5 @@ v3.7.11:
     - "Fixed property filtering when no category is present"
 v3.7.12:
     - "Added filterOutOfStock property to the Product component (thanks to @xyz1123581321)"
+v3.7.13:
+    - "Added mall.products.filter.extend to extend applied filter configuration (thanks to @verenaroe)"
