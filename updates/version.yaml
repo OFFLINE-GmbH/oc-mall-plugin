@@ -711,3 +711,6 @@ v3.7.12:
     - "Added filterOutOfStock property to the Product component (thanks to @xyz1123581321)"
 v3.7.13:
     - "Added mall.products.filter.extend to extend applied filter configuration (thanks to @verenaroe)"
+v3.8.0:
+    - "Added support for MySQL 8"
+    - 031_02-mysql_8_compatibility.php
