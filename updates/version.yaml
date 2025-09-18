@@ -714,3 +714,5 @@ v3.7.13:
 v3.8.0:
     - "Added support for MySQL 8"
     - 031_02-mysql_8_compatibility.php
+v3.8.1:
+    - "Removed non-existing property call from PropertyValues"
