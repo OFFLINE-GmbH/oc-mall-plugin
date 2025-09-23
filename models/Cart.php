@@ -183,11 +183,11 @@ class Cart extends Model
      * @param Variant $variant
      * @param Collection|null $values
      *
-     * @return bool
+     * @return CartProduct|null
      */
-    public function isInCart(Product $product, ?Variant $variant = null, ?Collection $values = null): bool
+    public function isInCart(Product $product, ?Variant $variant = null, ?Collection $values = null): CartProduct|null
     {
-        $productIsInCart = $this->products->contains(function (CartProduct $existing) use ($product, $variant) {
+        $productsInCart = $this->products->where(function (CartProduct $existing) use ($product, $variant) {
             $productIsInCart = $existing->product_id === $product->id;
             $variantIsInCart = $variant ? $existing->variant_id === $variant->id : true;
 
@@ -196,34 +196,36 @@ class Cart extends Model
 
         // If there is no CustomFieldValue to compare we only have
         // to check if the product is in the cart.
-        if ($values === null || $values->count() === 0 || $productIsInCart === false) {
-            return $productIsInCart;
+        if ($values === null || $values->count() === 0) {
+            return $productsInCart->first();
         }
 
-        foreach ($values as $value) {
-            $hasCustomFieldOption = $value->custom_field_option_id !== null;
+        // Find the cart product that has all the custom field values.
+        $query = CartProduct::whereIn('id', $productsInCart->pluck('id'))->whereHas('custom_field_values', function ($query) use ($values) {
+            foreach ($values as $value) {
+                $query->orWhere(function ($query) use ($value) {
+                    $hasCustomFieldOption = $value->custom_field_option_id !== null;
 
-            $query = CustomFieldValue::where('custom_field_id', $value->custom_field_id);
-            $query->whereHas('cart_product.cart', function ($query) {
-                $query->where('id', $this->id);
-            });
+                    $query
+                        ->where('custom_field_id', $value->custom_field_id)
+                        ->when($hasCustomFieldOption, function ($query) use ($value) {
+                            $query->where('custom_field_option_id', $value->custom_field_option_id);
+                        })->when(!$hasCustomFieldOption, function ($query) use ($value) {
+                            $query->where('value', $value->value);
+                        });
+                });
+            }
+        }, '=', $values->count());
 
-            $query->when($hasCustomFieldOption, function ($query) use ($value) {
-                $query->where('custom_field_option_id', $value->custom_field_option_id);
-            })->when(!$hasCustomFieldOption, function ($query) use ($value) {
-                $query->where('value', $value->value);
-            });
-        }
-
-        return $query->count() > 0;
+        return $query->first();
     }
 
     /**
      * Remove all products that are no longer published.
      * Returns all removed products.
      *
-     * @throws Exception
      * @return \October\Rain\Support\Collection
+     * @throws Exception
      */
     public function removeUnpublishedProducts()
     {

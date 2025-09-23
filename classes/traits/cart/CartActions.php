@@ -36,17 +36,15 @@ trait CartActions
 
             $quantity ??= $product->quantity_default ?? 1;
 
-            $isStackable = $product->stackable && count($serviceOptionIds) === 0 && $this->isInCart($product, $variant, $values);
+            $matchingProductInCart = $this->isInCart($product, $variant, $values);
+
+            $isStackable = $product->stackable && count($serviceOptionIds) === 0 && $matchingProductInCart;
 
             if ($isStackable) {
-                $cartEntry = $this->products->first(fn (CartProduct $cartProduct) => $variant
-                        ? $cartProduct->product_id === $product->id && $cartProduct->variant_id === $variant->id
-                        : $cartProduct->product_id === $product->id);
-
-                $newQuantity = $product->normalizeQuantity($cartEntry->quantity + $quantity, $product);
+                $newQuantity = $product->normalizeQuantity($matchingProductInCart->quantity + $quantity, $product);
 
                 $this->validateStock($variant ?? $product, $quantity);
-                $cartEntry->update(['quantity' => $newQuantity]);
+                $matchingProductInCart->update(['quantity' => $newQuantity]);
                 
                 $this->validateShippingMethod();
 
