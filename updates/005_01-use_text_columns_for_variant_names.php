@@ -10,7 +10,7 @@ class UseTextColumnsForVariantNames extends Migration
     public function up()
     {
         Schema::table('offline_mall_order_products', function ($table) {
-            $table->text('variant_name')->change();
+            $table->text('variant_name')->nullable()->change();
         });
     }
 
