@@ -716,3 +716,5 @@ v3.8.0:
     - 031_02-mysql_8_compatibility.php
 v3.8.1:
     - "Removed non-existing property call from PropertyValues"
+v3.8.2:
+    - "Optimized Laravel 11 compatibility (thanks to @Pindagus)"
