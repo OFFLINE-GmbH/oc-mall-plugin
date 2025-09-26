@@ -718,3 +718,5 @@ v3.8.1:
     - "Removed non-existing property call from PropertyValues"
 v3.8.2:
     - "Optimized Laravel 11 compatibility (thanks to @Pindagus)"
+v3.8.3:
+    - "Fixed stacking of Cart items when custom field values are used"
