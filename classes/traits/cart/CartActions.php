@@ -36,7 +36,7 @@ trait CartActions
 
             $quantity ??= $product->quantity_default ?? 1;
 
-            $matchingProductInCart = $this->isInCart($product, $variant, $values);
+            $matchingProductInCart = $this->getMatchingProductInCart($product, $variant, $values);
 
             $isStackable = $product->stackable && count($serviceOptionIds) === 0 && $matchingProductInCart;
 

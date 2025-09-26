@@ -185,7 +185,7 @@ class Cart extends Model
      *
      * @return CartProduct|null
      */
-    public function isInCart(Product $product, ?Variant $variant = null, ?Collection $values = null): CartProduct|null
+    public function getMatchingProductInCart(Product $product, ?Variant $variant = null, ?Collection $values = null): CartProduct|null
     {
         $productsInCart = $this->products->where(function (CartProduct $existing) use ($product, $variant) {
             $productIsInCart = $existing->product_id === $product->id;
@@ -194,28 +194,49 @@ class Cart extends Model
             return $productIsInCart && $variantIsInCart;
         });
 
-        // If there is no CustomFieldValue to compare we only have
-        // to check if the product is in the cart.
+        // If there are no CustomFieldValue items provided, only match
+        // cart products that also have no custom field values.
         if ($values === null || $values->count() === 0) {
-            return $productsInCart->first();
+            return CartProduct::whereIn('id', $productsInCart->pluck('id'))
+                ->whereDoesntHave('custom_field_values')
+                ->first();
         }
 
-        // Find the cart product that has all the custom field values.
-        $query = CartProduct::whereIn('id', $productsInCart->pluck('id'))->whereHas('custom_field_values', function ($query) use ($values) {
-            foreach ($values as $value) {
-                $query->orWhere(function ($query) use ($value) {
-                    $hasCustomFieldOption = $value->custom_field_option_id !== null;
+        // Find the cart product that has exactly the provided custom field values (no more, no less).
+        $ids = $productsInCart->pluck('id');
 
-                    $query
-                        ->where('custom_field_id', $value->custom_field_id)
-                        ->when($hasCustomFieldOption, function ($query) use ($value) {
-                            $query->where('custom_field_option_id', $value->custom_field_option_id);
-                        })->when(!$hasCustomFieldOption, function ($query) use ($value) {
-                            $query->where('value', $value->value);
-                        });
-                });
-            }
-        }, '=', $values->count());
+        $query = CartProduct::query()
+            ->whereIn('id', $ids)
+            ->select('offline_mall_cart_products.*')
+            // Total number of custom field values attached to the cart product
+            ->selectSub(function ($q) {
+                $q->from('offline_mall_cart_custom_field_value')
+                    ->selectRaw('count(*)')
+                    ->whereColumn('offline_mall_cart_products.id', 'offline_mall_cart_custom_field_value.cart_product_id');
+            }, 'custom_field_values_count')
+            // Number of custom field values that match the provided set
+            ->selectSub(function ($q) use ($values) {
+                $q->from('offline_mall_cart_custom_field_value')
+                    ->selectRaw('count(*)')
+                    ->whereColumn('offline_mall_cart_products.id', 'offline_mall_cart_custom_field_value.cart_product_id')
+                    ->where(function ($q) use ($values) {
+                        foreach ($values as $value) {
+                            $q->orWhere(function ($q) use ($value) {
+                                $hasCustomFieldOption = $value->custom_field_option_id !== null;
+
+                                $q->where('custom_field_id', $value->custom_field_id);
+
+                                if ($hasCustomFieldOption) {
+                                    $q->where('custom_field_option_id', $value->custom_field_option_id);
+                                } else {
+                                    $q->whereNull('custom_field_option_id')->where('value', $value->value);
+                                }
+                            });
+                        }
+                    });
+            }, 'matching_field_values_count')
+            ->having('custom_field_values_count', '=', $values->count())
+            ->having('matching_field_values_count', '=', $values->count());
 
         return $query->first();
     }
