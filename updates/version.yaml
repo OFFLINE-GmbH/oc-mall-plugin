@@ -720,3 +720,5 @@ v3.8.2:
     - "Optimized Laravel 11 compatibility (thanks to @Pindagus)"
 v3.8.3:
     - "Fixed stacking of Cart items when custom field values are used"
+v3.8.4:
+    - "Fixed order view in dark mode"
