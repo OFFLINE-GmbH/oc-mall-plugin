@@ -107,3 +107,23 @@ table.table.data tbody tr.orderfooter-taxes td {
     margin: 0 0 -24px;
     padding: 0 !important;
 }
+
+/* OctoberCMS v3+ theming */
+
+[data-bs-theme] table.table.data tbody tr.orderfooter td,
+[data-bs-theme] table.table.data tbody tr.orderdiscount td {
+    color: var(--oc-table-hover-color);
+    background-color: var(--oc-table-hover-bg);
+    border-color: var(--bs-table-border-color);
+}
+[data-bs-theme] table.table.data tbody tr.orderfooter-bottomline td {
+    color: var(--oc-callout-info-icon);
+    background-color: var(--oc-callout-info-bg);
+    border-color: var(--bs-table-border-color);
+}
+[data-bs-theme] .sidebar-box {
+    color: var(--oc-sidebar-color);
+    background-color: var(--oc-sidebar-bg);
+    border-color: var(--bs-border-color);
+    box-shadow: 0 2px 1px var(--bs-border-color);
+}
