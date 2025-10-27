@@ -138,7 +138,7 @@ Use this event to change the Product filter configuration.
 This event is emitted after the filters have been processed. It receives the `Products` component and the `Filters` collection as arguments.
 
 ```php
-Event::listen('mall.products.filter.extend', function (\OFFLINE\Mall\Components\Products $component, \October\Rain\Support\Collection $filters) {
+Event::listen('mall.products.filter.extend', function (\OFFLINE\Mall\Components\Products $component, $filters) {
       // only show products from category 2 
       $filters->get('category_id')->values = [2];
 });
