@@ -232,9 +232,13 @@ class OrderProduct extends Model
      */
     protected function toPriceModel(string $key): Price
     {
-        return new Price([
-            'currency_id' => $this->useCurrency()->id,
-            'price'       => $this->getOriginal($key) / 100,
+        $currency = $this->useCurrency();
+        $priceModel = new Price([
+            'currency_id' => $currency->id,
+            'price' => $this->getOriginal($key) / 100,
         ]);
+        $priceModel->setRelation('currency', $currency);
+
+        return $priceModel;
     }
 }
