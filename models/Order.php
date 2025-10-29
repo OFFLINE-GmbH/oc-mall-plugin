@@ -467,10 +467,14 @@ class Order extends Model
 
     protected function toPriceModel(string $key): Price
     {
-        return new Price([
-            'currency_id' => $this->useCurrency()->id,
+        $currency = $this->useCurrency();
+        $priceModel = new Price([
+            'currency_id' => $currency->id,
             'price'       => $this->getOriginal($key) / 100,
         ]);
+        $priceModel->setRelation('currency', $currency);
+
+        return $priceModel;
     }
 
     protected function getLocale()
