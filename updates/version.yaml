@@ -722,3 +722,5 @@ v3.8.3:
     - "Fixed stacking of Cart items when custom field values are used"
 v3.8.4:
     - "Fixed order view in dark mode"
+v3.8.5:
+    - "Optimized price model queries (thanks to @Pindagus)"
