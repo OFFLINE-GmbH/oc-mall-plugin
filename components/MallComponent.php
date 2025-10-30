@@ -16,6 +16,8 @@ abstract class MallComponent extends ComponentBase
 
     protected function setVar($name, $value)
     {
-        return $this->$name = $this->page[$name] = $value;
+        if (property_exists($this, $name)) {
+            return $this->$name = $this->page[$name] = $value;
+        }
     }
 }
