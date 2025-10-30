@@ -66,6 +66,12 @@ class Checkout extends MallComponent
     public $dataLayer;
 
     /**
+     * The selected payment method.
+     * @var PaymentMethod
+     */
+    public $paymentMethod;
+
+    /**
      * Backend setting whether shipping should be before payment.
      * @var bool
      */

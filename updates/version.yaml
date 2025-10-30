@@ -724,3 +724,5 @@ v3.8.4:
     - "Fixed order view in dark mode"
 v3.8.5:
     - "Optimized price model queries (thanks to @Pindagus)"
+v3.8.6:
+    - "Handle payment method corrently in legacy Checkout"
