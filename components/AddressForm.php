@@ -125,6 +125,23 @@ class AddressForm extends MallComponent
         ];
     }
 
+    public function init()
+    {
+        $this->setVar('useState', GeneralSettings::get('use_state', true));
+    }
+
+    /**
+     * The component is executed.
+     *
+     * @return string|void
+     */
+    public function onRun()
+    {
+        if (! $this->setData()) {
+            return $this->controller->run('404');
+        }
+    }
+
     /**
      * This method sets all variables needed for this component to work.
      *
@@ -141,7 +158,6 @@ class AddressForm extends MallComponent
         $this->setVar('setAddressAs', $this->property('set'));
         $this->setVar('cart', Cart::byUser(Auth::user()));
         $this->setVar('countries', Country::getNameList());
-        $this->setVar('useState', GeneralSettings::get('use_state', true));
 
         $hashId = $this->property('address');
 
@@ -158,18 +174,6 @@ class AddressForm extends MallComponent
         }
 
         return true;
-    }
-
-    /**
-     * The component is executed.
-     *
-     * @return string|void
-     */
-    public function onRun()
-    {
-        if (! $this->setData()) {
-            return $this->controller->run('404');
-        }
     }
 
     /**
