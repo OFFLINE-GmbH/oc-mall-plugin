@@ -726,3 +726,5 @@ v3.8.5:
     - "Optimized price model queries (thanks to @Pindagus)"
 v3.8.6:
     - "Handle payment method corrently in legacy Checkout"
+v3.8.7:
+    - "Fixed state setting in Address form (thanks to @verenaroe)"
