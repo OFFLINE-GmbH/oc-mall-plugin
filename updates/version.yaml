@@ -728,3 +728,5 @@ v3.8.6:
     - "Handle payment method corrently in legacy Checkout"
 v3.8.7:
     - "Fixed state setting in Address form (thanks to @verenaroe)"
+v3.8.8:
+    - "Fixed categories migration"
