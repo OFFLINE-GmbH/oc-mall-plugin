@@ -38,6 +38,7 @@ class MigrateCategoriesToBelongstoManyRelation extends Migration
         });
 
         Schema::table('offline_mall_products', function ($table) {
+            $table->dropIndex('idx_product_category_id');
             $table->dropColumn(['category_id']);
         });
 
