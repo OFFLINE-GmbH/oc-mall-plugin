@@ -126,6 +126,11 @@ class Filebase implements Index
             $this->jsonq->where('on_sale', true);
         }
 
+        if ($filters->has('in_stock')) {
+            $filters->pull('in_stock');
+            $this->jsonq->where('stock', '>', 0);
+        }
+
         if ($filters->has('price')) {
             $price    = $filters->pull('price');
             $currency = Currency::activeCurrency()->code;
