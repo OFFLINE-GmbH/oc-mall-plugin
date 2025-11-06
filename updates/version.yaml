@@ -730,3 +730,5 @@ v3.8.7:
     - "Fixed state setting in Address form (thanks to @verenaroe)"
 v3.8.8:
     - "Fixed categories migration"
+v3.8.9:
+    - "Fixed in_stock filter in file based index"
