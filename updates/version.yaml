@@ -732,3 +732,5 @@ v3.8.8:
     - "Fixed categories migration"
 v3.8.9:
     - "Fixed in_stock filter in file based index"
+v3.8.10:
+    - "Fixed sitemap generation for 'all shop products' (thanks to @RobertCh2)"

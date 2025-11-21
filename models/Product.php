@@ -697,7 +697,7 @@ class Product extends Model
 
         $result = null;
 
-        if ($type === 'mall-all-products') {
+        if ($type === 'all-mall-products') {
             $data = self::published()->where('inventory_management_method', 'single')->get();
 
             return [
