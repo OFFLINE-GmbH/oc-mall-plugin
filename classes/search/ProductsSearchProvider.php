@@ -63,7 +63,7 @@ class ProductsSearchProvider extends ResultsProvider
 
             $result->relevance = 1;
             $result->title     = $match->name;
-            $result->text      = $match->description;
+            $result->text      = $match->description ?: '';
             $result->url       = $url;
             $result->thumb     = $match->image;
             $result->model     = $match;
