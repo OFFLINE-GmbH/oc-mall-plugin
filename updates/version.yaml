@@ -734,3 +734,5 @@ v3.8.9:
     - "Fixed in_stock filter in file based index"
 v3.8.10:
     - "Fixed sitemap generation for 'all shop products' (thanks to @RobertCh2)"
+v3.8.11:
+    - "Fixed SiteSearch results for products without descriptions (thanks to @verenaroe)"
