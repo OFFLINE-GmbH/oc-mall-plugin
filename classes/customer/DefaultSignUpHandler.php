@@ -158,6 +158,8 @@ class DefaultSignUpHandler implements SignUpHandler
 
             $customer->save();
 
+            $user = $user->fresh();
+
             Cart::transferSessionCartToCustomer($user->customer);
             Wishlist::transferToCustomer($user->customer);
 

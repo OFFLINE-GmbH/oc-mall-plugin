@@ -738,3 +738,5 @@ v3.8.11:
     - "Fixed SiteSearch results for products without descriptions (thanks to @verenaroe)"
 v3.8.12:
     - "Made user_defined_id translatable"
+v3.8.13:
+    - "Fixed customer not existing when transfering Cart"
