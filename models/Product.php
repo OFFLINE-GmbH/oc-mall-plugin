@@ -68,6 +68,7 @@ class Product extends Model
         ['slug', 'index' => true],
         'description_short',
         'description',
+        'user_defined_id',
         'meta_title',
         'meta_description',
         'meta_keywords',

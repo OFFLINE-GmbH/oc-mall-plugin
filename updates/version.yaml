@@ -736,3 +736,5 @@ v3.8.10:
     - "Fixed sitemap generation for 'all shop products' (thanks to @RobertCh2)"
 v3.8.11:
     - "Fixed SiteSearch results for products without descriptions (thanks to @verenaroe)"
+v3.8.12:
+    - "Made user_defined_id translatable"
