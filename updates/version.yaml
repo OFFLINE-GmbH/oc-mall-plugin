@@ -740,3 +740,5 @@ v3.8.12:
     - "Made user_defined_id translatable"
 v3.8.13:
     - "Fixed customer not existing when transfering Cart"
+v3.8.14:
+    - "Added product and variant filter options"
