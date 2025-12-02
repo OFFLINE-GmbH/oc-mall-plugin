@@ -216,9 +216,19 @@ class MySQL implements Index
             });
         }
 
+        if ($filters->has('product_id')) {
+            $filter = $filters->pull('product_id');
+            $this->applySpecialSetFilter($db, $filter);
+        }
+
+        if ($filters->has('variant_id')) {
+            $filter = $filters->pull('variant_id');
+            $this->applySpecialSetFilter($db, $filter);
+        }
+
         if ($filters->has('brand')) {
             $filter = $filters->pull('brand');
-            $db->whereIn('brand', $filter->values());
+            $this->applySpecialSetFilter($db, $filter);
         }
 
         if ($filters->has('on_sale')) {
@@ -232,7 +242,7 @@ class MySQL implements Index
         }
 
         if ($filters->has('price')) {
-            $price    = $filters->pull('price');
+            $price = $filters->pull('price');
             $currency = Currency::activeCurrency()->code;
 
             ['min' => $min, 'max' => $max] = $price->values();
@@ -250,6 +260,17 @@ class MySQL implements Index
         }
 
         return $filters;
+    }
+
+    protected function applySpecialSetFilter($db, $filter)
+    {
+        $values = $filter->values();
+
+        if ($filter->exclude) {
+            $db->whereNotIn($filter->property, $values);
+        } else {
+            $db->whereIn($filter->property, $values);
+        }
     }
 
     protected function applyCustomFilters(Collection $filters, $db)

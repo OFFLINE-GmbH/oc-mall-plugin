@@ -139,8 +139,12 @@ This event is emitted after the filters have been processed. It receives the `Pr
 
 ```php
 Event::listen('mall.products.filter.extend', function (\OFFLINE\Mall\Components\Products $component, $filters) {
-      // only show products from category 2 
+      // only show products from category 2. Use can use ->get() here since a category filter is always present.
       $filters->get('category_id')->values = [2];
+      // Add filter to hide product with ID 1
+      $filters->put('product_id', new SetFilter(property: 'product_id', values: [1], exclude: true));
+      // Add filter to only show variant with ID 17
+      $filters->put('variant_id', new SetFilter(property: 'variant_id', values: [17], exclude: false));
 });
 ```
 
