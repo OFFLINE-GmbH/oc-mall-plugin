@@ -29,7 +29,7 @@ class ProductEntry implements Entry
         $data['on_sale']     = $product->on_sale;
         $data['category_id'] = $product->categories->pluck('id');
 
-        $data['property_values']       = $this->mapProps($product->property_values);
+        $data['property_values']       = $this->mapProps($product->variant_property_values);
         $data['prices']                = $this->mapPrices($product);
         $data['customer_group_prices'] = $this->mapCustomerGroupPrices($product);
 
