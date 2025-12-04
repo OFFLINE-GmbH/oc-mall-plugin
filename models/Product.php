@@ -243,16 +243,17 @@ class Product extends Model
      * @var array
      */
     public $hasMany = [
-        'prices'                 => [ProductPrice::class, 'conditions' => 'variant_id is null'],
-        'variants'               => [Variant::class],
-        'cart_products'          => [CartProduct::class, 'replicate' => false],
-        'order_products'         => [OrderProduct::class, 'replicate' => false],
-        'image_sets'             => [ImageSet::class],
-        'property_values'        => [PropertyValue::class, 'conditions' => 'variant_id is null'],
-        'reviews'                => [Review::class, 'replicate' => false],
-        'discounts'              => [Discount::class, 'replicate' => false],
-        'category_review_totals' => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null', 'replicate' => false],
-        'files'                  => [ProductFile::class],
+        'prices'                  => [ProductPrice::class, 'conditions' => 'variant_id is null'],
+        'variants'                => [Variant::class],
+        'cart_products'           => [CartProduct::class, 'replicate' => false],
+        'order_products'          => [OrderProduct::class, 'replicate' => false],
+        'image_sets'              => [ImageSet::class],
+        'property_values'         => [PropertyValue::class, 'conditions' => 'variant_id is null'],
+        'variant_property_values' => [PropertyValue::class],
+        'reviews'                 => [Review::class, 'replicate' => false],
+        'discounts'               => [Discount::class, 'replicate' => false],
+        'category_review_totals'  => [CategoryReviewTotal::class, 'conditions' => 'variant_id is null', 'replicate' => false],
+        'files'                   => [ProductFile::class],
     ];
 
     /**
