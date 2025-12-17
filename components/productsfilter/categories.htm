@@ -5,6 +5,8 @@
     <div class="mall-filter mall-filter--categories">
         {% set selected = filter['category_id'].values|default([]) %}
 
+        {% partial __SELF__ ~ '::clearfilter' id='category_id' %}
+
         {% partial __SELF__ ~ '::category_checkboxes' categories=__SELF__.getCategories()|default([])|default([]) level=1 %}
     </div>
 </div>
