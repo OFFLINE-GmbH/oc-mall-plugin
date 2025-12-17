@@ -153,7 +153,7 @@ class DiscountApplier
 
     private function appliesForShippingMethod(Discount $discount): bool
     {
-        return $discount->shipping_methods->contains($this->input->shipping_method->id);
+        return $discount->shipping_methods->contains($this->input->shipping_method?->id);
     }
 
     private function checkPaymentMethod(int $method_id)

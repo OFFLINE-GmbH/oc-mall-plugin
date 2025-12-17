@@ -744,3 +744,5 @@ v3.8.14:
     - "Added product and variant filter options"
 v3.8.15:
     - "Fixed Product index to also include Variant property values"
+v3.8.16:
+    - "Fixed handling of shipping method discounts"
