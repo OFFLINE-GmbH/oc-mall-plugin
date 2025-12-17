@@ -1,20 +1,22 @@
-<div class="mall-filter-category-list mall-filter-category-list--level-{{ level }} {{ level > 1 ? 'mall-filter-category-list--nested' }}">
+<div class="mall-filter mall-filter--set mall-filter-category-list mall-filter-category-list--level-{{ level }} {{ level > 1 ? 'mall-filter-category-list--nested' }}">
+    {% set selected = filter['category_id'].values|default([]) %}
     {% for category in categories %}
         {% set isSelected = category.id in selected %}
-
-        <label for="category-{{ category.id }}" class="mall-label mall-label--checkbox">
-            <input
-                type="checkbox"
-                class="mall-input-checkbox"
-                id="category-{{ category.id }}"
-                name="filter[category_id][]"
-                value="{{ category.id }}"
-                onchange="$(this).closest('form').trigger('submit')"
-                {{ isSelected ? 'checked' : '' }}
-            >
-            {{ category.name }}
-        </label>
-
+        <div class="js-mall-filter mall-filter__option {{ isSelected ? 'mall-filter__option--selected' : '' }}">
+            <label for="category-{{ category.id }}" class="mall-label mall-label--checkbox">
+                <input type="checkbox"
+                       aria-hidden="true"
+                       style="display: none"
+                       name="filter[category_id][]"
+                       value="{{ category.id }}"
+                       onchange="$(this).closest('form').trigger('submit')"
+                    {% if isSelected %}
+                        checked
+                    {% endif %}
+                >
+                {{ category.name }}
+            </label>
+        </div>
         {% if category.children|length > 0 %}
             {% partial __SELF__ ~ '::category_checkboxes' categories=category.children level=level+1 %}
         {% endif %}
