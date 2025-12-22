@@ -123,6 +123,8 @@ return [
             'api_key_comment' => 'Je kunt deze sleutel vinden in je Stripe Dashboard',
             'publishable_key' => 'Stripe Publishable Sleutel',
             'publishable_key_comment' => 'Je kunt deze sleutel vinden in je Stripe Dashboard',
+            'webhook_secret' => 'Stripe Webhook Geheim',
+            'webhook_secret_comment' => 'Je kunt deze sleutel vinden in je Stripe Dashboard',
         ],
         'paypal' => [
             'client_id' => 'PayPal Client-ID',

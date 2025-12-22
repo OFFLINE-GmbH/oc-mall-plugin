@@ -103,6 +103,8 @@ return [
             'api_key_comment' => 'Vous pouvez trouver cette clé dans votre tableau de bord Stripe',
             'publishable_key' => 'Stripe Publishable Key',
             'publishable_key_comment' => 'Vous pouvez trouver cette clé dans votre tableau de bord Stripe',
+            'webhook_secret' => 'Secret du webhook Stripe',
+            'webhook_secret_comment' => 'Vous pouvez trouver cette clé dans votre tableau de bord Stripe',
         ],
         'paypal' => [
             'client_id' => 'PayPal Client ID',

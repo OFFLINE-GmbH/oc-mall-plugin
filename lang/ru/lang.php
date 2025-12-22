@@ -103,6 +103,8 @@ return [
             'api_key_comment' => 'Вы можете найти этот ключ в панели инструментов Stripe.',
             'publishable_key' => 'Stripe публичный ключ',
             'publishable_key_comment' => 'Вы можете найти этот ключ в панели инструментов Stripe.',
+            'webhook_secret' => 'Stripe Webhook секрет',
+            'webhook_secret_comment' => 'Вы можете найти этот ключ в панели инструментов Stripe.',
         ],
         'paypal' => [
             'client_id' => 'PayPal клиент |',

@@ -27,7 +27,8 @@
         "rainlab/user-plugin": "^1.6|^2.0|^3.0",
         "rainlab/location-plugin": "^1.2|^2.0",
         "rainlab/translate-plugin": "^1.9|^2.0",
-        "whitecube/php-prices": "^2.0|^3.0"
+        "whitecube/php-prices": "^2.0|^3.0",
+        "stripe/stripe-php": "^19.1"
     },
     "suggest": {
         "vitalybaev/google-merchant-feed": "Required to use the Google Merchant Feed integration",

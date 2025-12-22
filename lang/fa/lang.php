@@ -101,6 +101,8 @@ return [
             'api_key_comment' => 'You can find this key in your Stripe Dashboard',
             'publishable_key' => 'Stripe Publishable Key',
             'publishable_key_comment' => 'You can find this key in your Stripe Dashboard',
+            'webhook_secret' => 'رمز وب‌هوک Stripe',
+            'webhook_secret_comment' => 'می‌توانید این کلید را در داشبورد Stripe خود پیدا کنید',
         ],
         'paypal' => [
             'client_id' => 'PayPal Client ID',

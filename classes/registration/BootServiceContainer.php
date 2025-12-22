@@ -28,6 +28,7 @@ use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\GeneralSettings;
 use PDO;
+use OFFLINE\Mall\Classes\Payments\StripeHostedCheckout;
 
 trait BootServiceContainer
 {
@@ -42,7 +43,7 @@ trait BootServiceContainer
             $gateway->registerProvider(new PayPalRest());
             $gateway->registerProvider(new Stripe());
             $gateway->registerProvider(new PostFinance());
-
+            $gateway->registerProvider(new StripeHostedCheckout());
             return $gateway;
         });
         $this->app->singleton(Hashids::class, fn () => new Hashids(config('app.key', 'oc-mall'), 8));

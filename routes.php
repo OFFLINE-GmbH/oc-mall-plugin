@@ -3,6 +3,7 @@
 use Cms\Classes\Controller;
 use OFFLINE\Mall\Classes\Feeds\GoogleMerchantFeed;
 use OFFLINE\Mall\Models\FeedSettings;
+use OFFLINE\Mall\Classes\Payments\StripeHostedCheckoutWebhook;
 
 // Send virtual product files to the user's browser.
 Route::get('/mall/download/{key}/{idx?}', '\OFFLINE\Mall\Classes\Downloads\VirtualProductFileDownload@handle')
@@ -44,4 +45,12 @@ Route::get('/feeds/google-merchant/{key}', function ($key) {
     );
 
     return response($feed->build(), 200, ['Content-Type' => 'application/xml']);
+});
+
+// Handles Stripe Checkout webhook events (backup payment verification).
+// This ensures payment confirmation happens even if the user doesn't complete
+// the browser redirect after payment.
+Route::post('/mall-stripe-webhook', function () {
+    $handler = new StripeHostedCheckoutWebhook();
+    return $handler->handle();
 });

@@ -200,6 +200,12 @@ class Stripe extends PaymentProvider
                 'span'    => 'left',
                 'type'    => 'text',
             ],
+            'stripe_webhook_secret' => [
+                'label'   => 'offline.mall::lang.payment_gateway_settings.stripe.webhook_secret',
+                'comment' => 'offline.mall::lang.payment_gateway_settings.stripe.webhook_secret_comment',
+                'span'    => 'left',
+                'type'    => 'text',
+            ]
         ];
     }
 
@@ -208,7 +214,7 @@ class Stripe extends PaymentProvider
      */
     public function encryptedSettings(): array
     {
-        return ['stripe_api_key'];
+        return ['stripe_api_key', 'stripe_webhook_secret'];
     }
 
     /**
