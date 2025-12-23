@@ -61,6 +61,7 @@ The following dependencies are only required if necessary, but must be installed
 - [offline/jsonq](https://packagist.org/packages/offline/jsonq) - To use the file based index
 - [tmarois/filebase](https://packagist.org/packages/tmarois/filebase) - To use the file based index
 - [vitalybaev/google-merchant-feed](https://packagist.org/packages/vitalybaev/google-merchant-feed) - To use the Google Merchant Feed integration
+- [stripe/stripe-php](https://github.com/stripe/stripe-php) - To use the Stripe Hosted Checkout payment provider
 
 
 ### Development dependencies
