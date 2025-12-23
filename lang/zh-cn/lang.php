@@ -103,8 +103,6 @@ return [
             'api_key_comment' => '你可以在你的 Stripe Dashboard 中找到这个key',
             'publishable_key' => 'Stripe可发布密钥',
             'publishable_key_comment' => '你可以在你的 Stripe Dashboard 中找到这个key',
-            'webhook_secret' => 'Stripe Webhook密钥',
-            'webhook_secret_comment' => '你可以在你的 Stripe Dashboard 中找到这个key',
         ],
         'paypal' => [
             'client_id' => 'PayPal客户 ID',

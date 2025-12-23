@@ -3,12 +3,10 @@
 namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
-use Redirect;
-use Request;
 use Session;
-use Throwable;
-use Stripe\StripeClient;
 use Stripe\Exception\ApiErrorException;
+use Stripe\StripeClient;
+use Throwable;
 
 /**
  * Process the payment via Stripe Hosted Checkout (redirect mode).
@@ -22,7 +20,7 @@ class StripeHostedCheckout extends PaymentProvider
      */
     public function name(): string
     {
-        return 'Stripe Hosted Checkout';
+        return 'Stripe (Hosted Checkout)';
     }
 
     /**
@@ -68,8 +66,6 @@ class StripeHostedCheckout extends PaymentProvider
 
             return $result->redirect($session->url);
         } catch (ApiErrorException $e) {
-            \Log::error('Stripe Checkout process error');
-            \Log::error($e->getMessage());
             return $result->fail([
                 'error' => $e->getMessage(),
                 'code' => $e->getCode(),

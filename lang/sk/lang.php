@@ -101,8 +101,6 @@ return [
             'api_key_comment' => 'Kľúč najdete v Stripe Dashboard',
             'publishable_key' => 'Stripe verejný kľúč',
             'publishable_key_comment' => 'klúč nájdete v  Stripe Dashboard',
-            'webhook_secret' => 'Stripe Webhook tajný kľúč',
-            'webhook_secret_comment' => 'Kľúč nájdete v Stripe Dashboard',
         ],
         'paypal' => [
             'client_id' => 'PayPal Client ID',

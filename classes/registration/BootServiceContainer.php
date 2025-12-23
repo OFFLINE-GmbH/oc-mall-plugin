@@ -42,8 +42,8 @@ trait BootServiceContainer
             $gateway->registerProvider(new Offline());
             $gateway->registerProvider(new PayPalRest());
             $gateway->registerProvider(new Stripe());
-            $gateway->registerProvider(new PostFinance());
             $gateway->registerProvider(new StripeHostedCheckout());
+            $gateway->registerProvider(new PostFinance());
             return $gateway;
         });
         $this->app->singleton(Hashids::class, fn () => new Hashids(config('app.key', 'oc-mall'), 8));

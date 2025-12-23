@@ -103,8 +103,6 @@ return [
             'api_key_comment' => 'Puedes encontrarla en el Dashboard de Stripe',
             'publishable_key' => 'Publishable Key de Stripe',
             'publishable_key_comment' => 'Puedes encontrarla en el Dashboard de Stripe',
-            'webhook_secret' => 'Secreto de webhook de Stripe',
-            'webhook_secret_comment' => 'Puedes encontrar esta clave en tu panel de control de Stripe',
         ],
         'paypal' => [
             'client_id' => 'ID de cliente PayPal',

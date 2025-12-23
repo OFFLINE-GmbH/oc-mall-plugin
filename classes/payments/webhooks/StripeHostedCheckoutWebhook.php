@@ -1,14 +1,15 @@
 <?php
 
-namespace OFFLINE\Mall\Classes\Payments;
+namespace OFFLINE\Mall\Classes\Payments\Webhooks;
 
 use Illuminate\Http\Response;
+use OFFLINE\Mall\Classes\Payments\PaymentResult;
+use OFFLINE\Mall\Classes\Payments\StripeHostedCheckout;
 use OFFLINE\Mall\Classes\PaymentState\PaidState;
 use OFFLINE\Mall\Models\Order;
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
-use Stripe\StripeClient;
-use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
+use Stripe\Webhook;
 use Throwable;
 
 /**

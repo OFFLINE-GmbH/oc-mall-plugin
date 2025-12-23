@@ -754,8 +754,6 @@ return [
             'api_key_comment' => 'Puoi trovare questa chiave nella tua dashboard di Stripe',
             'publishable_key' => 'Chiave pubblicabile Stripe',
             'publishable_key_comment' => 'Puoi trovare questa chiave nella tua dashboard di Stripe',
-            'webhook_secret' => 'Segreto del webhook di Stripe',
-            'webhook_secret_comment' => 'Puoi trovare questa chiave nella tua dashboard di Stripe',
         ],
     ],
     'payment_log' => [

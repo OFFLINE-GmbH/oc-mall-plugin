@@ -24,7 +24,7 @@ class Stripe extends PaymentProvider
      */
     public function name(): string
     {
-        return 'Stripe';
+        return 'Stripe (Intents)';
     }
 
     /**

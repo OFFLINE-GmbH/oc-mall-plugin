@@ -125,8 +125,8 @@ return [
             'api_key_comment' => 'Du findest diesen in deinem Stripe Dashboard',
             'publishable_key' => 'Stripe Publishable-Key',
             'publishable_key_comment' => 'Du findest diesen in deinem Stripe Dashboard',
-            'webhook_secret' => 'Stripe Webhook-Geheimnis',
-            'webhook_secret_comment' => 'Diesen Schlüssel finden Sie in Ihrem Stripe-Dashboard',
+            'webhook_secret' => 'Stripe Webhook-Secret',
+            'webhook_secret_comment' => 'Optional, nur wenn Webhook verwendet wird',
         ],
         'paypal' => [
             'client_id' => 'PayPal Client-ID',
