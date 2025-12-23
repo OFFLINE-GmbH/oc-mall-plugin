@@ -748,3 +748,5 @@ v3.8.16:
     - "Fixed handling of shipping method discounts"
 v3.8.17:
     - "Minor bugfixes (thanks to @verenaroe)"
+v3.8.18:
+    - "Added Stripe Hosted Checkout payment provider (thanks to @toome123)"
