@@ -4,9 +4,9 @@ namespace OFFLINE\Mall\Classes\Payments;
 
 use OFFLINE\Mall\Models\PaymentGatewaySettings;
 use Session;
-use Stripe\Exception\ApiErrorException;
-use Stripe\StripeClient;
 use Throwable;
+use Stripe\StripeClient;
+use Stripe\Exception\ApiErrorException;
 
 /**
  * Process the payment via Stripe Hosted Checkout (redirect mode).
@@ -47,7 +47,7 @@ class StripeHostedCheckout extends PaymentProvider
         try {
             $stripe = $this->getStripeClient();
             $lineItems = $this->buildLineItems();
-            $session = $stripe->checkout->sessions->create([
+            $params = [
                 'mode' => 'payment',
                 'line_items' => $lineItems,
                 'success_url' => $this->returnUrl(),
@@ -59,7 +59,9 @@ class StripeHostedCheckout extends PaymentProvider
                     'order_number' => $this->order->order_number,
                     'payment_hash' => $this->order->payment_hash,
                 ],
-            ]);
+            ];
+
+            $session = $stripe->checkout->sessions->create($params);
             // Store session ID for later verification
             Session::put('mall.payment.callback', self::class);
             Session::put('mall.stripe_checkout.session_id', $session->id);
@@ -156,47 +158,21 @@ class StripeHostedCheckout extends PaymentProvider
      */
     protected function buildLineItems(): array
     {
-        $lineItems = [];
-
         $currency = is_array($this->order->currency) ? $this->order->currency['code'] : 'gbp';
 
-        /** @var \OFFLINE\Mall\Models\OrderProduct $product */
-        foreach ($this->order->products as $product) {
-            $lineItems[] = [
+        return [
+            [
                 'price_data' => [
                     'currency' => strtolower($currency),
-                    'unit_amount' => $this->convertToCents($product->price_post_taxes),
+                    'unit_amount' => $this->convertToCents($this->order->total_post_taxes),
                     'product_data' => [
-                        'name' => $product->name,
-                    ],
-                ],
-                'quantity' => $product->quantity,
-            ];
-        }
-
-        // Add shipping as a line item if applicable
-        if ($this->order->total_shipping_post_taxes > 0) {
-            $shippingName = 'Shipping Fee';
-            if (is_array($this->order->shipping) && isset($this->order->shipping['name'])) {
-                $shippingName = $this->order->shipping['name'];
-            }
-
-            $lineItems[] = [
-                'price_data' => [
-                    'currency' => strtolower($currency),
-                    'unit_amount' => $this->convertToCents($this->order->total_shipping_post_taxes),
-                    'product_data' => [
-                        'name' => 'Shipping',
-                        'description' => $shippingName,
+                        'name' => 'Order #' . $this->order->order_number,
                     ],
                 ],
                 'quantity' => 1,
-            ];
-        }
-
-        return $lineItems;
+            ]
+        ];
     }
-
     /**
      * Convert price to cents (smallest currency unit).
      * 
@@ -222,7 +198,7 @@ class StripeHostedCheckout extends PaymentProvider
     protected function getCustomerEmail(): ?string
     {
         // Try to get email from customer's user account
-        if ($this->order->customer && $this->order->customer->user) {
+        if (is_object($this->order->customer) && $this->order->customer->user) {
             return $this->order->customer->user->email;
         }
 
