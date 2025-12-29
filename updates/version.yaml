@@ -750,3 +750,5 @@ v3.8.17:
     - "Minor bugfixes (thanks to @verenaroe)"
 v3.8.18:
     - "Added Stripe Hosted Checkout payment provider (thanks to @toome123)"
+v3.8.19:
+    - "Minor fixes for Stripe Hosted Checkout payment provider (thanks to @toome123)"
