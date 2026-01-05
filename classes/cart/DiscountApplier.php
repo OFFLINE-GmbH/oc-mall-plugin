@@ -75,7 +75,7 @@ class DiscountApplier
         }
 
         if ($discount->type === 'rate') {
-            $savings            = $this->total * $discount->rate;
+            $savings            = $this->total * ($discount->rate / 100);
             $this->reducedTotal -= $savings;
         }
 
