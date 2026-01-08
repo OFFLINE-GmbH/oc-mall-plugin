@@ -77,8 +77,8 @@ class MailingEventHandler
      */
     public function customerCreated($handler, $user)
     {
-        // Don't mail guest accounts.
-        if ($user->customer->is_guest) {
+        // Don't send the mail when customer signs up as a guest or when this notification is disabled.
+        if ($user->customer->is_guest || ! $this->enabledNotifications->has('offline.mall::customer.created')) {
             return;
         }
 
