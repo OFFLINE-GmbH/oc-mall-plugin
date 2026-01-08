@@ -754,3 +754,5 @@ v3.8.19:
     - "Minor fixes for Stripe Hosted Checkout payment provider (thanks to @toome123)"
 v3.8.20:
     - "Fixed discount calculation"
+v3.8.21:
+    - "Minor mailing bugfix (thanks to @regularjogger)"
