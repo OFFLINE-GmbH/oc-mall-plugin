@@ -756,3 +756,5 @@ v3.8.20:
     - "Fixed discount calculation"
 v3.8.21:
     - "Minor mailing bugfix (thanks to @regularjogger)"
+v3.8.22:
+    - "Fixed problem where products without an attached category were breaking the indexing process"

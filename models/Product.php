@@ -351,7 +351,9 @@ class Product extends Model
             if ($relationName === 'categories') {
                 foreach ($attachedIdList as $attachedId) {
                     $category = Category::find($attachedId);
-                    UniquePropertyValue::updateUsingCategory($category);
+                    if ($category) {
+                        UniquePropertyValue::updateUsingCategory($category);
+                    }
                 }
             }
         });
@@ -360,7 +362,9 @@ class Product extends Model
             if ($relationName === 'categories' && is_array($detachedIdList)) {
                 foreach ($detachedIdList as $detachedId) {
                     $category = Category::find($detachedId);
-                    UniquePropertyValue::updateUsingCategory($category);
+                    if ($category) {
+                        UniquePropertyValue::updateUsingCategory($category);
+                    }
                 }
             }
         });
