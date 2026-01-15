@@ -758,3 +758,5 @@ v3.8.21:
     - "Minor mailing bugfix (thanks to @regularjogger)"
 v3.8.22:
     - "Fixed problem where products without an attached category were breaking the indexing process"
+v3.8.23:
+    - "Fixed pubsub.js compatibility in October 4.1"

@@ -1,17 +1,20 @@
 // @see https://gist.github.com/cowboy/661855
-(function($) {
+(function ($) {
+    if ($.publish) {
+        return;
+    }
 
     var o = $({});
 
-    $.subscribe = function() {
+    $.subscribe = function () {
         o.on.apply(o, arguments);
     };
 
-    $.unsubscribe = function() {
+    $.unsubscribe = function () {
         o.off.apply(o, arguments);
     };
 
-    $.publish = function() {
+    $.publish = function () {
         o.trigger.apply(o, arguments);
     };
 
