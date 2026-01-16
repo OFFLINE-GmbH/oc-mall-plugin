@@ -2,9 +2,12 @@
 
 namespace OFFLINE\Mall\Classes\Traits\Cart;
 
+use Auth;
 use Cookie;
 use OFFLINE\Mall\Models\Cart;
+use OFFLINE\Mall\Models\CartProduct;
 use OFFLINE\Mall\Models\Customer;
+use OFFLINE\Mall\Models\CustomerGroupPrice;
 use RainLab\User\Models\User;
 use Session;
 
@@ -70,6 +73,20 @@ trait CartSession
         $this->customer_id         = $customer->id;
         $this->billing_address_id  = $customer->default_billing_address_id;
         $this->shipping_address_id = $shippingId;
+
+        if(Auth::getUser()?->offline_mall_customer_group_id !== null) {
+            $this->products->each(function (CartProduct $cartProduct) {
+                if ($cartProduct->product->price() instanceof CustomerGroupPrice) {
+                    $model = $cartProduct->variant ?? $cartProduct->product;
+
+                    $price = $model->priceIncludingCustomFieldValues($cartProduct->custom_field_values);
+
+                    $cartProduct->attributes['price'] = $cartProduct->mapJsonPrice($price, 1);
+
+                    $cartProduct->save();
+                }
+            });
+        }
 
         $this->save();
 
