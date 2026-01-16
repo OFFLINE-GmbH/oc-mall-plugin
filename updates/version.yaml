@@ -760,3 +760,5 @@ v3.8.22:
     - "Fixed problem where products without an attached category were breaking the indexing process"
 v3.8.23:
     - "Fixed pubsub.js compatibility in October 4.1"
+v3.8.24:
+    - "Apply customer specific prices to cart products when logging in (thanks to @verenaroe)"
