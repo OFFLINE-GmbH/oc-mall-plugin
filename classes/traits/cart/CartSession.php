@@ -74,17 +74,19 @@ trait CartSession
         $this->billing_address_id  = $customer->default_billing_address_id;
         $this->shipping_address_id = $shippingId;
 
-        if(Auth::getUser()?->offline_mall_customer_group_id !== null) {
+        // If the logged-in user belongs to a customer group, ensure
+        // that group-specific prices are applied to the cart products.
+        if (Auth::getUser()?->offline_mall_customer_group_id !== null) {
             $this->products->each(function (CartProduct $cartProduct) {
-                if ($cartProduct->product->price() instanceof CustomerGroupPrice) {
-                    $model = $cartProduct->variant ?? $cartProduct->product;
-
-                    $price = $model->priceIncludingCustomFieldValues($cartProduct->custom_field_values);
-
-                    $cartProduct->attributes['price'] = $cartProduct->mapJsonPrice($price, 1);
-
-                    $cartProduct->save();
+                if (!$cartProduct->product->price() instanceof CustomerGroupPrice) {
+                    return;
                 }
+
+                $model = $cartProduct->variant ?? $cartProduct->product;
+                $price = $model->priceIncludingCustomFieldValues($cartProduct->custom_field_values);
+                
+                $cartProduct->attributes['price'] = $cartProduct->mapJsonPrice($price, 1);
+                $cartProduct->save();
             });
         }
 
