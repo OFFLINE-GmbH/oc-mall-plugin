@@ -58,7 +58,8 @@ trait CartActions
 
                 $this->load('products');
 
-                return $matchingProductInCart;            }
+                return $matchingProductInCart;
+            }
 
             $quantity = $product->normalizeQuantity($quantity);
             $price    = $variant
