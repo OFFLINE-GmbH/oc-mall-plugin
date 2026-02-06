@@ -49,6 +49,17 @@ implementation and the provided credentials as arguments.
 
 ## Cart
 
+### `mall.cart.product.beforeAdded`
+
+This event is emitted before a product is added to the cart. It receives the following arguments:
+
+* `Cart` model
+* `Product` model that will be added to the cart
+* `quantity` the quantity of the product that will be added to the cart
+* `variant` the variant that will be added to the cart
+* `values` the values of custom fields that will be added to the cart
+* `serviceOptionIds` the IDs of the selected service options that will be added to the cart
+
 ### `mall.cart.product.added`
 
 This event is emitted when a product has been added to the cart. It receives the following arguments:
