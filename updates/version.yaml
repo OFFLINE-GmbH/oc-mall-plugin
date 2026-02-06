@@ -762,3 +762,5 @@ v3.8.23:
     - "Fixed pubsub.js compatibility in October 4.1"
 v3.8.24:
     - "Apply customer specific prices to cart products when logging in (thanks to @verenaroe)"
+v3.8.25:
+    - "Added 'mall.cart.product.beforeAdded' event (thanks to @verenaroe)"

@@ -60,6 +60,10 @@ This event is emitted before a product is added to the cart. It receives the fol
 * `values` the values of custom fields that will be added to the cart
 * `serviceOptionIds` the IDs of the selected service options that will be added to the cart
 
+If a `CartProduct` instance is returned from this event, Mall's internal logic to add the product to the Cart will be skipped.
+
+You can use this event to implement your own "add to cart" logic.
+
 ### `mall.cart.product.added`
 
 This event is emitted when a product has been added to the cart. It receives the following arguments:
