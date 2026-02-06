@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits\Cart;
 
 use DB;
 use Illuminate\Support\Collection;
+use October\Rain\Support\Facades\Event;
 use OFFLINE\Mall\Classes\Exceptions\OutOfStockException;
 use OFFLINE\Mall\Models\Cart;
 use OFFLINE\Mall\Models\CartProduct;
@@ -30,6 +31,13 @@ trait CartActions
         ?array $serviceOptionIds = []
     ) {
         return DB::transaction(function () use ($product, $quantity, $variant, $values, $serviceOptionIds) {
+
+            $response = Event::fire('mall.cart.product.beforeAdded', [$this, $product], true);
+
+            if ($response instanceof CartProduct) {
+                return $response;
+            }
+
             if (! $this->exists) {
                 $this->save();
             }
