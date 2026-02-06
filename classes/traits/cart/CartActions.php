@@ -32,7 +32,7 @@ trait CartActions
     ) {
         return DB::transaction(function () use ($product, $quantity, $variant, $values, $serviceOptionIds) {
 
-            $response = Event::fire('mall.cart.product.beforeAdded', [$this, $product], true);
+            $response = Event::fire('mall.cart.product.beforeAdded', [$this, $product, $quantity, $variant, $values, $serviceOptionIds], true);
 
             if ($response instanceof CartProduct) {
                 return $response;
