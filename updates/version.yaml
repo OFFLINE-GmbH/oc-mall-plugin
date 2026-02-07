@@ -764,3 +764,5 @@ v3.8.24:
     - "Apply customer specific prices to cart products when logging in (thanks to @verenaroe)"
 v3.8.25:
     - "Added 'mall.cart.product.beforeAdded' event (thanks to @verenaroe)"
+v3.8.26:
+    - "Fixed return value of addToCart method (thanks to @verenaroe)"
