@@ -15,21 +15,38 @@
                 e.preventDefault()
                 $overlay.prependTo($body).show()
                 $form.request('{{ __SELF__ }}::onCheckout', {
+                    success: function(data) {
+                        // On successful checkout, redirect immediately
+                        $overlay.hide();
+                        if (data.redirect) {
+                            window.location.href = data.redirect;
+                        } else {
+                            window.location.href = '{{ __SELF__.accountPage | page }}';
+                        }
+                    },
                     error: function (jqXHR) {
                         $overlay.hide();
                         if (jqXHR.status === 406) {
                             var data = jqXHR.responseJSON
                             var platform = data.hasOwnProperty('X_OCTOBER_ERROR_MESSAGE') ? 'OCTOBER' : 'WINTER'
-                            return this.options.handleValidationMessage(
-                                jqXHR.responseJSON['X_' + platform + '_ERROR_MESSAGE'],
-                                jqXHR.responseJSON['X_' + platform + '_ERROR_FIELDS']
-                            )
+                            var errorMessage = jqXHR.responseJSON['X_' + platform + '_ERROR_MESSAGE'];
+                            
+                            if (errorMessage) {  // Only show alert if there's an actual error message
+                                return this.options.handleValidationMessage(
+                                    errorMessage,
+                                    jqXHR.responseJSON['X_' + platform + '_ERROR_FIELDS']
+                                )
+                            }
                         }
-                        this.error(jqXHR)
-                        document.location.href = '{{ __SELF__.accountPage | page }}'
+                        if (jqXHR.status >= 400) {
+                            this.error(jqXHR)
+                            document.location.href = '{{ __SELF__.accountPage | page }}'
+                        }
                     },
                     handleValidationMessage: function (message, fields) {
-                        alert("There was an error while processing your order: " + message)
+                        if (message && message !== 'null') {  // Check for both null and string 'null'
+                            alert("There was an error while processing your order: " + message)
+                        }
                         document.location.href = '{{ __SELF__.accountPage | page }}'
                     }
                 })
