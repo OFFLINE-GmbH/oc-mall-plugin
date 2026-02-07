@@ -56,7 +56,9 @@ trait CartActions
                 
                 $this->validateShippingMethod();
 
-                return $this->load('products');
+                $this->load('products');
+
+                return $matchingProductInCart;
             }
 
             $quantity = $product->normalizeQuantity($quantity);
