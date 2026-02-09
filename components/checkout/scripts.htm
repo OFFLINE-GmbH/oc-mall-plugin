@@ -15,15 +15,6 @@
                 e.preventDefault()
                 $overlay.prependTo($body).show()
                 $form.request('{{ __SELF__ }}::onCheckout', {
-                    success: function(data) {
-                        // On successful checkout, redirect immediately
-                        $overlay.hide();
-                        if (data.redirect) {
-                            window.location.href = data.redirect;
-                        } else {
-                            window.location.href = '{{ __SELF__.accountPage | page }}';
-                        }
-                    },
                     error: function (jqXHR) {
                         $overlay.hide();
                         if (jqXHR.status === 406) {
@@ -37,8 +28,7 @@
                                     jqXHR.responseJSON['X_' + platform + '_ERROR_FIELDS']
                                 )
                             }
-                        }
-                        if (jqXHR.status >= 400) {
+                        } else {
                             this.error(jqXHR)
                             document.location.href = '{{ __SELF__.accountPage | page }}'
                         }
