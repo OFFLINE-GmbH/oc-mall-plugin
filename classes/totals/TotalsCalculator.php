@@ -252,22 +252,58 @@ class TotalsCalculator implements CallsAnyMethod
 
         // Calculate the total discounts per item. We need this to calculate the correct tax amount per item.
         $totalDiscounts = $this->appliedDiscounts->sum('savings') * -1;
-        $cartItems = $this->input->products->count();
-        $discountPerItemAfterTaxes = $cartItems > 0 ? $totalDiscounts / $cartItems : 0;
 
-        $productTaxes = $this->input->products->flatMap(function ($product) use ($discountPerItemAfterTaxes) {
-            $totalTaxFactor = $product->filtered_product_taxes->sum('percentageDecimal');
+        // Calculate total cart value (products + services) to distribute discount proportionally
+        $totalCartValue = $this->input->products->sum(function ($product) {
+            return $product->totalProductPostTaxes + $product->totalServicePostTaxes;
+        });
 
-            // All discounts are inclusive of taxes. We need to calculate the discount per item without taxes.
-            $discountForThisItem = $discountPerItemAfterTaxes / (1 + $totalTaxFactor);
+        $productTaxes = $this->input->products->flatMap(function ($product) use ($totalDiscounts, $totalCartValue) {
+            // Calculate the proportional discount for this cart item (product + services)
+            $itemTotalPostTaxes = $product->totalProductPostTaxes + $product->totalServicePostTaxes;
+            $discountForThisItem = $totalCartValue > 0 ? ($itemTotalPostTaxes / $totalCartValue) * $totalDiscounts : 0;
 
-            $products = $product->filtered_product_taxes->map(function (Tax $tax) use ($product, $discountForThisItem) {
-                $discountedPrice = max(0, $product->totalProductPreTaxes - $discountForThisItem);
+            // Calculate discount allocation between product and services based on their values
+            $productPostTaxes = $product->totalProductPostTaxes;
+            $servicePostTaxes = $product->totalServicePostTaxes;
+
+            $discountForProduct = $itemTotalPostTaxes > 0
+                ? ($productPostTaxes / $itemTotalPostTaxes) * $discountForThisItem
+                : 0;
+            $discountForServices = $itemTotalPostTaxes > 0
+                ? ($servicePostTaxes / $itemTotalPostTaxes) * $discountForThisItem
+                : 0;
+
+            // Apply discount to product taxes
+            $productTaxFactor = $product->filtered_product_taxes->sum('percentageDecimal');
+            $discountForProductPreTaxes = $discountForProduct / (1 + $productTaxFactor);
+
+            $products = $product->filtered_product_taxes->map(function (Tax $tax) use ($product, $discountForProductPreTaxes) {
+                $discountedPrice = max(0, $product->totalProductPreTaxes - $discountForProductPreTaxes);
 
                 return new TaxTotal($discountedPrice, $tax);
             });
 
-            return $products->concat($product->filtered_service_taxes);
+            // Apply discount to service taxes
+            $services = $product->filtered_service_taxes->map(function (TaxTotal $serviceTax) use ($discountForServices, $product) {
+                $serviceTaxFactor = $product->filtered_service_taxes->sum('percentageDecimal');
+                $discountForServicesPreTaxes = $serviceTaxFactor > 0
+                    ? $discountForServices / (1 + $serviceTaxFactor)
+                    : 0;
+
+                // Calculate the proportion of this specific tax within all service taxes
+                $totalServicePreTaxes = $product->totalServicePreTaxes;
+                $thisServiceTaxProportion = $totalServicePreTaxes > 0
+                    ? ($serviceTax->preTax() / $totalServicePreTaxes)
+                    : 0;
+
+                $discountForThisServiceTax = $discountForServicesPreTaxes * $thisServiceTaxProportion;
+                $discountedServicePrice = max(0, $serviceTax->preTax() - $discountForThisServiceTax);
+
+                return new TaxTotal($discountedServicePrice, $serviceTax->tax);
+            });
+
+            return $products->concat($services);
         });
 
         $combined = $productTaxes->concat($shippingTaxes)->concat($paymentTaxes);

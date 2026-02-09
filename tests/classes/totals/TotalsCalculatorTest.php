@@ -1049,6 +1049,260 @@ class TotalsCalculatorTest extends PluginTestCase
         $this->assertEquals(30000, $calc->totalPostTaxes());
     }
 
+    /**
+     * Test: Proportional discount distribution with different VAT rates
+     *
+     * Scenario:
+     * - Product: €100 with 21% VAT
+     * - Service: €20 with 12% VAT
+     * - Total: €120
+     * - Discount: 50%
+     *
+     * Expected after 50% discount:
+     * - Product: €50 (pre-tax: €41.32, VAT: €8.68)
+     * - Service: €10 (pre-tax: €8.93, VAT: €1.07)
+     * - Total: €60 (pre-tax: €50.25, VAT: €9.75)
+     */
+    public function test_it_distributes_discounts_proportionally_across_products_and_services_with_different_vat_rates()
+    {
+        $tax21 = $this->getTax('VAT 21%', 21);
+        $tax12 = $this->getTax('VAT 12%', 12);
+
+        // Create product with 21% VAT
+        $product = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax21->id);
+
+        // Create service with 12% VAT
+        $service = Service::create(['name' => 'Test Service']);
+        $service->taxes()->attach($tax12->id);
+
+        $serviceOption = ServiceOption::create([
+            'name' => 'Test Service Option',
+            'service_id' => $service->id
+        ]);
+        $serviceOption->prices()->save(new Price([
+            'currency_id' => 1,
+            'price' => 20,
+        ]));
+
+        $product->services()->attach($service->id);
+
+        // Create cart with product and service
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1, null, null, [$serviceOption->id]);
+
+        // Apply 50% discount
+        $discount = new Discount();
+        $discount->code = 'TEST50';
+        $discount->trigger = 'code';
+        $discount->name = '50% Discount';
+        $discount->type = 'rate';
+        $discount->rate = 50;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        // Calculate totals
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+
+        // Verify total after discount
+        $this->assertEquals(6000, $calc->totalPostTaxes(), 'Total after 50% discount should be €60');
+
+        // Verify total VAT (should be €9.75 = 975 cents)
+        // Allow small rounding tolerance
+        $this->assertEqualsWithDelta(975, $calc->totalTaxes(), 5, 'Total VAT should be approximately €9.75');
+
+        // Verify pre-tax total (should be €50.25 = 5025 cents)
+        $this->assertEqualsWithDelta(5025, $calc->totalPreTaxes(), 5, 'Total pre-tax should be approximately €50.25');
+    }
+
+    /**
+     * Test: Fixed amount discount distribution with services
+     *
+     * Scenario:
+     * - Product: €100 with 21% VAT
+     * - Service: €20 with 12% VAT
+     * - Total: €120
+     * - Discount: €60 fixed
+     *
+     * Expected after €60 discount:
+     * - Product gets: €50 discount (83.33% of total)
+     * - Service gets: €10 discount (16.67% of total)
+     * - Total: €60
+     */
+    public function test_it_distributes_fixed_amount_discounts_proportionally_across_products_and_services()
+    {
+        $tax21 = $this->getTax('VAT 21%', 21);
+        $tax12 = $this->getTax('VAT 12%', 12);
+
+        // Create product with 21% VAT
+        $product = $this->getProduct(100);
+        $product->price_includes_tax = true;
+        $product->save();
+        $product->taxes()->attach($tax21->id);
+
+        // Create service with 12% VAT
+        $service = Service::create(['name' => 'Test Service']);
+        $service->taxes()->attach($tax12->id);
+
+        $serviceOption = ServiceOption::create([
+            'name' => 'Test Service Option',
+            'service_id' => $service->id
+        ]);
+        $serviceOption->prices()->save(new Price([
+            'currency_id' => 1,
+            'price' => 20,
+        ]));
+
+        $product->services()->attach($service->id);
+
+        // Create cart with product and service
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1, null, null, [$serviceOption->id]);
+
+        // Apply €60 fixed discount
+        $discount = new Discount();
+        $discount->code = 'FIXED60';
+        $discount->trigger = 'code';
+        $discount->name = '€60 Fixed Discount';
+        $discount->type = 'fixed_amount';
+        $discount->save();
+        $discount->amounts()->save(new Price([
+            'price' => 60,
+            'currency_id' => 1,
+            'field' => 'amounts',
+        ]));
+
+        $cart->applyDiscount($discount);
+
+        // Calculate totals
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+
+        // Verify total after discount
+        $this->assertEquals(6000, $calc->totalPostTaxes(), 'Total after €60 discount should be €60');
+
+        // Verify total VAT is proportionally reduced
+        $this->assertEqualsWithDelta(975, $calc->totalTaxes(), 5, 'Total VAT should be approximately €9.75');
+    }
+
+    /**
+     * Test: Multiple products with services and discount
+     *
+     * Ensures discount is distributed across all cart items proportionally
+     */
+    public function test_it_distributes_discounts_across_multiple_products_with_services()
+    {
+        $tax21 = $this->getTax('VAT 21%', 21);
+        $tax12 = $this->getTax('VAT 12%', 12);
+
+        // Product 1: €100 with 21% VAT
+        $product1 = $this->getProduct(100);
+        $product1->price_includes_tax = true;
+        $product1->save();
+        $product1->taxes()->attach($tax21->id);
+
+        // Product 2: €50 with 21% VAT
+        $product2 = $this->getProduct(50);
+        $product2->price_includes_tax = true;
+        $product2->save();
+        $product2->taxes()->attach($tax21->id);
+
+        // Service with 12% VAT
+        $service = Service::create(['name' => 'Test Service']);
+        $service->taxes()->attach($tax12->id);
+
+        $serviceOption = ServiceOption::create([
+            'name' => 'Test Service Option',
+            'service_id' => $service->id
+        ]);
+        $serviceOption->prices()->save(new Price([
+            'currency_id' => 1,
+            'price' => 20,
+        ]));
+
+        $product1->services()->attach($service->id);
+
+        // Create cart
+        $cart = $this->getCart();
+        $cart->addProduct($product1, 1, null, null, [$serviceOption->id]); // €120 (€100 + €20)
+        $cart->addProduct($product2, 1); // €50
+
+        // Total cart: €170
+        // Apply 50% discount
+        $discount = new Discount();
+        $discount->code = 'TEST50';
+        $discount->trigger = 'code';
+        $discount->name = '50% Discount';
+        $discount->type = 'rate';
+        $discount->rate = 50;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        // Calculate totals
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+
+        // Verify total after discount (€170 / 2 = €85)
+        $this->assertEquals(8500, $calc->totalPostTaxes(), 'Total after 50% discount should be €85');
+    }
+
+    /**
+     * Test: Service-only cart item with discount
+     *
+     * Edge case: Product with only services (no base price)
+     */
+    public function test_it_handles_discount_when_product_has_zero_price_and_only_services()
+    {
+        $tax12 = $this->getTax('VAT 12%', 12);
+
+        // Product with zero price
+        $product = $this->getProduct(0);
+        $product->price_includes_tax = true;
+        $product->save();
+
+        // Service with 12% VAT
+        $service = Service::create(['name' => 'Test Service']);
+        $service->taxes()->attach($tax12->id);
+
+        $serviceOption = ServiceOption::create([
+            'name' => 'Test Service Option',
+            'service_id' => $service->id
+        ]);
+        $serviceOption->prices()->save(new Price([
+            'currency_id' => 1,
+            'price' => 100,
+        ]));
+
+        $product->services()->attach($service->id);
+
+        // Create cart
+        $cart = $this->getCart();
+        $cart->addProduct($product, 1, null, null, [$serviceOption->id]);
+
+        // Apply 50% discount
+        $discount = new Discount();
+        $discount->code = 'TEST50';
+        $discount->trigger = 'code';
+        $discount->name = '50% Discount';
+        $discount->type = 'rate';
+        $discount->rate = 50;
+        $discount->save();
+
+        $cart->applyDiscount($discount);
+
+        // Calculate totals
+        $calc = new TotalsCalculator(TotalsCalculatorInput::fromCart($cart));
+
+        // Verify total after discount (€100 / 2 = €50)
+        $this->assertEquals(5000, $calc->totalPostTaxes(), 'Total after 50% discount should be €50');
+
+        // Verify VAT is calculated on discounted service price
+        $expectedVat = 5000 / 1.12 * 0.12; // €50 / 1.12 * 0.12 ≈ €5.36
+        $this->assertEqualsWithDelta($expectedVat, $calc->totalTaxes(), 5, 'VAT should be calculated on discounted service price');
+    }
+
     protected function getProduct($price)
     {
         if (is_int($price)) {
