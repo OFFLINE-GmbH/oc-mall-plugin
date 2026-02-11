@@ -1,6 +1,6 @@
 <div id="optionList">
     <?= $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm', ['items' =>
-    $model->custom_field_options, 'type' => $model->type]) ?>
+    $model->custom_field_options, 'type' => $model->type, 'customFieldId' => $model->id]) ?>
 </div>
 <script>
     $(function () {

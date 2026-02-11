@@ -418,6 +418,7 @@ class Products extends Controller
 
         $this->vars['items'] = $items;
         $this->vars['type']  = post('type');
+        $this->vars['customFieldId']  = post('manage_id');
 
         return ['#optionList' => $this->makePartial('$/offline/mall/controllers/customfields/_options_list.htm')];
     }
