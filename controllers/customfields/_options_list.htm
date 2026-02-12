@@ -15,7 +15,7 @@
                     <a href="javascript:;"
                        data-handler="onLoadEditOptionForm"
                        data-size="large"
-                       data-request-data="option_id: '<?= $item->id ?>', type: '<?php echo $type; ?>'"
+                       data-request-data="option_id: '<?= $item->id ?>', type: '<?php echo $type; ?>', manage_id: '<?php echo $customFieldId; ?>'"
                        data-control="popup">
                         <?= e($item->name) ?>
                     </a>
@@ -27,7 +27,7 @@
                     <a
                             href="javascript:;"
                             data-request="onDeleteOption"
-                            data-request-data="record_id: '<?= $item->id ?>'"
+                            data-request-data="record_id: '<?= $item->id ?>', manage_id: '<?php echo $customFieldId; ?>'"
                             data-request-confirm="Delete this item?"
                             class="oc-icon-remove"
                             data-toggle="tooltip"
@@ -43,7 +43,7 @@
                             class="btn btn-sm btn-secondary oc-icon-plus js-create-option-form"
                             data-control="popup"
                             data-handler="onLoadCreateOptionForm"
-                            data-request-data="type: '<?php echo $type ?>'"
+                            data-request-data="type: '<?php echo $type ?>', manage_id: '<?php echo $customFieldId; ?>'"
                             data-size="large">
                         <?= e(trans('offline.mall::lang.common.add_value')) ?>
                     </a>
