@@ -768,3 +768,5 @@ v3.8.26:
     - "Fixed return value of addToCart method (thanks to @verenaroe)"
 v3.8.27:
     - "Hardened client-side checkout script (thanks to @Master-Guy)"
+v3.8.28:
+    - "Fixed backend handling of custom field options (thanks to @martinkuch)"
