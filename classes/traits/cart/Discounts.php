@@ -116,7 +116,9 @@ trait Discounts
         try {
             DB::transaction(function () use ($id) {
                 $discount = Discount::find($id);
+
                 $this->discounts()->remove($discount);
+                $this->unsetRelation('discounts');
 
                 $code = $discount->code;
 
