@@ -167,23 +167,17 @@ Event::listen('mall.products.filter.extend', function (\OFFLINE\Mall\Components\
 
 ### `mall.productsFilter.props.extend`
 
-Use this event to change the Product filter properties.
+Use this event to change the ProductsFilter component's properties.
 
-This event is emitted on property setting. It receives the `ProductsFilter`.
+This event is emitted after the component's properties have been set. It receives the `ProductsFilter` component as a single argument.
 
 ```php
+// Example on how to use a fictional 'visibleForLoggedInUser' scope to change the displayed groups and values.
 Event::listen('mall.productsFilter.props.extend', function (\OFFLINE\Mall\Components\ProductsFilter $component) {
-        // change PropertyGroups of component
-        $component->propertyGroups = PropertyGroup::with(['filterable_properties' => function ($q) {
-            $q->whereHas('property_values.product', function ($q) {
-                $q->where(...);
-            });
-        }])->get();
-
-        // change values of component
-        $component->values = PropertyValue::whereHas('product', function ($q){
-                $q->where(...);
-        })->get()->unique('index_value')->groupBy('property_id');
+    // Change the available PropertyGroups
+    $component->propertyGroups = PropertyGroup::visibleForLoggedInUser()->get();
+    // Change the displayed property values.
+    $component->values = PropertyValue::visibleForLoggedInUser()->get()->unique('index_value')->groupBy('property_id');
 });
 ``
 
