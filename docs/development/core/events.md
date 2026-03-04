@@ -163,6 +163,30 @@ Event::listen('mall.products.filter.extend', function (\OFFLINE\Mall\Components\
 });
 ```
 
+## ProductsFilter
+
+### `mall.productsFilter.props.extend`
+
+Use this event to change the Product filter properties.
+
+This event is emitted on property setting. It receives the `ProductsFilter`.
+
+```php
+Event::listen('mall.productsFilter.props.extend', function (\OFFLINE\Mall\Components\ProductsFilter $component) {
+        // change PropertyGroups of component
+        $component->propertyGroups = PropertyGroup::with(['filterable_properties' => function ($q) {
+            $q->whereHas('property_values.product', function ($q) {
+                $q->where(...);
+            });
+        }])->get();
+
+        // change values of component
+        $component->values = PropertyValue::whereHas('product', function ($q){
+                $q->where(...);
+        })->get()->unique('index_value')->groupBy('property_id');
+});
+``
+
 
 ## Index
 

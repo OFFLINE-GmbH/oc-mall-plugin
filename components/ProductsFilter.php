@@ -7,6 +7,7 @@ namespace OFFLINE\Mall\Components;
 use DB;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
+use October\Rain\Support\Facades\Event;
 use OFFLINE\Mall\Classes\CategoryFilter\Filter;
 use OFFLINE\Mall\Classes\CategoryFilter\QueryString;
 use OFFLINE\Mall\Classes\CategoryFilter\RangeFilter;
@@ -508,6 +509,9 @@ class ProductsFilter extends MallComponent
     protected function setProps()
     {
         $this->values = Property::getValuesForCategory($this->categories);
+
+        Event::fire('mall.productsFilter.props.extend', [$this]);
+
         $valueKeys = $this->values->keys();
         $props = $this->propertyGroups->flatMap->filterable_properties->unique();
 
