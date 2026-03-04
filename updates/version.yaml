@@ -772,3 +772,5 @@ v3.8.28:
     - "Fixed backend handling of custom field options (thanks to @martinkuch)"
 v3.8.29:
     - "Fixed handling of discount relation when a discount is removed from cart"
+v3.8.30:
+    - "Added mall.productsFilter.props.extend event (thanks to @verenaroe)"
