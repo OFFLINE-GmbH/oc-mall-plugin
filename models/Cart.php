@@ -65,7 +65,8 @@ class Cart extends Model
     public $belongsToMany = [
         'discounts' => [
             Discount::class,
-            'table' => 'offline_mall_cart_discount',
+            'table'  => 'offline_mall_cart_discount',
+            'pivot'  => ['applied_codes'],
         ],
     ];
 

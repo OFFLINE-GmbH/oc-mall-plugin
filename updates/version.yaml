@@ -774,3 +774,17 @@ v3.8.29:
     - "Fixed handling of discount relation when a discount is removed from cart"
 v3.8.30:
     - "Added mall.productsFilter.props.extend event (thanks to @verenaroe)"
+v3.9.0:
+    - "Added multi-condition discount support with AND/OR logic"
+    - 032_01-create_discount_conditions_table.php
+    - 032_02-add_conditions_operator_to_discounts.php
+    - 032_03-migrate_discount_triggers_to_conditions.php
+v3.9.1:
+    - "Added minimum_total and shipping_method_ids columns to discount conditions"
+    - 032_04-add_minimum_total_and_shipping_ids_to_conditions.php
+v3.9.2:
+    - "Track applied discount codes per cart for AND-logic multi-code conditions"
+    - 034_01-add_applied_codes_to_cart_discount.php
+v3.9.3:
+    - "Add minimum quantity requirement to product-in-cart discount condition"
+    - 034_02-add_minimum_quantity_to_conditions.php
