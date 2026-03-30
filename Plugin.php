@@ -22,6 +22,7 @@ use OFFLINE\Mall\Console\SeedDataCommand;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldOption;
 use OFFLINE\Mall\Models\Discount;
+use OFFLINE\Mall\Models\DiscountCondition;
 use OFFLINE\Mall\Models\ImageSet;
 use OFFLINE\Mall\Models\PaymentMethod;
 use OFFLINE\Mall\Models\Product;
@@ -63,6 +64,7 @@ class Plugin extends PluginBase
         Product::MORPH_KEY            => Product::class,
         ImageSet::MORPH_KEY           => ImageSet::class,
         Discount::MORPH_KEY           => Discount::class,
+        DiscountCondition::MORPH_KEY  => DiscountCondition::class,
         CustomField::MORPH_KEY        => CustomField::class,
         PaymentMethod::MORPH_KEY      => PaymentMethod::class,
         ShippingMethod::MORPH_KEY     => ShippingMethod::class,

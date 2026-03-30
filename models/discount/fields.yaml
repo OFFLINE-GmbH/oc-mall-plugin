@@ -28,10 +28,11 @@ fields:
         oc.commentPosition: ''
         span: left
         type: dropdown
-    trigger:
-        label: 'offline.mall::lang.discounts.trigger'
+    conditions_operator:
+        label: 'offline.mall::lang.discounts.conditions_operator'
+        comment: 'offline.mall::lang.discounts.conditions_operator_comment'
         oc.commentPosition: ''
-        span: auto
+        span: right
         type: dropdown
     _amounts:
         label: 'offline.mall::lang.discounts.amount'
@@ -42,23 +43,6 @@ fields:
             field: type
             condition: value[fixed_amount]
         type: mall.price
-    _totals_to_reach:
-        label: 'offline.mall::lang.discounts.total_to_reach'
-        oc.commentPosition: ''
-        span: auto
-        trigger:
-            action: show
-            field: trigger
-            condition: value[total]
-        type: mall.price
-    shipping_methods:
-        span: right
-        type: relation
-        trigger:
-            action: show
-            field: trigger
-            condition: value[shipping_method]
-
     rate:
         label: 'offline.mall::lang.discounts.rate'
         oc.commentPosition: ''
@@ -73,16 +57,6 @@ fields:
         oc.commentPosition: ''
         span: left
         type: text
-    code:
-        label: 'offline.mall::lang.discounts.code'
-        comment: 'offline.mall::lang.discounts.code_comment'
-        oc.commentPosition: ''
-        span: auto
-        trigger:
-            action: show
-            field: trigger
-            condition: value[code]
-        type: text
     shipping_description:
         label: 'offline.mall::lang.discounts.shipping_description'
         oc.commentPosition: ''
@@ -92,38 +66,6 @@ fields:
             field: type
             condition: value[shipping]
         type: text
-    product:
-        label: 'offline.mall::lang.common.product'
-        oc.commentPosition: ''
-        descriptionFrom: user_defined_id
-        span: auto
-        type: recordfinder
-        list: ~/plugins/offline/mall/models/product/columns.yaml
-        nameFrom: name
-        trigger:
-            action: show
-            field: trigger
-            condition: value[product]
-    customer_group:
-        label: 'offline.mall::lang.common.customer_group'
-        span: right
-        type: recordfinder
-        list: ~/plugins/offline/mall/models/customergroup/columns.yaml
-        nameFrom: name
-        trigger:
-            action: show
-            field: trigger
-            condition: value[customer_group]
-    payment_method:
-        label: 'offline.mall::lang.discounts.payment_method_description'
-        span: right
-        type: recordfinder
-        list: ~/plugins/offline/mall/models/discount/columns.yaml
-        nameFrom: name
-        trigger:
-            action: show
-            field: trigger
-            condition: value[payment_method]
     shipping_guaranteed_days_to_delivery:
         label: 'offline.mall::lang.discounts.shipping_guaranteed_days_to_delivery'
         oc.commentPosition: ''
@@ -142,3 +84,10 @@ fields:
             field: type
             condition: value[shipping]
         type: mall.price
+    _conditions:
+        label: 'offline.mall::lang.discounts.conditions'
+        span: full
+        type: repeater
+        style: default
+        valueFrom: conditionItems
+        form: ~/plugins/offline/mall/models/discountcondition/fields.yaml

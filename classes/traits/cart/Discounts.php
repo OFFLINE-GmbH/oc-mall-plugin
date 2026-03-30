@@ -72,14 +72,48 @@ trait Discounts
         }
 
         try {
-            $discount = Discount::isActive()->whereCode($code)->firstOrFail();
+            $discount = Discount::isActive()
+                ->where(function ($q) use ($code) {
+                    // Legacy: code stored directly on the discount
+                    $q->where('code', $code)
+                    // New: code stored in a conditions row
+                    ->orWhereHas('conditions', fn ($cq) => $cq->where('trigger', 'code')->where('code', $code));
+                })
+                ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ValidationException([
                 'code' => trans('offline.mall::lang.discounts.validation.not_found'),
             ]);
         }
 
-        return $this->applyDiscount($discount, $discountCodeLimit);
+        // Load pivot data to check existing applied codes for this discount.
+        $existing = $this->discounts()->withPivot(['applied_codes'])->find($discount->id);
+
+        if ($existing) {
+            // Discount already in cart — this is an additional code for an AND-logic multi-code discount.
+            $appliedCodes = json_decode($existing->pivot->applied_codes ?? '[]', true) ?: [];
+
+            if (in_array($code, $appliedCodes)) {
+                throw new ValidationException([
+                    'code' => trans('offline.mall::lang.discounts.validation.duplicate'),
+                ]);
+            }
+
+            $this->discounts()->updateExistingPivot($discount->id, [
+                'applied_codes' => json_encode(array_merge($appliedCodes, [$code])),
+            ]);
+            $this->unsetRelation('discounts');
+
+            return;
+        }
+
+        // First code for this discount — attach and record the applied code.
+        $this->applyDiscount($discount, $discountCodeLimit);
+
+        $this->discounts()->updateExistingPivot($discount->id, [
+            'applied_codes' => json_encode([$code]),
+        ]);
+        $this->unsetRelation('discounts');
     }
 
     /**
@@ -120,10 +154,10 @@ trait Discounts
                 $this->discounts()->remove($discount);
                 $this->unsetRelation('discounts');
 
-                $code = $discount->code;
+                $code = $discount->getEffectiveCode();
 
                 $this->totals()->appliedDiscounts()->each(function (array $discount) use ($code) {
-                    if ($code === $discount['discount']->code && $discount['discount']->number_of_usages > 0) {
+                    if ($code !== null && $code === $discount['discount']->getEffectiveCode() && $discount['discount']->number_of_usages > 0) {
                         $discount['discount']->number_of_usages--;
                         $discount['discount']->save();
                     }

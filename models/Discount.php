@@ -26,10 +26,7 @@ class Discount extends Model
         'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
-        'trigger'                              => 'in:total,code,product,customer_group,shipping_method,payment_method',
         'types'                                => 'in:fixed_amount,rate,shipping',
-        'product'                              => 'required_if:trigger,product',
-        'customer_group'                       => 'required_if:trigger,customer_group',
         'code'                                 => 'nullable|unique:offline_mall_discounts,code',
         'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
@@ -37,7 +34,7 @@ class Discount extends Model
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
 
-    public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
+    public $with = ['shipping_prices', 'amounts', 'totals_to_reach', 'conditions'];
 
     public $table = 'offline_mall_discounts';
 
@@ -74,6 +71,7 @@ class Discount extends Model
         'number_of_usages',
         'max_number_of_usages',
         'trigger',
+        'conditions_operator',
         'types',
         'product',
         'product_id',
@@ -89,6 +87,10 @@ class Discount extends Model
         'product' => [Product::class],
         'customer_group' => [CustomerGroup::class],
         'payment_method' => [PaymentMethod::class],
+    ];
+
+    public $hasMany = [
+        'conditions' => [DiscountCondition::class],
     ];
 
     public $belongsToMany = [
@@ -186,5 +188,63 @@ class Discount extends Model
     public function getProductIdOptions()
     {
         return [null => trans('offline.mall::lang.common.none')] + Product::get()->pluck('name', 'id')->toArray();
+    }
+
+    public function getCustomerGroupIdOptions()
+    {
+        return [null => trans('offline.mall::lang.common.none')] + CustomerGroup::get()->pluck('name', 'id')->toArray();
+    }
+
+    public function getPaymentMethodIdOptions()
+    {
+        return [null => trans('offline.mall::lang.common.none')] + PaymentMethod::get()->pluck('name', 'id')->toArray();
+    }
+
+    public function getShippingMethodIdsOptions()
+    {
+        return ShippingMethod::get()->pluck('name', 'id')->toArray();
+    }
+
+    /**
+     * Provides existing conditions to the _conditions repeater when editing a discount.
+     * The repeater field uses valueFrom: conditionItems, so OctoberCMS reads this accessor
+     * (studly of 'conditionItems' = 'ConditionItems') to populate the repeater on load.
+     */
+    public function getConditionItemsAttribute(): array
+    {
+        return $this->conditions->map(fn (DiscountCondition $c) => [
+            'id'                  => $c->id,
+            'trigger'             => $c->trigger,
+            'code'                => $c->code,
+            'product_id'          => $c->product_id,
+            'minimum_quantity'    => $c->minimum_quantity,
+            'customer_group_id'   => $c->customer_group_id,
+            'payment_method_id'   => $c->payment_method_id,
+            'minimum_total'       => $c->minimum_total,
+            'shipping_method_ids' => $c->shipping_method_ids,
+            'sort_order'          => $c->sort_order,
+        ])->values()->toArray();
+    }
+
+    public function getConditionsOperatorOptions(): array
+    {
+        return [
+            'and' => trans('offline.mall::lang.discounts.conditions_operator_and'),
+            'or'  => trans('offline.mall::lang.discounts.conditions_operator_or'),
+        ];
+    }
+
+    /**
+     * Returns the effective discount code, checking both the legacy `code` column
+     * and the new conditions-based code condition.
+     */
+    public function getEffectiveCode(): ?string
+    {
+        $codeCondition = $this->conditions->firstWhere('trigger', 'code');
+        if ($codeCondition) {
+            return $codeCondition->code;
+        }
+
+        return $this->code ?: null;
     }
 }

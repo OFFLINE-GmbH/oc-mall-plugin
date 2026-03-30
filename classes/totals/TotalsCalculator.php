@@ -309,8 +309,16 @@ class TotalsCalculator implements CallsAnyMethod
      */
     protected function applyTotalDiscounts($total): ?float
     {
-        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method', 'payment_method'])
-            ->with('shipping_methods')
+        $nonCodeTriggers = Discount::where(function ($q) {
+            // Legacy: single trigger that is not code-based
+            $q->whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method', 'payment_method'])
+            // New: has at least one condition, none of which are code conditions
+            ->orWhere(function ($q) {
+                $q->whereHas('conditions')
+                    ->whereDoesntHave('conditions', fn ($cq) => $cq->where('trigger', 'code'));
+            });
+        })
+            ->with(['shipping_methods', 'conditions.shipping_methods', 'conditions.totals_to_reach'])
             ->where(function ($q) {
                 $q->whereNull('valid_from')
                     ->orWhere('valid_from', '<=', Carbon::now());

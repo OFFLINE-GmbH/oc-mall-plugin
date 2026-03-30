@@ -10,6 +10,7 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Models\Discount;
+use OFFLINE\Mall\Models\DiscountCondition;
 use OFFLINE\Mall\Models\Price;
 
 class Discounts extends Controller
@@ -82,6 +83,44 @@ class Discounts extends Controller
         $this->updatePrices($model, 'shipping_prices', '_shipping_prices');
         $this->updatePrices($model, 'totals_to_reach', '_totals_to_reach');
         $this->updatePrices($model, 'amounts', '_amounts');
+        $this->updateConditions($model);
+    }
+
+    /**
+     * Sync the conditions repeater data to DiscountCondition records.
+     * Reads from post('Discount')['_conditions'] — a plain repeater (no useRelation).
+     * Uses delete-and-recreate since condition IDs are not referenced externally.
+     */
+    protected function updateConditions(Discount $model): void
+    {
+        $items = array_get(post('Discount', []), '_conditions', []);
+
+        // Replace all conditions with the submitted set
+        $model->conditions()->delete();
+
+        foreach ($items as $item) {
+            $trigger = array_get($item, 'trigger');
+
+            if (empty($trigger)) {
+                continue;
+            }
+
+            $condition = new DiscountCondition([
+                'discount_id'         => $model->id,
+                'trigger'             => $trigger,
+                'code'                => array_get($item, 'code'),
+                'product_id'          => array_get($item, 'product_id') ?: null,
+                'minimum_quantity'    => array_get($item, 'minimum_quantity') ?: null,
+                'customer_group_id'   => array_get($item, 'customer_group_id') ?: null,
+                'payment_method_id'   => array_get($item, 'payment_method_id') ?: null,
+                'minimum_total'       => array_get($item, 'minimum_total') ?: null,
+                'shipping_method_ids' => array_get($item, 'shipping_method_ids') ?: null,
+                'sort_order'          => array_get($item, 'sort_order', 0),
+            ]);
+            $condition->save();
+        }
+
+        $model->unsetRelation('conditions');
     }
 
     /**
