@@ -27,10 +27,6 @@ class Discount extends Model
         'expires'                              => 'nullable|date',
         'number_of_usages'                     => 'nullable|numeric',
         'max_number_of_usages'                 => 'nullable|numeric',
-        'trigger'                              => 'in:total,code,product,customer_group,shipping_method,payment_method',
-        'types'                                => 'in:fixed_amount,rate,shipping',
-        'product'                              => 'required_if:trigger,product',
-        'customer_group'                       => 'required_if:trigger,customer_group',
         'code'                                 => 'nullable|unique:offline_mall_discounts,code',
         'type'                                 => 'in:fixed_amount,rate,shipping',
         'rate'                                 => 'required_if:type,rate|nullable|numeric',
@@ -38,7 +34,7 @@ class Discount extends Model
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
 
-    public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
+    public $with = ['shipping_prices', 'amounts', 'totals_to_reach', 'conditions'];
 
     public $table = 'offline_mall_discounts';
 
@@ -74,26 +70,19 @@ class Discount extends Model
         'expires',
         'number_of_usages',
         'max_number_of_usages',
-        'trigger',
-        'types',
-        'product',
-        'product_id',
-        'customer_group',
+        'conditions_operator',
         'type',
         'rate',
-        'code',
         'shipping_description',
         'shipping_guaranteed_days_to_delivery',
     ];
 
-    public $belongsTo = [
-        'product' => [Product::class],
-        'customer_group' => [CustomerGroup::class],
-        'payment_method' => [PaymentMethod::class],
+    public $hasMany = [
+        'conditions' => [DiscountCondition::class],
     ];
 
     public $belongsToMany = [
-        'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
+        'carts'            => [Cart::class, 'table' => 'offline_mall_cart_discount'],
         'shipping_methods' => [ShippingMethod::class, 'table' => 'offline_mall_shipping_method_discount'],
     ];
 
@@ -108,31 +97,10 @@ class Discount extends Model
     {
         parent::boot();
         static::saving(function (self $discount) {
-            if ($discount->trigger === 'code' && ! $discount->code) {
-                $discount->code = strtoupper(str_random(10));
-            }
-        });
-        static::saving(function (self $discount) {
             $discount->code = strtoupper($discount->code ?? '');
-
-            if ($discount->trigger !== 'product') {
-                $discount->product_id = null;
-            }
-
-            if ($discount->trigger !== 'code') {
-                $discount->code = null;
-            }
-
-            if ($discount->trigger !== 'customer_group') {
-                $discount->customer_group_id = null;
-            }
         });
     }
 
-    /**
-     * Filter out discounts that are valid and not expired.
-     * @param mixed $q
-     */
     public function scopeIsActive($q)
     {
         $q->where(function ($q) {
@@ -154,20 +122,6 @@ class Discount extends Model
         return $options;
     }
 
-    public function getTriggerOptions()
-    {
-        $keys = [
-            'total',
-            'code',
-            'product',
-            'shipping_method',
-            'customer_group',
-            'payment_method',
-        ];
-
-        return collect($keys)->mapWithKeys(fn ($key) => [$key => trans('offline.mall::lang.discounts.triggers.' . $key)]);
-    }
-
     public function amount($currency = null)
     {
         return $this->price($currency, 'amounts');
@@ -183,8 +137,42 @@ class Discount extends Model
         return $this->price($currency, 'shipping_prices');
     }
 
-    public function getProductIdOptions()
+    public function getConditionsOperatorOptions(): array
     {
-        return [null => trans('offline.mall::lang.common.none')] + Product::get()->pluck('name', 'id')->toArray();
+        return [
+            'and' => trans('offline.mall::lang.discounts.conditions_operator_and'),
+            'or'  => trans('offline.mall::lang.discounts.conditions_operator_or'),
+        ];
+    }
+
+    public function getConditionItemsAttribute(): array
+    {
+        return $this->conditions->map(fn (DiscountCondition $c) => [
+            'id'                  => $c->id,
+            'trigger'             => $c->trigger,
+            'code'                => $c->code,
+            'product_id'          => $c->product_id,
+            'minimum_quantity'    => $c->minimum_quantity,
+            'customer_group_id'   => $c->customer_group_id,
+            'payment_method_id'   => $c->payment_method_id,
+            'minimum_total'       => $c->minimum_total,
+            'shipping_method_ids' => $c->shipping_method_ids,
+            'sort_order'          => $c->sort_order,
+        ])->values()->toArray();
+    }
+
+    public function getAppliedCodesFromPivotAttribute(): array
+    {
+        return json_decode($this->pivot?->applied_codes ?? '[]', true) ?: [];
+    }
+
+    public function getEffectiveCode(): ?string
+    {
+        $codeCondition = $this->conditions->firstWhere('trigger', 'code');
+        if ($codeCondition) {
+            return $codeCondition->code;
+        }
+
+        return $this->code ?: null;
     }
 }

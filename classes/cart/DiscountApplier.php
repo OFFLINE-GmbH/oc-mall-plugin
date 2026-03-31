@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
 use OFFLINE\Mall\Models\Discount;
+use OFFLINE\Mall\Models\DiscountCondition;
 
 class DiscountApplier
 {
@@ -67,7 +68,7 @@ class DiscountApplier
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
-            $savings = $this->input->shipping_method->price()->integer - $discount->shippingPrice()->integer;
+            $savings                   = $this->input->shipping_method->price()->integer - $discount->shippingPrice()->integer;
             $this->reducedTotalIsFixed = true;
         }
 
@@ -121,37 +122,61 @@ class DiscountApplier
             return false;
         }
 
-        if ($discount->trigger === 'total' && (int)$discount->totalToReach()->integer <= $this->total) {
-            return true;
-        }
+        if ($discount->conditions->isNotEmpty()) {
+            $appliedCodes = json_decode($discount->pivot->applied_codes ?? '[]', true) ?: [];
 
-        if ($discount->trigger === 'product' && $this->productIsInCart(intval($discount->product_id))) {
-            return true;
-        }
+            $results = $discount->conditions->map(
+                fn (DiscountCondition $condition) => $this->conditionMet($condition, $appliedCodes)
+            );
 
-        if ($discount->trigger === 'customer_group' && $this->userBelongsToCustomerGroup(intval($discount->customer_group_id))) {
-            return true;
-        }
-        
-        if ($discount->trigger === 'shipping_method' && $this->appliesForShippingMethod($discount)) {
-            return true;
-        }
-
-        if ($discount->trigger === 'payment_method' && $this->checkPaymentMethod(intval($discount->payment_method_id))) {
-            return true;
-        }
-
-        if ($discount->trigger === 'code') {
-            return true;
+            return $discount->conditions_operator === 'or'
+                ? $results->contains(true)
+                : $results->every(fn ($v) => $v === true);
         }
 
         $result = Event::fire('mall.discount.canApply', [$discount, $this->input], true);
         return $result !== null ? (bool) $result : false;
     }
 
-    private function productIsInCart(int $productId): bool
+    private function conditionMet(DiscountCondition $condition, array $appliedCodes = []): bool
     {
-        return $this->input->products->pluck('product_id')->contains($productId);
+        if ($condition->trigger === 'total' && intval(($condition->minimum_total ?? 0) * 100) <= $this->total) {
+            return true;
+        }
+
+        if ($condition->trigger === 'product' && $this->productQuantityMet((int) $condition->product_id, $condition->minimum_quantity)) {
+            return true;
+        }
+
+        if ($condition->trigger === 'customer_group' && $this->userBelongsToCustomerGroup((int) $condition->customer_group_id)) {
+            return true;
+        }
+
+        if ($condition->trigger === 'shipping_method' && $this->appliesForConditionShippingMethod($condition)) {
+            return true;
+        }
+
+        if ($condition->trigger === 'payment_method' && $this->checkPaymentMethod((int) $condition->payment_method_id)) {
+            return true;
+        }
+
+        if ($condition->trigger === 'code') {
+            return in_array($condition->code, $appliedCodes);
+        }
+
+        $result = Event::fire('mall.discount.evaluateCondition', [$condition, $this->input], true);
+        if ($result !== null) {
+            return (bool) $result;
+        }
+
+        return false;
+    }
+
+    private function productQuantityMet(int $productId, ?int $minQty): bool
+    {
+        $qty = $this->input->products->where('product_id', $productId)->sum('quantity');
+
+        return $qty >= max(1, (int) $minQty);
     }
 
     private function userBelongsToCustomerGroup(int $customerGroupId): bool
@@ -165,9 +190,11 @@ class DiscountApplier
         return $group->where('id', $customerGroupId)->exists();
     }
 
-    private function appliesForShippingMethod(Discount $discount): bool
+    private function appliesForConditionShippingMethod(DiscountCondition $condition): bool
     {
-        return $discount->shipping_methods->contains($this->input->shipping_method?->id);
+        $ids = $condition->shipping_method_ids;
+
+        return is_array($ids) && in_array($this->input->shipping_method?->id, $ids);
     }
 
     private function checkPaymentMethod(int $method_id)

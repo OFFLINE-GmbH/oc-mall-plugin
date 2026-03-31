@@ -136,12 +136,12 @@ class TotalsCalculator implements CallsAnyMethod
     {
         return $this->totalTaxes;
     }
-    
+
     public function totalDiscounts(): float
     {
         return $this->totalDiscounts;
     }
-    
+
     public function totalPrePayment(): float
     {
         return $this->totalPrePayment;
@@ -251,25 +251,50 @@ class TotalsCalculator implements CallsAnyMethod
             $paymentTaxes = $this->paymentTaxes->map(fn (Tax $tax) => new TaxTotal($paymentTotal, $tax));
         }
 
-        // Calculate the total discounts per item. We need this to calculate the correct tax amount per item.
-        $totalDiscounts = $this->appliedDiscounts->sum('savings') * -1;
+        $genericDiscountTotal = $this->appliedDiscounts
+            ->filter(fn ($d) => ($d['product_id'] ?? null) === null)
+            ->sum('savings') * -1;
+
+        $productDiscountMap = $this->appliedDiscounts
+            ->filter(fn ($d) => ($d['product_id'] ?? null) !== null)
+            ->groupBy('product_id')
+            ->map(fn ($group) => $group->sum('savings') * -1);
+
+        $productIdTotals = $this->input->products
+            ->groupBy('product_id')
+            ->map(fn ($group) => $group->sum('totalPostTaxes'));
+
         $cartItems = $this->input->products->count();
-        $discountPerItemAfterTaxes = $cartItems > 0 ? $totalDiscounts / $cartItems : 0;
+        $genericDiscountPerItem = $cartItems > 0 ? $genericDiscountTotal / $cartItems : 0;
 
-        $productTaxes = $this->input->products->flatMap(function ($product) use ($discountPerItemAfterTaxes) {
-            $totalTaxFactor = $product->filtered_product_taxes->sum('percentageDecimal');
+        $productTaxes = $this->input->products->flatMap(
+            function ($product) use ($genericDiscountPerItem, $productDiscountMap, $productIdTotals) {
+                $totalTaxFactor = $product->filtered_product_taxes->sum('percentageDecimal');
+                $divisor        = 1 + $totalTaxFactor;
 
-            // All discounts are inclusive of taxes. We need to calculate the discount per item without taxes.
-            $discountForThisItem = $discountPerItemAfterTaxes / (1 + $totalTaxFactor);
+                $genericPreTax = $genericDiscountPerItem / $divisor;
 
-            $products = $product->filtered_product_taxes->map(function (Tax $tax) use ($product, $discountForThisItem) {
-                $discountedPrice = max(0, $product->totalProductPreTaxes - $discountForThisItem);
+                $productSpecificPostTax = 0;
+                if ($productDiscountMap->has($product->product_id)) {
+                    $productIdTotal         = $productIdTotals->get($product->product_id, 0);
+                    $fraction               = $productIdTotal > 0 ? $product->totalPostTaxes / $productIdTotal : 0;
+                    $productSpecificPostTax = $productDiscountMap->get($product->product_id) * $fraction;
+                }
+                $productSpecificPreTax = $productSpecificPostTax / $divisor;
 
-                return new TaxTotal($discountedPrice, $tax);
-            });
+                $discountForThisItem = $genericPreTax + $productSpecificPreTax;
 
-            return $products->concat($product->filtered_service_taxes);
-        });
+                $products = $product->filtered_product_taxes->map(
+                    function (Tax $tax) use ($product, $discountForThisItem) {
+                        $discountedPrice = max(0, $product->totalProductPreTaxes - $discountForThisItem);
+
+                        return new TaxTotal($discountedPrice, $tax);
+                    }
+                );
+
+                return $products->concat($product->filtered_service_taxes);
+            }
+        );
 
         $combined = $productTaxes->concat($shippingTaxes)->concat($paymentTaxes);
 
@@ -310,8 +335,9 @@ class TotalsCalculator implements CallsAnyMethod
      */
     protected function applyTotalDiscounts($total): ?float
     {
-        $nonCodeTriggers = Discount::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method', 'payment_method'])
-            ->with('shipping_methods')
+        $nonCodeTriggers = Discount::whereHas('conditions')
+            ->whereDoesntHave('conditions', fn ($cq) => $cq->where('trigger', 'code'))
+            ->with(['shipping_methods', 'conditions'])
             ->where(function ($q) {
                 $q->whereNull('valid_from')
                     ->orWhere('valid_from', '<=', Carbon::now());
@@ -325,7 +351,7 @@ class TotalsCalculator implements CallsAnyMethod
 
         if ($extraIds->isNotEmpty()) {
             $extra = Discount::whereIn('id', $extraIds)
-                ->with('shipping_methods')
+                ->with(['shipping_methods', 'conditions'])
                 ->where(function ($q) {
                     $q->whereNull('valid_from')->orWhere('valid_from', '<=', Carbon::now());
                 })->where(function ($q) {

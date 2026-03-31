@@ -1,0 +1,79 @@
+fields:
+    trigger:
+        label: 'offline.mall::lang.discounts.trigger'
+        span: auto
+        type: dropdown
+    minimum_total:
+        label: 'offline.mall::lang.discounts.minimum_total'
+        comment: 'offline.mall::lang.discounts.minimum_total_comment'
+        span: auto
+        type: number
+        trigger:
+            action: show
+            field: trigger
+            condition: value[total]
+    shipping_method_ids:
+        label: 'offline.mall::lang.discounts.shipping_methods'
+        span: auto
+        type: checkboxlist
+        trigger:
+            action: show
+            field: trigger
+            condition: value[shipping_method]
+    code:
+        label: 'offline.mall::lang.discounts.code'
+        comment: 'offline.mall::lang.discounts.code_comment'
+        span: auto
+        type: text
+        trigger:
+            action: show
+            field: trigger
+            condition: value[code]
+    product_id:
+        label: 'offline.mall::lang.common.product'
+        span: auto
+        type: recordfinder
+        useRelation: false
+        modelClass: OFFLINE\Mall\Models\Product
+        keyFrom: id
+        nameFrom: name
+        list: ~/plugins/offline/mall/models/product/columns.yaml
+        trigger:
+            action: show
+            field: trigger
+            condition: value[product]
+    minimum_quantity:
+        label: 'offline.mall::lang.discounts.minimum_quantity'
+        comment: 'offline.mall::lang.discounts.minimum_quantity_comment'
+        span: auto
+        type: number
+        trigger:
+            action: show
+            field: trigger
+            condition: value[product]
+    customer_group_id:
+        label: 'offline.mall::lang.common.customer_group'
+        span: auto
+        type: recordfinder
+        useRelation: false
+        modelClass: OFFLINE\Mall\Models\CustomerGroup
+        keyFrom: id
+        nameFrom: name
+        list: ~/plugins/offline/mall/models/customergroup/columns.yaml
+        trigger:
+            action: show
+            field: trigger
+            condition: value[customer_group]
+    payment_method_id:
+        label: 'offline.mall::lang.discounts.payment_method_description'
+        span: auto
+        type: recordfinder
+        useRelation: false
+        modelClass: OFFLINE\Mall\Models\PaymentMethod
+        keyFrom: id
+        nameFrom: name
+        list: ~/plugins/offline/mall/models/paymentmethod/columns.yaml
+        trigger:
+            action: show
+            field: trigger
+            condition: value[payment_method]

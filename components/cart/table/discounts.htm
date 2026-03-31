@@ -3,8 +3,8 @@
         <td></td>
         <td colspan="3">
             {{ entry.discount.name }}
-            {% if entry.discount.code|default(null) %}
-                ({{ entry.discount.code }})
+            {% if entry.discount.effectiveCode|default(null) %}
+                ({{ entry.discount.effectiveCode }})
                 <br>
                 <a href="javascript:;"
                    class="js-mall-remove-discount-code"

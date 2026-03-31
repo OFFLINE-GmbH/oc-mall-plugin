@@ -1,1 +1,20 @@
+{% if cart.discounts|default([])|length > 0 %}
+    <ul class="mall-applied-codes">
+        {% for discount in cart.discounts %}
+            <li class="mall-applied-code">
+                <span class="mall-applied-code__label">
+                    {% for code in discount.appliedCodesFromPivot %}
+                        <strong>{{ code }}</strong>
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    — {{ discount.name }}
+                </span>
+                <a href="javascript:;"
+                   class="js-mall-remove-discount-code mall-applied-code__remove"
+                   data-id="{{ discount.hash_id }}"
+                >{{ 'offline.mall::frontend.remove'|trans }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% component 'discountApplier' %}
