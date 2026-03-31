@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OFFLINE\Mall\Classes\Cart;
 
 use Auth;
+use Event;
 use Illuminate\Support\Collection;
 use OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput;
 use OFFLINE\Mall\Classes\Utils\Money;
@@ -61,7 +62,8 @@ class DiscountApplier
             return false;
         }
 
-        $savings = 0;
+        $savings         = 0;
+        $targetProductId = null;
 
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
@@ -79,10 +81,17 @@ class DiscountApplier
             $this->reducedTotal -= $savings;
         }
 
+        if ($savings === 0 && !in_array($discount->type, ['shipping', 'fixed_amount', 'rate'])) {
+            Event::fire('mall.discount.apply', [
+                $discount, $this->input, &$savings, &$this->reducedTotal, &$targetProductId,
+            ]);
+        }
+
         $this->discounts->push([
             'discount'          => $discount,
             'savings'           => $savings * -1,
             'savings_formatted' => $this->money->format($savings * -1),
+            'product_id'        => $targetProductId,
         ]);
 
         return true;
@@ -132,7 +141,12 @@ class DiscountApplier
             return true;
         }
 
-        return $discount->trigger === 'code';
+        if ($discount->trigger === 'code') {
+            return true;
+        }
+
+        $result = Event::fire('mall.discount.canApply', [$discount, $this->input], true);
+        return $result !== null ? (bool) $result : false;
     }
 
     private function productIsInCart(int $productId): bool

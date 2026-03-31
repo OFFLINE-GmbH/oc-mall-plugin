@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
+use Event;
 use Illuminate\Support\Collection;
 use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
@@ -318,6 +319,20 @@ class TotalsCalculator implements CallsAnyMethod
                 $q->whereNull('expires')
                     ->orWhere('expires', '>', Carbon::now());
             })->get();
+
+        $extraIds = collect(Event::fire('mall.discount.autoApplyIds', [$this->input]) ?? [])
+            ->flatten()->filter()->unique();
+
+        if ($extraIds->isNotEmpty()) {
+            $extra = Discount::whereIn('id', $extraIds)
+                ->with('shipping_methods')
+                ->where(function ($q) {
+                    $q->whereNull('valid_from')->orWhere('valid_from', '<=', Carbon::now());
+                })->where(function ($q) {
+                    $q->whereNull('expires')->orWhere('expires', '>', Carbon::now());
+                })->get();
+            $nonCodeTriggers = $nonCodeTriggers->merge($extra)->unique('id');
+        }
 
         $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(fn ($item) => $item->type === 'shipping');
 

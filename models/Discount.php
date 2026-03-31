@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OFFLINE\Mall\Models;
 
 use Carbon\Carbon;
+use Event;
 use Model;
 use October\Rain\Database\Traits\Nullable;
 use October\Rain\Database\Traits\Validation;
@@ -145,13 +146,12 @@ class Discount extends Model
 
     public function getTypeOptions()
     {
-        $keys = [
-            'fixed_amount',
-            'rate',
-            'shipping',
-        ];
+        $keys = ['fixed_amount', 'rate', 'shipping'];
+        $options = collect($keys)->mapWithKeys(fn ($key) => [$key => trans('offline.mall::lang.discounts.types.' . $key)]);
 
-        return collect($keys)->mapWithKeys(fn ($key) => [$key => trans('offline.mall::lang.discounts.types.' . $key)]);
+        Event::fire('mall.discount.extendTypeOptions', [&$options]);
+
+        return $options;
     }
 
     public function getTriggerOptions()
