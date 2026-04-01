@@ -36,14 +36,16 @@ tabs:
             label: 'offline.mall::lang.common.code'
             span: auto
             readonly: 1
-            type: text
+            type: partial
+            path: $/offline/mall/controllers/paymentlogs/_data.htm
             commentAbove: 'offline.mall::lang.payment_log.message_comment'
             tab: 'offline.mall::lang.payment_log.payment_data'
         message:
             label: 'offline.mall::lang.common.message'
             span: auto
             readonly: 1
-            type: text
+            type: partial
+            path: $/offline/mall/controllers/paymentlogs/_data.htm
             commentAbove: 'offline.mall::lang.payment_log.message_comment'
             tab: 'offline.mall::lang.payment_log.payment_data'
         data:
