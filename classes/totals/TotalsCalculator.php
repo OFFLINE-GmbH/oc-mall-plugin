@@ -94,6 +94,16 @@ class TotalsCalculator implements CallsAnyMethod
     protected $appliedDiscounts;
 
     /**
+     * @var Collection
+     */
+    protected $productLineTotals;
+
+    /**
+     * @var float
+     */
+    protected $productPostTaxesOriginal;
+
+    /**
      * @var int
      */
     protected $totalPrePayment;
@@ -107,6 +117,7 @@ class TotalsCalculator implements CallsAnyMethod
     {
         $this->input = $input;
         $this->taxes = new Collection();
+        $this->productLineTotals = new Collection();
 
         $this->calculate();
     }
@@ -197,24 +208,25 @@ class TotalsCalculator implements CallsAnyMethod
     protected function calculate()
     {
         $this->weightTotal = $this->calculateWeightTotal();
-        $this->productPreTaxes = $this->calculateProductPreTaxes();
-        $this->productTaxes = $this->calculateProductTaxes();
 
+        $this->productLineTotals = $this->buildProductLineTotals();
+
+        $this->productPreTaxes = $this->productLineTotals->sum('pre_total');
+        $productTaxTotals = $this->makeProductTaxTotals();
+        $this->productTaxes = $this->round($productTaxTotals->sum(fn (TaxTotal $tax) => $tax->total()));
         $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
-
-        $this->totalDiscounts = $this->productPostTaxes - $this->applyTotalDiscounts($this->productPostTaxes);
+        $this->totalDiscounts = max(0, $this->productPostTaxesOriginal - $this->productPostTaxes);
 
         $this->shippingTaxes = $this->filterShippingTaxes();
         $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
         $this->totalPreTaxes = $this->productPreTaxes + $this->shippingTotal->totalPreTaxes();
 
-        $this->totalPrePayment = $this->productPostTaxes - $this->totalDiscounts + $this->shippingTotal->totalPostTaxes();
+        $this->totalPrePayment = $this->productPostTaxes + $this->shippingTotal->totalPostTaxes();
         $this->paymentTaxes = $this->filterPaymentTaxes();
         $this->paymentTotal = new PaymentTotal($this->input->payment_method, $this);
 
         $this->totalPostTaxes = $this->totalPrePayment + $this->paymentTotal->totalPostTaxes();
 
-        // The grand total should never be negative.
         if ($this->totalPostTaxes < 0) {
             $this->totalPostTaxes = 0;
         }
@@ -222,16 +234,142 @@ class TotalsCalculator implements CallsAnyMethod
         $this->taxes = $this->getTaxTotals();
     }
 
-    protected function calculateProductPreTaxes(): float
+    protected function buildProductLineTotals(): Collection
     {
-        $total = $this->input->products->sum('totalPreTaxes');
+        $products = $this->input->products->values();
 
-        return $total > 0 ? $total : 0;
+        $basePostTotal = max(0, $products->sum('totalPostTaxes'));
+        $this->productPostTaxesOriginal = $basePostTotal;
+
+        $discountedTotal = $this->applyTotalDiscounts($basePostTotal) ?? $basePostTotal;
+
+        if ($this->appliedDiscounts === null) {
+            $this->appliedDiscounts = new Collection();
+        }
+
+        $totalDiscount = max(0, $basePostTotal - $discountedTotal);
+        $totalDiscount = min($totalDiscount, $basePostTotal);
+
+        $remainingDiscount = $totalDiscount;
+        $remainingPost = $basePostTotal;
+        $count = $products->count();
+
+        return $products->map(function ($product, $index) use (&$remainingDiscount, &$remainingPost, $count) {
+            return $this->buildLineTotalsForProduct($product, $remainingDiscount, $remainingPost, $count, $index);
+        });
     }
 
-    protected function calculateProductTaxes(): float
+    protected function buildLineTotalsForProduct($product, float &$remainingDiscount, float &$remainingPost, int $count, int $index): array
     {
-        return $this->round($this->input->products->sum('totalTaxes'));
+        $originalProductPre = max(0, $product->totalProductPreTaxes);
+        $originalProductTax = max(0, $product->totalProductTaxes);
+        $originalProductPost = max(0, $product->totalProductPostTaxes);
+
+        $originalServicePre = max(0, $product->totalServicePreTaxes);
+        $originalServiceTax = max(0, $product->totalServiceTaxes);
+        $originalServicePost = max(0, $product->totalServicePostTaxes);
+
+        $originalPreTotal = $originalProductPre + $originalServicePre;
+        $originalTaxTotal = $originalProductTax + $originalServiceTax;
+        $originalPostTotal = $originalPreTotal + $originalTaxTotal;
+
+        $lineDiscountPost = 0.0;
+
+        if ($originalPostTotal > 0 && $remainingDiscount > 0) {
+            $isLastRelevantLine = ($index === $count - 1) || ($remainingPost - $originalPostTotal <= 0.0000001);
+            if ($isLastRelevantLine || $remainingPost <= 0) {
+                $lineDiscountPost = min($originalPostTotal, $remainingDiscount);
+            } else {
+                $ratio = $remainingPost > 0 ? $originalPostTotal / $remainingPost : 0;
+                $lineDiscountPost = min($originalPostTotal, $remainingDiscount * $ratio);
+            }
+
+            $lineDiscountPost = max(0, $lineDiscountPost);
+            $remainingDiscount -= $lineDiscountPost;
+
+            if ($remainingDiscount < 0) {
+                $lineDiscountPost += $remainingDiscount;
+                $remainingDiscount = 0;
+            }
+        }
+
+        $remainingPost -= $originalPostTotal;
+        if ($remainingPost < 0) {
+            $remainingPost = 0;
+        }
+
+        $productShare = $originalPostTotal > 0 ? $originalProductPost / $originalPostTotal : 0;
+        $productDiscountPost = min($originalProductPost, $lineDiscountPost * $productShare);
+
+        $remainingForService = max(0, $lineDiscountPost - $productDiscountPost);
+        $serviceDiscountPost = min($originalServicePost, $remainingForService);
+
+        $allocatedPost = $productDiscountPost + $serviceDiscountPost;
+        if ($allocatedPost < $lineDiscountPost && $lineDiscountPost > 0) {
+            $remainder = $lineDiscountPost - $allocatedPost;
+
+            if ($productDiscountPost < $originalProductPost) {
+                $extra = min($remainder, $originalProductPost - $productDiscountPost);
+                $productDiscountPost += $extra;
+                $remainder -= $extra;
+            }
+
+            if ($remainder > 0 && $serviceDiscountPost < $originalServicePost) {
+                $extra = min($remainder, $originalServicePost - $serviceDiscountPost);
+                $serviceDiscountPost += $extra;
+                $remainder -= $extra;
+            }
+        }
+
+        $productPreShare = $originalProductPost > 0 ? $originalProductPre / $originalProductPost : 0;
+        $productDiscountPre = min($originalProductPre, $productDiscountPost * $productPreShare);
+        $productDiscountTax = min($originalProductTax, max(0, $productDiscountPost - $productDiscountPre));
+
+        $servicePreShare = $originalServicePost > 0 ? $originalServicePre / $originalServicePost : 0;
+        $serviceDiscountPre = min($originalServicePre, $serviceDiscountPost * $servicePreShare);
+        $serviceDiscountTax = min($originalServiceTax, max(0, $serviceDiscountPost - $serviceDiscountPre));
+
+        $discountedProductPre = max(0, $originalProductPre - $productDiscountPre);
+        $discountedServicePre = max(0, $originalServicePre - $serviceDiscountPre);
+        $discountedProductTax = max(0, $originalProductTax - $productDiscountTax);
+        $discountedServiceTax = max(0, $originalServiceTax - $serviceDiscountTax);
+
+        $preTotal = $discountedProductPre + $discountedServicePre;
+        $taxTotal = $discountedProductTax + $discountedServiceTax;
+
+        return [
+            'product' => $product,
+            'product_pre' => $discountedProductPre,
+            'service_pre' => $discountedServicePre,
+            'product_tax' => $discountedProductTax,
+            'service_tax' => $discountedServiceTax,
+            'pre_total' => $preTotal,
+            'tax_total' => $taxTotal,
+            'post_total' => $preTotal + $taxTotal,
+            'discount_post' => $lineDiscountPost,
+            'service_pre_original' => $originalServicePre,
+        ];
+    }
+
+    protected function makeProductTaxTotals(): Collection
+    {
+        return $this->productLineTotals->flatMap(function (array $line) {
+            $productTaxes = $line['product']->filtered_product_taxes->map(function (Tax $tax) use ($line) {
+                return new TaxTotal($line['product_pre'], $tax);
+            });
+
+            $servicePreOriginal = $line['service_pre_original'];
+            $serviceScale = $servicePreOriginal > 0 ? $line['service_pre'] / $servicePreOriginal : 0;
+            $serviceScale = max(0, min(1, $serviceScale));
+
+            $serviceTaxes = $line['product']->filtered_service_taxes->map(function (TaxTotal $taxTotal) use ($serviceScale) {
+                $preTax = $taxTotal->preTax() * $serviceScale;
+
+                return new TaxTotal($preTax, $taxTotal->tax);
+            });
+
+            return $productTaxes->concat($serviceTaxes);
+        });
     }
 
     protected function getTaxTotals(): Collection
@@ -250,30 +388,11 @@ class TotalsCalculator implements CallsAnyMethod
             $paymentTaxes = $this->paymentTaxes->map(fn (Tax $tax) => new TaxTotal($paymentTotal, $tax));
         }
 
-        // Calculate the total discounts per item. We need this to calculate the correct tax amount per item.
-        $totalDiscounts = $this->appliedDiscounts->sum('savings') * -1;
-        $cartItems = $this->input->products->count();
-        $discountPerItemAfterTaxes = $cartItems > 0 ? $totalDiscounts / $cartItems : 0;
-
-        $productTaxes = $this->input->products->flatMap(function ($product) use ($discountPerItemAfterTaxes) {
-            $totalTaxFactor = $product->filtered_product_taxes->sum('percentageDecimal');
-
-            // All discounts are inclusive of taxes. We need to calculate the discount per item without taxes.
-            $discountForThisItem = $discountPerItemAfterTaxes / (1 + $totalTaxFactor);
-
-            $products = $product->filtered_product_taxes->map(function (Tax $tax) use ($product, $discountForThisItem) {
-                $discountedPrice = max(0, $product->totalProductPreTaxes - $discountForThisItem);
-
-                return new TaxTotal($discountedPrice, $tax);
-            });
-
-            return $products->concat($product->filtered_service_taxes);
-        });
+        $productTaxes = $this->makeProductTaxTotals();
 
         $combined = $productTaxes->concat($shippingTaxes)->concat($paymentTaxes);
 
         $this->totalTaxes = $combined->sum(fn (TaxTotal $tax) => $tax->total());
-
         $this->detailedTaxes = $combined;
 
         return $this->consolidateTaxes($combined);
