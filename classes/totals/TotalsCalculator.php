@@ -172,6 +172,11 @@ class TotalsCalculator implements CallsAnyMethod
         return $this->productPostTaxes;
     }
 
+    public function productPostTaxesBeforeDiscount(): float
+    {
+        return $this->productPostTaxesOriginal;
+    }
+
     public function totalPostTaxes(): float
     {
         return $this->totalPostTaxes;
@@ -211,11 +216,24 @@ class TotalsCalculator implements CallsAnyMethod
 
         $this->productLineTotals = $this->buildProductLineTotals();
 
-        $this->productPreTaxes = $this->productLineTotals->sum('pre_total');
+        $productPreSum = $this->productLineTotals->sum('pre_total');
+        $productPostSum = $this->productLineTotals->sum('post_total');
+
+        $this->productPreTaxes = $productPreSum;
+        $this->productPostTaxes = $productPostSum;
+        $this->productTaxes = max(0, $this->productPostTaxes - $this->productPreTaxes);
+
         $productTaxTotals = $this->makeProductTaxTotals();
-        $this->productTaxes = $this->round($productTaxTotals->sum(fn (TaxTotal $tax) => $tax->total()));
-        $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
-        $this->totalDiscounts = max(0, $this->productPostTaxesOriginal - $this->productPostTaxes);
+        $calculatedTaxTotal = $this->round($productTaxTotals->sum(fn (TaxTotal $tax) => $tax->total()));
+        if (abs($calculatedTaxTotal - $this->productTaxes) > 0.0001) {
+            $this->productTaxes = $calculatedTaxTotal;
+            $this->productPostTaxes = $this->productPreTaxes + $this->productTaxes;
+        }
+
+        $this->totalDiscounts = $this->appliedDiscounts->sum('savings') * -1;
+        if ($this->totalDiscounts < 0) {
+            $this->totalDiscounts = 0;
+        }
 
         $this->shippingTaxes = $this->filterShippingTaxes();
         $this->shippingTotal = new ShippingTotal($this->input->shipping_method, $this);
@@ -394,6 +412,11 @@ class TotalsCalculator implements CallsAnyMethod
 
         $this->totalTaxes = $combined->sum(fn (TaxTotal $tax) => $tax->total());
         $this->detailedTaxes = $combined;
+
+        $expectedTotalTaxes = max(0, $this->totalPostTaxes - $this->totalPreTaxes);
+        if (abs($this->totalTaxes - $expectedTotalTaxes) > 0.0001) {
+            $this->totalTaxes = $this->round($expectedTotalTaxes);
+        }
 
         return $this->consolidateTaxes($combined);
     }

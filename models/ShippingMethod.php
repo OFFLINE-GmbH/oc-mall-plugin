@@ -225,7 +225,7 @@ class ShippingMethod extends Model
             // Virtual carts cannot be shipped.
             return collect([]);
         } else {
-            $total = $cart->totals()->productPostTaxes();
+            $total = $cart->totals()->productPostTaxesBeforeDiscount();
             $countryId = optional($cart->shipping_address)->country_id;
     
             // Use the Country ID from the post data, if availalb.e
@@ -247,7 +247,7 @@ class ShippingMethod extends Model
         if (!$wishlist) {
             return new Collection();
         } else {
-            $total = $wishlist->totals()->productPostTaxes();
+            $total = $wishlist->totals()->productPostTaxesBeforeDiscount();
             $countryId = $wishlist->getCartCountryId();
 
             return self::getAvailability($countryId, $total, null, $wishlist);
