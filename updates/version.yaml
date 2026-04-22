@@ -780,3 +780,6 @@ v3.8.32:
     - "Added container binding for TotalsCalculator (thanks to @verenaroe)"
 v3.8.33:
     - "Fixed typo in translations (thanks to @verenaroe)"
+v3.8.34:
+    - "succeeded_at added to orders table to prevent multiple succeeded event"
+    - 038_34-add_succeeded_at_to_offline_mall_orders.php
