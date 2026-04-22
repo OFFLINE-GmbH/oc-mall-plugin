@@ -778,3 +778,5 @@ v3.8.31:
     - "Fixed payment log popup (thanks to @verenaroe)"
 v3.8.32:
     - "Added container binding for TotalsCalculator (thanks to @verenaroe)"
+v3.8.33:
+    - "Fixed typo in translations (thanks to @verenaroe)"
