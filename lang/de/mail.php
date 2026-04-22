@@ -16,7 +16,7 @@ return [
         'paid' => [
             'subject' => 'Vielen Dank für Ihre Zahlung',
             'message' => 'Wir haben soeben eine Zahlung für die Bestellung **#:number** erhalten.',
-            'process_order' => 'Ihre Bestellung wir nun weiter verarbeitet.',
+            'process_order' => 'Ihre Bestellung wird nun weiter verarbeitet.',
         ],
         'failed' => [
             'subject' => 'Die Zahlung für Ihre Bestellung ist fehlgeschlagen',
