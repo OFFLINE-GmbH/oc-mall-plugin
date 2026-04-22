@@ -70,7 +70,7 @@ class Wishlist extends Model
 
     public function totals(): TotalsCalculator
     {
-        return $this->totalsCached = new TotalsCalculator(TotalsCalculatorInput::fromWishlist($this));
+        return $this->totalsCached = app()->make(TotalsCalculator::class, [TotalsCalculatorInput::fromWishlist($this)]);
     }
 
     /**

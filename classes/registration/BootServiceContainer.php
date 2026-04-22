@@ -23,6 +23,7 @@ use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
 use OFFLINE\Mall\Classes\Payments\PostFinance;
 use OFFLINE\Mall\Classes\Payments\Stripe;
+use OFFLINE\Mall\Classes\Totals\TotalsCalculator;
 use OFFLINE\Mall\Classes\User\UserProvider;
 use OFFLINE\Mall\Classes\Utils\DefaultMoney;
 use OFFLINE\Mall\Classes\Utils\Money;
@@ -36,6 +37,7 @@ trait BootServiceContainer
     {
         $this->app->bind(SignInHandler::class, fn () => new DefaultSignInHandler());
         $this->app->bind(SignUpHandler::class, fn () => new DefaultSignUpHandler());
+        $this->app->bind(TotalsCalculator::class, fn ($app, $params) => new TotalsCalculator($params[0] ?? null));
         $this->app->singleton(Money::class, fn () => new DefaultMoney());
         $this->app->singleton(PaymentGateway::class, function () {
             $gateway = new DefaultPaymentGateway();
