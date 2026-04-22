@@ -151,7 +151,7 @@ class Cart extends Model
 
     public function totals(): TotalsCalculator
     {
-        return $this->totalsCached = new TotalsCalculator(TotalsCalculatorInput::fromCart($this));
+        return $this->totalsCached = app()->make(TotalsCalculator::class, [TotalsCalculatorInput::fromCart($this)]);
     }
 
     /**
