@@ -5,6 +5,7 @@ namespace OFFLINE\Mall\Classes\Payments;
 use Cms\Classes\Controller;
 use Illuminate\Support\Facades\Event;
 use LogicException;
+use OFFLINE\Mall\Models\Order;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -103,7 +104,12 @@ class PaymentRedirector
         }
 
         if ($result->successful) {
+
+            if (!$result->order->succeeded_at) {
             Event::fire('mall.checkout.succeeded', [$result]);
+                $result->order->succeeded_at = now();
+                Order::where('id', $result->order->id)->update(['succeeded_at' => $result->order->succeeded_at]);
+            }
 
             return $this->finalRedirect('successful');
         }
