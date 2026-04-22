@@ -776,3 +776,5 @@ v3.8.30:
     - "Added mall.productsFilter.props.extend event (thanks to @verenaroe)"
 v3.8.31:
     - "Fixed payment log popup (thanks to @verenaroe)"
+v3.8.32:
+    - "Added container binding for TotalsCalculator (thanks to @verenaroe)"
