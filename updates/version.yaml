@@ -783,3 +783,5 @@ v3.8.33:
 v3.8.34:
     - "succeeded_at added to orders table to prevent multiple succeeded event"
     - 038_34-add_succeeded_at_to_offline_mall_orders.php
+v3.8.35:
+    - "Use current price data when adding a stackable product to the cart"
