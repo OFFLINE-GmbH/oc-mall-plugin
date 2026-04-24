@@ -44,15 +44,23 @@ trait CartActions
 
             $quantity ??= $product->quantity_default ?? 1;
 
+            $price = $variant
+                ? $variant->priceIncludingCustomFieldValues($values)
+                : $product->priceIncludingCustomFieldValues($values);
+
             $matchingProductInCart = $this->getMatchingProductInCart($product, $variant, $values);
 
             $isStackable = $product->stackable && count($serviceOptionIds) === 0 && $matchingProductInCart;
 
             if ($isStackable) {
-                $newQuantity = $product->normalizeQuantity($matchingProductInCart->quantity + $quantity, $product);
+                $newQuantity = $product->normalizeQuantity($matchingProductInCart->quantity + $quantity);
 
                 $this->validateStock($variant ?? $product, $quantity);
-                $matchingProductInCart->update(['quantity' => $newQuantity]);
+
+                // Use current price so a product that is already in the cart does not inherit old price data.
+                $matchingProductInCart->attributes['price'] = $matchingProductInCart->mapJsonPrice($price, 1);
+                $matchingProductInCart->quantity = $newQuantity;
+                $matchingProductInCart->save();
                 
                 $this->validateShippingMethod();
 
@@ -62,9 +70,6 @@ trait CartActions
             }
 
             $quantity = $product->normalizeQuantity($quantity);
-            $price    = $variant
-                ? $variant->priceIncludingCustomFieldValues($values)
-                : $product->priceIncludingCustomFieldValues($values);
 
             $this->validateStock($variant ?? $product, $quantity);
 
