@@ -12,9 +12,12 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('offline_mall_orders', function (Blueprint $table) {
-            $table->date('succeeded_at')->nullable();
-        });
+        if (!Schema::hasColumn('offline_mall_orders', 'succeeded_at')) {
+            Schema::table('offline_mall_orders', function (Blueprint $table) {
+                $table->date('succeeded_at')->nullable();
+            });
+        }
+
         Order::whereNotNull('paid_at')->update(['succeeded_at' => now()]);
     }
 
