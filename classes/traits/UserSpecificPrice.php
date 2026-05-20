@@ -2,6 +2,7 @@
 
 namespace OFFLINE\Mall\Classes\Traits;
 
+use October\Rain\Support\Facades\Event;
 use OFFLINE\Mall\Classes\User\Auth;
 use OFFLINE\Mall\Models\CustomerGroup;
 use OFFLINE\Mall\Models\Price;
@@ -42,6 +43,15 @@ trait UserSpecificPrice
 
         // If the customer group has a global discount, apply it to the original price.
         if ($group->discount !== null) {
+            $result = Event::fire('mall.product.checkCustomerGroupDiscount', [$this, $group, $original], true);
+            if ($result === false) {
+                return null;
+            }
+
+            if ($result instanceof Price) {
+                return $result;
+            }
+
             return $original->withDiscountPercentage($group->discount);
         }
 

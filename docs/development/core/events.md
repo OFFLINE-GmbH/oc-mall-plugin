@@ -144,6 +144,22 @@ well as the related `Product` model.
 For a usage example see
 [Virtual Products -> Generate user specific product files](/guide/usage/virtual-products#generate-user-specific-product-files)
 
+### `mall.product.checkCustomerGroupDiscount`
+
+This event allows you to override a Product's customer group discount. 
+
+Return a `Price` model to define a custom price. Return `false` to skip the discount.
+
+```php
+Event::listen('mall.product.checkCustomerGroupDiscount', function ($model, \OFFLINE\Mall\Models\CustomerGroup $customerGroup, \OFFLINE\Mall\Models\Price $originalPrice) {
+    // Override the price for this customer group.
+    return Price::fromArray(['EUR' => 20_00]); // 20.00 EUR
+    // Skip the discount for this customer group.
+    // return false;
+});
+```
+
+
 ## Products
 
 ### `mall.products.filter.extend`
