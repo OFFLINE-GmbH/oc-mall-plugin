@@ -787,3 +787,5 @@ v3.8.35:
 v3.8.36:
     - "Fixed succeeded_at migration"
     - 038_34-add_succeeded_at_to_offline_mall_orders.php
+v3.8.37:
+    - "Added 'mall.product.checkCustomerGroupDiscount' event"
