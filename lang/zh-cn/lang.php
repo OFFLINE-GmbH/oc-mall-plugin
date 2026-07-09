@@ -521,6 +521,7 @@ return [
             'expired' => '此促销代码已过期。',
             'not_found' => '此促销代码无效。',
             'usage_limit_reached' => '此促销代码已多次应用，因此不再有效。',
+            'product_required' => '购物车中没有此折扣所需的商品。',
             'cart_limit_reached' => '已达到促销代码限制。您不能再为此购物车添加促销代码。',
         ],
     ],

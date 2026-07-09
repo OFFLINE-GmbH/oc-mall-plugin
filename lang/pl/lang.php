@@ -521,6 +521,7 @@ return [
             'expired' => 'Ten kod promocyjny wygasł.',
             'not_found' => 'Ten kod promocyjny jest nieprawidłowy.',
             'usage_limit_reached' => 'Ten kod promocyjny był stosowany zbyt wiele razy i dlatego nie jest już ważny.',
+            'product_required' => 'Produkt wymagany do tej zniżki nie znajduje się w koszyku.',
             'cart_limit_reached' => 'Limit kodów promocyjnych osiągnięty. Nie możesz już dodawać kodów promocyjnych do tego koszyka.',
         ],
     ],

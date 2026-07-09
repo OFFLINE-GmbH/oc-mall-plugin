@@ -564,6 +564,7 @@ return [
             'not_found' => 'Questo codice promozionale non è valido.',
             'shipping' => 'Puoi applicare solo un codice promozionale per abbassare le spese di spedizione.',
             'usage_limit_reached' => 'Questo codice di sconto non è più valido perché usato troppe volte .',
+            'product_required' => 'Il prodotto richiesto per questo sconto non è nel carrello.',
         ],
     ],
     'feed_settings' => [

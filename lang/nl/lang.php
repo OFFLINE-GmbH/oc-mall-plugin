@@ -560,6 +560,7 @@ return [
             'expired' => 'Deze promotiecode is verlopen.',
             'not_found' => 'Deze promotiecode is niet geldig.',
             'usage_limit_reached' => 'Deze promotiecode is te vaak toegepast en is daarom niet langer geldig.',
+            'product_required' => 'Het product dat nodig is voor deze korting zit niet in je winkelwagen.',
             'cart_limit_reached' => 'Limiet voor promotiecodes bereikt. Je kunt geen promotiecodes meer toevoegen voor deze winkelwagen.',
         ],
     ],

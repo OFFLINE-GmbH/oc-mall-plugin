@@ -518,6 +518,7 @@ return [
             'expired' => 'Este cupom expirou.',
             'not_found' => 'Este cupom não é valido.',
             'usage_limit_reached' => 'Este cupoem foi usado muitas vezes e não está mais disponível.',
+            'product_required' => 'O produto necessário para este desconto não está no seu carrinho.',
             'cart_limit_reached' => 'Limite de usos do cupom alcançado. Você não pode mais adicionar cupons neste carrinho.',
         ],
     ],

@@ -510,6 +510,7 @@ return [
             'expired' => 'Tento kupón již vypršel.',
             'not_found' => 'Tento kupón není platný.',
             'usage_limit_reached' => 'Tento kupón byl již použit a proto je neplatný.',
+            'product_required' => 'Produkt požadovaný pro tuto slevu není ve vašem košíku.',
         ],
     ],
     'payment_method' => [
