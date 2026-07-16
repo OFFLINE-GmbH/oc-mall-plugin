@@ -789,3 +789,5 @@ v3.8.36:
     - 038_34-add_succeeded_at_to_offline_mall_orders.php
 v3.8.37:
     - "Added 'mall.product.checkCustomerGroupDiscount' event"
+v3.8.38:
+    - "Added product-specific discount codes (thanks to @toome123)"
