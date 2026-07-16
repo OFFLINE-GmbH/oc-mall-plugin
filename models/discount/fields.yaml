@@ -103,7 +103,7 @@ fields:
         trigger:
             action: show
             field: trigger
-            condition: value[product]
+            condition: value[product],value[code]
     customer_group:
         label: 'offline.mall::lang.common.customer_group'
         span: right

@@ -63,6 +63,18 @@ class DiscountApplier
 
         $savings = 0;
 
+        $targetTotal = $this->total;
+        $isProductSpecificCode = $discount->trigger === 'code' && $discount->product_id;
+
+        if ($isProductSpecificCode) {
+            $matchingProducts = $this->input->products->filter(function ($product) use ($discount) {
+                return (int)$product->product_id === (int)$discount->product_id;
+            });
+            $targetTotal = $matchingProducts->sum(function ($p) {
+                return $p->totalPreTaxes + $p->totalTaxes;
+            });
+        }
+
         if ($discount->type === 'shipping') {
             $this->reducedTotal        = $discount->shippingPrice()->integer;
             $savings = $this->input->shipping_method->price()->integer - $discount->shippingPrice()->integer;
@@ -70,12 +82,12 @@ class DiscountApplier
         }
 
         if ($discount->type === 'fixed_amount') {
-            $savings            = $discount->amount()->integer;
+            $savings            = min($discount->amount()->integer, $targetTotal);
             $this->reducedTotal -= $savings;
         }
 
         if ($discount->type === 'rate') {
-            $savings            = $this->total * ($discount->rate / 100);
+            $savings            = $targetTotal * ($discount->rate / 100);
             $this->reducedTotal -= $savings;
         }
 
@@ -132,7 +144,14 @@ class DiscountApplier
             return true;
         }
 
-        return $discount->trigger === 'code';
+        if ($discount->trigger === 'code') {
+            if ($discount->product_id !== null) {
+                return $this->productIsInCart((int)$discount->product_id);
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private function productIsInCart(int $productId): bool

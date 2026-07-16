@@ -510,6 +510,7 @@ return [
             'expired' => 'Platnosť tohto kupónu vypršala.',
             'not_found' => 'Tento kupón nie je platný.',
             'usage_limit_reached' => 'Tento kupón bol už použiť a preto je neplatný.',
+            'product_required' => 'Produkt požadovaný pre túto zľavu nie je vo vašom košíku.',
         ],
     ],
     'payment_method' => [

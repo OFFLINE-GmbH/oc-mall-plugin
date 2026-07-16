@@ -58,6 +58,14 @@ trait Discounts
             throw new ValidationException([trans('offline.mall::lang.discounts.validation.usage_limit_reached')]);
         }
 
+        if ($discount->trigger === 'code' && $discount->product_id !== null) {
+            $productIsInCart = $this->products->pluck('product_id')->contains((int)$discount->product_id);
+            if (!$productIsInCart) {
+                $errorMsg = trans('offline.mall::lang.discounts.validation.product_required');
+                throw new ValidationException([$errorMsg === 'offline.mall::lang.discounts.validation.product_required' ? 'The product required for this discount is not in your cart.' : $errorMsg]);
+            }
+        }
+
         $this->discounts()->save($discount);
     }
 

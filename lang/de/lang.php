@@ -564,6 +564,7 @@ return [
             'expired' => 'Der verwendete Gutschein ist nicht mehr gültig.',
             'not_found' => 'Der verwendete Gutschein ist nicht gültig.',
             'usage_limit_reached' => 'Dieser Gutschein wurde zu oft verwendet und ist daher nicht mehr gültig.',
+            'product_required' => 'Das für diesen Rabatt erforderliche Produkt befindet sich nicht im Warenkorb.',
             'cart_limit_reached' => 'Promo-Code-Limit erreicht. Du kannst keine weiteren Promo-Codes zu diesem Warenkorb hinzufügen.',
         ],
     ],
