@@ -515,6 +515,7 @@ return [
             'expired' => 'El código de promoción ha expirado.',
             'not_found' => 'El código ingresado no es válido.',
             'usage_limit_reached' => 'Este código de promoción ha excedido la cantidad disponible y por lo tanto ya no es válido.',
+            'product_required' => 'El producto requerido para este descuento no está en su carrito.',
         ],
     ],
     'payment_method' => [

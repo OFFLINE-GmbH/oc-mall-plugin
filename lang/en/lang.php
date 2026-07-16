@@ -564,6 +564,7 @@ return [
             'expired' => 'This promo code has expired.',
             'not_found' => 'This promo code is not valid.',
             'usage_limit_reached' => 'This promo code has been applied to many times and is therefore no longer valid.',
+            'product_required' => 'The product required for this discount is not in your cart.',
             'cart_limit_reached' => 'Promo code limit reached. You can no longer add promo codes for this cart.',
         ],
     ],

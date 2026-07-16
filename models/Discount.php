@@ -114,7 +114,7 @@ class Discount extends Model
         static::saving(function (self $discount) {
             $discount->code = strtoupper($discount->code ?? '');
 
-            if ($discount->trigger !== 'product') {
+            if ($discount->trigger !== 'product' && $discount->trigger !== 'code') {
                 $discount->product_id = null;
             }
 
