@@ -707,7 +707,7 @@ class Product extends Model
             $data = self::published()->where('inventory_management_method', 'single')->get();
 
             return [
-                'items' => $data->map($toItem),
+                'items' => $data->map($toItem)->toArray(),
             ];
         } elseif ($type === 'mall-variant') {
             $result = Variant::published()->find($item->reference);
