@@ -793,3 +793,5 @@ v3.8.38:
     - "Added product-specific discount codes (thanks to @toome123)"
 v3.8.39:
     - "Fixed 'all-mall-products' menu items (thanks to @martinkuch)"
+v3.8.40:
+    - "Added config option to disable built-in OFFLINE.SiteSearch integration"

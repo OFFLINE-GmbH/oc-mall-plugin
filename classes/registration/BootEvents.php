@@ -128,7 +128,9 @@ trait BootEvents
 
     protected function registerSiteSearchEvents()
     {
-        Event::listen('offline.sitesearch.extend', fn () => new ProductsSearchProvider());
+        if (config('offline.mall::features.site_search')) {
+            Event::listen('offline.sitesearch.extend', fn () => new ProductsSearchProvider());
+        }
     }
 
     protected function registerGdprEvents()
