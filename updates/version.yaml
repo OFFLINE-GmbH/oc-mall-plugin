@@ -795,3 +795,5 @@ v3.8.39:
     - "Fixed 'all-mall-products' menu items (thanks to @martinkuch)"
 v3.8.40:
     - "Added config option to disable built-in OFFLINE.SiteSearch integration"
+v3.8.41:
+    - "Fixed custom field checkbox validation (thanks to @verenaroe)"

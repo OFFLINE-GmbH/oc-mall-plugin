@@ -268,12 +268,13 @@ class Product extends MallComponent
         $product = $this->getProduct();
 
         $variant = null;
-        $values = $this->validateCustomFields(post('fields', []));
 
         if ($this->variantId !== null) {
             // In case a Variant is added we have to retrieve the model first by the selected props.
             $variant = $this->getVariantByPropertyValues(post('props'));
         }
+
+        $values = $this->validateCustomFields(post('fields', []), $product);
 
         $quantity = (int)input('quantity', $product->quantity_default ?? 1);
 
