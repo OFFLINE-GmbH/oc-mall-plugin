@@ -269,7 +269,6 @@ class Products extends MallComponent
     {
         $productId = $this->decode(post('product'));
         $variantId = $this->decode(post('variant'));
-        $values    = $this->validateCustomFields(post('fields', []));
 
         $product = Product::published()->where('id', $productId)->firstOrFail();
         $variant = null;
@@ -280,6 +279,8 @@ class Products extends MallComponent
                 ->where('id', $variantId)
                 ->firstOrFail();
         }
+
+        $values    = $this->validateCustomFields(post('fields', []), $product);
 
         $cart     = CartModel::byUser(Auth::user());
         $quantity = (int)post('quantity', $product->quantity_default ?? 1);
