@@ -7,6 +7,7 @@ use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Models\Currency;
 use OFFLINE\Mall\Models\CustomField;
 use OFFLINE\Mall\Models\CustomFieldValue;
+use OFFLINE\Mall\Models\Product;
 use Validator;
 
 trait CustomFields
@@ -50,13 +51,13 @@ trait CustomFields
      * @throws ValidationException
      * @return array|Collection|static
      */
-    protected function validateCustomFields(array $values)
+    protected function validateCustomFields(array $values, Product $product)
     {
-        $fields = $this->mapToCustomFields($values);
+        $fieldValues = $this->mapToCustomFields($values);
 
-        $rules = $fields->mapWithKeys(function (array $data) {
-            $field = $data['field'];
+        $fields = $product->custom_fields;
 
+        $rules = $fields->mapWithKeys(function (CustomField $field) {
             $rules = collect();
 
             if ($field->required) {
@@ -79,8 +80,8 @@ trait CustomFields
             return [$field->hashId => $rules];
         })->filter();
 
-        $data  = $fields->mapWithKeys(fn (array $data) => [$data['field']->hashId => $data['value']]);
-        $names = $fields->mapWithKeys(fn (array $data) => [$data['field']->hashId => $data['field']->name])->toArray();
+        $data  = $fieldValues->mapWithKeys(fn (array $data) => [$data['field']->hashId => $data['value']]);
+        $names = $fields->mapWithKeys(fn (CustomField $field) => [$field->hashId => $field->name])->toArray();
 
         $v = Validator::make($data->toArray(), $rules->toArray(), [], $names);
 
@@ -88,7 +89,7 @@ trait CustomFields
             throw new ValidationException($v);
         }
 
-        return $this->mapToCustomFieldValues($fields);
+        return $this->mapToCustomFieldValues($fieldValues);
     }
 
     /**
