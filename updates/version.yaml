@@ -797,3 +797,5 @@ v3.8.40:
     - "Added config option to disable built-in OFFLINE.SiteSearch integration"
 v3.8.41:
     - "Fixed custom field checkbox validation (thanks to @verenaroe)"
+v3.8.42:
+    - "Do not inherit Variant data in Variants controller (thanks to @verenaroe)"
