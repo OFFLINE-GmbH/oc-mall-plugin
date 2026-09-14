@@ -38,4 +38,11 @@ class Variants extends Controller
     public $requiredPermissions = [
         'offline.mall.manage_products',
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        session()->forget('mall.variants.disable-inheritance');
+    }
 }
