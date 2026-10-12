@@ -12,7 +12,7 @@ $mallRenderValue = function ($value) use (&$mallRenderValue) {
         $rows = '';
         foreach ($value as $key => $val) {
             $rows .= '<tr>'
-                . '<th style="white-space:nowrap;vertical-align:top;">' . e($key) . '</th>'
+                . '<th title="'.e($key).'" style="vertical-align:top;">' . e($key) . '</th>'
                 . '<td>' . $mallRenderValue($val) . '</td>'
                 . '</tr>';
         }
