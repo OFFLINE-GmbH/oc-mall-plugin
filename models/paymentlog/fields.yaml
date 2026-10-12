@@ -34,7 +34,7 @@ tabs:
     fields:
         code:
             label: 'offline.mall::lang.common.code'
-            span: auto
+            span: full
             readonly: 1
             type: partial
             path: $/offline/mall/controllers/paymentlogs/_data.htm
@@ -42,7 +42,7 @@ tabs:
             tab: 'offline.mall::lang.payment_log.payment_data'
         message:
             label: 'offline.mall::lang.common.message'
-            span: auto
+            span: full
             readonly: 1
             type: partial
             path: $/offline/mall/controllers/paymentlogs/_data.htm
@@ -50,14 +50,14 @@ tabs:
             tab: 'offline.mall::lang.payment_log.payment_data'
         data:
             label: 'offline.mall::lang.common.data'
-            span: auto
+            span: full
             type: partial
             path: $/offline/mall/controllers/paymentlogs/_data.htm
             commentAbove: 'offline.mall::lang.payment_log.data_comment'
             tab: 'offline.mall::lang.payment_log.payment_data'
         order_data:
             label: 'offline.mall::lang.order.data'
-            span: auto
+            span: full
             cssClass: ''
             path: $/offline/mall/controllers/paymentlogs/_order_data.htm
             type: partial

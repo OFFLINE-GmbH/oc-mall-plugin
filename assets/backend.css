@@ -27,6 +27,16 @@ table.table.data tbody tr.orderfooter-taxes td {
     background: transparent;
 }
 
+.mall-payment-log-data {
+    overflow-x: auto;
+}
+.mall-payment-log-data th {
+    vertical-align: top;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .sidebar-content {
     padding: 20px;
 }

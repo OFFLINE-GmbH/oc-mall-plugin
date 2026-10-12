@@ -1,1 +1,43 @@
-<?php dump($value); ?>
+<?php
+$mallRenderValue = function ($value) use (&$mallRenderValue) {
+    if (is_object($value)) {
+        $value = (array) $value;
+    }
+
+    if (is_array($value)) {
+        if (empty($value)) {
+            return '<em class="text-muted">—</em>';
+        }
+
+        $rows = '';
+        foreach ($value as $key => $val) {
+            $rows .= '<tr>'
+                . '<th title="'.e($key).'" style="vertical-align:top;">' . e($key) . '</th>'
+                . '<td>' . $mallRenderValue($val) . '</td>'
+                . '</tr>';
+        }
+
+        return '<table class="table table-condensed table-bordered" style="margin-bottom:0;">' . $rows . '</table>';
+    }
+
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    }
+
+    if (is_null($value) || $value === '') {
+        return '<em class="text-muted">—</em>';
+    }
+
+    if (is_string($value)) {
+        $decoded = json_decode($value, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return $mallRenderValue($decoded);
+        }
+    }
+
+    return '<span style="white-space:pre-wrap;word-break:break-word;">' . e((string) $value) . '</span>';
+};
+?>
+<div class="mall-payment-log-data">
+    <?= $mallRenderValue($value) ?>
+</div>

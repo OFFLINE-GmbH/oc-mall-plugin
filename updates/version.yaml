@@ -801,3 +801,5 @@ v3.8.42:
     - "Do not inherit Variant data in Variants controller (thanks to @verenaroe)"
 v3.8.43:
     - "Fixed total calculation for Products that do not include taxes"
+v3.8.44:
+    - "Added formatter for payment log data"
