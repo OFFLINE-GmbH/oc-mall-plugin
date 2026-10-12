@@ -99,7 +99,7 @@ class CartProduct extends Model
 
             $entry->item         = $this->item_data;
             $entry->name         = $this->variant ? $this->variant->name : $this->data->name;
-            $entry->variant_name = optional($this->variant)->properties_description;
+            $entry->variant_name = $this->variant ? $this->variant->properties_description : '';
             $entry->quantity     = $this->quantity;
             $entry->is_virtual   = $this->product->is_virtual;
 
@@ -108,7 +108,7 @@ class CartProduct extends Model
             $entry->service_options = $this->service_options->toArray();
 
             // Set the attribute directly to prevent the price mutator from being triggered
-            $entry->attributes['price_post_taxes'] = $this->price()->integer;
+            $entry->attributes['price_post_taxes'] = $this->product_post_taxes;
             $entry->attributes['price_taxes']      = $this->getTotalTaxesAttribute() / $this->quantity;
             $entry->attributes['price_pre_taxes']  = $this->getPricePreTaxesAttribute();
 
