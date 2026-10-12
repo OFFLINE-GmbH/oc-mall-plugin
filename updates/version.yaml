@@ -799,3 +799,5 @@ v3.8.41:
     - "Fixed custom field checkbox validation (thanks to @verenaroe)"
 v3.8.42:
     - "Do not inherit Variant data in Variants controller (thanks to @verenaroe)"
+v3.8.43:
+    - "Fixed total calculation for Products that do not include taxes"
