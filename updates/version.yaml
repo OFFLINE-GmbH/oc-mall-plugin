@@ -803,3 +803,5 @@ v3.8.43:
     - "Fixed total calculation for Products that do not include taxes"
 v3.8.44:
     - "Added formatter for payment log data"
+v3.8.45:
+    - "PHP 8.4 compatibility"
