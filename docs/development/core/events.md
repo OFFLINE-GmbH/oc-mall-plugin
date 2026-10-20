@@ -100,6 +100,31 @@ This event is emitted when the quantity of a cart product has changed. It receiv
 
 This event allows to customize the payment methods based on the current cart.
 
+## Totals
+
+### `mall.totals.extraDiscounts`
+
+This event allows you to add discount lines to the calculated totals that can't be expressed with the built-in discount triggers, e.g. quantity based deals ("buy 3, get the 4th free"). It receives the `TotalsCalculatorInput` as a single argument.
+
+Listeners must return an array of discount entries. Each entry has to use the same format as the `DiscountApplier`:
+
+```php
+Event::listen('mall.totals.extraDiscounts', function (\OFFLINE\Mall\Classes\Totals\TotalsCalculatorInput $input) {
+    $discount        = new \OFFLINE\Mall\Models\Discount();
+    $discount->name  = 'Buy 3, get the 4th free';
+
+    return [
+        [
+            'discount'          => $discount,
+            'savings'           => -2000, // negative amount in cents, e.g. -20.00
+            'savings_formatted' => 'CHF 20.00',
+        ],
+    ];
+});
+```
+
+The `savings` value has to be negative and inclusive of taxes. Always return an array of entries, even if you only add a single discount.
+
 ## Checkout
 
 ### `mall.checkout.succeeded`
