@@ -41,7 +41,14 @@ class Cart extends Model
     public $table = 'offline_mall_carts';
 
     public $hasMany = [
-        'products' => [CartProduct::class, 'deleted' => true],
+        // 'softDelete' (not 'delete') is what October's SoftDelete trait checks in
+        // performSoftDeleteOnRelations() - Cart uses SoftDelete, so a plain
+        // $cart->delete() only ever reaches that cascade path, never
+        // performDeleteOnRelations() (which needs 'delete' and is only used for
+        // forceDelete()). CartProduct has no SoftDelete trait of its own, so
+        // 'delete' => true would actually break forceDelete() cascades with a
+        // "call to undefined method CartProduct::forceDelete()" error.
+        'products' => [CartProduct::class, 'softDelete' => true],
     ];
 
     public $belongsTo = [
