@@ -322,10 +322,12 @@ class TotalsCalculator implements CallsAnyMethod
 
         $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(fn ($item) => $item->type === 'shipping');
 
-        // Let plugins add discounts that can't be expressed with the built-in triggers, e.g. quantity
-        // based deals. Listeners return applied discount entries in the same format as DiscountApplier:
-        // [['discount' => Discount, 'savings' => -1000 (negative, in cents), 'savings_formatted' => '...'], ...]
-        $extraDiscounts = collect(Event::fire('mall.totals.extraDiscounts', [$this->input]))->collapse();
+	// Discount extensions.
+        // Each listener must return an array of entries in the same format as DiscountApplier:
+        // [['discount' => Discount, 'savings' => -1000, 'savings_formatted' => '...']]
+        $extraDiscounts = collect(array_merge(...array_filter(
+            Event::fire('mall.totals.extraDiscounts', [$this->input]) ?? []
+        )));
 
         $total += $extraDiscounts->sum('savings');
 
