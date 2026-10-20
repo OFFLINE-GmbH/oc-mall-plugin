@@ -3,6 +3,7 @@
 namespace OFFLINE\Mall\Classes\Totals;
 
 use Carbon\Carbon;
+use Event;
 use Illuminate\Support\Collection;
 use October\Contracts\Twig\CallsAnyMethod;
 use OFFLINE\Mall\Classes\Cart\DiscountApplier;
@@ -321,8 +322,17 @@ class TotalsCalculator implements CallsAnyMethod
 
         $discounts = $this->input->discounts->merge($nonCodeTriggers)->reject(fn ($item) => $item->type === 'shipping');
 
+	// Discount extensions.
+        // Each listener must return an array of entries in the same format as DiscountApplier:
+        // [['discount' => Discount, 'savings' => -1000, 'savings_formatted' => '...']]
+        $extraDiscounts = collect(array_merge(...array_filter(
+            Event::fire('mall.totals.extraDiscounts', [$this->input]) ?? []
+        )));
+
+        $total += $extraDiscounts->sum('savings');
+
         $applier = new DiscountApplier($this->input, $total);
-        $this->appliedDiscounts = $applier->applyMany($discounts);
+        $this->appliedDiscounts = $extraDiscounts->merge($applier->applyMany($discounts));
 
         return $applier->reducedTotal();
     }

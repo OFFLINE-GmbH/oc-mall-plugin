@@ -41,7 +41,7 @@ class Cart extends Model
     public $table = 'offline_mall_carts';
 
     public $hasMany = [
-        'products' => [CartProduct::class, 'deleted' => true],
+        'products' => [CartProduct::class, 'softDelete' => true],
     ];
 
     public $belongsTo = [
