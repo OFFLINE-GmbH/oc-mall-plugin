@@ -90,6 +90,11 @@ table.table.data tbody tr.orderfooter-taxes td {
     padding-right: 0;
 }
 
+.price-table-modal {
+    max-height: calc(100vh - 220px);
+    overflow: auto;
+}
+
 /** Highlights the product row **/
 .price-table-modal table.data tr:first-child td {
     border-bottom-color: #ccc;

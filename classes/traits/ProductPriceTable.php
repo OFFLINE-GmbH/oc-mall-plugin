@@ -4,6 +4,7 @@ namespace OFFLINE\Mall\Classes\Traits;
 
 use Backend\Widgets\Table;
 use DB;
+use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\ValidationException;
 use OFFLINE\Mall\Classes\Database\IsStatesScope;
 use OFFLINE\Mall\Classes\Index\Index;
@@ -31,9 +32,11 @@ trait ProductPriceTable
     public function onPriceTablePersist()
     {
         DB::transaction(function () {
-            $state                     = post('state', []);
+            $state                     = $this->getPriceTableState();
             $currencies                = Currency::get()->keyBy('code');
             $hasPriceInDefaultCurrency = false;
+
+            $this->loadPriceCategories();
 
             $this->removeOldPricingInformation($state, $currencies);
 
@@ -57,23 +60,50 @@ trait ProductPriceTable
         (new ProductObserver(app(Index::class)))->updated(Product::find($this->params[0]));
     }
 
+    protected function getPriceTableState(): array
+    {
+        // A single JSON field stays below PHP's max_input_vars, nested form fields get silently truncated.
+        $json = post('state_json');
+
+        if (is_string($json) && $json !== '') {
+            $state = json_decode($json, true);
+
+            if (! is_array($state)) {
+                throw new ApplicationException('Invalid price table data.');
+            }
+
+            // Form encoding sent empty cells as '', keep that so no NULL price rows get created.
+            array_walk_recursive($state, function (&$value) {
+                $value = $value ?? '';
+            });
+
+            return $state;
+        }
+
+        return post('state', []);
+    }
+
+    protected function loadPriceCategories()
+    {
+        $this->vars['additionalPriceCategories'] = PriceCategory::orderBy('sort_order', 'ASC')->get();
+        $this->vars['customerGroups']            = CustomerGroup::orderBy('sort_order', 'ASC')->get();
+    }
+
     protected function preparePriceTable()
     {
         $config = $this->makeConfig($this->productPriceTableConfig);
 
-        $additionalPriceCategories = PriceCategory::orderBy('sort_order', 'ASC')->get();
-        $additionalPriceCategories->each(function (PriceCategory $category) use ($config) {
+        $this->loadPriceCategories();
+
+        $this->vars['additionalPriceCategories']->each(function (PriceCategory $category) use ($config) {
             $config->columns['additional__' . $category->id] = ['title' => $category->name];
         });
-        $this->vars['additionalPriceCategories'] = $additionalPriceCategories;
 
-        $customerGroups = CustomerGroup::orderBy('sort_order', 'ASC')->get();
-        $customerGroups->each(function (CustomerGroup $group) use ($config) {
+        $this->vars['customerGroups']->each(function (CustomerGroup $group) use ($config) {
             $config->columns['group__' . $group->id] = [
                 'title' => sprintf('%s %s', trans('offline.mall::lang.product.price'), $group->name),
             ];
         });
-        $this->vars['customerGroups'] = $customerGroups;
 
         $widget = $this->makeFormWidget(Table::class, $config);
         $widget->bindToController();
@@ -94,7 +124,7 @@ trait ProductPriceTable
 
         $this->vars['pricetable']      = $widget;
         $this->vars['currencies']      = Currency::orderBy('is_default', 'DESC')->orderBy('sort_order', 'ASC')->get();
-        $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson();
+        $this->vars['pricetableState'] = $this->processTableData($tableData)->toJson(JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     }
 
     protected function hasDefaultCurrencyPrice($record, $currency)
@@ -141,7 +171,6 @@ trait ProductPriceTable
     protected function persistCustomerGroupPrices($record, $currency)
     {
         $type = $record['type'] === 'product' ? Product::class : Variant::class;
-        $this->preparePriceTable();
 
         foreach ($this->vars['customerGroups'] as $group) {
             $price = $record['group__' . $group['id']] ?? false;
@@ -214,22 +243,29 @@ trait ProductPriceTable
 
     protected function removeOldPricingInformation($state, $currencies)
     {
-        $groupPrice = CustomerGroupPrice::query();
-        $price      = Price::query();
+        $ids = [];
 
         foreach ($state as $currency => $items) {
+            $currencyId = $currencies->get($currency)->id;
+
             foreach ($items as $record) {
-                $closure = function ($q) use ($record, $currencies, $currency) {
-                    $type = $record['type'] === 'product' ? Product::class : Variant::class;
-                    $q->where('priceable_type', $type::MORPH_KEY)
-                        ->where('priceable_id', $record['original_id'])
-                        ->where('currency_id', $currencies->get($currency)->id);
-                };
-                $price->orWhere($closure);
-                $groupPrice->orWhere($closure);
+                $type = $record['type'] === 'product' ? Product::class : Variant::class;
+                $ids[$type::MORPH_KEY][$currencyId][] = $record['original_id'];
             }
         }
-        $price->delete();
-        $groupPrice->delete();
+
+        foreach ($ids as $morphKey => $byCurrency) {
+            foreach ($byCurrency as $currencyId => $priceableIds) {
+                foreach (array_chunk($priceableIds, 500) as $chunk) {
+                    $scope = function ($q) use ($morphKey, $currencyId, $chunk) {
+                        $q->where('priceable_type', $morphKey)
+                            ->where('currency_id', $currencyId)
+                            ->whereIn('priceable_id', $chunk);
+                    };
+                    Price::where($scope)->delete();
+                    CustomerGroupPrice::where($scope)->delete();
+                }
+            }
+        }
     }
 }

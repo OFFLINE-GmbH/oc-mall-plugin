@@ -49,7 +49,7 @@
         // Give the widget time to render
         setTimeout(function () {
             priceTable = {
-                state: JSON.parse('<?= addslashes($pricetableState) ?>'),
+                state: <?= $pricetableState ?>,
                 currencyLabel: $('.currency-label'),
                 activeCurrency: '<?= $currencies->first()->code ?>',
                 widget: $('#Table-pricetable').data('oc.table'),
@@ -101,7 +101,7 @@
                 persist () {
                     priceTable.updateState()
                     $.request('onPriceTablePersist', {
-                        data: {state: this.state},
+                        data: {state_json: JSON.stringify(this.state)},
                         loading: $.oc.stripeLoadIndicator,
                         success: function (data) {
                             this.success(data)
