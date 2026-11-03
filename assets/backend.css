@@ -90,9 +90,33 @@ table.table.data tbody tr.orderfooter-taxes td {
     padding-right: 0;
 }
 
-.price-table-modal {
-    max-height: calc(100vh - 220px);
+.price-table-modal .control-table {
+    max-height: max(200px, calc(100vh - 260px));
     overflow: auto;
+    scroll-padding-inline-start: 140px;
+    scroll-padding-top: 36px;
+}
+.price-table-modal .control-table .table-container {
+    min-width: calc(var(--price-table-columns, 5) * var(--price-table-column-width, 140px));
+    overflow: visible;
+}
+.price-table-modal .control-table table.headers {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+.price-table-modal .control-table table th:nth-child(3),
+.price-table-modal .control-table table td[data-column="name"] {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 2;
+    box-shadow: inset -1px 0 0 var(--bs-border-color, #d7e1ea);
+}
+.price-table-modal .control-table table td[data-column="name"] {
+    background-color: var(--bs-table-bg, #fff);
+}
+.price-table-modal .control-table table.data tr:nth-child(2n) td[data-column="name"] {
+    background-image: linear-gradient(var(--bs-table-striped-bg, #f7f9fb), var(--bs-table-striped-bg, #f7f9fb));
 }
 
 /** Highlights the product row **/

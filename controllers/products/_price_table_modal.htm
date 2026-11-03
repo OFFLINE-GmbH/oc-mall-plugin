@@ -5,7 +5,7 @@
     </h4>
 </div>
 
-<div class="modal-body modal-body--no-padding price-table-modal">
+<div class="modal-body modal-body--no-padding price-table-modal" style="--price-table-columns: <?= max(count($widget->getConfig('columns', [])) - 2, 1) ?>">
     <?= $widget->render(); ?>
 </div>
 
