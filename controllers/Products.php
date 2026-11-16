@@ -102,7 +102,10 @@ class Products extends Controller
             // existence and doesn't inherit the parent product's data if it exists.
             session()->flash('mall.variants.disable-inheritance');
 
-            if (str_contains($this->getAjaxHandler() ?? '', 'PriceTable')) {
+            // The price table is only rendered by onLoadPriceTable. Persisting must not prepare it.
+            $ajaxHandler = $this->getAjaxHandler() ?? '';
+
+            if (str_contains($ajaxHandler, 'PriceTable') && ! str_contains($ajaxHandler, 'Persist')) {
                 $this->preparePriceTable();
             }
         }
