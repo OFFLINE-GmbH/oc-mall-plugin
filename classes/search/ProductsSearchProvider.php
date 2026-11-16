@@ -118,6 +118,7 @@ class ProductsSearchProvider extends ResultsProvider
 
         return Variant::where($variantQuery)
             ->published()
+            ->whereHas('product', fn ($q) => $q->where('published', true))
             ->get();
     }
 
@@ -173,10 +174,9 @@ class ProductsSearchProvider extends ResultsProvider
 
         // Then return all matching models via Eloquent.
         return Variant::published()
-            ->whereIn('id', $variantIds)
-            ->orWhereHas('product', function ($q) use ($productIds) {
-                $q->where('published', true)
-                    ->whereIn('id', $productIds);
+            ->whereHas('product', fn ($q) => $q->where('published', true))
+            ->where(function ($q) use ($variantIds, $productIds) {
+                $q->whereIn('id', $variantIds)->orWhereIn('product_id', $productIds);
             })
             ->get();
     }
