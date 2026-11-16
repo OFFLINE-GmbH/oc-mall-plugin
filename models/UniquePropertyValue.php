@@ -18,6 +18,12 @@ class UniquePropertyValue extends Model
     use Validation;
 
     /**
+     * Category IDs waiting for their deferred recompute, see updateUsingCategory().
+     * @var array<int, bool>
+     */
+    protected static array $deferredCategoryIds = [];
+
+    /**
      * @var string table name
      */
     public $table = 'offline_mall_unique_property_values';
@@ -120,6 +126,16 @@ class UniquePropertyValue extends Model
      */
     public static function updateUsingCategory(Category $category): void
     {
+        // On the sync queue driver the job below runs immediately and forgets its own cache
+        // key, so the de-duplication never kicks in: saving a product in the backend saves
+        // every property value, and each save recomputed every category of the product again.
+        // In a web request, recompute each category once when the request terminates instead.
+        if (config('queue.default') === 'sync' && !app()->runningInConsole()) {
+            self::deferUpdateForCategory($category);
+
+            return;
+        }
+
         $key = self::getCacheKeyForCategory($category);
 
         if (Cache::has($key)) {
@@ -129,6 +145,28 @@ class UniquePropertyValue extends Model
 
         Cache::forever($key, true);
         Queue::push(UpdateUniquePropertyForCategory::class, ['id' => $category->id]);
+    }
+
+    /**
+     * Queue a category for a single recompute at the end of the request (sync queue only).
+     *
+     * @param Category $category
+     * @return void
+     */
+    protected static function deferUpdateForCategory(Category $category): void
+    {
+        if (count(self::$deferredCategoryIds) === 0) {
+            app()->terminating(function () {
+                $categoryIds = array_keys(self::$deferredCategoryIds);
+                self::$deferredCategoryIds = [];
+
+                foreach (Category::whereIn('id', $categoryIds)->get() as $category) {
+                    self::resetForCategory($category);
+                }
+            });
+        }
+
+        self::$deferredCategoryIds[$category->id] = true;
     }
 
     /**

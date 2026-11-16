@@ -807,3 +807,7 @@ v3.8.45:
     - "PHP 8.4 compatibility"
 v3.8.46:
     - "Added mall.totals.extraDiscounts event"
+v3.8.47:
+    - "Respect Variant published state in OFFLINE.SiteSearch results"
+v3.8.48:
+    - "Fixed backend performance issues"
