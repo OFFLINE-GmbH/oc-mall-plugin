@@ -50,6 +50,8 @@ class QueryString
 
         // Map the user defined database properties.
         return $properties->mapWithKeys(function (Property $property) use ($query) {
+            $filterType = null;
+
             if ($property->pivot) {
                 $filterType = $property->pivot->filter_type;
             } else if ($group = $property->property_groups->first()) {
