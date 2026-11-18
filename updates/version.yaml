@@ -811,3 +811,5 @@ v3.8.47:
     - "Respect Variant published state in OFFLINE.SiteSearch results"
 v3.8.48:
     - "Fixed backend performance issues"
+v3.8.49:
+    - "Fixed undefined variable error"
